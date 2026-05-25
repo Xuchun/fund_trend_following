@@ -50,11 +50,12 @@ class BacktestEngine:
         params: "StrategyParams",
         initial_capital: float = 10_000_000,
     ) -> None:
-        self.strategy       = strategy
-        self.price_panel    = price_panel
-        self.indicators     = indicators
-        self.params         = params
+        self.strategy        = strategy
+        self.price_panel     = price_panel
+        self.indicators      = indicators
+        self.params          = params
         self.initial_capital = initial_capital
+        self._regime         = self._build_regime_series()
 
     # ── Public API ──────────────────────────────────────────────────────────
 
