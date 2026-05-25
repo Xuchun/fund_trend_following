@@ -329,6 +329,47 @@ class BacktestEngine:
         date_set = set(trading_dates)
         return {d: float(r) for d, r in rets.items() if d in date_set}
 
+    def _build_regime_series(self) -> "pd.Series | None":
+        """
+        Pre-compute the bull/bear regime for every date.
+
+        Returns a boolean Series indexed by date:
+          True  = bull market  (regime_ticker adj-close > SMA_N)
+          False = bear market  (regime_ticker adj-close ≤ SMA_N)
+          None  = filter disabled
+
+        NaN SMA days (first N-1 days of history) default to True so the
+        warmup period does not artificially suppress early entries.
+        """
+        if not self.params.regime_filter_enabled:
+            return None
+
+        ticker = self.params.regime_ticker
+        if ticker not in self.price_panel:
+            logger.warning(
+                "Regime ticker '%s' not in price panel; regime filter disabled.", ticker
+            )
+            return None
+
+        df  = self.price_panel[ticker]
+        adj = df["close"] * df["adj_factor"]
+        sma = adj.rolling(self.params.regime_sma_window, min_periods=self.params.regime_sma_window).mean()
+        regime = (adj > sma).where(sma.notna(), other=True)  # warmup → True
+        logger.info(
+            "Regime filter: %s SMA(%d) | bull days=%d  bear days=%d",
+            ticker, self.params.regime_sma_window,
+            int(regime.sum()), int((~regime).sum()),
+        )
+        return regime
+
+    def _is_bull_market(self, date: pd.Timestamp) -> bool:
+        """Return True if entries are allowed on this date."""
+        if self._regime is None:
+            return True   # filter disabled
+        if date not in self._regime.index:
+            return True   # no data → allow entries (conservative default)
+        return bool(self._regime[date])
+
     def _build_results(self, portfolio: Portfolio) -> BacktestResults:
         """Assemble BacktestResults from a completed portfolio run."""
         nav_series = pd.Series(
