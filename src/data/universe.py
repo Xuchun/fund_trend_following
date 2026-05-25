@@ -46,6 +46,7 @@ def fetch_sp500_tickers() -> list[str]:
     """
     Fetch current S&P 500 constituents from Wikipedia.
 
+    Uses requests with a browser User-Agent to avoid 403 blocks.
     Result is cached in-process for the lifetime of the interpreter.
     Returns an empty list on failure (caller should handle gracefully).
     """
@@ -53,9 +54,20 @@ def fetch_sp500_tickers() -> list[str]:
     if _sp500_cache is not None:
         return _sp500_cache
 
+    url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/124.0.0.0 Safari/537.36"
+        )
+    }
+
     try:
-        url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
-        tables = pd.read_html(url)
+        import requests
+        resp = requests.get(url, headers=headers, timeout=30)
+        resp.raise_for_status()
+        tables = pd.read_html(resp.text)
         tickers = tables[0]["Symbol"].tolist()
         # Yahoo Finance uses "-" instead of "." for BRK.B, BF.B, etc.
         tickers = [t.replace(".", "-") for t in tickers]
