@@ -121,9 +121,16 @@ class BacktestEngine:
             pending_exits = self.strategy.generate_exit_signals(
                 date, portfolio, self.price_panel, self.indicators
             )
-            pending_entries = self.strategy.generate_entry_signals(
-                date, universe, self.price_panel, self.indicators, portfolio
-            )
+
+            # Regime filter: block new entries when SPY ≤ its 200-day SMA.
+            # Existing positions are NOT touched; cash continues to earn the proxy rate.
+            in_bull = self._is_bull_market(date)
+            if in_bull:
+                pending_entries = self.strategy.generate_entry_signals(
+                    date, universe, self.price_panel, self.indicators, portfolio
+                )
+            else:
+                pending_entries = []
 
             # ── ④ NAV: mark-to-market at today's close ──────────────────────
             last_nav = portfolio.update_nav(date, self.price_panel)
