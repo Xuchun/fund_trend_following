@@ -53,7 +53,7 @@ logger = logging.getLogger(__name__)
 # SGOV only has data from 2022, which would leave pre-2022 cash earning 0%.
 BASELINE_PARAMS = StrategyParams(
     min_price           = 10.0,
-    min_market_cap_b    = 20.0,
+    min_market_cap_b    = 2.0,
     min_adv_m           = 20.0,
     breakout_window     = 100,
     atr_period          = 20,
