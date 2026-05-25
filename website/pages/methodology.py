@@ -82,14 +82,27 @@ st.markdown("---")
 # ── Cash management ───────────────────────────────────────────────────────────
 st.subheader("4. 资金管理")
 st.markdown(f"""
-**闲置资金处理：** 未持仓部分投入 **{meta.cash_proxy}**（iShares 1–3 年期国债 ETF）
+**闲置资金处理：** 未持仓部分投入 **{meta.cash_proxy}**（iShares 1–3 年期国债 ETF，2002 年上市）
 
 - 避免现金拖累（Cash Drag）
-- 获取短期无风险利率收益（约 4–5%/年，在2022–2024高息环境下更显著）
-- 模拟了真实机构运营中的资金利用效率
+- 获取无风险利率收益，2004–2021 年约 1–4%/年，2022–2024 年高息期约 4–5%/年
+- 模拟真实机构运营中的资金利用效率
 
 **初始资本：** $10,000,000（一千万美元）
 """)
+
+st.markdown("""
+<div class="info-box">
+<strong>现金代理选择说明：为何用 SHY，而不用 SGOV？</strong><br>
+<strong>SGOV</strong>（iShares 0–3 个月国债 ETF）是更接近"无风险利率"的工具，
+但它直到 <strong>2022 年才上市</strong>。如果将 SGOV 用于 2004–2024 全期回测，
+则 2004–2021 年间（共 18 年）的闲置现金收益将被记为 0%，
+严重低估策略在利率正常化时期的真实回报。<br><br>
+<strong>SHY</strong>（iShares 1–3 年期国债 ETF）自 <strong>2002 年上市</strong>，
+可完整覆盖整个回测区间，因此选用 SHY 作为现金代理，
+以确保回测结果的一致性和真实性。
+</div>
+""", unsafe_allow_html=True)
 
 st.markdown("---")
 
