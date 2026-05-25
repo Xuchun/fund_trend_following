@@ -84,6 +84,17 @@ st.markdown(f"""
 
 st.markdown("---")
 
+# ── Trades per year + holding days side by side ───────────────────────────────
+col1, col2 = st.columns(2)
+with col1:
+    st.subheader("逐年交易笔数")
+    st.plotly_chart(trades_per_year_chart(res.trades), use_container_width=True)
+with col2:
+    st.subheader("持仓天数分布")
+    st.plotly_chart(holding_days_distribution(res.trades), use_container_width=True)
+
+st.markdown("---")
+
 # ── Full metrics table ────────────────────────────────────────────────────────
 st.subheader("完整指标对比表")
 render_full_metrics_table(m, m)
