@@ -76,6 +76,15 @@ def setup_sidebar() -> StrategyResults:
     return st.session_state[cache_key]
 
 
+def get_results() -> "StrategyResults":
+    """Return current results from session state. Call at the top of every page."""
+    res = st.session_state.get("current_results")
+    if res is None:
+        st.warning("⚠️ 请从主页进入此页面以加载策略数据。")
+        st.stop()
+    return res
+
+
 def placeholder(phase: str, section: str) -> None:
     """Standard placeholder for sections pending Phase 6 analysis."""
     st.markdown(
