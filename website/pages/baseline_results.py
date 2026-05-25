@@ -13,6 +13,7 @@ from website.components.metric_cards import render_summary_cards, render_full_me
 from website.components.charts import (
     nav_vs_spy, drawdown_chart, rolling_sharpe_chart,
     r_multiple_distribution, annual_returns_chart,
+    trades_per_year_chart, holding_days_distribution,
 )
 
 res  = get_results()
