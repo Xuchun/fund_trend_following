@@ -89,13 +89,13 @@ def parse_args() -> argparse.Namespace:
     p.add_argument(
         "--mode",
         choices=["etf", "sp500", "sp900", "full"],
-        default="sp900",
+        default="full",
         help=(
             "Universe: "
-            "etf=21 ETFs only (fast sanity check), "
+            "etf=ETFs only from ETFs.csv (fast sanity check), "
             "sp500=S&P500 large-caps only, "
-            "sp900=S&P500+MidCap400 ~900 tickers [default, matches strategy spec], "
-            "full=sp900+ETFs"
+            "sp900=S&P500+MidCap400 ~900 tickers, "
+            "full=sp900+all ETFs from ETFs.csv [default, matches strategy spec]"
         ),
     )
     p.add_argument("--tickers", nargs="+", metavar="T",
