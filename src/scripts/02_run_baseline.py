@@ -34,7 +34,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 
 from data.adapters.yahoo import YahooFinanceAdapter
 from data.pipeline import load_price_panel
-from data.universe import ETF_TICKERS, fetch_sp500_tickers
+from data.universe import ETF_TICKERS, fetch_sp500_tickers, fetch_sp900_tickers
 from indicators.precompute import precompute_indicators
 from backtest.engine import BacktestEngine
 from reports.baseline import generate_baseline_report
