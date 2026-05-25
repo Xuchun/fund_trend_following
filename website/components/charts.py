@@ -184,6 +184,88 @@ def annual_returns_chart(nav: pd.Series, spy_nav: pd.Series | None,
     return fig
 
 
+def trades_per_year_chart(trades: pd.DataFrame) -> go.Figure:
+    """Bar chart: number of trades closed per year, stacked by exit reason."""
+    df = trades.copy()
+    df["year"] = df["exit_date"].dt.year
+
+    reason_colors = {
+        "trailing_stop": "#1f77b4",
+        "stop_loss":      "#d62728",
+        "end_of_backtest": "#aaaaaa",
+    }
+    reason_labels = {
+        "trailing_stop": "追踪止损",
+        "stop_loss":     "固定止损",
+        "end_of_backtest": "回测结束",
+    }
+
+    fig = go.Figure()
+    for reason, color in reason_colors.items():
+        sub = df[df["exit_reason"] == reason].groupby("year").size().reset_index(name="count")
+        if sub.empty:
+            continue
+        fig.add_trace(go.Bar(
+            x=sub["year"], y=sub["count"],
+            name=reason_labels.get(reason, reason),
+            marker_color=color,
+            hovertemplate="%{x}年<br>" + reason_labels.get(reason, reason) + ": %{y} 笔<extra></extra>",
+        ))
+
+    total_per_year = df.groupby("year").size()
+    avg = total_per_year.mean()
+    fig.add_hline(
+        y=avg, line_dash="dot", line_color="#555", line_width=1,
+        annotation_text=f"均值 {avg:.0f} 笔/年",
+        annotation_position="top right",
+    )
+    fig.update_layout(
+        barmode="stack",
+        title="逐年交易笔数（按平仓原因分类）",
+        xaxis_title="年份",
+        yaxis_title="交易笔数",
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        margin=dict(l=60, r=20, t=60, b=40),
+        height=340,
+    )
+    return fig
+
+
+def holding_days_distribution(trades: pd.DataFrame) -> go.Figure:
+    """Histogram of holding days for all trades."""
+    hd = trades["holding_days"].dropna()
+    median_d = hd.median()
+    mean_d   = hd.mean()
+
+    fig = go.Figure()
+    fig.add_trace(go.Histogram(
+        x=hd.values,
+        nbinsx=60,
+        marker_color="#1f77b4",
+        opacity=0.8,
+        name="持仓天数",
+        hovertemplate="持仓 %{x} 天：%{y} 笔<extra></extra>",
+    ))
+    for val, dash, label, color in [
+        (median_d, "solid", f"中位数 {median_d:.0f} 天", "#e65100"),
+        (mean_d,   "dash",  f"均值 {mean_d:.0f} 天",    "#2ca02c"),
+    ]:
+        fig.add_vline(
+            x=val, line_dash=dash, line_color=color, line_width=1.5,
+            annotation_text=label,
+            annotation_position="top right" if val == mean_d else "top left",
+            annotation_font_color=color,
+        )
+    fig.update_layout(
+        title="持仓天数分布（所有交易）",
+        xaxis_title="持仓天数",
+        yaxis_title="交易笔数",
+        margin=dict(l=60, r=20, t=60, b=40),
+        height=320,
+    )
+    return fig
+
+
 def multi_strategy_nav(results_list: list, spy_nav: pd.Series | None) -> go.Figure:
     """Overlay NAV curves for multiple strategies (used in comparison page)."""
     fig = go.Figure()
