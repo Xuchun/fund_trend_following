@@ -87,8 +87,16 @@ def parse_args() -> argparse.Namespace:
         epilog=__doc__,
     )
     p.add_argument(
-        "--mode", choices=["etf", "sp500", "full"], default="etf",
-        help="Universe: etf=ETFs only (fast), sp500=S&P500 only, full=both (default: etf)",
+        "--mode",
+        choices=["etf", "sp500", "sp900", "full"],
+        default="sp900",
+        help=(
+            "Universe: "
+            "etf=21 ETFs only (fast sanity check), "
+            "sp500=S&P500 large-caps only, "
+            "sp900=S&P500+MidCap400 ~900 tickers [default, matches strategy spec], "
+            "full=sp900+ETFs"
+        ),
     )
     p.add_argument("--tickers", nargs="+", metavar="T",
                    help="Override --mode with an explicit ticker list")
