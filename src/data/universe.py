@@ -67,7 +67,8 @@ def fetch_sp500_tickers() -> list[str]:
         import requests
         resp = requests.get(url, headers=headers, timeout=30)
         resp.raise_for_status()
-        tables = pd.read_html(resp.text)
+        from io import StringIO
+        tables = pd.read_html(StringIO(resp.text))
         tickers = tables[0]["Symbol"].tolist()
         # Yahoo Finance uses "-" instead of "." for BRK.B, BF.B, etc.
         tickers = [t.replace(".", "-") for t in tickers]
