@@ -8,36 +8,36 @@ Limitations:
 """
 
 import logging
+from pathlib import Path
 from typing import Optional
 
 import pandas as pd
 
 logger = logging.getLogger(__name__)
 
-# Key sector/market ETFs always included in the universe
-ETF_TICKERS: list[str] = [
-    "SPY",   # S&P 500
-    "QQQ",   # Nasdaq 100
-    "IWM",   # Russell 2000
-    "DIA",   # Dow Jones
-    "GLD",   # Gold
-    "TLT",   # 20Y Treasury
-    "SHY",   # 1-3Y Treasury
-    "XLK",   # Technology
-    "XLF",   # Financials
-    "XLE",   # Energy
-    "XLV",   # Health Care
-    "XLI",   # Industrials
-    "XLP",   # Consumer Staples
-    "XLY",   # Consumer Discretionary
-    "XLU",   # Utilities
-    "XLRE",  # Real Estate
-    "XLB",   # Materials
-    "XLC",   # Communication Services
-    "VNQ",   # Real Estate (broader)
-    "EEM",   # Emerging Markets
-    "EFA",   # Developed ex-US
+# ── ETF universe: loaded from data/ETFs.csv ────────────────────────────────
+# Fallback used only when the CSV cannot be read (e.g., missing file).
+_FALLBACK_ETF_TICKERS: list[str] = [
+    "SPY", "QQQ", "IWM", "DIA", "GLD", "TLT", "SHY",
+    "XLK", "XLF", "XLE", "XLV", "XLI", "XLP", "XLY", "XLU", "XLC",
+    "VNQ", "EEM", "EFA",
 ]
+
+
+def _load_etf_tickers() -> list[str]:
+    """Load ETF tickers from data/ETFs.csv in the project root."""
+    csv_path = Path(__file__).resolve().parents[2] / "data" / "ETFs.csv"
+    try:
+        tickers = pd.read_csv(csv_path)["SYMBOL"].dropna().str.strip().tolist()
+        tickers = sorted(set(tickers))
+        logger.info("Loaded %d ETF tickers from %s", len(tickers), csv_path.name)
+        return tickers
+    except Exception as e:
+        logger.warning("Cannot read ETFs.csv (%s) — using built-in fallback list", e)
+        return _FALLBACK_ETF_TICKERS
+
+
+ETF_TICKERS: list[str] = _load_etf_tickers()
 
 _sp500_cache: Optional[list[str]] = None
 _sp400_cache: Optional[list[str]] = None
