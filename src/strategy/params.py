@@ -52,3 +52,8 @@ class StrategyParams:
 
     # ── Cash proxy ─────────────────────────────────────────────────────────
     cash_proxy: str = "SGOV"         # uninvested cash earns SGOV returns
+
+    # ── Market regime filter ────────────────────────────────────────────────
+    regime_filter_enabled: bool = False   # True → block entries when SPY < SMA
+    regime_ticker: str = "SPY"            # benchmark for regime detection
+    regime_sma_window: int = 200          # SMA lookback in trading days
