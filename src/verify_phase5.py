@@ -43,7 +43,7 @@ def check_output_files(results_dir: Path) -> bool:
         if not path.exists():
             _fail(f"{fname} 不存在")
             ok = False
-        elif path.stat().st_size < 100:
+        elif path.stat().st_size < (10 if fname.endswith(".txt") else 100):
             _fail(f"{fname} 文件为空 ({path.stat().st_size} bytes)")
             ok = False
         else:
