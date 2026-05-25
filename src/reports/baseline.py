@@ -52,18 +52,20 @@ def save_trades_csv(results: "BacktestResults", path: Path) -> None:
     logger.info("Saved trades → %s  (%d trades)", path, len(results.trade_log))
 
 
-def save_metrics_json(results: "BacktestResults", spy_returns: pd.Series | None,
+def save_metrics_json(results: "BacktestResults", spy_raw: pd.DataFrame | None,
                       path: Path) -> None:
     metrics = results.compute_metrics()
 
-    if spy_returns is not None and len(spy_returns) > 0:
-        spy_nav     = (1 + spy_returns).cumprod()
-        n_days      = len(spy_nav)
-        spy_cagr    = float(spy_nav.iloc[-1] ** (252 / n_days) - 1) if n_days > 1 else 0.0
-        spy_vol     = float(spy_returns.std() * np.sqrt(252))
-        spy_sharpe  = (float(spy_returns.mean()) * 252 - 0.05) / spy_vol if spy_vol > 0 else 0.0
-        spy_cum_max = spy_nav.cummax()
-        spy_maxdd   = float(((spy_nav - spy_cum_max) / spy_cum_max).min())
+    if spy_raw is not None and len(spy_raw) > 0:
+        spy_adj_close = spy_raw["close"] * spy_raw["adj_factor"]
+        spy_rets      = spy_adj_close.pct_change().fillna(0.0)
+        spy_nav       = (1 + spy_rets).cumprod()
+        n_days        = len(spy_nav)
+        spy_cagr      = float(spy_nav.iloc[-1]) ** (252 / n_days) - 1 if n_days > 1 else 0.0
+        spy_vol       = float(spy_rets.std() * np.sqrt(252))
+        spy_sharpe    = (float(spy_rets.mean()) * 252 - 0.05) / spy_vol if spy_vol > 0 else 0.0
+        spy_cum_max   = spy_nav.cummax()
+        spy_maxdd     = float(((spy_nav - spy_cum_max) / spy_cum_max).min())
         metrics["spy_cagr"]    = spy_cagr
         metrics["spy_sharpe"]  = spy_sharpe
         metrics["spy_max_drawdown"] = spy_maxdd
