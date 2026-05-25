@@ -47,13 +47,19 @@ def check_yfinance_download() -> bool:
             print("  ✗ 下载结果为空，请检查网络连接")
             return False
 
-        print(f"  ✓ 下载成功，共 {len(df)} 行，列: {list(df.columns)}")
+        print(f"  ✓ 下载成功，共 {len(df)} 行")
         print(f"  ✓ 日期范围: {df.index[0].date()} → {df.index[-1].date()}")
 
+        # 新版 yfinance 返回 MultiIndex 列 (field, ticker)，取第一层做检查
+        if isinstance(df.columns, pd.MultiIndex):
+            col_names = set(df.columns.get_level_values(0))
+        else:
+            col_names = set(df.columns)
+
         required_cols = {"Open", "High", "Low", "Close", "Volume"}
-        missing = required_cols - set(df.columns)
+        missing = required_cols - col_names
         if missing:
-            print(f"  ✗ 缺少必要列: {missing}")
+            print(f"  ✗ 缺少必要列: {missing}，实际列: {col_names}")
             return False
 
         print(f"  ✓ 所有必要列存在: {required_cols}")
