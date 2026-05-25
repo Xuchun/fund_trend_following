@@ -41,6 +41,7 @@ def check_yfinance_download() -> bool:
     print("\n=== 测试 yfinance 数据下载（SPY，最近5天）===")
     try:
         import yfinance as yf
+        import pandas as pd
         df = yf.download("SPY", period="5d", auto_adjust=True, progress=False)
 
         if df.empty:
