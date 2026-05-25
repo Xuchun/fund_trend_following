@@ -40,44 +40,83 @@ ETF_TICKERS: list[str] = [
 ]
 
 _sp500_cache: Optional[list[str]] = None
+_sp400_cache: Optional[list[str]] = None
+
+_WIKI_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/124.0.0.0 Safari/537.36"
+    )
+}
+
+
+def _fetch_tickers_from_wikipedia(url: str, symbol_col: str = "Symbol") -> list[str]:
+    """Fetch a ticker list from a Wikipedia table. Returns [] on failure."""
+    try:
+        import requests
+        from io import StringIO
+        resp = requests.get(url, headers=_WIKI_HEADERS, timeout=30)
+        resp.raise_for_status()
+        tables = pd.read_html(StringIO(resp.text))
+        tickers = tables[0][symbol_col].tolist()
+        return sorted(t.replace(".", "-") for t in tickers)
+    except Exception as e:
+        logger.error("Failed to fetch from %s: %s", url, e)
+        return []
 
 
 def fetch_sp500_tickers() -> list[str]:
     """
-    Fetch current S&P 500 constituents from Wikipedia.
+    Fetch current S&P 500 constituents (~500 large-caps, market cap > ~$14B).
 
     Uses requests with a browser User-Agent to avoid 403 blocks.
     Result is cached in-process for the lifetime of the interpreter.
-    Returns an empty list on failure (caller should handle gracefully).
+    Returns an empty list on failure.
     """
     global _sp500_cache
-    if _sp500_cache is not None:
-        return _sp500_cache
+    if _sp500_cache is None:
+        url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
+        _sp500_cache = _fetch_tickers_from_wikipedia(url)
+        if _sp500_cache:
+            logger.info("Fetched %d S&P 500 tickers from Wikipedia", len(_sp500_cache))
+    return _sp500_cache or []
 
-    url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/124.0.0.0 Safari/537.36"
-        )
-    }
 
-    try:
-        import requests
-        resp = requests.get(url, headers=headers, timeout=30)
-        resp.raise_for_status()
-        from io import StringIO
-        tables = pd.read_html(StringIO(resp.text))
-        tickers = tables[0]["Symbol"].tolist()
-        # Yahoo Finance uses "-" instead of "." for BRK.B, BF.B, etc.
-        tickers = [t.replace(".", "-") for t in tickers]
-        _sp500_cache = sorted(tickers)
-        logger.info("Fetched %d S&P 500 tickers from Wikipedia", len(_sp500_cache))
-        return _sp500_cache
-    except Exception as e:
-        logger.error("Failed to fetch S&P 500 from Wikipedia: %s", e)
-        return []
+def fetch_sp400_tickers() -> list[str]:
+    """
+    Fetch current S&P MidCap 400 constituents (~400 mid-caps, market cap $2B–$14B).
+
+    Combined with S&P 500, these ~900 tickers cover the strategy's target universe
+    (market cap > $20亿 = $2B) far better than S&P 500 alone.
+    Result is cached in-process. Returns an empty list on failure.
+    """
+    global _sp400_cache
+    if _sp400_cache is None:
+        url = "https://en.wikipedia.org/wiki/List_of_S%26P_400_companies"
+        _sp400_cache = _fetch_tickers_from_wikipedia(url)
+        if _sp400_cache:
+            logger.info("Fetched %d S&P MidCap 400 tickers from Wikipedia", len(_sp400_cache))
+    return _sp400_cache or []
+
+
+def fetch_sp900_tickers() -> list[str]:
+    """
+    Fetch S&P 500 + MidCap 400 = ~900 tickers.
+
+    This is the recommended candidate universe for the strategy:
+      - Covers market cap roughly $2B and above (matching the $20亿 requirement)
+      - Mid-caps ($2B–$14B) are where trend-following strategies find the best signals
+      - Dynamic price/ADV filters in the engine further narrow the list each day
+    """
+    sp500 = fetch_sp500_tickers()
+    sp400 = fetch_sp400_tickers()
+    combined = sorted(set(sp500) | set(sp400))
+    logger.info(
+        "S&P 900 universe: %d tickers (SP500=%d, MidCap400=%d, overlap excluded)",
+        len(combined), len(sp500), len(sp400),
+    )
+    return combined
 
 
 def get_universe_at_date(
