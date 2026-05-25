@@ -124,14 +124,29 @@ def build_universe(mode: str, custom_tickers: list[str] | None) -> list[str]:
     if mode == "etf":
         return sorted(ETF_TICKERS)
 
-    sp500 = fetch_sp500_tickers()
-    if not sp500:
-        logger.error("Failed to fetch S&P 500 tickers; aborting")
-        sys.exit(1)
-
     if mode == "sp500":
+        sp500 = fetch_sp500_tickers()
+        if not sp500:
+            logger.error("Failed to fetch S&P 500 tickers; aborting")
+            sys.exit(1)
         return sp500
-    return sorted(set(sp500) | set(ETF_TICKERS))  # full
+
+    if mode == "sp900":
+        # Recommended: S&P 500 (large-cap) + MidCap 400 ≈ 900 tickers
+        # Covers market cap ~$2B and above, matching the strategy's $20亿 requirement.
+        # Mid-caps are excluded from sp500 mode but often the best trend-following targets.
+        sp900 = fetch_sp900_tickers()
+        if not sp900:
+            logger.error("Failed to fetch S&P 900 tickers; aborting")
+            sys.exit(1)
+        return sp900
+
+    # full: sp900 + ETFs
+    sp900 = fetch_sp900_tickers()
+    if not sp900:
+        logger.error("Failed to fetch tickers; aborting")
+        sys.exit(1)
+    return sorted(set(sp900) | set(ETF_TICKERS))
 
 
 # ── Main ───────────────────────────────────────────────────────────────────
