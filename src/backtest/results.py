@@ -144,6 +144,22 @@ class BacktestResults:
                 "profit_factor": 0.0, "avg_holding_days": 0.0, "trades_per_year": 0.0,
             })
 
+        # ── Portfolio turnover ─────────────────────────────────────────────
+        # Annual Turnover = total buy value / (avg NAV × years)
+        # Measures how many times the portfolio is "turned over" each year.
+        # Example: 12.5 means the portfolio's full value is bought/sold 12.5× per year.
+        if (n_trades > 0 and n_days > 0
+                and "entry_price" in tl.columns and "shares" in tl.columns):
+            total_buy_value = float((tl["entry_price"] * tl["shares"]).sum())
+            avg_nav_value   = float(self.daily_nav.mean())
+            n_years_turn    = n_days / 252
+            if avg_nav_value > 0 and n_years_turn > 0:
+                metrics["annual_turnover"] = total_buy_value / (avg_nav_value * n_years_turn)
+            else:
+                metrics["annual_turnover"] = 0.0
+        else:
+            metrics["annual_turnover"] = 0.0
+
         return metrics
 
     def to_dict(self) -> dict:
