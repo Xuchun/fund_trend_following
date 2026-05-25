@@ -1,7 +1,14 @@
 """
-Trend-Following Strategy Backtest Website — Home / Executive Summary
+Trend-Following Strategy Backtest Website — entry point.
 Run: streamlit run website/app.py
 """
+
+import sys
+from pathlib import Path
+
+_root = Path(__file__).resolve().parents[1]
+if str(_root) not in sys.path:
+    sys.path.insert(0, str(_root))
 
 import streamlit as st
 
@@ -12,74 +19,82 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-from website.shared import setup_sidebar
-from website.components.metric_cards import render_summary_cards
-from website.components.strategy_badge import render_page_header
-from website.components.charts import nav_vs_spy
+from website.style import GLOBAL_CSS
+from website.data_loader import list_strategies, load_strategy
 
-res  = setup_sidebar()
-meta = res.meta
+st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
 
-render_page_header("执行摘要  Executive Summary", meta)
-st.caption(f"{meta.display_name} · {meta.subtitle} · 回测期间 {meta.backtest_start} → {meta.backtest_end}")
-st.markdown("---")
+# ── Load available strategies ─────────────────────────────────────────────────
+strategies = list_strategies()
+if not strategies:
+    st.error("⚠️ 未找到回测结果。请先运行回测脚本生成 results/v1/ 目录。")
+    st.stop()
 
-# ── Key metrics cards ───────────────────────────────────────────────────────
-render_summary_cards(
-    res.metrics, meta.color,
-    meta.backtest_start, meta.backtest_end,
+strategy_ids    = [m.id for m in strategies]
+strategy_labels = [f"{m.display_name} — {m.subtitle}" for m in strategies]
+
+# ── Sidebar: strategy selector ────────────────────────────────────────────────
+with st.sidebar:
+    st.markdown("### 📊 趋势跟踪策略回测")
+    st.markdown("---")
+
+    if len(strategies) == 1:
+        selected_idx = 0
+        m0 = strategies[0]
+        st.markdown(
+            f'<div style="background:{m0.color};color:white;padding:8px 12px;'
+            f'border-radius:6px;font-weight:600;font-size:0.85rem;">📌 {m0.display_name}</div>',
+            unsafe_allow_html=True,
+        )
+        st.caption(m0.subtitle)
+    else:
+        selected_label = st.selectbox("选择策略版本", strategy_labels, key="strategy_selector")
+        selected_idx   = strategy_labels.index(selected_label)
+
+    sel_meta = strategies[selected_idx]
+    st.markdown("---")
+    st.caption(
+        f"回测期间：{sel_meta.backtest_start[:4]}–{sel_meta.backtest_end[:4]}\n\n"
+        f"标的：{sel_meta.universe_stocks} 只股票 + {sel_meta.universe_etfs} 只 ETF"
+    )
+
+# ── Cache strategy data in session state ──────────────────────────────────────
+selected_id = strategy_ids[selected_idx]
+cache_key   = f"_results_{selected_id}"
+if cache_key not in st.session_state:
+    with st.spinner(f"正在加载 {sel_meta.display_name} 数据…"):
+        st.session_state[cache_key] = load_strategy(selected_id)
+st.session_state["current_results"] = st.session_state[cache_key]
+
+# ── Navigation ────────────────────────────────────────────────────────────────
+_pages = Path(__file__).parent / "pages"
+
+pg = st.navigation(
+    {
+        "": [
+            st.Page(_pages / "home.py",          title="执行摘要",       icon="📋"),
+        ],
+        "策略信息": [
+            st.Page(_pages / "strategy_logic.py", title="策略逻辑",       icon="📐"),
+            st.Page(_pages / "universe.py",        title="数据与标的池",   icon="🌐"),
+            st.Page(_pages / "methodology.py",     title="回测方法论",     icon="⚙️"),
+        ],
+        "回测结果": [
+            st.Page(_pages / "baseline_results.py",      title="基准回测结果",   icon="📊"),
+            st.Page(_pages / "parameter_sensitivity.py", title="参数敏感性分析", icon="🎛️"),
+            st.Page(_pages / "monte_carlo.py",           title="蒙特卡洛风险",   icon="🎲"),
+            st.Page(_pages / "walk_forward.py",          title="Walk-Forward 验证", icon="🔄"),
+            st.Page(_pages / "regime_analysis.py",       title="市场环境分析",   icon="🌦️"),
+        ],
+        "评估与建议": [
+            st.Page(_pages / "limitations.py",     title="局限性声明",     icon="⚠️"),
+            st.Page(_pages / "recommendations.py", title="推荐实盘参数",   icon="✅"),
+            st.Page(_pages / "next_steps.py",      title="下一步计划",     icon="🚀"),
+        ],
+        "多策略": [
+            st.Page(_pages / "comparison.py", title="策略对比", icon="📊"),
+        ],
+    },
+    position="sidebar",
 )
-
-st.markdown("<br>", unsafe_allow_html=True)
-
-# ── Mini NAV chart ──────────────────────────────────────────────────────────
-st.plotly_chart(
-    nav_vs_spy(res.nav, res.spy_nav, meta.color, meta.display_name),
-    use_container_width=True,
-)
-
-st.markdown("---")
-
-# ── Key findings ────────────────────────────────────────────────────────────
-st.subheader("核心发现")
-
-m = res.metrics
-cagr     = m.get("cagr", 0)
-max_dd   = m.get("max_drawdown", 0)
-sharpe   = m.get("sharpe", 0)
-win_rate = m.get("win_rate", 0)
-avg_win  = m.get("avg_win_r", 0)
-avg_loss = m.get("avg_loss_r", 0)
-pf       = m.get("profit_factor", 1)
-
-col1, col2 = st.columns(2)
-with col1:
-    st.markdown(f"""
-**策略行为符合趋势跟踪特征：**
-- 胜率仅 {win_rate*100:.1f}%，但平均盈利 {avg_win:+.2f}R > 平均亏损 {avg_loss:.2f}R
-- 盈亏比（Profit Factor）= {pf:.2f}，期望值微正
-- 平均持仓 {m.get('avg_holding_days',0):.0f} 天，约 {m.get('trades_per_year',0):.0f} 笔/年
-- 72% 的平仓为追踪止损触发（趋势结束时退出）
-""")
-
-with col2:
-    st.markdown(f"""
-**主要风险与局限：**
-- 最大回撤 {max_dd*100:.1f}%，发生于 2008 金融危机期间
-- 纯多头策略，熊市缺乏对冲机制
-- 标的池为当前 S&P 900 成分股（**含幸存者偏差**）
-- 真实表现预计低于回测值 20%–50%
-""")
-
-# ── Survivorship bias warning ───────────────────────────────────────────────
-st.markdown("""
-<div class="warning-box">
-<h4>⚠️ 重要风险声明：幸存者偏差</h4>
-当前回测标的池仅包含 <strong>2024 年末仍在 S&P 900 中的公司</strong>，不含历史退市、破产或被摘牌的公司（如 2008 年的雷曼兄弟、贝尔斯登等）。
-这是本回测最主要的偏差来源，<strong>CAGR 可能虚高 20%–50%</strong>。详见「局限性声明」页面。
-</div>
-""", unsafe_allow_html=True)
-
-# ── Quick nav ───────────────────────────────────────────────────────────────
-st.markdown("---")
-st.caption("使用左侧边栏导航至各章节详细内容 →")
+pg.run()
