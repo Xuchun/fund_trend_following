@@ -84,6 +84,44 @@ st.markdown(f"""
 
 st.markdown("---")
 
+# ── Turnover callout ──────────────────────────────────────────────────────────
+turnover = m.get("annual_turnover", 0)
+slippage_bps   = meta.params_anchor.get("slippage_bps", 10)
+commission_bps = meta.params_anchor.get("commission_bps", 3)
+rt_cost_bps    = (slippage_bps + commission_bps) * 2
+implied_cost_pct = turnover * rt_cost_bps / 100   # in bps→%
+
+st.subheader("组合换手率（Portfolio Turnover）")
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.metric(
+        "年换手率",
+        f"{turnover:.1f}x",
+        help="= 全年买入总额 ÷ 平均 NAV ÷ 年数。12.5x 表示每年持仓被替换约 12.5 次。",
+    )
+with col2:
+    st.metric(
+        "年换手率（百分比）",
+        f"{turnover*100:.0f}%",
+        help="等同于左侧 x 倍数，以百分比表示。",
+    )
+with col3:
+    st.metric(
+        "隐含年化交易成本",
+        f"≈ {implied_cost_pct:.2f}%",
+        help=f"= 换手率 × 单边成本({slippage_bps:.0f} bps 滑点 + {commission_bps:.0f} bps 佣金)× 2。已包含于回测净值中。",
+    )
+
+st.markdown(f"""
+**解读：** 年换手率 {turnover:.1f}x（{turnover*100:.0f}%）表示每年平均买入约 {turnover:.1f} 倍 NAV 的股票。
+以单边 {slippage_bps:.0f} bps 滑点 + {commission_bps:.0f} bps 佣金（合计 {slippage_bps+commission_bps:.0f} bps）、往返 {rt_cost_bps:.0f} bps 计，
+隐含年化交易摩擦约 **{implied_cost_pct:.2f}%**，已完整计入回测净值，无需额外扣除。
+
+> 趋势跟踪策略的换手率通常在 500%–2,000%/年之间，本策略 {turnover*100:.0f}% 处于正常范围。
+""")
+
+st.markdown("---")
+
 # ── Trades per year + holding days side by side ───────────────────────────────
 col1, col2 = st.columns(2)
 with col1:
