@@ -7,7 +7,8 @@
           {
             "type": "command",
             "command": "cd /Users/xuchun/Documents/fund_trend_following && FILE=$(jq -r '.tool_input.file_path // .tool_response.filePath') && [ -z \"$FILE\" ] || [ \"$FILE\" = \"null\" ] && exit 0; git add \"$FILE\" && git diff --cached --quiet && exit 0; git commit -m \"auto: update $(basename \\\"$FILE\\\")\" && git push origin main",
-            "statusMessage": "Committing and pushing to GitHub..."
+            "statusMessage": "Committing and pushing to GitHub...",
+            "timeout": 30
           }
         ]
       }
