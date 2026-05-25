@@ -102,6 +102,12 @@ def render_full_metrics_table(metrics: dict, spy_metrics: dict | None = None) ->
         if v is None: return "—"
         return f"{int(v):,}"
 
+    turnover     = metrics.get("annual_turnover")
+    slippage_bps = 10.0
+    commission_bps = 3.0
+    rt_cost_bps  = (slippage_bps + commission_bps) * 2   # round-trip
+    implied_cost = (turnover * rt_cost_bps / 10_000) if turnover else None
+
     rows = [
         ("**收益**", "", ""),
         ("CAGR", pct(metrics.get("cagr")), pct(spy_metrics.get("spy_cagr") if spy_metrics else None)),
@@ -122,6 +128,13 @@ def render_full_metrics_table(metrics: dict, spy_metrics: dict | None = None) ->
         ("盈亏比（Profit Factor）", f"{metrics.get('profit_factor',0):.2f}" if metrics.get("profit_factor") else "—", "—"),
         ("平均持仓天数", f"{metrics.get('avg_holding_days',0):.0f} 天", "—"),
         ("交易频率", f"{metrics.get('trades_per_year',0):.0f} 笔/年", "—"),
+        ("**换手率（Turnover）**", "", ""),
+        ("年换手率",
+         f"{turnover:.1f}x  ({turnover*100:.0f}%/年)" if turnover else "—",
+         "—"),
+        ("隐含年化交易成本",
+         f"≈ {implied_cost*100:.2f}%/年（已含于回测）" if implied_cost else "—",
+         "—"),
     ]
 
     df = pd.DataFrame(rows, columns=["指标", "策略 1.0", "SPY 基准"])
