@@ -142,7 +142,7 @@ STRATEGY_META = {
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Run Strategy 2.0 backtest (regime filter)")
     p.add_argument("--mode", choices=["etf", "sp500", "sp900", "full"],
-                   default="sp900", help="Universe mode (default: sp900)")
+                   default="full", help="Universe mode (default: full = sp900 + all ETFs from ETFs.csv)")
     p.add_argument("--tickers", nargs="+", metavar="T",
                    help="Override --mode with an explicit ticker list")
     p.add_argument("--start",           default=DEFAULT_START)
