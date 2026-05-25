@@ -77,6 +77,8 @@ def compute_breakout_strength(
     Returns:
         Float Series with same index as `close`.
     """
-    with pd.option_context("mode.use_inf_as_na", True):
-        strength = (close / rolling_high).where(rolling_high > 0)
+    ratio = close / rolling_high
+    # Replace inf/-inf (division by zero) with NaN
+    ratio = ratio.replace([float("inf"), float("-inf")], float("nan"))
+    strength = ratio.where(rolling_high > 0)
     return strength
