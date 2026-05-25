@@ -135,15 +135,19 @@ def check_rolling_high_no_lookahead() -> bool:
     if ok:
         _ok("rolling_high[t] = max(high[t-N : t-1]) verified for 10 rows")
 
-    # Today's high must NOT affect rolling_high for today
+    # Inflating only the LAST row's high must not change rolling_high for that row.
+    # shift(1) means rolling_high[t] looks at [t-N, t-1], so today's high is excluded.
     df2 = df.copy()
-    df2["high"] = df2["high"] * 100  # wildly inflate today's high
+    last_date = df2.index[-1]
+    df2.loc[last_date, "high"] = df2["high"].max() * 1000  # extreme value
     rh2 = compute_rolling_high(df2["high"], window=window)
-    # rolling_high should be the same until window+1 rows shift through
-    if not np.allclose(rh.dropna().values, rh2.dropna().values, rtol=1e-5):
-        _fail("rolling_high is affected by same-day high (look-ahead bias!)")
+    if not np.isclose(rh.loc[last_date], rh2.loc[last_date], rtol=1e-8):
+        _fail(
+            f"rolling_high[last] changed when last-row high was inflated: "
+            f"{rh.loc[last_date]:.4f} → {rh2.loc[last_date]:.4f} (look-ahead bias!)"
+        )
         return False
-    _ok("Inflating today's high does not change rolling_high (shift=1 confirmed)")
+    _ok("Inflating the last row's high does not change rolling_high for that row (shift=1 confirmed)")
     return ok
 
 
