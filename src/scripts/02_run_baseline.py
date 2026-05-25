@@ -74,7 +74,7 @@ BASELINE_PARAMS = StrategyParams(
     cash_proxy          = "SHY",   # 1-3Y Treasury ETF; covers full backtest period
 )
 
-DEFAULT_START = "2010-01-01"
+DEFAULT_START = "2004-01-01"
 DEFAULT_END   = "2024-12-31"
 
 
