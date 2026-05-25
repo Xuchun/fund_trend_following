@@ -169,15 +169,20 @@ def check_adv_no_lookahead() -> bool:
     if ok:
         _ok("ADV[t] = mean(dollar_vol[t-60 : t-1]) verified (shift=1)")
 
-    # Today's volume must not affect ADV for today
+    # Inflating only the LAST row's volume must not change ADV for that row.
+    # shift(1) means ADV[t] uses dollar_vol[t-window, t-1], not today's.
     df2 = df.copy()
-    df2["volume"] = df2["volume"] * 1000
+    last_date = df2.index[-1]
+    df2.loc[last_date, "volume"] = df2["volume"].max() * 1_000_000
     dv2 = compute_dollar_volume(df2["close"], df2["volume"])
     adv2 = compute_adv(dv2, window=window)
-    if not np.allclose(adv.dropna().values, adv2.dropna().values, rtol=1e-5):
-        _fail("ADV is affected by same-day volume (look-ahead bias!)")
+    if not np.isclose(adv.loc[last_date], adv2.loc[last_date], rtol=1e-8):
+        _fail(
+            f"ADV[last] changed when last-row volume was inflated: "
+            f"{adv.loc[last_date]:.2f} → {adv2.loc[last_date]:.2f} (look-ahead bias!)"
+        )
         return False
-    _ok("Inflating today's volume does not change ADV (shift=1 confirmed)")
+    _ok("Inflating the last row's volume does not change ADV for that row (shift=1 confirmed)")
     return ok
 
 
