@@ -35,7 +35,8 @@ def precompute_indicators(
             'rolling_high':      pd.Series,   # max(high[t-N:t-1])
             'breakout_signal':   pd.Series,   # bool: close > rolling_high
             'breakout_strength': pd.Series,   # close / rolling_high
-            'adv':               pd.Series,   # ADV_60 (shift=1)
+            'adv':               pd.Series,   # ADV_60 dollar volume (shift=1)
+            'volume_ma':         pd.Series,   # 60-day avg share volume (shift=1)
             'log_returns':       pd.Series,   # ln(close[t]/close[t-1])
         }
     }
@@ -44,7 +45,7 @@ def precompute_indicators(
       - Changing `atr_period`       → only 'atr' needs recomputation.
       - Changing `breakout_window`  → only 'rolling_high', 'breakout_signal',
                                       'breakout_strength' need recomputation.
-      - 'adv' and 'log_returns' are parameter-independent.
+      - 'adv', 'volume_ma', 'log_returns' are parameter-independent.
 
     Args:
         price_panel: Dict of ticker → standardized OHLCV DataFrame
