@@ -35,8 +35,23 @@ def nav_vs_spy(nav: pd.Series, spy_nav: pd.Series | None,
         yaxis_tickformat=".1f",
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         hovermode="x unified",
-        margin=dict(l=60, r=20, t=60, b=40),
-        height=420,
+        margin=dict(l=60, r=20, t=60, b=120),
+        height=480,
+        xaxis=dict(
+            rangeslider=dict(visible=True, thickness=0.08),
+            rangeselector=dict(
+                buttons=[
+                    dict(count=1,  label="1年",  step="year",  stepmode="backward"),
+                    dict(count=3,  label="3年",  step="year",  stepmode="backward"),
+                    dict(count=5,  label="5年",  step="year",  stepmode="backward"),
+                    dict(count=10, label="10年", step="year",  stepmode="backward"),
+                    dict(step="all", label="全程"),
+                ],
+                bgcolor="#f0f2f6",
+                activecolor=color,
+                font=dict(size=12),
+            ),
+        ),
     )
     fig.update_yaxes(ticksuffix="x")
     return fig
