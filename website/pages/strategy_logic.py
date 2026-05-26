@@ -62,6 +62,40 @@ st.markdown(f"""
 
 st.markdown("---")
 
+# ── Volume confirmation ────────────────────────────────────────────────────────
+vol_mult = p.get("volume_filter_multiplier", 0.0)
+st.subheader("2. 成交量确认（Volume Confirmation）")
+
+if vol_mult > 0:
+    st.markdown(f"""
+突破信号还需通过**成交量确认**过滤：只有当突破当日成交量显著高于近期均值时，
+信号才被视为有效。
+
+```
+过滤条件（t 日）：volume[t] ≥ {vol_mult:.1f} × mean(volume[t-60:t-1])
+```
+
+- 对比基准：**60 日成交量移动平均**（shift(1)，无前视偏差）
+- 阈值：{vol_mult:.1f}×，即突破日成交量必须至少是近 60 日均量的 {vol_mult:.1f} 倍
+- 使用**原始股数（shares）**而非美元成交量，避免股价高低对比较基准的影响
+""")
+    st.markdown(f"""
+<div class="info-box">
+<strong>为何需要成交量确认？</strong><br>
+价格突破并不总是真实趋势的开始。低成交量突破（"假突破"）往往由少数买单推动，
+缺乏市场参与度，极易在随后几天内反转。<br><br>
+要求 volume[t] &gt; {vol_mult:.1f}×vol_ma60 能有效排除这类噪音信号：
+机构资金进场时必然伴随大量成交，高成交量突破更可能代表真实的供需格局转变。<br><br>
+<strong>预期效果：</strong> 入场信号减少约 20–30%，胜率提升，换手率相应下降。
+</div>
+""", unsafe_allow_html=True)
+else:
+    st.markdown("""
+**【当前未启用】** `volume_filter_multiplier = 0`，所有价格突破信号均有效，不检查成交量。
+""")
+
+st.markdown("---")
+
 # ── Stop loss ─────────────────────────────────────────────────────────────────
 st.subheader("2. 初始止损（Initial Stop）")
 st.markdown(f"""
