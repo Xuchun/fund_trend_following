@@ -18,7 +18,7 @@ meta = res.meta
 p    = meta.params_anchor
 m    = res.metrics
 
-render_page_header("参数敏感性分析  Parameter Sensitivity", meta)
+render_page_header("参数敏感性分析", meta)
 st.caption(f"{meta.display_name} · 回测期间：{meta.backtest_start} → {meta.backtest_end}")
 st.markdown("---")
 
