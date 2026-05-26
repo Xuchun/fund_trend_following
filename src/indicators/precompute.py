@@ -69,6 +69,7 @@ def precompute_indicators(
             breakout_signal = compute_breakout_signal(close, rolling_high)
             breakout_strength = compute_breakout_strength(close, rolling_high)
             adv = compute_adv_from_ohlcv(close, volume, window=60)
+            volume_ma = compute_volume_ma(volume, window=60)
             log_returns = compute_log_returns(close)
 
             result[ticker] = {
@@ -77,6 +78,7 @@ def precompute_indicators(
                 "breakout_signal":   breakout_signal,
                 "breakout_strength": breakout_strength,
                 "adv":               adv,
+                "volume_ma":         volume_ma,
                 "log_returns":       log_returns,
             }
         except Exception as e:
