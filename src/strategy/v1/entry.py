@@ -73,11 +73,11 @@ def generate_entry_signals_v1(
         if not row["is_tradable"]:
             continue
 
-        close = float(row["close"])
-
-        # ── (c) Minimum price ───────────────────────────────────────────────
-        if close < params.min_price:
+        # Min-price filter uses raw close (actual tradable price at that time).
+        # All other calculations use adj_close (total-return consistent).
+        if float(row["close"]) < params.min_price:
             continue
+        close = float(row["adj_close"])
 
         # ── (d) ADV filter ──────────────────────────────────────────────────
         adv_series = ind["adv"]
