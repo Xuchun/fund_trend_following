@@ -72,7 +72,10 @@ BASELINE_PARAMS = StrategyParams(
     gap_filter          = 0.025,
     commission_bps      = 3.0,
     slippage_bps        = 10.0,
-    cash_proxy          = "SHY",   # 1-3Y Treasury ETF; covers full backtest period
+    cash_proxy          = "SHY",       # 1-3Y Treasury ETF; covers full backtest period 2002+
+    regime_filter_enabled = True,      # SPY 200-day SMA filter: no new entries in bear market
+    regime_ticker         = "SPY",
+    regime_sma_window     = 200,
 )
 
 DEFAULT_START = "2004-01-01"
