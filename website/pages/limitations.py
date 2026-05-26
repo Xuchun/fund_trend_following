@@ -13,7 +13,7 @@ from website.components.strategy_badge import render_page_header
 res  = get_results()
 meta = res.meta
 
-render_page_header("局限性声明  Limitations", meta)
+render_page_header("局限性声明", meta)
 st.caption(f"{meta.display_name} — 诚实评估回测的固有偏差")
 st.markdown("---")
 
