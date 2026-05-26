@@ -48,6 +48,9 @@ class StrategyParams:
     # ── Volume confirmation ────────────────────────────────────────────────
     volume_filter_multiplier: float = 0.0  # 0.0=disabled; 1.5 → vol[t] > 1.5×vol_ma60
 
+    # ── Breakout strength filter ───────────────────────────────────────────
+    breakout_strength_min: float = 0.0    # 0.0=disabled; 0.02 → close/rolling_high > 1.02
+
     # ── Execution model ────────────────────────────────────────────────────
     gap_filter: float = 0.025        # reject entry if open gaps > ±2.5%
     commission_bps: float = 3.0      # one-way commission in basis points
