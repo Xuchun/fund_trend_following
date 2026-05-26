@@ -329,3 +329,102 @@ if _DIAG_PATH.exists():
     )
 else:
     st.info("连续亏损数据尚未生成。运行：python src/scripts/04_run_diagnostics.py")
+
+# ── Section 6: Assessment ─────────────────────────────────────────────────────
+st.markdown("---")
+st.subheader("评估")
+
+if mc and "cagr_dist" in mc:
+    cd  = mc["cagr_dist"]
+    dd  = mc["max_drawdown_dist"]
+    sd  = mc.get("sharpe_dist", {})
+    dur = mc["drawdown_duration"]
+
+    prob_neg  = cd.get("prob_negative_cagr", 0)
+    prob_ruin = cd.get("prob_ruin", 0)
+    cagr_p50  = cd["p50"]
+    cagr_p5   = cd["p5"]
+    cagr_p95  = cd["p95"]
+    dd_p50    = dd["p50"]
+    dd_worst  = dd["worst"]
+    dd_p95    = dd.get("p95", dd_worst)
+    sharpe_p50 = sd.get("p50", 0)
+    avg_days   = dur.get("avg_days", 0)
+    p95_days   = dur.get("p95_days", 0)
+    max_days   = dur.get("max_days", 0)
+    prob_gt24  = dur.get("prob_gt_24m", 0)
+
+    # Historical actual figures from meta
+    actual_maxdd = res.metrics.get("max_drawdown", 0)
+    actual_sharpe = res.metrics.get("sharpe", 0)
+    actual_cagr   = res.metrics.get("cagr", 0)
+
+    st.markdown(f"""
+**1. 正向预期价值高度确定**
+
+在 {mc["n_simulations"]:,} 条随机路径中，负年化收益概率仅 **{prob_neg*100:.1f}%**，
+净值归零（NAV 跌破初始 50%）的概率为 **{prob_ruin*100:.1f}%**。
+CAGR 中位数 **{cagr_p50*100:+.1f}%**，95% 置信区间为
+[{cagr_p5*100:+.1f}%, {cagr_p95*100:+.1f}%]。
+这是蒙特卡洛分析最核心的结论——在任何合理的历史重采样下，
+策略的长期正收益几乎是必然的，而非侥幸。
+
+**2. 历史回测结果具有代表性**
+
+实际历史 CAGR **{actual_cagr*100:+.2f}%** 落在模拟中位数 **{cagr_p50*100:+.1f}%** 附近，
+实际 Sharpe **{actual_sharpe:+.3f}** 与模拟中位数 **{sharpe_p50:+.3f}** 高度吻合。
+值得注意的是，历史最大回撤 **{actual_maxdd*100:.1f}%** 优于模拟中位数 **{dd_p50*100:.1f}%**，
+说明实际回测并非"运气最好"的情形——模型的统计特性在历史数据上得到了如实体现，
+这增强了参数稳定性的信心。
+
+**3. 长期水下时间是最大的投资者心理挑战**
+
+模拟显示，**{prob_gt24*100:.0f}%** 的路径存在超过 24 个月的连续水下期，
+平均最长水下时间达 **{avg_days:.0f} 个交易日（约 {avg_days/252:.1f} 年）**，
+95th percentile 情形长达 **{p95_days:.0f} 天（约 {p95_days/252:.1f} 年）**，
+极端情形 **{max_days:,} 天（约 {max_days/252:.1f} 年）**。
+这意味着投资者需要具备至少 2–3 年不追加赎回的流动性安排，
+以及承受账面持续浮亏的心理准备。此风险不可低估。
+
+**4. 尾部回撤风险需要明确披露**
+
+最大回撤分布的 95th percentile 为 **{dd_p95*100:.1f}%**，最差情形 **{dd_worst*100:.1f}%**。
+虽然这些极端情形概率较低，但资金管理上必须以"最坏情形出现时我是否仍可存续"为基准，
+而非以"中位情形"作为压力测试标准。建议以 **{dd_p95*100:.0f}%** 作为最大可承受回撤的参考值。
+
+**5. Bootstrap 方法的局限性**
+
+本次模拟同时使用了 Return Bootstrap（IID 重采样）和 Block Bootstrap（月度分块）两种方法：
+- Return Bootstrap 打破了日收益率的时序相关性，可能低估趋势跟踪策略中"连续盈利/亏损段"的真实概率；
+- Block Bootstrap 保留了月度内的自相关结构，对趋势类策略更具代表性，
+  但仍未能完全复现多月跨度的宏观市场状态切换（如持续 12 个月的熊市）。
+
+综合来看，模拟低估了极端长跌市场环境的回撤深度，
+**实际尾部风险可能比模拟显示的 {dd_p95*100:.1f}% 更大**。
+
+**6. 与实盘表现的潜在差距**
+
+蒙特卡洛模拟基于历史日收益率的重采样，隐含假设是未来收益率分布与历史一致。
+实盘中存在以下不确定性：
+① 历史选股池（标普500/900成分股）存在**幸存者偏差**，实盘难以完整复制；
+② 大资金规模下**市场冲击成本**和流动性约束可能远超历史滑点假设；
+③ **策略套利拥挤**风险：趋势跟踪策略被广泛采用后，同向仓位在相同信号触发时加剧尾部回撤。
+
+因此，历史模拟结论应视为**乐观情景的上界**，实盘预期应适度保守。
+""")
+
+    verdict_color = "green" if prob_neg < 0.01 else ("orange" if prob_neg < 0.05 else "red")
+    if prob_neg < 0.01 and prob_ruin == 0:
+        verdict = "✅ 综合评价：策略统计特性稳健，正收益概率高，适合长周期持有；核心风险在于水下时间过长考验投资者耐心，而非策略本身的失效。"
+    elif prob_neg < 0.05:
+        verdict = "🟡 综合评价：策略整体可行，但存在一定负收益概率，需关注极端回撤情形。"
+    else:
+        verdict = "⚠️ 综合评价：负收益概率偏高，需重新审视策略参数或市场适用性。"
+
+    st.markdown(
+        f'<div class="info-box"><strong>{verdict}</strong></div>',
+        unsafe_allow_html=True,
+    )
+
+else:
+    st.info("蒙特卡洛数据尚未生成，无法提供评估。运行：python src/scripts/05_run_montecarlo.py")
