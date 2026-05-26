@@ -45,6 +45,9 @@ class StrategyParams:
     correlation_threshold: float = 0.7    # reduce size if corr > threshold
     correlation_reduction: float = 0.5    # multiply shares by this factor
 
+    # ── Volume confirmation ────────────────────────────────────────────────
+    volume_filter_multiplier: float = 0.0  # 0.0=disabled; 1.5 → vol[t] > 1.5×vol_ma60
+
     # ── Execution model ────────────────────────────────────────────────────
     gap_filter: float = 0.025        # reject entry if open gaps > ±2.5%
     commission_bps: float = 3.0      # one-way commission in basis points
