@@ -228,6 +228,10 @@ def _update_strategy_meta(
         f"成交量确认：突破日成交量 > {p.volume_filter_multiplier:.1f}× 60日均量，排除低成交量假突破"
         if p.volume_filter_multiplier > 0 else "无成交量确认过滤"
     )
+    bs_feat = (
+        f"突破强度过滤：收盘价须高于 {p.breakout_window}日高点 {p.breakout_strength_min*100:.0f}% 以上，排除边际突破"
+        if p.breakout_strength_min > 0 else "无突破强度过滤"
+    )
     if p.regime_filter_enabled:
         meta["subtitle"] = "Trend Following — Long Only, ATR Breakout + SPY 200-Day Regime Filter"
         meta["key_features"] = [
