@@ -10,12 +10,9 @@ import streamlit as st
 from website.shared import get_results
 from website.components.strategy_badge import render_page_header
 
-_proj = Path(__file__).resolve().parents[2]   # fund_trend_following/
-_src  = _proj / "src"
-if str(_src) not in sys.path:
-    sys.path.insert(0, str(_src))
-from data.universe import ETF_TICKERS
-_ETF_SET = set(ETF_TICKERS)
+_etf_csv = Path(__file__).resolve().parents[2] / "data" / "ETFs.csv"
+import pandas as _pd_etf
+_ETF_SET = set(_pd_etf.read_csv(_etf_csv)["SYMBOL"].dropna().str.strip().tolist()) if _etf_csv.exists() else set()
 from website.components.metric_cards import render_summary_cards, render_full_metrics_table
 from website.components.charts import (
     nav_vs_spy, drawdown_chart, rolling_sharpe_chart,
