@@ -282,7 +282,7 @@ class BacktestEngine:
             pos = portfolio.positions[ticker]
             df  = self.price_panel.get(ticker)
             if df is not None and date in df.index:
-                close_price = float(df.at[date, "close"])
+                close_price = float(df.at[date, "adj_close"])
             else:
                 close_price = pos.entry_price  # fallback: no gain/loss
 
