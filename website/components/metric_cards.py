@@ -129,7 +129,7 @@ def render_full_metrics_table(metrics: dict, spy_metrics: dict | None = None) ->
 
     def days(v):
         if v is None: return "—"
-        return f"{int(v):,} 天"
+        return f"{int(v):,} 交易日（≈ {int(v)/252:.1f} 年）"
 
     def cnt(v):
         if v is None: return "—"
