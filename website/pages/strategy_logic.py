@@ -135,7 +135,7 @@ else:
 st.markdown("---")
 
 # ── Stop loss ─────────────────────────────────────────────────────────────────
-st.subheader("4. 初始止损（Initial Stop）")
+st.subheader("4. 初始止损（Initial Stop Loss）")
 st.markdown(f"""
 入场后立即设置固定止损位，基于 **ATR(20) Wilder 平滑**计算：
 
