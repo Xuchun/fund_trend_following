@@ -2,17 +2,14 @@
 BacktestResults: container for a completed backtest run.
 
 Stores daily NAV, daily returns, and the full trade log.
-compute_metrics() provides a basic summary; Phase 6 will expand this
-by delegating to analysis/metrics.py.
+compute_metrics() delegates to analysis/metrics.py (Phase 6).
 """
 
 from __future__ import annotations
 
-import math
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
-import numpy as np
 import pandas as pd
 
 if TYPE_CHECKING:
