@@ -83,7 +83,7 @@ class BacktestResults:
         dd = (nav - cum_max) / cum_max
         metrics["max_drawdown"] = float(dd.min())
 
-        # Max drawdown duration (consecutive days in drawdown)
+        # Max drawdown duration (consecutive days below peak)
         in_dd = dd < 0
         max_dur = 0
         cur_dur = 0
@@ -94,6 +94,24 @@ class BacktestResults:
             else:
                 cur_dur = 0
         metrics["max_dd_duration_days"] = max_dur
+
+        # Avg duration of deep-drawdown episodes (drawdown continuously > 10%)
+        DEEP_DD_THRESHOLD = -0.10
+        in_deep = dd < DEEP_DD_THRESHOLD
+        deep_segs: list[int] = []
+        seg_start: int | None = None
+        for i, v in enumerate(in_deep):
+            if v and seg_start is None:
+                seg_start = i
+            elif not v and seg_start is not None:
+                deep_segs.append(i - seg_start)
+                seg_start = None
+        if seg_start is not None:
+            deep_segs.append(len(in_deep) - seg_start)
+        metrics["avg_deep_dd_duration_days"] = (
+            float(sum(deep_segs) / len(deep_segs)) if deep_segs else 0.0
+        )
+        metrics["n_deep_dd_episodes"] = len(deep_segs)
 
         # ── Risk-adjusted metrics ──────────────────────────────────────────
         mean_ret = float(ret.mean()) if len(ret) > 0 else 0.0
