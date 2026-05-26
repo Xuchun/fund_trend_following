@@ -59,9 +59,9 @@ def precompute_indicators(
 
     for ticker, df in price_panel.items():
         try:
-            close  = df["close"]
-            high   = df["high"]
-            low    = df["low"]
+            close  = df["adj_close"]
+            high   = df["adj_high"]
+            low    = df["adj_low"]
             volume = df["volume"]
 
             atr = compute_atr(high, low, close, period=params.atr_period)
