@@ -14,7 +14,7 @@ from website.components.strategy_badge import render_page_header
 res  = get_results()
 meta = res.meta
 
-render_page_header("数据与标的池  Universe & Data", meta)
+render_page_header("数据与标的池", meta)
 st.caption(f"回测期间：{meta.backtest_start} → {meta.backtest_end}")
 st.markdown("---")
 
