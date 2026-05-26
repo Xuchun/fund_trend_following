@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING
 import pandas as pd
 
 from .atr import compute_atr
-from .adv import compute_adv_from_ohlcv
+from .adv import compute_adv_from_ohlcv, compute_volume_ma
 from .breakout import compute_rolling_high, compute_breakout_signal, compute_breakout_strength
 from .correlation import compute_log_returns
 
