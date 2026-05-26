@@ -172,9 +172,10 @@ def compute_metrics(
         n_years = n_days / 252
         metrics["trades_per_year"] = n_trades / n_years if n_years > 0 else 0.0
 
-        # Max consecutive losing trades
+        # Max consecutive losing trades (sorted by exit date for chronological order)
+        _tl_sorted = tl.sort_values("exit_date") if "exit_date" in tl.columns else tl
         max_cl = cur_cl = 0
-        for win in (tl[pnl_col].values > 0):
+        for win in (_tl_sorted[pnl_col].values > 0):
             if not win:
                 cur_cl += 1
                 max_cl  = max(max_cl, cur_cl)
