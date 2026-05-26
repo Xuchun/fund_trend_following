@@ -55,7 +55,7 @@ def render_summary_cards(metrics: dict, color: str,
         st.markdown(_card_html(
             "Sharpe 比率",
             f'<span style="color:{sharpe_color}">{sharpe:+.3f}</span>',
-            "无风险利率 5%（日度计算）",
+            "无风险利率 2%（历史均值，日度计算）",
             color,
         ), unsafe_allow_html=True)
 
