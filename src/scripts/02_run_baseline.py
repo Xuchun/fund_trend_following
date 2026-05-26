@@ -70,6 +70,7 @@ BASELINE_PARAMS = StrategyParams(
     correlation_window      = 60,
     correlation_threshold   = 0.70,
     correlation_reduction   = 0.50,
+    volume_filter_multiplier = 1.5,    # breakout vol must exceed 1.5× 60d avg volume
     gap_filter          = 0.025,
     commission_bps      = 3.0,
     slippage_bps        = 10.0,
