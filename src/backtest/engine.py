@@ -169,7 +169,7 @@ class BacktestEngine:
             logger.debug("Exit %s: no open price on %s, carrying to next day", ticker, date.date())
             return False  # will retry next trading day
 
-        open_price = float(df.at[date, "open"])
+        open_price = float(df.at[date, "adj_open"])
         fill_price = compute_fill_price(open_price, "sell", self.params.slippage_bps)
         commission = compute_commission(fill_price, portfolio.positions[ticker].shares,
                                         self.params.commission_bps)
