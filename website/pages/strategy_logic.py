@@ -151,7 +151,7 @@ st.markdown(f"""
 st.markdown("---")
 
 # ── Trailing stop ─────────────────────────────────────────────────────────────
-st.subheader("4. 分段追踪止损（Segmented Trailing Stop）")
+st.subheader("5. 分段追踪止损（Segmented Trailing Stop）")
 st.markdown(f"""
 随着持仓盈利增加，逐步收紧追踪止损以锁定利润：
 
