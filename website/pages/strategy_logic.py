@@ -162,7 +162,7 @@ for col, (step, title, body) in zip(cols, steps):
 st.markdown("---")
 
 # ── Execution ─────────────────────────────────────────────────────────────────
-st.subheader("5. 执行与成本假设")
+st.subheader("6. 执行与成本假设")
 col1, col2 = st.columns(2)
 with col1:
     st.markdown(f"""
