@@ -80,7 +80,7 @@ pg = st.navigation(
             st.Page(_pages / "methodology.py",     title="回测方法论",     icon="⚙️"),
         ],
         "回测结果": [
-            st.Page(_pages / "baseline_results.py",      title="基准回测结果",   icon="📊"),
+            st.Page(_pages / "baseline_results.py",      title="Baseline参数回测结果", icon="📊"),
             st.Page(_pages / "parameter_sensitivity.py", title="参数敏感性分析", icon="🎛️"),
             st.Page(_pages / "monte_carlo.py",           title="蒙特卡洛风险",   icon="🎲"),
             st.Page(_pages / "walk_forward.py",          title="Walk-Forward 验证", icon="🔄"),
