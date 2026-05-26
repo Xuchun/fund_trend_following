@@ -32,13 +32,26 @@ st.markdown("<br>", unsafe_allow_html=True)
 # ── Context note for poor CAGR ────────────────────────────────────────────────
 cagr = m.get("cagr", 0)
 if cagr < 0.05:
-    st.markdown("""
+    regime_on = meta.params_anchor.get("regime_filter_enabled", False)
+    if regime_on:
+        regime_note = (
+            "已启用 <strong>SPY 200日均线过滤器</strong>，熊市期间（约占全程 19%）停止开新仓、"
+            "闲置资金转入 SHY。但过滤器<strong>不强制平仓</strong>——"
+            "2008 年危机期间已持有的头寸仍由追踪止损逐步平出，因此最大回撤未能完全规避。<br>"
+            "<strong>Strategy 2.0 计划引入强制减仓机制，在熊市信号触发时主动平仓。</strong>"
+        )
+    else:
+        regime_note = (
+            "纯多头策略遭受熊市的全部冲击，毫无对冲机制。<br>"
+            "<strong>Strategy 2.0 将引入 SPY 200日均线过滤器以减少熊市回撤。</strong>"
+        )
+    st.markdown(f"""
 <div class="warning-box">
 <h4>⚠️ 关于低 CAGR 的说明</h4>
-Strategy 1.0 在 2004–2024 全期的 CAGR 仅为 0.3%，主因是 2008 年金融危机期间
-<strong>纯多头策略遭受 -54% 的最大回撤</strong>，导致长达 12 年的资金恢复期。
-2010–2024 子区间 CAGR 约 6%，说明策略本身在无极端熊市时仍有效。
-<strong>Strategy 2.0 将引入市场环境过滤器（Market Regime Filter）以应对此问题。</strong>
+CAGR 仅 {cagr*100:.1f}%，主因是 2008 年金融危机期间
+<strong>最大回撤达 {abs(m.get("max_drawdown",0))*100:.1f}%</strong>，导致长期的资金恢复期。
+2010–2024 子区间 CAGR 约 6%，说明策略本身在无极端熊市时仍有效。<br>
+{regime_note}
 </div>
 """, unsafe_allow_html=True)
 
