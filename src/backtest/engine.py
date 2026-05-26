@@ -204,7 +204,7 @@ class BacktestEngine:
         if not bool(row["is_tradable"]):
             return
 
-        open_price   = float(row["open"])
+        open_price   = float(row["adj_open"])
         signal_close = signal["signal_close"]
 
         # ── Gap filter ──────────────────────────────────────────────────────
