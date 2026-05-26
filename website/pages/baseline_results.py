@@ -151,6 +151,16 @@ with col2:
     st.subheader("持仓天数分布")
     st.plotly_chart(holding_days_distribution(res.trades), use_container_width=True)
 
+# ── Profit by type: stock vs ETF ──────────────────────────────────────────────
+st.subheader("策略盈利来源：股票 vs ETF")
+st.plotly_chart(profit_by_type_chart(res.trades, _ETF_SET), use_container_width=True)
+etf_pnl   = res.trades[res.trades["ticker"].isin(_ETF_SET)]["net_pnl"].sum()
+stock_pnl = res.trades[~res.trades["ticker"].isin(_ETF_SET)]["net_pnl"].sum()
+total_pnl = etf_pnl + stock_pnl
+st.markdown(f"""
+全回测期累计净盈亏：**股票 ${stock_pnl/1e6:.1f}M**（占比 {stock_pnl/total_pnl*100:.0f}%）+ **ETF ${etf_pnl/1e6:.1f}M**（占比 {etf_pnl/total_pnl*100:.0f}%）= 合计 ${total_pnl/1e6:.1f}M
+""" if total_pnl != 0 else "")
+
 st.markdown("---")
 
 # ── Full metrics table ────────────────────────────────────────────────────────
