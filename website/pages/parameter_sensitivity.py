@@ -118,13 +118,15 @@ else:
     lbl_n100, lbl_n200 = "**N=100（当前）**", "N=200（待回测）"
 
 bw_rows = list(zip(
-    ["CAGR", "最大回撤", "Sharpe", "年换手率", "交易频率", "平均持仓", "隐含年化成本", "最长水下时间"],
+    ["CAGR", "最大回撤", "Sharpe（rf=5%→2%）", "年换手率", "交易频率", "平均持仓", "隐含年化成本", "最长水下时间"],
     col_n100, col_n200,
 ))
 st.dataframe(
     pd.DataFrame(bw_rows, columns=["指标", lbl_n100, lbl_n200]),
     use_container_width=True, hide_index=True,
 )
+if is_200:
+    st.caption("注：N=100 的 Sharpe 使用旧无风险利率 5% 计算；N=200 使用 2%（历史均值）。")
 
 if is_200:
     cagr_chg  = cagr_cur - 0.0403
