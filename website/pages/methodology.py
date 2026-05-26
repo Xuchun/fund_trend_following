@@ -80,7 +80,7 @@ with col2:
 st.markdown("---")
 
 # ── Cash management ───────────────────────────────────────────────────────────
-st.subheader("4. 资金管理")
+st.subheader("4. 资金管理与价格体系")
 st.markdown(f"""
 **闲置资金处理：** 未持仓部分投入 **{meta.cash_proxy}**（iShares 1–3 年期国债 ETF，2002 年上市）
 
@@ -90,6 +90,18 @@ st.markdown(f"""
 
 **初始资本：** $10,000,000（一千万美元）
 """)
+
+st.markdown("""
+<div class="info-box">
+<strong>价格体系：使用复权价格（Adjusted Prices），包含分红</strong><br>
+回测中所有价格计算（入场、出场、止损、追踪止损、NAV 标记）均使用
+<strong>复权价格 = 原始价格 × adj_factor</strong>，完整反映分红再投资后的总回报（Total Return）。<br><br>
+<strong>复权价格 vs 原始价格的区别：</strong> 当股票派息时，原始价格在除息日下跌（如 $100 派息 $1 后变 $99），
+但投资者同时收到 $1 现金。若用原始价格计算，分红收益会被漏计。
+使用复权价格后，这部分收益已隐含在价格序列中，无需单独记录。<br><br>
+<em>例外：最低价格过滤器（min_price > $10）使用原始价格，确保标的在当时实际可交易。</em>
+</div>
+""", unsafe_allow_html=True)
 
 st.markdown("""
 <div class="info-box">
