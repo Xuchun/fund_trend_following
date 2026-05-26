@@ -86,20 +86,20 @@ def render_summary_cards(metrics: dict, color: str,
 
     cols3 = st.columns(3)
     with cols3[0]:
-        yrs = f"{max_dd_days/365:.1f} 年" if max_dd_days else "—"
+        yrs = f"{max_dd_days/252:.1f} 年" if max_dd_days else "—"
         st.markdown(_card_html(
             "最长水下时间",
-            f'<span style="color:#d62728">{max_dd_days:,} 天</span>',
-            f"≈ {yrs}，NAV 持续低于前高点的最长连续周期",
+            f'<span style="color:#d62728">{max_dd_days:,} 交易日</span>',
+            f"≈ {yrs}（交易日计），NAV 持续低于前高点的最长连续周期",
             color,
         ), unsafe_allow_html=True)
 
     with cols3[1]:
-        yrs2 = f"{avg_deep_days/365:.1f} 年" if avg_deep_days else "—"
+        yrs2 = f"{avg_deep_days/252:.1f} 年" if avg_deep_days else "—"
         st.markdown(_card_html(
             "平均深度水下时间（回撤 > 10%）",
-            f'<span style="color:#d62728">{avg_deep_days:.0f} 天</span>',
-            f"≈ {yrs2}，共 {n_episodes} 次回撤超过 10% 的情节",
+            f'<span style="color:#d62728">{avg_deep_days:.0f} 交易日</span>',
+            f"≈ {yrs2}（交易日计），共 {n_episodes} 次回撤超过 10% 的情节",
             color,
         ), unsafe_allow_html=True)
 
