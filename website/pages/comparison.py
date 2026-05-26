@@ -15,7 +15,7 @@ from website.data_loader import list_strategies, load_strategy
 res  = get_results()
 meta = res.meta
 
-render_page_header("策略对比  Strategy Comparison", meta)
+render_page_header("策略对比", meta)
 st.caption("多版本策略净值对比")
 st.markdown("---")
 
