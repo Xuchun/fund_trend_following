@@ -44,7 +44,7 @@ class BacktestResults:
     def compute_metrics(
         self,
         benchmark_returns: pd.Series | None = None,
-        risk_free_rate: float = 0.05,
+        risk_free_rate: float = 0.02,
     ) -> dict:
         """
         Compute a summary of key performance indicators.
