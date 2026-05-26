@@ -82,7 +82,7 @@ def main() -> None:
 
     initial_nav = float(nav_df["nav"].iloc[0])
     logger.info(
-        "Loaded %d trading days  |  initial NAV = $%,.0f  |  start=%s  end=%s",
+        "Loaded %d trading days  |  initial NAV = $%.0f  |  start=%s  end=%s",
         len(daily_returns), initial_nav,
         daily_returns.index[0].date(), daily_returns.index[-1].date(),
     )
