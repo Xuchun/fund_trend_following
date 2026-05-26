@@ -254,9 +254,11 @@ def _update_strategy_meta(
     else:
         meta["subtitle"] = "Trend Following — Long Only, ATR Breakout"
         meta["key_features"] = [
-            f"100日高点突破入场（N-Day Breakout，N={p.breakout_window}）",
+            f"{p.breakout_window}日高点突破入场（N-Day Breakout，N={p.breakout_window}）",
             f"ATR({p.atr_period}) Wilder平滑，固定止损 {p.stop_loss_multiplier:.0f}×ATR",
             f"分段追踪止损：<1R用{p.trail_multiplier_r1:.0f}×ATR，1-3R用{p.trail_multiplier_r3:.0f}×ATR，>3R用{p.trail_multiplier_r5:.0f}×ATR",
+            vol_feat,
+            bs_feat,
             "1% NAV 风险仓位计算（4步过滤）",
             f"相关性过滤：持仓相关性 > {p.correlation_threshold:.2f} 时减半仓",
             f"组合热度上限 {p.heat_limit*100:.0f}%（总风险敞口 ≤ NAV 的 {p.heat_limit*100:.0f}%）",
