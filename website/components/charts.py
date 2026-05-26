@@ -67,7 +67,7 @@ def drawdown_chart(nav: pd.Series, color: str) -> go.Figure:
 
 def rolling_sharpe_chart(returns: pd.Series, spy_nav: pd.Series | None,
                          color: str, strategy_name: str,
-                         window: int = 252, rf_annual: float = 0.05) -> go.Figure:
+                         window: int = 252, rf_annual: float = 0.02) -> go.Figure:
     rf_daily = (1 + rf_annual) ** (1 / 252) - 1
     excess   = returns - rf_daily
     rs = excess.rolling(window).apply(
