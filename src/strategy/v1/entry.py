@@ -34,6 +34,9 @@ def generate_entry_signals_v1(
       g. Preliminary stop distance >= params.min_stop_distance_pct.
          stop_distance = (close − preliminary_stop) / close
          where preliminary_stop = close − stop_loss_multiplier × ATR.
+      h. Volume confirmation (if params.volume_filter_multiplier > 0):
+         volume[t] >= params.volume_filter_multiplier × volume_ma_60[t].
+         Rejects low-conviction breakouts not accompanied by elevated volume.
 
     Note on market_cap filter: Yahoo Finance does not provide point-in-time
     market cap. The filter is skipped here; callers using a commercial data
