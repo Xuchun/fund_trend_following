@@ -27,7 +27,8 @@ m    = dict(res.metrics)  # mutable copy
 
 # Compute max_consecutive_losses from trades if not already in metrics
 if "max_consecutive_losses" not in m and len(res.trades) > 0:
-    _pnl = res.trades["net_pnl"].values
+    _sorted = res.trades.sort_values("exit_date") if "exit_date" in res.trades.columns else res.trades
+    _pnl = _sorted["net_pnl"].values
     _max_cl = _cur_cl = 0
     for _v in _pnl:
         if _v <= 0:
