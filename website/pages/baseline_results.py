@@ -23,7 +23,19 @@ from website.components.charts import (
 
 res  = get_results()
 meta = res.meta
-m    = res.metrics
+m    = dict(res.metrics)  # mutable copy
+
+# Compute max_consecutive_losses from trades if not already in metrics
+if "max_consecutive_losses" not in m and len(res.trades) > 0:
+    _pnl = res.trades["net_pnl"].values
+    _max_cl = _cur_cl = 0
+    for _v in _pnl:
+        if _v <= 0:
+            _cur_cl += 1
+            _max_cl  = max(_max_cl, _cur_cl)
+        else:
+            _cur_cl = 0
+    m["max_consecutive_losses"] = _max_cl
 
 render_page_header("基准回测结果  Baseline Results", meta)
 st.caption(f"回测期间：{meta.backtest_start} → {meta.backtest_end}  ·  初始资金：$10,000,000")
