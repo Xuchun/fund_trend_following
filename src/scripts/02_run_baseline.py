@@ -108,8 +108,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--end",             default=DEFAULT_END,   help="End date YYYY-MM-DD")
     p.add_argument("--initial-capital", default=10_000_000, type=float,
                    help="Initial portfolio value in USD (default: $10,000,000)")
-    p.add_argument("--output",          default="results/baseline/",
-                   help="Output directory (default: results/baseline/)")
+    p.add_argument("--output",          default="results/v1/",
+                   help="Output directory (default: results/v1/)")
     p.add_argument("--force-download",  action="store_true",
                    help="Re-download all data even if cache exists")
     p.add_argument("--cash-proxy",      default=None,
