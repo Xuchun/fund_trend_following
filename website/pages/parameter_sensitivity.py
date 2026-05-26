@@ -291,3 +291,123 @@ st.markdown("""
 """)
 
 placeholder("Phase 6", "参数敏感性分析 — 网格搜索热力图")
+
+st.markdown("---")
+st.subheader("交易执行诊断（Trade Execution Diagnostics）")
+
+_DIAG_PATH = _root / "results" / "v1" / "diagnostics.json"
+
+if _DIAG_PATH.exists():
+    import json as _json
+    diag = _json.loads(_DIAG_PATH.read_text(encoding="utf-8"))
+
+    # ── Section A: Gap 止损分析 ────────────────────────────────────────────
+    st.markdown("#### A. Gap 止损分析（只统计触发固定止损的交易）")
+
+    gs = diag.get("gap_loss_stats", {})
+    col1, col2, col3 = st.columns(3)
+    col1.metric("止损交易笔数", f"{gs.get('n_stop_trades', 0):,}")
+    col2.metric("理论止损损失", "-1.00R（计划）")
+    col3.metric("实际平均止损损失", f"{gs.get('mean', 0.0):.2f}R")
+
+    col4, col5, col6 = st.columns(3)
+    col4.metric("在计划止损价内", f"{gs.get('pct_within_1r', 0.0)*100:.1f}%")
+    col5.metric("缺口扩大到 > 2R", f"{gs.get('pct_beyond_2r', 0.0)*100:.1f}%")
+    col6.metric("严重缺口 > 5R",  f"{gs.get('pct_beyond_5r', 0.0)*100:.1f}%")
+
+    eq = diag.get("execution_quality", {})
+    assessment = eq.get("assessment", "")
+    if assessment == "excellent":
+        box_color, border_color = "#e8f5e9", "#2e7d32"
+        icon = "✅"
+    elif assessment == "acceptable":
+        box_color, border_color = "#fff8e1", "#f57c00"
+        icon = "⚠️"
+    else:
+        box_color, border_color = "#ffebee", "#c62828"
+        icon = "🔴"
+
+    st.markdown(
+        f'<div class="info-box" style="background:{box_color};border-left-color:{border_color};">'
+        f'{icon} 执行质量评估：<strong>{assessment.upper()}</strong> — '
+        f'理论止损 {eq.get("expected_avg_loss_r", -1.0):+.2f}R，'
+        f'实际止损 {eq.get("actual_avg_loss_r", 0.0):+.3f}R，'
+        f'缺口影响 {eq.get("gap_impact_r", 0.0):+.3f}R'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+    st.caption("数据来源：results/v1/diagnostics.json | 仅统计 exit_reason == stop_loss 的交易")
+
+    # ── Section B: 连续亏损序列分析 ───────────────────────────────────────
+    st.markdown("#### B. 连续亏损序列分析")
+
+    sa = diag.get("streak_analysis", {})
+    sb1, sb2, sb3 = st.columns(3)
+    sb1.metric("最长连续亏损（笔）", sa.get("max_consecutive_losses", 0))
+    sb2.metric("平均序列长度",       f"{sa.get('avg_streak_length', 0.0):.2f}")
+    sb3.metric("亏损序列总数",       sa.get("total_streaks", 0))
+
+    # Build streak table (group >= 10 under "≥10")
+    streak_counts: dict = sa.get("streak_counts", {})
+    if streak_counts:
+        table_rows = []
+        cumulative = 0
+        total_streaks = sa.get("total_streaks", 1) or 1
+
+        # Lengths 1-9 individually, then "≥10"
+        for length in range(1, 10):
+            key = str(length)
+            cnt = streak_counts.get(key, 0)
+            cumulative += cnt
+            table_rows.append({
+                "序列长度（笔）": length,
+                "出现次数":       cnt,
+                "累计占比":       f"{cumulative / total_streaks * 100:.1f}%",
+            })
+        # Group >= 10
+        cnt_10plus = streak_counts.get("10+", 0)
+        cumulative += cnt_10plus
+        table_rows.append({
+            "序列长度（笔）": "≥10",
+            "出现次数":       cnt_10plus,
+            "累计占比":       f"{cumulative / total_streaks * 100:.1f}%",
+        })
+        st.dataframe(
+            pd.DataFrame(table_rows),
+            use_container_width=False,
+            hide_index=True,
+        )
+
+    max_cl = sa.get("max_consecutive_losses", 0)
+    st.markdown(
+        f'<div class="info-box">'
+        f'最长连续亏损 <strong>{max_cl} 笔</strong>——对心理承受力的考验，'
+        f'但在趋势策略中属于正常特征（胜率 ~38%）。'
+        f'在 38% 胜率下，统计期望每隔约 2.6 笔出现一次亏损连续段。'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+
+    # ── Section C: 逐年交易质量 ───────────────────────────────────────────
+    st.markdown("#### C. 逐年交易质量")
+
+    yearly = diag.get("yearly_stats", [])
+    if yearly:
+        yearly_rows = []
+        for row in yearly:
+            yearly_rows.append({
+                "年份":       row["year"],
+                "交易笔数":   row["n_trades"],
+                "胜率":       f"{row['win_rate']*100:.1f}%",
+                "平均R":      f"{row['avg_r']:+.3f}",
+                "最佳交易R":  f"{row['best_r']:+.3f}",
+                "最差交易R":  f"{row['worst_r']:+.3f}",
+                "平均持仓天数": f"{row['avg_hold_days']:.0f}",
+            })
+        st.dataframe(
+            pd.DataFrame(yearly_rows),
+            use_container_width=True,
+            hide_index=True,
+        )
+else:
+    st.info("诊断数据尚未生成。运行：python src/scripts/04_run_diagnostics.py")
