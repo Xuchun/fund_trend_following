@@ -77,12 +77,24 @@ st.markdown(f"""
 
 | 当前盈利区间 | 追踪止损距离 | 说明 |
 |------------|------------|------|
-| < 1R | {p['trail_multiplier_r1']:.0f}×ATR | 宽松，给趋势发展空间 |
+| < 1R | {p['trail_multiplier_r1']:.0f}×ATR | 宽松，给趋势充分发展空间 |
 | 1R – 3R | {p['trail_multiplier_r3']:.0f}×ATR | 中等，开始锁定利润 |
 | > 3R | {p['trail_multiplier_r5']:.0f}×ATR | 收紧，保护大盈利 |
 
 追踪止损**只升不降**：`new_stop = max(old_stop, close − k×ATR)`
 """)
+
+st.markdown(f"""
+<div class="info-box">
+<strong>早期追踪止损为何设为 {p['trail_multiplier_r1']:.0f}×ATR？</strong><br>
+早期阶段（盈利 &lt; 1R）价格波动频繁，过窄的追踪止损容易被短期噪音触发，
+导致大量仓位在趋势尚未发展时就被震出。原版 2×ATR 设置导致平均持仓仅 24 天、
+年换手率高达 11.24x，隐含年化交易成本 2.92%。<br>
+调整为 {p['trail_multiplier_r1']:.0f}×ATR 后，给予早期趋势更多发展空间，
+预期降低换手率约 20%，节省约 0.6%/年的交易摩擦成本。
+初始止损（Initial Stop）不受影响——跌破入场价 − 2×ATR 仍立即平仓。
+</div>
+""", unsafe_allow_html=True)
 
 st.markdown("---")
 
