@@ -163,8 +163,11 @@ def main() -> int:
     _check("rolling_sharpe has NaNs", rs.isna().any(), "first 251 rows are NaN — expected")
 
     ar = annual_returns(nav)
-    _check("annual_returns non-empty", len(ar) > 0, f"{len(ar)} years")
-    _check("annual_returns index is int", ar.index.dtype == int, f"dtype={ar.index.dtype}")
+    if not _check("annual_returns non-empty", len(ar) > 0, f"{len(ar)} years"):
+        failures += 1
+    is_int = pd.api.types.is_integer_dtype(ar.index.dtype)
+    if not _check("annual_returns index is integer", is_int, f"dtype={ar.index.dtype}"):
+        failures += 1
 
     # ── 7. Summary ──────────────────────────────────────────────────────────
     print("\n" + "=" * 62)
