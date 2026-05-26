@@ -212,11 +212,11 @@ class Portfolio:
             return fallback
         df = price_panel[ticker]
         if date in df.index:
-            return float(df.at[date, "close"])
+            return float(df.at[date, "adj_close"])
         # Use last available close before date
         earlier = df.index[df.index <= date]
         if len(earlier) > 0:
-            return float(df.at[earlier[-1], "close"])
+            return float(df.at[earlier[-1], "adj_close"])
         return fallback
 
     def to_trade_log(self) -> pd.DataFrame:
