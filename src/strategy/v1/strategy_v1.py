@@ -72,9 +72,9 @@ class StrategyV1(BaseStrategy):
             signal = check_exit_signals_v1(
                 date=date,
                 position=position,
-                high=float(row["high"]),
-                low=float(row["low"]),
-                close=float(row["close"]),
+                high=float(row["adj_high"]),
+                low=float(row["adj_low"]),
+                close=float(row["adj_close"]),
                 atr=atr,
                 params=self.params,
             )
