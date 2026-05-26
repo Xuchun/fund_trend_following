@@ -70,3 +70,28 @@ def compute_adv_from_ohlcv(
     """
     dollar_vol = compute_dollar_volume(close, volume)
     return compute_adv(dollar_vol, window)
+
+
+def compute_volume_ma(
+    volume: pd.Series,
+    window: int = 60,
+) -> pd.Series:
+    """
+    Rolling average of raw share volume, excluding the current day.
+
+    volume_ma[t] = mean(volume[t-window : t-1])
+
+    Used for breakout volume confirmation:
+        volume[t] > multiplier × volume_ma[t]
+
+    Shares the same shift(1) convention as all other indicators,
+    so there is no look-ahead bias.
+
+    Args:
+        volume: Daily share volume.
+        window: Look-back period in trading days (default 60).
+
+    Returns:
+        Series with same index as `volume`.
+    """
+    return volume.shift(1).rolling(window=window, min_periods=window).mean()
