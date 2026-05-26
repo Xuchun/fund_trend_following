@@ -40,17 +40,25 @@ st.markdown("---")
 # ── Entry ─────────────────────────────────────────────────────────────────────
 st.subheader("1. 入场条件（Entry）")
 st.markdown(f"""
-当收盘价突破过去 **{p['breakout_window']} 个交易日的最高价**时触发买入信号。
+当复权收盘价突破过去 **{p['breakout_window']} 个交易日的最高价**时触发买入信号。
 
 ```
-信号（t 日收盘后）：close[t] > max(high[t-{p['breakout_window']}:t-1])
-执行（t+1 日开盘）：以 t+1 日开盘价 × (1 + 滑点) 买入
+信号（t 日收盘后）：adj_close[t] > max(adj_high[t-{p['breakout_window']}:t-1])
+执行（t+1 日开盘）：以 t+1 日复权开盘价 × (1 + 滑点) 买入
 ```
 
+- 使用复权价格（adj_factor），所有价格计算已包含分红
 - 使用 `shift(1)` 防止前视偏差（look-ahead bias）
 - 仅在满足仓位过滤条件后建仓（见仓位管理）
 - Gap 过滤：若开盘价偏离昨收 >{p.get('gap_filter',0.025)*100:.1f}%，跳过该信号
 """)
+
+st.markdown(f"""
+<div class="info-box">
+<strong>突破窗口为何选 {p['breakout_window']} 日？</strong><br>
+{'<strong>200 日</strong>（约 10 个月）即市场常说的"52 周新高"，是机构趋势跟踪中最经典的突破周期。相比 100 日突破，200 日只捕捉更持久、更强劲的趋势，信号更少但质量更高，可有效减少假突破带来的频繁进出场。' if p['breakout_window'] == 200 else f'当前使用 {p["breakout_window"]} 日突破，覆盖约 {p["breakout_window"]//20} 个月的价格区间，在信号频率与趋势质量之间取得平衡。'}
+</div>
+""", unsafe_allow_html=True)
 
 st.markdown("---")
 
