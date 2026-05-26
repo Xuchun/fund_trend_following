@@ -128,6 +128,10 @@ def generate_entry_signals_v1(
         str_series = ind["breakout_strength"]
         bs = float(str_series[date]) if (date in str_series.index and not pd.isna(str_series[date])) else 1.0
 
+        # ── (i) Breakout strength filter ────────────────────────────────────
+        if params.breakout_strength_min > 0 and bs < 1.0 + params.breakout_strength_min:
+            continue
+
         signals.append(
             {
                 "ticker":              ticker,
