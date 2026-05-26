@@ -40,7 +40,7 @@ st.markdown(f"""
 st.markdown("---")
 st.subheader("连续亏损序列分析（基于历史真实交易）")
 
-_DIAG_PATH = _root / "results" / "v1" / "diagnostics.json"
+_DIAG_PATH = Path(__file__).resolve().parents[2] / "results" / "v1" / "diagnostics.json"
 
 if _DIAG_PATH.exists():
     import plotly.graph_objects as go
