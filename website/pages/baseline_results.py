@@ -10,9 +10,7 @@ import streamlit as st
 from website.shared import get_results
 from website.components.strategy_badge import render_page_header
 
-import sys
-from pathlib import Path
-_src = Path(__file__).resolve().parents[3] / "src"
+_src = _root / "src"
 if str(_src) not in sys.path:
     sys.path.insert(0, str(_src))
 from data.universe import ETF_TICKERS
