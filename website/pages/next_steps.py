@@ -13,7 +13,7 @@ from website.components.strategy_badge import render_page_header
 res  = get_results()
 meta = res.meta
 
-render_page_header("下一步计划  Next Steps", meta)
+render_page_header("下一步计划", meta)
 st.caption(f"{meta.display_name} → Strategy 2.0 及后续路线图")
 st.markdown("---")
 
