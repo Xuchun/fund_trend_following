@@ -295,7 +295,7 @@ placeholder("Phase 6", "参数敏感性分析 — 网格搜索热力图")
 st.markdown("---")
 st.subheader("交易执行诊断（Trade Execution Diagnostics）")
 
-_DIAG_PATH = _root / "results" / "v1" / "diagnostics.json"
+_DIAG_PATH = Path(__file__).resolve().parents[2] / "results" / "v1" / "diagnostics.json"
 
 if _DIAG_PATH.exists():
     import json as _json
