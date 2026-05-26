@@ -153,6 +153,118 @@ def build_universe(mode: str, custom_tickers: list[str] | None) -> list[str]:
     return sorted(set(sp900) | set(ETF_TICKERS))
 
 
+# ── Strategy metadata ──────────────────────────────────────────────────────
+
+def _update_strategy_meta(
+    output_dir: Path,
+    params: "StrategyParams",
+    start: str,
+    end: str,
+    initial_capital: float,
+    n_strategy_stocks: int,
+    n_strategy_etfs: int,
+) -> None:
+    """
+    Write / update strategy_meta.json in output_dir.
+
+    Preserves etf_universe (names + categories) from any existing file so the
+    website's universe page keeps its rich display.  Updates all run-time fields.
+    """
+    meta_path = output_dir / "strategy_meta.json"
+
+    # Preserve rich fields (etf_universe, colors, …) from an existing file
+    if meta_path.exists():
+        meta = json.loads(meta_path.read_text())
+    else:
+        meta = {
+            "id": "v1", "version": "1.0",
+            "display_name": "Strategy 1.0",
+            "subtitle": "Trend Following — Long Only, ATR Breakout + Regime Filter",
+            "color": "#1f77b4", "badge_text": "v1.0", "badge_color": "blue",
+            "differs_from_previous": None,
+            "etf_universe": [],
+        }
+
+    # ── Runtime-derived fields ────────────────────────────────────────────────
+    meta["backtest_start"]   = start
+    meta["backtest_end"]     = end
+    meta["initial_capital"]  = initial_capital
+    meta["cash_proxy"]       = params.cash_proxy
+    meta["universe_stocks"]  = n_strategy_stocks
+    meta["universe_etfs"]    = n_strategy_etfs
+    meta["universe_total"]   = n_strategy_stocks + n_strategy_etfs
+
+    # ── Params anchor ─────────────────────────────────────────────────────────
+    meta["params_anchor"] = {
+        "breakout_window":        params.breakout_window,
+        "atr_period":             params.atr_period,
+        "stop_loss_multiplier":   params.stop_loss_multiplier,
+        "min_stop_distance_pct":  params.min_stop_distance_pct,
+        "trail_multiplier_r1":    params.trail_multiplier_r1,
+        "trail_multiplier_r3":    params.trail_multiplier_r3,
+        "trail_multiplier_r5":    params.trail_multiplier_r5,
+        "risk_per_trade":         params.risk_per_trade,
+        "position_cap":           params.position_cap,
+        "heat_limit":             params.heat_limit,
+        "correlation_window":     params.correlation_window,
+        "correlation_threshold":  params.correlation_threshold,
+        "correlation_reduction":  params.correlation_reduction,
+        "gap_filter":             params.gap_filter,
+        "commission_bps":         params.commission_bps,
+        "slippage_bps":           params.slippage_bps,
+        "regime_filter_enabled":  params.regime_filter_enabled,
+        "regime_ticker":          params.regime_ticker,
+        "regime_sma_window":      params.regime_sma_window,
+    }
+
+    # ── Human-readable descriptions ───────────────────────────────────────────
+    p = params
+    if p.regime_filter_enabled:
+        meta["subtitle"] = "Trend Following — Long Only, ATR Breakout + SPY 200-Day Regime Filter"
+        meta["key_features"] = [
+            f"100日高点突破入场（N-Day Breakout，N={p.breakout_window}）",
+            f"ATR({p.atr_period}) Wilder平滑，固定止损 {p.stop_loss_multiplier:.0f}×ATR",
+            f"分段追踪止损：<1R用{p.trail_multiplier_r1:.0f}×ATR，1-3R用{p.trail_multiplier_r3:.0f}×ATR，>3R用{p.trail_multiplier_r5:.0f}×ATR",
+            f"1% NAV 风险仓位计算（4步过滤）",
+            f"相关性过滤：持仓相关性 > {p.correlation_threshold:.2f} 时减半仓",
+            f"组合热度上限 {p.heat_limit*100:.0f}%（总风险敞口 ≤ NAV 的 {p.heat_limit*100:.0f}%）",
+            f"{p.regime_ticker} {p.regime_sma_window}日均线市场环境过滤：熊市停止开仓，现金投入 {p.cash_proxy}",
+            f"空仓资金投入 {p.cash_proxy}（1-3年期国债 ETF，覆盖完整回测期 2002+）",
+        ]
+        regime_desc = (
+            f"启用——{p.regime_ticker} adj-close[t] > SMA({p.regime_sma_window})[t] "
+            f"为牛市（允许开仓），否则为熊市（停止新建仓，追踪止损继续运行，"
+            f"闲置现金投入 {p.cash_proxy}）"
+        )
+    else:
+        meta["subtitle"] = "Trend Following — Long Only, ATR Breakout"
+        meta["key_features"] = [
+            f"100日高点突破入场（N-Day Breakout，N={p.breakout_window}）",
+            f"ATR({p.atr_period}) Wilder平滑，固定止损 {p.stop_loss_multiplier:.0f}×ATR",
+            f"分段追踪止损：<1R用{p.trail_multiplier_r1:.0f}×ATR，1-3R用{p.trail_multiplier_r3:.0f}×ATR，>3R用{p.trail_multiplier_r5:.0f}×ATR",
+            "1% NAV 风险仓位计算（4步过滤）",
+            f"相关性过滤：持仓相关性 > {p.correlation_threshold:.2f} 时减半仓",
+            f"组合热度上限 {p.heat_limit*100:.0f}%（总风险敞口 ≤ NAV 的 {p.heat_limit*100:.0f}%）",
+            f"空仓资金投入 {p.cash_proxy}（1-3年期国债 ETF，覆盖完整回测期 2002+）",
+            "无市场环境过滤器（纯多头，全程持仓机会均等）",
+        ]
+        regime_desc = "不启用——Strategy 1.0 原版为纯多头策略，无市场环境过滤器"
+
+    meta.setdefault("logic_sections", {})
+    meta["logic_sections"].update({
+        "entry":  f"close[t] > max(high[t-{p.breakout_window}:t-1])，使用shift(1)防前视偏差，次日开盘执行",
+        "regime": regime_desc,
+        "stop":   f"entry_price - {p.stop_loss_multiplier:.0f} × ATR({p.atr_period})，入场价与止损价之差定义为 1R",
+        "trail":  f"棘轮式追踪止损：<1R用{p.trail_multiplier_r1:.0f}×ATR，1-3R用{p.trail_multiplier_r3:.0f}×ATR，≥3R用{p.trail_multiplier_r5:.0f}×ATR；只能上移不能下移",
+        "sizing": f"Step1目标风险({p.risk_per_trade*100:.0f}%NAV)→Step2单标的上限({p.position_cap*100:.0f}%NAV)→Step3相关性调整→Step4热度检查({p.heat_limit*100:.0f}%)",
+        "direction": "纯多头（Long Only）",
+        "execution": f"t日收盘生成信号，t+1日开盘价执行；滑点{p.slippage_bps:.0f}bps，佣金{p.commission_bps:.0f}bps，Gap过滤±{p.gap_filter*100:.1f}%",
+    })
+
+    meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2))
+    logger.info("strategy_meta.json updated → %s", meta_path)
+
+
 # ── Main ───────────────────────────────────────────────────────────────────
 
 def main() -> None:
