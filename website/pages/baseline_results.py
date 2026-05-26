@@ -38,7 +38,7 @@ if "max_consecutive_losses" not in m and len(res.trades) > 0:
             _cur_cl = 0
     m["max_consecutive_losses"] = _max_cl
 
-render_page_header("基准回测结果  Baseline Results", meta)
+render_page_header("基准回测结果", meta)
 st.caption(f"回测期间：{meta.backtest_start} → {meta.backtest_end}  ·  初始资金：$10,000,000")
 st.markdown("---")
 
