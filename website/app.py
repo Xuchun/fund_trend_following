@@ -72,7 +72,7 @@ _pages = Path(__file__).parent / "pages"
 pg = st.navigation(
     {
         "": [
-            st.Page(_pages / "home.py",          title="执行摘要",       icon="📋"),
+            st.Page(_pages / "home.py",          title="总结",           icon="📋"),
         ],
         "策略信息": [
             st.Page(_pages / "strategy_logic.py", title="策略逻辑",       icon="📐"),
