@@ -10,7 +10,8 @@ import streamlit as st
 from website.shared import get_results
 from website.components.strategy_badge import render_page_header
 
-_src = _root / "src"
+_proj = Path(__file__).resolve().parents[2]   # fund_trend_following/
+_src  = _proj / "src"
 if str(_src) not in sys.path:
     sys.path.insert(0, str(_src))
 from data.universe import ETF_TICKERS
