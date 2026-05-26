@@ -152,12 +152,30 @@ with col2:
 # ── Profit by type: stock vs ETF ──────────────────────────────────────────────
 st.subheader("策略盈利来源：股票 vs ETF")
 st.plotly_chart(profit_by_type_chart(res.trades, _ETF_SET), use_container_width=True)
+
 etf_pnl   = res.trades[res.trades["ticker"].isin(_ETF_SET)]["net_pnl"].sum()
 stock_pnl = res.trades[~res.trades["ticker"].isin(_ETF_SET)]["net_pnl"].sum()
 total_pnl = etf_pnl + stock_pnl
-st.markdown(f"""
-全回测期累计净盈亏：**股票 ${stock_pnl/1e6:.1f}M**（占比 {stock_pnl/total_pnl*100:.0f}%）+ **ETF ${etf_pnl/1e6:.1f}M**（占比 {etf_pnl/total_pnl*100:.0f}%）= 合计 ${total_pnl/1e6:.1f}M
-""" if total_pnl != 0 else "")
+
+_traded        = res.trades["ticker"].unique()
+_stock_traded  = sum(1 for t in _traded if t not in _ETF_SET)
+_etf_traded    = sum(1 for t in _traded if t in _ETF_SET)
+_uni_stocks    = meta.universe_stocks
+_uni_etfs      = meta.universe_etfs
+
+col1, col2 = st.columns(2)
+with col1:
+    st.markdown(f"""
+**股票**
+- 股票池：{_uni_stocks} 只 → 实际交易 **{_stock_traded} 只**（覆盖率 {_stock_traded/_uni_stocks*100:.1f}%）
+- 盈利贡献：**${stock_pnl/1e6:.1f}M**（占总盈亏 {stock_pnl/total_pnl*100:.0f}%）
+""")
+with col2:
+    st.markdown(f"""
+**ETF**
+- ETF 池：{_uni_etfs} 只 → 实际交易 **{_etf_traded} 只**（覆盖率 {_etf_traded/_uni_etfs*100:.1f}%）
+- 盈利贡献：**${etf_pnl/1e6:.1f}M**（占总盈亏 {etf_pnl/total_pnl*100:.0f}%）
+""")
 
 st.markdown("---")
 
