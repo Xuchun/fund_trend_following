@@ -269,7 +269,7 @@ def _update_strategy_meta(
 
     meta.setdefault("logic_sections", {})
     meta["logic_sections"].update({
-        "entry":  f"close[t] > max(high[t-{p.breakout_window}:t-1])，且 volume[t] > {p.volume_filter_multiplier:.1f}×vol_ma60[t]（成交量确认），使用shift(1)防前视偏差，次日开盘执行",
+        "entry":  f"close[t] > max(high[t-{p.breakout_window}:t-1])，且 close[t]/rolling_high[t] ≥ {1+p.breakout_strength_min:.2f}（突破强度 ≥ {p.breakout_strength_min*100:.0f}%），且 volume[t] > {p.volume_filter_multiplier:.1f}×vol_ma60[t]（成交量确认），使用shift(1)防前视偏差，次日开盘执行",
         "regime": regime_desc,
         "stop":   f"entry_price - {p.stop_loss_multiplier:.0f} × ATR({p.atr_period})，入场价与止损价之差定义为 1R",
         "trail":  f"棘轮式追踪止损：<1R用{p.trail_multiplier_r1:.0f}×ATR，1-3R用{p.trail_multiplier_r3:.0f}×ATR，≥3R用{p.trail_multiplier_r5:.0f}×ATR；只能上移不能下移",
