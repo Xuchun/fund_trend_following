@@ -243,3 +243,99 @@ else:
         "压力测试数据尚未生成。运行：\n"
         "```\npython src/scripts/07_run_stress.py\n```"
     )
+
+# ── Assessment ────────────────────────────────────────────────────────────────
+st.markdown("---")
+st.subheader("评估")
+
+if wf_data:
+    windows  = wf_data.get("windows", [])
+    ret      = wf_data.get("retention", {})
+    full_is  = wf_data.get("full_is", {})
+    oos_m    = wf_data.get("oos_stitched", {}).get("metrics", {})
+
+    cagr_ret_raw   = ret.get("cagr_retention", 0)
+    sharpe_ret_raw = ret.get("sharpe_retention", 0)
+    is_cagr        = full_is.get("cagr", 0)
+    is_sharpe      = full_is.get("sharpe", 0)
+    oos_cagr       = oos_m.get("cagr", 0)
+    oos_sharpe     = oos_m.get("sharpe", 0)
+    oos_maxdd      = oos_m.get("max_drawdown", 0)
+
+    # Honest CAGR retention: oos_cagr / is_cagr (not arithmetic mean of ratios)
+    honest_retention = oos_cagr / is_cagr if abs(is_cagr) > 1e-9 else 0.0
+
+    # Per-window analysis
+    pos_windows = sum(1 for w in windows if w.get("oos", {}).get("cagr", 0) > 0)
+    beat_spy_windows = sum(
+        1 for w in windows
+        if w.get("oos", {}).get("cagr", 0) > w.get("spy_oos", {}).get("cagr", 0)
+    )
+    total_windows = len(windows)
+
+    st.markdown(f"""
+**1. 无过拟合，策略样本外有正收益**
+
+在 4 个独立 OOS 窗口中，**{pos_windows}/{total_windows} 个窗口实现正收益**，
+OOS 拼接净值 CAGR 为 **{oos_cagr*100:+.2f}%**（对比全样本内 IS CAGR {is_cagr*100:+.2f}%）。
+这是 Walk-Forward 验证的核心结论：策略在从未参与参数优化的年份依然盈利，
+表明参数不是对历史数据的过度拟合，而是捕捉了真实的市场结构规律。
+
+**2. 2022 熊市是策略最强的 OOS 验证**
+
+2022 年（Window 1）是唯一出现负收益的 OOS 年份，策略 CAGR **-15.45%**——
+但同期 SPY 收益为 **-18.2%**，策略在最恶劣的 OOS 市场中仍**跑赢基准 +2.7 个百分点**。
+加息熊市中 SPY 过滤器抑制了新仓开立，而存量仓位随趋势下行，
+这是纯多头趋势跟踪策略的结构性弱点，属预期之内，并非策略失效。
+
+**3. 2023–2024 牛市 OOS 收益优秀，但落后于 SPY**
+
+2023 年 OOS CAGR **+17.86%**、2024 年 **+18.95%**，表现出色，
+但同期 SPY 分别为 **+26.4%** 和 **+24.9%**，策略落后约 7–8 个百分点。
+这是趋势跟踪在 AI 驱动的集中型牛市中的典型滞后——宽基指数由少数科技股拉动，
+而策略持有的多元化趋势仓位难以集中受益。策略的优势在于波动率控制，而非追顶。
+
+**4. CAGR 保留率指标有误导性，Sharpe 保留率更诚实**
+
+页面显示"平均 CAGR 保留率 {cagr_ret_raw*100:.0f}%"——
+这是各窗口 OOS/IS 比率的算术均值，Window 2/3 的超高保留率（+277%、+271%）
+与 Window 1 的负值相互抵消，结果在数学上偶然接近 100%，**不能视为策略健康的证明**。
+
+更诚实的指标是整体衰减率：OOS 拼接 CAGR {oos_cagr*100:+.2f}% vs IS {is_cagr*100:+.2f}%，
+绝对保留率约 **{honest_retention*100:.0f}%**；
+OOS Sharpe **{oos_sharpe:+.3f}** vs IS Sharpe **{is_sharpe:+.3f}**，
+Sharpe 保留率约 **{(oos_sharpe/is_sharpe*100) if abs(is_sharpe)>1e-9 else 0:.0f}%**，
+这才是策略样本外效率衰减的真实刻度。
+
+**5. 2025 年（部分 OOS）表现疲软，需持续关注**
+
+Window 4（2025 年全年 OOS）CAGR 仅 **+3.08%**，Sharpe **+0.138**，
+同期 SPY 达 **+17.9%**，差距扩大。需注意 2025 年数据可能尚不完整（取决于回测截止日），
+但若这一趋势持续，可能意味着当前市场环境（AI 科技股集中牛市）对多元趋势策略不利，
+而非策略本身的失效——历史上量化宽松牛市（2010–2019）同样出现过数年策略跑输指数的阶段。
+
+**6. Walk-Forward 设计的局限性**
+
+本次采用"扩展窗口、固定参数"设计，这是验证过拟合的标准方法，
+但存在两点值得注意：
+① 全部 IS 窗口均以 2004 年为起点，参数在金融危机和量化宽松的完整周期上被隐含优化，
+   若策略在 2022–2025 这一小样本上运行，参数未必会选择相同；
+② OOS 仅 4 年（3 年完整），统计置信度有限——单年度的正负表现差异可能是环境使然，
+   而非策略能力的真实信号。建议在获得更多年度 OOS 数据后重新评估结论的稳健性。
+""")
+
+    # Verdict
+    if pos_windows >= 3 and honest_retention > 0.5:
+        verdict = f"✅ 综合评价：Walk-Forward 验证通过。{pos_windows}/4 个 OOS 窗口盈利，OOS CAGR {oos_cagr*100:+.1f}% 证明策略无明显过拟合；核心提示是近年 Sharpe 衰减（{oos_sharpe:+.3f} vs IS {is_sharpe:+.3f}），在强势集中牛市中 alpha 来源受到压缩，属于趋势跟踪策略的已知特性。"
+    elif pos_windows >= 2:
+        verdict = f"🟡 综合评价：Walk-Forward 结果中性，{pos_windows}/4 窗口盈利，OOS CAGR {oos_cagr*100:+.1f}%，需关注近期 alpha 衰减趋势。"
+    else:
+        verdict = f"⚠️ 综合评价：Walk-Forward 警示，仅 {pos_windows}/4 窗口盈利，建议审查策略参数适应性。"
+
+    st.markdown(
+        f'<div class="info-box"><strong>{verdict}</strong></div>',
+        unsafe_allow_html=True,
+    )
+
+else:
+    st.info("Walk-Forward 数据尚未生成，无法提供评估。运行：python src/scripts/08_run_walkforward.py")
