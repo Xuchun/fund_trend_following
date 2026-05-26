@@ -123,7 +123,7 @@ def _compute_spy_nav(nav: pd.Series, results_dir: Path) -> Optional[pd.Series]:
 
 
 def compute_rolling_sharpe(returns: pd.Series, window: int = 252,
-                            rf_annual: float = 0.05) -> pd.Series:
+                            rf_annual: float = 0.02) -> pd.Series:
     rf_daily = (1 + rf_annual) ** (1 / 252) - 1
     excess   = returns - rf_daily
     rs = excess.rolling(window).apply(
