@@ -37,6 +37,9 @@ def generate_entry_signals_v1(
       h. Volume confirmation (if params.volume_filter_multiplier > 0):
          volume[t] >= params.volume_filter_multiplier × volume_ma_60[t].
          Rejects low-conviction breakouts not accompanied by elevated volume.
+      i. Breakout strength (if params.breakout_strength_min > 0):
+         close[t] / rolling_high_N[t] >= 1 + params.breakout_strength_min.
+         Rejects marginal new highs; requires a decisive breakout above the lookback high.
 
     Note on market_cap filter: Yahoo Finance does not provide point-in-time
     market cap. The filter is skipped here; callers using a commercial data
