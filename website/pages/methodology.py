@@ -13,7 +13,7 @@ from website.components.strategy_badge import render_page_header
 res  = get_results()
 meta = res.meta
 
-render_page_header("回测方法论  Methodology", meta)
+render_page_header("回测方法论", meta)
 st.caption(f"回测期间：{meta.backtest_start} → {meta.backtest_end}")
 st.markdown("---")
 
