@@ -14,7 +14,7 @@ res  = get_results()
 meta = res.meta
 p    = meta.params_anchor
 
-render_page_header("推荐实盘参数  Recommendations", meta)
+render_page_header("推荐实盘参数", meta)
 st.caption(f"{meta.display_name} — 当前 Anchor 参数组合")
 st.markdown("---")
 
