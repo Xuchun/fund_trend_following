@@ -76,8 +76,11 @@ st.markdown("---")
 
 # ── NAV chart ─────────────────────────────────────────────────────────────────
 st.subheader("净值曲线 vs SPY")
-st.plotly_chart(nav_vs_spy(res.nav, res.spy_nav, meta.color, meta.display_name),
-                use_container_width=True)
+_show_spy = st.checkbox("显示 SPY 基准曲线", value=True, key="nav_show_spy")
+st.plotly_chart(
+    nav_vs_spy(res.nav, res.spy_nav if _show_spy else None, meta.color, meta.display_name),
+    use_container_width=True,
+)
 
 # ── Drawdown chart ────────────────────────────────────────────────────────────
 st.subheader("回撤曲线")
