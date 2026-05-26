@@ -266,6 +266,64 @@ def holding_days_distribution(trades: pd.DataFrame) -> go.Figure:
     return fig
 
 
+def profit_by_type_chart(trades: pd.DataFrame, etf_tickers: set[str]) -> go.Figure:
+    """Stacked bar: annual net P&L split by stock vs ETF."""
+    df = trades.copy()
+    df["year"] = df["exit_date"].dt.year
+    df["type"] = df["ticker"].apply(lambda t: "ETF" if t in etf_tickers else "股票")
+
+    pnl_col  = "net_pnl" if "net_pnl" in df.columns else "gross_pnl"
+    grouped  = df.groupby(["year", "type"])[pnl_col].sum()
+
+    all_years = sorted(df["year"].unique())
+
+    etf_vals   = [grouped.get(("ETF",   y), grouped.get((y, "ETF"),   0)) / 1e6 for y in all_years]
+    stock_vals = [grouped.get(("股票",   y), grouped.get((y, "股票"),  0)) / 1e6 for y in all_years]
+
+    # reindex properly
+    etf_series   = grouped.xs("ETF",   level="type") / 1e6 if "ETF"   in grouped.index.get_level_values("type") else pd.Series(dtype=float)
+    stock_series = grouped.xs("股票",  level="type") / 1e6 if "股票"  in grouped.index.get_level_values("type") else pd.Series(dtype=float)
+    etf_vals   = [float(etf_series.get(y,   0)) for y in all_years]
+    stock_vals = [float(stock_series.get(y,  0)) for y in all_years]
+    totals     = [e + s for e, s in zip(etf_vals, stock_vals)]
+
+    fig = go.Figure()
+    fig.add_trace(go.Bar(
+        x=all_years, y=etf_vals,
+        name="ETF",
+        marker_color="#ff7f0e",
+        hovertemplate="%{x}年<br>ETF: $%{y:.2f}M<extra></extra>",
+    ))
+    fig.add_trace(go.Bar(
+        x=all_years, y=stock_vals,
+        name="股票",
+        marker_color="#1f77b4",
+        hovertemplate="%{x}年<br>股票: $%{y:.2f}M<extra></extra>",
+    ))
+    fig.add_trace(go.Scatter(
+        x=all_years, y=totals,
+        name="合计",
+        mode="lines+markers",
+        line=dict(color="#333333", width=1.5, dash="dot"),
+        marker=dict(size=5),
+        hovertemplate="%{x}年<br>合计: $%{y:.2f}M<extra></extra>",
+    ))
+    fig.add_hline(y=0, line_color="#555", line_width=0.8)
+    fig.update_layout(
+        barmode="relative",
+        title="策略盈利来源：股票 vs ETF（按年，已平仓交易净盈亏）",
+        xaxis_title="年份",
+        yaxis_title="净盈亏（百万美元）",
+        yaxis_tickprefix="$",
+        yaxis_ticksuffix="M",
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        hovermode="x unified",
+        margin=dict(l=60, r=20, t=60, b=40),
+        height=360,
+    )
+    return fig
+
+
 def multi_strategy_nav(results_list: list, spy_nav: pd.Series | None) -> go.Figure:
     """Overlay NAV curves for multiple strategies (used in comparison page)."""
     fig = go.Figure()
