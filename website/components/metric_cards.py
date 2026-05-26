@@ -150,7 +150,7 @@ def render_full_metrics_table(metrics: dict, spy_metrics: dict | None = None) ->
         ("最大回撤", pct(metrics.get("max_drawdown")), pct(spy_metrics.get("spy_max_drawdown") if spy_metrics else None)),
         ("最长回撤（天）", days(metrics.get("max_dd_duration_days")), "—"),
         ("**风险收益**", "", ""),
-        ("Sharpe 比率（rf=5%）", num(metrics.get("sharpe")), num(spy_metrics.get("spy_sharpe") if spy_metrics else None)),
+        ("Sharpe 比率（rf=2%）", num(metrics.get("sharpe")), num(spy_metrics.get("spy_sharpe") if spy_metrics else None)),
         ("Sortino 比率", num(metrics.get("sortino")), "—"),
         ("Calmar 比率", num(metrics.get("calmar"), 3), "—"),
         ("**交易统计**", "", ""),
