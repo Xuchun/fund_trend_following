@@ -213,6 +213,7 @@ def _update_strategy_meta(
         "correlation_threshold":     params.correlation_threshold,
         "correlation_reduction":     params.correlation_reduction,
         "volume_filter_multiplier":  params.volume_filter_multiplier,
+        "breakout_strength_min":     params.breakout_strength_min,
         "gap_filter":                params.gap_filter,
         "commission_bps":            params.commission_bps,
         "slippage_bps":              params.slippage_bps,
