@@ -16,15 +16,15 @@ def _card_html(label: str, value: str, sub: str, color: str) -> str:
 def render_summary_cards(metrics: dict, color: str,
                           start: str, end: str) -> None:
     """Render the 8 headline metric cards."""
-    cagr         = metrics.get("cagr", 0)
-    total_ret    = metrics.get("total_return", 0)
-    max_dd       = metrics.get("max_drawdown", 0)
-    sharpe       = metrics.get("sharpe", 0)
-    win_rate     = metrics.get("win_rate", 0)
-    n_trades     = metrics.get("n_trades", 0)
-    max_dd_days  = metrics.get("max_dd_duration_days", 0)
+    cagr          = metrics.get("cagr", 0)
+    max_dd        = metrics.get("max_drawdown", 0)
+    sharpe        = metrics.get("sharpe", 0)
+    win_rate      = metrics.get("win_rate", 0)
+    n_trades      = metrics.get("n_trades", 0)
+    max_cl        = metrics.get("max_consecutive_losses", 0)
+    max_dd_days   = metrics.get("max_dd_duration_days", 0)
     avg_deep_days = metrics.get("avg_deep_dd_duration_days", 0)
-    n_episodes   = metrics.get("n_deep_dd_episodes", 0)
+    n_episodes    = metrics.get("n_deep_dd_episodes", 0)
 
     def fmt_pct(v):
         sign = "+" if v >= 0 else ""
@@ -62,25 +62,26 @@ def render_summary_cards(metrics: dict, color: str,
     cols2 = st.columns(3)
     with cols2[0]:
         st.markdown(_card_html(
-            "总回报率",
-            f'<span style="color:{signed_color(total_ret)}">{fmt_pct(total_ret)}</span>',
-            f"$10M → ${10_000_000*(1+total_ret):,.0f}",
-            color,
-        ), unsafe_allow_html=True)
-
-    with cols2[1]:
-        st.markdown(_card_html(
             "交易胜率",
             f"{win_rate*100:.1f}%",
             "胜率低但期望值为正（趋势跟踪特征）",
             color,
         ), unsafe_allow_html=True)
 
-    with cols2[2]:
+    with cols2[1]:
         st.markdown(_card_html(
             "总交易笔数",
             f"{int(n_trades):,}",
             f"约 {metrics.get('trades_per_year',0):.0f} 笔/年",
+            color,
+        ), unsafe_allow_html=True)
+
+    with cols2[2]:
+        cl_color = "#d62728" if max_cl >= 10 else ("#f57c00" if max_cl >= 6 else "#333333")
+        st.markdown(_card_html(
+            "最长连续亏钱交易次数",
+            f'<span style="color:{cl_color}">{max_cl} 笔</span>',
+            "历史最长连续亏损交易序列",
             color,
         ), unsafe_allow_html=True)
 
