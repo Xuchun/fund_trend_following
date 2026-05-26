@@ -168,6 +168,10 @@ def render_full_metrics_table(metrics: dict, spy_metrics: dict | None = None) ->
         ("隐含年化交易成本",
          f"≈ {implied_cost*100:.2f}%/年（已含于回测）" if implied_cost else "—",
          "—"),
+        ("**仓位暴露**", "", ""),
+        ("市场暴露率（Market Exposure）",
+         f"{metrics.get('market_exposure', 0)*100:.1f}%（持仓天数 / 总交易日）" if metrics.get("market_exposure") else "—",
+         "—"),
     ]
 
     df = pd.DataFrame(rows, columns=["指标", "策略 1.0", "SPY 基准"])
