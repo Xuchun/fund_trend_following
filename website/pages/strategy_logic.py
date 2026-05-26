@@ -14,7 +14,7 @@ res  = get_results()
 meta = res.meta
 p    = meta.params_anchor
 
-render_page_header("策略逻辑  Strategy Logic", meta)
+render_page_header("策略逻辑", meta)
 st.caption(f"{meta.display_name} · {meta.subtitle}")
 st.markdown("---")
 
