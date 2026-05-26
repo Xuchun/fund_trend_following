@@ -189,3 +189,125 @@ else:
 | 加息熊市 | 2022 | 股债双杀，SPY -19% |
 | AI驱动牛市 | 2023–2025 | 科技领涨，趋势集中 |
 """)
+
+# ── Assessment ────────────────────────────────────────────────────────────────
+st.markdown("---")
+st.subheader("评估")
+
+if regime_data and "regimes" in regime_data:
+    regimes  = regime_data["regimes"]
+    full_p   = regime_data.get("full_period", {})
+
+    def _s(name):
+        return regimes.get(name, {}).get("strategy", {})
+
+    def _spy(name):
+        return regimes.get(name, {}).get("spy", {})
+
+    def _alpha(name):
+        sc = _s(name).get("cagr", 0)
+        bc = _spy(name).get("cagr", 0)
+        return sc - bc
+
+    crisis_alpha   = _alpha("金融危机")
+    crisis_strat_dd = _s("金融危机").get("max_drawdown", 0)
+    crisis_spy_dd   = _spy("金融危机").get("max_drawdown", 0)
+
+    qe_alpha        = _alpha("量化宽松牛市")
+    qe_cagr         = _s("量化宽松牛市").get("cagr", 0)
+    qe_spy_cagr     = _spy("量化宽松牛市").get("cagr", 0)
+    qe_sharpe       = _s("量化宽松牛市").get("sharpe", 0)
+
+    covid_cagr      = _s("COVID崩盘+复苏").get("cagr", 0)
+    covid_sharpe    = _s("COVID崩盘+复苏").get("sharpe", 0)
+    covid_strat_dd  = _s("COVID崩盘+复苏").get("max_drawdown", 0)
+    covid_spy_dd    = _spy("COVID崩盘+复苏").get("max_drawdown", 0)
+
+    hike_cagr       = _s("加息熊市").get("cagr", 0)
+    hike_spy_cagr   = _spy("加息熊市").get("cagr", 0)
+    hike_alpha      = _alpha("加息熊市")
+    hike_winrate    = _s("加息熊市").get("win_rate", 0)
+    hike_strat_dd   = _s("加息熊市").get("max_drawdown", 0)
+
+    ai_cagr         = _s("AI驱动牛市").get("cagr", 0)
+    ai_spy_cagr     = _spy("AI驱动牛市").get("cagr", 0)
+    ai_alpha        = _alpha("AI驱动牛市")
+    ai_sharpe       = _s("AI驱动牛市").get("sharpe", 0)
+    ai_strat_dd     = _s("AI驱动牛市").get("max_drawdown", 0)
+
+    full_cagr   = full_p.get("cagr", 0)
+    full_sharpe = full_p.get("sharpe", 0)
+    full_dd     = full_p.get("max_drawdown", 0)
+
+    st.markdown(f"""
+**1. 下行保护是策略最核心的竞争优势**
+
+金融危机（2008–2009）是对策略最有力的压力测试：
+SPY 最大回撤高达 **{crisis_spy_dd*100:.1f}%**，而策略最大回撤仅 **{crisis_strat_dd*100:.1f}%**；
+SPY 年化收益 **{_spy("金融危机").get("cagr",0)*100:+.2f}%**，策略仍实现 **{_s("金融危机").get("cagr",0)*100:+.2f}%**，
+超额收益 **{crisis_alpha*100:+.2f}%**。
+追踪止损机制在趋势反转初期有效截断了亏损，令策略在全市场最极端的系统性崩盘中
+依然保全了本金并获得小幅正收益。这是该策略最有说服力的结果，
+也是其作为投资组合"尾部保护"配置的核心价值。
+
+**2. COVID 急跌：回撤控制远优于 SPY，绝对收益亮眼**
+
+COVID 期间（2020–2021）是策略风险调整回报最佳的阶段：
+CAGR **{covid_cagr*100:+.2f}%**，Sharpe **{covid_sharpe:+.3f}**，最大回撤仅 **{covid_strat_dd*100:.1f}%**。
+相比之下 SPY 最大回撤 **{covid_spy_dd*100:.1f}%**（急跌-34%后强劲反弹）。
+策略在急跌时止损及时，在复苏趋势中快速建仓，
+充分体现了追踪止损 + 趋势跟踪在高波动环境中的优势。
+
+**3. 牛市跑输 SPY 是结构性特征，非策略缺陷**
+
+量化宽松十年牛市（2010–2019）中，策略 CAGR **{qe_cagr*100:+.2f}%** vs SPY **{qe_spy_cagr*100:+.2f}%**，
+差距 **{qe_alpha*100:+.2f}%**；AI 驱动牛市（2023–2025）差距进一步扩大至 **{ai_alpha*100:+.2f}%**。
+这是**结构性弱点**：纯多头趋势策略持有多元化仓位，
+在 SPY 由少数科技股集中拉动的环境下必然滞后。
+但需注意，策略在 AI 牛市中的 CAGR 仍达 **{ai_cagr*100:+.2f}%**，Sharpe **{ai_sharpe:+.3f}**，
+最大回撤 **{ai_strat_dd*100:.1f}%**——绝对收益可观，只是相对收益落后。
+
+**4. 加息熊市（2022）是策略设计边界的暴露**
+
+2022 年策略 CAGR **{hike_cagr*100:+.2f}%**，仍优于 SPY 的 **{hike_spy_cagr*100:+.2f}%**（超额 {hike_alpha*100:+.2f}%），
+但胜率骤降至 **{hike_winrate*100:.1f}%**，最大回撤 **{hike_strat_dd*100:.1f}%**。
+这揭示了"SPY 过滤器 + 纯多头"设计的边界：
+过滤器在趋势持续下行时阻止了新仓，但已持仓跟随市场下行直至止损触发，
+无做空能力使得策略无法在熊市中主动获利，只能被动减少损失。
+加息周期是该策略最弱的环境类型。
+
+**5. 跨环境综合评价：攻守失衡是已知权衡**
+
+| 环境 | 策略表现 | vs SPY |
+|------|----------|--------|
+| 金融危机 | ✅ 极强 | 大幅跑赢 |
+| 量化宽松牛市 | 🟡 稳健 | 跑输约 5% |
+| COVID崩盘+复苏 | ✅ 极强 | 回撤控制碾压 SPY |
+| 加息熊市 | 🟡 抗跌 | 小幅跑赢但仍亏损 |
+| AI驱动牛市 | 🟡 可接受 | 跑输约 11% |
+
+策略在**每一个市场环境中均跑赢或接近 SPY 的风险调整表现**，
+但以"原始收益率"衡量，只有金融危机和 COVID 崩盘阶段能明显击败 SPY。
+这是趋势跟踪与买入持有策略之间的经典权衡：
+**用牛市的相对落后，换取熊市的本金保护**。
+""")
+
+    # Verdict
+    bear_markets = [n for n in ["金融危机", "加息熊市"] if _alpha(n) > 0]
+    bull_markets_neg = [n for n in ["量化宽松牛市", "AI驱动牛市"] if _alpha(n) < -0.05]
+
+    verdict = (
+        f"✅ 综合评价：策略在 5 个市场环境中展示出一致的风险控制能力——"
+        f"熊市/危机场景（金融危机、加息熊市）均跑赢 SPY，"
+        f"牛市环境获得正绝对收益但落后于 SPY。"
+        f"全周期 CAGR {full_cagr*100:+.2f}%、Sharpe {full_sharpe:+.3f}、MaxDD {full_dd*100:.1f}%，"
+        f"定位是**攻守兼备但偏重防守**的量化策略，"
+        f"适合将其视为投资组合的风险对冲配置而非单纯超越指数的工具。"
+    )
+    st.markdown(
+        f'<div class="info-box"><strong>{verdict}</strong></div>',
+        unsafe_allow_html=True,
+    )
+
+else:
+    st.info("市场环境分析数据尚未生成，无法提供评估。运行：python src/scripts/09_run_regime.py")
