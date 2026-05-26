@@ -18,7 +18,7 @@ from website.components.strategy_badge import render_page_header
 res  = get_results()
 meta = res.meta
 
-render_page_header("市场环境分析  Regime Analysis", meta)
+render_page_header("市场环境分析", meta)
 st.caption(f"{meta.display_name} · 回测期间：{meta.backtest_start} → {meta.backtest_end}")
 st.markdown("---")
 
