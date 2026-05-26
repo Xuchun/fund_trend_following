@@ -93,11 +93,16 @@ if wf_data:
 
         # Add OOS window separators
         for w in windows:
-            fig.add_vline(
-                x=w["oos_start"], line_dash="dot",
-                line_color="#888", line_width=1,
-                annotation_text=w["label"],
-                annotation_position="top",
+            fig.add_shape(
+                type="line",
+                x0=w["oos_start"], x1=w["oos_start"],
+                y0=0, y1=1, yref="paper",
+                line=dict(dash="dot", color="#888", width=1),
+            )
+            fig.add_annotation(
+                x=w["oos_start"], y=1.04, yref="paper",
+                text=w["label"], showarrow=False,
+                font=dict(size=10, color="#888"),
             )
 
         oos_m = oos_st.get("metrics", {})
