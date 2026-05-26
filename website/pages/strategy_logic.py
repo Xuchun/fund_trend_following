@@ -96,8 +96,46 @@ else:
 
 st.markdown("---")
 
+# ── Breakout strength filter ──────────────────────────────────────────────────
+bs_min = p.get("breakout_strength_min", 0.0)
+st.subheader("3. 突破强度过滤（Breakout Strength Filter）")
+
+if bs_min > 0:
+    st.markdown(f"""
+突破信号还需通过**突破强度过滤**：不仅要求收盘价超过 N 日高点，
+还要求**超出幅度至少达到 {bs_min*100:.0f}%**，排除边际突破。
+
+```
+过滤条件（t 日）：close[t] / rolling_high_{p['breakout_window']}[t] ≥ {1+bs_min:.2f}
+等价于：close[t] ≥ rolling_high_{p['breakout_window']}[t] × {1+bs_min:.2f}
+```
+
+- 突破强度（`breakout_strength`）= close[t] / rolling_high_N[t]
+- 当前阈值：**{bs_min*100:.0f}%**，即收盘价须高于 {p['breakout_window']} 日高点 {bs_min*100:.0f}% 以上
+- 边际突破（仅超出 0.1%）被过滤，只保留有决定性突破意义的信号
+""")
+    st.markdown(f"""
+<div class="info-box">
+<strong>为何需要突破强度过滤？</strong><br>
+传统的 N 日突破条件（close &gt; rolling_high）对于"仅超出一分钱"的突破同样有效，
+这类边际突破缺乏真正的动量支撑，更可能是随机噪音而非趋势起点。<br><br>
+要求 <strong>close/rolling_high &gt; {1+bs_min:.2f}</strong>（即超出 {bs_min*100:.0f}%）能确保：
+<ul>
+<li>进场信号具有一定的趋势惯性，不会因微小波动立即回撤触发止损</li>
+<li>与成交量确认配合，大幅提升每笔入场的质量</li>
+<li>预期效果：入场信号进一步减少约 15–20%，但胜率和平均盈亏比（profit factor）改善</li>
+</ul>
+</div>
+""", unsafe_allow_html=True)
+else:
+    st.markdown("""
+**【当前未启用】** `breakout_strength_min = 0`，只要价格高于 N 日高点即触发入场信号，不要求最小突破幅度。
+""")
+
+st.markdown("---")
+
 # ── Stop loss ─────────────────────────────────────────────────────────────────
-st.subheader("3. 初始止损（Initial Stop）")
+st.subheader("4. 初始止损（Initial Stop）")
 st.markdown(f"""
 入场后立即设置固定止损位，基于 **ATR(20) Wilder 平滑**计算：
 
