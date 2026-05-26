@@ -84,7 +84,7 @@ def render_summary_cards(metrics: dict, color: str,
             color,
         ), unsafe_allow_html=True)
 
-    cols3 = st.columns(2)
+    cols3 = st.columns(3)
     with cols3[0]:
         yrs = f"{max_dd_days/365:.1f} 年" if max_dd_days else "—"
         st.markdown(_card_html(
@@ -100,6 +100,19 @@ def render_summary_cards(metrics: dict, color: str,
             "平均深度水下时间（回撤 > 10%）",
             f'<span style="color:#d62728">{avg_deep_days:.0f} 天</span>',
             f"≈ {yrs2}，共 {n_episodes} 次回撤超过 10% 的情节",
+            color,
+        ), unsafe_allow_html=True)
+
+    with cols3[2]:
+        turnover     = metrics.get("annual_turnover", 0)
+        slip_bps     = metrics.get("slippage_bps", 10)
+        comm_bps     = metrics.get("commission_bps", 3)
+        rt_bps       = (slip_bps + comm_bps) * 2
+        implied_cost = turnover * rt_bps / 100 if turnover else 0
+        st.markdown(_card_html(
+            "隐含年化交易成本",
+            f'<span style="color:#d62728">≈ {implied_cost:.2f}%</span>',
+            f"换手率 {turnover:.1f}x × 往返 {rt_bps:.0f} bps，已含于回测净值",
             color,
         ), unsafe_allow_html=True)
 
