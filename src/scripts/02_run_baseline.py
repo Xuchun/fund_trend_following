@@ -360,6 +360,20 @@ def main() -> None:
     generate_baseline_report(results, spy_raw, output_dir)
     logger.info("Report saved in %.1fs → %s", time.time() - t3, output_dir.resolve())
 
+    # ── Step 5b: update strategy_meta.json ───────────────────────────────
+    etf_set = set(ETF_TICKERS)
+    n_strategy_etfs   = len([t for t in strategy_tickers if t in etf_set])
+    n_strategy_stocks = len(strategy_tickers) - n_strategy_etfs
+    _update_strategy_meta(
+        output_dir=output_dir,
+        params=params,
+        start=args.start,
+        end=args.end,
+        initial_capital=args.initial_capital,
+        n_strategy_stocks=n_strategy_stocks,
+        n_strategy_etfs=n_strategy_etfs,
+    )
+
     # ── Step 6: print summary ─────────────────────────────────────────────
     print()
     print(results.summary())
