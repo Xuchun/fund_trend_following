@@ -15,13 +15,16 @@ def _card_html(label: str, value: str, sub: str, color: str) -> str:
 
 def render_summary_cards(metrics: dict, color: str,
                           start: str, end: str) -> None:
-    """Render the 6 headline metric cards."""
-    cagr       = metrics.get("cagr", 0)
-    total_ret  = metrics.get("total_return", 0)
-    max_dd     = metrics.get("max_drawdown", 0)
-    sharpe     = metrics.get("sharpe", 0)
-    win_rate   = metrics.get("win_rate", 0)
-    n_trades   = metrics.get("n_trades", 0)
+    """Render the 8 headline metric cards."""
+    cagr         = metrics.get("cagr", 0)
+    total_ret    = metrics.get("total_return", 0)
+    max_dd       = metrics.get("max_drawdown", 0)
+    sharpe       = metrics.get("sharpe", 0)
+    win_rate     = metrics.get("win_rate", 0)
+    n_trades     = metrics.get("n_trades", 0)
+    max_dd_days  = metrics.get("max_dd_duration_days", 0)
+    avg_deep_days = metrics.get("avg_deep_dd_duration_days", 0)
+    n_episodes   = metrics.get("n_deep_dd_episodes", 0)
 
     def fmt_pct(v):
         sign = "+" if v >= 0 else ""
@@ -69,7 +72,7 @@ def render_summary_cards(metrics: dict, color: str,
         st.markdown(_card_html(
             "交易胜率",
             f"{win_rate*100:.1f}%",
-            f"胜率低但期望值为正（趋势跟踪特征）",
+            "胜率低但期望值为正（趋势跟踪特征）",
             color,
         ), unsafe_allow_html=True)
 
@@ -78,6 +81,25 @@ def render_summary_cards(metrics: dict, color: str,
             "总交易笔数",
             f"{int(n_trades):,}",
             f"约 {metrics.get('trades_per_year',0):.0f} 笔/年",
+            color,
+        ), unsafe_allow_html=True)
+
+    cols3 = st.columns(2)
+    with cols3[0]:
+        yrs = f"{max_dd_days/365:.1f} 年" if max_dd_days else "—"
+        st.markdown(_card_html(
+            "最长水下时间",
+            f'<span style="color:#d62728">{max_dd_days:,} 天</span>',
+            f"≈ {yrs}，NAV 持续低于前高点的最长连续周期",
+            color,
+        ), unsafe_allow_html=True)
+
+    with cols3[1]:
+        yrs2 = f"{avg_deep_days/365:.1f} 年" if avg_deep_days else "—"
+        st.markdown(_card_html(
+            "平均深度水下时间（回撤 > 10%）",
+            f'<span style="color:#d62728">{avg_deep_days:.0f} 天</span>',
+            f"≈ {yrs2}，共 {n_episodes} 次回撤超过 10% 的情节",
             color,
         ), unsafe_allow_html=True)
 
