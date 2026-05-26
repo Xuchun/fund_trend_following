@@ -188,7 +188,7 @@ def load_price_panel(
         try:
             df = load_price_data(ticker, adapter, start, end, cache_dir, force_refresh)
             if not df.empty:
-                panel[ticker] = df
+                panel[ticker] = compute_adj_prices(df)
             else:
                 logger.warning("[%d/%d] %s: empty, skipped", i + 1, len(tickers), ticker)
         except Exception as e:
