@@ -16,7 +16,7 @@ res  = get_results()
 meta = res.meta
 
 render_page_header("总结  Summary", meta)
-st.caption(f"{meta.display_name} · {meta.subtitle} · 回测期间 {meta.backtest_start} → {meta.backtest_end}")
+st.caption(f"回测期间 {meta.backtest_start} → {meta.backtest_end}")
 st.markdown("---")
 
 render_summary_cards(res.metrics, meta.color, meta.backtest_start, meta.backtest_end)
