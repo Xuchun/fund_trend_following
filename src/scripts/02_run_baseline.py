@@ -80,7 +80,7 @@ BASELINE_PARAMS = StrategyParams(
 )
 
 DEFAULT_START = "2004-01-01"
-DEFAULT_END   = "2024-12-31"
+DEFAULT_END   = (datetime.date.today() - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
 
 
 # ── Argument parsing ───────────────────────────────────────────────────────
