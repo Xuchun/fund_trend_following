@@ -105,9 +105,7 @@ def render_summary_cards(metrics: dict, color: str,
 
     with cols3[2]:
         turnover     = metrics.get("annual_turnover", 0)
-        slip_bps     = metrics.get("slippage_bps", 10)
-        comm_bps     = metrics.get("commission_bps", 3)
-        rt_bps       = (slip_bps + comm_bps) * 2
+        rt_bps       = (metrics.get("slippage_bps", 10) + metrics.get("commission_bps", 3)) * 2
         implied_cost = turnover * rt_bps / 100 if turnover else 0
         st.markdown(_card_html(
             "隐含年化交易成本",
