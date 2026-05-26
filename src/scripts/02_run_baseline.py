@@ -387,7 +387,7 @@ def main() -> None:
         n_days  = len(spy_nav)
         spy_cagr  = float(spy_nav.iloc[-1] ** (252 / n_days) - 1) if n_days > 1 else 0.0
         spy_vol   = float(spy_ret.std() * (252 ** 0.5))
-        spy_sharpe = (float(spy_ret.mean()) * 252 - 0.05) / spy_vol if spy_vol > 0 else 0.0
+        spy_sharpe = (float(spy_ret.mean()) * 252 - 0.02) / spy_vol if spy_vol > 0 else 0.0
 
         m = results.compute_metrics()
         print(f"\n{'='*55}")
