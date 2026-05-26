@@ -237,7 +237,9 @@ with col3:
     ratio = _s['cap_eff'] / _e['cap_eff'] if _e['cap_eff'] != 0 else 0
     st.metric("股票 / ETF 效率比", f"{ratio:.1f}×",
               help="股票每投入1元产生的回报是 ETF 的多少倍")
-st.caption("资本效率 = 净盈亏 ÷ 总买入金额。97% 利润来自股票，但也因为股票占用了更多资本（94%）；关键在于每单位资本的回报率，股票是 ETF 的 1.7×。")
+_s_pct = stock_pnl / total_pnl * 100 if total_pnl != 0 else 0
+_s_cap_pct = _s["notional"] / (_s["notional"] + _e["notional"]) * 100
+st.caption(f"资本效率 = 净盈亏 ÷ 总买入金额。{_s_pct:.0f}% 利润来自股票，但也因为股票占用了更多资本（{_s_cap_pct:.0f}%）；关键在于每单位资本的回报率，股票是 ETF 的 {ratio:.1f}×。")
 
 st.markdown("#### 分散化价值")
 _corr_label = "几乎零相关" if abs(_corr) < 0.2 else ("低相关" if abs(_corr) < 0.4 else "中等相关")
