@@ -24,7 +24,7 @@ st.markdown("---")
 
 
 # ── Helper: load perturbation JSON ───────────────────────────────────────────
-_PERTURB_DIR = _root / "results" / "v1" / "perturbation"
+_PERTURB_DIR = Path(__file__).resolve().parents[2] / "results" / "v1" / "perturbation"
 
 
 def _load_perturbation(param_name: str) -> dict | None:
