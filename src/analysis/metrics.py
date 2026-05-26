@@ -171,10 +171,21 @@ def compute_metrics(
 
         n_years = n_days / 252
         metrics["trades_per_year"] = n_trades / n_years if n_years > 0 else 0.0
+
+        # Max consecutive losing trades
+        max_cl = cur_cl = 0
+        for win in (tl[pnl_col].values > 0):
+            if not win:
+                cur_cl += 1
+                max_cl  = max(max_cl, cur_cl)
+            else:
+                cur_cl = 0
+        metrics["max_consecutive_losses"] = max_cl
     else:
         metrics.update({
             "win_rate": 0.0, "avg_win_r": 0.0, "avg_loss_r": 0.0,
             "profit_factor": 0.0, "avg_holding_days": 0.0, "trades_per_year": 0.0,
+            "max_consecutive_losses": 0,
         })
 
     # ── Portfolio metrics ───────────────────────────────────────────────────
