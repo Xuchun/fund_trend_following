@@ -44,138 +44,21 @@ class BacktestResults:
         risk_free_rate: float = 0.02,
     ) -> dict:
         """
-        Compute a summary of key performance indicators.
+        Compute all core performance indicators.
 
-        Returns a dict with the following keys:
-          cagr, total_return, annual_vol, max_drawdown, max_dd_duration_days,
-          sharpe, sortino, calmar,
-          n_trades, win_rate, avg_win_r, avg_loss_r, profit_factor,
-          avg_holding_days, trades_per_year.
-
-        Phase 6 will replace this with a full call to analysis/metrics.py.
+        Delegates to analysis.metrics.compute_metrics() — Phase 6 implementation.
+        The `benchmark_returns` parameter is accepted for API compatibility but
+        benchmark stats (spy_cagr, spy_sharpe, spy_max_drawdown) are computed
+        separately in reports/baseline.py where raw SPY data is available.
         """
-        nav = self.daily_nav
-        ret = self.daily_returns
-        tl  = self.trade_log
-
-        n_days = len(nav)
-        metrics: dict = {}
-
-        # ── Return metrics ─────────────────────────────────────────────────
-        final_nav = float(nav.iloc[-1]) if n_days > 0 else self.initial_capital
-        total_return = (final_nav / self.initial_capital) - 1.0
-        metrics["total_return"] = total_return
-
-        if n_days > 1:
-            metrics["cagr"] = (final_nav / self.initial_capital) ** (252.0 / n_days) - 1.0
-        else:
-            metrics["cagr"] = 0.0
-
-        # ── Risk metrics ───────────────────────────────────────────────────
-        annual_vol = float(ret.std() * math.sqrt(252)) if len(ret) > 1 else 0.0
-        metrics["annual_vol"] = annual_vol
-
-        # Max drawdown
-        cum_max = nav.cummax()
-        dd = (nav - cum_max) / cum_max
-        metrics["max_drawdown"] = float(dd.min())
-
-        # Max drawdown duration (consecutive days below peak)
-        in_dd = dd < 0
-        max_dur = 0
-        cur_dur = 0
-        for v in in_dd:
-            if v:
-                cur_dur += 1
-                max_dur = max(max_dur, cur_dur)
-            else:
-                cur_dur = 0
-        metrics["max_dd_duration_days"] = max_dur
-
-        # Avg duration of deep-drawdown episodes (drawdown continuously > 10%)
-        DEEP_DD_THRESHOLD = -0.10
-        in_deep = dd < DEEP_DD_THRESHOLD
-        deep_segs: list[int] = []
-        seg_start: int | None = None
-        for i, v in enumerate(in_deep):
-            if v and seg_start is None:
-                seg_start = i
-            elif not v and seg_start is not None:
-                deep_segs.append(i - seg_start)
-                seg_start = None
-        if seg_start is not None:
-            deep_segs.append(len(in_deep) - seg_start)
-        metrics["avg_deep_dd_duration_days"] = (
-            float(sum(deep_segs) / len(deep_segs)) if deep_segs else 0.0
+        from analysis.metrics import compute_metrics as _compute  # noqa: PLC0415
+        return _compute(
+            daily_nav=self.daily_nav,
+            daily_returns=self.daily_returns,
+            trade_log=self.trade_log,
+            initial_capital=self.initial_capital,
+            risk_free_rate=risk_free_rate,
         )
-        metrics["n_deep_dd_episodes"] = len(deep_segs)
-
-        # ── Risk-adjusted metrics ──────────────────────────────────────────
-        mean_ret = float(ret.mean()) if len(ret) > 0 else 0.0
-        rf_daily = risk_free_rate / 252
-
-        if annual_vol > 0:
-            metrics["sharpe"] = (mean_ret * 252 - risk_free_rate) / annual_vol
-        else:
-            metrics["sharpe"] = 0.0
-
-        downside = ret[ret < rf_daily]
-        down_vol = float(downside.std() * math.sqrt(252)) if len(downside) > 1 else 0.0
-        if down_vol > 0:
-            metrics["sortino"] = (mean_ret * 252 - risk_free_rate) / down_vol
-        else:
-            metrics["sortino"] = 0.0
-
-        max_dd = abs(metrics["max_drawdown"])
-        metrics["calmar"] = metrics["cagr"] / max_dd if max_dd > 1e-9 else 0.0
-
-        # ── Trade statistics ───────────────────────────────────────────────
-        n_trades = len(tl)
-        metrics["n_trades"] = n_trades
-
-        if n_trades > 0:
-            wins   = tl[tl["net_pnl"] > 0]
-            losses = tl[tl["net_pnl"] <= 0]
-
-            metrics["win_rate"] = len(wins) / n_trades
-
-            avg_win_r  = float(tl.loc[tl["net_pnl"] > 0,  "pnl_r_multiple"].mean()) \
-                         if len(wins) > 0 else 0.0
-            avg_loss_r = float(tl.loc[tl["net_pnl"] <= 0, "pnl_r_multiple"].mean()) \
-                         if len(losses) > 0 else 0.0
-            metrics["avg_win_r"]  = avg_win_r
-            metrics["avg_loss_r"] = avg_loss_r
-
-            total_wins   = float(wins["net_pnl"].sum())   if len(wins)   > 0 else 0.0
-            total_losses = float(losses["net_pnl"].abs().sum()) if len(losses) > 0 else 1e-9
-            metrics["profit_factor"] = total_wins / total_losses if total_losses > 0 else 0.0
-
-            metrics["avg_holding_days"] = float(tl["holding_days"].mean())
-            years = n_days / 252
-            metrics["trades_per_year"]  = n_trades / years if years > 0 else 0.0
-        else:
-            metrics.update({
-                "win_rate": 0.0, "avg_win_r": 0.0, "avg_loss_r": 0.0,
-                "profit_factor": 0.0, "avg_holding_days": 0.0, "trades_per_year": 0.0,
-            })
-
-        # ── Portfolio turnover ─────────────────────────────────────────────
-        # Annual Turnover = total buy value / (avg NAV × years)
-        # Measures how many times the portfolio is "turned over" each year.
-        # Example: 12.5 means the portfolio's full value is bought/sold 12.5× per year.
-        if (n_trades > 0 and n_days > 0
-                and "entry_price" in tl.columns and "shares" in tl.columns):
-            total_buy_value = float((tl["entry_price"] * tl["shares"]).sum())
-            avg_nav_value   = float(self.daily_nav.mean())
-            n_years_turn    = n_days / 252
-            if avg_nav_value > 0 and n_years_turn > 0:
-                metrics["annual_turnover"] = total_buy_value / (avg_nav_value * n_years_turn)
-            else:
-                metrics["annual_turnover"] = 0.0
-        else:
-            metrics["annual_turnover"] = 0.0
-
-        return metrics
 
     def to_dict(self) -> dict:
         """
