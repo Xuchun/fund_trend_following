@@ -111,6 +111,16 @@ def generate_entry_signals_v1(
         if stop_distance_pct < params.min_stop_distance_pct:
             continue
 
+        # ── (h) Volume confirmation ─────────────────────────────────────────
+        if params.volume_filter_multiplier > 0:
+            vol_ma_series = ind.get("volume_ma")
+            if vol_ma_series is not None and date in vol_ma_series.index:
+                vol_ma = vol_ma_series[date]
+                if not pd.isna(vol_ma) and vol_ma > 0:
+                    today_vol = float(row["volume"])
+                    if today_vol < params.volume_filter_multiplier * vol_ma:
+                        continue
+
         # ── Breakout strength ────────────────────────────────────────────────
         str_series = ind["breakout_strength"]
         bs = float(str_series[date]) if (date in str_series.index and not pd.isna(str_series[date])) else 1.0
