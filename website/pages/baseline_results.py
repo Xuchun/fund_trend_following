@@ -177,6 +177,95 @@ with col2:
 - 盈利贡献：**${etf_pnl/1e6:.1f}M**（占总盈亏 {etf_pnl/total_pnl*100:.0f}%）
 """)
 
+# ── 深度分析：交易质量 / 资本效率 / 分散化价值 ────────────────────────────────
+import numpy as _np
+
+_trades = res.trades.copy()
+_trades["_type"]     = _trades["ticker"].apply(lambda t: "ETF" if t in _ETF_SET else "股票")
+_trades["_notional"] = _trades["entry_price"] * _trades["shares"]
+
+def _stats(df):
+    wins   = df[df["net_pnl"] > 0]
+    losses = df[df["net_pnl"] <= 0]
+    pf     = wins["net_pnl"].sum() / abs(losses["net_pnl"].sum()) if len(losses) > 0 else 0.0
+    cap_eff = df["net_pnl"].sum() / df["_notional"].sum() * 100
+    return dict(
+        n          = len(df),
+        win_rate   = len(wins) / len(df) * 100,
+        avg_win_r  = df[df["net_pnl"] > 0]["pnl_r_multiple"].mean(),
+        avg_loss_r = df[df["net_pnl"] <= 0]["pnl_r_multiple"].mean(),
+        pf         = pf,
+        avg_hold   = df["holding_days"].mean(),
+        med_hold   = df["holding_days"].median(),
+        net_pnl    = df["net_pnl"].sum(),
+        notional   = df["_notional"].sum(),
+        cap_eff    = cap_eff,
+    )
+
+_s = _stats(_trades[_trades["_type"] == "股票"])
+_e = _stats(_trades[_trades["_type"] == "ETF"])
+
+# 月度相关性
+_trades["_month"] = _trades["exit_date"].dt.to_period("M")
+_sm = _trades[_trades["_type"] == "股票"].groupby("_month")["net_pnl"].sum()
+_em = _trades[_trades["_type"] == "ETF"].groupby("_month")["net_pnl"].sum()
+_common = _sm.index.intersection(_em.index)
+_corr = float(_sm.loc[_common].corr(_em.loc[_common])) if len(_common) > 1 else 0.0
+
+st.markdown("#### 交易质量对比")
+import pandas as _pd2
+_quality_df = _pd2.DataFrame({
+    "指标":      ["交易笔数", "胜率", "平均盈利 R", "平均亏损 R", "Profit Factor", "平均持仓天数", "中位持仓天数"],
+    "股票":      [f"{_s['n']:,}", f"{_s['win_rate']:.1f}%", f"{_s['avg_win_r']:+.2f}R",
+                  f"{_s['avg_loss_r']:+.2f}R", f"{_s['pf']:.3f}", f"{_s['avg_hold']:.1f} 天", f"{_s['med_hold']:.1f} 天"],
+    "ETF":       [f"{_e['n']:,}", f"{_e['win_rate']:.1f}%", f"{_e['avg_win_r']:+.2f}R",
+                  f"{_e['avg_loss_r']:+.2f}R", f"{_e['pf']:.3f}", f"{_e['avg_hold']:.1f} 天", f"{_e['med_hold']:.1f} 天"],
+    "结论":      ["ETF 仅占 6%", "ETF 胜率更高", "股票赢时赢更多", "股票输时输更少",
+                  "几乎相同", "股票趋势更持久", "股票趋势更持久"],
+})
+st.dataframe(_quality_df, use_container_width=True, hide_index=True)
+
+st.markdown("#### 资本效率")
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.metric("股票资本效率", f"{_s['cap_eff']:.2f}%",
+              help=f"总净盈亏 ${_s['net_pnl']/1e6:.1f}M ÷ 总买入金额 ${_s['notional']/1e6:.0f}M")
+with col2:
+    st.metric("ETF 资本效率", f"{_e['cap_eff']:.2f}%",
+              help=f"总净盈亏 ${_e['net_pnl']/1e6:.1f}M ÷ 总买入金额 ${_e['notional']/1e6:.0f}M")
+with col3:
+    ratio = _s['cap_eff'] / _e['cap_eff'] if _e['cap_eff'] != 0 else 0
+    st.metric("股票 / ETF 效率比", f"{ratio:.1f}×",
+              help="股票每投入1元产生的回报是 ETF 的多少倍")
+st.caption("资本效率 = 净盈亏 ÷ 总买入金额。97% 利润来自股票，但也因为股票占用了更多资本（94%）；关键在于每单位资本的回报率，股票是 ETF 的 1.7×。")
+
+st.markdown("#### 分散化价值")
+_corr_label = "几乎零相关" if abs(_corr) < 0.2 else ("低相关" if abs(_corr) < 0.4 else "中等相关")
+col1, col2 = st.columns([1, 2])
+with col1:
+    st.metric("月度盈亏相关性", f"{_corr:.3f}", help="股票 vs ETF 月度净盈亏的 Pearson 相关系数")
+    st.caption(f"→ {_corr_label}，ETF 提供真实的分散化价值")
+with col2:
+    # 找ETF救场的关键年份
+    _trades["_year"] = _trades["exit_date"].dt.year
+    _by_year = _trades.groupby(["_year","_type"])["net_pnl"].sum().unstack(fill_value=0)
+    _by_year.columns.name = None
+    _rescue = []
+    for yr, row in _by_year.iterrows():
+        s_pnl = row.get("股票", 0)
+        e_pnl = row.get("ETF", 0)
+        if s_pnl < 0 and e_pnl > 0:
+            _rescue.append(f"**{yr}**：股票亏 ${abs(s_pnl)/1e4:.0f}万，ETF 盈 ${e_pnl/1e4:.0f}万")
+    if _rescue:
+        st.markdown("**ETF 在股票亏损年份提供缓冲：**")
+        for line in _rescue:
+            st.markdown(f"- {line}")
+
+st.markdown("""
+> **综合判断：** 股票资本效率更高（1.7×），但 ETF 与股票几乎零相关，在关键年份提供对冲缓冲。
+> 建议保留 ETF 池，若要提高股票敞口，可适当上调单笔风险比例（如 1% → 1.2% NAV），而非削减 ETF。
+""")
+
 st.markdown("---")
 
 # ── Full metrics table ────────────────────────────────────────────────────────
