@@ -63,7 +63,7 @@ def save_metrics_json(results: "BacktestResults", spy_raw: pd.DataFrame | None,
         n_days        = len(spy_nav)
         spy_cagr      = float(spy_nav.iloc[-1]) ** (252 / n_days) - 1 if n_days > 1 else 0.0
         spy_vol       = float(spy_rets.std() * np.sqrt(252))
-        spy_sharpe    = (float(spy_rets.mean()) * 252 - 0.05) / spy_vol if spy_vol > 0 else 0.0
+        spy_sharpe    = (float(spy_rets.mean()) * 252 - 0.02) / spy_vol if spy_vol > 0 else 0.0
         spy_cum_max   = spy_nav.cummax()
         spy_maxdd     = float(((spy_nav - spy_cum_max) / spy_cum_max).min())
         metrics["spy_cagr"]    = spy_cagr
