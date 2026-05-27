@@ -19,7 +19,7 @@ class StrategyParams:
     min_adv_m: float = 20.0          # million USD average daily dollar volume
 
     # ── Entry signal ───────────────────────────────────────────────────────
-    breakout_window: int = 100       # N-day rolling-high lookback
+    breakout_window: int = 200       # N-day rolling-high lookback
 
     # ── ATR ────────────────────────────────────────────────────────────────
     atr_period: int = 20             # Wilder smoothing period
