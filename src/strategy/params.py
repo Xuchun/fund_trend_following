@@ -60,6 +60,6 @@ class StrategyParams:
     cash_proxy: str = "SHY"          # 1-3Y Treasury ETF; covers full backtest period 2002+
 
     # ── Market regime filter ────────────────────────────────────────────────
-    regime_filter_enabled: bool = False   # True → block entries when SPY < SMA
+    regime_filter_enabled: bool = True    # True → block entries when SPY < SMA
     regime_ticker: str = "SPY"            # benchmark for regime detection
     regime_sma_window: int = 200          # SMA lookback in trading days
