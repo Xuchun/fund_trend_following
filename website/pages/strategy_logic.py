@@ -199,7 +199,7 @@ k 越大，止损线离当前价格越远，需要股价跌得更多才能触发
 st.markdown("---")
 
 # ── Position sizing ───────────────────────────────────────────────────────────
-st.subheader("6. 仓位管理（Position Sizing — 4 步过滤）")
+st.subheader("7. 仓位管理（Position Sizing — 4 步过滤）")
 
 cols = st.columns(4)
 steps = [
