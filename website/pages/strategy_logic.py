@@ -170,7 +170,7 @@ st.markdown("---")
 
 # ── Breakout strength filter ──────────────────────────────────────────────────
 bs_min = p.get("breakout_strength_min", 0.0)
-st.subheader("5. 突破强度过滤（Breakout Strength Filter）")
+st.subheader("5. 突破强度过滤")
 
 if bs_min > 0:
     st.markdown(f"""
