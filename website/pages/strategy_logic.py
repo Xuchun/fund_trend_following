@@ -38,7 +38,7 @@ st.markdown(f"""
 st.markdown("---")
 
 # ── Universe filters ──────────────────────────────────────────────────────────
-st.subheader("1. 标的过滤（Universe Filters）")
+st.subheader("1. 标的过滤")
 st.markdown(f"""
 每个交易日扫描入场信号前，对所有候选标的逐一检查以下三个条件，**三者必须同时满足**，否则跳过该标的：
 
