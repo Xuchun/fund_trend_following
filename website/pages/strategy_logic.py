@@ -301,7 +301,7 @@ Strategy 1.0 无止盈（Take Profit）条件，持仓仅通过止损退出。
 st.markdown("---")
 
 # ── Position sizing ───────────────────────────────────────────────────────────
-st.subheader("8. 仓位管理（Position Sizing — 4 步过滤）")
+st.subheader("8. 仓位管理")
 
 cols = st.columns(4)
 steps = [
