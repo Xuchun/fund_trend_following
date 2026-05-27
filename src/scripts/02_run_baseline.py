@@ -19,7 +19,8 @@ Usage examples:
 ⚠  Yahoo Finance data limitations (apply to all results from this script):
     1. Survivorship bias: no delisted stocks → results may be 20-50% too high.
     2. Market cap not point-in-time: current cap used as proxy for historical.
-    3. ETF inception dates not enforced: ETFs may appear before they existed.
+    3. ETF inception dates: handled naturally — Yahoo Finance data starts at actual inception;
+       entry.py skips tickers with no data on a given date; ADV-60 filter adds ~3-month buffer.
     These biases disappear automatically when switching to a commercial adapter.
 """
 
