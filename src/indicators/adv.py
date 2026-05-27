@@ -1,8 +1,8 @@
 """
 Average Daily (Dollar) Volume indicator.
 
-Uses shift(1) so ADV on day t is computed from days [t-window, t-1],
-avoiding any look-ahead bias from today's volume.
+ADV[t] = mean(dollar_volume[t-window+1 : t]), including today t.
+Today's dollar volume is known at end-of-day signal generation, so no shift is needed.
 """
 
 import pandas as pd
