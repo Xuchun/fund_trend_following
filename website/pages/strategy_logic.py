@@ -211,6 +211,18 @@ st.markdown(f"""
 追踪止损**只升不降**：`new_stop = max(old_stop, highest_high − k×ATR)`
 
 其中 `highest_high` = 持仓期间（自入场日起）的历史最高价（adj_high 的累计最大值）。止损线锚定最高点而非当日收盘价，确保止损线仅在创新高时上移，不会因某天大涨后小幅回调就提前触发。
+
+**初始值与硬止损的切换逻辑：**
+
+```
+开仓时：trail_stop[t0] = entry_price − 3×ATR   （追踪止损初始值，宽于硬止损）
+硬止损：stop_loss      = entry_price − 2×ATR   （固定，日内最低价触发）
+```
+
+开仓初期，硬止损（2×ATR）比追踪止损（3×ATR）更紧，由硬止损提供主要保护。
+当持仓最高价突破 `entry_price + 1×ATR` 后，追踪止损线（`highest_high − 3×ATR`）
+开始低于硬止损线（`entry − 2×ATR`），从此由追踪止损主导退出。
+两者同时有效，以**收盘价穿越追踪止损**或**日内最低价穿越硬止损**中先触发者为准。
 """)
 
 st.markdown(f"""
