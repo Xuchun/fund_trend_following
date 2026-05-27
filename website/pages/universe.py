@@ -90,6 +90,12 @@ if meta.etf_universe:
 else:
     st.info("ETF 列表未加载。请检查 results/v1/strategy_meta.json 中的 etf_universe 字段。")
 
+st.markdown("""
+> ⚠️ **ETF 上市日期过滤未实现**：当前回测未按 inception date 过滤 ETF，
+> 部分 ETF 可能在其实际上市之前就出现在标的池中，对早期回测结果有轻微高估影响。
+> Strategy 2.0 将引入 inception date 过滤以修正此偏差。
+""")
+
 st.markdown("---")
 
 # ── Regime filter note ────────────────────────────────────────────────────────
