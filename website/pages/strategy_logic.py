@@ -136,7 +136,7 @@ st.markdown("---")
 
 # ── Volume filter ──────────────────────────────────────────────────────────────
 vol_mult = p.get("volume_filter_multiplier", 0.0)
-st.subheader("4. 成交量过滤（Volume Filter）")
+st.subheader("4. 成交量过滤")
 
 if vol_mult > 0:
     st.markdown(f"""
