@@ -37,7 +37,7 @@ st.markdown(f"""
 
 st.markdown("---")
 
-# ── Pre-entry filters ────────────────────────────────────────────────────────
+# ── Universe filters ──────────────────────────────────────────────────────────
 st.subheader("1. 标的过滤（Universe Filters）")
 st.markdown(f"""
 每个交易日扫描入场信号前，对所有候选标的逐一检查以下三个条件，**三者必须同时满足**，否则跳过该标的：
@@ -67,8 +67,45 @@ st.markdown(f"""
 
 st.markdown("---")
 
+# ── Regime filter ─────────────────────────────────────────────────────────────
+regime_enabled = p.get("regime_filter_enabled", False)
+regime_ticker  = p.get("regime_ticker", "SPY")
+regime_window  = p.get("regime_sma_window", 200)
+
+st.subheader("2. 市场环境过滤（Market Regime Filter）")
+
+if regime_enabled:
+    st.markdown(f"""
+**【已启用】** 当 **{regime_ticker}** 收盘价 > 其 **{regime_window} 日简单移动平均线** 时，
+策略处于「牛市模式」，允许开仓。否则进入「熊市模式」，停止新建仓位。
+
+```
+牛市模式（Bull）：SPY adj-close[t] > SMA({regime_window})[t]  → 正常扫描入场信号
+熊市模式（Bear）：SPY adj-close[t] ≤ SMA({regime_window})[t]  → pending_entries = []
+```
+
+**规则要点：**
+- 现有持仓**不强平**——追踪止损继续保护，让利润自然奔跑
+- 熊市期间所有闲置现金自动流入 **{meta.cash_proxy}**（赚取无风险利率）
+- 从 2004 年起，此规则将 **熊市封仓天数约占 19%**（约 1,025 天），
+  主要覆盖 2008 金融危机（封仓 373 天）和 2022 年加息熊市（封仓 261 天）
+""")
+else:
+    st.markdown(f"""
+**【未启用】—— Strategy 1.0 为纯多头策略，无市场环境过滤器。**
+
+策略在整个 2004–2024 回测期内，无论市场处于牛市还是熊市，均按相同规则扫描入场信号。
+这导致 Strategy 1.0 在 2008 年金融危机期间遭受了 **-54% 的最大回撤**。
+
+**Strategy 2.0 改进：** 引入 **{regime_ticker} {regime_window} 日均线过滤器**。
+当 SPY 价格低于其 200 日均线时，停止开新仓，熊市期间额外现金自动投入 SHY。
+预期可将最大回撤从 -54% 降至 -25% 以内，同时显著提升 Sharpe 比率。
+""")
+
+st.markdown("---")
+
 # ── Entry ─────────────────────────────────────────────────────────────────────
-st.subheader("2. 入场条件（Entry）")
+st.subheader("3. 入场条件（Entry）")
 st.markdown(f"""
 当复权收盘价突破过去 **{p['breakout_window']} 个交易日的最高价**时触发买入信号。
 
@@ -97,9 +134,9 @@ st.markdown(f"""
 
 st.markdown("---")
 
-# ── Volume confirmation ────────────────────────────────────────────────────────
+# ── Volume filter ──────────────────────────────────────────────────────────────
 vol_mult = p.get("volume_filter_multiplier", 0.0)
-st.subheader("3. 成交量过滤（Volume Filter）")
+st.subheader("4. 成交量过滤（Volume Filter）")
 
 if vol_mult > 0:
     st.markdown(f"""
@@ -133,7 +170,7 @@ st.markdown("---")
 
 # ── Breakout strength filter ──────────────────────────────────────────────────
 bs_min = p.get("breakout_strength_min", 0.0)
-st.subheader("4. 突破强度过滤（Breakout Strength Filter）")
+st.subheader("5. 突破强度过滤（Breakout Strength Filter）")
 
 if bs_min > 0:
     st.markdown(f"""
@@ -170,7 +207,7 @@ else:
 st.markdown("---")
 
 # ── Stop loss ─────────────────────────────────────────────────────────────────
-st.subheader("5. 初始止损（Initial Stop Loss）")
+st.subheader("6. 初始止损（Initial Stop Loss）")
 st.markdown(f"""
 入场后立即设置固定止损位，基于 **ATR(20) Wilder 平滑**计算：
 
@@ -205,7 +242,7 @@ st.markdown("""
 st.markdown("---")
 
 # ── Trailing stop ─────────────────────────────────────────────────────────────
-st.subheader("6. 分段追踪止损（Segmented Trailing Stop）")
+st.subheader("7. 分段追踪止损（Segmented Trailing Stop）")
 st.markdown(f"""
 随着持仓盈利增加，逐步收紧追踪止损以锁定利润：
 
@@ -264,7 +301,7 @@ Strategy 1.0 无止盈（Take Profit）条件，持仓仅通过止损退出。
 st.markdown("---")
 
 # ── Position sizing ───────────────────────────────────────────────────────────
-st.subheader("7. 仓位管理（Position Sizing — 4 步过滤）")
+st.subheader("8. 仓位管理（Position Sizing — 4 步过滤）")
 
 cols = st.columns(4)
 steps = [
@@ -299,7 +336,7 @@ st.markdown(f"""
 st.markdown("---")
 
 # ── Execution ─────────────────────────────────────────────────────────────────
-st.subheader("8. 执行与成本假设")
+st.subheader("9. 执行与成本假设")
 col1, col2 = st.columns(2)
 with col1:
     st.markdown(f"""
@@ -331,40 +368,3 @@ SHY（1–3 年期国债 ETF）自 <strong>2002 年</strong>起就有数据，�
 能够正确模拟闲置资金赚取无风险利率的效果。
 </div>
 """, unsafe_allow_html=True)
-
-st.markdown("---")
-
-# ── Regime filter ─────────────────────────────────────────────────────────────
-regime_enabled = p.get("regime_filter_enabled", False)
-regime_ticker  = p.get("regime_ticker", "SPY")
-regime_window  = p.get("regime_sma_window", 200)
-
-st.subheader("9. 市场环境过滤（Market Regime Filter）")
-
-if regime_enabled:
-    st.markdown(f"""
-**【已启用】** 当 **{regime_ticker}** 收盘价 > 其 **{regime_window} 日简单移动平均线** 时，
-策略处于「牛市模式」，允许开仓。否则进入「熊市模式」，停止新建仓位。
-
-```
-牛市模式（Bull）：SPY adj-close[t] > SMA({regime_window})[t]  → 正常扫描入场信号
-熊市模式（Bear）：SPY adj-close[t] ≤ SMA({regime_window})[t]  → pending_entries = []
-```
-
-**规则要点：**
-- 现有持仓**不强平**——追踪止损继续保护，让利润自然奔跑
-- 熊市期间所有闲置现金自动流入 **{meta.cash_proxy}**（赚取无风险利率）
-- 从 2004 年起，此规则将 **熊市封仓天数约占 19%**（约 1,025 天），
-  主要覆盖 2008 金融危机（封仓 373 天）和 2022 年加息熊市（封仓 261 天）
-""")
-else:
-    st.markdown(f"""
-**【未启用】—— Strategy 1.0 为纯多头策略，无市场环境过滤器。**
-
-策略在整个 2004–2024 回测期内，无论市场处于牛市还是熊市，均按相同规则扫描入场信号。
-这导致 Strategy 1.0 在 2008 年金融危机期间遭受了 **-54% 的最大回撤**。
-
-**Strategy 2.0 改进：** 引入 **{regime_ticker} {regime_window} 日均线过滤器**。
-当 SPY 价格低于其 200 日均线时，停止开新仓，熊市期间额外现金自动投入 SHY。
-预期可将最大回撤从 -54% 降至 -25% 以内，同时显著提升 Sharpe 比率。
-""")
