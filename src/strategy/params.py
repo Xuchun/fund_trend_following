@@ -57,7 +57,7 @@ class StrategyParams:
     slippage_bps: float = 10.0       # one-way slippage in basis points
 
     # ── Cash proxy ─────────────────────────────────────────────────────────
-    cash_proxy: str = "SGOV"         # uninvested cash earns SGOV returns
+    cash_proxy: str = "SHY"          # 1-3Y Treasury ETF; covers full backtest period 2002+
 
     # ── Market regime filter ────────────────────────────────────────────────
     regime_filter_enabled: bool = False   # True → block entries when SPY < SMA
