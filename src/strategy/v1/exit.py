@@ -31,7 +31,7 @@ def update_trail_stop_v1(
     Trailing stop segmented formula (design spec Section D):
         R_multiple = (close − entry_price) / R
 
-        if R_multiple < 1:   multiplier = trail_multiplier_r1  (default 2.0)
+        if R_multiple < 1:   multiplier = trail_multiplier_r1  (default 3.0)
         if R_multiple < 3:   multiplier = trail_multiplier_r3  (default 3.0)
         else:                multiplier = trail_multiplier_r5  (default 5.0)
 
