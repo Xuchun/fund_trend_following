@@ -29,7 +29,7 @@ class StrategyParams:
     min_stop_distance_pct: float = 0.005     # reject if stop < 0.5% below entry
 
     # ── Trailing stop (segmented by R-multiple) ────────────────────────────
-    trail_multiplier_r1: float = 2.0   # R_multiple < 1   → trail = HH - 2×ATR
+    trail_multiplier_r1: float = 3.0   # R_multiple < 1   → trail = HH - 3×ATR
     trail_multiplier_r3: float = 3.0   # 1 ≤ R_multiple < 3 → trail = HH - 3×ATR
     trail_multiplier_r5: float = 5.0   # R_multiple ≥ 3   → trail = HH - 5×ATR
 
