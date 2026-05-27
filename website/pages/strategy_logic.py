@@ -173,7 +173,9 @@ st.markdown(f"""
 | 1R – 3R | {p['trail_multiplier_r3']:.0f}×ATR | 中等，开始锁定利润 |
 | > 3R | {p['trail_multiplier_r5']:.0f}×ATR | 收紧，保护大盈利 |
 
-追踪止损**只升不降**：`new_stop = max(old_stop, close − k×ATR)`
+追踪止损**只升不降**：`new_stop = max(old_stop, highest_high − k×ATR)`
+
+其中 `highest_high` = 持仓期间（自入场日起）的历史最高价（adj_high 的累计最大值）。止损线锚定最高点而非当日收盘价，确保止损线仅在创新高时上移，不会因某天大涨后小幅回调就提前触发。
 """)
 
 st.markdown(f"""
