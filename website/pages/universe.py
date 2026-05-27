@@ -91,9 +91,9 @@ else:
     st.info("ETF 列表未加载。请检查 results/v1/strategy_meta.json 中的 etf_universe 字段。")
 
 st.markdown("""
-> ⚠️ **ETF 上市日期过滤未实现**：当前回测未按 inception date 过滤 ETF，
-> 部分 ETF 可能在其实际上市之前就出现在标的池中，对早期回测结果有轻微高估影响。
-> Strategy 2.0 将引入 inception date 过滤以修正此偏差。
+> ℹ️ **ETF 上市日期过滤**：回测通过数据可用性自然实现——Yahoo Finance 数据从各 ETF
+> 实际上市日起步，引擎对无数据日期的标的自动跳过；ADV-60 过滤额外要求至少 60 个交易日
+> 的成交量历史（约 3 个月缓冲），进一步防止 ETF 在上市初期过早入场。
 """)
 
 st.markdown("---")
