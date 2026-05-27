@@ -70,7 +70,7 @@ def compute_position_size(
         log_returns=log_returns,
         as_of_date=as_of_date,
         window=params.correlation_window,
-        min_samples=max(10, params.correlation_window // 2),
+        min_samples=40,
     )
 
     if max_corr > params.correlation_threshold:
