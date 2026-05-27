@@ -105,7 +105,7 @@ else:
 st.markdown("---")
 
 # ── Entry ─────────────────────────────────────────────────────────────────────
-st.subheader("3. 入场条件（Entry）")
+st.subheader("3. 入场条件")
 st.markdown(f"""
 当复权收盘价突破过去 **{p['breakout_window']} 个交易日的最高价**时触发买入信号。
 
