@@ -99,7 +99,7 @@ st.markdown("---")
 
 # ── Volume confirmation ────────────────────────────────────────────────────────
 vol_mult = p.get("volume_filter_multiplier", 0.0)
-st.subheader("3. 成交量确认（Volume Confirmation）")
+st.subheader("3. 成交量过滤（Volume Filter）")
 
 if vol_mult > 0:
     st.markdown(f"""
