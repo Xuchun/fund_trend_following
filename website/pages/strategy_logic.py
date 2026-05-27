@@ -38,7 +38,7 @@ st.markdown(f"""
 st.markdown("---")
 
 # ── Entry ─────────────────────────────────────────────────────────────────────
-st.subheader("1. 入场条件（Entry）")
+st.subheader("2. 入场条件（Entry）")
 st.markdown(f"""
 当复权收盘价突破过去 **{p['breakout_window']} 个交易日的最高价**时触发买入信号。
 
