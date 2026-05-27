@@ -123,8 +123,8 @@ st.markdown(f"""
 **数据处理流程：**
 1. 下载日度 OHLCV 数据 + 分红/拆股复权因子
 2. 以 Parquet 格式本地缓存，支持增量更新
-3. 计算**复权收盘价**（close × adj_factor）用于信号计算
-4. ATR 计算使用**原始价格**（非复权），保持一致性
+3. 计算**复权价格**（adj_close / adj_high / adj_low）用于信号计算与指标计算
+4. ATR 计算使用**复权价格**（非原始价格），避免拆股/分红导致 ATR 序列产生人为跳变
 
 **回测覆盖期间：** {meta.backtest_start} → {meta.backtest_end}（约 21 年）
 
