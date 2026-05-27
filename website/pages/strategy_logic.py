@@ -339,7 +339,7 @@ regime_enabled = p.get("regime_filter_enabled", False)
 regime_ticker  = p.get("regime_ticker", "SPY")
 regime_window  = p.get("regime_sma_window", 200)
 
-st.subheader("9. 市场环境过滤器（Market Regime Filter）")
+st.subheader("9. 市场环境过滤（Market Regime Filter）")
 
 if regime_enabled:
     st.markdown(f"""
