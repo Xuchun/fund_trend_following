@@ -80,7 +80,7 @@ st.markdown(f"""
 - 使用复权价格（adj_factor），所有价格计算已包含分红
 - 使用 `shift(1)` 防止前视偏差（look-ahead bias）
 - 仅在满足仓位过滤条件后建仓（见仓位管理）
-- Gap 过滤：若开盘价偏离昨收 >{p.get('gap_filter',0.025)*100:.1f}%，跳过该信号
+- Gap 过滤：若 `|t+1开盘价 − t收盘价| / t收盘价 > {p.get('gap_filter',0.025)*100:.1f}%`，跳过该信号（双向：跳空高开或跳空低开均过滤）
 """)
 
 st.markdown(f"""
