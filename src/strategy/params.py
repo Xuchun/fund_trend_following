@@ -46,7 +46,7 @@ class StrategyParams:
     correlation_reduction: float = 0.5    # multiply shares by this factor
 
     # ── Volume confirmation ────────────────────────────────────────────────
-    volume_filter_multiplier: float = 0.0  # 0.0=disabled; 1.5 → vol[t] > 1.5×vol_ma60
+    volume_filter_multiplier: float = 1.5  # vol[t] ≥ 1.5×vol_ma60; set 0.0 to disable
 
     # ── Breakout strength filter ───────────────────────────────────────────
     breakout_strength_min: float = 0.0    # 0.0=disabled; 0.02 → close/rolling_high > 1.02
