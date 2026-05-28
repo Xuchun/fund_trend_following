@@ -265,7 +265,10 @@ st.markdown(f"""
 
 开仓初期，硬止损（2×ATR）比追踪止损（3×ATR）更紧，由硬止损提供主要保护。
 当持仓最高价突破 `entry_price + 1×ATR` 后，追踪止损线（`highest_high − 3×ATR`）
-开始低于硬止损线（`entry − 2×ATR`），从此由追踪止损主导退出。
+开始高于硬止损线（`entry − 2×ATR`），从此由追踪止损主导退出。
+（此接管时机由数学自然保证，代码无需显式判断：trail_stop 从 entry − 3×ATR 起步，
+低于固定的 hard stop entry − 2×ATR；一旦 highest_high 超过 entry + 1×ATR，
+trail_stop 数学上必然超过 hard stop，自动成为约束性条件。）
 两者同时有效，以**收盘价穿越追踪止损**或**日内最低价穿越硬止损**中先触发者为准。
 """)
 
