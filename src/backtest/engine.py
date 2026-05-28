@@ -308,15 +308,15 @@ class BacktestEngine:
             all_dates.update(df.index.tolist())
         return sorted(d for d in all_dates if start_ts <= d <= end_ts)
 
-    def _build_sgov_returns(
+    def _build_cash_proxy_returns(
         self,
         trading_dates: list[pd.Timestamp],
     ) -> dict[pd.Timestamp, float]:
         """
-        Build a dict of {date: daily_return} for the cash proxy (SGOV).
+        Build a dict of {date: daily_return} for the cash proxy (params.cash_proxy).
 
         Uses adjusted close (close × adj_factor) to capture the interest income.
-        Returns an empty dict if SGOV is not in the price panel (cash earns 0%).
+        Returns an empty dict if the proxy is not in the price panel (cash earns 0%).
         """
         proxy = self.params.cash_proxy
         if proxy not in self.price_panel:
