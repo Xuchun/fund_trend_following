@@ -66,8 +66,8 @@ st.markdown("""
 ---
 """)
 
-# ── Limitation 4: Data quality ────────────────────────────────────────────────
-st.subheader("4. 数据质量局限性")
+# ── Limitation 3: Data quality ────────────────────────────────────────────────
+st.subheader("3. 数据质量局限性")
 st.markdown("""
 **Yahoo Finance 数据潜在问题：**
 - 历史复权价格可能存在点误差（尤其是2004–2008年早期数据）
