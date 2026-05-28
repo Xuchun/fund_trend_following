@@ -10,7 +10,7 @@ import pandas as pd
 
 def compute_rolling_high(
     high: pd.Series,
-    window: int = 100,
+    window: int = 200,
 ) -> pd.Series:
     """
     Rolling N-day high, excluding the current day.
@@ -24,7 +24,7 @@ def compute_rolling_high(
 
     Args:
         high:   Daily high prices.
-        window: Look-back period N (default 100).
+        window: Look-back period N (default 200).
 
     Returns:
         Series with same index as `high`.
