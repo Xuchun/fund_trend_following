@@ -270,8 +270,8 @@ st.markdown(f"""
 当持仓最高价突破 `entry_price + 1×ATR` 后，移动止盈线（`highest_high − 3×ATR`）
 开始高于止损线（`entry − 2×ATR`），从此由移动止盈主导退出。
 （此接管时机由数学自然保证，代码无需显式判断：trail_stop 从 entry − 3×ATR 起步，
-低于固定的 止损 entry − 2×ATR；一旦 highest_high 超过 entry + 1×ATR，
-trail_stop 数学上必然超过 止损，自动成为约束性条件。）
+低于固定止损位 entry − 2×ATR；一旦 highest_high 超过 entry + 1×ATR，
+trail_stop 数学上必然超过固定止损位，自动成为约束性条件。）
 两者同时有效，以**收盘价穿越移动止盈**或**日内最低价穿越止损**中先触发者为准。
 """)
 
