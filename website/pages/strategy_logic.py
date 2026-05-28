@@ -85,7 +85,7 @@ if regime_enabled:
 ```
 
 """)
-st.markdown(f"""
+    st.markdown(f"""
 <div class="info-box">
 <strong>规则要点</strong><br>
 <ul>
