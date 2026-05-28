@@ -225,6 +225,9 @@ class BacktestEngine:
         stop_loss = entry_price - self.params.stop_loss_multiplier * atr
         if stop_loss >= entry_price:
             return  # degenerate: stop above/at entry
+        stop_distance_pct = (entry_price - stop_loss) / entry_price
+        if stop_distance_pct < self.params.min_stop_distance_pct:
+            return
 
         trail_stop = entry_price - self.params.trail_multiplier_r1 * atr
 
