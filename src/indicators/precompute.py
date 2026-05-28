@@ -69,7 +69,7 @@ def precompute_indicators(
             rolling_high = compute_rolling_high(high, window=params.breakout_window)
             breakout_signal = compute_breakout_signal(close, rolling_high)
             breakout_strength = compute_breakout_strength(close, rolling_high)
-            adv = compute_adv_from_ohlcv(close, volume, window=60)
+            adv = compute_adv_from_ohlcv(df["close"], volume, window=60)
             volume_ma = compute_volume_ma(volume, window=60)
             log_returns = compute_log_returns(close)
 
