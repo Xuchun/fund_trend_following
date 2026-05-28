@@ -253,7 +253,7 @@ st.markdown(f"""
 |------------|------------|------|
 | < 1R | {p['trail_multiplier_r1']:.0f}×ATR | 宽松，给趋势充分发展空间 |
 | 1R – 3R | {p['trail_multiplier_r3']:.0f}×ATR | 中等，开始锁定利润 |
-| > 3R | {p['trail_multiplier_r5']:.0f}×ATR | 收紧，保护大盈利 |
+| > 3R | {p['trail_multiplier_r5']:.0f}×ATR | 放宽，让利润继续奔跑 |
 
 移动止盈**只升不降**：`new_stop = max(old_stop, highest_high − k×ATR)`
 
