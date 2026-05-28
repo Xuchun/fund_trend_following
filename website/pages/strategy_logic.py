@@ -84,12 +84,17 @@ if regime_enabled:
 熊市模式（Bear）：SPY adj-close[t] ≤ SMA({regime_window})[t]  → pending_entries = []
 ```
 
-**规则要点：**
-- 现有持仓**不强平**——移动止盈继续保护，让利润自然奔跑
-- 熊市期间所有闲置现金自动流入 **{meta.cash_proxy}**（赚取无风险利率）
-- 从 2004 年起，此规则将 **熊市封仓天数约占 19%**（约 1,025 天），
-  主要覆盖 2008 金融危机（封仓 373 天）和 2022 年加息熊市（封仓 261 天）
 """)
+st.markdown(f"""
+<div class="info-box">
+<strong>规则要点</strong><br>
+<ul>
+<li>现有持仓<strong>不强平</strong>——移动止盈继续保护，让利润自然奔跑</li>
+<li>熊市期间所有闲置现金自动流入 <strong>{meta.cash_proxy}</strong>（赚取无风险利率）</li>
+<li>从 2004 年起，此规则将<strong>熊市封仓天数约占 19%</strong>（约 1,025 天），主要覆盖 2008 金融危机（封仓 373 天）和 2022 年加息熊市（封仓 261 天）</li>
+</ul>
+</div>
+""", unsafe_allow_html=True)
 else:
     st.markdown(f"""
 **【当前参数未启用市场环境过滤器】**
