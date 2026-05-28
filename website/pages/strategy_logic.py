@@ -76,7 +76,7 @@ st.subheader("2. 市场环境过滤")
 
 if regime_enabled:
     st.markdown(f"""
-**【已启用】** 当 **{regime_ticker}** 收盘价 > 其 **{regime_window} 日简单移动平均线** 时，
+当 **{regime_ticker}** 收盘价 > 其 **{regime_window} 日简单移动平均线** 时，
 策略处于「牛市模式」，允许开仓。否则进入「熊市模式」，停止新建仓位。
 
 ```
