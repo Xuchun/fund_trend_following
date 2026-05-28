@@ -107,8 +107,8 @@ st.markdown("""
 ---
 """)
 
-# ── Limitation 7: Regime filter design ───────────────────────────────────────
-st.subheader("7. 市场环境过滤器局限性")
+# ── Limitation 6: Regime filter design ───────────────────────────────────────
+st.subheader("6. 市场环境过滤器局限性")
 st.markdown("""
 **问题 1：震荡市场中的频繁切换（Whipsaw）**
 
