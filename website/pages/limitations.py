@@ -92,8 +92,8 @@ st.markdown("""
 ---
 """)
 
-# ── Limitation 6: Volume filter for ETFs ─────────────────────────────────────
-st.subheader("6. 成交量过滤对 ETF 适用性较弱")
+# ── Limitation 5: Volume filter for ETFs ─────────────────────────────────────
+st.subheader("5. 成交量过滤对 ETF 适用性较弱")
 st.markdown("""
 **问题：** 成交量放大对个股意味着机构买入确认，但 ETF 成交量由市场做市机制驱动，量能含义不同。
 
