@@ -362,7 +362,6 @@ with col2:
 **闲置资金管理：**
 - 未持仓资金投入 **{meta.cash_proxy}**（iShares 1–3 年期国债 ETF）
 - 获取无风险收益，降低现金拖累
-- 相关窗口：{p.get('correlation_window',60)} 日滚动相关性
 """)
 
 st.markdown("""
