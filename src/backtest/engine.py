@@ -89,7 +89,7 @@ class BacktestEngine:
         )
 
         portfolio = Portfolio(self.initial_capital)
-        sgov_returns = self._build_sgov_returns(trading_dates)
+        sgov_returns = self._build_cash_proxy_returns(trading_dates)
         log_returns  = {
             t: self.indicators[t]["log_returns"]
             for t in self.indicators
