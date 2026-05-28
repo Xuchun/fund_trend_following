@@ -301,7 +301,7 @@ st.markdown("""
 | Priority 1 | 止损：`low[t] < stop_loss` | 日内最低价，同日两条件均满足时此项优先 |
 | Priority 2 | 移动止盈：`close[t] < trail_stop` | 收盘价，仅在止损未触发时检查 |
 
-Strategy 1.0 无止盈（Take Profit）条件，持仓仅通过止损退出。
+Strategy 1.0 无固定止盈价位（Take Profit），持仓仅通过止损或移动止盈退出。
 """)
 
 st.markdown("---")
