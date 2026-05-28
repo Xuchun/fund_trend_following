@@ -135,6 +135,7 @@ def generate_entry_signals_v1(
         signals.append(
             {
                 "ticker":              ticker,
+                "signal_date":         date,
                 "signal_close":        close,
                 "atr":                 atr,
                 "breakout_strength":   bs,
