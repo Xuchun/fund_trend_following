@@ -241,7 +241,7 @@ class BacktestEngine:
             current_positions=list(portfolio.positions.keys()),
             log_returns=log_returns,
             new_ticker=ticker,
-            as_of_date=date,
+            as_of_date=signal.get("signal_date", date),
             params=self.params,
         )
         if shares is None:
