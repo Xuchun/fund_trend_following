@@ -27,7 +27,7 @@ st.markdown("""
   └── Yahoo Finance → Parquet 缓存 → 增量更新
 
 信号层（Signal Layer）
-  └── t 日收盘后计算所有信号（突破、止损、追踪止损）
+  └── t 日收盘后计算所有信号（突破、止损、移动止盈）
 
 执行层（Execution Layer）
   └── t+1 日开盘价执行（含滑点、佣金、Gap 过滤）
@@ -96,7 +96,7 @@ st.markdown(f"""
 st.markdown("""
 <div class="info-box">
 <strong>价格体系：使用复权价格（Adjusted Prices），包含分红</strong><br>
-回测中所有价格计算（入场、出场、止损、追踪止损、NAV 标记）均使用
+回测中所有价格计算（入场、出场、止损、移动止盈、NAV 标记）均使用
 <strong>复权价格 = 原始价格 × adj_factor</strong>，完整反映分红再投资后的总回报（Total Return）。<br><br>
 <strong>复权价格 vs 原始价格的区别：</strong> 当股票派息时，原始价格在除息日下跌（如 $100 派息 $1 后变 $99），
 但投资者同时收到 $1 现金。若用原始价格计算，分红收益会被漏计。
