@@ -62,6 +62,35 @@ def render_summary_cards(metrics: dict, color: str,
             color,
         ), unsafe_allow_html=True)
 
+    cols1b = st.columns(3)
+    with cols1b[0]:
+        sortino_color = "#2ca02c" if sortino > 0.5 else ("#d62728" if sortino < 0 else "#f57c00")
+        st.markdown(_card_html(
+            "Sortino 比率",
+            f'<span style="color:{sortino_color}">{sortino:+.3f}</span>',
+            "仅惩罚下行波动率，比 Sharpe 更关注亏损风险",
+            color,
+        ), unsafe_allow_html=True)
+
+    with cols1b[1]:
+        calmar_color = "#2ca02c" if calmar > 0.5 else ("#d62728" if calmar < 0 else "#f57c00")
+        st.markdown(_card_html(
+            "Calmar 比率",
+            f'<span style="color:{calmar_color}">{calmar:+.3f}</span>',
+            "CAGR ÷ |最大回撤|，每单位回撤获取的年化收益",
+            color,
+        ), unsafe_allow_html=True)
+
+    with cols1b[2]:
+        pf_color = "#2ca02c" if profit_factor > 1.5 else ("#d62728" if profit_factor < 1.0 else "#f57c00")
+        pf_val = f"{profit_factor:.2f}" if profit_factor else "—"
+        st.markdown(_card_html(
+            "Profit Factor",
+            f'<span style="color:{pf_color}">{pf_val}</span>',
+            "总盈利 ÷ 总亏损；> 1 策略有正期望，> 1.5 为良好，> 2.0 为优秀",
+            color,
+        ), unsafe_allow_html=True)
+
     cols2 = st.columns(3)
     with cols2[0]:
         st.markdown(_card_html(
