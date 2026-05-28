@@ -73,8 +73,9 @@ def compute_atr(
 
     atr_values = np.full(len(tr_values), np.nan)
 
-    # Seed: simple average of the first `period` valid TR values.
-    # tr_values[0] may be NaN (no prior close), so start from index 1.
+    # Seed: simple average of TR[1:period+1].
+    # TR[0] = high[0]-low[0] is valid (not NaN), but skipped to align the
+    # seed window with the first full period of gap-adjusted TR values.
     seed_start = 1
     seed_end = seed_start + period  # exclusive
     if seed_end > len(tr_values):
