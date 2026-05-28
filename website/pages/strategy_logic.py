@@ -130,7 +130,7 @@ st.markdown(f"""
 st.markdown(f"""
 <div class="info-box">
 <strong>突破窗口为何选 {p['breakout_window']} 日？</strong><br>
-{'<strong>200 日</strong>（约 10 个月）即市场常说的"52 周新高"，是机构趋势跟踪中最经典的突破周期。相比 100 日突破，200 日只捕捉更持久、更强劲的趋势，信号更少但质量更高，可有效减少假突破带来的频繁进出场。' if p['breakout_window'] == 200 else f'当前使用 {p["breakout_window"]} 日突破，覆盖约 {p["breakout_window"]//20} 个月的价格区间，在信号频率与趋势质量之间取得平衡。'}
+{'<strong>200 日</strong>（约 10 个月）即市场常说的"52 周新高"，是机构趋势跟踪中最经典的突破周期。相比 100 日突破，200 日只捕捉更持久、更强劲的趋势，信号更少但质量更高，可有效减少假突破带来的频繁进出场。200日突破是 Donchian 通道的经典实现，学术和实践中均有充分验证。' if p['breakout_window'] == 200 else f'当前使用 {p["breakout_window"]} 日突破，覆盖约 {p["breakout_window"]//20} 个月的价格区间，在信号频率与趋势质量之间取得平衡。'}
 </div>
 """, unsafe_allow_html=True)
 
