@@ -81,7 +81,10 @@ def compute_max_correlation(
     min_samples: int = 40,
 ) -> float:
     """
-    Maximum absolute Pearson correlation between a candidate and all open positions.
+    Maximum positive Pearson correlation between a candidate and all open positions.
+
+    Only positive correlation triggers position reduction — negative correlation
+    indicates diversification benefit in a long-only portfolio and is treated as 0.
 
     Only uses log-return data up to and including `as_of_date` so there is no
     look-ahead bias.
@@ -95,7 +98,7 @@ def compute_max_correlation(
         min_samples:       Minimum valid observations (default 40).
 
     Returns:
-        max(|corr|) across all current positions.
+        max(corr, 0) across all current positions.
         Returns 0.0 if no valid correlation can be computed (treat as uncorrelated).
     """
     if not current_positions or new_ticker not in log_returns:
@@ -104,7 +107,7 @@ def compute_max_correlation(
     returns_new = log_returns[new_ticker]
     returns_new = returns_new[returns_new.index <= as_of_date]
 
-    max_abs_corr = 0.0
+    max_pos_corr = 0.0
     for pos_ticker in current_positions:
         if pos_ticker not in log_returns or pos_ticker == new_ticker:
             continue
@@ -115,6 +118,6 @@ def compute_max_correlation(
             returns_new, returns_pos, window=window, min_samples=min_samples
         )
         if corr is not None:
-            max_abs_corr = max(max_abs_corr, abs(corr))
+            max_pos_corr = max(max_pos_corr, corr)
 
-    return max_abs_corr
+    return max_pos_corr
