@@ -53,7 +53,7 @@ def compute_atr(
         |low[i]  - close[i-1]|,
     )
 
-    ATR seed  = simple mean of TR[1 : period+1]  (skip first NaN row)
+    ATR seed  = simple mean of TR[1 : period+1]  (TR[0] is valid but skipped for consistency)
     ATR[i]    = (ATR[i-1] × (period - 1) + TR[i]) / period
 
     Returns a Series aligned with the input index.
