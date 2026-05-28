@@ -21,7 +21,6 @@ if TYPE_CHECKING:
 def update_trail_stop_v1(
     position: "Position",
     high: float,
-    close: float,
     atr: float,
     params: "StrategyParams",
 ) -> None:
@@ -29,7 +28,11 @@ def update_trail_stop_v1(
     Update position.highest_high and position.trail_stop in-place.
 
     Trailing stop segmented formula (design spec Section D):
-        R_multiple = (close − entry_price) / R
+        R_multiple = (highest_high − entry_price) / R   ← peak profit, not current close
+        (highest_high is updated to today's high in Step 1 before this calculation)
+
+        Once a position has reached a higher R-band it stays there — the multiplier
+        never drops back on a pullback, preventing the stop from tightening mid-trend.
 
         if R_multiple < 1:   multiplier = trail_multiplier_r1  (default 3.0)
         if R_multiple < 3:   multiplier = trail_multiplier_r3  (default 3.0)
@@ -50,8 +53,8 @@ def update_trail_stop_v1(
     if r <= 0 or math.isnan(r):
         return
 
-    # Step 2: compute R_multiple from today's close
-    r_multiple = (close - position.entry_price) / r
+    # Step 2: compute peak R_multiple from highest_high (already updated in Step 1)
+    r_multiple = (position.highest_high - position.entry_price) / r
 
     # Step 3: select trailing multiplier
     if r_multiple < 1.0:
@@ -91,9 +94,9 @@ def check_exit_signals_v1(
         None  if no exit is triggered
     """
     # Always update state first, regardless of exit
-    update_trail_stop_v1(position, high, close, atr, params)
+    update_trail_stop_v1(position, high, atr, params)
 
-    # Priority 1: hard stop loss (intraday low check)
+    # Priority 1: stop loss (intraday low check)
     if low < position.stop_loss:
         return {
             "ticker": position.ticker,
