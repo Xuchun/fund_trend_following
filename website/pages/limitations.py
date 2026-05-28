@@ -79,8 +79,8 @@ st.markdown("""
 ---
 """)
 
-# ── Limitation 5: Parameter optimization ─────────────────────────────────────
-st.subheader("5. 参数优化偏差")
+# ── Limitation 4: Parameter optimization ─────────────────────────────────────
+st.subheader("4. 参数优化偏差")
 st.markdown("""
 **问题：** 当前参数（200日突破、2×ATR止损等）是基于历史经验选定的，
 虽然未进行显式优化，但研究者本人可能存在**无意识的参数选择偏差**。
