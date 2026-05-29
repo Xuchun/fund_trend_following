@@ -73,8 +73,11 @@ OUTPUT_DIR = ROOT / "results" / "v1" / "perturbation"
 
 # ── Parameters to sweep ───────────────────────────────────────────────────────
 # Format: (param_name, [values], use_int)
-# Already done: trail_multiplier_r1, breakout_window
+# Existing JSON files are skipped automatically; delete them to force a re-run.
 SWEEPS = [
+    # Trailing stop / entry signal
+    ("trail_multiplier_r1",     [2.0, 2.5, 3.0, 3.5, 4.0],     False),
+    ("breakout_window",         [150, 170, 200, 230, 250, 270, 300], True),
     # Risk / stop
     ("stop_loss_multiplier",    [1.5, 2.0, 2.5, 3.0],          False),
     # Position sizing
