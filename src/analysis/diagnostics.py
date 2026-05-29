@@ -108,11 +108,26 @@ def _execution_quality(gap_stats: dict) -> dict:
     else:
         assessment = "concerning"
 
+    # Tail risk check per design spec 1.2.3 benchmarks:
+    # p5 (signed) = 95th percentile of loss magnitude; worst (signed) = max loss magnitude
+    p95_magnitude = abs(gap_stats.get("p5", 0.0))   # 95th pct of |loss|
+    max_magnitude = abs(gap_stats.get("worst", 0.0)) # worst single loss |R|
+
+    if max_magnitude > 10.0:
+        tail_risk = "灾难"   # design spec threshold: max > 10R
+    elif p95_magnitude > 2.5:
+        tail_risk = "危险"   # design spec threshold: P95 > 2.5R
+    else:
+        tail_risk = "正常"
+
     return {
-        "expected_avg_loss_r": expected,
-        "actual_avg_loss_r":   actual,
-        "gap_impact_r":        impact,
-        "assessment":          assessment,
+        "expected_avg_loss_r":  expected,
+        "actual_avg_loss_r":    actual,
+        "gap_impact_r":         impact,
+        "assessment":           assessment,
+        "p95_loss_magnitude":   round(p95_magnitude, 4),
+        "max_loss_magnitude":   round(max_magnitude, 4),
+        "tail_risk":            tail_risk,
     }
 
 
