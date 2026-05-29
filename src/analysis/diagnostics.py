@@ -270,6 +270,9 @@ def _print_execution_quality(eq: dict) -> None:
     print(f"  实际平均止损  : {eq['actual_avg_loss_r']:+.3f}R")
     print(f"  缺口影响      : {eq['gap_impact_r']:+.3f}R")
     print(f"  评估          : {eq['assessment'].upper()}")
+    print(f"  P95 损失量级  : {eq.get('p95_loss_magnitude', 0):.3f}R  （基准: > 2.5R = 危险）")
+    print(f"  最大损失量级  : {eq.get('max_loss_magnitude', 0):.3f}R  （基准: > 10R = 灾难）")
+    print(f"  尾部风险评级  : {eq.get('tail_risk', 'N/A')}")
 
 
 def _print_streak_analysis(sa: dict) -> None:
