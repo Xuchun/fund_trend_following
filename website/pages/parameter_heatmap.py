@@ -77,7 +77,10 @@ st.markdown(f"""
 - 🔴 尖峰形态（Sharp Peak）：仅特定值表现最优 → 过拟合风险高
 """)
 
-st.info("💡 **计算量：** 1D Heatmap 直接复用已有 Perturbation JSON 数据，无需额外回测，渲染时间 < 1 秒。")
+st.info(
+    "💡 **计算量：** 突破窗口 N、ATR 止损乘数、移动止盈乘数直接复用已有 Perturbation JSON，无需额外回测。"
+    "ATR 周期（4 个值）和最小止损距离（3 个值）需新增共 7 次全宇宙回测，预计约 1 小时。"
+)
 
 st.markdown("---")
 
