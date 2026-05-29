@@ -75,6 +75,100 @@ CAGR 仅 {cagr*100:.1f}%，主因是 2008 年金融危机期间
 
 st.markdown("---")
 
+# ── Baseline parameter table ───────────────────────────────────────────────────
+_p = meta.params_anchor
+st.subheader("📋 Baseline 锚点参数（完整）")
+st.caption("以下参数值与设计方案 §1.2.1.1、代码 StrategyParams 及回测脚本三处完全一致。")
+
+_col_a, _col_b = st.columns(2)
+
+with _col_a:
+    st.markdown("**入场信号**")
+    st.markdown(f"""
+| 参数 | 代码名 | Baseline 值 |
+|---|---|---|
+| 突破窗口 | `breakout_window` | **{_p['breakout_window']} 日** |
+| ATR 周期 | `atr_period` | **{_p['atr_period']} 日**（Wilder 平滑）|
+| 成交量确认乘数 | `volume_filter_multiplier` | **{_p['volume_filter_multiplier']:.1f}×** 60日均量 |
+| 突破强度过滤 | `breakout_strength_min` | **无**（0.0，不过滤）|
+| Gap 过滤 | `gap_filter` | **±{_p['gap_filter']*100:.1f}%**（跳空超限放弃入场）|
+""")
+
+    st.markdown("**标的过滤**")
+    st.markdown(r"""
+| 参数 | 代码名 | Baseline 值 |
+|---|---|---|
+| 最低股价 | `min_price` | **\$10**（原始收盘价）|
+| 最低市值 | `min_market_cap_b` | **\$2B**（注①）|
+| ADV 流动性 | `min_adv_m` | **\$20M**（60日均量）|
+""")
+    st.caption("注①：Yahoo Finance 不提供历史点位市值，该过滤在回测中实际未执行（见参数敏感性分析页）。")
+
+    st.markdown("**止损 / 最小止损距离**")
+    st.markdown(f"""
+| 参数 | 代码名 | Baseline 值 |
+|---|---|---|
+| ATR 止损乘数 | `stop_loss_multiplier` | **{_p['stop_loss_multiplier']:.1f}×ATR** |
+| 最小止损距离 | `min_stop_distance_pct` | **{_p['min_stop_distance_pct']*100:.1f}%**（低于此值放弃）|
+""")
+
+    st.markdown("**追踪止损（分段）**")
+    st.markdown(f"""
+| 阶段 | 代码名 | Baseline 值 |
+|---|---|---|
+| 早期（< 1R） | `trail_multiplier_r1` | **{_p['trail_multiplier_r1']:.1f}×ATR** |
+| 中期（1–3R） | `trail_multiplier_r3` | **{_p['trail_multiplier_r3']:.1f}×ATR** |
+| 大赢（≥ 3R） | `trail_multiplier_r5` | **{_p['trail_multiplier_r5']:.1f}×ATR** |
+""")
+
+with _col_b:
+    st.markdown("**仓位与风险**")
+    st.markdown(f"""
+| 参数 | 代码名 | Baseline 值 |
+|---|---|---|
+| 每笔风险比例 | `risk_per_trade` | **{_p['risk_per_trade']*100:.1f}% NAV** |
+| 单标的仓位上限 | `position_cap` | **{_p['position_cap']*100:.0f}% NAV** |
+| 热度上限 | `heat_limit` | **{_p['heat_limit']*100:.0f}% NAV**（注②）|
+""")
+    st.caption("注②：由于 position_cap 架空效应，实际每笔风险约 0.24% NAV，heat_limit ≥ 10% 在回测中从未触发（见参数敏感性分析页）。")
+
+    st.markdown("**相关性过滤**")
+    st.markdown(f"""
+| 参数 | 代码名 | Baseline 值 |
+|---|---|---|
+| 相关性窗口 | `correlation_window` | **{_p['correlation_window']} 日** |
+| 相关性阈值 | `correlation_threshold` | **{_p['correlation_threshold']:.2f}**（超出则减仓）|
+| 减仓比例 | `correlation_reduction` | **{_p['correlation_reduction']*100:.0f}%**（仓位乘以 0.5）|
+""")
+
+    st.markdown("**市场环境过滤（Regime Filter）**")
+    st.markdown(f"""
+| 参数 | 代码名 | Baseline 值 |
+|---|---|---|
+| 启用 | `regime_filter_enabled` | **{'是' if _p['regime_filter_enabled'] else '否'}** |
+| 基准标的 | `regime_ticker` | **{_p['regime_ticker']}** |
+| SMA 窗口 | `regime_sma_window` | **{_p['regime_sma_window']} 日** |
+""")
+
+    st.markdown("**交易成本**")
+    st.markdown(f"""
+| 参数 | 代码名 | Baseline 值 |
+|---|---|---|
+| 滑点（单边） | `slippage_bps` | **{_p['slippage_bps']:.0f} bps** |
+| 佣金（单边） | `commission_bps` | **{_p['commission_bps']:.0f} bps** |
+""")
+
+    st.markdown("**空仓 / 回测设置**")
+    st.markdown(r"""
+| 参数 | 代码名 | Baseline 值 |
+|---|---|---|
+| 空仓资金代理 | `cash_proxy` | **SHY**（1–3年期国债 ETF）|
+| 初始资金 | — | **\$10,000,000** |
+| 回测开始 | — | **2004-01-01** |
+""")
+
+st.markdown("---")
+
 # ── NAV chart ─────────────────────────────────────────────────────────────────
 st.subheader("净值曲线 vs SPY")
 _show_spy = st.checkbox("显示 SPY 基准曲线", value=True, key="nav_show_spy")
