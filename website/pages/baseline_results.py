@@ -601,6 +601,7 @@ _annual_all = _nav_s.resample("YE").last().pct_change().dropna()
 _current_year = _nav_s.index[-1].year
 _annual = _annual_all[_annual_all.index.year < _current_year]
 _n_years      = len(_annual)
+_bt_years     = (_nav_s.index[-1] - _nav_s.index[0]).days / 365.25  # actual backtest duration
 _pos_years    = int((_annual > 0).sum())
 _neg_years    = int((_annual < 0).sum())
 _worst_yr     = int(_annual.idxmin().year)
