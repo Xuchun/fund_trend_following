@@ -562,19 +562,26 @@ st.markdown("---")
 st.subheader("交易样本")
 n_show = st.slider("显示交易笔数", 10, 100, 20, 10)
 trades_display = res.trades.sort_values("exit_date", ascending=False).head(n_show).copy()
-if "pnl_r_multiple" in trades_display.columns:
-    trades_display = trades_display[[
-        "ticker", "entry_date", "exit_date", "entry_price", "exit_price",
-        "shares", "pnl_r_multiple",
-    ]].rename(columns={
-        "ticker": "标的",
-        "entry_date": "入场日",
-        "exit_date": "出场日",
-        "entry_price": "入场价",
-        "exit_price": "出场价",
-        "shares": "股数",
-        "pnl_r_multiple": "R 倍数",
-    })
+_td_cols = ["ticker", "entry_date", "exit_date", "holding_days",
+            "entry_price", "exit_price", "shares", "net_pnl",
+            "pnl_r_multiple", "exit_reason"]
+_td_cols = [c for c in _td_cols if c in trades_display.columns]
+trades_display = trades_display[_td_cols].rename(columns={
+    "ticker":         "标的",
+    "entry_date":     "入场日",
+    "exit_date":      "出场日",
+    "holding_days":   "持仓天",
+    "entry_price":    "入场价",
+    "exit_price":     "出场价",
+    "shares":         "股数",
+    "net_pnl":        "净盈亏($)",
+    "pnl_r_multiple": "R 倍数",
+    "exit_reason":    "出场原因",
+})
+if "净盈亏($)" in trades_display.columns:
+    trades_display["净盈亏($)"] = trades_display["净盈亏($)"].apply(
+        lambda v: f"${v:+,.0f}"
+    )
 st.dataframe(trades_display, use_container_width=True, hide_index=True)
 
 # ── Assessment ─────────────────────────────────────────────────────────────────
