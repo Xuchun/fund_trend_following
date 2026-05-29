@@ -385,23 +385,32 @@ if _d:
     _info = _render_param_section(
         _d,
         "✅ 每笔风险比例（risk_per_trade）",
-        """**背景：** 每笔交易风险 = risk_per_trade × NAV，决定仓位大小。
-1% 意味着每笔交易若触发止损，亏损约 1% NAV（实际因滑点略高）。
-较小比例更保守，最大回撤更小但 CAGR 也同比例缩小；
-较大比例收益更高但波动和回撤同步放大。""",
+        """**背景：** 理论上，每笔交易风险 = risk_per_trade × NAV，用于计算仓位大小：
+仓位股数 = (risk_per_trade × NAV) ÷ (stop_distance × 股价)。
+然而在当前配置中，**position_cap（单标的仓位上限 = 5% NAV）是主导约束**，
+导致 risk_per_trade ≥ 1% 时几乎所有交易都被截断至 5% NAV 上限。""",
     )
     base = _info["base_rec"]
     best = _info["best_sharpe_rec"]
     lo, hi = _info["stab_lo"], _info["stab_hi"]
     stab_str = f"{lo*100:.1f}%–{hi*100:.1f}%" if lo is not None else "全范围"
     st.markdown(f"""
-**结论：** {"✅ 全部参数值均实现正 CAGR——仓位大小不影响策略的正期望。" if _info["all_pos"] else "⚠️ 存在负 CAGR 的参数值。"}
+**结论：** {"✅ 全部参数值均实现正 CAGR。" if _info["all_pos"] else "⚠️ 存在负 CAGR 的参数值。"}
 Sharpe 稳定区间：**{stab_str}**。
 
-- 此参数主要是**杠杆调节旋钮**：收益、波动率、回撤均近线性缩放
-- 基准 {base['param_value']*100:.1f}%：CAGR {base['cagr']*100:+.2f}%，Sharpe {base['sharpe']:+.3f}，MaxDD {base['max_drawdown']*100:.1f}%
-- Sharpe 理论上对此参数不敏感（分子分母同比例变化）
-- 实际偏差来自 heat_limit 约束和 position_cap 约束：较大的 risk_per_trade 更容易触碰上限而减仓
+> ⚠️ **重要发现：position_cap 架空了 risk_per_trade**
+>
+> **为什么 1.0% / 1.5% / 2.0% 的回测结果几乎完全相同？**
+>
+> - 典型止损距离（stop_distance_pct）约 4.7% NAV（实测范围 0.51%–13.10%）
+> - 以 risk_per_trade=1% 计算：原始仓位 = 1% ÷ 4.7% = **21.3% NAV**，远超 position_cap=5%
+> - 因此 **100% 的交易** 在 risk_per_trade ≥ 1% 时都被截断至 5% NAV（position_cap 全面触发）
+> - 即使 risk_per_trade=0.5%，仍有 **99.1%** 的交易触发上限
+> - 实际每笔真实风险 ≈ 5% NAV × 4.7% ≈ **0.24% NAV**（远低于名义的 1%）
+>
+> **结论：** 在当前配置下，risk_per_trade 被 position_cap 完全架空，调整此参数（≥ 0.5%）
+> 不会改变仓位大小或回测结果。**真正控制风险敞口的参数是 position_cap**。
+> 若要使 risk_per_trade 生效，需将 position_cap 提高至 ≥ 25%（不推荐）或将 risk_per_trade 降至 ≤ 0.2%。
 """)
     _section_meta["risk_per_trade"] = _info
 else:
