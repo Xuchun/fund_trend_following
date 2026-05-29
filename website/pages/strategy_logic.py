@@ -85,13 +85,32 @@ if regime_enabled:
 ```
 
 """)
+    # ── Compute bear-market stats from SPY nav ────────────────────────────────
+    import pandas as _pd_regime
+    _sma_reg = res.spy_nav.rolling(regime_window, min_periods=regime_window).mean()
+    _is_bear = (res.spy_nav < _sma_reg).fillna(False)
+    _bear_days_total = int(_is_bear.sum())
+    _bear_pct = _bear_days_total / len(_is_bear) * 100
+
+    _ep_grp = (_is_bear != _is_bear.shift()).cumsum()
+    _episodes_bear: list[tuple] = []
+    for _, _g in _is_bear.groupby(_ep_grp):
+        if bool(_g.iloc[0]):
+            _episodes_bear.append((_g.index[0].year, _g.index[-1].year, len(_g)))
+    _episodes_bear.sort(key=lambda x: -x[2])
+    _ep_strs = []
+    for _s, _e, _d in _episodes_bear[:2]:
+        _lbl = str(_s) if _s == _e else f"{_s}–{_e}"
+        _ep_strs.append(f"{_lbl}（封仓 {_d} 天）")
+    _ep_text = "，".join(_ep_strs) if _ep_strs else "无重大熊市封仓期"
+
     st.markdown(f"""
 <div class="info-box">
 <strong>规则要点</strong><br>
 <ul>
 <li>现有持仓<strong>不强平</strong>——移动止盈继续保护，让利润自然奔跑</li>
 <li>熊市期间所有闲置现金自动流入 <strong>{meta.cash_proxy}</strong>（赚取无风险利率）</li>
-<li>从 2004 年起，此规则将<strong>熊市封仓天数约占 19%</strong>（约 1,025 天），主要覆盖 2008 金融危机（封仓 373 天）和 2022 年加息熊市（封仓 261 天）</li>
+<li>从 {meta.backtest_start[:4]} 年起，此规则将<strong>熊市封仓天数约占 {_bear_pct:.0f}%</strong>（约 {_bear_days_total:,} 天），主要覆盖 {_ep_text}</li>
 </ul>
 </div>
 """, unsafe_allow_html=True)
