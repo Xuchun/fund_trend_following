@@ -210,7 +210,7 @@ def trades_per_year_chart(trades: pd.DataFrame) -> go.Figure:
         "end_of_backtest": "#aaaaaa",
     }
     reason_labels = {
-        "trailing_stop": "追踪止损",
+        "trailing_stop": "移动止盈",
         "stop_loss":     "固定止损",
         "end_of_backtest": "回测结束",
     }
