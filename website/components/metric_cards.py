@@ -130,9 +130,9 @@ def render_summary_cards(metrics: dict, color: str,
     with cols3[1]:
         yrs2 = f"{avg_deep_days/252:.1f} 年" if avg_deep_days else "—"
         st.markdown(_card_html(
-            "平均深度水下时间（回撤 > 10%）",
+            "平均深度水下时间（回撤 > 10%，≥5 天情节）",
             f'<span style="color:#d62728">{avg_deep_days:.0f} 交易日</span>',
-            f"≈ {yrs2}（交易日计），共 {n_episodes} 次回撤超过 10% 的情节",
+            f"≈ {yrs2}（交易日计），共 {n_episodes} 次有效情节（已过滤 1–4 天噪声触碰）",
             color,
         ), unsafe_allow_html=True)
 
