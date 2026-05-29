@@ -307,6 +307,32 @@ with _col2_t:
         "这种「多次小亏、少次大赚」的持仓结构是趋势跟踪策略的典型特征。"
     )
 
+# ── Daily position count ──────────────────────────────────────────────────────
+st.subheader("每日持仓标的数目")
+st.plotly_chart(
+    daily_position_count_chart(res.trades, res.nav.index, meta.color),
+    use_container_width=True,
+)
+_dc = res.trades.copy()
+_dc["entry_date"] = _pd_ar.to_datetime(_dc["entry_date"])
+_dc["exit_date"]  = _pd_ar.to_datetime(_dc["exit_date"])
+_nav_idx = _pd_ar.to_datetime(res.nav.index)
+_entry_c = _dc.groupby("entry_date").size().reindex(_nav_idx, fill_value=0)
+_exit_c  = _dc.groupby("exit_date").size().reindex(_nav_idx, fill_value=0)
+_daily_n = (_entry_c - _exit_c).cumsum().clip(lower=0)
+_mean_n  = float(_daily_n.mean())
+_max_n   = int(_daily_n.max())
+_zero_pct= float((_daily_n == 0).mean()) * 100
+st.markdown(
+    f"**解读：** 回测期间每日持仓标的数量的实际分布。"
+    f"全程均值约 **{_mean_n:.1f} 只**，历史峰值 **{_max_n} 只**。"
+    f"空仓天数（0 只持仓）占全程约 **{_zero_pct:.1f}%**，"
+    f"主要集中于熊市阶段（SPY 跌破 200 日均线时，Regime Filter 停止新开仓并等待旧仓止损出清）。"
+    f"持仓数目随市场环境的起伏变化，体现了策略在不同市场条件下的动态参与度。"
+)
+
+st.markdown("---")
+
 # ── Profit by type: stock vs ETF ──────────────────────────────────────────────
 st.subheader("策略盈利来源：股票 vs ETF")
 st.plotly_chart(profit_by_type_chart(res.trades, _ETF_SET), use_container_width=True)
