@@ -60,7 +60,7 @@ st.markdown(f"""
 | 相关性阈值 | {p['correlation_threshold']:.2f} | 0.5 / 0.6 / 0.7 / 0.8 / 0.9 | 分散化效果 | 🔜 待分析 |
 | 成交量确认乘数 | **{p.get('volume_filter_multiplier', 0):.1f}×** | 1.0 / 1.2 / 1.5 / 1.7 / 2.0 | 过滤低质量假突破 vs 入场频率 | 🔜 待分析 |
 | 最低收盘价 | \${p.get('min_price', 10):.0f} | $8 / $10 / $12 / $15 | 低价股噪声过滤强度 | 🔜 待分析 |
-| 最低市值 | \${p.get('min_market_cap_b', 2):.0f}B | $1B / $2B / $3B | 大盘 vs 中盘稳定性 | 🔜 待分析 |
+| 最低市值 | \${p.get('min_market_cap_b', 2):.0f}B | $2B / $3B / $4B | 大盘 vs 中盘稳定性 | 🔜 待分析 |
 | ADV 流动性过滤 | \${p.get('min_adv_m', 20):.0f}M | $10M / $20M / $30M / $50M | 流动性约束 vs 可交易标的数 | 🔜 待分析 |
 | 滑点（单边） | {p.get('slippage_bps', 10):.0f} bps | 5 / 10 / 20 / 30 bps | 实盘摩擦敏感度 | 🔜 待分析 |
 | 佣金（单边） | {p.get('commission_bps', 3):.0f} bps | 0 / 1 / 3 / 5 bps | 高频成本敏感性 | 🔜 待分析 |
