@@ -455,7 +455,7 @@ if _d:
         _d,
         "✅ 热度上限（heat_limit）",
         """**背景：** 热度（Heat）= 所有开仓的风险总和（∑ 止损距离 × 仓位大小 / NAV）。
-Heat limit 控制组合总风险暴露上限。当接近 Heat limit 时，新信号不执行。
+Heat limit 控制组合总风险暴露上限。当新信号入场会导致总热度超过上限时，该信号不执行。
 较低上限更保守，可能错失趋势聚集期的入场机会；较高上限更激进。""",
     )
     base = _info["base_rec"]
@@ -468,7 +468,27 @@ Sharpe 稳定区间：**{stab_str}**。
 
 - 基准 {base['param_value']*100:.0f}%：CAGR {base['cagr']*100:+.2f}%，Sharpe {base['sharpe']:+.3f}，MaxDD {base['max_drawdown']*100:.1f}%
 {"- 基准值即 Sharpe 最优点" if abs(base['param_value'] - best['param_value']) < 0.001 else f"- Sharpe 最高点：{best['param_value']*100:.0f}%（{best['cagr']*100:+.2f}%，Sharpe {best['sharpe']:+.3f}）"}
-- Heat limit 主要影响组合在趋势聚集期的充分参与度，对 Sharpe 的影响通常小于止损参数
+
+> ⚠️ **重要发现：heat_limit ≥ 10% 在当前配置下从未触发**
+>
+> **为什么 10% / 15% / 20% 的回测结果完全相同？**
+>
+> 热度检查公式：`total_heat = ∑(各仓位风险额) / 当前NAV`
+>
+> 由于 position_cap=5% NAV 是主导约束（参见上文"每笔风险比例"分析），
+> 每笔交易的实际风险约为 5% NAV × 4.7%（典型止损距离）≈ **0.24% NAV**。
+>
+> | heat_limit 值 | 触发所需并发持仓数 | 实际最大并发持仓 | 是否触发 |
+> |---|---|---|---|
+> | 5% | > 21 笔 | 32 笔 | **偶尔触发** |
+> | 10% | > 42 笔 | 32 笔 | **从不触发** |
+> | 15% | > 63 笔 | 32 笔 | **从不触发** |
+> | 20% | > 83 笔 | 32 笔 | **从不触发** |
+>
+> **结论：** heat_limit 代码逻辑正确，但受 position_cap 架空效应影响，
+> 真正有效的约束范围是 ≤ 7%（32 笔 × 0.24% ≈ 7.7%）。
+> 基准值 10% 已超出实际约束范围，属于冗余安全边际。
+> **真正控制组合总风险的参数是 position_cap**。
 """)
     _section_meta["heat_limit"] = _info
 else:
