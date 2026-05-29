@@ -73,12 +73,13 @@ if _MC_PATH.exists():
 # ── Section 1: analysis objective ────────────────────────────────────────────
 n_trades_str = f"{res.metrics.get('n_trades', 0):,}"
 if mc:
-    st.subheader("模拟概览")
-    mc1, mc2, mc3, mc4 = st.columns(4)
-    mc1.metric("模拟路径数",    f"{mc['n_simulations']:,} 条")
-    mc2.metric("模拟方法",      mc.get("method", "—").replace("_", " "))
-    mc3.metric("模拟区间",      f"{mc['start']} → {mc['end']}")
-    mc4.metric("模拟交易日数",  f"{mc['n_days']:,} 天")
+    st.subheader("模拟概览（Baseline Anchor 锚点参数）")
+    mc1, mc2, mc3, mc4, mc5 = st.columns(5)
+    mc1.metric("模拟路径数",   f"{mc['n_simulations']:,} 条")
+    mc2.metric("模拟方法",     "Return + Block Bootstrap")
+    mc3.metric("数据起点",     mc.get("start", "—"))
+    mc4.metric("数据终点",     mc.get("end", "—"))
+    mc5.metric("模拟交易日数", f"{mc['n_days']:,} 天")
 else:
     st.subheader("分析目标")
     st.markdown(f"""
