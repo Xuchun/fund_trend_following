@@ -112,7 +112,7 @@ with _col_a:
 | 最小止损距离 | `min_stop_distance_pct` | **{_p['min_stop_distance_pct']*100:.1f}%**（低于此值放弃）|
 """)
 
-    st.markdown("**追踪止损（分段）**")
+    st.markdown("**移动止盈（分段）**")
     st.markdown(f"""
 | 阶段 | 代码名 | Baseline 值 |
 |---|---|---|
