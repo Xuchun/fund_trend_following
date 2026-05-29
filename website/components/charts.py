@@ -184,6 +184,10 @@ def annual_returns_chart(nav: pd.Series, spy_nav: pd.Series | None,
     fig.add_trace(go.Bar(
         x=strat_annual.index, y=strat_annual.values * 100,
         name=strategy_name, marker_color=bar_colors, opacity=0.85,
+        text=[f"{v*100:+.1f}%" for v in strat_annual.values],
+        textposition="outside",
+        textfont=dict(size=9),
+        cliponaxis=False,
     ))
     fig.add_hline(y=0, line_color="#333", line_width=0.8)
     fig.update_layout(
@@ -193,8 +197,8 @@ def annual_returns_chart(nav: pd.Series, spy_nav: pd.Series | None,
         yaxis_ticksuffix="%",
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         hovermode="x unified",
-        margin=dict(l=60, r=20, t=60, b=40),
-        height=340,
+        margin=dict(l=60, r=20, t=60, b=60),
+        height=380,
     )
     return fig
 
