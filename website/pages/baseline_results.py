@@ -182,6 +182,80 @@ st.plotly_chart(
 st.subheader("回撤曲线")
 st.plotly_chart(drawdown_chart(res.nav, meta.color), use_container_width=True)
 
+# ── Drawdown recovery analysis table ─────────────────────────────────────────
+import numpy as _np_ep
+import pandas as _pd_ep
+
+_nav_ep = res.nav.copy()
+if not isinstance(_nav_ep.index, _pd_ep.DatetimeIndex):
+    _nav_ep.index = _pd_ep.to_datetime(_nav_ep.index)
+
+_DD_THRESH = -0.05   # track episodes with drawdown < -5%
+_n_ep      = len(_nav_ep)
+_dates_ep  = _nav_ep.index
+_vals_ep   = _nav_ep.values.astype(float)
+
+_peak_val  = _vals_ep[0]
+_peak_i    = 0
+_in_ep     = False
+_ep_pi     = 0      # peak index of current episode
+_ep_ti     = 0      # trough index of current episode
+_ep_tv     = 0.0   # trough value
+_ep_rows   = []
+
+for _i in range(1, _n_ep):
+    _v = _vals_ep[_i]
+    if _v >= _peak_val:
+        if _in_ep:
+            _ep_rows.append({
+                "高点": _dates_ep[_ep_pi].strftime("%Y-%m"),
+                "低点": _dates_ep[_ep_ti].strftime("%Y-%m"),
+                "修复": _dates_ep[_i].strftime("%Y-%m"),
+                "最大回撤": (_ep_tv - _vals_ep[_ep_pi]) / _vals_ep[_ep_pi],
+                "至低谷（交易日）": _ep_ti - _ep_pi,
+                "修复耗时（交易日）": _i - _ep_ti,
+                "总水下时间（交易日）": _i - _ep_pi,
+            })
+            _in_ep = False
+        _peak_val = _v
+        _peak_i   = _i
+    else:
+        _dd_v = (_v - _peak_val) / _peak_val
+        if _dd_v < _DD_THRESH:
+            if not _in_ep:
+                _in_ep = True
+                _ep_pi = _peak_i
+                _ep_ti = _i
+                _ep_tv = _v
+            elif _v < _ep_tv:
+                _ep_ti = _i
+                _ep_tv = _v
+
+if _in_ep:   # ongoing episode (not yet recovered)
+    _ep_rows.append({
+        "高点": _dates_ep[_ep_pi].strftime("%Y-%m"),
+        "低点": _dates_ep[_ep_ti].strftime("%Y-%m"),
+        "修复": "进行中",
+        "最大回撤": (_ep_tv - _vals_ep[_ep_pi]) / _vals_ep[_ep_pi],
+        "至低谷（交易日）": _ep_ti - _ep_pi,
+        "修复耗时（交易日）": _n_ep - 1 - _ep_ti,
+        "总水下时间（交易日）": _n_ep - 1 - _ep_pi,
+    })
+
+_ep_df = _pd_ep.DataFrame(_ep_rows)
+if len(_ep_df) > 0:
+    _ep_df_sorted  = _ep_df.sort_values("最大回撤").head(10).copy()
+    _ep_df_sorted["最大回撤"] = _ep_df_sorted["最大回撤"].apply(lambda v: f"{v*100:.1f}%")
+    st.markdown("##### 主要回撤情节（按深度排序，前 10 次，仅含回撤 ≥ 5% 的情节）")
+    st.dataframe(_ep_df_sorted, use_container_width=True, hide_index=True)
+    _avg_rec = _ep_df[_ep_df["修复"] != "进行中"]["修复耗时（交易日）"].mean()
+    _avg_trough = _ep_df["至低谷（交易日）"].mean()
+    st.caption(
+        f"共 {len(_ep_df)} 次回撤 ≥ 5% 的情节；"
+        f"平均 {_avg_trough:.0f} 个交易日触底，"
+        f"触底后平均 {_avg_rec:.0f} 个交易日修复（已修复情节）。"
+    )
+
 st.markdown("---")
 
 # ── Annual returns + Rolling Sharpe side by side ──────────────────────────────
