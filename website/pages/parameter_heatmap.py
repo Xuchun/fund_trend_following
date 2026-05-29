@@ -53,15 +53,15 @@ st.markdown("---")
 st.subheader("📊 计划一：1D Heatmap（单参数景观可视化）")
 st.markdown(f"""
 对以下 **5 个核心参数**生成条形图 + 折线图，可视化参数景观（Parameter Landscape）。
-数据来自已完成的 Perturbation JSON 文件，无需重新计算。
+参数列表与测试范围直接来自设计方案 1.2.5"1D Heatmap（5个以内）"。
 
-| 参数 | 当前基准值 | 测试范围 | 设计方案要求 |
-|------|-----------|---------|------------|
-| 突破窗口 N（breakout_window） | **{p['breakout_window']}日** | 150/170/200/230/250/270/300 | ✅ 必须 |
-| ATR 止损乘数（stop_loss_multiplier） | **{p['stop_loss_multiplier']:.1f}×** | 1.5/2.0/2.5/3.0 | ✅ 必须 |
-| 早期移动止盈乘数（trail_multiplier_r1） | **{p['trail_multiplier_r1']:.0f}×ATR** | 2.0/2.5/3.0/3.5/4.0 | ✅ 必须 |
-| 每笔风险比例（risk_per_trade） | **{p['risk_per_trade']*100:.1f}%** | 0.5%/1.0%/1.5%/2.0% | 可选 |
-| 相关性阈值（correlation_threshold） | **{p['correlation_threshold']:.2f}** | 0.5/0.6/0.7/0.8/0.9 | 可选 |
+| 参数 | 当前基准值 | 测试范围 | 设计方案要求 | 数据来源 |
+|------|-----------|---------|------------|---------|
+| 突破窗口 N（breakout_window） | **{p['breakout_window']}日** | 150/170/200/230/250/270/300 | ✅ 必须 | 已有 JSON |
+| ATR 周期（atr_period） | **{p.get('atr_period', 20)}日** | 10/15/20/30 | ✅ 必须 | 需新增回测 |
+| ATR 止损乘数（stop_loss_multiplier） | **{p['stop_loss_multiplier']:.1f}×** | 1.5/2.0/2.5/3.0 | ✅ 必须 | 已有 JSON |
+| 移动止盈乘数（trail_multiplier_r1） | **{p['trail_multiplier_r1']:.0f}×ATR** | 2.0/2.5/3.0/3.5/4.0 | ✅ 必须 | 已有 JSON |
+| 最小止损距离（min_stop_distance_pct） | **{p.get('min_stop_distance_pct', 0.005)*100:.1f}%** | 0.3%/0.5%/1.0% | 可选 | 需新增回测 |
 
 **每张 1D 图展示：**
 - X 轴：参数取值
