@@ -22,9 +22,9 @@ st.markdown("---")
 
 # ── 0. 重要说明 ─────────────────────────────────────────────────────────────────
 st.warning(
-    "⚠️ **严格限制：所有 Heatmap 必须使用 In-Sample（IS）数据，不得引入任何 OOS 数据。**  \n"
-    "OOS 数据专属于"Walk-Forward 验证"页面。  \n"
-    "**Heatmap 的目的不是找最优参数，而是识别 Parameter Stability Region（参数稳定区间）。**",
+    "⚠️ 严格限制：所有 Heatmap 必须使用 In-Sample（IS）数据，不得引入任何 OOS 数据。"
+    "OOS 数据专属于 Walk-Forward 验证页面。"
+    "Heatmap 的目的不是找最优参数，而是识别 Parameter Stability Region（参数稳定区间）。"
 )
 
 st.markdown("""
