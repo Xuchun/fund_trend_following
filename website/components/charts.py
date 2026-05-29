@@ -339,6 +339,69 @@ def profit_by_type_chart(trades: pd.DataFrame, etf_tickers: set[str]) -> go.Figu
     return fig
 
 
+def daily_position_count_chart(trades: pd.DataFrame, nav_index, color: str = "#1f77b4") -> go.Figure:
+    """Bar chart: number of open positions on each trading day."""
+    if len(trades) == 0:
+        return go.Figure()
+
+    df = trades.copy()
+    df["entry_date"] = pd.to_datetime(df["entry_date"])
+    df["exit_date"]  = pd.to_datetime(df["exit_date"])
+
+    dates = pd.to_datetime(nav_index)
+
+    # Event-based cumsum: +1 on entry day, -1 on exit day
+    entry_counts = df.groupby("entry_date").size().reindex(dates, fill_value=0)
+    exit_counts  = df.groupby("exit_date").size().reindex(dates, fill_value=0)
+    daily_count  = (entry_counts - exit_counts).cumsum().clip(lower=0)
+
+    mean_val = float(daily_count.mean())
+    max_val  = int(daily_count.max())
+    zero_pct = float((daily_count == 0).mean()) * 100
+
+    # 30-day rolling mean for trend line
+    rolling_mean = daily_count.rolling(30, min_periods=1).mean()
+
+    fig = go.Figure()
+    fig.add_trace(go.Bar(
+        x=daily_count.index,
+        y=daily_count.values,
+        marker_color=color,
+        marker_line_width=0,
+        opacity=0.7,
+        name="持仓标的数",
+        hovertemplate="%{x|%Y-%m-%d}：%{y} 只<extra></extra>",
+    ))
+    fig.add_trace(go.Scatter(
+        x=rolling_mean.index,
+        y=rolling_mean.values,
+        mode="lines",
+        line=dict(color="#e65100", width=1.5),
+        name=f"30日均值",
+        hovertemplate="%{x|%Y-%m-%d}：均值 %{y:.1f} 只<extra></extra>",
+    ))
+    fig.add_hline(
+        y=mean_val,
+        line_dash="dot",
+        line_color="black",
+        line_width=1,
+        annotation_text=f"全程均值 {mean_val:.1f} 只",
+        annotation_position="top left",
+        annotation_font_size=11,
+    )
+    fig.update_layout(
+        title=f"每日持仓标的数目（最多 {max_val} 只，全程均值 {mean_val:.1f} 只，空仓天数占比 {zero_pct:.1f}%）",
+        xaxis_title="日期",
+        yaxis_title="持仓标的数量（只）",
+        bargap=0,
+        height=360,
+        margin=dict(l=60, r=20, t=60, b=40),
+        legend=dict(orientation="h", x=1, xanchor="right", y=1.12),
+        hovermode="x unified",
+    )
+    return fig
+
+
 def multi_strategy_nav(results_list: list, spy_nav: pd.Series | None) -> go.Figure:
     """Overlay NAV curves for multiple strategies (used in comparison page)."""
     fig = go.Figure()
