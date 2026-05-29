@@ -413,6 +413,42 @@ _implied_cost = _turnover * (
     meta.params_anchor.get("slippage_bps", 10) + meta.params_anchor.get("commission_bps", 3)
 ) * 2 / 100
 
+# ── Dynamic negative-year description ────────────────────────────────────────
+_spy_ann_dict: dict = {}
+if res.spy_nav is not None:
+    _spy_nav_tmp = res.spy_nav.copy()
+    if not isinstance(_spy_nav_tmp.index, _pd3.DatetimeIndex):
+        _spy_nav_tmp.index = _pd3.to_datetime(_spy_nav_tmp.index)
+    for _idx, _ret in _spy_nav_tmp.resample("YE").last().pct_change().dropna().items():
+        if _idx.year < _current_year:
+            _spy_ann_dict[int(_idx.year)] = float(_ret)
+
+_neg_details = sorted(
+    [(int(_idx.year), float(_ret)) for _idx, _ret in _annual[_annual < 0].items()],
+    key=lambda x: x[1],
+)
+if _neg_details:
+    _small_loss = [(y, r) for y, r in _neg_details if r > -0.10]
+    _big_loss   = [(y, r) for y, r in _neg_details if r <= -0.10]
+    _nd_parts: list[str] = []
+    if _small_loss:
+        _nd_parts.append(
+            f"{len(_small_loss)} 年亏损较轻（> -10%）："
+            + "、".join(f"{y}年（{r*100:.1f}%）" for y, r in sorted(_small_loss))
+        )
+    if _big_loss:
+        _big_strs = []
+        for _y, _r in sorted(_big_loss):
+            _spy_r = _spy_ann_dict.get(_y)
+            _spy_suffix = f"，同期 SPY {_spy_r*100:.1f}%" if _spy_r is not None else ""
+            _big_strs.append(f"{_y}年（策略 {_r*100:.1f}%{_spy_suffix}）")
+        _nd_parts.append(
+            f"{len(_big_loss)} 年出现较大亏损（≤ -10%）：" + "、".join(_big_strs)
+        )
+    _neg_yr_desc = "；".join(_nd_parts) + "。"
+else:
+    _neg_yr_desc = "历史回测中无负收益年份。"
+
 st.markdown(f"""
 **1. 绝对收益可观，但跑输 SPY 约 {abs(_cagr_gap)*100:.1f} 个百分点**
 
