@@ -678,7 +678,7 @@ else:
 st.markdown(f"""
 **1. 绝对收益可观，但跑输 SPY 约 {abs(_cagr_gap)*100:.1f} 个百分点**
 
-在 {meta.backtest_start[:4]}–{_current_year-1} 约 {_n_years} 年的完整回测期内，
+在 {meta.backtest_start[:4]}–{meta.backtest_end[:4]} 约 {_bt_years:.0f} 年的回测期内，
 策略 CAGR **{_cagr*100:+.2f}%**，同期 SPY 为 **{_spy_cagr*100:+.2f}%**，差距 **{_cagr_gap*100:+.2f}%**。
 以 $10M 初始资金计算，净值增长 **{_total_ret:.2f} 倍**（期末约 ${_total_ret*10:.0f}M）。
 跑输 SPY 是这份结果最直接的弱点，也是向任何潜在投资者解释时需要正面回答的第一个问题。
