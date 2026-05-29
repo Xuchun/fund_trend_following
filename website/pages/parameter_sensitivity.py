@@ -63,7 +63,7 @@ st.markdown(f"""
 | 最低市值 | \${p.get('min_market_cap_b', 2):.0f}B | $2B / $3B / $4B | 大盘 vs 中盘稳定性 | 🔜 待分析 |
 | ADV 流动性过滤 | \${p.get('min_adv_m', 20):.0f}M | $10M / $20M / $30M | 流动性约束 vs 可交易标的数 | 🔜 待分析 |
 | 滑点（单边） | {p.get('slippage_bps', 10):.0f} bps | 5 / 8 / 10 / 12 / 15 bps | 实盘摩擦敏感度 | 🔜 待分析 |
-| 佣金（单边） | {p.get('commission_bps', 3):.0f} bps | 0 / 1 / 3 / 5 bps | 高频成本敏感性 | 🔜 待分析 |
+| 佣金（单边） | {p.get('commission_bps', 3):.0f} bps | 1 / 3 / 5 bps | 高频成本敏感性 | 🔜 待分析 |
 """)
 
 st.markdown("---")
