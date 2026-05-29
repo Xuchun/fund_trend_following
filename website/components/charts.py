@@ -406,6 +406,55 @@ def daily_position_count_chart(trades: pd.DataFrame, nav_index, color: str = "#1
     return fig
 
 
+def monthly_return_heatmap(nav: pd.Series) -> go.Figure:
+    """Heatmap of monthly returns: years (rows) × months (columns)."""
+    monthly = nav.resample("ME").last().pct_change().dropna()
+    df = pd.DataFrame({
+        "year":  monthly.index.year,
+        "month": monthly.index.month,
+        "ret":   monthly.values * 100,
+    })
+    month_names = {1:"1月",2:"2月",3:"3月",4:"4月",5:"5月",6:"6月",
+                   7:"7月",8:"8月",9:"9月",10:"10月",11:"11月",12:"12月"}
+    pivot = df.pivot(index="year", columns="month", values="ret")
+    for m in range(1, 13):
+        if m not in pivot.columns:
+            pivot[m] = np.nan
+    pivot = pivot[[m for m in range(1, 13)]]
+    pivot.columns = [month_names[m] for m in range(1, 13)]
+    pivot = pivot.sort_index(ascending=False)  # most recent year at top
+
+    z = pivot.values
+    x = list(pivot.columns)
+    y = [str(yr) for yr in pivot.index]
+    text_z = [[f"{v:+.1f}%" if not np.isnan(v) else "" for v in row] for row in z]
+
+    flat = z[~np.isnan(z)]
+    abs_max = float(np.percentile(np.abs(flat), 95)) if len(flat) > 0 else 15.0
+    abs_max = max(abs_max, 5.0)
+
+    pos_m = int(np.nansum(z > 0))
+    tot_m = int(np.sum(~np.isnan(z)))
+
+    fig = go.Figure(go.Heatmap(
+        z=z, x=x, y=y,
+        text=text_z, texttemplate="%{text}",
+        textfont=dict(size=9),
+        colorscale=[[0.0,"#d62728"],[0.5,"#ffffff"],[1.0,"#2ca02c"]],
+        zmid=0, zmin=-abs_max, zmax=abs_max,
+        hovertemplate="%{y}年 %{x}: %{z:.2f}%<extra></extra>",
+        showscale=True,
+        colorbar=dict(title=dict(text="%", side="right"), ticksuffix="%"),
+    ))
+    fig.update_layout(
+        title=f"月度收益热力图（正收益月份 {pos_m}/{tot_m}，占比 {pos_m/tot_m*100:.0f}%）",
+        xaxis=dict(side="top", tickfont=dict(size=11)),
+        height=max(420, len(pivot) * 26 + 160),
+        margin=dict(l=60, r=80, t=80, b=20),
+    )
+    return fig
+
+
 def multi_strategy_nav(results_list: list, spy_nav: pd.Series | None) -> go.Figure:
     """Overlay NAV curves for multiple strategies (used in comparison page)."""
     fig = go.Figure()
