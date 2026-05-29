@@ -96,8 +96,10 @@ def compute_metrics(
             cur_dur  = 0
     metrics["max_dd_duration_days"] = max_dur
 
-    # Deep-drawdown episodes: continuous periods with drawdown < -10%
+    # Deep-drawdown episodes: continuous periods with drawdown < -10%,
+    # minimum 5 trading days to exclude single-day noise touches.
     DEEP_THRESHOLD = -0.10
+    MIN_EPISODE_DAYS = 5
     in_deep    = (dd < DEEP_THRESHOLD).values
     deep_segs: list[int] = []
     seg_start: int | None = None
@@ -110,10 +112,11 @@ def compute_metrics(
     if seg_start is not None:
         deep_segs.append(len(in_deep) - seg_start)
 
+    valid_segs = [s for s in deep_segs if s >= MIN_EPISODE_DAYS]
     metrics["avg_deep_dd_duration_days"] = (
-        float(sum(deep_segs) / len(deep_segs)) if deep_segs else 0.0
+        float(sum(valid_segs) / len(valid_segs)) if valid_segs else 0.0
     )
-    metrics["n_deep_dd_episodes"] = len(deep_segs)
+    metrics["n_deep_dd_episodes"] = len(valid_segs)
 
     # ── Risk-adjusted metrics ───────────────────────────────────────────────
     mean_ret  = float(ret.mean()) if len(ret) > 0 else 0.0
