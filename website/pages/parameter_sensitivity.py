@@ -683,6 +683,9 @@ if _DIAG_PATH.exists():
 
     eq = diag.get("execution_quality", {})
     assessment = eq.get("assessment", "")
+    tail_risk  = eq.get("tail_risk", "")
+
+    # Execution quality (mean-based)
     if assessment == "excellent":
         box_color, border_color, icon = "#e8f5e9", "#2e7d32", "✅"
     elif assessment == "acceptable":
@@ -696,6 +699,41 @@ if _DIAG_PATH.exists():
         f'理论止损 {eq.get("expected_avg_loss_r", -1.0):+.2f}R，'
         f'实际止损 {eq.get("actual_avg_loss_r", 0.0):+.3f}R，'
         f'缺口影响 {eq.get("gap_impact_r", 0.0):+.3f}R'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+
+    # Tail risk (per design spec 1.2.3 benchmarks)
+    st.markdown("**尾部风险评估（设计方案 1.2.3 基准线）**")
+    tr_col1, tr_col2, tr_col3 = st.columns(3)
+    p95_mag = eq.get("p95_loss_magnitude", abs(gs.get("p5", 0.0)))
+    max_mag = eq.get("max_loss_magnitude",  abs(gs.get("worst", 0.0)))
+    tr_col1.metric(
+        "P95 损失量级",
+        f"{p95_mag:.2f}R",
+        help="止损交易中最差 5% 的平均损失量级。设计方案基准：> 2.5R = 危险",
+    )
+    tr_col2.metric(
+        "最大单笔损失",
+        f"{max_mag:.2f}R",
+        help="历史上最大的缺口止损损失。设计方案基准：> 10R = 灾难",
+    )
+    if tail_risk == "正常":
+        tr_icon, tr_bg, tr_bd = "✅", "#e8f5e9", "#2e7d32"
+    elif tail_risk == "危险":
+        tr_icon, tr_bg, tr_bd = "⚠️", "#fff8e1", "#f57c00"
+    else:
+        tr_icon, tr_bg, tr_bd = "🔴", "#ffebee", "#c62828"
+    tr_col3.markdown(
+        f'<div class="info-box" style="background:{tr_bg};border-left-color:{tr_bd};padding:8px 12px;">'
+        f'{tr_icon} 尾部风险：<strong>{tail_risk}</strong>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        f'<div class="info-box">'
+        f'P95={p95_mag:.2f}R（基准阈值 2.5R），最大={max_mag:.2f}R（基准阈值 10R）。'
+        f'{"P95 和最大损失均低于危险阈值，策略尾部风险在可控范围内。" if tail_risk == "正常" else "尾部风险超出基准线，建议进一步分析缺口来源。"}'
         f'</div>',
         unsafe_allow_html=True,
     )
