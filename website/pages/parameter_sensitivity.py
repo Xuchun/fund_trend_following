@@ -590,20 +590,33 @@ if _d:
     _info = _render_param_section(
         _d,
         "✅ 最低市值过滤（min_market_cap_b）",
-        """**背景：** 过滤市值低于阈值的标的，聚焦大中盘流动性更好的股票。
-注意：当前实现使用 Yahoo Finance 市值（非时序点内），可能存在一定前视偏差。""",
+        r"""**背景：** 理论上过滤市值低于阈值的标的，聚焦大中盘流动性更好的股票。
+然而由于数据源限制，**该过滤器在当前回测中实际未生效**（见下方说明）。""",
     )
     base = _info["base_rec"]
     best = _info["best_sharpe_rec"]
     lo, hi = _info["stab_lo"], _info["stab_hi"]
-    stab_str = f"${lo:.0f}B–${hi:.0f}B" if lo is not None else "全范围"
+    stab_str = f"\${lo:.0f}B–\${hi:.0f}B" if lo is not None else "全范围"
     st.markdown(f"""
 **结论：** {"✅ 全部参数值均实现正 CAGR。" if _info["all_pos"] else "⚠️ 存在负 CAGR 的参数值。"}
 Sharpe 稳定区间：**{stab_str}**。
 
-- 基准 ${base['param_value']:.0f}B：CAGR {base['cagr']*100:+.2f}%，Sharpe {base['sharpe']:+.3f}，MaxDD {base['max_drawdown']*100:.1f}%
-{"- 基准值即 Sharpe 最优点" if abs(base['param_value'] - best['param_value']) < 0.1 else f"- Sharpe 最高点：${best['param_value']:.0f}B（{best['cagr']*100:+.2f}%，Sharpe {best['sharpe']:+.3f}）"}
-- 市值过滤主要影响标的池大小；较小市值纳入更多中盘股，趋势质量可能下降
+- 基准 \${base['param_value']:.0f}B：CAGR {base['cagr']*100:+.2f}%，Sharpe {base['sharpe']:+.3f}，MaxDD {base['max_drawdown']*100:.1f}%
+
+> ⚠️ **重要说明：min_market_cap_b 过滤器因数据限制未实际执行**
+>
+> **为什么 \$2B / \$3B / \$4B 的回测结果完全相同？**
+>
+> Yahoo Finance **不提供历史点位市值（point-in-time market cap）**，只能获取当前市值。
+> 若直接使用当前市值做历史过滤，会引入**前视偏差（look-ahead bias）**：
+> 例如某公司 2005 年时市值仅 \$1B，但今天已是 \$10B，用今天的市值过滤会错误地包含该股票。
+>
+> 因此，代码中该过滤器被有意跳过（`entry.py` 注释：*"The filter is skipped here"*）。
+> `min_market_cap_b` 参数在当前实现下对回测结果**没有任何影响**，
+> 三个测试值（\$2B / \$3B / \$4B）产生完全相同的结果属于预期行为，不是 bug。
+>
+> **若需启用：** 须使用提供历史点位市值的商业数据源（如 Compustat、FactSet），
+> 并在 `entry.py` 中实现对应的过滤逻辑。
 """)
     _section_meta["min_market_cap_b"] = _info
 else:
