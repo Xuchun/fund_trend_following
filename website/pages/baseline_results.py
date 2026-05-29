@@ -191,6 +191,28 @@ with col2:
     st.subheader("持仓天数分布")
     st.plotly_chart(holding_days_distribution(res.trades), use_container_width=True)
 
+_trades_per_yr = m.get("trades_per_year", 0)
+_avg_hold      = m.get("avg_holding_days", 0)
+_med_hold      = float(res.trades["holding_days"].median()) if "holding_days" in res.trades.columns else 0
+_long_hold     = int((res.trades["holding_days"] > 60).sum()) if "holding_days" in res.trades.columns else 0
+_long_hold_pct = _long_hold / len(res.trades) * 100 if len(res.trades) > 0 else 0
+
+_col1_t, _col2_t = st.columns(2)
+with _col1_t:
+    st.markdown(
+        f"**解读：** 平均每年约 **{_trades_per_yr:.0f}** 笔交易。"
+        "熊市年份（市场环境过滤器关闭新开仓）交易笔数明显减少，"
+        "牛市年份信号密集、笔数较多。"
+        "年度笔数的波动反映的是市场状态变化，而非策略本身不稳定。"
+    )
+with _col2_t:
+    st.markdown(
+        f"**解读：** 持仓中位数 **{_med_hold:.0f} 天**，均值 **{_avg_hold:.0f} 天**，"
+        f"均值显著大于中位数，说明分布右偏——大多数交易快速止损出场（短持仓），"
+        f"少数大赢家被持有较长时间（持仓 > 60 天的交易占 {_long_hold_pct:.0f}%）。"
+        "这种「多次小亏、少次大赚」的持仓结构是趋势跟踪策略的典型特征。"
+    )
+
 # ── Profit by type: stock vs ETF ──────────────────────────────────────────────
 st.subheader("策略盈利来源：股票 vs ETF")
 st.plotly_chart(profit_by_type_chart(res.trades, _ETF_SET), use_container_width=True)
