@@ -18,7 +18,7 @@ from website.components.charts import (
     nav_vs_spy, drawdown_chart, rolling_sharpe_chart,
     r_multiple_distribution, annual_returns_chart,
     trades_per_year_chart, holding_days_distribution,
-    profit_by_type_chart,
+    profit_by_type_chart, daily_position_count_chart,
 )
 
 res  = get_results()
