@@ -201,6 +201,38 @@ def _compute_regime_stats(
         return {}
 
 
+def _save_universe_tickers_csv(
+    output_dir: Path,
+    strategy_tickers: list[str],
+) -> None:
+    """
+    Write universe_tickers.csv: ticker, category (S&P 500 / S&P MidCap 400 / ETF).
+
+    Uses in-process caches populated by build_universe(), so no extra HTTP calls.
+    """
+    import csv
+
+    etf_set  = set(ETF_TICKERS)
+    sp500_set = set(fetch_sp500_tickers())
+    sp400_set = set(fetch_sp400_tickers())
+
+    out = output_dir / "universe_tickers.csv"
+    with out.open("w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(["ticker", "category"])
+        for t in sorted(strategy_tickers):
+            if t in etf_set:
+                cat = "ETF"
+            elif t in sp500_set:
+                cat = "S&P 500"
+            elif t in sp400_set:
+                cat = "S&P MidCap 400"
+            else:
+                cat = "S&P 500"  # was in index when backtested, since replaced
+            writer.writerow([t, cat])
+    logger.info("Saved universe_tickers.csv (%d tickers) → %s", len(strategy_tickers), out)
+
+
 def _update_strategy_meta(
     output_dir: Path,
     params: "StrategyParams",
