@@ -34,29 +34,14 @@ strategy_ids    = [m.id for m in strategies]
 strategy_labels = [f"{m.display_name} — {m.subtitle}" for m in strategies]
 
 # ── Sidebar: strategy selector ────────────────────────────────────────────────
-with st.sidebar:
-    st.markdown("### 📊 趋势跟踪策略回测")
-    st.markdown("---")
-
-    if len(strategies) == 1:
-        selected_idx = 0
-        m0 = strategies[0]
-        st.markdown(
-            f'<div style="background:{m0.color};color:white;padding:8px 12px;'
-            f'border-radius:6px;font-weight:600;font-size:0.85rem;">📌 {m0.display_name}</div>',
-            unsafe_allow_html=True,
-        )
-        st.caption(m0.subtitle)
-    else:
+if len(strategies) == 1:
+    selected_idx = 0
+else:
+    with st.sidebar:
         selected_label = st.selectbox("选择策略版本", strategy_labels, key="strategy_selector")
         selected_idx   = strategy_labels.index(selected_label)
 
-    sel_meta = strategies[selected_idx]
-    st.markdown("---")
-    st.caption(
-        f"回测期间：{sel_meta.backtest_start[:4]}–{sel_meta.backtest_end[:4]}\n\n"
-        f"标的：{sel_meta.universe_stocks} 只股票 + {sel_meta.universe_etfs} 只 ETF"
-    )
+sel_meta = strategies[selected_idx]
 
 # ── Cache strategy data in session state ──────────────────────────────────────
 selected_id = strategy_ids[selected_idx]
