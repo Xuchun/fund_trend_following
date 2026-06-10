@@ -82,7 +82,7 @@ if regime_enabled:
 
 ```
 牛市模式（Bull）：SPY adj-close[t] > SMA({regime_window})[t]  → 正常扫描入场信号
-熊市模式（Bear）：SPY adj-close[t] ≤ SMA({regime_window})[t]  → pending_entries = []
+熊市模式（Bear）：SPY adj-close[t] ≤ SMA({regime_window})[t]  → 停止新建仓位
 ```
 
 """)
