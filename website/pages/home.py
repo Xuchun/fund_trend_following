@@ -96,7 +96,6 @@ _wf_pos_win    = sum(1 for w in _wf_windows if w.get("oos", {}).get("cagr", 0) >
 
 st.markdown("---")
 st.header("综合评估")
-st.caption("综合基准回测、参数敏感性分析、蒙特卡洛风险、Walk-Forward 验证、市场环境分析五个维度得出")
 
 # ── Score cards ───────────────────────────────────────────────────────────────
 sc1, sc2, sc3, sc4, sc5 = st.columns(5)
