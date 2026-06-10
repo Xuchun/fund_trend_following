@@ -475,6 +475,7 @@ def main() -> None:
         spy_raw=spy_raw,
         nav_index=results.daily_nav.index,
     )
+    _save_universe_tickers_csv(output_dir, strategy_tickers)
 
     # ── Step 6: print summary ─────────────────────────────────────────────
     print()
