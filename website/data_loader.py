@@ -37,6 +37,7 @@ class StrategyMeta:
     params_anchor: dict
     logic_sections: dict
     etf_universe: list[dict] = field(default_factory=list)
+    regime_stats: dict = field(default_factory=dict)
 
     @property
     def results_dir(self) -> Path:
