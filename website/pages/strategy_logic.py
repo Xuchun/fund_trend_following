@@ -85,24 +85,18 @@ if regime_enabled:
 ```
 
 """)
-    # ── Compute bear-market stats from SPY nav ────────────────────────────────
-    import pandas as _pd_regime
-    _sma_reg = res.spy_nav.rolling(regime_window, min_periods=regime_window).mean()
-    _is_bear = (res.spy_nav < _sma_reg).fillna(False)
-    _bear_days_total = int(_is_bear.sum())
-    _bear_pct = _bear_days_total / len(_is_bear) * 100
-
-    _ep_grp = (_is_bear != _is_bear.shift()).cumsum()
-    _episodes_bear: list[tuple] = []
-    for _, _g in _is_bear.groupby(_ep_grp):
-        if bool(_g.iloc[0]):
-            _episodes_bear.append((_g.index[0].year, _g.index[-1].year, len(_g)))
-    _episodes_bear.sort(key=lambda x: -x[2])
-    _ep_strs = []
-    for _s, _e, _d in _episodes_bear[:2]:
-        _lbl = str(_s) if _s == _e else f"{_s}–{_e}"
-        _ep_strs.append(f"{_lbl}（封仓 {_d} 天）")
-    _ep_text = "，".join(_ep_strs) if _ep_strs else "无重大熊市封仓期"
+    _rs = meta.regime_stats
+    if _rs:
+        _bear_days_total = _rs["bear_days_total"]
+        _bear_pct        = _rs["bear_pct"]
+        _ep_strs = []
+        for ep in _rs.get("top_episodes", [])[:2]:
+            _lbl = str(ep["start_year"]) if ep["start_year"] == ep["end_year"] else f"{ep['start_year']}–{ep['end_year']}"
+            _ep_strs.append(f"{_lbl}（封仓 {ep['days']} 天）")
+        _ep_text = "，".join(_ep_strs) if _ep_strs else "无重大熊市封仓期"
+        _regime_detail = f"从 {meta.backtest_start[:4]} 年起，此规则将<strong>熊市封仓天数约占 {_bear_pct:.0f}%</strong>（约 {_bear_days_total:,} 天），主要覆盖 {_ep_text}"
+    else:
+        _regime_detail = "熊市期间停止新建仓位，历史上主要覆盖 2008–2009 金融危机及 2022 年加息周期"
 
     st.markdown(f"""
 <div class="info-box">
@@ -110,7 +104,7 @@ if regime_enabled:
 <ul>
 <li>现有持仓<strong>不强平</strong>——移动止盈继续保护，让利润自然奔跑</li>
 <li>熊市期间所有闲置现金自动流入 <strong>{meta.cash_proxy}</strong>（赚取无风险利率）</li>
-<li>从 {meta.backtest_start[:4]} 年起，此规则将<strong>熊市封仓天数约占 {_bear_pct:.0f}%</strong>（约 {_bear_days_total:,} 天），主要覆盖 {_ep_text}</li>
+<li>{_regime_detail}</li>
 </ul>
 </div>
 """, unsafe_allow_html=True)
