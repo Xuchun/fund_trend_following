@@ -99,13 +99,3 @@ st.markdown(f"""
    - Walk-Forward 验证将确认样本外有效性
    - 届时可给出具体的 **推荐参数区间**
 """)
-
-st.markdown("---")
-st.markdown("""
-<div class="info-box">
-<strong>下一步：Strategy 2.0</strong><br>
-Strategy 2.0 将在 Strategy 1.0 基础上引入<strong>市场环境过滤器</strong>
-（SPY 200日均线规则），预期可将最大回撤从 -54% 控制至 -25% 以内，
-同时保持 CAGR > 8%。详见「下一步计划」页面。
-</div>
-""", unsafe_allow_html=True)
