@@ -37,6 +37,15 @@ class StrategyParams:
     risk_per_trade: float = 0.01     # 1% of NAV risked per new position
     position_cap: float = 0.05       # single-name cap: 5% of NAV
 
+    # ── Dual-constraint sizing (Option B) ──────────────────────────────────
+    # When risk_cap > 0, the sizing module switches to dual-constraint mode:
+    #   shares = min(risk_cap * NAV / stop_distance,   ← actual-loss cap
+    #                notional_cap * NAV / price)        ← concentration cap
+    # risk_per_trade and position_cap are ignored in this mode.
+    # Set risk_cap = 0.0 (default) to keep legacy single-cap behaviour.
+    risk_cap: float = 0.0            # max actual loss per trade as fraction of NAV (0 = disabled)
+    notional_cap: float = 0.0        # max notional per position as fraction of NAV (0 = use position_cap)
+
     # ── Portfolio risk ─────────────────────────────────────────────────────
     heat_limit: float = 0.10         # max total risk across all open positions
 
