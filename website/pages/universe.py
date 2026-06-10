@@ -16,9 +16,9 @@ meta = res.meta
 
 _ticker_csv_path = Path(__file__).resolve().parents[2] / "results" / "v1" / "universe_tickers.csv"
 
-_title_col, _btn_col = st.columns([6, 1])
-with _title_col:
-    render_page_header("数据与标的池", meta)
+render_page_header("数据与标的池", meta)
+_cap_col, _btn_col = st.columns([5, 1])
+with _cap_col:
     st.caption(f"回测期间：{meta.backtest_start} → {meta.backtest_end}")
 with _btn_col:
     if _ticker_csv_path.exists():
