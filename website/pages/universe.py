@@ -14,8 +14,20 @@ from website.components.strategy_badge import render_page_header
 res  = get_results()
 meta = res.meta
 
-render_page_header("数据与标的池", meta)
-st.caption(f"回测期间：{meta.backtest_start} → {meta.backtest_end}")
+_ticker_csv_path = Path(__file__).resolve().parents[2] / "results" / "v1" / "universe_tickers.csv"
+
+_title_col, _btn_col = st.columns([6, 1])
+with _title_col:
+    render_page_header("数据与标的池", meta)
+    st.caption(f"回测期间：{meta.backtest_start} → {meta.backtest_end}")
+with _btn_col:
+    if _ticker_csv_path.exists():
+        st.download_button(
+            label="⬇ 下载标的池",
+            data=_ticker_csv_path.read_bytes(),
+            file_name="universe_tickers.csv",
+            mime="text/csv",
+        )
 st.markdown("---")
 
 # ── Overview ──────────────────────────────────────────────────────────────────
