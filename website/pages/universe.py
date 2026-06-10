@@ -28,6 +28,8 @@ with _btn_col:
             file_name="universe_tickers.csv",
             mime="text/csv",
         )
+    else:
+        st.caption("标的池文件未找到")
 st.markdown("---")
 
 # ── Overview ──────────────────────────────────────────────────────────────────
