@@ -440,6 +440,8 @@ def main() -> None:
         initial_capital=args.initial_capital,
         n_strategy_stocks=n_strategy_stocks,
         n_strategy_etfs=n_strategy_etfs,
+        spy_raw=spy_raw,
+        nav_index=results.daily_nav.index,
     )
 
     # ── Step 6: print summary ─────────────────────────────────────────────
