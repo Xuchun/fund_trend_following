@@ -55,19 +55,13 @@ def compute_position_size(
     if risk_per_share <= 0 or math.isnan(risk_per_share):
         return None
 
-    # ── Step 1 & 2: Position sizing (two modes) ────────────────────────────
-    if params.risk_cap > 0:
-        # Option B — dual-constraint: actual-loss cap + notional concentration cap
-        risk_constrained  = (nav * params.risk_cap) / risk_per_share
-        notional_limit    = params.notional_cap if params.notional_cap > 0 else params.position_cap
-        notional_constrained = (nav * notional_limit) / entry_price
-        preliminary_shares = min(risk_constrained, notional_constrained)
-    else:
-        # Legacy — risk-budget sizing clipped by notional position_cap
-        risk_amount = nav * params.risk_per_trade
-        raw_shares  = risk_amount / risk_per_share
-        capped_shares = (nav * params.position_cap) / entry_price
-        preliminary_shares = min(raw_shares, capped_shares)
+    # ── Step 1: Raw position ────────────────────────────────────────────────
+    risk_amount = nav * params.risk_per_trade
+    raw_shares = risk_amount / risk_per_share
+
+    # ── Step 2: Single-name cap ─────────────────────────────────────────────
+    capped_shares = (nav * params.position_cap) / entry_price
+    preliminary_shares = min(raw_shares, capped_shares)
 
     # ── Step 3: Correlation adjustment ──────────────────────────────────────
     max_corr = compute_max_correlation(
