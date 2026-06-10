@@ -242,6 +242,12 @@ def _update_strategy_meta(
     meta["universe_etfs"]    = n_strategy_etfs
     meta["universe_total"]   = n_strategy_stocks + n_strategy_etfs
 
+    # ── Regime stats (pre-computed for cloud deployment) ──────────────────────
+    if spy_raw is not None and nav_index is not None:
+        meta["regime_stats"] = _compute_regime_stats(
+            spy_raw, nav_index, params.regime_sma_window
+        )
+
     # ── Params anchor ─────────────────────────────────────────────────────────
     meta["params_anchor"] = {
         "breakout_window":           params.breakout_window,
