@@ -484,5 +484,26 @@
       "name": "Graniteshares 2x Long Ethereum Daily ETF",
       "category": "加密货币"
     }
-  ]
+  ],
+  "regime_stats": {
+    "bear_days_total": 1079,
+    "bear_pct": 19.1,
+    "top_episodes": [
+      {
+        "start_year": 2008,
+        "end_year": 2009,
+        "days": 257
+      },
+      {
+        "start_year": 2007,
+        "end_year": 2008,
+        "days": 88
+      },
+      {
+        "start_year": 2022,
+        "end_year": 2022,
+        "days": 87
+      }
+    ]
+  }
 }
