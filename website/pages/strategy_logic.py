@@ -382,7 +382,7 @@ st.markdown("""
 <strong>为何使用 SHY 而非 SGOV？</strong><br>
 SGOV（0–3 个月国债 ETF）于 <strong>2022 年</strong>才上市，若用于 2004–2021 年的回测，
 现金将在该期间产生 0% 收益，严重低估策略的真实表现。
-SHY（1–3 年期国债 ETF）自 <strong>2002 年</strong>起就有数据，可覆盖完整的 2004–2024 回测期，
+SHY（1–3 年期国债 ETF）自 <strong>2002 年</strong>起就有数据，可覆盖完整的 2004–2026 回测期，
 能够正确模拟闲置资金赚取无风险利率的效果。
 </div>
 """, unsafe_allow_html=True)
