@@ -159,6 +159,48 @@ def build_universe(mode: str, custom_tickers: list[str] | None) -> list[str]:
 
 # ── Strategy metadata ──────────────────────────────────────────────────────
 
+def _compute_regime_stats(
+    spy_raw: "pd.DataFrame | None",
+    nav_index: "pd.DatetimeIndex",
+    sma_window: int,
+) -> dict:
+    """
+    Compute bear-market statistics from actual SPY prices aligned to nav_index.
+    Returns a dict suitable for storage in strategy_meta.json['regime_stats'].
+    Falls back to empty dict if SPY data is unavailable.
+    """
+    import pandas as _pd
+    if spy_raw is None:
+        return {}
+    try:
+        spy_adj = spy_raw["close"] * spy_raw["adj_factor"]
+        spy_adj = spy_adj.reindex(nav_index).ffill().bfill()
+        sma = spy_adj.rolling(sma_window, min_periods=sma_window).mean()
+        is_bear = (spy_adj < sma).fillna(False)
+
+        bear_days_total = int(is_bear.sum())
+        bear_pct = round(bear_days_total / len(is_bear) * 100, 1)
+
+        ep_grp = (is_bear != is_bear.shift()).cumsum()
+        episodes = []
+        for _, g in is_bear.groupby(ep_grp):
+            if bool(g.iloc[0]):
+                episodes.append({
+                    "start_year": int(g.index[0].year),
+                    "end_year":   int(g.index[-1].year),
+                    "days":       int(len(g)),
+                })
+        episodes.sort(key=lambda x: -x["days"])
+
+        return {
+            "bear_days_total": bear_days_total,
+            "bear_pct": bear_pct,
+            "top_episodes": episodes[:3],
+        }
+    except Exception:
+        return {}
+
+
 def _update_strategy_meta(
     output_dir: Path,
     params: "StrategyParams",
@@ -167,6 +209,8 @@ def _update_strategy_meta(
     initial_capital: float,
     n_strategy_stocks: int,
     n_strategy_etfs: int,
+    spy_raw: "pd.DataFrame | None" = None,
+    nav_index: "pd.DatetimeIndex | None" = None,
 ) -> None:
     """
     Write / update strategy_meta.json in output_dir.
