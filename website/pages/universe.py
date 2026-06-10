@@ -112,10 +112,9 @@ if meta.params_anchor.get("regime_filter_enabled", False):
 else:
     st.markdown("""
 <div class="info-box">
-<strong>市场环境过滤器（Strategy 1.0 未启用）</strong><br>
-Strategy 2.0 将引入 <strong>SPY 200 日均线过滤器</strong>：
-当 SPY 价格低于均线时，停止新建仓位，现金额外流入 SHY。
-预期可将最大回撤从 -54% 显著降低。
+<strong>市场环境过滤器（当前配置未启用）</strong><br>
+Strategy 1.0 设计方案包含此过滤器，当前参数配置已将其关闭（<code>regime_filter_enabled = False</code>）。
+启用后，当 SPY 收盘价低于其 200 日均线时，策略停止新建仓位，闲置资金流入 SHY。
 </div>
 """, unsafe_allow_html=True)
 
