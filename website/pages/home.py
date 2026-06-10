@@ -67,7 +67,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown("---")
-st.caption("使用左侧边栏导航至各章节详细内容 →")
 
 # ── 综合评估 ──────────────────────────────────────────────────────────────────
 import json as _json
