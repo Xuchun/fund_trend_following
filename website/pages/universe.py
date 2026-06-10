@@ -131,7 +131,7 @@ st.markdown(f"""
 3. 计算**复权价格**（adj_close / adj_high / adj_low）用于信号计算与指标计算
 4. ATR 计算使用**复权价格**（非原始价格），避免拆股/分红导致 ATR 序列产生人为跳变
 
-**回测覆盖期间：** {meta.backtest_start} → {meta.backtest_end}（约 {round((pd.Timestamp(meta.backtest_end) - pd.Timestamp(meta.backtest_start)).days / 365.25):.0f} 年）
+**回测覆盖期间：** {meta.backtest_start} → {meta.backtest_end}（约 {int((pd.Timestamp(meta.backtest_end) - pd.Timestamp(meta.backtest_start)).days / 365.25)} 年）
 
 **ETF 来源文件：** `data/ETFs.csv`（{meta.universe_etfs + 2} 行，含 SPY + SHY 辅助标的）
 """)
