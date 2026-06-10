@@ -21,7 +21,7 @@ st.markdown("---")
 # ── Overview ──────────────────────────────────────────────────────────────────
 st.subheader("策略概述")
 st.markdown(f"""
-本策略是一个**经典动量突破型趋势跟踪策略**，纯多头（Long Only），适用于股票和 ETF 市场。
+本策略1.0是一个**经典动量突破型趋势跟踪策略1.0**，纯多头（Long Only），适用于股票和 ETF 市场。
 核心理念源自 Richard Dennis 的海龟交易法则与 David Harding 的 AHL 系统：
 **顺势而为，快速止损，让利润奔跑**。
 
@@ -78,7 +78,7 @@ st.subheader("2. 市场环境过滤")
 if regime_enabled:
     st.markdown(f"""
 当 **{regime_ticker}** 收盘价 > 其 **{regime_window} 日简单移动平均线** 时，
-策略处于「牛市模式」，允许开仓。否则进入「熊市模式」，停止新建仓位。
+策略1.0处于「牛市模式」，允许开仓。否则进入「熊市模式」，停止新建仓位。
 
 ```
 牛市模式（Bull）：SPY adj-close[t] > SMA({regime_window})[t]  → 正常扫描入场信号
@@ -114,7 +114,7 @@ else:
 **【当前参数未启用市场环境过滤器】**
 
 Strategy 1.0 Baseline 默认启用此过滤器（`regime_filter_enabled = True`）。
-当前运行已将其关闭，策略将在整个回测期内无论牛熊均扫描入场信号，
+当前运行已将其关闭，策略1.0将在整个回测期内无论牛熊均扫描入场信号，
 可能导致在 2008 年金融危机等极端行情中承受显著回撤。
 """)
 
@@ -175,7 +175,7 @@ if vol_mult > 0:
 要求 volume[t] ≥ {vol_mult:.1f}×vol_ma60 能有效排除这类噪音信号：
 机构资金进场时必然伴随大量成交，高成交量突破更可能代表真实的供需格局转变。<br><br>
 <strong>预期效果：</strong> 入场信号减少约 20–30%，胜率提升，换手率相应下降。<br><br>
-<strong>注：</strong> {vol_mult:.1f}× 阈值为经验设定，目前尚无针对本策略的实证验证。为什么是 {vol_mult:.1f}× 而非 1.2× 或 2.0×？若参数敏感性分析显示绩效对该阈值高度敏感，则存在过拟合风险，建议通过 Walk-Forward 验证其稳健性。
+<strong>注：</strong> {vol_mult:.1f}× 阈值为经验设定，目前尚无针对本策略1.0的实证验证。为什么是 {vol_mult:.1f}× 而非 1.2× 或 2.0×？若参数敏感性分析显示绩效对该阈值高度敏感，则存在过拟合风险，建议通过 Walk-Forward 验证其稳健性。
 </div>
 """, unsafe_allow_html=True)
 else:
@@ -247,7 +247,7 @@ st.markdown(f"""
 st.markdown("""
 <div style="background:#e3f2fd;border-left:4px solid #1565c0;padding:12px 16px;border-radius:6px;margin-top:4px;">
 <strong>0.5% 最小止损距离的作用</strong><br>
-这个门槛不是策略噪音防护的主要机制，而是一个<strong>数据质量兜底检查</strong>：
+这个门槛不是策略1.0噪音防护的主要机制，而是一个<strong>数据质量兜底检查</strong>：
 当 ATR 异常趋近于零时（数据错误或极端低波动），拒绝入场，防止仓位计算出现除以近零的错误。<br>
 实盘中几乎从不触发——3,050 笔历史交易中无一笔止损距离低于 0.5%，
 实际止损距离中位数为 <strong>4.4%</strong>（= 2×ATR）。
@@ -382,7 +382,7 @@ st.markdown("""
 <div class="info-box">
 <strong>为何使用 SHY 而非 SGOV？</strong><br>
 SGOV（0–3 个月国债 ETF）于 <strong>2022 年</strong>才上市，若用于 2004–2021 年的回测，
-现金将在该期间产生 0% 收益，严重低估策略的真实表现。
+现金将在该期间产生 0% 收益，严重低估策略1.0的真实表现。
 SHY（1–3 年期国债 ETF）自 <strong>2002 年</strong>起就有数据，可覆盖完整的 2004–2026 回测期，
 能够正确模拟闲置资金赚取无风险利率的效果。
 </div>

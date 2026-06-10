@@ -52,7 +52,7 @@ else:
     for r in all_results:
         m = r.metrics
         rows.append({
-            "策略": r.meta.display_name,
+            "策略1.0": r.meta.display_name,
             "CAGR": f"{m.get('cagr',0)*100:+.2f}%",
             "最大回撤": f"{m.get('max_drawdown',0)*100:.1f}%",
             "Sharpe": f"{m.get('sharpe',0):+.3f}",

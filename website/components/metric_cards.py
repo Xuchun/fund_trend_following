@@ -87,7 +87,7 @@ def render_summary_cards(metrics: dict, color: str,
         st.markdown(_card_html(
             "Profit Factor",
             f'<span style="color:{pf_color}">{pf_val}</span>',
-            "总盈利 ÷ 总亏损；> 1 策略有正期望，> 1.5 为良好，> 2.0 为优秀",
+            "总盈利 ÷ 总亏损；> 1 策略1.0有正期望，> 1.5 为良好，> 2.0 为优秀",
             color,
         ), unsafe_allow_html=True)
 

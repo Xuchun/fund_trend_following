@@ -13,7 +13,7 @@ if str(_root) not in sys.path:
 import streamlit as st
 
 st.set_page_config(
-    page_title="趋势跟踪策略回测",
+    page_title="趋势跟踪策略1.0回测",
     page_icon="📈",
     layout="wide",
     initial_sidebar_state="expanded",

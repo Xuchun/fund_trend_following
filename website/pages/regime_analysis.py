@@ -58,9 +58,9 @@ if regime_data and "regimes" in regime_data:
         rows.append({
             "市场环境":      name,
             "区间":          period,
-            "策略 CAGR":     f"{s.get('cagr',0)*100:+.1f}%",
-            "策略 MaxDD":    f"{s.get('max_drawdown',0)*100:.1f}%",
-            "策略 Sharpe":   f"{s.get('sharpe',0):+.3f}",
+            "策略1.0 CAGR":     f"{s.get('cagr',0)*100:+.1f}%",
+            "策略1.0 MaxDD":    f"{s.get('max_drawdown',0)*100:.1f}%",
+            "策略1.0 Sharpe":   f"{s.get('sharpe',0):+.3f}",
             "SPY CAGR":      f"{spy.get('cagr',0)*100:+.1f}%" if spy else "—",
             "SPY MaxDD":     f"{spy.get('max_drawdown',0)*100:.1f}%" if spy else "—",
             "交易笔数":      f"{s.get('n_trades',0):,}",
@@ -70,7 +70,7 @@ if regime_data and "regimes" in regime_data:
     st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
     # ── CAGR comparison bar chart ──────────────────────────────────────────
-    st.subheader("策略 vs SPY：各环境 CAGR 对比")
+    st.subheader("策略1.0 vs SPY：各环境 CAGR 对比")
 
     names        = list(regimes.keys())
     strat_cagrs  = [regimes[n]["strategy"].get("cagr", 0) * 100 for n in names]
@@ -78,7 +78,7 @@ if regime_data and "regimes" in regime_data:
 
     fig = go.Figure()
     fig.add_trace(go.Bar(
-        name="策略", x=names, y=strat_cagrs,
+        name="策略1.0", x=names, y=strat_cagrs,
         marker_color=[
             "#2ca02c" if v >= 0 else "#d62728" for v in strat_cagrs
         ],
@@ -114,7 +114,7 @@ if regime_data and "regimes" in regime_data:
 
     fig2 = go.Figure()
     fig2.add_trace(go.Bar(
-        name="策略 MaxDD", x=names, y=strat_dds,
+        name="策略1.0 MaxDD", x=names, y=strat_dds,
         marker_color="#f57c00",
         text=[f"{v:.1f}%" for v in strat_dds],
         textposition="outside",
@@ -145,9 +145,9 @@ if regime_data and "regimes" in regime_data:
         with st.expander(f"{name}  ({data['start'][:7]} → {data['end'][:7]})"):
             st.caption(REGIME_DESC.get(name, ""))
             cols = st.columns(5)
-            cols[0].metric("策略 CAGR",    f"{s.get('cagr',0)*100:+.1f}%")
-            cols[1].metric("策略 Sharpe",   f"{s.get('sharpe',0):+.3f}")
-            cols[2].metric("策略 MaxDD",    f"{s.get('max_drawdown',0)*100:.1f}%")
+            cols[0].metric("策略1.0 CAGR",    f"{s.get('cagr',0)*100:+.1f}%")
+            cols[1].metric("策略1.0 Sharpe",   f"{s.get('sharpe',0):+.3f}")
+            cols[2].metric("策略1.0 MaxDD",    f"{s.get('max_drawdown',0)*100:.1f}%")
             cols[3].metric("SPY CAGR",      f"{spy.get('cagr',0)*100:+.1f}%" if spy else "—")
             cols[4].metric("SPY MaxDD",     f"{spy.get('max_drawdown',0)*100:.1f}%" if spy else "—")
 
@@ -166,8 +166,8 @@ if regime_data and "regimes" in regime_data:
 
     st.markdown(
         f'<div class="info-box">'
-        f'策略在 <strong>量化宽松牛市（2010–2019）</strong>表现最强，长趋势环境与追踪止损模型完美契合。'
-        f'<strong>金融危机</strong>期间纯多头策略跟随下跌（无做空），但最大回撤显著低于 SPY（-55%）。'
+        f'策略1.0在 <strong>量化宽松牛市（2010–2019）</strong>表现最强，长趋势环境与追踪止损模型完美契合。'
+        f'<strong>金融危机</strong>期间纯多头策略1.0跟随下跌（无做空），但最大回撤显著低于 SPY（-55%）。'
         f'<strong>加息熊市（2022）</strong>是最大的考验：SPY 过滤器阻止了大量开仓但已持仓无法规避。'
         f'</div>',
         unsafe_allow_html=True,
@@ -240,45 +240,45 @@ if regime_data and "regimes" in regime_data:
     full_dd     = full_p.get("max_drawdown", 0)
 
     st.markdown(f"""
-**1. 下行保护是策略最核心的竞争优势**
+**1. 下行保护是策略1.0最核心的竞争优势**
 
-金融危机（2008–2009）是对策略最有力的压力测试：
-SPY 最大回撤高达 **{crisis_spy_dd*100:.1f}%**，而策略最大回撤仅 **{crisis_strat_dd*100:.1f}%**；
-SPY 年化收益 **{_spy("金融危机").get("cagr",0)*100:+.2f}%**，策略仍实现 **{_s("金融危机").get("cagr",0)*100:+.2f}%**，
+金融危机（2008–2009）是对策略1.0最有力的压力测试：
+SPY 最大回撤高达 **{crisis_spy_dd*100:.1f}%**，而策略1.0最大回撤仅 **{crisis_strat_dd*100:.1f}%**；
+SPY 年化收益 **{_spy("金融危机").get("cagr",0)*100:+.2f}%**，策略1.0仍实现 **{_s("金融危机").get("cagr",0)*100:+.2f}%**，
 超额收益 **{crisis_alpha*100:+.2f}%**。
-追踪止损机制在趋势反转初期有效截断了亏损，令策略在全市场最极端的系统性崩盘中
-依然保全了本金并获得小幅正收益。这是该策略最有说服力的结果，
+追踪止损机制在趋势反转初期有效截断了亏损，令策略1.0在全市场最极端的系统性崩盘中
+依然保全了本金并获得小幅正收益。这是该策略1.0最有说服力的结果，
 也是其作为投资组合"尾部保护"配置的核心价值。
 
 **2. COVID 急跌：回撤控制远优于 SPY，绝对收益亮眼**
 
-COVID 期间（2020–2021）是策略风险调整回报最佳的阶段：
+COVID 期间（2020–2021）是策略1.0风险调整回报最佳的阶段：
 CAGR **{covid_cagr*100:+.2f}%**，Sharpe **{covid_sharpe:+.3f}**，最大回撤仅 **{covid_strat_dd*100:.1f}%**。
 相比之下 SPY 最大回撤 **{covid_spy_dd*100:.1f}%**（急跌-34%后强劲反弹）。
-策略在急跌时止损及时，在复苏趋势中快速建仓，
+策略1.0在急跌时止损及时，在复苏趋势中快速建仓，
 充分体现了追踪止损 + 趋势跟踪在高波动环境中的优势。
 
-**3. 牛市跑输 SPY 是结构性特征，非策略缺陷**
+**3. 牛市跑输 SPY 是结构性特征，非策略1.0缺陷**
 
-量化宽松十年牛市（2010–2019）中，策略 CAGR **{qe_cagr*100:+.2f}%** vs SPY **{qe_spy_cagr*100:+.2f}%**，
+量化宽松十年牛市（2010–2019）中，策略1.0 CAGR **{qe_cagr*100:+.2f}%** vs SPY **{qe_spy_cagr*100:+.2f}%**，
 差距 **{qe_alpha*100:+.2f}%**；AI 驱动牛市（2023–2025）差距进一步扩大至 **{ai_alpha*100:+.2f}%**。
-这是**结构性弱点**：纯多头趋势策略持有多元化仓位，
+这是**结构性弱点**：纯多头趋势策略1.0持有多元化仓位，
 在 SPY 由少数科技股集中拉动的环境下必然滞后。
-但需注意，策略在 AI 牛市中的 CAGR 仍达 **{ai_cagr*100:+.2f}%**，Sharpe **{ai_sharpe:+.3f}**，
+但需注意，策略1.0在 AI 牛市中的 CAGR 仍达 **{ai_cagr*100:+.2f}%**，Sharpe **{ai_sharpe:+.3f}**，
 最大回撤 **{ai_strat_dd*100:.1f}%**——绝对收益可观，只是相对收益落后。
 
-**4. 加息熊市（2022）是策略设计边界的暴露**
+**4. 加息熊市（2022）是策略1.0设计边界的暴露**
 
-2022 年策略 CAGR **{hike_cagr*100:+.2f}%**，仍优于 SPY 的 **{hike_spy_cagr*100:+.2f}%**（超额 {hike_alpha*100:+.2f}%），
+2022 年策略1.0 CAGR **{hike_cagr*100:+.2f}%**，仍优于 SPY 的 **{hike_spy_cagr*100:+.2f}%**（超额 {hike_alpha*100:+.2f}%），
 但胜率骤降至 **{hike_winrate*100:.1f}%**，最大回撤 **{hike_strat_dd*100:.1f}%**。
 这揭示了"SPY 过滤器 + 纯多头"设计的边界：
 过滤器在趋势持续下行时阻止了新仓，但已持仓跟随市场下行直至止损触发，
-无做空能力使得策略无法在熊市中主动获利，只能被动减少损失。
-加息周期是该策略最弱的环境类型。
+无做空能力使得策略1.0无法在熊市中主动获利，只能被动减少损失。
+加息周期是该策略1.0最弱的环境类型。
 
 **5. 跨环境综合评价：攻守失衡是已知权衡**
 
-| 环境 | 策略表现 | vs SPY |
+| 环境 | 策略1.0表现 | vs SPY |
 |------|----------|--------|
 | 金融危机 | ✅ 极强 | 大幅跑赢 |
 | 量化宽松牛市 | 🟡 稳健 | 跑输约 5% |
@@ -286,9 +286,9 @@ CAGR **{covid_cagr*100:+.2f}%**，Sharpe **{covid_sharpe:+.3f}**，最大回撤�
 | 加息熊市 | 🟡 抗跌 | 小幅跑赢但仍亏损 |
 | AI驱动牛市 | 🟡 可接受 | 跑输约 11% |
 
-策略在**每一个市场环境中均跑赢或接近 SPY 的风险调整表现**，
+策略1.0在**每一个市场环境中均跑赢或接近 SPY 的风险调整表现**，
 但以"原始收益率"衡量，只有金融危机和 COVID 崩盘阶段能明显击败 SPY。
-这是趋势跟踪与买入持有策略之间的经典权衡：
+这是趋势跟踪与买入持有策略1.0之间的经典权衡：
 **用牛市的相对落后，换取熊市的本金保护**。
 """)
 
@@ -297,7 +297,7 @@ CAGR **{covid_cagr*100:+.2f}%**，Sharpe **{covid_sharpe:+.3f}**，最大回撤�
     bull_markets_neg = [n for n in ["量化宽松牛市", "AI驱动牛市"] if _alpha(n) < -0.05]
 
     verdict = (
-        f"✅ 综合评价：策略在 5 个市场环境中展示出一致的风险控制能力——"
+        f"✅ 综合评价：策略1.0在 5 个市场环境中展示出一致的风险控制能力——"
         f"熊市/危机场景（金融危机、加息熊市）均跑赢 SPY，"
         f"牛市环境获得正绝对收益但落后于 SPY。"
         f"全周期 CAGR {full_cagr*100:+.2f}%、Sharpe {full_sharpe:+.3f}、MaxDD {full_dd*100:.1f}%，"

@@ -42,7 +42,7 @@ pf       = m.get("profit_factor", 1)
 col1, col2 = st.columns(2)
 with col1:
     st.markdown(f"""
-**策略行为符合趋势跟踪特征：**
+**策略1.0行为符合趋势跟踪特征：**
 - 胜率仅 {win_rate*100:.1f}%，但平均盈利 {avg_win:+.2f}R > 平均亏损 {avg_loss:.2f}R
 - 盈亏比（Profit Factor）= {pf:.4f}，期望值微正
 - 平均持仓 {m.get('avg_holding_days',0):.0f} 天，约 {m.get('trades_per_year',0):.0f} 笔/年
@@ -137,7 +137,7 @@ CAGR 变动不超过 1%，鲁棒性高。`trail_multiplier_r1`（2.0–4.0×）�
 
 4 个独立 OOS 年度中 **{_wf_pos_win}/4 正收益**，4 年拼接 OOS CAGR **{_wf_oos_cagr*100:+.2f}%**，
 Sharpe **{_wf_oos_sharpe:+.3f}**（vs 全样本内 {_sharpe:+.3f}）。
-未发现参数过拟合，策略在从未参与优化的年份依然盈利，这是最重要的诚实性验证。
+未发现参数过拟合，策略1.0在从未参与优化的年份依然盈利，这是最重要的诚实性验证。
 但 Sharpe 从 IS 的 {_sharpe:.3f} 衰减至 OOS 的 {_wf_oos_sharpe:.3f}（降幅
 {(1 - _wf_oos_sharpe / _sharpe)*100:.0f}%），说明样本外效率有显著但非灾难性的退化。
 
@@ -145,8 +145,8 @@ Sharpe **{_wf_oos_sharpe:+.3f}**（vs 全样本内 {_sharpe:+.3f}）。
 
 在 5 个市场环境中，金融危机（alpha +13.4%）和 COVID 急跌（MaxDD -10.9% vs SPY -33.7%）
 最为出色；加息熊市小幅跑赢 SPY；量化宽松牛市落后 5.5%，AI 驱动牛市落后 10.6%。
-策略在每一个环境中均实现或接近正绝对收益——从未出现"某种市场环境下策略完全失效"的情形。
-这种"危机保护 + 牛市参与（但打折）"的特征是趋势跟踪策略的内在属性，
+策略1.0在每一个环境中均实现或接近正绝对收益——从未出现"某种市场环境下策略1.0完全失效"的情形。
+这种"危机保护 + 牛市参与（但打折）"的特征是趋势跟踪策略1.0的内在属性，
 适合接受此权衡的投资者。
 
 ---
@@ -157,7 +157,7 @@ st.markdown("""
 <div style="background:#e8f5e9;border-left:5px solid #2e7d32;padding:16px 20px;border-radius:6px;margin:8px 0 16px 0;">
 <h4 style="margin:0 0 8px 0;color:#1b5e20;">✅ 推荐实盘，但需满足以下前提条件</h4>
 <p style="margin:0;color:#1b5e20;">
-策略具备正期望、无过拟合证据、规则透明可执行。在<strong>满足下述条件</strong>的情况下，推荐作为
+策略1.0具备正期望、无过拟合证据、规则透明可执行。在<strong>满足下述条件</strong>的情况下，推荐作为
 投资组合中的防御性趋势配置（而非 SPY 的替代品）。
 </p>
 </div>
@@ -166,7 +166,7 @@ st.markdown("""
 st.markdown(f"""
 **推荐实盘的依据：**
 1. Walk-Forward 4/4 窗口无过拟合，OOS CAGR {_wf_oos_cagr*100:+.1f}% 在实盘可实现范围内
-2. 蒙特卡洛负收益概率 {_mc_neg_prob*100:.1f}%，策略正期望高度确定
+2. 蒙特卡洛负收益概率 {_mc_neg_prob*100:.1f}%，策略1.0正期望高度确定
 3. 策略逻辑透明，信号明确，无"看未来"的前视偏差
 4. 在所有 5 个市场环境中均可存续，无单一环境下的致命弱点
 5. 交易成本已完整计入回测净值，执行质量评估为 EXCELLENT
@@ -208,8 +208,8 @@ st.markdown("""
 <div style="background:#fff8e1;border-left:5px solid #f57c00;padding:14px 18px;border-radius:6px;margin:12px 0;">
 <strong>⚠️ 核心风险提示：上述预期基于历史数据推断，存在以下主要不确定性</strong><br>
 ① <strong>幸存者偏差</strong>：当前回测 CAGR 可能高估 20%–50%，这是最大的单一偏差来源；<br>
-② <strong>未来分布与历史的偏离</strong>：AI 驱动的集中型牛市若持续，策略 alpha 可能进一步收缩；<br>
-③ <strong>实盘摩擦</strong>：大资金规模下的市场冲击成本、流动性约束和策略拥挤将额外拖累收益；<br>
+② <strong>未来分布与历史的偏离</strong>：AI 驱动的集中型牛市若持续，策略1.0 alpha 可能进一步收缩；<br>
+③ <strong>实盘摩擦</strong>：大资金规模下的市场冲击成本、流动性约束和策略1.0拥挤将额外拖累收益；<br>
 ④ <strong>参数测试不完整</strong>：6 个核心参数尚未通过扰动测试，实盘前不应视为已充分验证。
 </div>
 """, unsafe_allow_html=True)
@@ -217,7 +217,7 @@ st.markdown("""
 st.markdown("""
 <div style="background:#e3f2fd;border-left:5px solid #1565c0;padding:14px 18px;border-radius:6px;margin:8px 0;">
 <strong>📌 一句话结论</strong><br>
-这是一个<strong>统计上可信、逻辑上清晰、实盘可执行</strong>的趋势跟踪策略。
+这是一个<strong>统计上可信、逻辑上清晰、实盘可执行</strong>的趋势跟踪策略1.0。
 在完成幸存者偏差修正和剩余参数验证后，推荐以<strong>合理规模（总仓位 20%–40%）</strong>
 配置于多元化投资组合中，预期提供约 <strong>5%–7% 年化收益、最大回撤 25%–35%</strong>，
 在熊市中提供显著的下行保护，长期持有具备正复利的统计确定性。

@@ -258,8 +258,8 @@ def _status_icon(param_name: str) -> str:
 
 st.subheader("分析框架")
 st.markdown(f"""
-参数敏感性分析的目的是验证策略对参数选择的**鲁棒性（Robustness）**：
-若策略在宽泛的参数范围内均能盈利，说明结果不依赖于特定参数的过拟合。
+参数敏感性分析的目的是验证策略1.0对参数选择的**鲁棒性（Robustness）**：
+若策略1.0在宽泛的参数范围内均能盈利，说明结果不依赖于特定参数的过拟合。
 
 | 参数 | 当前基准值 | 测试范围 | 分析目的 | 状态 |
 |------|-----------|---------|---------|------|
@@ -272,7 +272,7 @@ st.info(
     "📌 **关于 IS/OOS 数据范围的说明：**  \n"
     f"本页所有扰动测试使用**完整历史数据（{meta.backtest_start} → {meta.backtest_end}）**，"
     "包含 Walk-Forward 验证中标记为 OOS 的年份（2022–2026）。  \n"
-    "这在方法论上是可接受的，原因是：**策略参数（N=200、止损 2×ATR 等）在运行回测前已根据业界经验事先确定**，"
+    "这在方法论上是可接受的，原因是：**策略1.0参数（N=200、止损 2×ATR 等）在运行回测前已根据业界经验事先确定**，"
     "并非通过观察 OOS 结果后反向挑选——因此不存在『看 OOS 结果 → 调参 → 再测试』的数据泄漏。  \n"
     "扰动测试的目的仅为验证鲁棒性，而非选择参数。  \n"
     "即将实现的**参数热力图分析**将严格使用 IS 截止日（2021-12-31），与 Walk-Forward OOS 窗口完全隔离。"
@@ -311,7 +311,7 @@ if _d:
     monotonic = all(_info["sharpes"][i] <= _info["sharpes"][i+1] for i in range(len(_info["sharpes"])-1))
 
     st.markdown(f"""
-**结论：** {"✅ 全部参数值均实现正 CAGR，策略对该参数具有鲁棒性。" if _info["all_pos"] else "⚠️ 存在负 CAGR 的参数值，需关注。"}
+**结论：** {"✅ 全部参数值均实现正 CAGR，策略1.0对该参数具有鲁棒性。" if _info["all_pos"] else "⚠️ 存在负 CAGR 的参数值，需关注。"}
 Sharpe 稳定区间：**{stab_str}**（Sharpe ≥ 基准最优值的 90%）。
 
 {"- Sharpe 呈单调递增：更大的乘数在样本内表现更优，但需 OOS 验证" if monotonic else "- Sharpe 呈非单调形态，存在明确的稳定高原区间"}
@@ -342,12 +342,12 @@ N 越小信号越多，但噪音也越高；N 越大信号越少，但动量更�
     cagr_range = max(_info["cagrs"]) - min(_info["cagrs"])
 
     st.markdown(f"""
-**结论：** {"✅ 全部参数值均实现正 CAGR，策略对突破窗口具有鲁棒性。" if _info["all_pos"] else "⚠️ 存在负 CAGR 的参数值。"}
+**结论：** {"✅ 全部参数值均实现正 CAGR，策略1.0对突破窗口具有鲁棒性。" if _info["all_pos"] else "⚠️ 存在负 CAGR 的参数值。"}
 CAGR 变化幅度 **{cagr_range*100:.2f}%**（N=150→300），Sharpe 稳定区间：**{stab_str}**。
 
 - 窗口越长：信号越少、持仓更久、换手更低、交易摩擦更小
 - 基准 N={int(base['param_value'])}：CAGR {base['cagr']*100:+.2f}%，Sharpe {base['sharpe']:+.3f}，均持仓 {base['avg_holding_days']:.0f} 天
-- 极平坦的参数景观是过拟合风险最低的信号：即便实盘趋势周期发生小幅漂移，策略表现不会显著退化
+- 极平坦的参数景观是过拟合风险最低的信号：即便实盘趋势周期发生小幅漂移，策略1.0表现不会显著退化
 - **选择 N=200 的理由**：52 周新高具有充分的行业实践支撑，且处于稳定高原区间内
 """)
     _section_meta["breakout_window"] = _info
@@ -669,15 +669,15 @@ if _d:
         _d,
         "✅ 滑点（slippage_bps）",
         """**背景：** 单边滑点（bps）= 实际成交价与信号价之间的摩擦成本模型。
-策略 baseline 假设 10 bps（0.1%）单边滑点，结合市价冲击和买卖价差。
-此测试验证策略边际是否足够支撑不同的实盘摩擦水平。""",
+策略1.0 baseline 假设 10 bps（0.1%）单边滑点，结合市价冲击和买卖价差。
+此测试验证策略1.0边际是否足够支撑不同的实盘摩擦水平。""",
     )
     base = _info["base_rec"]
     best = _info["best_sharpe_rec"]
     lo, hi = _info["stab_lo"], _info["stab_hi"]
     stab_str = f"{lo:.0f}–{hi:.0f} bps" if lo is not None else "全范围"
     st.markdown(f"""
-**结论：** {"✅ 全部测试水平下策略均保持正收益。" if _info["all_pos"] else "⚠️ 高滑点情景下策略出现负收益，需关注。"}
+**结论：** {"✅ 全部测试水平下策略1.0均保持正收益。" if _info["all_pos"] else "⚠️ 高滑点情景下策略1.0出现负收益，需关注。"}
 Sharpe 稳定区间：**{stab_str}**。
 
 - 基准 {base['param_value']:.0f} bps：CAGR {base['cagr']*100:+.2f}%，Sharpe {base['sharpe']:+.3f}，MaxDD {base['max_drawdown']*100:.1f}%
@@ -705,12 +705,12 @@ if _d:
     lo, hi = _info["stab_lo"], _info["stab_hi"]
     stab_str = f"{lo:.0f}–{hi:.0f} bps" if lo is not None else "全范围"
     st.markdown(f"""
-**结论：** {"✅ 全部测试水平下策略均保持正收益。" if _info["all_pos"] else "⚠️ 高佣金情景下策略出现负收益，需关注。"}
+**结论：** {"✅ 全部测试水平下策略1.0均保持正收益。" if _info["all_pos"] else "⚠️ 高佣金情景下策略1.0出现负收益，需关注。"}
 Sharpe 稳定区间：**{stab_str}**。
 
 - 基准 {base['param_value']:.0f} bps：CAGR {base['cagr']*100:+.2f}%，Sharpe {base['sharpe']:+.3f}
 - 年换手率约 {base.get('annual_turnover', 7):.1f}x，佣金从 1→5 bps 的累积影响约 {(5-1)*2*base.get('annual_turnover',7)/100:.2f}%/年
-- 佣金相对滑点影响更小：策略每笔交易平均持仓较长，佣金在总成本中占比有限
+- 佣金相对滑点影响更小：策略1.0每笔交易平均持仓较长，佣金在总成本中占比有限
 """)
     _section_meta["commission_bps"] = _info
 else:
@@ -725,8 +725,8 @@ st.subheader("交易执行诊断（Trade Execution Diagnostics）")
 st.markdown(f"""
 > **数据来源说明：** 此诊断基于 **Baseline anchor 锚点参数**的历史回测交易日志（`results/v1/trades.csv`），
 > 而非参数敏感性分析中各扰动参数的交易。
-> 诊断目的是评估策略在正常运行条件下"计划止损价 vs 实际成交价"的偏差，
-> 是策略执行质量的固有属性，用 Baseline 跑一次即可代表策略整体。
+> 诊断目的是评估策略1.0在正常运行条件下"计划止损价 vs 实际成交价"的偏差，
+> 是策略1.0执行质量的固有属性，用 Baseline 跑一次即可代表策略1.0整体。
 > 回测期间：{meta.backtest_start} → {meta.backtest_end}，锚点参数：N={p['breakout_window']}日突破，止损 {p['stop_loss_multiplier']:.0f}×ATR。
 """)
 
@@ -800,7 +800,7 @@ if _DIAG_PATH.exists():
     st.markdown(
         f'<div class="info-box">'
         f'P95={p95_mag:.2f}R（基准阈值 2.5R），最大={max_mag:.2f}R（基准阈值 10R）。'
-        f'{"P95 和最大损失均低于危险阈值，策略尾部风险在可控范围内。" if tail_risk == "正常" else "尾部风险超出基准线，建议进一步分析缺口来源。"}'
+        f'{"P95 和最大损失均低于危险阈值，策略1.0尾部风险在可控范围内。" if tail_risk == "正常" else "尾部风险超出基准线，建议进一步分析缺口来源。"}'
         f'</div>',
         unsafe_allow_html=True,
     )
@@ -839,7 +839,7 @@ if _DIAG_PATH.exists():
     max_cl = sa.get("max_consecutive_losses", 0)
     st.markdown(
         f'<div class="info-box">'
-        f'最长连续亏损 <strong>{max_cl} 笔</strong>——在趋势策略中属于正常特征（胜率 ~38%）。'
+        f'最长连续亏损 <strong>{max_cl} 笔</strong>——在趋势策略1.0中属于正常特征（胜率 ~38%）。'
         f'在 38% 胜率下，统计期望每隔约 2.6 笔出现一次亏损连续段。'
         f'</div>',
         unsafe_allow_html=True,
@@ -904,11 +904,11 @@ else:
     st.markdown(f"""
 #### 测试覆盖率：{_n_done} / {_total_params} 参数已完成（{_progress_pct:.0f}%）
 
-**1. 正收益覆盖率 — 策略的基础鲁棒性**
+**1. 正收益覆盖率 — 策略1.0的基础鲁棒性**
 
 已完成的 {_n_done} 个参数中，**{_n_all_pos} 个**（{_n_all_pos/_n_done*100:.0f}%）
 在全部测试值下均实现正 CAGR。
-{"✅ 策略正期望来源于市场结构（趋势持续性），而非特定参数组合。" if _n_all_pos == _n_done else f"⚠️ 有 {_n_done - _n_all_pos} 个参数的极端值出现负收益，需关注。"}
+{"✅ 策略1.0正期望来源于市场结构（趋势持续性），而非特定参数组合。" if _n_all_pos == _n_done else f"⚠️ 有 {_n_done - _n_all_pos} 个参数的极端值出现负收益，需关注。"}
 
 **2. 敏感度分析（CAGR 变异系数 CV）**
 
@@ -1015,7 +1015,7 @@ else:
             _icon, _color, _border = "✅", "#e8f5e9", "#2e7d32"
             _summary = (
                 f"全部 {_total_params} 个参数通过鲁棒性验证：测试范围内无负 CAGR，"
-                f"参数景观整体平坦。策略的正期望来自市场结构性动量，而非参数过拟合。"
+                f"参数景观整体平坦。策略1.0的正期望来自市场结构性动量，而非参数过拟合。"
             )
         elif concerns:
             _icon, _color, _border = "🟡", "#fff8e1", "#f57c00"

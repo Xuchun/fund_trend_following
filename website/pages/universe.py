@@ -38,7 +38,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.metric("股票数量", f"{meta.universe_stocks:,}", help="S&P 900 成分股（S&P 500 + S&P MidCap 400）")
 with col2:
-    st.metric("ETF 数量", f"{meta.universe_etfs}", help="来自 ETFs.csv，涵盖大盘/板块/债券/商品/国际/另类资产等（SPY + SHY 为辅助标的不纳入策略）")
+    st.metric("ETF 数量", f"{meta.universe_etfs}", help="来自 ETFs.csv，涵盖大盘/板块/债券/商品/国际/另类资产等（SPY + SHY 为辅助标的不纳入策略1.0）")
 with col3:
     st.metric("合计标的数", f"{meta.universe_total:,}")
 
@@ -71,10 +71,10 @@ st.subheader(f"ETF 标的池：{meta.universe_etfs} 只可交易 ETF（共 85 �
 
 st.markdown("""
 ETF 列表来自项目根目录的 **`data/ETFs.csv`**，涵盖美股宽基、行业板块、固定收益、
-国际股票、大宗商品、另类资产等多个类别，为趋势跟踪策略提供多元化的信号来源。
+国际股票、大宗商品、另类资产等多个类别，为趋势跟踪策略1.0提供多元化的信号来源。
 
-- **SPY**：用作市场基准（Benchmark），不纳入策略持仓
-- **SHY**：用作闲置资金的现金代理（Cash Proxy），不作为策略交易标的
+- **SPY**：用作市场基准（Benchmark），不纳入策略1.0持仓
+- **SHY**：用作闲置资金的现金代理（Cash Proxy），不作为策略1.0交易标的
 """)
 
 if meta.etf_universe:
@@ -100,7 +100,7 @@ if meta.etf_universe:
             grp = grp.rename(columns={"ticker": "Ticker", "name": "名称 / Full Name"})
             st.dataframe(grp, use_container_width=True, hide_index=True)
 
-    st.markdown(f"**合计：{len(etf_df)} 只 ETF**（SPY + SHY 标注为辅助标的，不纳入策略交易）")
+    st.markdown(f"**合计：{len(etf_df)} 只 ETF**（SPY + SHY 标注为辅助标的，不纳入策略1.0交易）")
 else:
     st.info("ETF 列表未加载。请检查 results/v1/strategy_meta.json 中的 etf_universe 字段。")
 
@@ -120,7 +120,7 @@ if meta.params_anchor.get("regime_filter_enabled", False):
 <div class="info-box">
 <strong>市场环境过滤器已启用</strong><br>
 当 <strong>{ticker}</strong> 收盘价低于其 <strong>{window} 日均线</strong>时，
-停止新建仓位。SPY 本身同时担任过滤器信号源，不纳入策略交易标的。
+停止新建仓位。SPY 本身同时担任过滤器信号源，不纳入策略1.0交易标的。
 </div>
 """, unsafe_allow_html=True)
 else:
@@ -128,7 +128,7 @@ else:
 <div class="info-box">
 <strong>市场环境过滤器（当前配置未启用）</strong><br>
 Strategy 1.0 设计方案包含此过滤器，当前参数配置已将其关闭（<code>regime_filter_enabled = False</code>）。
-启用后，当 SPY 收盘价低于其 200 日均线时，策略停止新建仓位，闲置资金流入 SHY。
+启用后，当 SPY 收盘价低于其 200 日均线时，策略1.0停止新建仓位，闲置资金流入 SHY。
 </div>
 """, unsafe_allow_html=True)
 

@@ -85,7 +85,7 @@ with tab2:
 - [ ] 验证 Yahoo Finance 数据与 Bloomberg/Refinitiv 的差异
 - [ ] 考虑增加国际市场（MSCI World）
 
-**策略增强：**
+**策略1.0增强：**
 - [ ] VIX 波动率过滤器测试（Strategy 2.1）
 - [ ] 动态仓位规模调整（Strategy 2.2）
 - [ ] 考虑做空机制（Strategy 3.0 长远目标）

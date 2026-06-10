@@ -61,7 +61,7 @@ if cagr < 0.05:
         )
     else:
         regime_note = (
-            "纯多头策略遭受熊市的全部冲击，毫无对冲机制。<br>"
+            "纯多头策略1.0遭受熊市的全部冲击，毫无对冲机制。<br>"
             "<strong>Strategy 2.0 将引入 SPY 200日均线过滤器以减少熊市回撤。</strong>"
         )
     st.markdown(f"""
@@ -69,7 +69,7 @@ if cagr < 0.05:
 <h4>⚠️ 关于低 CAGR 的说明</h4>
 CAGR 仅 {cagr*100:.1f}%，主因是 2008 年金融危机期间
 <strong>最大回撤达 {abs(m.get("max_drawdown",0))*100:.1f}%</strong>，导致长期的资金恢复期。
-2010–2024 子区间 CAGR 约 6%，说明策略本身在无极端熊市时仍有效。<br>
+2010–2024 子区间 CAGR 约 6%，说明策略1.0本身在无极端熊市时仍有效。<br>
 {regime_note}
 </div>
 """, unsafe_allow_html=True)
@@ -283,7 +283,7 @@ _col1_r, _col2_r = st.columns(2)
 with _col1_r:
     st.markdown(
         f"**解读：** {_n_yr_ar} 个完整年度中 **{_pos_yr_ar}** 年正收益（{_pos_yr_ar/_n_yr_ar*100:.0f}%）。"
-        "趋势策略在强牛市年份（SPY 单边大涨）因持仓不满往往落后，"
+        "趋势策略1.0在强牛市年份（SPY 单边大涨）因持仓不满往往落后，"
         "但在下行年份（如 2008、2022）损失明显小于 SPY，体现了**截断亏损**的核心优势。"
     )
 with _col2_r:
@@ -292,7 +292,7 @@ with _col2_r:
     st.markdown(
         f"**解读：** 滚动 Sharpe 在 2008 年危机期间跌至深度负值，2010 年后趋于稳定并持续正值。"
         f"全周期 Sharpe **{_sharpe_tmp:+.3f}** vs SPY **{_spy_sharpe_tmp:+.3f}**，"
-        "说明在单位风险维度上策略与 SPY 大体相当，而非仅靠减少持仓频率规避风险。"
+        "说明在单位风险维度上策略1.0与 SPY 大体相当，而非仅靠减少持仓频率规避风险。"
     )
 
 st.markdown("---")
@@ -315,7 +315,7 @@ st.markdown(
     f"**解读：** {_pos_m_cnt + _neg_m_cnt} 个月中 **{_pos_m_cnt}** 个月正收益（{_pos_m_cnt/(_pos_m_cnt+_neg_m_cnt)*100:.0f}%）。"
     f"最好月份 **{_best_m_dt.strftime('%Y年%m月')}（{_best_m_val:+.1f}%）**，"
     f"最差月份 **{_worst_m_dt.strftime('%Y年%m月')}（{_worst_m_val:+.1f}%）**。"
-    "热力图可直观识别季节性规律：红色集中区域（如某季度持续亏损）是策略改进的潜在方向。"
+    "热力图可直观识别季节性规律：红色集中区域（如某季度持续亏损）是策略1.0改进的潜在方向。"
 )
 
 st.markdown("---")
@@ -329,9 +329,9 @@ avg_win  = m.get("avg_win_r", 0)
 avg_loss = m.get("avg_loss_r", 0)
 pf       = m.get("profit_factor", 1)
 st.markdown(f"""
-**解读：** 胜率 {win_rate*100:.1f}% 看似低，但这是趋势跟踪策略的**正常特征**。
+**解读：** 胜率 {win_rate*100:.1f}% 看似低，但这是趋势跟踪策略1.0的**正常特征**。
 关键在于平均盈利（{avg_win:+.2f}R）远大于平均亏损（{avg_loss:.2f}R），
-盈亏比 {pf:.4f} > 1，期望值为正。右侧长尾（大盈利交易）是策略盈利的核心来源。
+盈亏比 {pf:.4f} > 1，期望值为正。右侧长尾（大盈利交易）是策略1.0盈利的核心来源。
 """)
 
 st.markdown("---")
@@ -369,7 +369,7 @@ st.markdown(f"""
 以单边 {slippage_bps:.0f} bps 滑点 + {commission_bps:.0f} bps 佣金（合计 {slippage_bps+commission_bps:.0f} bps）、往返 {rt_cost_bps:.0f} bps 计，
 隐含年化交易摩擦约 **{implied_cost_pct:.2f}%**，已完整计入回测净值，无需额外扣除。
 
-> 趋势跟踪策略的换手率通常在 500%–2,000%/年之间，本策略 {turnover*100:.0f}% 处于正常范围。
+> 趋势跟踪策略1.0的换手率通常在 500%–2,000%/年之间，本策略1.0 {turnover*100:.0f}% 处于正常范围。
 """)
 
 st.markdown("---")
@@ -395,14 +395,14 @@ with _col1_t:
         f"**解读：** 平均每年约 **{_trades_per_yr:.0f}** 笔交易。"
         "熊市年份（市场环境过滤器关闭新开仓）交易笔数明显减少，"
         "牛市年份信号密集、笔数较多。"
-        "年度笔数的波动反映的是市场状态变化，而非策略本身不稳定。"
+        "年度笔数的波动反映的是市场状态变化，而非策略1.0本身不稳定。"
     )
 with _col2_t:
     st.markdown(
         f"**解读：** 持仓中位数 **{_med_hold:.0f} 天**，均值 **{_avg_hold:.0f} 天**，"
         f"均值显著大于中位数，说明分布右偏——大多数交易快速止损出场（短持仓），"
         f"少数大赢家被持有较长时间（持仓 > 60 天的交易占 {_long_hold_pct:.0f}%）。"
-        "这种「多次小亏、少次大赚」的持仓结构是趋势跟踪策略的典型特征。"
+        "这种「多次小亏、少次大赚」的持仓结构是趋势跟踪策略1.0的典型特征。"
     )
 
 # ── Daily position count ──────────────────────────────────────────────────────
@@ -426,13 +426,13 @@ st.markdown(
     f"全程均值约 **{_mean_n:.1f} 只**，历史峰值 **{_max_n} 只**。"
     f"空仓天数（0 只持仓）占全程约 **{_zero_pct:.1f}%**，"
     f"主要集中于熊市阶段（SPY 跌破 200 日均线时，Regime Filter 停止新开仓并等待旧仓止损出清）。"
-    f"持仓数目随市场环境的起伏变化，体现了策略在不同市场条件下的动态参与度。"
+    f"持仓数目随市场环境的起伏变化，体现了策略1.0在不同市场条件下的动态参与度。"
 )
 
 st.markdown("---")
 
 # ── Profit by type: stock vs ETF ──────────────────────────────────────────────
-st.subheader("策略盈利来源：股票 vs ETF")
+st.subheader("策略1.0盈利来源：股票 vs ETF")
 st.plotly_chart(profit_by_type_chart(res.trades, _ETF_SET), use_container_width=True)
 
 etf_pnl   = res.trades[res.trades["ticker"].isin(_ETF_SET)]["net_pnl"].sum()
@@ -667,7 +667,7 @@ if _neg_details:
         for _y, _r in sorted(_big_loss):
             _spy_r = _spy_ann_dict.get(_y)
             _spy_suffix = f"，同期 SPY {_spy_r*100:.1f}%" if _spy_r is not None else ""
-            _big_strs.append(f"{_y}年（策略 {_r*100:.1f}%{_spy_suffix}）")
+            _big_strs.append(f"{_y}年（策略1.0 {_r*100:.1f}%{_spy_suffix}）")
         _nd_parts.append(
             f"{len(_big_loss)} 年出现较大亏损（≤ -10%）：" + "、".join(_big_strs)
         )
@@ -679,36 +679,36 @@ st.markdown(f"""
 **1. 绝对收益可观，但跑输 SPY 约 {abs(_cagr_gap)*100:.1f} 个百分点**
 
 在 {meta.backtest_start[:4]}–{meta.backtest_end[:4]} 约 {_bt_years:.0f} 年的回测期内，
-策略 CAGR **{_cagr*100:+.2f}%**，同期 SPY 为 **{_spy_cagr*100:+.2f}%**，差距 **{_cagr_gap*100:+.2f}%**。
+策略1.0 CAGR **{_cagr*100:+.2f}%**，同期 SPY 为 **{_spy_cagr*100:+.2f}%**，差距 **{_cagr_gap*100:+.2f}%**。
 以 $10M 初始资金计算，净值增长 **{_total_ret:.2f} 倍**（期末约 ${_total_ret*10:.0f}M）。
 跑输 SPY 是这份结果最直接的弱点，也是向任何潜在投资者解释时需要正面回答的第一个问题。
-对此的核心回答是：**SPY 在相同时间内最大回撤 {abs(_spy_maxdd)*100:.1f}%，而策略最大回撤仅 {abs(_maxdd)*100:.1f}%**——
+对此的核心回答是：**SPY 在相同时间内最大回撤 {abs(_spy_maxdd)*100:.1f}%，而策略1.0最大回撤仅 {abs(_maxdd)*100:.1f}%**——
 收益更低，但承受的风险断崖式下降。
 
 **2. Sharpe 轻微领先 SPY，风险调整后有竞争力**
 
-策略 Sharpe **{_sharpe:+.3f}** vs SPY **{_spy_sharpe:+.3f}**，差距微小但方向有利。
+策略1.0 Sharpe **{_sharpe:+.3f}** vs SPY **{_spy_sharpe:+.3f}**，差距微小但方向有利。
 Sortino **{_sortino:+.3f}**（对下行波动的惩罚更严格），Calmar **{_calmar:+.3f}**（CAGR / MaxDD）。
-这三个指标共同说明：在单位风险维度上，策略与 SPY 大体相当，
+这三个指标共同说明：在单位风险维度上，策略1.0与 SPY 大体相当，
 并非用大幅更低的风险调整收益换来了更低的绝对回撤——而是在**基本等效的风险效率下**，
 大幅压缩了最大回撤的绝对深度。
 
-**3. 最大回撤 {abs(_maxdd)*100:.1f}% 是策略最突出的实际优势**
+**3. 最大回撤 {abs(_maxdd)*100:.1f}% 是策略1.0最突出的实际优势**
 
 SPY 在回测期内最大回撤高达 **{abs(_spy_maxdd)*100:.1f}%**（2008–2009 金融危机），
-策略同期最大回撤仅 **{abs(_maxdd)*100:.1f}%**，下行深度约为 SPY 的 **{_maxdd_ratio*100:.0f}%**。
+策略1.0同期最大回撤仅 **{abs(_maxdd)*100:.1f}%**，下行深度约为 SPY 的 **{_maxdd_ratio*100:.0f}%**。
 最长水下时间 **{_maxdd_dur} 个交易日**（约 {_maxdd_dur/252:.1f} 年）。
 对于以保全本金为前提的机构资金而言，这一差距具有实质意义：
-**{abs(_spy_maxdd)*100:.0f}%** 的跌幅需要涨 **{(1/(1-min(abs(_spy_maxdd),0.99))-1)*100:.0f}%** 才能回本，而策略 **{abs(_maxdd)*100:.0f}%** 仅需涨 **{(1/(1-min(abs(_maxdd),0.99))-1)*100:.0f}%**。
+**{abs(_spy_maxdd)*100:.0f}%** 的跌幅需要涨 **{(1/(1-min(abs(_spy_maxdd),0.99))-1)*100:.0f}%** 才能回本，而策略1.0 **{abs(_maxdd)*100:.0f}%** 仅需涨 **{(1/(1-min(abs(_maxdd),0.99))-1)*100:.0f}%**。
 
 **4. 胜率低而盈亏比高，符合趋势跟踪的数学结构**
 
-胜率 **{_wr*100:.1f}%** 在表观上偏低，但这是趋势策略的内在特征，而非缺陷。
+胜率 **{_wr*100:.1f}%** 在表观上偏低，但这是趋势策略1.0的内在特征，而非缺陷。
 盈利交易平均 **{_avg_win_r:+.2f}R**，亏损交易平均 **{abs(_avg_loss_r):.2f}R**，
 Profit Factor **{_pf:.3f}**——每亏 1 元预期赚回 {_pf:.2f} 元。
 在 {_n_trades:,} 笔交易中，超过 5R 的大赢家 {_big5r} 笔（占比 {_big5r_pct:.1f}%），
 最大单笔 **{_max_r:+.2f}R**。
-**大赢家的右尾贡献是策略盈利的核心来源**——不能因为胜率偏低就轻易判断策略无效。
+**大赢家的右尾贡献是策略1.0盈利的核心来源**——不能因为胜率偏低就轻易判断策略1.0无效。
 
 **5. 年度表现稳定，{_n_years} 年中 {_pos_years} 年正收益（{_pos_years/_n_years*100:.0f}%）**
 
@@ -716,15 +716,15 @@ Profit Factor **{_pf:.3f}**——每亏 1 元预期赚回 {_pf:.2f} 元。
 最差年份 **{_worst_yr} 年（{_worst_ret*100:+.1f}%）**，最好年份 **{_best_yr} 年（{_best_ret*100:+.1f}%）**。
 {_neg_yr_desc}
 这种"负收益年份损失可控、正收益年份收益可观"的结构，
-是趋势策略长期正复利的基础。
+是趋势策略1.0长期正复利的基础。
 
 **6. 交易成本与换手率处于合理区间**
 
 年换手率 **{_turnover:.2f}x**，隐含年化交易摩擦约 **{_implied_cost:.2f}%**，
 已完整计入回测净值。市场暴露率 **{_exposure*100:.1f}%**（约 {100-_exposure*100:.1f}% 时间现金转入 SHY），
-说明策略全年大部分时间有仓位，并非依赖少数几笔交易的偶然发挥。
+说明策略1.0全年大部分时间有仓位，并非依赖少数几笔交易的偶然发挥。
 
-**7. 策略定位的准确理解**
+**7. 策略1.0定位的准确理解**
 """)
 
 # Positioning assessment table
@@ -746,7 +746,7 @@ if _cagr > 0.06 and _sharpe > _spy_sharpe and abs(_maxdd) < abs(_spy_maxdd) * 0.
         f"综合评价：基准回测结果达到预期目标。"
         f"CAGR {_cagr*100:+.2f}%，Sharpe {_sharpe:.3f}（微超 SPY {_spy_sharpe:.3f}），"
         f"MaxDD {abs(_maxdd)*100:.1f}%（仅为 SPY {abs(_spy_maxdd)*100:.1f}% 的 {_maxdd_ratio*100:.0f}%）。"
-        f"策略的核心价值在于**用约 {abs(_cagr_gap)*100:.1f}% 的年化收益损失，换取约 {(abs(_spy_maxdd)-abs(_maxdd))*100:.1f}% 的最大回撤保护**，"
+        f"策略1.0的核心价值在于**用约 {abs(_cagr_gap)*100:.1f}% 的年化收益损失，换取约 {(abs(_spy_maxdd)-abs(_maxdd))*100:.1f}% 的最大回撤保护**，"
         f"是风险厌恶型投资者在权益资产中最值得考虑的量化选项之一。"
     )
 elif _cagr > 0.05:
@@ -756,7 +756,7 @@ elif _cagr > 0.05:
     )
 else:
     verdict_icon = "⚠️"
-    verdict_body = f"综合评价：CAGR {_cagr*100:+.2f}% 偏低，需审查策略参数或回测设置。"
+    verdict_body = f"综合评价：CAGR {_cagr*100:+.2f}% 偏低，需审查策略1.0参数或回测设置。"
 
 st.markdown(
     f'<div class="info-box"><strong>{verdict_icon} {verdict_body}</strong></div>',

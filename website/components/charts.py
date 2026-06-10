@@ -330,7 +330,7 @@ def profit_by_type_chart(trades: pd.DataFrame, etf_tickers: set[str]) -> go.Figu
     fig.add_hline(y=0, line_color="#555", line_width=0.8)
     fig.update_layout(
         barmode="relative",
-        title="策略盈利来源：股票 vs ETF（按年，已平仓交易净盈亏）",
+        title="策略1.0盈利来源：股票 vs ETF（按年，已平仓交易净盈亏）",
         xaxis_title="年份",
         yaxis_title="净盈亏（百万美元）",
         yaxis_tickprefix="$",
@@ -474,7 +474,7 @@ def multi_strategy_nav(results_list: list, spy_nav: pd.Series | None) -> go.Figu
             hovertemplate="SPY<br>%{x|%Y-%m-%d}<br>%{y:.2f}x<extra></extra>",
         ))
     fig.update_layout(
-        title="策略净值对比（归一化到初始 1.0）",
+        title="策略1.0净值对比（归一化到初始 1.0）",
         yaxis_title="资产净值", yaxis_ticksuffix="x",
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         hovermode="x unified",
