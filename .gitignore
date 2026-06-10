@@ -11,8 +11,11 @@ venv/
 # 数据缓存（体积大，不上传 git）
 data/cache/
 
-# 回测结果
-results/
+# 回测结果：提交 JSON/CSV 数据供 Streamlit Cloud 读取，排除大型临时文件
+results/**/*.log
+results/**/*.png
+results/**/*.html
+results/**/sanity.txt
 
 # Jupyter
 .ipynb_checkpoints/
