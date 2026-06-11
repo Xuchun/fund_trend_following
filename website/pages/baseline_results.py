@@ -356,6 +356,25 @@ def _build_md_report():
     L.append(f"最差年份：**{_worst_yr_r} 年（{_worst_rt_r*100:+.1f}%）**  |  最好年份：**{_best_yr_r} 年（{_best_rt_r*100:+.1f}%）**")
     _blank(); _hr()
 
+    # ── 滚动 Sharpe 比率年度摘要（对应图表：滚动 Sharpe 比率）──────────────────────
+    _h(2, "滚动 Sharpe 比率年度摘要（对应图表：滚动 Sharpe 比率）")
+    _rets_r = res.returns.copy() if hasattr(res, "returns") and res.returns is not None else _nav_r.pct_change().fillna(0.0)
+    if not isinstance(_rets_r.index, _pd_r.DatetimeIndex):
+        _rets_r.index = _pd_r.to_datetime(_rets_r.index)
+    _rf_r2     = (1 + 0.02) ** (1 / 252) - 1
+    import numpy as _np_r2
+    _excess_r  = _rets_r - _rf_r2
+    _roll_sh   = (_excess_r.rolling(252).mean() / _rets_r.rolling(252).std()) * _np_r2.sqrt(252)
+    _roll_sh_y = _roll_sh.resample("YE").agg(["mean","min","max"]).dropna()
+    _row("年份","年均滚动Sharpe","年内最低","年内最高"); _sep(4)
+    for _dt_rs, _row_rs in _roll_sh_y.iterrows():
+        _row(int(_dt_rs.year), f"{_row_rs['mean']:+.3f}", f"{_row_rs['min']:+.3f}", f"{_row_rs['max']:+.3f}")
+    _blank()
+    _rs_overall_mean = float(_roll_sh.dropna().mean())
+    _rs_pos_pct      = float((_roll_sh.dropna() > 0).mean()) * 100
+    L.append(f"全期均值（252日滚动）：**{_rs_overall_mean:+.3f}**  |  滚动Sharpe > 0 的交易日占比：**{_rs_pos_pct:.0f}%**")
+    _blank(); _hr()
+
     _h(2, "月度收益热力图（对应图表：月度收益热力图）")
     L.append(f"正收益月份：{_pos_m_r} / {_tot_m_r}（{_pos_m_r/_tot_m_r*100:.0f}%）  |  "
              f"最好月份：{_best_m_dt.strftime('%Y年%m月')}（{_best_m_r:+.1f}%）  |  "
