@@ -166,19 +166,11 @@ def _build_ps_md_report():
     return "\n".join(L)
 
 
-_ps_md_report = _build_ps_md_report()
-
 render_page_header("参数敏感性分析", meta)
 _ps_cap_col, _ps_btn_col = st.columns([5, 1])
 with _ps_cap_col:
     st.caption(f"{meta.display_name} · 回测期间：{meta.backtest_start} → {meta.backtest_end}")
-with _ps_btn_col:
-    st.download_button(
-        label="⬇ 下载报告(MD)",
-        data=_ps_md_report.encode("utf-8"),
-        file_name=f"parameter_sensitivity_{meta.backtest_end[:10]}.md",
-        mime="text/markdown",
-    )
+_ps_btn_placeholder = _ps_btn_col.empty()   # filled after helpers are defined
 st.markdown("---")
 
 # ── Constants ──────────────────────────────────────────────────────────────────
