@@ -936,6 +936,11 @@ Sharpe 稳定区间：**{stab_str}**。
 - 年换手率约 {base.get('annual_turnover', 7):.1f}x，佣金从 1→5 bps 的累积影响约 {(5-1)*2*base.get('annual_turnover',7)/100:.2f}%/年
 - 佣金相对滑点影响更小：策略1.0每笔交易平均持仓较长，佣金在总成本中占比有限
 """)
+    st.markdown(
+        f"- **选择 {base['param_value']:.0f} bps 的理由：** 反映 Interactive Brokers 等机构经纪商的实际佣金水平"
+        "（≈ $0.003/股，最低 $0.35/笔）；3 bps 是机构级账户的合理保守估算，"
+        "佣金相对滑点对策略影响更小（持仓期越长单位持仓成本越低）"
+    )
     _section_meta["commission_bps"] = _info
 else:
     st.subheader("⏳ 佣金（commission_bps）")
