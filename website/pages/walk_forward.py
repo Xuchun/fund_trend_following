@@ -135,40 +135,73 @@ if wf_data:
         oos_cagr = oos_m.get("cagr", 0)
         retention = oos_cagr / is_cagr if abs(is_cagr) > 1e-9 else 0.0
         rows.append({
-            "窗口":         w["label"],
-            "OOS 区间":     f"{w['oos_start'][:7]} → {w['oos_end'][:7]}",
-            "IS CAGR":      f"{is_cagr*100:+.1f}%",
-            "OOS CAGR":     f"{oos_cagr*100:+.1f}%",
-            "CAGR保留率":   f"{retention*100:.0f}%",
-            "OOS Sharpe":   f"{oos_m.get('sharpe',0):+.3f}",
-            "OOS MaxDD":    f"{oos_m.get('max_drawdown',0)*100:.1f}%",
-            "SPY OOS CAGR": f"{spy_oos.get('cagr',0)*100:+.1f}%" if spy_oos else "—",
+            "窗口":           w["label"],
+            "OOS 区间":       f"{w['oos_start'][:7]} → {w['oos_end'][:7]}",
+            "IS CAGR":        f"{is_cagr*100:+.1f}%",
+            "OOS CAGR":       f"{oos_cagr*100:+.1f}%",
+            "CAGR保留率":     f"{retention*100:.0f}%",
+            "OOS Sharpe":     f"{oos_m.get('sharpe',0):+.3f}",
+            "OOS MaxDD":      f"{oos_m.get('max_drawdown',0)*100:.1f}%",
+            "SPY OOS CAGR":   f"{spy_oos.get('cagr',0)*100:+.1f}%" if spy_oos else "—",
+            "SPY OOS MaxDD":  f"{spy_oos.get('max_drawdown',0)*100:.1f}%" if spy_oos else "—",
         })
 
     st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+
+    # ── Compute SPY stitched metrics from nav data ────────────────────────
+    import numpy as _np_wf
+    _spy_nav_list = oos_spy.get("nav", [])
+    _spy_st_cagr, _spy_st_maxdd = None, None
+    if _spy_nav_list and len(_spy_nav_list) > 1:
+        _snav = _np_wf.array(_spy_nav_list, dtype=float)
+        _years = (len(_snav) - 1) / 252.0
+        _spy_st_cagr = (_snav[-1] / _snav[0]) ** (1 / _years) - 1 if _years > 0 else 0.0
+        _running_max = _np_wf.maximum.accumulate(_snav)
+        _spy_st_maxdd = float(((_snav - _running_max) / _running_max).min())
 
     # Retention metrics highlight
     cagr_ret   = ret.get("cagr_retention",   0)
     sharpe_ret = ret.get("sharpe_retention", 0)
     oos_m = oos_st.get("metrics", {})
 
-    rc1, rc2, rc3, rc4 = st.columns(4)
+    rc1, rc2, rc3, rc4, rc5, rc6 = st.columns(6)
     rc1.metric("平均 CAGR 保留率",   f"{cagr_ret*100:.0f}%",
-               help="OOS CAGR / IS CAGR，理想值 > 70%")
+               help="各窗口（OOS CAGR ÷ IS CAGR）的算术均值")
     rc2.metric("平均 Sharpe 保留率", f"{sharpe_ret*100:.0f}%",
-               help="OOS Sharpe / IS Sharpe，理想值 > 60%")
-    rc3.metric("OOS 拼接 CAGR",      f"{oos_m.get('cagr',0)*100:+.1f}%")
-    rc4.metric("OOS 拼接 MaxDD",     f"{oos_m.get('max_drawdown',0)*100:.1f}%")
+               help="各窗口（OOS Sharpe ÷ IS Sharpe）的算术均值")
+    rc3.metric("策略 OOS 拼接 CAGR",  f"{oos_m.get('cagr',0)*100:+.1f}%")
+    rc4.metric("策略 OOS 拼接 MaxDD", f"{oos_m.get('max_drawdown',0)*100:.1f}%")
+    rc5.metric("SPY OOS 拼接 CAGR",
+               f"{_spy_st_cagr*100:+.1f}%" if _spy_st_cagr is not None else "—")
+    rc6.metric("SPY OOS 拼接 MaxDD",
+               f"{_spy_st_maxdd*100:.1f}%" if _spy_st_maxdd is not None else "—")
+
+    st.markdown("""
+**📖 保留率指标说明**
+
+| 指标 | 计算方式 | 含义 | 理想值 |
+|------|---------|------|--------|
+| **CAGR 保留率** | 各窗口（OOS CAGR ÷ IS CAGR）的算术均值 | 策略在样本外保留了多少 IS 期收益率——衡量**过拟合程度** | > 70% |
+| **Sharpe 保留率** | 各窗口（OOS Sharpe ÷ IS Sharpe）的算术均值 | 样本外风险调整后收益的衰减——比 CAGR 保留率**更诚实**，因为同时考虑了波动率变化 | > 60% |
+
+⚠️ **重要：两个保留率均为算术均值，容易被极端窗口扭曲。**
+例如 Window 2/3 的 OOS 远超 IS（保留率 > 200%），会拉高均值；而 Window 1 的负值则拉低均值。
+更诚实的检验是看整体**OOS 拼接 CAGR vs SPY OOS 拼接 CAGR**：策略是否在完整 OOS 期间跑赢或跑输市场。
+""")
 
     # Interpretation
     overfit_flag = cagr_ret < 0.5
-    color = "red" if overfit_flag else ("orange" if cagr_ret < 0.7 else "green")
     verdict = "⚠️ 存在过拟合风险" if overfit_flag else ("🟡 中等保留率" if cagr_ret < 0.7 else "✅ 鲁棒性良好")
+    _spy_vs_str = ""
+    if _spy_st_cagr is not None:
+        _diff = oos_m.get('cagr', 0) - _spy_st_cagr
+        _spy_vs_str = f"OOS 拼接期间策略 vs SPY：{_diff*100:+.1f} 个百分点。"
     st.markdown(
         f'<div class="info-box">'
         f'<strong>判断：{verdict}</strong>　'
         f'CAGR 保留率 {cagr_ret*100:.0f}%（理想 > 70%），'
         f'Sharpe 保留率 {sharpe_ret*100:.0f}%（理想 > 60%）。'
+        f'{_spy_vs_str}'
         f'扩展窗口设计使用固定基准参数，结果反映策略1.0在历史样本外的真实稳健性。'
         f'</div>',
         unsafe_allow_html=True,
