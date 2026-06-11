@@ -74,12 +74,15 @@ n_trades_str = f"{res.metrics.get('n_trades', 0):,}"
 if mc:
     st.subheader("模拟概览（Baseline Anchor 锚点参数）")
     mc1, mc2, mc3 = st.columns(3)
-    mc1.metric("模拟路径数",   f"{mc['n_simulations']:,} 条")
-    mc2.metric("数据起点",     mc.get("start", "—"))
-    mc3.metric("数据终点",     mc.get("end", "—"))
-    mc4, mc5 = st.columns(2)
-    mc4.metric("模拟方法",     "Return + Block Bootstrap")
-    mc5.metric("模拟交易日数", f"{mc['n_days']:,} 天")
+    mc1.metric("数据起点",     mc.get("start", "—"))
+    mc2.metric("数据终点",     mc.get("end", "—"))
+    mc3.metric("模拟交易日数", f"{mc['n_days']:,} 天")
+    st.markdown(f"""
+| 方法 | 路径数 | 用途 |
+|------|--------|------|
+| **Return Bootstrap**（IID 有放回重采样） | **{mc['n_simulations']:,} 条** | NAV 路径扇形图、CAGR 分布、最大回撤分布、Sharpe 分布 |
+| **Block Bootstrap**（月度分块随机重排） | **{mc['n_simulations']:,} 条** | 水下时间概率分析（保留自相关结构，更适合趋势跟踪策略） |
+""")
 else:
     st.subheader("分析目标")
     st.markdown(f"""
