@@ -97,14 +97,20 @@ if wf_data:
                     line=dict(color="#aaaaaa", width=1.5, dash="dash"),
                     name="SPY（同期）",
                 ))
+            # Draw window separators as Scatter traces (not add_shape) to avoid
+            # Plotly xaxis range being clipped to the last shape's x coordinate.
+            _y_lo = min(nav) * 0.94
+            _y_hi = max(nav) * 1.06
             for w in windows:
                 if w["oos_start"] >= dates[0]:
-                    f.add_shape(
-                        type="line",
-                        x0=w["oos_start"], x1=w["oos_start"],
-                        y0=0, y1=1, yref="paper",
-                        line=dict(dash="dot", color="#888", width=1),
-                    )
+                    f.add_trace(go.Scatter(
+                        x=[w["oos_start"], w["oos_start"]],
+                        y=[_y_lo, _y_hi],
+                        mode="lines",
+                        line=dict(dash="dot", color="#888888", width=1),
+                        showlegend=False,
+                        hoverinfo="skip",
+                    ))
                     f.add_annotation(
                         x=w["oos_start"], y=1.04, yref="paper",
                         text=w["label"], showarrow=False,
@@ -112,11 +118,7 @@ if wf_data:
                     )
             f.update_layout(
                 title=title,
-                xaxis=dict(
-                    title="日期",
-                    range=[dates[0], dates[-1]],
-                    autorange=False,
-                ),
+                xaxis_title="日期",
                 yaxis_title="净值（归一化，各OOS期独立起点=1.0）",
                 height=height,
                 margin=dict(t=55, b=50, l=50, r=20),
