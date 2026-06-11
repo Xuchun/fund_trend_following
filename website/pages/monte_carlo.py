@@ -306,70 +306,7 @@ else:
     )
     st.markdown("---")
 
-# ── Section 5: streak analysis (from diagnostics) ────────────────────────────
-st.subheader("连续亏损序列分析（基于历史真实交易）")
-
-if _DIAG_PATH.exists():
-    import plotly.graph_objects as go
-
-    _diag = json.loads(_DIAG_PATH.read_text(encoding="utf-8"))
-    _sa   = _diag.get("streak_analysis", {})
-    _streak_counts: dict = _sa.get("streak_counts", {})
-
-    if _streak_counts:
-        x_labels: list[str] = []
-        y_counts: list[int] = []
-        bar_colors: list[str] = []
-
-        for length in range(1, 10):
-            x_labels.append(str(length))
-            y_counts.append(_streak_counts.get(str(length), 0))
-            if length <= 4:
-                bar_colors.append("#2ca02c")
-            else:
-                bar_colors.append("#f57c00")
-
-        x_labels.append("≥10")
-        y_counts.append(_streak_counts.get("10+", 0))
-        bar_colors.append("#d62728")
-
-        fig3 = go.Figure(
-            data=[go.Bar(
-                x=x_labels,
-                y=y_counts,
-                marker_color=bar_colors,
-                text=y_counts,
-                textposition="outside",
-            )]
-        )
-        fig3.update_layout(
-            title="历史连续亏损序列分布",
-            xaxis_title="连续亏损笔数",
-            yaxis_title="出现次数",
-            showlegend=False,
-            height=360,
-            margin=dict(t=50, b=40, l=40, r=20),
-        )
-        st.plotly_chart(fig3, use_container_width=True)
-
-    sc1, sc2, sc3 = st.columns(3)
-    sc1.metric("最长连续亏损（笔）", _sa.get("max_consecutive_losses", 0))
-    sc2.metric("总亏损序列数",       _sa.get("total_streaks", 0))
-    sc3.metric("平均序列长度",       f"{_sa.get('avg_streak_length', 0.0):.2f}")
-
-    _max_cl = _sa.get("max_consecutive_losses", 0)
-    st.markdown(
-        f'<div class="info-box">'
-        f'在 38% 胜率下，随机期望每隔约 2.6 笔交易出现一次亏损连续段。'
-        f'最长 <strong>{_max_cl} 笔</strong>连续亏损是心理上最难承受的时刻，'
-        f'但从统计上看并不异常。'
-        f'</div>',
-        unsafe_allow_html=True,
-    )
-else:
-    st.info("连续亏损数据尚未生成。运行：python src/scripts/04_run_diagnostics.py")
-
-# ── Section 6: Assessment ─────────────────────────────────────────────────────
+# ── Section 5: Assessment ─────────────────────────────────────────────────────
 st.markdown("---")
 st.subheader("评估")
 
