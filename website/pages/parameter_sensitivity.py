@@ -259,6 +259,9 @@ def _robustness_label(cv: float) -> str:
         return "🔴 敏感"
 
 
+_cv_formula_shown = [False]   # shown only on first parameter section
+
+
 def _stability_region(recs: list[dict], metric: str = "sharpe") -> tuple:
     """Largest contiguous range where metric ≥ 90% of peak."""
     sorted_recs = sorted(recs, key=lambda r: r["param_value"])
