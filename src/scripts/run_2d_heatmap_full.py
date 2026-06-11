@@ -115,7 +115,6 @@ def run_grid(grid_key: str) -> None:
         start=_START,
         end=_END,
         adapter=adapter,
-        force_download=False,
     )
     strategy_tickers = [t for t in strategy_tickers if t in price_panel]
     logger.info("Price panel: %d tickers; strategy tickers: %d", len(price_panel), len(strategy_tickers))
