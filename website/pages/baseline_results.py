@@ -308,6 +308,27 @@ def _build_md_report():
         _prev_spy = _spy_v_s
     _blank(); _hr()
 
+    # ── 回撤曲线（月末回撤 %，对应图表：回撤曲线）──────────────────────────────────
+    _h(2, "回撤曲线月末快照（对应图表：回撤曲线）")
+    _dd_ser = _nav_r / _nav_r.cummax() - 1
+    _dd_mo  = (_dd_ser.resample("ME").last() * 100)   # end-of-month drawdown in %
+    _row("年份","1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"); _sep(13)
+    for _yr_dd in sorted(_dd_mo.index.year.unique()):
+        _row_dd = [str(_yr_dd)]
+        _ym_dd  = _dd_mo[_dd_mo.index.year == _yr_dd]
+        for _m_dd in range(1, 13):
+            _mm_dd = _ym_dd[_ym_dd.index.month == _m_dd]
+            _row_dd.append(f"{float(_mm_dd.iloc[0]):.1f}%" if len(_mm_dd) > 0 else "—")
+        _row(*_row_dd)
+    _blank()
+    _dd_min_v  = float(_dd_mo.min())
+    _dd_min_dt = str(_dd_mo.idxmin())[:7]
+    _dd_avg    = float(_dd_mo.mean())
+    _dd_zero   = float((_dd_mo >= -0.1).mean()) * 100
+    L.append(f"历史最大月末回撤：**{_dd_min_v:.1f}%**（{_dd_min_dt}）")
+    L.append(f"平均月末回撤：**{_dd_avg:.1f}%**  |  高于 -0.1% 的月份（基本在水面上）：**{_dd_zero:.0f}%**")
+    _blank(); _hr()
+
     if len(_ep_df_r) > 0:
         _h(2, "主要回撤情节（回撤 ≥ 5%，按深度排序，前 10 次）")
         _ep_top = _ep_df_r.sort_values("最大回撤%").head(10)
