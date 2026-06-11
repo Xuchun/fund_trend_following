@@ -758,6 +758,10 @@ Sharpe 稳定区间：**{stab_str}**。
 {"- 基准值即 Sharpe 最优点" if abs(base['param_value'] - best['param_value']) < 0.01 else f"- Sharpe 最高点：{best['param_value']:.1f}×（{best['cagr']*100:+.2f}%，Sharpe {best['sharpe']:+.3f}）"}
 - 成交量过滤器主要影响入场频率；过度严格时会错失有效突破
 """)
+    st.markdown(
+        f"- **选择 {base['param_value']:.1f}× 的理由：** 有效过滤成交量不足的假突破（真实突破通常明显放量）；"
+        "1.0× 过于宽松，2.0× 可能错失有效信号，1.5× 在两者之间居中"
+    )
     _section_meta["volume_filter_multiplier"] = _info
 else:
     st.subheader("⏳ 成交量确认乘数（volume_filter_multiplier）")
