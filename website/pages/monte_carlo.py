@@ -89,15 +89,16 @@ if mc:
 """)
 else:
     st.subheader("分析目标")
-    st.markdown(f"""
-蒙特卡洛模拟通过**随机重采样历史日收益率序列**（Bootstrap Resampling），
-评估策略1.0在不同市场路径下的表现分布：
+    st.markdown("""
+蒙特卡洛模拟通过 **Block Bootstrap 重采样历史日收益率序列**（月度分块随机重排），
+评估策略1.0在 1,000 条随机市场路径下的表现分布。
 
-**模拟方法：**
-- Return Bootstrap：对日收益率有放回随机重采样（IID）
-- Block Bootstrap：按月分块随机重排（保留自相关结构）
-- 生成 1,000 条模拟净值路径
-- 分析 CAGR、MaxDD、Sharpe 的 5/25/50/75/95 百分位分布
+**为什么用 Block Bootstrap 而非 IID Return Bootstrap？**
+趋势跟踪策略的日收益率天然不是 IID——牛熊市切换造成收益率聚集，信号依赖序列延续性。
+IID 重采样打断了这个结构，会系统性低估连亏段和深度回撤的真实概率。
+Block Bootstrap 按月分块保留了月度内的自相关，对趋势策略更具代表性。
+
+**所有指标均使用同一组路径：** CAGR、MaxDD、Sharpe、NAV 扇形图、水下时间。
 
 运行：`python src/scripts/05_run_montecarlo.py`
 """)
