@@ -440,6 +440,36 @@ def _build_md_report():
     for (lo_b,hi_b),lbl_b in zip(_hd_bins,_hd_labels):
         _cnt_b = int((((_hd_r > lo_b) if lo_b > 0 else (_hd_r >= 0)) & (_hd_r <= hi_b if hi_b < 99999 else _pd_r.Series([True]*len(_hd_r),index=_hd_r.index))).sum())
         _row(lbl_b, _cnt_b, f"{_cnt_b/len(_hd_r)*100:.1f}%")
+    _blank()
+
+    # ── 每日持仓标的数目年度摘要（对应图表：每日持仓标的数目）────────────────────
+    _h(3, "每日持仓标的数目年度摘要（对应图表：每日持仓标的数目）")
+    _dc_r = res.trades.copy()
+    _dc_r["_entry"] = _pd_r.to_datetime(_dc_r["entry_date"])
+    _dc_r["_exit"]  = _pd_r.to_datetime(_dc_r["exit_date"])
+    _nav_idx_r = _pd_r.to_datetime(_nav_r.index)
+    _en_cnt = _dc_r.groupby("_entry").size().reindex(_nav_idx_r, fill_value=0)
+    _ex_cnt = _dc_r.groupby("_exit").size().reindex(_nav_idx_r, fill_value=0)
+    _daily_pos = (_en_cnt - _ex_cnt).cumsum().clip(lower=0)
+    _daily_pos_ser = _pd_r.Series(_daily_pos.values, index=_nav_idx_r)
+    _row("年份","年均持仓数","最多","最少","空仓天数","空仓占比%"); _sep(6)
+    for _yr_dp in sorted(_nav_idx_r.year.unique()):
+        _yr_mask = _daily_pos_ser.index.year == _yr_dp
+        _yr_vals = _daily_pos_ser[_yr_mask]
+        if len(_yr_vals) == 0:
+            continue
+        _dp_mean  = float(_yr_vals.mean())
+        _dp_max   = int(_yr_vals.max())
+        _dp_min   = int(_yr_vals.min())
+        _dp_zero  = int((_yr_vals == 0).sum())
+        _dp_zerop = _dp_zero / len(_yr_vals) * 100
+        _row(int(_yr_dp), f"{_dp_mean:.1f}", _dp_max, _dp_min, _dp_zero, f"{_dp_zerop:.0f}%")
+    _blank()
+    _dp_overall_mean = float(_daily_pos_ser.mean())
+    _dp_overall_max  = int(_daily_pos_ser.max())
+    _dp_zero_pct     = float((_daily_pos_ser == 0).mean()) * 100
+    L.append(f"全期日均持仓：**{_dp_overall_mean:.1f} 只**  |  历史峰值：**{_dp_overall_max} 只**  |  "
+             f"空仓天数占比：**{_dp_zero_pct:.1f}%**")
     _blank(); _hr()
 
     _h(2, "盈利来源：股票 vs ETF")
