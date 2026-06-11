@@ -869,6 +869,11 @@ Sharpe 稳定区间：**{stab_str}**。
 {"- 基准值即 Sharpe 最优点" if abs(base['param_value'] - best['param_value']) < 0.1 else f"- Sharpe 最高点：${best['param_value']:.0f}M（{best['cagr']*100:+.2f}%，Sharpe {best['sharpe']:+.3f}）"}
 - ADV 过滤在降低流动性风险的同时会收窄标的池；过严可能错失有效趋势
 """)
+    st.markdown(
+        f"- **选择 ${base['param_value']:.0f}M ADV 的理由：** 对 $10M 初始资金，典型仓位约 $500K，"
+        "$20M ADV 意味着占当日成交量约 2.5%，可在合理冲击成本下完成建仓退出；"
+        "ADV 过高会过度收窄标的池，$20M 是实盘可操作的流动性底线"
+    )
     _section_meta["min_adv_m"] = _info
 else:
     st.subheader("⏳ ADV 流动性过滤（min_adv_m）")
