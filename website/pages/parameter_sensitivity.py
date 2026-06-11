@@ -602,6 +602,11 @@ Sharpe 稳定区间：**{stab_str}**。
 > 不会改变仓位大小或回测结果。**真正控制风险敞口的参数是 position_cap**。
 > 若要使 risk_per_trade 生效，需将 position_cap 提高至 ≥ 25%（不推荐）或将 risk_per_trade 降至 ≤ 0.2%。
 """)
+    st.markdown(
+        f"- **选择 {base['param_value']*100:.1f}% 的理由：** 趋势策略惯用单笔风险比例（0.5%–2% 是业界惯例）；"
+        "但由于 position_cap=5% 架空效应，实际每笔风险约 0.24% NAV，"
+        "真正控制风险的是 position_cap，调整此参数（≥0.5%）对仓位大小无实质影响"
+    )
     _section_meta["risk_per_trade"] = _info
 else:
     st.subheader("⏳ 每笔风险比例（risk_per_trade）")
