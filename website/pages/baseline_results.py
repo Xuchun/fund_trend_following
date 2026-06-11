@@ -370,9 +370,36 @@ def _build_md_report():
     L.append(f"- 隐含年化交易摩擦：≈ {_impl_r:.2f}%（已完整计入回测净值）")
     _blank(); _hr()
 
-    _h(2, "持仓分析")
+    _h(2, "持仓分析（对应图表：逐年交易笔数 / 持仓天数分布）")
     L.append(f"- 平均每年交易笔数：{_tpy_r:.0f} 笔  |  市场暴露率：{_exposure_r*100:.1f}%")
     L.append(f"- 平均持仓天数：{_avg_hold_r:.0f} 天  |  中位持仓天数：{_med_hld_r:.0f} 天")
+    _blank()
+    # Trades per year table
+    _h(3, "逐年交易笔数")
+    _tr_yr_r = res.trades.copy()
+    _tr_yr_r["_exit_yr"] = _pd_r.to_datetime(_tr_yr_r["exit_date"]).dt.year
+    _tpy_grp = _tr_yr_r.groupby("_exit_yr").agg(
+        交易笔数=("net_pnl","count"),
+        胜率=("net_pnl", lambda x: (x>0).mean()),
+        平均R=("pnl_r_multiple","mean"),
+        净盈亏=("net_pnl","sum"),
+    ).reset_index().rename(columns={"_exit_yr":"年份"})
+    _row("年份","交易笔数","胜率","平均R","净盈亏($)"); _sep(5)
+    for _, _tyr in _tpy_grp.iterrows():
+        _row(int(_tyr["年份"]), int(_tyr["交易笔数"]),
+             f"{_tyr['胜率']*100:.1f}%",
+             f"{_tyr['平均R']:+.3f}",
+             f"${_tyr['净盈亏']:+,.0f}")
+    _blank()
+    # Holding days distribution (binned)
+    _h(3, "持仓天数分布")
+    _hd_r = _tr_r["holding_days"].dropna()
+    _hd_bins = [(0,5),(5,10),(10,20),(20,30),(30,60),(60,90),(90,120),(120,180),(180,99999)]
+    _hd_labels = ["1–5天","6–10天","11–20天","21–30天","31–60天","61–90天","91–120天","121–180天","＞180天"]
+    _row("区间","笔数","占比"); _sep(3)
+    for (lo_b,hi_b),lbl_b in zip(_hd_bins,_hd_labels):
+        _cnt_b = int((((_hd_r > lo_b) if lo_b > 0 else (_hd_r >= 0)) & (_hd_r <= hi_b if hi_b < 99999 else _pd_r.Series([True]*len(_hd_r),index=_hd_r.index))).sum())
+        _row(lbl_b, _cnt_b, f"{_cnt_b/len(_hd_r)*100:.1f}%")
     _blank(); _hr()
 
     _h(2, "盈利来源：股票 vs ETF")
