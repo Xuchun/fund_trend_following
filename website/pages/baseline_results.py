@@ -77,8 +77,338 @@ if res.spy_nav is not None:
             _cur_dur = 0
     _spy_metrics["spy_max_dd_duration_days"] = _max_dur
 
+# ── Build downloadable markdown report (uses m, meta, res, _spy_metrics, _ETF_SET) ──
+def _build_md_report():
+    import datetime as _dt_r
+    import pandas as _pd_r
+    import numpy as _np_r
+
+    _p_r   = meta.params_anchor
+    _now_r = _dt_r.datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    # -- metrics --
+    _cagr_r         = m.get("cagr", 0)
+    _maxdd_r        = m.get("max_drawdown", 0)
+    _sharpe_r       = m.get("sharpe", 0)
+    _sortino_r      = m.get("sortino", 0)
+    _calmar_r       = m.get("calmar", 0)
+    _pf_r           = m.get("profit_factor", 0)
+    _wr_r           = m.get("win_rate", 0)
+    _n_trades_r     = m.get("n_trades", 0)
+    _max_cl_r       = m.get("max_consecutive_losses", 0)
+    _maxdd_dur_r    = m.get("max_dd_duration_days", 0)
+    _turnover_r     = m.get("annual_turnover", 0)
+    _exposure_r     = m.get("market_exposure", 0)
+    _total_ret_r    = m.get("total_return", 0)
+    _avg_win_r_r    = m.get("avg_win_r", 0)
+    _avg_loss_r_r   = m.get("avg_loss_r", 0)
+    _annual_vol_r   = m.get("annual_vol", 0)
+    _tpy_r          = m.get("trades_per_year", 0)
+    _avg_hold_r     = m.get("avg_holding_days", 0)
+    _spy_cagr_r     = m.get("spy_cagr", 0)
+    _spy_maxdd_r    = m.get("spy_max_drawdown", 0)
+    _spy_sharpe_r   = m.get("spy_sharpe", 0)
+    _spy_sortino_r  = _spy_metrics.get("spy_sortino", 0)
+    _spy_calmar_r   = _spy_metrics.get("spy_calmar", 0)
+    _spy_totret_r   = _spy_metrics.get("spy_total_return", 0)
+    _spy_vol_r      = _spy_metrics.get("spy_annual_vol", 0)
+    _spy_mddur_r    = _spy_metrics.get("spy_max_dd_duration_days", 0)
+
+    _slip_r = _p_r.get("slippage_bps", 10)
+    _comm_r = _p_r.get("commission_bps", 3)
+    _rt_r   = (_slip_r + _comm_r) * 2
+    _impl_r = _turnover_r * _rt_r / 100
+    _cagr_gap_r   = _cagr_r - _spy_cagr_r
+    _mddrat_r     = abs(_maxdd_r / _spy_maxdd_r) if _spy_maxdd_r != 0 else 0
+    _bt_years_r   = (res.nav.index[-1] - res.nav.index[0]).days / 365.25
+
+    # -- nav / annual returns --
+    _nav_r = res.nav.copy()
+    if not isinstance(_nav_r.index, _pd_r.DatetimeIndex):
+        _nav_r.index = _pd_r.to_datetime(_nav_r.index)
+    _ann_all_r  = _nav_r.resample("YE").last().pct_change().dropna()
+    _cur_yr_r   = _nav_r.index[-1].year
+    _ann_r      = _ann_all_r[_ann_all_r.index.year < _cur_yr_r]
+    _spy_ann_r: dict = {}
+    if res.spy_nav is not None:
+        _spy_nav_r = res.spy_nav.copy()
+        if not isinstance(_spy_nav_r.index, _pd_r.DatetimeIndex):
+            _spy_nav_r.index = _pd_r.to_datetime(_spy_nav_r.index)
+        for _idx_r2, _ret_r2 in _spy_nav_r.resample("YE").last().pct_change().dropna().items():
+            if _idx_r2.year < _cur_yr_r:
+                _spy_ann_r[int(_idx_r2.year)] = float(_ret_r2)
+    _pos_yr_r   = int((_ann_r > 0).sum())
+    _n_yr_r     = len(_ann_r)
+    _worst_yr_r = int(_ann_r.idxmin().year) if _n_yr_r > 0 else 0
+    _worst_rt_r = float(_ann_r.min()) if _n_yr_r > 0 else 0
+    _best_yr_r  = int(_ann_r.idxmax().year) if _n_yr_r > 0 else 0
+    _best_rt_r  = float(_ann_r.max()) if _n_yr_r > 0 else 0
+
+    # -- monthly stats --
+    _mo_r       = _nav_r.resample("ME").last().pct_change().dropna() * 100
+    _pos_m_r    = int((_mo_r > 0).sum())
+    _tot_m_r    = len(_mo_r)
+    _best_m_r   = float(_mo_r.max())
+    _worst_m_r  = float(_mo_r.min())
+    _best_m_dt  = _mo_r.idxmax()
+    _worst_m_dt = _mo_r.idxmin()
+
+    # -- drawdown episodes --
+    _vals_r  = _nav_r.values.astype(float)
+    _dates_r = _nav_r.index
+    _n_r     = len(_vals_r)
+    _pk_v    = _vals_r[0]; _pk_i = 0; _in_ep = False
+    _ep_pi = _ep_ti = 0; _ep_tv = 0.0; _ep_rows: list[dict] = []
+    for _i in range(1, _n_r):
+        _v = _vals_r[_i]
+        if _v >= _pk_v:
+            if _in_ep:
+                _ep_rows.append({"高点": _dates_r[_ep_pi].strftime("%Y-%m"),
+                                  "低点": _dates_r[_ep_ti].strftime("%Y-%m"),
+                                  "修复": _dates_r[_i].strftime("%Y-%m"),
+                                  "最大回撤%": (_ep_tv - _vals_r[_ep_pi]) / _vals_r[_ep_pi] * 100,
+                                  "至低谷(交易日)": _ep_ti - _ep_pi,
+                                  "修复耗时(交易日)": _i - _ep_ti,
+                                  "总水下时间(交易日)": _i - _ep_pi})
+                _in_ep = False
+            _pk_v = _v; _pk_i = _i
+        else:
+            if (_v - _pk_v) / _pk_v < -0.05:
+                if not _in_ep:
+                    _in_ep = True; _ep_pi = _pk_i; _ep_ti = _i; _ep_tv = _v
+                elif _v < _ep_tv:
+                    _ep_ti = _i; _ep_tv = _v
+    if _in_ep:
+        _ep_rows.append({"高点": _dates_r[_ep_pi].strftime("%Y-%m"),
+                          "低点": _dates_r[_ep_ti].strftime("%Y-%m"),
+                          "修复": "进行中",
+                          "最大回撤%": (_ep_tv - _vals_r[_ep_pi]) / _vals_r[_ep_pi] * 100,
+                          "至低谷(交易日)": _ep_ti - _ep_pi,
+                          "修复耗时(交易日)": _n_r - 1 - _ep_ti,
+                          "总水下时间(交易日)": _n_r - 1 - _ep_pi})
+    _ep_df_r = _pd_r.DataFrame(_ep_rows)
+
+    # -- trade stats --
+    _tr_r      = res.trades.copy()
+    _big5_r    = int((_tr_r["pnl_r_multiple"] > 5).sum())
+    _big5p_r   = _big5_r / len(_tr_r) * 100 if len(_tr_r) > 0 else 0
+    _max_r_r   = float(_tr_r["pnl_r_multiple"].max())
+    _med_hld_r = float(_tr_r["holding_days"].median()) if "holding_days" in _tr_r.columns else 0
+    _s_pnl_r   = _tr_r[~_tr_r["ticker"].isin(_ETF_SET)]["net_pnl"].sum()
+    _e_pnl_r   = _tr_r[_tr_r["ticker"].isin(_ETF_SET)]["net_pnl"].sum()
+    _tot_pnl_r = _s_pnl_r + _e_pnl_r
+
+    L: list[str] = []
+
+    def _h(n, t): L.append(f"{'#'*n} {t}"); L.append("")
+    def _row(*cells): L.append("| " + " | ".join(str(c) for c in cells) + " |")
+    def _sep(n): L.append("|" + "|".join(["------"] * n) + "|")
+    def _blank(): L.append("")
+    def _hr(): L.append("---"); _blank()
+
+    L.append(f"# {meta.display_name} — Baseline参数回测结果")
+    _blank()
+    L.append(f"**回测期间：** {meta.backtest_start} → {meta.backtest_end}  ")
+    L.append(f"**初始资金：** $10,000,000  ")
+    L.append(f"**生成时间：** {_now_r}")
+    _blank(); _hr()
+
+    _h(2, "核心指标摘要")
+    _row("指标", "策略1.0", "SPY 基准"); _sep(3)
+    _row("CAGR（年化复合回报）", f"{_cagr_r*100:+.2f}%", f"{_spy_cagr_r*100:+.2f}%")
+    _row("总回报率", f"{_total_ret_r*100:+.2f}%", f"{_spy_totret_r*100:+.2f}%")
+    _row("年化波动率", f"{_annual_vol_r*100:.2f}%", f"{_spy_vol_r*100:.2f}%")
+    _row("最大回撤", f"{_maxdd_r*100:+.2f}%", f"{_spy_maxdd_r*100:+.2f}%")
+    _row("最长水下时间", f"{_maxdd_dur_r:,} 交易日（≈ {_maxdd_dur_r/252:.1f} 年）",
+         f"{_spy_mddur_r:,} 交易日（≈ {_spy_mddur_r/252:.1f} 年）")
+    _row("Sharpe 比率（rf=2%）", f"{_sharpe_r:+.3f}", f"{_spy_sharpe_r:+.3f}")
+    _row("Sortino 比率", f"{_sortino_r:+.3f}", f"{_spy_sortino_r:+.3f}")
+    _row("Calmar 比率", f"{_calmar_r:+.3f}", f"{_spy_calmar_r:+.3f}")
+    _row("Profit Factor", f"{_pf_r:.3f}", "—（买入持有）")
+    _row("交易胜率", f"{_wr_r*100:.1f}%", "—（买入持有）")
+    _row("总交易笔数", f"{int(_n_trades_r):,}", "—（买入持有）")
+    _row("平均盈利（R 倍数）", f"{_avg_win_r_r:+.2f}R", "—（买入持有）")
+    _row("平均亏损（R 倍数）", f"{_avg_loss_r_r:.2f}R", "—（买入持有）")
+    _row("平均持仓天数", f"{_avg_hold_r:.0f} 天", "—（买入持有）")
+    _row("中位持仓天数", f"{_med_hld_r:.0f} 天", "—（买入持有）")
+    _row("交易频率", f"{_tpy_r:.0f} 笔/年", "—（买入持有）")
+    _row("最长连续亏损次数", f"{int(_max_cl_r)} 笔", "—（买入持有）")
+    _row("年换手率", f"{_turnover_r:.1f}x（{_turnover_r*100:.0f}%/年）", "—（买入持有）")
+    _row("隐含年化交易成本", f"≈ {_impl_r:.2f}%（已含于回测）", "—（买入持有）")
+    _row("市场暴露率", f"{_exposure_r*100:.1f}%", "100%（全仓持有）")
+    _blank(); _hr()
+
+    _h(2, "Baseline 锚点参数")
+    _h(3, "入场信号")
+    _row("参数", "代码名", "值"); _sep(3)
+    _row("突破窗口", "breakout_window", f"{_p_r['breakout_window']} 日")
+    _row("ATR 周期", "atr_period", f"{_p_r['atr_period']} 日（Wilder 平滑）")
+    _row("成交量确认乘数", "volume_filter_multiplier", f"{_p_r['volume_filter_multiplier']:.1f}× 60日均量")
+    _row("Gap 过滤", "gap_filter", f"±{_p_r['gap_filter']*100:.1f}%")
+    _blank()
+    _h(3, "止损 / 移动止盈")
+    _row("参数", "代码名", "值"); _sep(3)
+    _row("ATR 止损乘数", "stop_loss_multiplier", f"{_p_r['stop_loss_multiplier']:.1f}×ATR")
+    _row("最小止损距离", "min_stop_distance_pct", f"{_p_r['min_stop_distance_pct']*100:.1f}%")
+    _row("移动止盈（早期 <1R）", "trail_multiplier_r1", f"{_p_r['trail_multiplier_r1']:.1f}×ATR")
+    _row("移动止盈（中期 1–3R）", "trail_multiplier_r3", f"{_p_r['trail_multiplier_r3']:.1f}×ATR")
+    _row("移动止盈（大赢 ≥3R）", "trail_multiplier_r5", f"{_p_r['trail_multiplier_r5']:.1f}×ATR")
+    _blank()
+    _h(3, "仓位与风险")
+    _row("参数", "代码名", "值"); _sep(3)
+    _row("每笔风险比例", "risk_per_trade", f"{_p_r['risk_per_trade']*100:.1f}% NAV")
+    _row("单标的仓位上限", "position_cap", f"{_p_r['position_cap']*100:.0f}% NAV")
+    _row("热度上限", "heat_limit", f"{_p_r['heat_limit']*100:.0f}% NAV")
+    _blank()
+    _h(3, "相关性过滤")
+    _row("参数", "代码名", "值"); _sep(3)
+    _row("相关性窗口", "correlation_window", f"{_p_r['correlation_window']} 日")
+    _row("相关性阈值", "correlation_threshold", f"{_p_r['correlation_threshold']:.2f}")
+    _row("减仓比例", "correlation_reduction", f"{_p_r['correlation_reduction']*100:.0f}%")
+    _blank()
+    _h(3, "市场环境过滤（Regime Filter）")
+    _row("参数", "代码名", "值"); _sep(3)
+    _row("启用", "regime_filter_enabled", "是" if _p_r["regime_filter_enabled"] else "否")
+    _row("基准标的", "regime_ticker", _p_r["regime_ticker"])
+    _row("SMA 窗口", "regime_sma_window", f"{_p_r['regime_sma_window']} 日")
+    _blank()
+    _h(3, "交易成本")
+    _row("参数", "代码名", "值"); _sep(3)
+    _row("滑点（单边）", "slippage_bps", f"{_slip_r:.0f} bps")
+    _row("佣金（单边）", "commission_bps", f"{_comm_r:.0f} bps")
+    _blank(); _hr()
+
+    if len(_ep_df_r) > 0:
+        _h(2, "主要回撤情节（回撤 ≥ 5%，按深度排序，前 10 次）")
+        _ep_top = _ep_df_r.sort_values("最大回撤%").head(10)
+        _row("高点","低点","修复","最大回撤","至低谷(交易日)","修复耗时(交易日)","总水下时间(交易日)"); _sep(7)
+        for _, _er in _ep_top.iterrows():
+            _row(_er["高点"], _er["低点"], _er["修复"],
+                 f"{_er['最大回撤%']:.1f}%",
+                 _er["至低谷(交易日)"], _er["修复耗时(交易日)"], _er["总水下时间(交易日)"])
+        _blank(); _hr()
+
+    _h(2, "逐年回报")
+    _row("年份", "策略1.0", "SPY"); _sep(3)
+    for _idx_a, _ret_a in _ann_r.items():
+        _yr_a = int(_idx_a.year)
+        _spy_a = _spy_ann_r.get(_yr_a)
+        _row(_yr_a, f"{_ret_a*100:+.1f}%", f"{_spy_a*100:+.1f}%" if _spy_a is not None else "—")
+    if _cur_yr_r in _ann_all_r.index.year:
+        _cur_ret_a = float(_ann_all_r[_ann_all_r.index.year == _cur_yr_r].iloc[-1])
+        _spy_cur_a = _spy_ann_r.get(_cur_yr_r)
+        _row(f"{_cur_yr_r}（截至 {meta.backtest_end}）",
+             f"{_cur_ret_a*100:+.1f}%",
+             f"{_spy_cur_a*100:+.1f}%" if _spy_cur_a is not None else "—")
+    _blank()
+    L.append(f"**{_n_yr_r} 个完整年度中 {_pos_yr_r} 年正收益（{_pos_yr_r/_n_yr_r*100:.0f}%）**")
+    L.append(f"最差年份：**{_worst_yr_r} 年（{_worst_rt_r*100:+.1f}%）**  |  最好年份：**{_best_yr_r} 年（{_best_rt_r*100:+.1f}%）**")
+    _blank(); _hr()
+
+    _h(2, "月度收益统计")
+    L.append(f"- 正收益月份：{_pos_m_r} / {_tot_m_r}（{_pos_m_r/_tot_m_r*100:.0f}%）")
+    L.append(f"- 最好月份：{_best_m_dt.strftime('%Y年%m月')}（{_best_m_r:+.1f}%）")
+    L.append(f"- 最差月份：{_worst_m_dt.strftime('%Y年%m月')}（{_worst_m_r:+.1f}%）")
+    _blank(); _hr()
+
+    _h(2, "交易盈亏分布（R 倍数）")
+    L.append(f"- 胜率：{_wr_r*100:.1f}%")
+    L.append(f"- 平均盈利：{_avg_win_r_r:+.2f}R  |  平均亏损：{_avg_loss_r_r:.2f}R")
+    L.append(f"- Profit Factor：{_pf_r:.4f}")
+    L.append(f"- 超过 5R 的大赢家：{_big5_r} 笔（{_big5p_r:.1f}%），历史最大单笔：{_max_r_r:+.2f}R")
+    _blank(); _hr()
+
+    _h(2, "换手率分析")
+    L.append(f"- 年换手率：{_turnover_r:.1f}x（{_turnover_r*100:.0f}%/年）")
+    L.append(f"- 往返成本：{_rt_r:.0f} bps（{_slip_r:.0f} bps 滑点 + {_comm_r:.0f} bps 佣金，双边）")
+    L.append(f"- 隐含年化交易摩擦：≈ {_impl_r:.2f}%（已完整计入回测净值）")
+    _blank(); _hr()
+
+    _h(2, "持仓分析")
+    L.append(f"- 平均每年交易笔数：{_tpy_r:.0f} 笔  |  市场暴露率：{_exposure_r*100:.1f}%")
+    L.append(f"- 平均持仓天数：{_avg_hold_r:.0f} 天  |  中位持仓天数：{_med_hld_r:.0f} 天")
+    _blank(); _hr()
+
+    _h(2, "盈利来源：股票 vs ETF")
+    _row("类别", "净盈亏", "占比"); _sep(3)
+    _row("股票", f"${_s_pnl_r/1e6:.1f}M", f"{_s_pnl_r/_tot_pnl_r*100:.0f}%")
+    _row("ETF",  f"${_e_pnl_r/1e6:.1f}M", f"{_e_pnl_r/_tot_pnl_r*100:.0f}%")
+    _row("合计", f"${_tot_pnl_r/1e6:.1f}M", "100%")
+    _blank(); _hr()
+
+    _h(2, "评估")
+    _h(3, f"1. 绝对收益，但跑输 SPY 约 {abs(_cagr_gap_r)*100:.1f} 个百分点")
+    L.append(f"在 {meta.backtest_start[:4]}–{meta.backtest_end[:4]} 约 {_bt_years_r:.0f} 年的回测期内，"
+             f"策略1.0 CAGR **{_cagr_r*100:+.2f}%**，SPY **{_spy_cagr_r*100:+.2f}%**，差距 **{_cagr_gap_r*100:+.2f}%**。"
+             f"$10M 初始资金净值增长 **{_total_ret_r:.2f} 倍**（期末约 ${_total_ret_r*10:.0f}M）。")
+    _blank()
+    _h(3, "2. 风险调整后 Sharpe 与 SPY 大体相当")
+    L.append(f"Sharpe **{_sharpe_r:+.3f}** vs SPY **{_spy_sharpe_r:+.3f}**  |  "
+             f"Sortino **{_sortino_r:+.3f}**  |  Calmar **{_calmar_r:+.3f}**")
+    _blank()
+    _h(3, f"3. 最大回撤 {abs(_maxdd_r)*100:.1f}% 是最突出优势")
+    L.append(f"SPY 最大回撤 **{abs(_spy_maxdd_r)*100:.1f}%**，策略1.0仅 **{abs(_maxdd_r)*100:.1f}%**，"
+             f"下行深度约为 SPY 的 **{_mddrat_r*100:.0f}%**。"
+             f"最长水下时间 **{_maxdd_dur_r} 个交易日**（约 {_maxdd_dur_r/252:.1f} 年）。")
+    _blank()
+    _h(3, "4. 胜率低而盈亏比高，符合趋势跟踪数学结构")
+    L.append(f"胜率 **{_wr_r*100:.1f}%**（趋势策略内在特征，非缺陷）。"
+             f"平均盈利 **{_avg_win_r_r:+.2f}R**，平均亏损 **{abs(_avg_loss_r_r):.2f}R**，"
+             f"Profit Factor **{_pf_r:.3f}**。大赢家（>5R）{_big5_r} 笔（{_big5p_r:.1f}%），最大单笔 **{_max_r_r:+.2f}R**。")
+    _blank()
+    _h(3, f"5. {_n_yr_r} 个完整年度中 {_pos_yr_r} 年正收益（{_pos_yr_r/_n_yr_r*100:.0f}%）")
+    L.append(f"最差年份 **{_worst_yr_r} 年（{_worst_rt_r*100:+.1f}%）**，最好年份 **{_best_yr_r} 年（{_best_rt_r*100:+.1f}%）**。")
+    _blank()
+    _h(3, "6. 综合定位")
+    _row("维度", "结论"); _sep(2)
+    _row("绝对收益", f"CAGR {_cagr_r*100:+.2f}%，{_n_yr_r}年累计 {(_total_ret_r-1)*100:.0f}%，正期望明确")
+    _row("相对收益", f"落后 SPY {abs(_cagr_gap_r)*100:.1f}%/年，长牛市中的结构性弱点")
+    _row("回撤控制", f"MaxDD {abs(_maxdd_r)*100:.1f}% vs SPY {abs(_spy_maxdd_r)*100:.1f}%，下行保护突出")
+    _row("风险效率", f"Sharpe {_sharpe_r:.3f} vs SPY {_spy_sharpe_r:.3f}，单位风险回报大体相当")
+    _row("交易成本", f"{_impl_r:.2f}%/年，已计入净值，结论可信")
+    _row("适用场景", "投资组合中的防御性趋势配置，而非替代 SPY 的进攻性资产")
+    _blank(); _hr()
+
+    _h(2, f"全部历史交易（共 {len(res.trades):,} 笔，按出场日降序）")
+    _dl_c = ["ticker","entry_date","exit_date","holding_days",
+             "entry_price","exit_price","shares","net_pnl","pnl_r_multiple","exit_reason"]
+    _dl_c = [c for c in _dl_c if c in res.trades.columns]
+    _col_zh = {"ticker":"标的","entry_date":"入场日","exit_date":"出场日","holding_days":"持仓天",
+               "entry_price":"入场价","exit_price":"出场价","shares":"股数",
+               "net_pnl":"净盈亏($)","pnl_r_multiple":"R倍数","exit_reason":"出场原因"}
+    _row(*[_col_zh.get(c, c) for c in _dl_c]); _sep(len(_dl_c))
+    for _, _tr in res.trades.sort_values("exit_date", ascending=False)[_dl_c].iterrows():
+        def _fmt_cell(col, v):
+            if col == "entry_date" or col == "exit_date":
+                return str(v)[:10]
+            if col == "holding_days" or col == "shares":
+                return f"{int(v):,}"
+            if col == "entry_price" or col == "exit_price":
+                return f"{v:.4f}"
+            if col == "net_pnl":
+                return f"${v:+,.0f}"
+            if col == "pnl_r_multiple":
+                return f"{v:.4f}"
+            return str(v)
+        _row(*[_fmt_cell(c, _tr[c]) for c in _dl_c])
+    _blank()
+
+    return "\n".join(L)
+
+
+_md_report = _build_md_report()
+
 render_page_header("Baseline参数回测结果", meta)
-st.caption(f"回测期间：{meta.backtest_start} → {meta.backtest_end}  ·  初始资金：$10,000,000")
+_hdr_cap_col, _hdr_btn_col = st.columns([5, 1])
+with _hdr_cap_col:
+    st.caption(f"回测期间：{meta.backtest_start} → {meta.backtest_end}  ·  初始资金：$10,000,000")
+with _hdr_btn_col:
+    st.download_button(
+        label="⬇ 下载报告(MD)",
+        data=_md_report.encode("utf-8"),
+        file_name=f"baseline_results_{meta.backtest_end[:10]}.md",
+        mime="text/markdown",
+    )
 st.markdown("---")
 
 # ── Summary cards ─────────────────────────────────────────────────────────────
