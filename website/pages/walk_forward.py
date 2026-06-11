@@ -114,9 +114,22 @@ if wf_data:
                 f"Sharpe {oos_m.get('sharpe',0):+.3f}  "
                 f"MaxDD {oos_m.get('max_drawdown',0)*100:.1f}%"
             ),
-            xaxis_title="日期",
+            xaxis=dict(
+                title="日期",
+                rangeselector=dict(
+                    buttons=[
+                        dict(count=6,  label="6M", step="month", stepmode="backward"),
+                        dict(count=1,  label="1Y", step="year",  stepmode="backward"),
+                        dict(count=2,  label="2Y", step="year",  stepmode="backward"),
+                        dict(step="all", label="全部"),
+                    ],
+                    bgcolor="#f0f2f6",
+                    activecolor="#1f77b4",
+                ),
+                rangeslider=dict(visible=False),
+            ),
             yaxis_title="净值（归一化，各OOS期独立起点=1.0）",
-            height=440,
+            height=480,
             margin=dict(t=60, b=50, l=50, r=20),
             hovermode="x unified",
             legend=dict(orientation="h", yanchor="bottom", y=1.02),
