@@ -409,6 +409,49 @@ def _build_md_report():
     _row("合计", f"${_tot_pnl_r/1e6:.1f}M", "100%")
     _blank(); _hr()
 
+    # ── 完整指标对比表（对应页面"完整指标对比表"）────────────────────────────────
+    _h(2, "完整指标对比表（策略1.0 vs SPY 买入持有）")
+
+    def _pct_md(v, d=2): return f"{v*100:+.{d}f}%" if v is not None else "—"
+    def _num_md(v, d=3): return f"{v:+.{d}f}" if v is not None else "—"
+    def _days_md(v): return f"{int(v):,} 交易日（≈ {int(v)/252:.1f} 年）" if v is not None else "—"
+    def _cnt_md(v): return f"{int(v):,}" if v is not None else "—"
+
+    _sm_r = _spy_metrics
+    _tov_r  = m.get("annual_turnover")
+    _imp_cv = (_tov_r * (_slip_r + _comm_r) * 2 / 10_000) if _tov_r else None
+
+    _full_rows = [
+        ("**收益**", "", ""),
+        ("CAGR", _pct_md(m.get("cagr")), _pct_md(_sm_r.get("spy_cagr"))),
+        ("总回报率", _pct_md(m.get("total_return")), _pct_md(_sm_r.get("spy_total_return"))),
+        ("**风险**", "", ""),
+        ("年化波动率", _pct_md(m.get("annual_vol")), _pct_md(_sm_r.get("spy_annual_vol"))),
+        ("最大回撤", _pct_md(m.get("max_drawdown")), _pct_md(_sm_r.get("spy_max_drawdown"))),
+        ("最长回撤（天）", _days_md(m.get("max_dd_duration_days")), _days_md(_sm_r.get("spy_max_dd_duration_days"))),
+        ("**风险收益**", "", ""),
+        ("Sharpe 比率（rf=2%）", _num_md(m.get("sharpe")), _num_md(_sm_r.get("spy_sharpe"))),
+        ("Sortino 比率", _num_md(m.get("sortino")), _num_md(_sm_r.get("spy_sortino"))),
+        ("Calmar 比率", _num_md(m.get("calmar"), 3), _num_md(_sm_r.get("spy_calmar"), 3)),
+        ("**交易统计**", "", ""),
+        ("总交易笔数", _cnt_md(m.get("n_trades")), "—（买入持有）"),
+        ("胜率", _pct_md(m.get("win_rate"), 1), "—（买入持有）"),
+        ("平均盈利（R 倍数）", _num_md(m.get("avg_win_r"), 2), "—（买入持有）"),
+        ("平均亏损（R 倍数）", _num_md(m.get("avg_loss_r"), 2), "—（买入持有）"),
+        ("盈亏比（Profit Factor）", f"{m.get('profit_factor',0):.2f}" if m.get("profit_factor") else "—", "—（买入持有）"),
+        ("平均持仓天数", f"{m.get('avg_holding_days',0):.0f} 天", "—（买入持有）"),
+        ("交易频率", f"{m.get('trades_per_year',0):.0f} 笔/年", "—（买入持有）"),
+        ("**换手率**", "", ""),
+        ("年换手率", f"{_tov_r:.1f}x（{_tov_r*100:.0f}%/年）" if _tov_r else "—", "—（买入持有）"),
+        ("隐含年化交易成本", f"≈ {_imp_cv*100:.2f}%/年（已含于回测）" if _imp_cv else "—", "—（买入持有）"),
+        ("**仓位暴露**", "", ""),
+        ("市场暴露率", f"{m.get('market_exposure',0)*100:.1f}%（持仓天数/总交易日）" if m.get("market_exposure") else "—", "100%（全仓持有）"),
+    ]
+    _row("指标", "策略1.0", "SPY 基准"); _sep(3)
+    for _fr in _full_rows:
+        _row(*_fr)
+    _blank(); _hr()
+
     _h(2, "评估")
     _h(3, f"1. 绝对收益，但跑输 SPY 约 {abs(_cagr_gap_r)*100:.1f} 个百分点")
     L.append(f"在 {meta.backtest_start[:4]}–{meta.backtest_end[:4]} 约 {_bt_years_r:.0f} 年的回测期内，"
