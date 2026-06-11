@@ -904,6 +904,11 @@ Sharpe 稳定区间：**{stab_str}**。
 - CAGR CV={_info['cv_cagr']:.3f}，{_robustness_label(_info['cv_cagr'])}
 - 实盘可接受的滑点上限：只要均持仓 > 30 天，每笔 10–15 bps 滑点占总收益比例有限
 """)
+    st.markdown(
+        f"- **选择 {base['param_value']:.0f} bps 的理由：** 保守估计零售至半机构级滑点（机构级通常 3–5 bps）；"
+        "10 bps 提供安全边际，全测试范围均正 CAGR 说明策略边际充足，"
+        "实盘即使滑点略高于估算值结论仍成立"
+    )
     _section_meta["slippage_bps"] = _info
 else:
     st.subheader("⏳ 滑点（slippage_bps）")
