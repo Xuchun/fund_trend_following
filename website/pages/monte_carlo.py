@@ -305,8 +305,6 @@ if mc and "cagr_dist" in mc:
     d2.metric("95th pct 最长水下",      f"{dur['p95_days']:.0f} 天")
     d3.metric("最坏情况最长水下",        f"{dur['max_days']:,} 天")
 
-    st.markdown("---")
-
 else:
     st.info(
         "蒙特卡洛数据尚未生成。运行：\n"
