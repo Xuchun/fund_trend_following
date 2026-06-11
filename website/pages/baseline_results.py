@@ -335,10 +335,26 @@ def _build_md_report():
     L.append(f"最差年份：**{_worst_yr_r} 年（{_worst_rt_r*100:+.1f}%）**  |  最好年份：**{_best_yr_r} 年（{_best_rt_r*100:+.1f}%）**")
     _blank(); _hr()
 
-    _h(2, "月度收益统计")
-    L.append(f"- 正收益月份：{_pos_m_r} / {_tot_m_r}（{_pos_m_r/_tot_m_r*100:.0f}%）")
-    L.append(f"- 最好月份：{_best_m_dt.strftime('%Y年%m月')}（{_best_m_r:+.1f}%）")
-    L.append(f"- 最差月份：{_worst_m_dt.strftime('%Y年%m月')}（{_worst_m_r:+.1f}%）")
+    _h(2, "月度收益热力图（对应图表：月度收益热力图）")
+    L.append(f"正收益月份：{_pos_m_r} / {_tot_m_r}（{_pos_m_r/_tot_m_r*100:.0f}%）  |  "
+             f"最好月份：{_best_m_dt.strftime('%Y年%m月')}（{_best_m_r:+.1f}%）  |  "
+             f"最差月份：{_worst_m_dt.strftime('%Y年%m月')}（{_worst_m_r:+.1f}%）")
+    _blank()
+    _row("年份","1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月","全年"); _sep(14)
+    for _yr_h in sorted(_mo_r.index.year.unique()):
+        _row_h = [str(_yr_h)]
+        _yr_mos_h = _mo_r[_mo_r.index.year == _yr_h]
+        for _m_h in range(1, 13):
+            _mm = _yr_mos_h[_yr_mos_h.index.month == _m_h]
+            _row_h.append(f"{float(_mm.iloc[0]):+.1f}%" if len(_mm) > 0 else "—")
+        # full-year compound return
+        if _yr_h < _cur_yr_r and _yr_h in [int(_i.year) for _i in _ann_r.index]:
+            _ann_h = float(_ann_r[[_i.year == _yr_h for _i in _ann_r.index]].iloc[0]) * 100
+            _row_h.append(f"{_ann_h:+.1f}%")
+        else:
+            _comp_h = ((_yr_mos_h / 100 + 1).prod() - 1) * 100
+            _row_h.append(f"{_comp_h:+.1f}%")
+        _row(*_row_h)
     _blank(); _hr()
 
     _h(2, "交易盈亏分布（R 倍数）")
