@@ -477,6 +477,16 @@ def main() -> None:
     )
     _save_universe_tickers_csv(output_dir, strategy_tickers)
 
+    # ── Step 5c: export SPY daily NAV for Streamlit Cloud ────────────────
+    if spy_raw is not None:
+        spy_adj = spy_raw["close"] * spy_raw["adj_factor"]
+        spy_adj = spy_adj.reindex(results.daily_nav.index).ffill().bfill()
+        spy_ret = spy_adj.pct_change().fillna(0.0)
+        spy_nav_series = (1 + spy_ret).cumprod()
+        spy_out = output_dir / "spy_nav.csv"
+        spy_nav_series.to_csv(spy_out, header=["spy_nav"])
+        logger.info("Saved spy_nav.csv (%d rows) → %s", len(spy_nav_series), spy_out)
+
     # ── Step 6: print summary ─────────────────────────────────────────────
     print()
     print(results.summary())
