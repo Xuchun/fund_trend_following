@@ -491,6 +491,10 @@ Sharpe 稳定区间：**{stab_str}**（Sharpe ≥ 基准最优值的 90%）。
 - 基准 {base['param_value']:.1f}×ATR：CAGR {base['cagr']*100:+.2f}%，Sharpe {base['sharpe']:+.3f}，MaxDD {base['max_drawdown']*100:.1f}%
 {"- Sharpe 最高点：基准值本身已是最优" if baseline_is_best else f"- Sharpe 最高点 {best['param_value']:.1f}×ATR（{best['cagr']*100:+.2f}%，Sharpe {best['sharpe']:+.3f}），略优于基准——建议 OOS 验证"}
 """)
+    st.markdown(
+        f"- **选择 {base['param_value']:.1f}×ATR 的理由：** 相比原版 2×ATR 给予趋势更多发展空间，"
+        "降低被市场噪声震出的概率；高鲁棒性验证表明基准值处于稳定高原内，非过拟合的孤立尖峰"
+    )
     _section_meta["trail_multiplier_r1"] = _info
 else:
     st.subheader("⏳ 早期移动止盈乘数（trail_multiplier_r1）")
