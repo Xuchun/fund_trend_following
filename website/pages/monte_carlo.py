@@ -56,8 +56,6 @@ with st.expander("📋 点击展开：本次模拟使用的 Baseline Anchor 锚�
 | 空仓代理 `cash_proxy` | **{_p.get('cash_proxy', 'SHY')}** |
 """)
 
-st.markdown("---")
-
 # ── Load montecarlo.json ──────────────────────────────────────────────────────
 _MC_PATH   = Path(__file__).resolve().parents[2] / "results" / "v1" / "montecarlo.json"
 _DIAG_PATH = Path(__file__).resolve().parents[2] / "results" / "v1" / "diagnostics.json"
