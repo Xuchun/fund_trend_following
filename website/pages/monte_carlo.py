@@ -73,11 +73,12 @@ if _MC_PATH.exists():
 n_trades_str = f"{res.metrics.get('n_trades', 0):,}"
 if mc:
     st.subheader("模拟概览（Baseline Anchor 锚点参数）")
-    mc1, mc2, mc3, mc4, mc5 = st.columns(5)
+    mc1, mc2, mc3 = st.columns(3)
     mc1.metric("模拟路径数",   f"{mc['n_simulations']:,} 条")
-    mc2.metric("模拟方法",     "Return + Block Bootstrap")
-    mc3.metric("数据起点",     mc.get("start", "—"))
-    mc4.metric("数据终点",     mc.get("end", "—"))
+    mc2.metric("数据起点",     mc.get("start", "—"))
+    mc3.metric("数据终点",     mc.get("end", "—"))
+    mc4, mc5 = st.columns(2)
+    mc4.metric("模拟方法",     "Return + Block Bootstrap")
     mc5.metric("模拟交易日数", f"{mc['n_days']:,} 天")
 else:
     st.subheader("分析目标")
