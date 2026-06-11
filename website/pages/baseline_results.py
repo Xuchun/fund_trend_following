@@ -592,7 +592,7 @@ st.markdown("---")
 
 # ── Full metrics table ────────────────────────────────────────────────────────
 st.subheader("完整指标对比表")
-render_full_metrics_table(m, m)
+render_full_metrics_table(m, _spy_metrics)
 
 st.markdown("---")
 
