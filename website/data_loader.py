@@ -95,14 +95,18 @@ def _load_meta(path: Path) -> StrategyMeta:
 
 
 def _compute_spy_nav(nav: pd.Series, results_dir: Path) -> Optional[pd.Series]:
-    """Re-derive SPY normalised NAV from metrics.json spy_cagr if available."""
-    metrics = json.loads((results_dir / "metrics.json").read_text())
-    spy_cagr = metrics.get("spy_cagr")
-    if spy_cagr is None:
-        return None
-    n = len(nav)
-    # Reconstruct a smooth SPY curve from CAGR (approximation for display)
-    # Actual daily SPY data isn't stored, so we use the real cached price data if available
+    """Load actual SPY daily NAV, normalised to 1.0 on the strategy start date."""
+    # Priority 1: pre-exported CSV alongside results (works on Streamlit Cloud)
+    spy_csv = results_dir / "spy_nav.csv"
+    if spy_csv.exists():
+        try:
+            s = pd.read_csv(spy_csv, index_col=0, parse_dates=True).squeeze()
+            s = s.reindex(nav.index).ffill().bfill()
+            return s / float(s.iloc[0])
+        except Exception:
+            pass
+
+    # Priority 2: local parquet cache (dev machine)
     spy_cache = Path(__file__).resolve().parents[1] / "data" / "cache" / "prices" / "SPY.parquet"
     if spy_cache.exists():
         try:
@@ -110,17 +114,17 @@ def _compute_spy_nav(nav: pd.Series, results_dir: Path) -> Optional[pd.Series]:
             adj = spy_df["close"] * spy_df["adj_factor"]
             adj = adj.reindex(nav.index).ffill().bfill()
             spy_ret = adj.pct_change().fillna(0.0)
-            spy_nav = (1 + spy_ret).cumprod()
-            return spy_nav
+            return (1 + spy_ret).cumprod()
         except Exception:
             pass
-    # Fallback: smooth CAGR line
+
+    # Priority 3: smooth CAGR fallback (no real data available)
+    metrics = json.loads((results_dir / "metrics.json").read_text())
+    spy_cagr = metrics.get("spy_cagr")
+    if spy_cagr is None:
+        return None
     daily_r = (1 + spy_cagr) ** (1 / 252) - 1
-    spy_nav = pd.Series(
-        (1 + daily_r) ** np.arange(n),
-        index=nav.index,
-    )
-    return spy_nav
+    return pd.Series((1 + daily_r) ** np.arange(len(nav)), index=nav.index)
 
 
 def compute_rolling_sharpe(returns: pd.Series, window: int = 252,
