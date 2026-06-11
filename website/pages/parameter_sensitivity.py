@@ -790,6 +790,10 @@ Sharpe 稳定区间：**{stab_str}**。
 {"- 基准值即 Sharpe 最优点" if abs(base['param_value'] - best['param_value']) < 0.1 else f"- Sharpe 最高点：${best['param_value']:.0f}（{best['cagr']*100:+.2f}%，Sharpe {best['sharpe']:+.3f}）"}
 - CAGR CV={_info['cv_cagr']:.3f}，{_robustness_label(_info['cv_cagr'])}
 """)
+    st.markdown(
+        f"- **选择 ${base['param_value']:.0f} 的理由：** 业界最常用低价股过滤标准，"
+        "有效排除高噪声低流动性标的；保留足够的标的池规模，且全测试范围均实现正 CAGR"
+    )
     _section_meta["min_price"] = _info
 else:
     st.subheader("⏳ 最低收盘价过滤（min_price）")
