@@ -690,6 +690,11 @@ Sharpe 稳定区间：**{stab_str}**。
 > 基准值 10% 已超出实际约束范围，属于冗余安全边际。
 > **真正控制组合总风险的参数是 position_cap**。
 """)
+    st.markdown(
+        f"- **选择 {base['param_value']*100:.0f}% 的理由：** 作为冗余安全边际设置（实际有效约束范围 ≤7.7%，"
+        "10% 从未触发）；当 position_cap 降低时 heat_limit 才成为有效约束，"
+        "当前配置下此参数对回测结果无实质影响"
+    )
     _section_meta["heat_limit"] = _info
 else:
     st.subheader("⏳ 热度上限（heat_limit）")
