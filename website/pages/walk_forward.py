@@ -107,6 +107,8 @@ if wf_data:
             )
 
         oos_m = oos_st.get("metrics", {})
+        _view_start = "2025-01-01"
+        _view_end   = (pd.Timestamp(oos_dates[-1]) + pd.DateOffset(days=14)).strftime("%Y-%m-%d")
         fig.update_layout(
             title=(
                 f"OOS 拼接净值（5窗口汇总）  "
@@ -116,10 +118,8 @@ if wf_data:
             ),
             xaxis=dict(
                 title="日期",
-                range=[
-                    (pd.Timestamp(oos_dates[-1]) - pd.DateOffset(years=2)).strftime("%Y-%m-%d"),
-                    oos_dates[-1],
-                ],
+                range=[_view_start, _view_end],
+                rangeslider=dict(visible=True, thickness=0.08),
                 rangeselector=dict(
                     buttons=[
                         dict(count=6,  label="6M", step="month", stepmode="backward"),
@@ -130,11 +130,10 @@ if wf_data:
                     bgcolor="#f0f2f6",
                     activecolor="#1f77b4",
                 ),
-                rangeslider=dict(visible=False),
             ),
             yaxis_title="净值（归一化，各OOS期独立起点=1.0）",
-            height=480,
-            margin=dict(t=60, b=50, l=50, r=20),
+            height=540,
+            margin=dict(t=60, b=30, l=50, r=20),
             hovermode="x unified",
             legend=dict(orientation="h", yanchor="bottom", y=1.02),
         )
