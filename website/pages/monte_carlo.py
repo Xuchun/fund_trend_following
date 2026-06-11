@@ -23,12 +23,11 @@ st.markdown("---")
 
 # ── Baseline anchor parameter declaration ─────────────────────────────────────
 _p = meta.params_anchor
-st.markdown("""
-> **⚠️ 重要说明：本页所有蒙特卡洛模拟结果均基于 Baseline Anchor 锚点参数。**
->
-> 模拟方法：对 Baseline 回测产生的**历史日收益率序列**进行 Bootstrap 重采样（1,000 条路径），
-> 评估策略1.0在不同随机市场路径下的表现分布。输入数据为 `results/v1/nav.csv`（Baseline 回测净值）。
-""")
+st.warning(
+    "⚠️ **重要说明：本页所有蒙特卡洛模拟结果均基于 Baseline Anchor 锚点参数。**\n\n"
+    "模拟方法：对 Baseline 回测产生的**历史日收益率序列**进行 Bootstrap 重采样（1,000 条路径），"
+    "评估策略1.0在不同随机市场路径下的表现分布。输入数据为 `results/v1/nav.csv`（Baseline 回测净值）。"
+)
 
 with st.expander("📋 点击展开：本次模拟使用的 Baseline Anchor 锚点参数", expanded=False):
     _ca, _cb = st.columns(2)
