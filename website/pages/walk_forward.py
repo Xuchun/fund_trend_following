@@ -347,12 +347,12 @@ Sharpe **{_w5_sharpe:+.3f}**，是 5 个窗口中表现最强的一个。
 """)
 
     # Verdict
-    if pos_windows >= 3 and honest_retention > 0.5:
-        verdict = f"✅ 综合评价：Walk-Forward 验证通过。{pos_windows}/4 个 OOS 窗口盈利，OOS CAGR {oos_cagr*100:+.1f}% 证明策略1.0无明显过拟合；核心提示是近年 Sharpe 衰减（{oos_sharpe:+.3f} vs IS {is_sharpe:+.3f}），在强势集中牛市中 alpha 来源受到压缩，属于趋势跟踪策略1.0的已知特性。"
-    elif pos_windows >= 2:
-        verdict = f"🟡 综合评价：Walk-Forward 结果中性，{pos_windows}/4 窗口盈利，OOS CAGR {oos_cagr*100:+.1f}%，需关注近期 alpha 衰减趋势。"
+    if pos_windows >= 4 and honest_retention > 0.5:
+        verdict = f"✅ 综合评价：Walk-Forward 验证通过。{pos_windows}/{total_windows} 个 OOS 窗口盈利，OOS CAGR {oos_cagr*100:+.1f}% 证明策略1.0无明显过拟合；核心提示是近年 Sharpe 衰减（{oos_sharpe:+.3f} vs IS {is_sharpe:+.3f}），在强势集中牛市中 alpha 来源受到压缩，属于趋势跟踪策略1.0的已知特性。"
+    elif pos_windows >= 3:
+        verdict = f"🟡 综合评价：Walk-Forward 结果中性，{pos_windows}/{total_windows} 窗口盈利，OOS CAGR {oos_cagr*100:+.1f}%，需关注近期 alpha 衰减趋势。"
     else:
-        verdict = f"⚠️ 综合评价：Walk-Forward 警示，仅 {pos_windows}/4 窗口盈利，建议审查策略1.0参数适应性。"
+        verdict = f"⚠️ 综合评价：Walk-Forward 警示，仅 {pos_windows}/{total_windows} 窗口盈利，建议审查策略1.0参数适应性。"
 
     st.markdown(
         f'<div class="info-box"><strong>{verdict}</strong></div>',
