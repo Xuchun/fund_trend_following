@@ -51,7 +51,7 @@ st.markdown("---")
 
 
 # ── 数据范围说明与 Walk-Forward 框架 ──────────────────────────────────────────
-st.subheader("📋 数据范围说明与 Walk-Forward 验证框架")
+st.subheader("📋 数据范围说明")
 
 st.markdown(f"""
 #### 为什么热力图和扰动测试都使用完整历史数据（{meta.backtest_start} → {meta.backtest_end}）？
