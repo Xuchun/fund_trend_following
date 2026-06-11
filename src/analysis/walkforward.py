@@ -12,7 +12,8 @@ Walk-Forward Windows (expanding IS, 1-year OOS each):
   Window 1 : IS 2004–2021  OOS 2022
   Window 2 : IS 2004–2022  OOS 2023
   Window 3 : IS 2004–2023  OOS 2024
-  Window 4 : IS 2004–2024  OOS 2025 (partial if backtest ends < 2025-12-31)
+  Window 4 : IS 2004–2024  OOS 2025
+  Window 5 : IS 2004–2025  OOS 2026 (partial, ends 2026-06-09)
 
 Public API
 ----------
