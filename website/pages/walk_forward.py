@@ -274,33 +274,47 @@ if wf_data:
     )
     total_windows = len(windows)
 
+    # Look up per-window OOS metrics for assessment
+    _w_by_label = {w["label"]: w for w in windows}
+    _w1_cagr  = _w_by_label.get("Window 1", {}).get("oos", {}).get("cagr", 0)
+    _w2_cagr  = _w_by_label.get("Window 2", {}).get("oos", {}).get("cagr", 0)
+    _w3_cagr  = _w_by_label.get("Window 3", {}).get("oos", {}).get("cagr", 0)
+    _w4_cagr  = _w_by_label.get("Window 4", {}).get("oos", {}).get("cagr", 0)
+    _w4_sharpe= _w_by_label.get("Window 4", {}).get("oos", {}).get("sharpe", 0)
+    _w5_cagr  = _w_by_label.get("Window 5", {}).get("oos", {}).get("cagr", 0)
+    _w5_sharpe= _w_by_label.get("Window 5", {}).get("oos", {}).get("sharpe", 0)
+    _w1_spy   = _w_by_label.get("Window 1", {}).get("spy_oos", {}).get("cagr", 0)
+    _w2_spy   = _w_by_label.get("Window 2", {}).get("spy_oos", {}).get("cagr", 0)
+    _w3_spy   = _w_by_label.get("Window 3", {}).get("spy_oos", {}).get("cagr", 0)
+    _w4_spy   = _w_by_label.get("Window 4", {}).get("spy_oos", {}).get("cagr", 0)
+
     st.markdown(f"""
 **1. 无过拟合，策略1.0样本外有正收益**
 
-在 4 个独立 OOS 窗口中，**{pos_windows}/{total_windows} 个窗口实现正收益**，
+在 5 个独立 OOS 窗口中，**{pos_windows}/{total_windows} 个窗口实现正收益**，
 OOS 拼接净值 CAGR 为 **{oos_cagr*100:+.2f}%**（对比全样本内 IS CAGR {is_cagr*100:+.2f}%）。
 这是 Walk-Forward 验证的核心结论：策略1.0在从未参与参数优化的年份依然盈利，
 表明参数不是对历史数据的过度拟合，而是捕捉了真实的市场结构规律。
 
 **2. 2022 熊市是策略1.0最强的 OOS 验证**
 
-2022 年（Window 1）是唯一出现负收益的 OOS 年份，策略1.0 CAGR **-15.45%**——
-但同期 SPY 收益为 **-18.2%**，策略1.0在最恶劣的 OOS 市场中仍**跑赢基准 +2.7 个百分点**。
+2022 年（Window 1）是唯一出现负收益的 OOS 年份，策略1.0 CAGR **{_w1_cagr*100:+.1f}%**——
+但同期 SPY 收益为 **{_w1_spy*100:+.1f}%**，策略1.0在最恶劣的 OOS 市场中仍**跑赢基准**。
 加息熊市中 SPY 过滤器抑制了新仓开立，而存量仓位随趋势下行，
 这是纯多头趋势跟踪策略1.0的结构性弱点，属预期之内，并非策略1.0失效。
 
 **3. 2023–2024 牛市 OOS 收益优秀，但落后于 SPY**
 
-2023 年 OOS CAGR **+17.86%**、2024 年 **+18.95%**，表现出色，
-但同期 SPY 分别为 **+26.4%** 和 **+24.9%**，策略1.0落后约 7–8 个百分点。
+2023 年 OOS CAGR **{_w2_cagr*100:+.1f}%**、2024 年 **{_w3_cagr*100:+.1f}%**，表现出色，
+但同期 SPY 分别为 **{_w2_spy*100:+.1f}%** 和 **{_w3_spy*100:+.1f}%**，策略1.0落后约 7–8 个百分点。
 这是趋势跟踪在 AI 驱动的集中型牛市中的典型滞后——宽基指数由少数科技股拉动，
 而策略1.0持有的多元化趋势仓位难以集中受益。策略1.0的优势在于波动率控制，而非追顶。
 
 **4. CAGR 保留率指标有误导性，Sharpe 保留率更诚实**
 
 页面显示"平均 CAGR 保留率 {cagr_ret_raw*100:.0f}%"——
-这是各窗口 OOS/IS 比率的算术均值，Window 2/3 的超高保留率（+277%、+271%）
-与 Window 1 的负值相互抵消，结果在数学上偶然接近 100%，**不能视为策略1.0健康的证明**。
+这是各窗口 OOS/IS 比率的算术均值，Window 2/3 的超高保留率拉高均值，
+与 Window 1 的负值相互抵消，结果在数学上偶然偏高，**不能视为策略1.0健康的证明**。
 
 更诚实的指标是整体衰减率：OOS 拼接 CAGR {oos_cagr*100:+.2f}% vs IS {is_cagr*100:+.2f}%，
 绝对保留率约 **{honest_retention*100:.0f}%**；
@@ -308,21 +322,28 @@ OOS Sharpe **{oos_sharpe:+.3f}** vs IS Sharpe **{is_sharpe:+.3f}**，
 Sharpe 保留率约 **{(oos_sharpe/is_sharpe*100) if abs(is_sharpe)>1e-9 else 0:.0f}%**，
 这才是策略1.0样本外效率衰减的真实刻度。
 
-**5. 2025 年（部分 OOS）表现疲软，需持续关注**
+**5. 2025 年 OOS 表现疲软，需持续关注**
 
-Window 4（2025 年全年 OOS）CAGR 仅 **+3.08%**，Sharpe **+0.138**，
-同期 SPY 达 **+17.9%**，差距扩大。需注意 2025 年数据可能尚不完整（取决于回测截止日），
-但若这一趋势持续，可能意味着当前市场环境（AI 科技股集中牛市）对多元趋势策略1.0不利，
-而非策略1.0本身的失效——历史上量化宽松牛市（2010–2019）同样出现过数年策略1.0跑输指数的阶段。
+Window 4（2025 全年 OOS）CAGR **{_w4_cagr*100:+.1f}%**，Sharpe **{_w4_sharpe:+.3f}**，
+同期 SPY **{_w4_spy*100:+.1f}%**，差距明显扩大。
+这可能意味着当前市场环境（AI 科技股集中牛市）对多元趋势策略1.0不利，
+而非策略1.0本身的失效——历史上量化宽松牛市同样出现过数年策略1.0跑输指数的阶段。
 
-**6. Walk-Forward 设计的局限性**
+**6. 2026 年（部分 OOS，Window 5）表现强劲**
+
+Window 5（2026-01 至 2026-06-09，约半年）OOS CAGR 年化 **{_w5_cagr*100:+.1f}%**，
+Sharpe **{_w5_sharpe:+.3f}**，是 5 个窗口中表现最强的一个。
+需注意这仅为约 6 个月的短期数据，统计意义有限，但结果积极。
+
+**7. Walk-Forward 设计的局限性**
 
 本次采用"扩展窗口、固定参数"设计，这是验证过拟合的标准方法，
 但存在两点值得注意：
 ① 全部 IS 窗口均以 2004 年为起点，参数在金融危机和量化宽松的完整周期上被隐含优化，
-   若策略1.0在 2022–2025 这一小样本上运行，参数未必会选择相同；
-② OOS 仅 4 年（3 年完整），统计置信度有限——单年度的正负表现差异可能是环境使然，
-   而非策略1.0能力的真实信号。建议在获得更多年度 OOS 数据后重新评估结论的稳健性。
+   若策略1.0在 2022–2026 这一小样本上运行，参数未必会选择相同；
+② OOS 共 5 个窗口（4 年完整 + 2026 上半年），统计置信度仍有限——
+   单年度的正负表现差异可能是环境使然，而非策略1.0能力的真实信号。
+   建议在获得更多年度 OOS 数据后重新评估结论的稳健性。
 """)
 
     # Verdict
