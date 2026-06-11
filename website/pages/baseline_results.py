@@ -39,6 +39,44 @@ if "max_consecutive_losses" not in m and len(res.trades) > 0:
             _cur_cl = 0
     m["max_consecutive_losses"] = _max_cl
 
+# ── Compute extended SPY metrics from spy_nav ─────────────────────────────────
+import numpy as _np
+
+_spy_metrics = dict(m)   # already has spy_cagr, spy_sharpe, spy_max_drawdown
+
+if res.spy_nav is not None:
+    _sn  = res.spy_nav
+    _sr  = _sn.pct_change().fillna(0.0)
+    _rf  = (1 + 0.02) ** (1 / 252) - 1
+
+    # Total return
+    _spy_metrics["spy_total_return"] = float(_sn.iloc[-1] / _sn.iloc[0] - 1)
+
+    # Annual volatility
+    _spy_metrics["spy_annual_vol"] = float(_sr.std() * _np.sqrt(252))
+
+    # Sortino
+    _exc       = _sr - _rf
+    _down_std  = float(_exc[_exc < 0].std() * _np.sqrt(252))
+    _spy_cagr  = m.get("spy_cagr", 0)
+    _spy_metrics["spy_sortino"] = float((_spy_cagr - 0.02) / _down_std) if _down_std > 0 else 0.0
+
+    # Calmar
+    _spy_maxdd = m.get("spy_max_drawdown", 0)
+    _spy_metrics["spy_calmar"] = float(_spy_cagr / abs(_spy_maxdd)) if _spy_maxdd != 0 else 0.0
+
+    # Max drawdown duration (trading days)
+    _roll_max  = _sn.cummax()
+    _underwater = (_sn < _roll_max)
+    _max_dur = _cur_dur = 0
+    for _uw in _underwater:
+        if _uw:
+            _cur_dur += 1
+            _max_dur  = max(_max_dur, _cur_dur)
+        else:
+            _cur_dur = 0
+    _spy_metrics["spy_max_dd_duration_days"] = _max_dur
+
 render_page_header("Baseline参数回测结果", meta)
 st.caption(f"回测期间：{meta.backtest_start} → {meta.backtest_end}  ·  初始资金：$10,000,000")
 st.markdown("---")
