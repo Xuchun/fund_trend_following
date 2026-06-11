@@ -278,6 +278,36 @@ def _build_md_report():
     _row("佣金（单边）", "commission_bps", f"{_comm_r:.0f} bps")
     _blank(); _hr()
 
+    # ── NAV 年度快照（对应"净值曲线 vs SPY"图表）───────────────────────────────
+    _h(2, "净值曲线年度快照（对应图表：净值曲线 vs SPY）")
+    _row("年末日期", "策略1.0 NAV", "SPY NAV（归一）", "策略年涨幅", "SPY年涨幅"); _sep(5)
+    _nav_snap = _nav_r.resample("YE").last()
+    _spy_snap = res.spy_nav.resample("YE").last() if res.spy_nav is not None else None
+    if not isinstance(_spy_snap.index if _spy_snap is not None else _nav_snap.index, _pd_r.DatetimeIndex):
+        pass
+    _prev_nav = float(_nav_snap.iloc[0]) if len(_nav_snap) > 0 else 1.0
+    _prev_spy = float(_spy_snap.iloc[0]) if _spy_snap is not None and len(_spy_snap) > 0 else None
+    # First row = start date
+    _start_nav = float(_nav_r.iloc[0])
+    _start_spy = float(res.spy_nav.iloc[0]) if res.spy_nav is not None else None
+    _row(str(_nav_r.index[0])[:10],
+         f"{_start_nav:.4f}",
+         f"{_start_spy:.4f}" if _start_spy is not None else "—",
+         "（起始）", "（起始）")
+    for _dt_s, _v_s in _nav_snap.items():
+        _v_s = float(_v_s)
+        _spy_v_s = float(_spy_snap[_dt_s]) if _spy_snap is not None and _dt_s in _spy_snap.index else None
+        _nav_chg = (_v_s / _prev_nav - 1) * 100 if _prev_nav != 0 else 0
+        _spy_chg = (_spy_v_s / _prev_spy - 1) * 100 if _spy_v_s is not None and _prev_spy is not None and _prev_spy != 0 else None
+        _row(str(_dt_s)[:10],
+             f"{_v_s:.4f}",
+             f"{_spy_v_s:.4f}" if _spy_v_s is not None else "—",
+             f"{_nav_chg:+.1f}%",
+             f"{_spy_chg:+.1f}%" if _spy_chg is not None else "—")
+        _prev_nav = _v_s
+        _prev_spy = _spy_v_s
+    _blank(); _hr()
+
     if len(_ep_df_r) > 0:
         _h(2, "主要回撤情节（回撤 ≥ 5%，按深度排序，前 10 次）")
         _ep_top = _ep_df_r.sort_values("最大回撤%").head(10)
