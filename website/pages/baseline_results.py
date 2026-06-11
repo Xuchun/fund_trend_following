@@ -369,7 +369,7 @@ st.markdown(f"""
 以单边 {slippage_bps:.0f} bps 滑点 + {commission_bps:.0f} bps 佣金（合计 {slippage_bps+commission_bps:.0f} bps）、往返 {rt_cost_bps:.0f} bps 计，
 隐含年化交易摩擦约 **{implied_cost_pct:.2f}%**，已完整计入回测净值，无需额外扣除。
 
-> 趋势跟踪策略1.0的换手率通常在 500%–2,000%/年之间，本策略1.0 {turnover*100:.0f}% 处于正常范围。
+> 趋势跟踪策略的换手率通常在每年 500%–2,000%，本策略 {turnover*100:.0f}% 处于正常范围。
 """)
 
 st.markdown("---")
