@@ -134,7 +134,6 @@ if wf_data:
         _rs_dates = [d for d in spy_dates if d >= _cutoff]
         _rs_nav   = [v for d, v in zip(spy_dates, spy_nav) if d >= _cutoff]
         if _r_dates:
-            st.caption(f"DEBUG: 数据范围 {_r_dates[0]} → {_r_dates[-1]}，共 {len(_r_dates)} 个交易日")
             fig_r = _build_oos_fig(_r_dates, _r_nav, _rs_dates, _rs_nav,
                                    _chart_title + "　　（近18个月）", 400)
             st.plotly_chart(fig_r, use_container_width=True)
