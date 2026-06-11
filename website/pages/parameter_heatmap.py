@@ -189,8 +189,6 @@ st.markdown(f"""
 | 佣金 | 1/3/5 bps | ✅ 已有 JSON |
 """)
 
-st.info("💡 **计算量：** Slice Tests 全部复用已有数据，无需额外回测。")
-
 st.markdown("---")
 
 
