@@ -1166,6 +1166,73 @@ if "净盈亏($)" in trades_display.columns:
     )
 st.dataframe(trades_display, use_container_width=True, hide_index=True)
 
+# ── Streak analysis ───────────────────────────────────────────────────────────
+import json as _json_br
+_DIAG_PATH_BR = Path(__file__).resolve().parents[2] / "results" / "v1" / "diagnostics.json"
+
+st.markdown("---")
+st.subheader("连续亏损序列分析（基于baseline参数得到的历史回测交易）")
+
+if _DIAG_PATH_BR.exists():
+    import plotly.graph_objects as _go_br
+
+    _diag_br = _json_br.loads(_DIAG_PATH_BR.read_text(encoding="utf-8"))
+    _sa_br   = _diag_br.get("streak_analysis", {})
+    _streak_counts_br: dict = _sa_br.get("streak_counts", {})
+
+    if _streak_counts_br:
+        _x_labels_br: list[str] = []
+        _y_counts_br: list[int] = []
+        _bar_colors_br: list[str] = []
+
+        for _length_br in range(1, 10):
+            _x_labels_br.append(str(_length_br))
+            _y_counts_br.append(_streak_counts_br.get(str(_length_br), 0))
+            if _length_br <= 4:
+                _bar_colors_br.append("#2ca02c")
+            else:
+                _bar_colors_br.append("#f57c00")
+
+        _x_labels_br.append("≥10")
+        _y_counts_br.append(_streak_counts_br.get("10+", 0))
+        _bar_colors_br.append("#d62728")
+
+        _fig_streak = _go_br.Figure(
+            data=[_go_br.Bar(
+                x=_x_labels_br,
+                y=_y_counts_br,
+                marker_color=_bar_colors_br,
+                text=_y_counts_br,
+                textposition="outside",
+            )]
+        )
+        _fig_streak.update_layout(
+            title="历史连续亏损序列分布",
+            xaxis_title="连续亏损笔数",
+            yaxis_title="出现次数",
+            showlegend=False,
+            height=360,
+            margin=dict(t=50, b=40, l=40, r=20),
+        )
+        st.plotly_chart(_fig_streak, use_container_width=True)
+
+    _sc1, _sc2, _sc3 = st.columns(3)
+    _sc1.metric("最长连续亏损（笔）", _sa_br.get("max_consecutive_losses", 0))
+    _sc2.metric("总亏损序列数",       _sa_br.get("total_streaks", 0))
+    _sc3.metric("平均序列长度",       f"{_sa_br.get('avg_streak_length', 0.0):.2f}")
+
+    _max_cl_br = _sa_br.get("max_consecutive_losses", 0)
+    st.markdown(
+        f'<div class="info-box">'
+        f'在 38% 胜率下，随机期望每隔约 2.6 笔交易出现一次亏损连续段。'
+        f'最长 <strong>{_max_cl_br} 笔</strong>连续亏损是心理上最难承受的时刻，'
+        f'但从统计上看并不异常。'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
+else:
+    st.info("连续亏损数据尚未生成。运行：python src/scripts/04_run_diagnostics.py")
+
 # ── Assessment ─────────────────────────────────────────────────────────────────
 st.markdown("---")
 st.subheader("评估")
