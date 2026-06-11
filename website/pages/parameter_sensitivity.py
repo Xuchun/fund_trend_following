@@ -384,6 +384,14 @@ def _render_param_section(data: dict, section_title: str, background_text: str):
     col2.metric("Sharpe CV（敏感度）", f"{cv_sharpe:.3f}", help="< 0.10 = 高鲁棒 | 0.10–0.25 = 中等 | > 0.25 = 敏感")
     col3.metric("CAGR 鲁棒性",  _robustness_label(cv_cagr))
     col4.metric("Sharpe 鲁棒性", _robustness_label(cv_sharpe))
+    if not _cv_formula_shown[0]:
+        st.caption(
+            "📐 **CV（变异系数）计算公式：** CV = σ / |μ|，"
+            "其中 σ = 该指标在所有测试参数值下的**标准差**，μ = **均值**（取绝对值）。"
+            "CV 衡量参数变化对指标的相对影响：**CV < 0.10** = 高鲁棒（参数景观平坦，结果不依赖精确参数值）；"
+            "**0.10 – 0.25** = 中等敏感；**> 0.25** = 敏感（策略可能过度依赖该参数的特定取值）。"
+        )
+        _cv_formula_shown[0] = True
 
     return {
         "param_name": param_name,
