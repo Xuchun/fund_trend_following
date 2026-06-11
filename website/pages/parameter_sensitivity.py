@@ -636,6 +636,11 @@ Sharpe 稳定区间：**{stab_str}**。
 {"- 基准值即 Sharpe 最优点" if abs(base['param_value'] - best['param_value']) < 0.001 else f"- Sharpe 最高点：{best['param_value']*100:.0f}%（{best['cagr']*100:+.2f}%，Sharpe {best['sharpe']:+.3f}）"}
 - CAGR CV={_info['cv_cagr']:.3f}，{_robustness_label(_info['cv_cagr'])}
 """)
+    st.markdown(
+        f"- **选择 {base['param_value']*100:.0f}% NAV 的理由：** 当前配置下真正控制风险敞口的关键参数；"
+        "5% 在防止过度集中（>10% 风险暴露过高）与充分参与趋势之间取得平衡，"
+        "优先级高于 risk_per_trade 和 heat_limit"
+    )
     _section_meta["position_cap"] = _info
 else:
     st.subheader("⏳ 单标的仓位上限（position_cap）")
