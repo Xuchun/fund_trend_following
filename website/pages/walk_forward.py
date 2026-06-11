@@ -116,7 +116,10 @@ if wf_data:
             ),
             xaxis=dict(
                 title="日期",
-                range=[oos_dates[0], oos_dates[-1]],
+                range=[
+                    (pd.Timestamp(oos_dates[-1]) - pd.DateOffset(years=2)).strftime("%Y-%m-%d"),
+                    oos_dates[-1],
+                ],
                 rangeselector=dict(
                     buttons=[
                         dict(count=6,  label="6M", step="month", stepmode="backward"),
