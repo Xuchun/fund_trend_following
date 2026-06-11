@@ -72,72 +72,71 @@ if wf_data:
     oos_dates = oos_st.get("dates", [])
     oos_nav   = oos_st.get("nav", [])
 
+    spy_dates = oos_spy.get("dates", [])
+    spy_nav   = oos_spy.get("nav", [])
+
     if oos_dates and oos_nav:
-        fig = go.Figure()
-
-        fig.add_trace(go.Scatter(
-            x=oos_dates, y=oos_nav,
-            mode="lines",
-            line=dict(color="#1f77b4", width=2.5),
-            name="策略1.0 OOS 拼接",
-        ))
-
-        spy_dates = oos_spy.get("dates", [])
-        spy_nav   = oos_spy.get("nav", [])
-        if spy_dates and spy_nav:
-            fig.add_trace(go.Scatter(
-                x=spy_dates, y=spy_nav,
-                mode="lines",
-                line=dict(color="#aaaaaa", width=1.5, dash="dash"),
-                name="SPY（同期）",
-            ))
-
-        # Add OOS window separators
-        for w in windows:
-            fig.add_shape(
-                type="line",
-                x0=w["oos_start"], x1=w["oos_start"],
-                y0=0, y1=1, yref="paper",
-                line=dict(dash="dot", color="#888", width=1),
-            )
-            fig.add_annotation(
-                x=w["oos_start"], y=1.04, yref="paper",
-                text=w["label"], showarrow=False,
-                font=dict(size=10, color="#888"),
-            )
-
         oos_m = oos_st.get("metrics", {})
-        _view_start = "2025-01-01"
-        _view_end   = (pd.Timestamp(oos_dates[-1]) + pd.DateOffset(days=14)).strftime("%Y-%m-%d")
-        fig.update_layout(
-            title=(
-                f"OOS 拼接净值（5窗口汇总）  "
-                f"CAGR {oos_m.get('cagr',0)*100:+.1f}%  "
-                f"Sharpe {oos_m.get('sharpe',0):+.3f}  "
-                f"MaxDD {oos_m.get('max_drawdown',0)*100:.1f}%"
-            ),
-            xaxis=dict(
-                title="日期",
-                range=[_view_start, _view_end],
-                rangeslider=dict(visible=True, thickness=0.08),
-                rangeselector=dict(
-                    buttons=[
-                        dict(count=6,  label="6M", step="month", stepmode="backward"),
-                        dict(count=1,  label="1Y", step="year",  stepmode="backward"),
-                        dict(count=2,  label="2Y", step="year",  stepmode="backward"),
-                        dict(step="all", label="全部"),
-                    ],
-                    bgcolor="#f0f2f6",
-                    activecolor="#1f77b4",
-                ),
-            ),
-            yaxis_title="净值（归一化，各OOS期独立起点=1.0）",
-            height=540,
-            margin=dict(t=60, b=30, l=50, r=20),
-            hovermode="x unified",
-            legend=dict(orientation="h", yanchor="bottom", y=1.02),
+        _chart_title = (
+            f"OOS 拼接净值（5窗口汇总）  "
+            f"CAGR {oos_m.get('cagr',0)*100:+.1f}%  "
+            f"Sharpe {oos_m.get('sharpe',0):+.3f}  "
+            f"MaxDD {oos_m.get('max_drawdown',0)*100:.1f}%"
         )
-        st.plotly_chart(fig, use_container_width=True)
+
+        def _build_oos_fig(dates, nav, s_dates, s_nav, title, height):
+            f = go.Figure()
+            f.add_trace(go.Scatter(
+                x=dates, y=nav, mode="lines",
+                line=dict(color="#1f77b4", width=2.5),
+                name="策略1.0 OOS 拼接",
+            ))
+            if s_dates and s_nav:
+                f.add_trace(go.Scatter(
+                    x=s_dates, y=s_nav, mode="lines",
+                    line=dict(color="#aaaaaa", width=1.5, dash="dash"),
+                    name="SPY（同期）",
+                ))
+            for w in windows:
+                if w["oos_start"] >= dates[0]:
+                    f.add_shape(
+                        type="line",
+                        x0=w["oos_start"], x1=w["oos_start"],
+                        y0=0, y1=1, yref="paper",
+                        line=dict(dash="dot", color="#888", width=1),
+                    )
+                    f.add_annotation(
+                        x=w["oos_start"], y=1.04, yref="paper",
+                        text=w["label"], showarrow=False,
+                        font=dict(size=10, color="#888"),
+                    )
+            f.update_layout(
+                title=title,
+                xaxis_title="日期",
+                yaxis_title="净值（归一化，各OOS期独立起点=1.0）",
+                height=height,
+                margin=dict(t=55, b=50, l=50, r=20),
+                hovermode="x unified",
+                legend=dict(orientation="h", yanchor="bottom", y=1.02),
+            )
+            return f
+
+        # ── 近18个月细节图（预过滤数据，避免 Plotly shape 引起的轴偏移）
+        _cutoff = "2025-01-01"
+        _r_dates = [d for d in oos_dates if d >= _cutoff]
+        _r_nav   = [v for d, v in zip(oos_dates, oos_nav) if d >= _cutoff]
+        _rs_dates = [d for d in spy_dates if d >= _cutoff]
+        _rs_nav   = [v for d, v in zip(spy_dates, spy_nav) if d >= _cutoff]
+        if _r_dates:
+            fig_r = _build_oos_fig(_r_dates, _r_nav, _rs_dates, _rs_nav,
+                                   _chart_title + "　　（近18个月）", 400)
+            st.plotly_chart(fig_r, use_container_width=True)
+
+        # ── 完整历史折叠面板
+        with st.expander("展开查看完整历史 (2022–2026，5窗口)"):
+            fig_full = _build_oos_fig(oos_dates, oos_nav, spy_dates, spy_nav,
+                                      _chart_title, 320)
+            st.plotly_chart(fig_full, use_container_width=True)
 
     # ── IS vs OOS summary table ───────────────────────────────────────────
     st.subheader("IS vs OOS 指标对比")
