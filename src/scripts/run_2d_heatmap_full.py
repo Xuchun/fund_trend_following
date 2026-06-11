@@ -104,7 +104,7 @@ def run_grid(grid_key: str) -> None:
     params = StrategyParams()
     adapter = YahooFinanceAdapter()
 
-    tickers = fetch_sp900_tickers(sp500_only=False)
+    tickers = fetch_sp900_tickers()
     all_tickers = list({params.cash_proxy, "SPY"} | set(tickers) | set(ETF_TICKERS))
     strategy_tickers = [t for t in tickers if t not in {"SPY", params.cash_proxy}]
     strategy_tickers += [t for t in ETF_TICKERS if t not in strategy_tickers and t not in {"SPY", params.cash_proxy}]
