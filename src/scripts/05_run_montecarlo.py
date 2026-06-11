@@ -57,8 +57,8 @@ def main() -> None:
     parser.add_argument(
         "--method",
         choices=["return_bootstrap", "block_bootstrap", "both"],
-        default="both",
-        help="Bootstrap method (default: both)",
+        default="block_bootstrap",
+        help="Bootstrap method (default: block_bootstrap)",
     )
     parser.add_argument(
         "--risk-free-rate", type=float, default=0.02,
