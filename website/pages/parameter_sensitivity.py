@@ -835,6 +835,11 @@ Sharpe 稳定区间：**{stab_str}**。
 > **若需启用：** 须使用提供历史点位市值的商业数据源（如 Compustat、FactSet），
 > 并在 `entry.py` 中实现对应的过滤逻辑。
 """)
+    st.markdown(
+        f"- **选择 ${base['param_value']:.0f}B 的理由（理论）：** 聚焦大中盘流动性更好的股票；"
+        "但因 Yahoo Finance 不提供历史点位市值，该过滤器未实际执行，此参数值暂无实质影响，"
+        "须引入商业数据源（如 Compustat）后才能生效"
+    )
     _section_meta["min_market_cap_b"] = _info
 else:
     st.subheader("⏳ 最低市值过滤（min_market_cap_b）")
