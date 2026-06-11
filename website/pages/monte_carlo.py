@@ -74,15 +74,18 @@ if _MC_PATH.exists():
 n_trades_str = f"{res.metrics.get('n_trades', 0):,}"
 if mc:
     st.subheader("模拟概览（Baseline Anchor 锚点参数）")
-    mc1, mc2, mc3 = st.columns(3)
-    mc1.metric("数据起点",     mc.get("start", "—"))
-    mc2.metric("数据终点",     mc.get("end", "—"))
-    mc3.metric("模拟交易日数", f"{mc['n_days']:,} 天")
-    st.markdown(f"""
-| 方法 | 路径数 | 用途 |
-|------|--------|------|
-| **Return Bootstrap**（IID 有放回重采样） | **{mc['n_simulations']:,} 条** | NAV 路径扇形图、CAGR 分布、最大回撤分布、Sharpe 分布 |
-| **Block Bootstrap**（月度分块随机重排） | **{mc['n_simulations']:,} 条** | 水下时间概率分析（保留自相关结构，更适合趋势跟踪策略） |
+    mc1, mc2, mc3, mc4 = st.columns(4)
+    mc1.metric("模拟路径数",   f"{mc['n_simulations']:,} 条")
+    mc2.metric("数据起点",     mc.get("start", "—"))
+    mc3.metric("数据终点",     mc.get("end", "—"))
+    mc4.metric("模拟交易日数", f"{mc['n_days']:,} 天")
+    st.markdown("""
+**模拟方法：Block Bootstrap（月度分块随机重排）**
+
+将历史日收益率序列按月（≈21 交易日）分块，随机重排各月块后拼接成模拟路径。
+与 IID 有放回重采样（Return Bootstrap）相比，Block Bootstrap 保留了月度内的收益率自相关结构，
+对趋势跟踪策略更具代表性——趋势信号依赖收益率的序列延续性，IID 假设会破坏这一特性，低估连亏段和深度回撤的真实概率。
+所有指标（CAGR、MaxDD、Sharpe、NAV 路径、水下时间）均使用同一组 1,000 条路径计算，方法统一。
 """)
 else:
     st.subheader("分析目标")
