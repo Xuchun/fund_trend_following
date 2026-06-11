@@ -557,6 +557,11 @@ Sharpe 稳定区间：**{stab_str}**。
 {"- 基准值即 Sharpe 最优点，无需调整" if abs(base['param_value'] - best['param_value']) < 0.01 else f"- Sharpe 最高点 {best['param_value']:.1f}×（{best['cagr']*100:+.2f}%，Sharpe {best['sharpe']:+.3f}）"}
 - CAGR CV={_info['cv_cagr']:.3f}，{_robustness_label(_info['cv_cagr'])}
 """)
+    st.markdown(
+        f"- **选择 {base['param_value']:.1f}×ATR 的理由：** 业界趋势策略最常用止损乘数，"
+        "在"止损过紧被震出"与"止损过宽每次亏损大"之间取得平衡；"
+        "基准值处于 Sharpe 稳定区间内，且全测试范围均实现正 CAGR"
+    )
     _section_meta["stop_loss_multiplier"] = _info
 else:
     st.subheader("⏳ ATR 止损乘数（stop_loss_multiplier）")
