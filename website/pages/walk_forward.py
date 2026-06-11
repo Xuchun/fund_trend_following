@@ -112,7 +112,11 @@ if wf_data:
                     )
             f.update_layout(
                 title=title,
-                xaxis_title="日期",
+                xaxis=dict(
+                    title="日期",
+                    range=[dates[0], dates[-1]],
+                    autorange=False,
+                ),
                 yaxis_title="净值（归一化，各OOS期独立起点=1.0）",
                 height=height,
                 margin=dict(t=55, b=50, l=50, r=20),
