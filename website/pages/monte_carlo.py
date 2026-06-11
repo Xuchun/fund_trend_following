@@ -1,4 +1,4 @@
-"""蒙特卡洛风险分析"""
+"""蒙特卡洛模拟"""
 
 from __future__ import annotations
 
