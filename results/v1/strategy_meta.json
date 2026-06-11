@@ -10,7 +10,7 @@
   "universe_etfs": 83,
   "universe_total": 986,
   "backtest_start": "2004-01-01",
-  "backtest_end": "2026-06-09",
+  "backtest_end": "2026-06-10",
   "initial_capital": 10000000,
   "cash_proxy": "SHY",
   "key_features": [
