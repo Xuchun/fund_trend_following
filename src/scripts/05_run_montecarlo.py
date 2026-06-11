@@ -112,7 +112,7 @@ def main() -> None:
     dur = result["drawdown_duration"]
 
     print("\n" + "=" * 62)
-    print(f"  蒙特卡洛风险分析结果  ({args.method}  N={args.n_simulations:,})")
+    print(f"  蒙特卡洛模拟结果  ({args.method}  N={args.n_simulations:,})")
     print("=" * 62)
     print(f"\n  CAGR 分布（年化收益率）:")
     print(f"    5th pct : {cd['p5']*100:+.2f}%")
