@@ -725,6 +725,10 @@ Sharpe 稳定区间：**{stab_str}**。
 {"- 基准值即 Sharpe 最优点" if abs(base['param_value'] - best['param_value']) < 0.01 else f"- Sharpe 最高点：阈值 {best['param_value']:.1f}（{best['cagr']*100:+.2f}%，Sharpe {best['sharpe']:+.3f}）"}
 - CAGR CV={_info['cv_cagr']:.3f}，{_robustness_label(_info['cv_cagr'])}
 """)
+    st.markdown(
+        f"- **选择 {base['param_value']:.2f} 的理由：** 相关性 > 0.70 时两标的联动密切，"
+        "减半仓位有助于分散集中风险；0.70 在积极分散化与保留入场机会之间取得合理平衡"
+    )
     _section_meta["correlation_threshold"] = _info
 else:
     st.subheader("⏳ 相关性阈值（correlation_threshold）")
