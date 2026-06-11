@@ -310,7 +310,6 @@ else:
         "蒙特卡洛数据尚未生成。运行：\n"
         "```\npython src/scripts/05_run_montecarlo.py\n```"
     )
-    st.markdown("---")
 
 # ── Section 5: Assessment ─────────────────────────────────────────────────────
 st.markdown("---")
