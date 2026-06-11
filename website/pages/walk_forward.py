@@ -109,7 +109,7 @@ if wf_data:
         oos_m = oos_st.get("metrics", {})
         fig.update_layout(
             title=(
-                f"OOS 拼接净值（4年汇总）  "
+                f"OOS 拼接净值（5窗口汇总）  "
                 f"CAGR {oos_m.get('cagr',0)*100:+.1f}%  "
                 f"Sharpe {oos_m.get('sharpe',0):+.3f}  "
                 f"MaxDD {oos_m.get('max_drawdown',0)*100:.1f}%"
