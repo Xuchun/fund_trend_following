@@ -407,6 +407,15 @@ def _status_icon(param_name: str) -> str:
     return "🔜 待分析"
 
 
+# All helpers now defined — build MD report and fill the button placeholder
+_ps_md_report = _build_ps_md_report()
+_ps_btn_placeholder.download_button(
+    label="⬇ 下载报告(MD)",
+    data=_ps_md_report.encode("utf-8"),
+    file_name=f"parameter_sensitivity_{meta.backtest_end[:10]}.md",
+    mime="text/markdown",
+)
+
 st.subheader("分析框架")
 st.markdown(f"""
 参数敏感性分析的目的是验证策略1.0对参数选择的**鲁棒性（Robustness）**：
