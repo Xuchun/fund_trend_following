@@ -127,22 +127,9 @@ if wf_data:
             )
             return f
 
-        # ── 近18个月细节图（预过滤数据，避免 Plotly shape 引起的轴偏移）
-        _cutoff = "2025-01-01"
-        _r_dates = [d for d in oos_dates if d >= _cutoff]
-        _r_nav   = [v for d, v in zip(oos_dates, oos_nav) if d >= _cutoff]
-        _rs_dates = [d for d in spy_dates if d >= _cutoff]
-        _rs_nav   = [v for d, v in zip(spy_dates, spy_nav) if d >= _cutoff]
-        if _r_dates:
-            fig_r = _build_oos_fig(_r_dates, _r_nav, _rs_dates, _rs_nav,
-                                   _chart_title + "　　（近18个月）", 400)
-            st.plotly_chart(fig_r, use_container_width=True)
-
-        # ── 完整历史折叠面板
-        with st.expander("展开查看完整历史 (2022–2026，5窗口)"):
-            fig_full = _build_oos_fig(oos_dates, oos_nav, spy_dates, spy_nav,
-                                      _chart_title, 320)
-            st.plotly_chart(fig_full, use_container_width=True)
+        fig_full = _build_oos_fig(oos_dates, oos_nav, spy_dates, spy_nav,
+                                  _chart_title, 420)
+        st.plotly_chart(fig_full, use_container_width=True)
 
     # ── IS vs OOS summary table ───────────────────────────────────────────
     st.subheader("IS vs OOS 指标对比")
