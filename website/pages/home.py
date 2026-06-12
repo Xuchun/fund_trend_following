@@ -69,14 +69,14 @@ with _col_right:
 
 # ── 完整报告下载按钮 ───────────────────────────────────────────────────────────
 @st.cache_data(show_spinner=False, ttl=3600)
-def _cached_report(_nav_hash: str) -> bytes:
-    from website.utils.full_report import generate_report as _gen
-    return _gen(res)
+def _cached_full_report(_nav_hash: str) -> bytes:
+    from website.utils.playwright_report import generate_report as _gen
+    return _gen()
 
 try:
-    _nav_hash = str(res.nav.index[-1])   # cache key: last NAV date
-    with st.spinner("正在生成完整报告，请稍候…"):
-        _pdf_bytes = _cached_report(_nav_hash)
+    _nav_hash = str(res.nav.index[-1])
+    with st.spinner("正在生成完整报告（首次需 1–2 分钟，之后秒级响应）…"):
+        _pdf_bytes = _cached_full_report(_nav_hash)
     import datetime as _dt
     _fname = f"策略1.0_完整回测报告_{_dt.date.today()}.pdf"
     st.download_button(
