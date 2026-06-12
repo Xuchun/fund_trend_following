@@ -21,3 +21,4 @@ libxcb1
 libatspi2.0-0
 libwayland-client0
 libfontconfig1
+fonts-noto-cjk
