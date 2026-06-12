@@ -111,16 +111,7 @@ _wf_pos_win    = sum(1 for w in _wf_windows if w.get("oos", {}).get("cagr", 0) >
 st.markdown("---")
 st.header("综合评估")
 
-# ── Score cards ───────────────────────────────────────────────────────────────
-sc1, sc2, sc3, sc4, sc5 = st.columns(5)
-sc1.metric("回测 CAGR",    f"{_cagr*100:+.2f}%",  help="全样本内 2004–2026")
-sc2.metric("OOS CAGR",     f"{_wf_oos_cagr*100:+.2f}%", help="Walk-Forward 4年拼接样本外")
-sc3.metric("MC 负收益概率", f"{_mc_neg_prob*100:.1f}%",  help="1000条蒙特卡洛路径")
-sc4.metric("MaxDD",        f"{_maxdd*100:.1f}%",   help="vs SPY " + f"{_spy_maxdd*100:.1f}%")
-sc5.metric("OOS 正收益窗口", f"{_wf_pos_win}/4",   help="Walk-Forward 4个独立年度")
-
 st.markdown(f"""
----
 ### 一、五维度综合评分
 
 **① 基准回测结果 — 达标**
