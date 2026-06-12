@@ -3,8 +3,6 @@ libnss3
 libexpat1
 libgbm1
 libdrm2
-libxcb-dri3-0
-libxshmfence1
 libx11-6
 libxcomposite1
 libxdamage1
