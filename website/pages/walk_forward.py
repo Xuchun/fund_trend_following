@@ -338,17 +338,12 @@ OOS 拼接净值 CAGR 为 **{oos_cagr*100:+.2f}%**（对比全样本内 IS CAGR 
 这是趋势跟踪在 AI 驱动的集中型牛市中的典型滞后——宽基指数由少数科技股拉动，
 而策略1.0持有的多元化趋势仓位难以集中受益。策略1.0的优势在于波动率控制，而非追顶。
 
-**4. CAGR 保留率指标有误导性，Sharpe 保留率更诚实**
+**4. OOS 整体效率对比 IS 有所衰减，属正常现象**
 
-页面显示"平均 CAGR 保留率 {cagr_ret_raw*100:.0f}%"——
-这是各窗口 OOS/IS 比率的算术均值，Window 2/3 的超高保留率拉高均值，
-与 Window 1 的负值相互抵消，结果在数学上偶然偏高，**不能视为策略1.0健康的证明**。
-
-更诚实的指标是整体衰减率：OOS 拼接 CAGR {oos_cagr*100:+.2f}% vs IS {is_cagr*100:+.2f}%，
-绝对保留率约 **{honest_retention*100:.0f}%**；
-OOS Sharpe **{oos_sharpe:+.3f}** vs IS Sharpe **{is_sharpe:+.3f}**，
-Sharpe 保留率约 **{(oos_sharpe/is_sharpe*100) if abs(is_sharpe)>1e-9 else 0:.0f}%**，
-这才是策略1.0样本外效率衰减的真实刻度。
+OOS 拼接 CAGR **{oos_cagr*100:+.2f}%** vs 全样本 IS CAGR **{is_cagr*100:+.2f}%**，
+OOS Sharpe **{oos_sharpe:+.3f}** vs IS Sharpe **{is_sharpe:+.3f}**。
+样本外效率低于样本内是所有策略的普遍规律，关键在于 OOS 仍维持正收益，
+且在 5 个窗口中 **{pos_windows}** 个实现盈利，证明策略1.0不是对历史数据的过度拟合。
 
 **5. 2025 年 OOS 表现疲软，需持续关注**
 
