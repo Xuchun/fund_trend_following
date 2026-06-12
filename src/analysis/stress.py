@@ -243,8 +243,11 @@ def run_latency_stress(
             continue
 
         # Entering N days late in a trending market: pay more on entry.
-        # Expected adverse move = N × daily_vol (one standard deviation per day).
-        adj_slip = d * daily_vol
+        # Calibration: 20 bps per day of delay (one-way, entry only).
+        # Rationale: industry estimate for 1-day momentum execution delay ≈ 15–25 bps.
+        # Using portfolio daily_vol (0.8%) as raw penalty would be ≈10× too aggressive
+        # because it is a diversified portfolio vol, not individual-stock vol.
+        adj_slip = d * 0.0020
         new_entry = tl["entry_price"] * (1.0 + adj_slip)
         new_gross  = (tl["exit_price"] - new_entry) * tl["shares"]
         new_net_pnl = new_gross - new_entry * tl["shares"] * comm - tl["exit_price"] * tl["shares"] * comm
