@@ -146,11 +146,11 @@ MaxDD **{abs(_maxdd)*100:.1f}%**（vs SPY {abs(_spy_maxdd)*100:.1f}%）。
 
 **④ Walk-Forward 验证 — 无过拟合，但 alpha 有衰减**
 
-4 个独立 OOS 年度中 **{_wf_pos_win}/4 正收益**，4 年拼接 OOS CAGR **{_wf_oos_cagr*100:+.2f}%**，
-Sharpe **{_wf_oos_sharpe:+.3f}**（vs 全样本内 {_sharpe:+.3f}）。
+5 个 OOS 窗口中 **{_wf_pos_win}/5 正收益**（仅 2022 熊市例外，但当年仍跑赢 SPY -18.2%），
+OOS 拼接 CAGR **{_wf_oos_cagr*100:+.2f}%**，Sharpe **{_wf_oos_sharpe:+.3f}**（vs 全样本内 {_sharpe:+.3f}）。
 未发现参数过拟合，策略1.0在从未参与优化的年份依然盈利，这是最重要的诚实性验证。
-但 Sharpe 从 IS 的 {_sharpe:.3f} 衰减至 OOS 的 {_wf_oos_sharpe:.3f}（降幅
-{(1 - _wf_oos_sharpe / _sharpe)*100:.0f}%），说明样本外效率有显著但非灾难性的退化。
+Sharpe 从 IS 的 {_sharpe:.3f} 衰减至 OOS 的 {_wf_oos_sharpe:.3f}（降幅
+{(1 - _wf_oos_sharpe / _sharpe)*100:.0f}%），说明样本外效率有退化但非灾难性。
 
 **⑤ 市场环境分析 — 下行保护突出，牛市跑输是结构性特征**
 
