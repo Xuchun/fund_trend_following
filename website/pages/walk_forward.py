@@ -176,19 +176,28 @@ if wf_data:
                f"{_spy_st_maxdd*100:.1f}%" if _spy_st_maxdd is not None else "—")
 
     # Interpretation
-    overfit_flag = cagr_ret < 0.5
-    verdict = "⚠️ 存在过拟合风险" if overfit_flag else ("🟡 中等保留率" if cagr_ret < 0.7 else "✅ 鲁棒性良好")
-    _spy_vs_str = ""
+    _oos_cagr_val = oos_m.get('cagr', 0)
+    _pos_windows = sum(1 for w in windows if w.get("oos", {}).get("cagr", 0) > 0)
+    _total_windows = len(windows)
     if _spy_st_cagr is not None:
-        _diff = oos_m.get('cagr', 0) - _spy_st_cagr
-        _spy_vs_str = f"OOS 拼接期间策略 vs SPY：{_diff*100:+.1f} 个百分点。"
+        _diff = _oos_cagr_val - _spy_st_cagr
+        _vs_spy_str = (
+            f"OOS 拼接 CAGR {_oos_cagr_val*100:+.1f}% vs SPY {_spy_st_cagr*100:+.1f}%，"
+            f"差距 {_diff*100:+.1f} 个百分点。"
+        )
+        if _diff >= 0:
+            _verdict = "✅ OOS 期间跑赢 SPY"
+        else:
+            _verdict = "🟡 OOS 期间落后 SPY"
+    else:
+        _vs_spy_str = f"OOS 拼接 CAGR {_oos_cagr_val*100:+.1f}%。"
+        _verdict = "✅ OOS 正收益" if _oos_cagr_val > 0 else "⚠️ OOS 负收益"
     st.markdown(
         f'<div class="info-box">'
-        f'<strong>判断：{verdict}</strong>　'
-        f'CAGR 保留率 {cagr_ret*100:.0f}%（理想 > 70%），'
-        f'Sharpe 保留率 {sharpe_ret*100:.0f}%（理想 > 60%）。'
-        f'{_spy_vs_str}'
-        f'扩展窗口设计使用固定基准参数，结果反映策略1.0在历史样本外的真实稳健性。'
+        f'<strong>判断：{_verdict}</strong>　'
+        f'{_total_windows} 个 OOS 窗口中 {_pos_windows} 个实现正收益。'
+        f'{_vs_spy_str}'
+        f'扩展窗口采用固定基准参数、无窗口内重新优化，结果反映策略1.0在历史样本外的真实稳健性。'
         f'</div>',
         unsafe_allow_html=True,
     )
