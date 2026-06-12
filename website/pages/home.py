@@ -68,21 +68,25 @@ with _col_right:
     """, height=60)
 
 # ── 完整报告下载按钮 ───────────────────────────────────────────────────────────
-with st.spinner("正在生成完整报告…"):
-    try:
-        from website.utils.full_report import generate_report as _gen_report
-        _pdf_bytes = _gen_report(res)
-        import datetime as _dt
-        _fname = f"策略1.0_完整回测报告_{_dt.date.today()}.pdf"
-        st.download_button(
-            label="📥 下载完整报告（所有页面合并 PDF）",
-            data=_pdf_bytes,
-            file_name=_fname,
-            mime="application/pdf",
-            use_container_width=False,
-        )
-    except Exception as _e:
-        st.warning(f"完整报告生成失败：{_e}")
+@st.cache_data(show_spinner=False, ttl=3600)
+def _cached_report(_nav_hash: str) -> bytes:
+    from website.utils.full_report import generate_report as _gen
+    return _gen(res)
+
+try:
+    _nav_hash = str(res.nav.index[-1])   # cache key: last NAV date
+    with st.spinner("正在生成完整报告，请稍候…"):
+        _pdf_bytes = _cached_report(_nav_hash)
+    import datetime as _dt
+    _fname = f"策略1.0_完整回测报告_{_dt.date.today()}.pdf"
+    st.download_button(
+        label="📥 下载完整报告（所有页面合并 PDF）",
+        data=_pdf_bytes,
+        file_name=_fname,
+        mime="application/pdf",
+    )
+except Exception as _e:
+    st.warning(f"完整报告生成失败：{_e}")
 
 st.caption(f"回测期间 {meta.backtest_start} → {meta.backtest_end}")
 st.markdown("---")
