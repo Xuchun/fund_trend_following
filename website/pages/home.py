@@ -27,7 +27,7 @@ st.markdown("""
     [data-testid="stStatusWidget"],
     header, footer,
     .stApp > header { display: none !important; }
-    #pdf-btn-wrap { display: none !important; }
+    iframe { display: none !important; }
     .main .block-container,
     [data-testid="stMainBlockContainer"] {
         padding-top: 0.5cm !important;
