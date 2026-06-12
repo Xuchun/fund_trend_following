@@ -147,8 +147,6 @@ if wf_data:
             "OOS 区间":       f"{w['oos_start'][:7]} → {w['oos_end'][:7]}",
             "IS CAGR":        f"{is_cagr*100:+.1f}%",
             "OOS CAGR":       f"{oos_cagr*100:+.1f}%",
-            "CAGR保留率":     f"{retention*100:.0f}%",
-            "OOS Sharpe":     f"{oos_m.get('sharpe',0):+.3f}",
             "OOS MaxDD":      f"{oos_m.get('max_drawdown',0)*100:.1f}%",
             "SPY OOS CAGR":   f"{spy_oos.get('cagr',0)*100:+.1f}%" if spy_oos else "—",
             "SPY OOS MaxDD":  f"{spy_oos.get('max_drawdown',0)*100:.1f}%" if spy_oos else "—",
