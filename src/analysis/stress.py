@@ -196,59 +196,64 @@ def run_slippage_stress(
 def run_latency_stress(
     daily_nav: pd.Series,
     daily_returns: pd.Series,
+    trade_log: pd.DataFrame,
     delay_days: list[int] | None = None,
-    annual_vol_estimate: float | None = None,
     risk_free_rate: float = 0.02,
 ) -> pd.DataFrame:
     """
-    Execution latency stress (approximate).
+    Execution latency stress.
 
-    Models 1 or 2 day execution delay as a price drift penalty:
-      - 1 day delay: strategy misses the first day of each trade's move
-        → estimated cost ≈ daily_vol × sqrt(delay_days) per trade
-      - Applied as a deterministic haircut to the NAV growth.
+    Models N-day execution delay by worsening each trade's entry price by
+    N × daily_vol (as a fraction).  In a trend-following strategy, entering
+    N days late means buying into momentum that has already moved — the
+    expected adverse drift is proportional to N × daily_vol.
 
-    Note: a fully accurate latency test requires re-running the backtest
-    with a modified engine.  This approximation is conservative (may
-    slightly over-estimate the drag).
+    This correctly re-prices trade PnLs and rebuilds the NAV, unlike the
+    previous approach of scaling the NAV by a constant (which cancelled out
+    in all ratio-based metrics and produced identical results for all delays).
 
     Parameters
     ----------
     daily_nav : pd.Series
     daily_returns : pd.Series
+    trade_log : pd.DataFrame
     delay_days : list[int]
         [0, 1, 2] day execution delays.
-    annual_vol_estimate : float | None
-        Daily volatility of the strategy (if None, computed from returns).
     risk_free_rate : float
-
-    Returns
-    -------
-    pd.DataFrame  with index = delay_days, columns = metric names.
     """
     if delay_days is None:
         delay_days = [0, 1, 2]
 
-    if annual_vol_estimate is None:
-        daily_vol = float(daily_returns.std())
-    else:
-        daily_vol = annual_vol_estimate / math.sqrt(252)
+    if trade_log.empty or "entry_price" not in trade_log.columns:
+        return pd.DataFrame()
+
+    daily_vol = float(daily_returns.std())
+    tl = trade_log.copy()
+    tl["exit_date"] = pd.to_datetime(tl["exit_date"])
+    pnl_col = "net_pnl" if "net_pnl" in tl.columns else "gross_pnl"
+    initial_nav = float(daily_nav.iloc[0])
+    comm = _COMMISSION_BPS / 10_000.0
 
     records: list[dict] = []
-    initial_nav = float(daily_nav.iloc[0])
-    n_days = len(daily_nav)
-
     for d in delay_days:
         if d == 0:
-            adj_nav = daily_nav.copy()
-        else:
-            # Penalty: each trading day has a tiny fraction of time "wasted"
-            # modelled as a daily return drag = -0.5 × d × daily_vol²
-            # (from geometric Brownian motion: extra vol drag with delay)
-            daily_drag = -0.5 * d * daily_vol ** 2
-            drag_factor = (1.0 + daily_drag) ** n_days
-            adj_nav = daily_nav * drag_factor
+            m = _metrics_from_nav(daily_nav, rf=risk_free_rate)
+            m["delay_days"] = d
+            records.append(m)
+            continue
 
+        # Entering N days late in a trending market: pay more on entry.
+        # Expected adverse move = N × daily_vol (one standard deviation per day).
+        adj_slip = d * daily_vol
+        new_entry = tl["entry_price"] * (1.0 + adj_slip)
+        new_gross  = (tl["exit_price"] - new_entry) * tl["shares"]
+        new_net_pnl = new_gross - new_entry * tl["shares"] * comm - tl["exit_price"] * tl["shares"] * comm
+        tl["adj_net_pnl"] = new_net_pnl
+
+        adj_nav = _rebuild_nav_from_trades(
+            tl, initial_nav, pnl_col="adj_net_pnl",
+            date_col="exit_date", base_nav=daily_nav,
+        )
         m = _metrics_from_nav(adj_nav, rf=risk_free_rate)
         m["delay_days"] = d
         records.append(m)
