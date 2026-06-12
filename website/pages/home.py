@@ -45,14 +45,18 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ── 页面标题 + PDF 下载按钮 ────────────────────────────────────────────────────
+import streamlit.components.v1 as _components
+
 _col_title, _col_right = st.columns([4, 2])
 with _col_title:
     st.title("总结")
 with _col_right:
-    st.markdown(f"""
-    <div id="pdf-btn-wrap" style="display:flex;justify-content:flex-end;
-         align-items:center;gap:10px;padding-top:24px;">
-        <button onclick="window.print()"
+    # components.html runs in a real iframe where JS executes;
+    # window.parent.print() triggers the parent page's print dialog
+    _components.html(f"""
+    <div style="display:flex;justify-content:flex-end;align-items:center;
+                gap:10px;padding-top:20px;">
+        <button onclick="window.parent.print()"
             title="打开打印对话框后选择「存储为 PDF」即可下载"
             style="background:#1565c0;color:#fff;border:none;padding:7px 16px;
                    border-radius:5px;cursor:pointer;font-size:13px;
@@ -63,7 +67,7 @@ with _col_right:
                      border-radius:14px;font-size:0.8rem;font-weight:700;
                      letter-spacing:0.05em;">{meta.badge_text}</span>
     </div>
-    """, unsafe_allow_html=True)
+    """, height=60)
 
 st.caption(f"回测期间 {meta.backtest_start} → {meta.backtest_end}")
 st.markdown("---")
