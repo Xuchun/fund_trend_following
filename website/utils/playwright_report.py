@@ -61,17 +61,24 @@ _INJECT_CSS_JS = f"""
 _chromium_installed = False
 
 def _ensure_chromium() -> None:
+    """
+    Download playwright's bundled chromium binary (no sudo needed).
+    System libraries are pre-installed via .streamlit/packages.txt.
+    """
     global _chromium_installed
     if _chromium_installed:
         return
-    try:
-        subprocess.run(
-            [sys.executable, "-m", "playwright", "install", "chromium", "--with-deps"],
-            capture_output=True, timeout=300, check=False,
+    result = subprocess.run(
+        # No --with-deps: system libs come from packages.txt (root at build time)
+        [sys.executable, "-m", "playwright", "install", "chromium"],
+        timeout=300, check=False,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(
+            "playwright install chromium failed — "
+            "check Streamlit Cloud logs for details"
         )
-        _chromium_installed = True
-    except Exception:
-        pass
+    _chromium_installed = True
 
 
 # ── Page capture ──────────────────────────────────────────────────────────────
