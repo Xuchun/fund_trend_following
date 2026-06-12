@@ -9,14 +9,62 @@ if str(_root) not in sys.path:
 import streamlit as st
 from website.shared import get_results
 from website.components.metric_cards import render_summary_cards
-from website.components.strategy_badge import render_page_header
 from website.components.charts import nav_vs_spy
 
 res  = get_results()
 meta = res.meta
 m    = res.metrics
 
-render_page_header("总结", meta)
+# ── 打印/PDF 样式 ──────────────────────────────────────────────────────────────
+st.markdown("""
+<style>
+@media print {
+    [data-testid="stSidebar"],
+    [data-testid="stSidebarNav"],
+    [data-testid="stHeader"],
+    [data-testid="stDecoration"],
+    [data-testid="stToolbar"],
+    [data-testid="stStatusWidget"],
+    header, footer,
+    .stApp > header { display: none !important; }
+    #pdf-btn-wrap { display: none !important; }
+    .main .block-container,
+    [data-testid="stMainBlockContainer"] {
+        padding-top: 0.5cm !important;
+        padding-left: 1cm !important;
+        padding-right: 1cm !important;
+        max-width: 100% !important;
+    }
+    @page { margin: 1.5cm; }
+    .stPlotlyChart,
+    [data-testid="stDataFrame"],
+    [data-testid="stAlert"] { page-break-inside: avoid; }
+    h2, h3 { page-break-after: avoid; }
+}
+</style>
+""", unsafe_allow_html=True)
+
+# ── 页面标题 + PDF 下载按钮 ────────────────────────────────────────────────────
+_col_title, _col_right = st.columns([4, 2])
+with _col_title:
+    st.title("总结")
+with _col_right:
+    st.markdown(f"""
+    <div id="pdf-btn-wrap" style="display:flex;justify-content:flex-end;
+         align-items:center;gap:10px;padding-top:24px;">
+        <button onclick="window.print()"
+            title="打开打印对话框后选择「存储为 PDF」即可下载"
+            style="background:#1565c0;color:#fff;border:none;padding:7px 16px;
+                   border-radius:5px;cursor:pointer;font-size:13px;
+                   font-family:sans-serif;white-space:nowrap;">
+            📄 下载 PDF
+        </button>
+        <span style="background:{meta.color};color:white;padding:4px 12px;
+                     border-radius:14px;font-size:0.8rem;font-weight:700;
+                     letter-spacing:0.05em;">{meta.badge_text}</span>
+    </div>
+    """, unsafe_allow_html=True)
+
 st.caption(f"回测期间 {meta.backtest_start} → {meta.backtest_end}")
 st.markdown("---")
 
