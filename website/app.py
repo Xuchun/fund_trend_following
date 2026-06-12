@@ -74,10 +74,6 @@ pg = st.navigation(
         ],
         "评估与建议": [
             st.Page(_pages / "limitations.py",     title="局限性声明",     icon="⚠️"),
-            st.Page(_pages / "recommendations.py", title="推荐实盘参数",   icon="✅"),
-        ],
-        "多策略": [
-            st.Page(_pages / "comparison.py", title="策略对比", icon="📊"),
         ],
     },
     position="sidebar",
