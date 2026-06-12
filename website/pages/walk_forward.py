@@ -165,35 +165,15 @@ if wf_data:
         _running_max = _np_wf.maximum.accumulate(_snav)
         _spy_st_maxdd = float(((_snav - _running_max) / _running_max).min())
 
-    # Retention metrics highlight
-    cagr_ret   = ret.get("cagr_retention",   0)
-    sharpe_ret = ret.get("sharpe_retention", 0)
     oos_m = oos_st.get("metrics", {})
 
-    rc1, rc2, rc3, rc4, rc5, rc6 = st.columns(6)
-    rc1.metric("平均 CAGR 保留率",   f"{cagr_ret*100:.0f}%",
-               help="各窗口（OOS CAGR ÷ IS CAGR）的算术均值")
-    rc2.metric("平均 Sharpe 保留率", f"{sharpe_ret*100:.0f}%",
-               help="各窗口（OOS Sharpe ÷ IS Sharpe）的算术均值")
-    rc3.metric("策略 OOS 拼接 CAGR",  f"{oos_m.get('cagr',0)*100:+.1f}%")
-    rc4.metric("策略 OOS 拼接 MaxDD", f"{oos_m.get('max_drawdown',0)*100:.1f}%")
-    rc5.metric("SPY OOS 拼接 CAGR",
+    rc1, rc2, rc3, rc4 = st.columns(4)
+    rc1.metric("策略 OOS 拼接 CAGR",  f"{oos_m.get('cagr',0)*100:+.1f}%")
+    rc2.metric("策略 OOS 拼接 MaxDD", f"{oos_m.get('max_drawdown',0)*100:.1f}%")
+    rc3.metric("SPY OOS 拼接 CAGR",
                f"{_spy_st_cagr*100:+.1f}%" if _spy_st_cagr is not None else "—")
-    rc6.metric("SPY OOS 拼接 MaxDD",
+    rc4.metric("SPY OOS 拼接 MaxDD",
                f"{_spy_st_maxdd*100:.1f}%" if _spy_st_maxdd is not None else "—")
-
-    st.markdown("""
-**📖 保留率指标说明**
-
-| 指标 | 计算方式 | 含义 | 理想值 |
-|------|---------|------|--------|
-| **CAGR 保留率** | 各窗口（OOS CAGR ÷ IS CAGR）的算术均值 | 策略在样本外保留了多少 IS 期收益率——衡量**过拟合程度** | > 70% |
-| **Sharpe 保留率** | 各窗口（OOS Sharpe ÷ IS Sharpe）的算术均值 | 样本外风险调整后收益的衰减——比 CAGR 保留率**更诚实**，因为同时考虑了波动率变化 | > 60% |
-
-⚠️ **重要：两个保留率均为算术均值，容易被极端窗口扭曲。**
-例如 Window 2/3 的 OOS 远超 IS（保留率 > 200%），会拉高均值；而 Window 1 的负值则拉低均值。
-更诚实的检验是看整体**OOS 拼接 CAGR vs SPY OOS 拼接 CAGR**：策略是否在完整 OOS 期间跑赢或跑输市场。
-""")
 
     # Interpretation
     overfit_flag = cagr_ret < 0.5
