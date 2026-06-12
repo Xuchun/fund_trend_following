@@ -14,44 +14,69 @@ NEG_COLOR = "#d62728"
 
 def nav_vs_spy(nav: pd.Series, spy_nav: pd.Series | None,
                color: str, strategy_name: str) -> go.Figure:
-    norm = nav / float(nav.iloc[0])
+    # For each period, pre-compute slices normalised to 1.0 at period start so
+    # clicking a period button re-baselines both curves (not just x-zoom).
+    periods = [
+        ("1年",  1),
+        ("3年",  3),
+        ("5年",  5),
+        ("10年", 10),
+        ("全程", None),
+    ]
+    default_idx = len(periods) - 1  # 全程 active by default
+    has_spy = spy_nav is not None
+    n_per = 2 if has_spy else 1  # traces per period
 
     fig = go.Figure()
-    fig.add_trace(go.Scatter(
-        x=norm.index, y=norm.values,
-        name=strategy_name, line=dict(color=color, width=2),
-        hovertemplate="%{x|%Y-%m-%d}<br>NAV: %{y:.2f}x<extra></extra>",
-    ))
-    if spy_nav is not None:
-        spy = spy_nav / float(spy_nav.iloc[0])
+
+    for i, (label, years) in enumerate(periods):
+        end = nav.index[-1]
+        start = (end - pd.DateOffset(years=years)) if years is not None else nav.index[0]
+        nav_sl = nav.loc[start:]; nav_sl = nav if nav_sl.empty else nav_sl
+        nav_norm = nav_sl / float(nav_sl.iloc[0])
+        visible = (i == default_idx)
+
         fig.add_trace(go.Scatter(
-            x=spy.index, y=spy.values,
-            name="SPY (benchmark)", line=dict(color=SPY_COLOR, width=1.2, dash="dash"),
-            hovertemplate="%{x|%Y-%m-%d}<br>SPY: %{y:.2f}x<extra></extra>",
+            x=nav_norm.index, y=nav_norm.values,
+            name=strategy_name, line=dict(color=color, width=2),
+            hovertemplate="%{x|%Y-%m-%d}<br>NAV: %{y:.2f}x<extra></extra>",
+            visible=visible, legendgroup="strategy", showlegend=(i == default_idx),
         ))
+        if has_spy:
+            spy_sl = spy_nav.loc[start:]; spy_sl = spy_nav if spy_sl.empty else spy_sl
+            spy_norm = spy_sl / float(spy_sl.iloc[0])
+            fig.add_trace(go.Scatter(
+                x=spy_norm.index, y=spy_norm.values,
+                name="SPY (benchmark)", line=dict(color=SPY_COLOR, width=1.2, dash="dash"),
+                hovertemplate="%{x|%Y-%m-%d}<br>SPY: %{y:.2f}x<extra></extra>",
+                visible=visible, legendgroup="spy", showlegend=(i == default_idx),
+            ))
+
+    total = len(periods) * n_per
+    buttons = []
+    for i, (label, _) in enumerate(periods):
+        vis = [False] * total
+        for j in range(n_per):
+            vis[i * n_per + j] = True
+        buttons.append(dict(label=label, method="update",
+                            args=[{"visible": vis}]))
+
     fig.update_layout(
         title="归一化净值曲线 vs SPY",
-        yaxis_title="资产净值（1 = 初始资金）",
+        yaxis_title="资产净值（各期起点 = 1.0x）",
         yaxis_tickformat=".1f",
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         hovermode="x unified",
-        margin=dict(l=60, r=20, t=60, b=120),
+        margin=dict(l=60, r=20, t=80, b=40),
         height=480,
-        xaxis=dict(
-            rangeslider=dict(visible=True, thickness=0.08),
-            rangeselector=dict(
-                buttons=[
-                    dict(count=1,  label="1年",  step="year",  stepmode="backward"),
-                    dict(count=3,  label="3年",  step="year",  stepmode="backward"),
-                    dict(count=5,  label="5年",  step="year",  stepmode="backward"),
-                    dict(count=10, label="10年", step="year",  stepmode="backward"),
-                    dict(step="all", label="全程"),
-                ],
-                bgcolor="#f0f2f6",
-                activecolor=color,
-                font=dict(size=12),
-            ),
-        ),
+        updatemenus=[dict(
+            type="buttons", direction="left",
+            buttons=buttons,
+            active=default_idx,
+            x=0.0, xanchor="left", y=1.13, yanchor="top",
+            bgcolor="#f0f2f6", bordercolor="#cccccc",
+            font=dict(size=12),
+        )],
     )
     fig.update_yaxes(ticksuffix="x")
     return fig
