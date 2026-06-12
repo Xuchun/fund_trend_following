@@ -19,6 +19,20 @@ render_page_header("总结", meta)
 st.caption(f"回测期间 {meta.backtest_start} → {meta.backtest_end}")
 st.markdown("---")
 
+st.markdown(f"""
+**策略1.0** 是一套基于**趋势跟踪**（Trend Following）原理的纯多头量化策略。
+核心逻辑：当股票突破近期最高价（N日突破信号），以 ATR 倍数为单位开仓，
+并通过追踪止损（Trailing Stop）锁定利润、控制回撤，
+空仓资金持有短债 ETF（SHY）。策略在 SPY 200日均线以下停止开新仓，
+但保留已有仓位随趋势运行。
+
+**历史回测标的池**：{meta.universe_total} 只标的（{meta.backtest_start[:4]}–{meta.backtest_end[:4]}），
+含 {meta.universe_stocks} 只个股（当前 S&P 500 + S&P 400 Mid-Cap 成分股）
+及 {meta.universe_etfs} 只行业/主题 ETF。
+标的池基于 **2024 年末在指数中的成分股**，存在幸存者偏差，详见「局限性声明」。
+""")
+st.markdown("---")
+
 render_summary_cards(res.metrics, meta.color, meta.backtest_start, meta.backtest_end)
 
 st.markdown("<br>", unsafe_allow_html=True)
