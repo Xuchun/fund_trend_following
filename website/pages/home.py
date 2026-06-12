@@ -44,15 +44,13 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ── 页面标题 + PDF 下载按钮 ────────────────────────────────────────────────────
+# ── 页面标题 + 按钮区 ──────────────────────────────────────────────────────────
 import streamlit.components.v1 as _components
 
 _col_title, _col_right = st.columns([4, 2])
 with _col_title:
     st.title("总结")
 with _col_right:
-    # components.html runs in a real iframe where JS executes;
-    # window.parent.print() triggers the parent page's print dialog
     _components.html(f"""
     <div style="display:flex;justify-content:flex-end;align-items:center;
                 gap:10px;padding-top:20px;">
@@ -68,6 +66,23 @@ with _col_right:
                      letter-spacing:0.05em;">{meta.badge_text}</span>
     </div>
     """, height=60)
+
+# ── 完整报告下载按钮 ───────────────────────────────────────────────────────────
+with st.spinner("正在生成完整报告…"):
+    try:
+        from website.utils.full_report import generate_report as _gen_report
+        _pdf_bytes = _gen_report(res)
+        import datetime as _dt
+        _fname = f"策略1.0_完整回测报告_{_dt.date.today()}.pdf"
+        st.download_button(
+            label="📥 下载完整报告（所有页面合并 PDF）",
+            data=_pdf_bytes,
+            file_name=_fname,
+            mime="application/pdf",
+            use_container_width=False,
+        )
+    except Exception as _e:
+        st.warning(f"完整报告生成失败：{_e}")
 
 st.caption(f"回测期间 {meta.backtest_start} → {meta.backtest_end}")
 st.markdown("---")
