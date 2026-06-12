@@ -411,7 +411,7 @@ def run_stress_analysis(
         slippage_levels, base_slippage_bps, risk_free_rate,
     )
     lat_df = run_latency_stress(
-        daily_nav, daily_returns, delay_days,
+        daily_nav, daily_returns, trade_log, delay_days,
         risk_free_rate=risk_free_rate,
     )
     liq_df = run_liquidity_stress(
