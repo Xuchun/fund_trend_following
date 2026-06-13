@@ -143,23 +143,23 @@ st.markdown("""
 st.markdown("---")
 
 # ── 入场执行 ──────────────────────────────────────────────────────────────────
-st.subheader("3. 入场执行")
+st.subheader("3. 入场执行（与策略1.0相同）")
 st.code("""
 # 在 t+1 日开盘价买入
 entry_price = open[t+1] × (1 + slippage_bps / 10000)
 
-# ── 跳空保护（唯一执行过滤）──
-gap = open[t+1] / close[t] - 1
-
-if gap > 0.05:          # 跳空高开 > 5%：放弃（风险过高）
-    skip_trade = True
-elif gap > 0.025:       # 跳空高开 2.5%-5%：仓位减半
-    risk_multiplier = 0.5
-elif gap < -0.02:       # 跳空低开 > 2%：放弃（可选）
-    skip_trade = True
-else:                   # 正常开盘
-    risk_multiplier = 1.0
+# 跳空过滤：双向对称 ±2.5%
+gap = abs(open[t+1] - close[t]) / close[t]
+if gap > 0.025:
+    skip_trade = True   # 跳空高开或低开超过 2.5%，放弃入场
 """, language="python")
+st.markdown("""
+| 参数 | 值 | 说明 |
+|------|----|------|
+| Gap filter | ±2.5% | 双向对称，超过则放弃该信号 |
+| Slippage | 10 bps | 买入价 = 开盘价 × (1 + 10bps) |
+| Commission | 3 bps | 单边，买卖各收一次 |
+""")
 
 st.markdown("---")
 
