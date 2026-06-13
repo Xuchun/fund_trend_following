@@ -209,8 +209,9 @@ st.markdown("""
 st.markdown("---")
 
 # ── 6. 止盈 ───────────────────────────────────────────────────────────────────
-st.subheader("6. 移动止盈 — 分段追踪止损（与策略1.0相同）")
+st.subheader("6. 移动止盈 + 平价保护")
 st.code("""
+# ── 分段追踪止损（与策略1.0相同）──────────────────────
 # 初始追踪止损（开仓时设定）
 trail_stop[t0] = entry_price - 3 × ATR(20)
 
@@ -227,13 +228,20 @@ elif R_multiple[t] < 3:
 else:
     trail_stop[t] = max(trail_stop[t-1], highest_high[t] - 5 × ATR(20))
 
-# 触发退出：收盘价跌破追踪止损
-if close[t] < trail_stop[t]:
-    exit at open[t+1]
+# ── 平价保护（Break-Even Stop）— 策略2.0新增 ───────────
+# 浮盈达到 1R 后，止损上移至开仓价，确保最终不亏损
+if R_multiple[t] >= 1:
+    stop_loss = max(stop_loss, entry_price)
+
+# 触发退出（两者取先触发）
+if low[t] < stop_loss:
+    exit at open[t+1]       # 止损触发（日内最低价，含平价保护线）
+elif close[t] < trail_stop[t]:
+    exit at open[t+1]       # 追踪止损触发（收盘价）
 """, language="python")
 
 st.markdown("""
-与策略1.0使用**完全相同**的分段追踪止损机制：
+**分段追踪止损**（与策略1.0相同）：
 
 | R 档位 | 追踪止损倍数 | 含义 |
 |--------|------------|------|
@@ -245,6 +253,23 @@ st.markdown("""
 
 开仓初期，追踪止损初始值（entry − 3×ATR）低于止损（entry − 2×ATR），故止损先提供保护；
 当 highest_high > entry + 1×ATR 时，trail_stop 自然超过止损，成为约束性条件。
+""")
+
+st.markdown("""
+**平价保护（Break-Even Stop）— 策略2.0新增**
+
+当持仓的历史最高浮盈达到 **1R**（即 `R_multiple ≥ 1`，最高价高于开仓价 1 个风险单位）时，
+将止损价上移至**开仓价**：
+
+$$\\text{stop\\_loss} = \\max(\\text{stop\\_loss},\\ \\text{entry\\_price})$$
+
+**效果**：此后即使行情反转并触发止损，成交价约为开仓价，**本笔交易不亏损**（平价出场）。
+
+**为何在策略2.0中引入？**
+- 策略2.0的入场质量更高（横盘收敛 + 箱体突破），回调至开仓价就代表突破完全失败；
+- 结构止损本身比 v1 的 ATR 止损更远（保护了低点结构），给趋势更多空间；
+- 平价保护是对"让结构止损更宽"的对冲：既允许持仓承受更大波动，又保证强势突破失败不会造成亏损；
+- 心理上：确认浮盈 ≥ 1R 后，投资者可以更从容地持仓等待大趋势，而不必担心该笔交易最终亏损。
 """)
 
 st.markdown("---")
