@@ -309,5 +309,9 @@ CAGR **{covid_cagr*100:+.2f}%**，Sharpe **{covid_sharpe:+.3f}**，最大回撤�
         unsafe_allow_html=True,
     )
 
+    # 数据更新对比
+    from website.utils.comparison import render_regime_comparison
+    render_regime_comparison(meta, regime_data)
+
 else:
     st.info("市场环境分析数据尚未生成，无法提供评估。运行：python src/scripts/09_run_regime.py")
