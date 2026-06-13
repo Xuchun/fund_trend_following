@@ -55,7 +55,8 @@ class BacktestEngine:
         self.indicators      = indicators
         self.params          = params
         self.initial_capital = initial_capital
-        self._regime         = self._build_regime_series()
+        self._regime         = self._build_regime_series()      # SPY-based (stocks)
+        self._etf_regime     = self._build_etf_regime_dict()    # per-ETF own SMA
 
     # ── Public API ──────────────────────────────────────────────────────────
 
