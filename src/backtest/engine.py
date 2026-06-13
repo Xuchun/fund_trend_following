@@ -123,15 +123,15 @@ class BacktestEngine:
                 date, portfolio, self.price_panel, self.indicators
             )
 
-            # Regime filter: block new entries when SPY ≤ its 200-day SMA.
-            # Existing positions are NOT touched; cash continues to earn the proxy rate.
-            in_bull = self._is_bull_market(date)
-            if in_bull:
-                pending_entries = self.strategy.generate_entry_signals(
-                    date, universe, self.price_panel, self.indicators, portfolio
-                )
-            else:
-                pending_entries = []
+            # Regime filter: stocks use SPY SMA; ETFs use their own SMA.
+            # Generate all candidates first, then filter per ticker.
+            all_candidates = self.strategy.generate_entry_signals(
+                date, universe, self.price_panel, self.indicators, portfolio
+            )
+            pending_entries = [
+                sig for sig in all_candidates
+                if self._is_bull_market_for(date, sig["ticker"])
+            ]
 
             # ── ④ NAV: mark-to-market at today's close ──────────────────────
             last_nav = portfolio.update_nav(date, self.price_panel)
