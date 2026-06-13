@@ -12,6 +12,13 @@ from __future__ import annotations
 
 import pandas as pd
 
+# ETF set for volume-filter bypass (loaded once at module import)
+try:
+    from data.universe import ETF_TICKERS as _ETF_TICKERS
+    _ETF_SET: frozenset[str] = frozenset(_ETF_TICKERS)
+except ImportError:
+    _ETF_SET = frozenset()
+
 
 def generate_entry_signals_v1(
     date: pd.Timestamp,
