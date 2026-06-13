@@ -166,7 +166,11 @@ def render_mc_comparison(current_meta, mc_data: dict):
 
     prev_end = prev.get("_run_end", "上次运行")
     curr_end = current_meta.backtest_end
-    rerun_done = curr_end != "approx 2026-06-10" and curr_end != prev_end
+    import datetime as _dt
+    try:
+        rerun_done = _dt.date.fromisoformat(curr_end) > _dt.date.fromisoformat(prev_end)
+    except ValueError:
+        rerun_done = curr_end != prev_end
 
     st.markdown("---")
     st.subheader("数据更新对比（蒙特卡洛）")
@@ -225,7 +229,11 @@ def render_wf_comparison(current_meta, wf_data: dict):
 
     prev_end = prev.get("_run_end", "上次运行")
     curr_end = current_meta.backtest_end
-    rerun_done = curr_end != "approx 2026-06-10" and curr_end != prev_end
+    import datetime as _dt
+    try:
+        rerun_done = _dt.date.fromisoformat(curr_end) > _dt.date.fromisoformat(prev_end)
+    except ValueError:
+        rerun_done = curr_end != prev_end
 
     st.markdown("---")
     st.subheader("数据更新对比（Walk-Forward）")
@@ -274,7 +282,11 @@ def render_regime_comparison(current_meta, regime_data: dict):
 
     prev_end = prev.get("_run_end", "上次运行")
     curr_end = current_meta.backtest_end
-    rerun_done = curr_end != "approx 2026-06-10" and curr_end != prev_end
+    import datetime as _dt
+    try:
+        rerun_done = _dt.date.fromisoformat(curr_end) > _dt.date.fromisoformat(prev_end)
+    except ValueError:
+        rerun_done = curr_end != prev_end
 
     st.markdown("---")
     st.subheader("数据更新对比（市场环境）")
