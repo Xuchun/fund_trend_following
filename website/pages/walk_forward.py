@@ -382,5 +382,9 @@ Sharpe **{_w5_sharpe:+.3f}**，是 5 个窗口中表现最强的一个。
         unsafe_allow_html=True,
     )
 
+    # 数据更新对比
+    from website.utils.comparison import render_wf_comparison
+    render_wf_comparison(meta, wf_data)
+
 else:
     st.info("Walk-Forward 数据尚未生成，无法提供评估。运行：python src/scripts/08_run_walkforward.py")
