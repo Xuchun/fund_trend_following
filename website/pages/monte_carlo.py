@@ -404,5 +404,9 @@ baseline历史回测 Sharpe **{actual_sharpe:+.3f}** 与模拟中位数 **{sharp
         unsafe_allow_html=True,
     )
 
+    # 数据更新对比
+    from website.utils.comparison import render_mc_comparison
+    render_mc_comparison(meta, mc)
+
 else:
     st.info("蒙特卡洛数据尚未生成，无法提供评估。运行：python src/scripts/05_run_montecarlo.py")
