@@ -63,17 +63,8 @@ st.markdown("""
 ---
 """)
 
-# ── Limitation 3: Parameter optimization ─────────────────────────────────────
-st.subheader("3. 参数优化偏差")
-st.markdown("""
-**问题：** 当前参数（200日突破、2×ATR止损等）是基于历史经验选定的，
-虽然未进行显式优化，但研究者本人可能存在**无意识的参数选择偏差**。
-
----
-""")
-
-# ── Limitation 4: Regime filter design ───────────────────────────────────────
-st.subheader("4. 市场环境过滤器局限性")
+# ── Limitation 3: Regime filter design ───────────────────────────────────────
+st.subheader("3. 市场环境过滤器局限性")
 st.markdown("""
 **问题 1：震荡市场中的频繁切换（Whipsaw）**
 
