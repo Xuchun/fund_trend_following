@@ -896,3 +896,7 @@ st.markdown(
     f'<div class="info-box"><strong>{verdict_icon} {verdict_body}</strong></div>',
     unsafe_allow_html=True,
 )
+
+# ── 数据更新对比 ──────────────────────────────────────────────────────────────
+from website.utils.comparison import render_data_update_comparison
+render_data_update_comparison(meta, m)
