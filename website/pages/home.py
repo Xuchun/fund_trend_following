@@ -283,3 +283,7 @@ st.markdown("""
 在熊市中提供显著的下行保护，长期持有具备正复利的统计确定性。
 </div>
 """, unsafe_allow_html=True)
+
+# ── 六、数据更新对比 ──────────────────────────────────────────────────────────
+from website.utils.comparison import render_data_update_comparison
+render_data_update_comparison(meta, m)
