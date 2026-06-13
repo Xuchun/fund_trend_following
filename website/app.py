@@ -30,18 +30,9 @@ if not strategies:
     st.error("⚠️ 未找到回测结果。请先运行回测脚本生成 results/v1/ 目录。")
     st.stop()
 
-strategy_ids    = [m.id for m in strategies]
-strategy_labels = [f"{m.display_name} — {m.subtitle}" for m in strategies]
-
-if len(strategies) == 1:
-    selected_idx = 0
-else:
-    with st.sidebar:
-        selected_label = st.selectbox("选择策略1.0版本", strategy_labels,
-                                      key="strategy_selector")
-        selected_idx   = strategy_labels.index(selected_label)
-
-sel_meta = strategies[selected_idx]
+strategy_ids = [m.id for m in strategies]
+selected_idx = 0
+sel_meta     = strategies[selected_idx]
 
 selected_id = strategy_ids[selected_idx]
 cache_key   = f"_results_{selected_id}"
