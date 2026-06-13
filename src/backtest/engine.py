@@ -365,57 +365,12 @@ class BacktestEngine:
         )
         return regime
 
-    def _build_etf_regime_dict(self) -> "dict[str, pd.Series]":
-        """
-        Pre-compute per-ETF regime series: adj_close > SMA(regime_sma_window).
-
-        ETFs filter themselves against their own trend instead of SPY, because
-        ETF prices reflect their own asset class dynamics (bonds, commodities, etc.)
-        which may diverge from US equity regimes.
-        """
-        if not self.params.regime_filter_enabled:
-            return {}
-        try:
-            from data.universe import ETF_TICKERS as _etfs
-            etf_set = frozenset(_etfs)
-        except ImportError:
-            logger.warning("Could not import ETF_TICKERS; ETFs will use SPY regime")
-            return {}
-
-        sma_window = self.params.regime_sma_window
-        result: dict[str, pd.Series] = {}
-        for ticker, df in self.price_panel.items():
-            if ticker not in etf_set:
-                continue
-            adj = df["close"] * df["adj_factor"]
-            sma = adj.rolling(sma_window, min_periods=sma_window).mean()
-            result[ticker] = (adj > sma).where(sma.notna(), other=True)
-        logger.info("Built per-ETF regime dict for %d ETFs", len(result))
-        return result
-
-    def _is_bull_market_for(self, date: pd.Timestamp, ticker: str) -> bool:
-        """Return True if entries are allowed for this ticker on this date.
-
-        ETFs use the ETF's own SMA regime; stocks use the SPY regime.
-        """
+    def _is_bull_market(self, date: pd.Timestamp) -> bool:
+        """Return True if entries are allowed on this date."""
         if self._regime is None:
             return True   # filter disabled
-        if ticker in self._etf_regime:
-            etf_reg = self._etf_regime[ticker]
-            if date in etf_reg.index:
-                return bool(etf_reg[date])
-            return True   # no ETF data → allow entry
-        # Stock: use SPY regime
         if date not in self._regime.index:
-            return True
-        return bool(self._regime[date])
-
-    def _is_bull_market(self, date: pd.Timestamp) -> bool:
-        """Return True if entries are allowed on this date (SPY-only, legacy)."""
-        if self._regime is None:
-            return True
-        if date not in self._regime.index:
-            return True
+            return True   # no data → allow entries (conservative default)
         return bool(self._regime[date])
 
     def _build_results(self, portfolio: Portfolio) -> BacktestResults:
