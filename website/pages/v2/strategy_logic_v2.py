@@ -315,7 +315,7 @@ st.markdown("""
 st.markdown("---")
 
 # ── 组合风险控制 ──────────────────────────────────────────────────────────────
-st.subheader("9. 组合层风险控制（Heat Limit）— 与策略1.0相同")
+st.subheader("9. 组合层风险控制 — Heat Limit（与策略1.0相同）")
 st.code("""
 # 组合总热度 = 所有持仓的当前风险金额之和 / 净值
 total_heat = sum(position_risk_i for all positions) / NAV
