@@ -9,7 +9,7 @@ if str(_root) not in sys.path:
 import streamlit as st
 from website.shared import render_v2_page_header
 
-render_v2_page_header("策略逻辑")
+render_v2_page_header("策略描述")
 st.caption("策略2.0 · 横盘收敛 + 箱体突破趋势跟踪")
 st.markdown("---")
 
