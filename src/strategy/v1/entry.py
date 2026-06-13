@@ -115,10 +115,7 @@ def generate_entry_signals_v1(
             continue
 
         # ── (h) Volume confirmation ─────────────────────────────────────────
-        # ETFs are exempt: their volume is driven by market-making / arbitrage
-        # mechanics rather than institutional conviction, so the volume filter
-        # has no predictive value for ETF breakouts.
-        if params.volume_filter_multiplier > 0 and ticker not in _ETF_SET:
+        if params.volume_filter_multiplier > 0:
             vol_ma_series = ind.get("volume_ma")
             if vol_ma_series is not None and date in vol_ma_series.index:
                 vol_ma = vol_ma_series[date]
