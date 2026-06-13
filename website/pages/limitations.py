@@ -17,16 +17,6 @@ render_page_header("局限性声明", meta)
 st.caption(f"{meta.display_name} — 诚实评估回测的固有偏差")
 st.markdown("---")
 
-st.markdown("""
-<div class="warning-box">
-<h4>⚠️ 整体风险声明</h4>
-本回测结果仅供研究参考，不构成投资建议。真实交易表现预计低于回测值
-<strong>20%–50%</strong>，主要原因如下所述。
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("---")
-
 # ── Limitation 1: Survivorship bias + Data quality ───────────────────────────
 st.subheader("1. 数据局限性")
 st.markdown(f"""
