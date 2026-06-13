@@ -95,3 +95,75 @@ def placeholder(phase: str, section: str) -> None:
         f'</div>',
         unsafe_allow_html=True,
     )
+
+
+# ── Strategy 2.0 helpers ───────────────────────────────────────────────────────
+
+_V2_BADGE_COLOR = "#ff7f0e"
+
+_V2_PRINT_CSS = """
+<style>
+@media print {
+    [data-testid="stSidebar"],
+    [data-testid="stSidebarNav"],
+    [data-testid="stHeader"],
+    [data-testid="stDecoration"],
+    [data-testid="stToolbar"],
+    [data-testid="stStatusWidget"],
+    header, footer,
+    .stApp > header { display: none !important; }
+    iframe { display: none !important; }
+    .main .block-container,
+    [data-testid="stMainBlockContainer"] {
+        padding-top: 0.5cm !important;
+        padding-left: 1cm !important;
+        padding-right: 1cm !important;
+        max-width: 100% !important;
+    }
+    @page { margin: 1.5cm; }
+    .stPlotlyChart,
+    [data-testid="stDataFrame"],
+    [data-testid="stAlert"] { page-break-inside: avoid; }
+    h2, h3 { page-break-after: avoid; }
+}
+</style>
+"""
+
+
+def render_v2_page_header(title: str) -> None:
+    """Page header for Strategy 2.0 pages (no strategy meta needed yet)."""
+    import streamlit.components.v1 as _cv1
+    st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
+    st.markdown(_V2_PRINT_CSS, unsafe_allow_html=True)
+    col1, col2 = st.columns([4, 2])
+    with col1:
+        st.title(title)
+    with col2:
+        _cv1.html(
+            '<div style="display:flex;justify-content:flex-end;align-items:center;'
+            f'gap:10px;padding-top:20px;">'
+            '<button onclick="window.parent.print()" '
+            'title="打开打印对话框后选择「存储为 PDF」即可下载" '
+            'style="background:#1565c0;color:#fff;border:none;padding:7px 16px;'
+            'border-radius:5px;cursor:pointer;font-size:13px;'
+            'font-family:sans-serif;white-space:nowrap;">📄 下载 PDF</button>'
+            f'<span style="background:{_V2_BADGE_COLOR};color:white;padding:4px 12px;'
+            'border-radius:14px;font-size:0.8rem;font-weight:700;'
+            'letter-spacing:0.05em;">策略2.0 开发中</span>'
+            '</div>',
+            height=60,
+        )
+
+
+def placeholder_v2(section: str, description: str = "") -> None:
+    """Standard placeholder for v2 sections pending backtesting."""
+    desc_html = f"<br><small style='color:#bbb'>{description}</small>" if description else ""
+    st.markdown(
+        f'<div class="placeholder-box">'
+        f'<h3 style="color:#bbb;margin:0">⏳ 策略2.0回测尚未完成</h3>'
+        f'<p style="color:#aaa;margin:8px 0 0 0">'
+        f'本章节（{section}）将在策略2.0回测完成后填充分析数据。'
+        f'{desc_html}</p>'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
