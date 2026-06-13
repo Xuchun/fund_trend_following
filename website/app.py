@@ -51,10 +51,12 @@ pg = st.navigation(
             st.Page(_pages / "home.py",               title="总结",     icon="📋"),
             st.Page(_pages / "strategy_comparison.py", title="策略对比", icon="⚖️"),
         ],
+        "数据与方法论": [
+            st.Page(_pages / "universe.py",    title="数据与标的池", icon="🌐"),
+            st.Page(_pages / "methodology.py", title="回测方法论",   icon="⚙️"),
+        ],
         "策略1.0": [
             st.Page(_pages / "strategy_logic.py",      title="策略逻辑",       icon="📐"),
-            st.Page(_pages / "universe.py",             title="数据与标的池",   icon="🌐"),
-            st.Page(_pages / "methodology.py",          title="回测方法论",     icon="⚙️"),
             st.Page(_pages / "baseline_results.py",     title="Baseline参数回测结果", icon="📊"),
             st.Page(_pages / "parameter_sensitivity.py", title="参数敏感性分析", icon="🎛️"),
             st.Page(_pages / "parameter_heatmap.py",   title="参数热力图分析", icon="🗺️"),
