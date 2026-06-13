@@ -51,8 +51,12 @@ def render_data_update_comparison(current_meta, current_metrics: dict):
     prev_end = prev.get("_run_end", "上次运行")
     curr_end = current_meta.backtest_end
 
-    # Detect if rerun has completed (backtest_end changed)
-    rerun_done = curr_end != "approx 2026-06-10" and curr_end != prev_end
+    # Detect if rerun has completed: backtest_end must be strictly later than snapshot's end
+    import datetime as _dt
+    try:
+        rerun_done = _dt.date.fromisoformat(curr_end) > _dt.date.fromisoformat(prev_end)
+    except ValueError:
+        rerun_done = curr_end != prev_end
 
     st.markdown("---")
     st.subheader("数据更新对比")
