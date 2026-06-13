@@ -163,7 +163,7 @@ st.markdown("---")
 
 # ── 最终目标 ──────────────────────────────────────────────────────────────────
 st.subheader("六、最终目标")
-st.markdown("从"单 Breakout 系统"升级为**多 Alpha 专业趋势组合**：")
+st.markdown('从"单 Breakout 系统"升级为**多 Alpha 专业趋势组合**：')
 st.table({
     "目标": [
         "Alpha Diversification",
