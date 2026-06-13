@@ -66,7 +66,7 @@ pg = st.navigation(
             st.Page(_pages / "limitations.py",          title="局限性声明",     icon="⚠️"),
         ],
         "策略2.0（开发中）": [
-            st.Page(_v2 / "strategy_logic_v2.py",        title="策略逻辑",       icon="📐"),
+            st.Page(_v2 / "strategy_logic_v2.py",        title="策略描述",       icon="📐"),
             st.Page(_v2 / "baseline_results_v2.py",      title="Baseline参数回测结果", icon="📊"),
             st.Page(_v2 / "parameter_sensitivity_v2.py", title="参数敏感性分析", icon="🎛️"),
             st.Page(_v2 / "parameter_heatmap_v2.py",    title="参数热力图分析", icon="🗺️"),
