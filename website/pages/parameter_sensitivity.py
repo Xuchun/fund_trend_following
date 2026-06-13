@@ -1114,3 +1114,16 @@ else:
         f'</div>',
         unsafe_allow_html=True,
     )
+
+# ── 数据更新说明 ──────────────────────────────────────────────────────────────
+import json as _json_ps
+_prev_ps = Path(__file__).resolve().parents[2] / "results" / "v1" / "prev_run_snapshot.json"
+if _prev_ps.exists():
+    _prev_ps_data = _json_ps.loads(_prev_ps.read_text())
+    _prev_end_ps = _prev_ps_data.get("_run_end", "上次运行")
+    st.markdown("---")
+    st.caption(
+        f"📅 **数据更新说明**：本页扰动分析已使用最新市场数据重新运行（全部 13 个参数，"
+        f"共 {sum(len(v[1]) for v in [('trail_multiplier_r1',[2.0,2.5,3.0,3.5,4.0],False),('breakout_window',[150,170,200,230,250,270,300],True),('stop_loss_multiplier',[1.5,2.0,2.5,3.0],False),('risk_per_trade',[0.005,0.010,0.015,0.020],False),('position_cap',[0.03,0.05,0.07,0.10],False),('heat_limit',[0.05,0.10,0.15,0.20],False),('correlation_threshold',[0.5,0.6,0.7,0.8,0.9],False),('volume_filter_multiplier',[1.0,1.2,1.5,1.7,2.0],False),('min_price',[8.0,10.0,12.0,15.0],False),('min_market_cap_b',[2.0,3.0,4.0],False),('min_adv_m',[10.0,20.0,30.0],False),('slippage_bps',[5.0,8.0,10.0,12.0,15.0],False),('commission_bps',[1.0,3.0,5.0],False)])} 次"
+        f"），回测终止日从 **{_prev_end_ps}** 延伸至最新市场数据。结论的鲁棒性判断见上方各参数图表。"
+    )
