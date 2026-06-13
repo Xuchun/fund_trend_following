@@ -76,6 +76,9 @@ pg = st.navigation(
             st.Page(_v2 / "regime_analysis_v2.py",       title="市场环境分析",   icon="🌦️"),
             st.Page(_v2 / "limitations_v2.py",           title="局限性声明",     icon="⚠️"),
         ],
+        "Future Work": [
+            st.Page(_fw / "multi_strategy_plan.py", title="多策略开发 Plan", icon="🚀"),
+        ],
     },
     position="sidebar",
 )
