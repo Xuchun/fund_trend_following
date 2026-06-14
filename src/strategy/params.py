@@ -63,3 +63,8 @@ class StrategyParams:
     regime_filter_enabled: bool = True    # True → block entries when SPY < SMA
     regime_ticker: str = "SPY"            # benchmark for regime detection
     regime_sma_window: int = 200          # SMA lookback in trading days
+
+    # ── Consolidation filter (v2+) ─────────────────────────────────────────
+    consolidation_filter_enabled: bool = False   # disabled → v1 behaviour unchanged
+    consolidation_window: int = 80               # lookback days for range check
+    consolidation_threshold: float = 0.25        # (max_high - min_low) / min_low < threshold
