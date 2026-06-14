@@ -86,28 +86,26 @@ def fetch_us_stock_universe(start: str, end: str) -> list[str]:
         with z.open("supported_tickers.csv") as f:
             df = pd.read_csv(f)
 
-    # Filter: major US exchanges, common stock, USD
+    # Filter: major US exchanges, common stock, USD, valid ticker symbol
     mask = (
         df["exchange"].isin(US_EXCHANGES) &
         (df["assetType"] == "Stock") &
-        (df["priceCurrency"] == "USD")
+        (df["priceCurrency"] == "USD") &
+        df["ticker"].notna()
     )
     df = df[mask].copy()
 
-    # Keep only tickers that overlapped with our backtest window
-    df["startDate"] = pd.to_datetime(df["startDate"], errors="coerce")
-    df["endDate"]   = pd.to_datetime(df["endDate"],   errors="coerce")
+    # Keep only tickers that overlapped with our backtest window.
+    # Dates are YYYY-MM-DD strings (ISO format sorts correctly).
+    # NaN = no restriction; fill with boundary values for string comparison.
+    start_filled = df["startDate"].fillna("1900-01-01").astype(str)
+    end_filled   = df["endDate"].fillna("2099-12-31").astype(str)
 
-    bt_start = pd.Timestamp(start)
-    bt_end   = pd.Timestamp(end)
+    in_window = (start_filled <= end) & (end_filled >= start)
+    df = df[in_window].copy()
+    ef = end_filled[in_window]
 
-    in_window = (
-        (df["startDate"].isna() | (df["startDate"] <= bt_end)) &
-        (df["endDate"].isna()   | (df["endDate"]   >= bt_start))
-    )
-    df = df[in_window]
-
-    still_active = df["endDate"].isna() | (df["endDate"] >= pd.Timestamp("2026-01-01"))
+    still_active = ef >= "2026-01-01"
     delisted_ct  = (~still_active).sum()
     active_ct    = still_active.sum()
     print(f"  Active stocks  : {active_ct:,}")
