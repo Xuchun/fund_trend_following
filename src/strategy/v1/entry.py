@@ -132,6 +132,12 @@ def generate_entry_signals_v1(
         if params.breakout_strength_min > 0 and bs < 1.0 + params.breakout_strength_min:
             continue
 
+        # ── (j) Consolidation filter (v2+, disabled by default) ─────────────
+        if params.consolidation_filter_enabled:
+            consol = ind.get("consolidation_signal")
+            if consol is None or date not in consol.index or not bool(consol[date]):
+                continue
+
         signals.append(
             {
                 "ticker":              ticker,
