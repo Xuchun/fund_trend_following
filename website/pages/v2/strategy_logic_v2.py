@@ -200,7 +200,7 @@ st.markdown("""
 st.markdown("---")
 
 # ── 4. 入场执行 ───────────────────────────────────────────────────────────────
-st.subheader("4. 入场执行")
+st.subheader("4. 入场执行（跟策略1.0一样）")
 col1, col2 = st.columns(2)
 with col1:
     st.markdown(f"""
