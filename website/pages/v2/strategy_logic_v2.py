@@ -418,7 +418,7 @@ Heat Limit（**{p['heat_limit']*100:.0f}% NAV**）是组合级别的风险上限
 st.markdown("---")
 
 # ── 10. 现金管理 ──────────────────────────────────────────────────────────────
-st.subheader("10. 现金管理")
+st.subheader("10. 现金管理（跟策略1.0一样）")
 st.markdown(f"""
 **闲置资金管理：**
 - 未持仓资金投入 **{meta.cash_proxy}**（iShares 1–3 年期国债 ETF）
