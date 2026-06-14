@@ -73,15 +73,21 @@ def precompute_indicators(
             adv = compute_adv_from_ohlcv(df["close"], volume, window=60)
             volume_ma = compute_volume_ma(volume, window=60)
             log_returns = compute_log_returns(close)
+            consolidation_signal = compute_consolidation_signal(
+                high, low,
+                window=params.consolidation_window,
+                threshold=params.consolidation_threshold,
+            )
 
             result[ticker] = {
-                "atr":               atr,
-                "rolling_high":      rolling_high,
-                "breakout_signal":   breakout_signal,
-                "breakout_strength": breakout_strength,
-                "adv":               adv,
-                "volume_ma":         volume_ma,
-                "log_returns":       log_returns,
+                "atr":                  atr,
+                "rolling_high":         rolling_high,
+                "breakout_signal":      breakout_signal,
+                "breakout_strength":    breakout_strength,
+                "adv":                  adv,
+                "volume_ma":            volume_ma,
+                "log_returns":          log_returns,
+                "consolidation_signal": consolidation_signal,
             }
         except Exception as e:
             logger.warning("Failed to compute indicators for %s: %s", ticker, e)
