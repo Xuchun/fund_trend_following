@@ -7,7 +7,11 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
-from website.shared import render_v2_page_header
+from website.shared import render_v2_page_header, get_results
+
+res  = get_results()
+meta = res.meta
+p    = meta.params_anchor
 
 render_v2_page_header("策略描述")
 st.caption("策略2.0 · 横盘收敛 + 箱体突破趋势跟踪")
@@ -39,40 +43,83 @@ st.markdown("""
 st.markdown("---")
 
 # ── 1. 标的过滤 ───────────────────────────────────────────────────────────────
-st.subheader("1. 标的过滤（与策略1.0相同）")
-st.markdown("""
-与策略1.0相同的流动性约束：
+st.subheader("1. 标的过滤")
+st.markdown(f"""
+每个交易日扫描入场信号前，对所有候选标的逐一检查以下三个条件，**三者必须同时满足**，否则跳过该标的：
 
 | 过滤条件 | 阈值 | 说明 |
 |----------|------|------|
-| 收盘价（原始价格） | > $10 | 排除低价股 |
-| 市值 | > $20 亿美元（$2B） | 排除微盘股 |
-| 日均成交额（ADV_60） | > $20M 美元 | 流动性过滤 |
+| 收盘价（原始价格） | > \${p.get('min_price', 10):.0f} | 排除低价股，降低数据噪声和流动性风险 |
+| 市值 | > \${p.get('min_market_cap_b', 2):.0f} 亿美元（\$2B） | 排除微盘股，确保基本的机构可投资性 |
+| 日均成交额（ADV） | > \${p.get('min_adv_m', 20):.0f}M 美元 | 流动性过滤，确保可在目标规模下正常进出 |
 
-```
-ADV_60[t] = average(dollar_volume[t-59 : t])  # 含当日，共60天
-```
+**实现细节：**
+- **价格** 使用**原始价格**（非复权），确保标的在当时实际可以 ≥ \${p.get('min_price', 10):.0f} 买入
+- **市值** ⚠️ Yahoo Finance 不提供历史时间点市值数据，该过滤条件在回测中**未实际执行**。回测依赖 S&P 900 成分股名单作为隐性市值门槛（S&P 400 成分股市值约 $20亿以上），但成分股名单为静态，存在**幸存者偏差**——已退市或被踢出指数的小市值股票不在回测范围内。
+- **ADV** 基于**滚动 60 日成交额均值**，包含当天 t：ADV_60[t] = mean(dollar_volume[t-59], ..., dollar_volume[t])（含当天，共 60 天；当天成交量在收盘后信号生成时已知，无前视偏差）
 """)
+
+st.markdown(f"""
+<div class="info-box">
+<strong>为何需要这三个过滤条件？</strong><br>
+<ul>
+<li><strong>价格 > \${p.get('min_price', 10):.0f}：</strong>低价股（Penny Stocks）波动极大、流动性差，ATR 计算容易失真，仓位规模计算也会产生极端结果。</li>
+<li><strong>市值 > \${p.get('min_market_cap_b', 2):.0f}B：</strong>微盘股成交量小，机构资金（\$1,000 万规模）大额买入会造成明显市场冲击，回测中的成交价难以在实盘中复现。</li>
+<li><strong>ADV > \${p.get('min_adv_m', 20):.0f}M：</strong>直接量化流动性——确保目标仓位（最大 5% NAV = \$50 万）不超过该股票单日成交额的 2.5%，减少实盘滑点超出假设的风险。</li>
+</ul>
+</div>
+""", unsafe_allow_html=True)
 
 st.markdown("---")
 
 # ── 2. 市场环境过滤 ───────────────────────────────────────────────────────────
-st.subheader("2. 市场环境过滤 — SPY 200 日均线（与策略1.0相同）")
-st.code("""
-# 牛市（Bull）：SPY adj_close[t] > SMA(200)[t]
-#   → 正常扫描入场信号，允许开新仓
+regime_enabled = p.get("regime_filter_enabled", False)
+regime_ticker  = p.get("regime_ticker", "SPY")
+regime_window  = p.get("regime_sma_window", 200)
 
-# 熊市（Bear）：SPY adj_close[t] ≤ SMA(200)[t]
-#   → 停止新开仓（pending_entries = []）
-#   → 已有持仓按止损 / 追踪止损继续运行，不强制平仓
-#   → 空仓资金继续配置到短债 ETF
-""", language="python")
+st.subheader("2. 市场环境过滤")
 
-st.markdown("""
-| 模式 | 条件 | 策略行为 |
-|------|------|---------|
-| 牛市（Bull） | SPY > SMA(200) | 正常扫描入场信号 |
-| 熊市（Bear） | SPY ≤ SMA(200) | 停止新开仓；持仓继续运行；现金投入短债 ETF |
+if regime_enabled:
+    st.markdown(f"""
+当 **{regime_ticker}** 收盘价 > 其 **{regime_window} 日简单移动平均线** 时，
+策略处于「牛市模式」，允许开仓。否则进入「熊市模式」，停止新建仓位。
+
+```
+牛市模式（Bull）：SPY adj-close[t] > SMA({regime_window})[t]  → 正常扫描入场信号
+熊市模式（Bear）：SPY adj-close[t] ≤ SMA({regime_window})[t]  → 停止新建仓位
+```
+
+""")
+    _rs = meta.regime_stats
+    if _rs:
+        _bear_days_total = _rs["bear_days_total"]
+        _bear_pct        = _rs["bear_pct"]
+        _ep_strs = []
+        for ep in _rs.get("top_episodes", [])[:2]:
+            _lbl = str(ep["start_year"]) if ep["start_year"] == ep["end_year"] else f"{ep['start_year']}–{ep['end_year']}"
+            _ep_strs.append(f"{_lbl}（封仓 {ep['days']} 天）")
+        _ep_text = "，".join(_ep_strs) if _ep_strs else "无重大熊市封仓期"
+        _regime_detail = f"从 {meta.backtest_start[:4]} 年起，此规则将<strong>熊市封仓天数约占 {_bear_pct:.0f}%</strong>（约 {_bear_days_total:,} 天），主要覆盖 {_ep_text}"
+    else:
+        _regime_detail = "熊市期间停止新建仓位，历史上主要覆盖 2008–2009 金融危机及 2022 年加息周期"
+
+    st.markdown(f"""
+<div class="info-box">
+<strong>规则要点</strong><br>
+<ul>
+<li>现有持仓<strong>不强平</strong>——移动止盈继续保护，让利润自然奔跑</li>
+<li>熊市期间所有闲置现金自动流入 <strong>{meta.cash_proxy}</strong>（赚取无风险利率）</li>
+<li>{_regime_detail}</li>
+</ul>
+</div>
+""", unsafe_allow_html=True)
+else:
+    st.markdown("""
+**【当前参数未启用市场环境过滤器】**
+
+策略 Baseline 默认启用此过滤器（`regime_filter_enabled = True`）。
+当前运行已将其关闭，策略将在整个回测期内无论牛熊均扫描入场信号，
+可能导致在 2008 年金融危机等极端行情中承受显著回撤。
 """)
 
 st.markdown("---")
@@ -153,22 +200,32 @@ st.markdown("""
 st.markdown("---")
 
 # ── 4. 入场执行 ───────────────────────────────────────────────────────────────
-st.subheader("4. 入场执行（与策略1.0相同）")
-st.code("""
-# 在 t+1 日开盘价买入
-entry_price = open[t+1] × (1 + slippage_bps / 10000)
+st.subheader("4. 入场执行")
+col1, col2 = st.columns(2)
+with col1:
+    st.markdown(f"""
+**执行模型：**
+- 信号在 t 日收盘后生成
+- 以 t+1 日开盘价执行（无前视偏差）
+- 滑点：{p.get('slippage_bps', 10):.0f} bps（单边）
+- 佣金：{p.get('commission_bps', 3):.0f} bps（单边）
+- 总成本约 {(p.get('slippage_bps', 10) + p.get('commission_bps', 3)) * 2:.0f} bps/往返
 
-# 跳空过滤：双向对称 ±2.5%
-gap = abs(open[t+1] - close[t]) / close[t]
-if gap > 0.025:
-    skip_trade = True   # 跳空高开或低开超过 2.5%，放弃入场
-""", language="python")
-st.markdown("""
-| 参数 | 值 | 说明 |
-|------|----|------|
-| Gap filter | ±2.5% | 双向对称，超过则放弃该信号 |
-| Slippage | 10 bps | 买入价 = 开盘价 × (1 + 10bps) |
-| Commission | 3 bps | 单边，买卖各收一次 |
+> 实现说明：代码中滑点已直接嵌入成交价，
+> `fill_price = open_price × (1 + slippage_bps/10000)`，
+> 与设计方案将 entry_price 和成本分开记录的方式在 PnL 上数值等价。
+""")
+with col2:
+    st.markdown(f"""
+**Gap 过滤（双向对称）：**
+- 若 `|t+1开盘价 − t收盘价| / t收盘价 > {p.get('gap_filter', 0.025) * 100:.1f}%`
+- 跳空高开或跳空低开均跳过该信号
+
+| 参数 | 值 |
+|------|----|
+| Gap filter | ±{p.get('gap_filter', 0.025) * 100:.1f}% |
+| Slippage | {p.get('slippage_bps', 10):.0f} bps |
+| Commission | {p.get('commission_bps', 3):.0f} bps |
 """)
 
 st.markdown("---")
@@ -209,7 +266,7 @@ st.markdown("""
 st.markdown("---")
 
 # ── 6. 止盈 ───────────────────────────────────────────────────────────────────
-st.subheader("6. 移动止盈 — 分段追踪止损（与策略1.0相同）")
+st.subheader("6. 移动止盈 + 平价保护（需要测试）")
 st.code("""
 # 初始追踪止损（开仓时设定）
 trail_stop[t0] = entry_price - 3 × ATR(20)
@@ -278,95 +335,128 @@ if R_multiple[t] >= 1:
 st.markdown("---")
 
 # ── 7. 仓位管理 ───────────────────────────────────────────────────────────────
-st.subheader("7. 仓位管理 — 4步风险等权（与策略1.0相同）")
-st.code("""
-# Step 1：原始仓位（1% NAV 风险）
-risk_amount  = NAV × 1%
-raw_shares   = risk_amount / (entry_price - stop_loss)
+st.subheader("7. 仓位管理")
 
-# Step 2：单标的市值上限（5% NAV）
-capped_shares = NAV × 5% / entry_price
-preliminary_shares = min(raw_shares, capped_shares)
+cols = st.columns(4)
+steps = [
+    ("Step 1", "目标风险", f"每笔交易风险 = NAV × {p['risk_per_trade']*100:.0f}%\n股数 = 目标风险 ÷ (入场价 − 止损价)"),
+    ("Step 2", "单标的上限", f"单标的持仓市值上限 = NAV × {p['position_cap']*100:.0f}%"),
+    ("Step 3", "相关性调整", f"若持仓中已有<strong>正相关性</strong> > {p['correlation_threshold']:.2f} 的标的，\n新仓位减半（负相关不触发）"),
+    ("Step 4", "组合热度检查", f"组合总风险敞口 ≤ NAV × {p['heat_limit']*100:.0f}%\n超限则拒绝开仓"),
+]
+for col, (step, title, body) in zip(cols, steps):
+    with col:
+        st.markdown(f"""
+<div class="info-box">
+<strong>{step}：{title}</strong><br>
+<small>{body.replace(chr(10), '<br>')}</small>
+</div>
+""", unsafe_allow_html=True)
 
-# Step 3：相关性调整（见下节）
-final_shares = preliminary_shares × (0.5 if max_corr > 0.7 else 1.0)
+st.markdown(f"""
+**Step 3 相关性调整——实现细节：**
 
-# Step 4：组合热度检查（见第9节）
-new_risk   = final_shares × (entry_price - stop_loss)
-total_heat = (existing_risk + new_risk) / NAV
-if total_heat > 0.10:
-    skip_trade   # 放弃开仓（不是减仓）
-""", language="python")
+| 参数 | 值 | 说明 |
+|------|----|------|
+| 收益率类型 | 对数收益率 | ln(close[t] / close[t-1]) |
+| 滚动窗口 | 60 个交易日 | 与新标的和每个已持仓标的逐对计算 |
+| 最少样本 | 40 个有效交易日 | 共同有数据的天数不足 40 → 视为不相关 |
+| 相关系数处理 | 仅正相关 | 负相关视为 0，不触发减仓（多头组合中负相关具有对冲效果） |
+| 触发阈值 | max_pos_corr > {p['correlation_threshold']:.2f} | 与任意一个已持仓标的超阈值即触发 |
+| 触发效果 | 仓位减半 × {p.get('correlation_reduction', 0.5):.1f} | 不拒绝开仓，仅降低头寸 |
+| 空仓时 | 跳过检查 | 无已持仓标的时不触发减仓 |
+""")
 
 st.markdown("---")
 
 # ── 8. 相关性过滤 ─────────────────────────────────────────────────────────────
-st.subheader("8. 相关性过滤（与策略1.0相同）")
-st.code("""
-# 对数收益率
-r[t] = ln(close[t] / close[t-1])
+st.subheader("8. 相关性过滤")
+st.markdown(f"""
+对每个候选标的，计算与**所有当前持仓**的 Pearson 相关系数，使用过去 60 个共有交易日的对数收益率序列。
+若有效样本不足 40 天或标准差为 0，则视为不相关（不触发减仓）。
 
-# 对每个候选标的，计算与所有当前持仓的 Pearson 相关性
-# 使用过去 60 个共有交易日的对数收益率序列（inner join + 取最近 60 个）
-# 若有效样本 < 40 或标准差为 0，则视为不相关（不触发减仓）
+```python
+r[t] = ln(close[t] / close[t-1])
 
 max_corr = max(pearson_corr(r_new, r_i, window=60)
                for r_i in current_positions)
 
 # 仅考虑正相关；负相关视为 0（负相关具有对冲效果，不减仓）
-if max_corr > 0.7:
-    final_shares = preliminary_shares × 0.5
+if max_corr > {p['correlation_threshold']:.2f}:
+    final_shares = preliminary_shares × {p.get('correlation_reduction', 0.5):.1f}
 else:
     final_shares = preliminary_shares
-""", language="python")
+```
 
-st.markdown("""
 | 参数 | 值 | 说明 |
 |------|-----|------|
 | Correlation window | 60 日 | 计算相关性使用的历史窗口 |
 | Min samples | 40 个 | 有效样本不足则视为不相关 |
-| Correlation threshold | 0.7 | 超过此值触发减仓 |
-| Correlation reduction | 0.5× | 仓位减半 |
+| Correlation threshold | {p['correlation_threshold']:.2f} | 超过此值触发减仓 |
+| Correlation reduction | {p.get('correlation_reduction', 0.5):.1f}× | 仓位减半 |
 """)
 
 st.markdown("---")
 
-# ── 9. 组合风险控制 ───────────────────────────────────────────────────────────
-st.subheader("9. 组合层风险控制 — Heat Limit（与策略1.0相同）")
-st.code("""
+# ── 9. 组合层风险控制 ─────────────────────────────────────────────────────────
+st.subheader("9. 组合层风险控制 — Heat Limit")
+st.markdown(f"""
+```python
 # 组合总热度 = 所有持仓的当前风险金额之和 / 净值
 total_heat = sum(position_risk_i for all positions) / NAV
 
 new_position_risk = final_shares × (entry_price - stop_loss)
 
-if (total_heat + new_position_risk / NAV) > 0.10:
+if (total_heat + new_position_risk / NAV) > {p['heat_limit']:.2f}:
     skip_trade  # 放弃开仓（不是减仓）
-""", language="python")
+```
 
-st.markdown("""
-Heat Limit（10% NAV）是组合级别的风险上限，确保在极端行情下（多个仓位同时亏损）
-总损失不超过可接受范围。与策略1.0相同，超过热度上限时**放弃**新开仓，而非减少仓位规模。
+Heat Limit（**{p['heat_limit']*100:.0f}% NAV**）是组合级别的风险上限，确保在极端行情下（多个仓位同时亏损）
+总损失不超过可接受范围。超过热度上限时**放弃**新开仓，而非减少仓位规模。
 """)
 
 st.markdown("---")
 
 # ── 10. 现金管理 ──────────────────────────────────────────────────────────────
-st.subheader("10. 现金管理（与策略1.0相同）")
-st.markdown("""
-空仓资金自动配置到**短期国债 ETF**，赚取无风险利率，不参与策略信号计算。
-
-与策略1.0使用 **SHY**（1-3 年期国债 ETF，覆盖完整回测期 2002+）保持一致。
+st.subheader("10. 现金管理")
+st.markdown(f"""
+**闲置资金管理：**
+- 未持仓资金投入 **{meta.cash_proxy}**（iShares 1–3 年期国债 ETF）
+- 获取无风险收益，降低现金拖累
 """)
+
+st.markdown("""
+<div class="info-box">
+<strong>为何使用 SHY 而非 SGOV？</strong><br>
+SGOV（0–3 个月国债 ETF）于 <strong>2022 年</strong>才上市，若用于 2004–2021 年的回测，
+现金将在该期间产生 0% 收益，严重低估策略的真实表现。
+SHY（1–3 年期国债 ETF）自 <strong>2002 年</strong>起就有数据，可覆盖完整的 2004–2026 回测期，
+能够正确模拟闲置资金赚取无风险利率的效果。
+</div>
+""", unsafe_allow_html=True)
 
 st.markdown("---")
 
 # ── 11. 信号执行顺序 ──────────────────────────────────────────────────────────
-st.subheader("11. 信号执行顺序（与策略1.0相同）")
+st.subheader("11. 信号执行顺序")
 st.markdown("""
-与策略1.0相同的执行时序：
+**多信号处理（同一天多个标的同时触发突破）：**
+- 所有信号按 **突破强度（breakout_strength）降序排列**优先执行：`breakout_strength = adj_close[t] / max(adj_high[t-N:t-1])`
+- 每执行完一笔后**立即更新**当前持仓和风险敞口，后续信号的相关性计算与组合热度检查均基于最新状态
+- 优先处理突破最强的信号，可在热度上限耗尽前最大化资金利用效率
 
+**退出优先级顺序：**
+
+| 优先级 | 条件 | 触发方式 |
+|--------|------|---------|
+| Priority 1 | 止损：`low[t] < stop_loss` | 日内最低价，同日两条件均满足时此项优先 |
+| Priority 2 | 移动止盈：`close[t] < trail_stop` | 收盘价，仅在止损未触发时检查 |
+
+**执行时序：**
 1. **t 日收盘后**：更新持仓状态（highest_high、trail_stop）；生成止盈信号；生成开仓信号
 2. **t+1 日开盘**：先执行平仓指令，再执行开仓指令；同一标的在同一时点不会同时开仓与平仓
+
+策略无固定止盈价位（Take Profit），持仓仅通过止损或移动止盈退出。
 """)
 
 st.markdown("---")
