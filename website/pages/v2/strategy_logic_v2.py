@@ -141,7 +141,7 @@ st.markdown("""
 > 与策略1.0入场信号完全相同：收盘价突破过去 200 个交易日（约 10 个月）的**最高价**（high）。
 """)
 
-st.markdown("#### 条件2：横盘收敛（Consolidation — 核心 Edge）")
+st.markdown("#### 条件2：横盘收敛")
 st.code("""
 # 过去 80 日价格区间宽度 < 25%
 range_ratio = (max(high[t-80:t-1]) - min(low[t-80:t-1])) / min(low[t-80:t-1])
