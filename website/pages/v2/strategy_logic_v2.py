@@ -185,7 +185,7 @@ st.markdown("""
 > 目前先验证横盘收敛本身是否带来统计显著的增量，再决定是否叠加此条件。
 """)
 
-st.markdown("#### 条件4：突破强度（Breakout Momentum）")
+st.markdown("#### 条件4：突破强度")
 st.code("""
 # 突破当日为阳线，且涨幅 > 1%
 (close[t] / open[t] - 1) > 0.01
