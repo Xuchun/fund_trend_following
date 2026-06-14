@@ -29,3 +29,7 @@ results/**/sanity.txt
 
 # PDF 报告（体积大，本地查看用）
 *.pdf
+
+# 环境变量 / API keys（不上传 git）
+.env
+.env.*
