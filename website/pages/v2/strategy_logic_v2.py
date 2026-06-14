@@ -77,7 +77,7 @@ regime_enabled = p.get("regime_filter_enabled", False)
 regime_ticker  = p.get("regime_ticker", "SPY")
 regime_window  = p.get("regime_sma_window", 200)
 
-st.subheader("2. 市场环境过滤")
+st.subheader("2. 市场环境过滤（跟策略1.0一样）")
 
 if regime_enabled:
     st.markdown(f"""
