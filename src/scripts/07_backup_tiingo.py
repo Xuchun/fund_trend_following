@@ -130,10 +130,13 @@ def main() -> None:
         print("ERROR: 没有找到任何数据文件")
         sys.exit(1)
 
+    n_parquet = len(files)
     total_uncompressed = sum(f.stat().st_size for f in files)
+    backup_date = str(date.today())
+
     print(f"\n{'='*60}")
     print(f"  Tiingo 数据备份")
-    print(f"  文件数    : {len(files):,} 个")
+    print(f"  文件数    : {n_parquet:,} 个")
     print(f"  原始大小  : {fmt_size(total_uncompressed)}")
     print(f"  输出文件  : {BACKUP_NAME}")
     print(f"{'='*60}\n")
@@ -141,7 +144,17 @@ def main() -> None:
     t0 = time.time()
     done = 0
 
+    readme_content = _build_readme(n_parquet, backup_date)
+
     with tarfile.open(BACKUP_PATH, "w:gz") as tar:
+        # Add README first
+        import io
+        readme_bytes = readme_content.encode("utf-8")
+        info = tarfile.TarInfo(name="README.md")
+        info.size = len(readme_bytes)
+        tar.addfile(info, io.BytesIO(readme_bytes))
+
+        # Add all data files
         for f in files:
             arcname = str(f.relative_to(_root))
             tar.add(f, arcname=arcname)
