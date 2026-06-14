@@ -23,3 +23,9 @@ results/**/sanity.txt
 # IDE
 .idea/
 .vscode/
+
+# Obsidian
+.obsidian/
+
+# PDF 报告（体积大，本地查看用）
+*.pdf
