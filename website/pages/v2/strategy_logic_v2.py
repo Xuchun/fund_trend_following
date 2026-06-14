@@ -438,7 +438,7 @@ SHY（1–3 年期国债 ETF）自 <strong>2002 年</strong>起就有数据，�
 st.markdown("---")
 
 # ── 11. 信号执行顺序 ──────────────────────────────────────────────────────────
-st.subheader("11. 信号执行顺序")
+st.subheader("11. 信号执行顺序（跟策略1.0一样）")
 st.markdown("""
 **多信号处理（同一天多个标的同时触发突破）：**
 - 所有信号按 **突破强度（breakout_strength）降序排列**优先执行：`breakout_strength = adj_close[t] / max(adj_high[t-N:t-1])`
