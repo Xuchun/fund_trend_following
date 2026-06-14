@@ -173,7 +173,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown("#### 条件3：触顶次数（Touch Count — 暂缓实施）")
+st.markdown("#### 条件3：触顶次数（需要测试）")
 st.code("""
 # 过去横盘期内价格触及压力区间顶部次数 >= 2（允许 ±2% 误差）
 touch_count >= 2
