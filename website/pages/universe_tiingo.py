@@ -40,6 +40,12 @@ eu = _load_universe()
 active   = eu[eu["is_active"]]
 delisted = eu[~eu["is_active"]]
 
+# ≥252 天（1年）过滤后的推荐标的池
+MIN_ELIGIBLE_DAYS = 252
+eu_rec     = eu[eu["eligible_days"] >= MIN_ELIGIBLE_DAYS]
+rec_active = eu_rec[eu_rec["is_active"]]
+rec_del    = eu_rec[~eu_rec["is_active"]]
+
 # ── 一、过滤方法与理由 ─────────────────────────────────────────────────────────
 st.subheader("一、过滤方法与理由")
 st.markdown("""
