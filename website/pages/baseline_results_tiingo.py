@@ -22,7 +22,7 @@ from website.components.charts import (
     monthly_return_heatmap, capital_utilization_chart,
 )
 
-_TIINGO_RESULTS_ID = "v1_unbiased_20m"
+_TIINGO_RESULTS_ID = "v1_unbiased_50m"
 _cache_key = f"_results_{_TIINGO_RESULTS_ID}"
 if _cache_key not in st.session_state:
     with st.spinner("正在加载 Tiingo 无偏差回测数据…"):
