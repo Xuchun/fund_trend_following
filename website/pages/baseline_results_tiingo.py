@@ -893,7 +893,7 @@ st.plotly_chart(_fig_yr_ta, use_container_width=True)
 _peak_yr_ta  = int(_first_yr_ta.loc[_first_yr_ta["count"].idxmax(), "year"])
 _peak_cnt_ta = int(_first_yr_ta["count"].max())
 st.markdown(
-    f"**解读：** 各年度策略首次买入的"新面孔"标的数量，反映市场趋势机会的时间分布。"
+    f"**解读：** 各年度策略首次买入的新标的数量，反映市场趋势机会的时间分布。"
     f"**{_peak_yr_ta} 年**新增标的最多（{_peak_cnt_ta:,} 个），"
     "通常对应牛市突破年——大量标的同时创出 200 日新高。"
     "熊市年份（如 2008、2022）新增标的极少，说明 Regime Filter 有效拦截了潜在假突破信号。"
