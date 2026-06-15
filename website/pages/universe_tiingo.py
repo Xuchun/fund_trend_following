@@ -250,8 +250,8 @@ with tab2:
 
 # ── Tab3: Exits per year (delisted) ───────────────────────────────────────
 with tab3:
-    st.markdown("已退市标的的退市年份分布（按 `last_eligible` 年份统计，仅统计已退市标的）。")
-    exit_year = delisted["last_eligible"].dt.year.value_counts().sort_index().reset_index()
+    st.markdown("最终回测标的池中已退市标的的退市年份分布（按 `last_eligible` 年份统计）。")
+    exit_year = rec_del["last_eligible"].dt.year.value_counts().sort_index().reset_index()
     exit_year.columns = ["year", "count"]
 
     _fig_exit = go.Figure()
