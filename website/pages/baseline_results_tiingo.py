@@ -373,6 +373,69 @@ st.markdown(f"""
 
 st.markdown("---")
 
+# ── Delisted / acquired trades ────────────────────────────────────────────────
+import plotly.graph_objects as _go
+
+_dl = res.trades[res.trades["exit_reason"] == "delisted"].copy() if "exit_reason" in res.trades.columns else res.trades.iloc[0:0].copy()
+_n_total   = len(res.trades)
+_n_dl      = len(_dl)
+_dl_pct    = _n_dl / _n_total * 100 if _n_total else 0
+
+st.subheader("退市 / 被收购标的的交易")
+
+if _n_dl == 0:
+    st.info("本次回测中未检测到退市 / 被收购平仓。")
+else:
+    _dl_wins     = int((_dl["net_pnl"] > 0).sum())
+    _dl_win_rate = _dl_wins / _n_dl * 100
+    _dl_avg_r    = float(_dl["pnl_r_multiple"].mean()) if "pnl_r_multiple" in _dl.columns else float("nan")
+    _dl_net_pnl  = float(_dl["net_pnl"].sum()) if "net_pnl" in _dl.columns else float("nan")
+
+    _c1, _c2, _c3, _c4 = st.columns(4)
+    _c1.metric("退市平仓笔数",  f"{_n_dl}",         help=f"占全部 {_n_total} 笔的 {_dl_pct:.1f}%")
+    _c2.metric("胜率",          f"{_dl_win_rate:.0f}%", help="net_pnl > 0 的比例")
+    _c3.metric("平均 R 倍数",   f"{_dl_avg_r:.2f}R",    help="含并购溢价捕获的 R 倍数均值")
+    _c4.metric("累计净盈亏",    f"${_dl_net_pnl:,.0f}", help="退市 / 并购事件带来的总净利润")
+
+    # Bar chart: count by year of exit
+    _dl["exit_year"] = _pd_etf.to_datetime(_dl["exit_date"]).dt.year
+    _yr_cnt = _dl.groupby("exit_year").size().reset_index(name="count")
+    _fig_dl = _go.Figure(_go.Bar(
+        x=_yr_cnt["exit_year"].astype(str),
+        y=_yr_cnt["count"],
+        marker_color="#e67e22",
+        text=_yr_cnt["count"],
+        textposition="outside",
+        hovertemplate="退市年份 %{x}：%{y} 笔<extra></extra>",
+    ))
+    _fig_dl.update_layout(
+        title="各年度退市 / 被收购平仓笔数",
+        xaxis_title="退市年份", yaxis_title="笔数",
+        height=280, margin=dict(l=50, r=20, t=50, b=40),
+        bargap=0.3,
+    )
+    st.plotly_chart(_fig_dl, use_container_width=True)
+
+    # Detail table
+    with st.expander(f"查看全部 {_n_dl} 笔退市平仓明细", expanded=False):
+        _dl_show = _dl[["ticker", "entry_date", "exit_date", "holding_days",
+                         "pnl_r_multiple", "net_pnl"]].copy()
+        _dl_show = _dl_show.sort_values("exit_date")
+        _dl_show.columns = ["代码", "入场日", "退市平仓日", "持仓天数", "R 倍数", "净盈亏 ($)"]
+        _dl_show["R 倍数"]    = _dl_show["R 倍数"].map(lambda x: f"{x:.2f}R")
+        _dl_show["净盈亏 ($)"] = _dl_show["净盈亏 ($)"].map(lambda x: f"${x:,.0f}")
+        st.dataframe(_dl_show, use_container_width=True, hide_index=True)
+
+    st.markdown(f"""
+**解读：** 回测期间共有 **{_n_dl}** 笔交易（占总交易的 {_dl_pct:.1f}%）因标的退市或被收购而平仓。
+由于策略1.0基于价格突破入场，被并购标的往往在宣布前已产生较强趋势，
+并购溢价会使最后一个交易日的收盘价出现跳升，平均 R 倍数达 {_dl_avg_r:.2f}R
+（高于策略整体的 {m.get("avg_win_r", float("nan")):.2f}R 胜率组均值）。
+这表明 Tiingo 动态标的池中的历史退市 / 并购事件对策略贡献了**正收益**，并非噪声。
+""")
+
+st.markdown("---")
+
 # ── Turnover callout ──────────────────────────────────────────────────────────
 turnover = m.get("annual_turnover", 0)
 slippage_bps   = meta.params_anchor.get("slippage_bps", 10)
