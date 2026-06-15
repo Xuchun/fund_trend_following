@@ -67,7 +67,7 @@ st.markdown(f"""
 st.markdown("---")
 
 # ── ETF universe ──────────────────────────────────────────────────────────────
-st.subheader(f"ETF 标的池：{meta.universe_etfs} 只可交易 ETF（共 85 只，SPY + SHY 为辅助标的）")
+st.subheader(f"ETF 标的池：{meta.universe_etfs} 只可交易 ETF（共 84 只，SPY + SHY 为辅助标的）")
 
 st.markdown("""
 ETF 列表来自项目根目录的 **`data/ETFs.csv`**，涵盖美股宽基、行业板块、固定收益、
@@ -75,6 +75,20 @@ ETF 列表来自项目根目录的 **`data/ETFs.csv`**，涵盖美股宽基、�
 
 - **SPY**：用作市场基准（Benchmark），不纳入策略1.0持仓
 - **SHY**：用作闲置资金的现金代理（Cash Proxy），不作为策略1.0交易标的
+
+**排除的 ETF 类型：波动率 / 反向 / 杠杆产品**
+
+以下类型的 ETF 已被明确排除在标的池之外，不会出现在 `data/ETFs.csv` 中：
+
+| 排除类型 | 代表产品 | 排除原因 |
+|---------|---------|---------|
+| VIX 期货 ETF/ETN | VXX、UVXY、VIXY | 期货展期成本导致结构性负漂移，长期必然亏损 |
+| 3× 杠杆指数 | TQQQ、UPRO、SPXL、SQQQ、SPXU | 每日复杠放大波动，长期受波动率拖拽侵蚀本金 |
+| 2× 杠杆/反向 | SSO、SDS、SH | 同上，反向产品与趋势跟踪策略方向性矛盾 |
+| 3× 杠杆行业 | LABU/LABD、NUGT/DUST、TNA/TZA | 日内重置机制在震荡市造成系统性损耗 |
+
+> 回测分析发现，VXX（唯一混入标的池的波动率产品）3 笔交易合计亏损 **$380k**，
+> 是 ETF 子集整体亏损的主因。排除此类产品后，ETF 标的池可专注于真实趋势资产。
 """)
 
 if meta.etf_universe:
