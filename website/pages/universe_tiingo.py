@@ -140,7 +140,6 @@ _cmp_data = {
     "含退市标的": ["❌ 无",           f"✅ {len(delisted):,} 个", f"**✅ {len(rec_del):,} 个**"],
     "幸存者偏差": ["⚠️ 严重",        "✅ 最小",                  "**✅ 大幅降低**"],
     "无效标的噪声": ["低",            "高（1,460 个无效标的）",   "**低（已过滤）**"],
-    "8 GB 内存":  ["✅ 轻松",        "⚠️ 勉强（~6 GB）",         "**✅ 舒适（~3 GB）**"],
 }
 st.dataframe(pd.DataFrame(_cmp_data), use_container_width=True, hide_index=True)
 
