@@ -295,13 +295,23 @@ def main():
             print(f"  {label:<22} {va:>{14}{fmt}} {vb:>{14}{fmt}} {sign}{delta:{fmt}}")
 
         # Verdict
-        cagr_diff = abs(results_b["cagr"] - results_a["cagr"]) * 100
-        dd_diff   = abs(abs(results_b["max_drawdown"]) - abs(results_a["max_drawdown"])) * 100
-        print(f"\n  CAGR 差异 = {cagr_diff:.2f}pp  |  MaxDD 差异 = {dd_diff:.2f}pp")
-        if cagr_diff < 1.0 and dd_diff < 2.0:
-            print("  ✓ 差异 < 阈值 → ADV 门槛对结果影响极小，当前 $20M 方案已足够")
+        cagr_diff   = (results_b["cagr"] - results_a["cagr"]) * 100   # signed: + means B > A
+        dd_diff_abs = abs(abs(results_b["max_drawdown"]) - abs(results_a["max_drawdown"])) * 100
+        print(f"\n  CAGR 差异 = {cagr_diff:+.2f}pp  |  MaxDD 差异 = {dd_diff_abs:.2f}pp")
+        if abs(cagr_diff) < 1.0 and dd_diff_abs < 2.0:
+            verdict_key  = "no_difference"
+            verdict_text = "  ✓ 差异 < 阈值 → ADV 门槛对结果影响极小，当前 $20M 方案已足够"
+        elif cagr_diff < 0:
+            # $50M worse than $20M → small/mid-caps contribute alpha, keep $20M
+            verdict_key  = "keep_20m_small_caps_add_alpha"
+            verdict_text = (
+                "  ✓ ADV>$50M 表现更差（-{:.2f}pp CAGR）→ $20M~$50M 小票贡献正 Alpha，\n"
+                "    建议保留当前 $20M 门槛；引擎逐日 ADV 过滤已足够控制流动性风险"
+            ).format(abs(cagr_diff))
         else:
-            print("  ⚠ 差异 > 阈值 → 建议将 ADV 门槛提高至 $50M 以减少小票暴露")
+            verdict_key  = "raise_adv_threshold"
+            verdict_text = "  ✓ ADV>$50M 表现更佳 → 建议将门槛提高至 $50M 以减少小票暴露"
+        print(verdict_text)
         print(f"{'='*70}\n")
 
         # Save comparison JSON
@@ -309,8 +319,8 @@ def main():
             "adv_20m": results_a,
             "adv_50m": results_b,
             "cagr_diff_pp":   round(cagr_diff, 4),
-            "maxdd_diff_pp":  round(dd_diff, 4),
-            "verdict":        "no_change_needed" if cagr_diff < 1.0 else "raise_adv_threshold",
+            "maxdd_diff_pp":  round(dd_diff_abs, 4),
+            "verdict":        verdict_key,
         }
         (_root / "results" / "v1_unbiased_comparison.json").write_text(
             json.dumps(cmp, ensure_ascii=False, indent=2)
