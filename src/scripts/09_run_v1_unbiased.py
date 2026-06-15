@@ -162,11 +162,6 @@ def main():
     ap.add_argument("--initial-capital", default=10_000_000, type=float)
     args = ap.parse_args()
 
-    token = os.environ.get("TIINGO_API_TOKEN", "")
-    if not token:
-        logger.error("TIINGO_API_TOKEN not set in .env")
-        sys.exit(1)
-
     t_total = time.time()
 
     # ── Load universe (superset for both runs) ────────────────────────────────
@@ -176,15 +171,10 @@ def main():
     auxiliary = {BASE_PARAMS.cash_proxy, "SPY", BASE_PARAMS.regime_ticker}
     load_list = sorted(set(universe) | auxiliary)
 
-    # ── Load price panel once (shared by both runs) ───────────────────────────
-    adapter = TiingoAdapter(api_token=token)
-    logger.info("Loading price panel (%d tickers) …", len(load_list))
+    # ── Load price panel directly from parquet cache (no API calls) ───────────
+    logger.info("Loading price panel (%d tickers) from local cache …", len(load_list))
     t_load = time.time()
-    panel = load_price_panel(
-        load_list, adapter,
-        start=args.start, end=args.end,
-        cache_dir=TIINGO_CACHE,
-    )
+    panel = _load_panel_from_cache(load_list, args.start, args.end)
     logger.info("Loaded %d tickers in %.1fs", len(panel), time.time() - t_load)
 
     # ── Precompute indicators once (shared by both runs) ─────────────────────
