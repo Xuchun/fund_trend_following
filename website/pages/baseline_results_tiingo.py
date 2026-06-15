@@ -682,6 +682,225 @@ st.markdown(f"""
 
 st.markdown("---")
 
+# ── Traded ticker analysis ────────────────────────────────────────────────────
+import pandas as _pd_ta
+
+st.subheader("实际交易标的分析")
+st.caption("从标的维度分析回测期间哪些标的被实际建仓，以及其覆盖率、盈亏集中度、交易频次、胜率等特征")
+
+_ta = res.trades.copy()
+_ta["_is_etf"] = _ta["ticker"].isin(_ETF_SET)
+
+# Per-ticker aggregated stats
+_tk = _ta.groupby("ticker").agg(
+    交易次数=("net_pnl", "count"),
+    总盈亏  =("net_pnl", "sum"),
+    胜率    =("net_pnl", lambda x: (x > 0).mean()),
+    平均R   =("pnl_r_multiple", "mean"),
+    最大R   =("pnl_r_multiple", "max"),
+).reset_index()
+_tk["类别"] = _tk["ticker"].apply(lambda t: "ETF" if t in _ETF_SET else "股票")
+
+_ta_traded_all  = set(_ta["ticker"].unique())
+_ta_traded_etf  = {t for t in _ta_traded_all if t in _ETF_SET}
+_ta_traded_stk  = _ta_traded_all - _ETF_SET
+_n_ta  = len(_ta_traded_all)
+_n_ts  = len(_ta_traded_stk)
+_n_te  = len(_ta_traded_etf)
+_n_pt  = meta.universe_total
+_n_ps  = meta.universe_stocks
+_n_pe  = meta.universe_etfs
+_pct_all = _n_ta / _n_pt * 100 if _n_pt else 0
+_pct_s   = _n_ts / _n_ps * 100 if _n_ps else 0
+_pct_e   = _n_te / _n_pe * 100 if _n_pe else 0
+
+# ── 一、标的覆盖率 ────────────────────────────────────────────────────────────
+st.markdown("#### 一、标的覆盖率")
+_tc1, _tc2, _tc3 = st.columns(3)
+_tc1.metric("实际开仓标的总数", f"{_n_ta:,}",
+            help=f"标的池共 {_n_pt:,} 个，覆盖率 {_pct_all:.1f}%")
+_tc2.metric("其中：股票", f"{_n_ts:,}",
+            help=f"股票池 {_n_ps:,} 个，覆盖率 {_pct_s:.1f}%")
+_tc3.metric("其中：ETF", f"{_n_te:,}",
+            help=f"ETF 池 {_n_pe:,} 个，覆盖率 {_pct_e:.1f}%")
+
+st.dataframe(_pd_ta.DataFrame([
+    {"类别": "股票", "标的池": _n_ps, "实际开仓": _n_ts,
+     "覆盖率": f"{_pct_s:.1f}%", "未触发": _n_ps - _n_ts},
+    {"类别": "ETF",  "标的池": _n_pe, "实际开仓": _n_te,
+     "覆盖率": f"{_pct_e:.1f}%", "未触发": _n_pe - _n_te},
+    {"类别": "合计", "标的池": _n_pt, "实际开仓": _n_ta,
+     "覆盖率": f"{_pct_all:.1f}%", "未触发": _n_pt - _n_ta},
+]), use_container_width=True, hide_index=True)
+st.caption(
+    f"未触发开仓的 {_n_pt - _n_ta:,} 个标的：要么在可交易期内始终未发出 200 日高点突破信号，"
+    "要么突破发生时恰逢熊市阶段（Regime Filter 关闭新开仓）。"
+)
+
+# ── 二、盈利集中度 ────────────────────────────────────────────────────────────
+st.markdown("#### 二、盈利集中度")
+
+_total_pnl_ta = float(_tk["总盈亏"].sum())
+_pos_pnl_ta   = float(_tk[_tk["总盈亏"] > 0]["总盈亏"].sum())
+_n_profit_tk  = int((_tk["总盈亏"] > 0).sum())
+_n_loss_tk    = int((_tk["总盈亏"] <= 0).sum())
+
+_top20_ta = _tk.nlargest(20, "总盈亏")
+_fig_top20 = _go.Figure(_go.Bar(
+    y=_top20_ta["ticker"].tolist()[::-1],
+    x=(_top20_ta["总盈亏"] / 1e6).tolist()[::-1],
+    orientation="h",
+    marker_color=["#2ca02c" if v > 0 else "#d62728"
+                  for v in _top20_ta["总盈亏"].tolist()[::-1]],
+    text=[f"${v:.1f}M" for v in (_top20_ta["总盈亏"] / 1e6).tolist()[::-1]],
+    textposition="outside",
+))
+_fig_top20.update_layout(
+    title="累计净盈亏 TOP 20 标的",
+    xaxis_title="净盈亏（$M）",
+    height=520,
+    margin=dict(l=70, r=80, t=50, b=40),
+    showlegend=False,
+)
+st.plotly_chart(_fig_top20, use_container_width=True)
+
+_top5_pnl_ta  = float(_tk.nlargest(5,  "总盈亏")["总盈亏"].sum())
+_top10_pnl_ta = float(_tk.nlargest(10, "总盈亏")["总盈亏"].sum())
+_top20_pnl_ta = float(_tk.nlargest(20, "总盈亏")["总盈亏"].sum())
+st.markdown(f"""
+实际交易的 {_n_ta:,} 个标的中，**{_n_profit_tk:,} 个**（{_n_profit_tk/_n_ta*100:.0f}%）净盈利，**{_n_loss_tk:,} 个**净亏损。
+
+| 维度 | 金额 | 占全部净盈利比例 |
+|------|------|----------------|
+| TOP 5 标的 | ${_top5_pnl_ta/1e6:.1f}M | {_top5_pnl_ta/_pos_pnl_ta*100:.0f}% |
+| TOP 10 标的 | ${_top10_pnl_ta/1e6:.1f}M | {_top10_pnl_ta/_pos_pnl_ta*100:.0f}% |
+| TOP 20 标的 | ${_top20_pnl_ta/1e6:.1f}M | {_top20_pnl_ta/_pos_pnl_ta*100:.0f}% |
+
+这是趋势跟踪的核心统计特征：**少数大赢标的贡献绝大多数利润**，整体正期望来自右尾效应。
+""")
+
+with st.expander("📋 亏损最大的 10 个标的", expanded=False):
+    _bot10_ta = _tk.nsmallest(10, "总盈亏")[
+        ["ticker", "类别", "交易次数", "总盈亏", "胜率", "平均R"]
+    ].copy()
+    _bot10_ta["总盈亏"] = _bot10_ta["总盈亏"].map(lambda v: f"${v:+,.0f}")
+    _bot10_ta["胜率"]   = _bot10_ta["胜率"].map(lambda v: f"{v*100:.0f}%")
+    _bot10_ta["平均R"]  = _bot10_ta["平均R"].map(lambda v: f"{v:.2f}R")
+    st.dataframe(_bot10_ta, use_container_width=True, hide_index=True)
+
+# ── 三、每标的交易次数分布 ─────────────────────────────────────────────────────
+st.markdown("#### 三、每标的交易次数分布")
+
+_freq_ta     = _ta.groupby("ticker").size()
+_once_ta     = int((_freq_ta == 1).sum())
+_multi_ta    = int((_freq_ta > 1).sum())
+_max_freq_ta = int(_freq_ta.max())
+_top_tk_ta   = _freq_ta.idxmax()
+
+_fdist_x, _fdist_y = [], []
+for _k in range(1, 10):
+    _fdist_x.append(str(_k))
+    _fdist_y.append(int((_freq_ta == _k).sum()))
+_ge10_ta = int((_freq_ta >= 10).sum())
+_fdist_x.append("≥10")
+_fdist_y.append(_ge10_ta)
+
+_fig_freq_ta = _go.Figure(_go.Bar(
+    x=_fdist_x, y=_fdist_y,
+    marker_color=meta.color,
+    text=_fdist_y, textposition="outside",
+))
+_fig_freq_ta.update_layout(
+    title="每标的历史交易次数分布",
+    xaxis_title="交易次数（该标的整个回测期内合计）",
+    yaxis_title="标的数量",
+    height=320, margin=dict(l=50, r=20, t=50, b=40),
+)
+st.plotly_chart(_fig_freq_ta, use_container_width=True)
+st.markdown(
+    f"**{_once_ta:,} 个**标的（{_once_ta/_n_ta*100:.0f}%）仅交易过 1 次；"
+    f"**{_multi_ta:,} 个**（{_multi_ta/_n_ta*100:.0f}%）被多次买卖，"
+    f"交易最多的是 **{_top_tk_ta}**（{_max_freq_ta} 次）。"
+    "一次性交易占主导，说明策略追求的是独立的、非重复性趋势机会；"
+    "多次交易的标的往往是趋势明显的 ETF 或大盘龙头。"
+)
+
+with st.expander("📋 交易次数最多的 TOP 10 标的", expanded=False):
+    _topfreq_df = _freq_ta.sort_values(ascending=False).head(10).reset_index()
+    _topfreq_df.columns = ["标的", "交易次数"]
+    _topfreq_df["类别"] = _topfreq_df["标的"].apply(
+        lambda t: "ETF" if t in _ETF_SET else "股票"
+    )
+    _tk_pnl_map = _tk.set_index("ticker")["总盈亏"].to_dict()
+    _topfreq_df["总净盈亏($)"] = _topfreq_df["标的"].map(_tk_pnl_map).map(
+        lambda v: f"${v:+,.0f}"
+    )
+    st.dataframe(_topfreq_df, use_container_width=True, hide_index=True)
+
+# ── 四、每标的胜率分布 ────────────────────────────────────────────────────────
+st.markdown("#### 四、每标的胜率分布（≥ 3 笔交易）")
+
+_multi3_ta  = _tk[_tk["交易次数"] >= 3].copy()
+_wr_bins_ta = [0, 0.2, 0.4, 0.6, 0.8, 1.001]
+_wr_lbl_ta  = ["0–20%", "20–40%", "40–60%", "60–80%", "80–100%"]
+_wr_cut_ta  = _pd_ta.cut(_multi3_ta["胜率"], bins=_wr_bins_ta, labels=_wr_lbl_ta, right=False)
+_wr_dist_ta = _wr_cut_ta.value_counts().reindex(_wr_lbl_ta).fillna(0).astype(int)
+
+_fig_wr_ta = _go.Figure(_go.Bar(
+    x=_wr_lbl_ta, y=_wr_dist_ta.values.tolist(),
+    marker_color=meta.color,
+    text=_wr_dist_ta.values.tolist(), textposition="outside",
+))
+_fig_wr_ta.update_layout(
+    title=f"每标的胜率分布（{len(_multi3_ta):,} 个标的，≥3 笔交易）",
+    xaxis_title="胜率区间", yaxis_title="标的数量",
+    height=320, margin=dict(l=50, r=20, t=50, b=40),
+)
+st.plotly_chart(_fig_wr_ta, use_container_width=True)
+
+_wr_med_ta = float(_multi3_ta["胜率"].median())
+_gt50_ta   = int((_multi3_ta["胜率"] >= 0.5).sum())
+st.markdown(
+    f"≥3 笔交易的 {len(_multi3_ta):,} 个标的中，胜率中位数 **{_wr_med_ta*100:.0f}%**，"
+    f"**{_gt50_ta:,} 个**（{_gt50_ta/len(_multi3_ta)*100:.0f}%）胜率 ≥50%。"
+    "胜率分布分散并不意味着策略不稳定——关键在于盈利幅度（R 倍数）远大于亏损幅度，"
+    "即使多数标的胜率偏低，整体期望值仍为正。"
+)
+
+# ── 五、首次建仓年份分布 ──────────────────────────────────────────────────────
+st.markdown("#### 五、首次建仓年份分布")
+
+_first_yr_ta = (
+    _ta.groupby("ticker")["entry_date"].min()
+    .dt.year.value_counts().sort_index()
+    .reset_index()
+)
+_first_yr_ta.columns = ["year", "count"]
+
+_fig_yr_ta = _go.Figure(_go.Bar(
+    x=_first_yr_ta["year"].astype(str),
+    y=_first_yr_ta["count"],
+    marker_color=meta.color,
+    text=_first_yr_ta["count"], textposition="outside",
+))
+_fig_yr_ta.update_layout(
+    title="各年度首次建仓的新标的数量",
+    xaxis_title="年份", yaxis_title="新增标的数",
+    height=320, margin=dict(l=50, r=20, t=50, b=40),
+)
+st.plotly_chart(_fig_yr_ta, use_container_width=True)
+
+_peak_yr_ta  = int(_first_yr_ta.loc[_first_yr_ta["count"].idxmax(), "year"])
+_peak_cnt_ta = int(_first_yr_ta["count"].max())
+st.markdown(
+    f"**解读：** 各年度策略首次买入的"新面孔"标的数量，反映市场趋势机会的时间分布。"
+    f"**{_peak_yr_ta} 年**新增标的最多（{_peak_cnt_ta:,} 个），"
+    "通常对应牛市突破年——大量标的同时创出 200 日新高。"
+    "熊市年份（如 2008、2022）新增标的极少，说明 Regime Filter 有效拦截了潜在假突破信号。"
+)
+
+st.markdown("---")
+
 # ── Full metrics table ────────────────────────────────────────────────────────
 st.subheader("完整指标对比表")
 render_full_metrics_table(m, _spy_metrics)
