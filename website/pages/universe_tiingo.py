@@ -451,7 +451,4 @@ st.markdown("""
 | 数据格式 | 原始 OHLCV + 复权系数（adj_factor = adjClose / close），每标的一个 parquet 文件 |
 | 数据质量 | 运行 `06_check_tiingo_quality.py` 后：2,633 个复权跳变异常、5,305 个价格尖峰、8,328 个零成交量行，均通过 `is_tradable=False` 标记 |
 | 幸存者偏差防御 | ✅ 通过下载 Tiingo 官方 `supported_tickers.csv`（含历史上市/退市日期）实现全量覆盖，非基于当前成分股 |
-
-> ⚠️ **注意**：Tiingo Power 计划为按月付费（$30/月）。本数据集于 2026 年 6 月一次性下载完成并压缩备份，
-> 订阅已于 2026-07-14 前取消。后续回测直接使用本地 parquet 缓存，无需再次订阅。
 """)
