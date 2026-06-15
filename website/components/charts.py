@@ -480,6 +480,93 @@ def monthly_return_heatmap(nav: pd.Series) -> go.Figure:
     return fig
 
 
+def capital_utilization_chart(
+    trades: pd.DataFrame,
+    nav: pd.Series,
+    color: str = "#1f77b4",
+    cash_proxy: str = "SHY",
+) -> go.Figure:
+    """
+    Area chart: % of NAV invested in equity/ETF positions (excluding cash proxy) each day.
+
+    Invested capital is measured at cost (shares × entry_price), which slightly
+    understates true market-value utilization for winning positions but requires
+    no daily price data — it is computed purely from trades.csv and nav.csv.
+    """
+    if len(trades) == 0 or len(nav) == 0:
+        return go.Figure()
+
+    df = trades.copy()
+    df["entry_date"] = pd.to_datetime(df["entry_date"])
+    df["exit_date"]  = pd.to_datetime(df["exit_date"])
+
+    # Exclude cash-proxy ticker if it ever appears
+    if "ticker" in df.columns:
+        df = df[df["ticker"] != cash_proxy]
+
+    df["entry_value"] = df["shares"] * df["entry_price"]
+
+    dates = pd.to_datetime(nav.index)
+
+    # Event-based cumsum: +value on entry day, −value on exit day
+    entry_vals = df.groupby("entry_date")["entry_value"].sum().reindex(dates, fill_value=0.0)
+    exit_vals  = df.groupby("exit_date")["entry_value"].sum().reindex(dates, fill_value=0.0)
+    daily_invested = (entry_vals - exit_vals).cumsum().clip(lower=0.0)
+
+    # Utilization = invested_at_cost / NAV (%)
+    util_pct = (daily_invested / nav.values * 100).clip(lower=0.0, upper=100.0)
+
+    rolling_30 = util_pct.rolling(30, min_periods=1).mean()
+    mean_util  = float(util_pct.mean())
+    max_util   = float(util_pct.max())
+
+    fig = go.Figure()
+
+    # Shaded area
+    fig.add_trace(go.Scatter(
+        x=util_pct.index,
+        y=util_pct.values,
+        fill="tozeroy",
+        fillcolor=f"rgba({int(color[1:3],16)},{int(color[3:5],16)},{int(color[5:7],16)},0.18)",
+        line=dict(color=color, width=1),
+        name="每日资金使用率",
+        hovertemplate="%{x|%Y-%m-%d}：%{y:.1f}%<extra></extra>",
+    ))
+
+    # 30-day rolling mean
+    fig.add_trace(go.Scatter(
+        x=rolling_30.index,
+        y=rolling_30.values,
+        mode="lines",
+        line=dict(color="#e65100", width=1.8),
+        name="30日均值",
+        hovertemplate="%{x|%Y-%m-%d}：30日均 %{y:.1f}%<extra></extra>",
+    ))
+
+    # Mean reference line
+    fig.add_hline(
+        y=mean_util,
+        line_dash="dot",
+        line_color="black",
+        line_width=1,
+        annotation_text=f"全程均值 {mean_util:.1f}%",
+        annotation_position="top left",
+        annotation_font_size=11,
+    )
+
+    fig.update_layout(
+        title=f"资金使用率（成本基础，均值 {mean_util:.1f}%，峰值 {max_util:.1f}%）",
+        xaxis_title="日期",
+        yaxis_title="资金使用率（%）",
+        yaxis=dict(range=[0, min(max_util * 1.15, 100)], ticksuffix="%"),
+        height=360,
+        margin=dict(l=60, r=20, t=60, b=40),
+        legend=dict(orientation="h", x=1, xanchor="right", y=1.12),
+        hovermode="x unified",
+    )
+    return fig
+
+
 def multi_strategy_nav(results_list: list, spy_nav: pd.Series | None) -> go.Figure:
     """Overlay NAV curves for multiple strategies (used in comparison page)."""
     fig = go.Figure()
