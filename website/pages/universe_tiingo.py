@@ -428,7 +428,7 @@ if _m20_path.exists() and _m50_path.exists():
     _m20 = _json.loads(_m20_path.read_text())
     _m50 = _json.loads(_m50_path.read_text())
 
-    st.subheader("八、无偏差回测结果对比")
+    st.subheader("七、无偏差回测结果对比")
     st.markdown("""
 使用动态标的池（≥1年过滤，2,943 个标的）运行 Strategy 1.0，
 分别测试 ADV > $20M 和 ADV > $50M 两套门槛，并与原始有偏差基线对比。
@@ -520,7 +520,7 @@ if _m20_path.exists() and _m50_path.exists():
     )
 
 else:
-    st.subheader("八、无偏差回测结果对比")
+    st.subheader("七、无偏差回测结果对比")
     st.warning("回测结果未找到。请先运行：`python src/scripts/09_run_v1_unbiased.py`")
 
 st.markdown("---")
