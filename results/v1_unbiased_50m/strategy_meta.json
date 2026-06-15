@@ -1,10 +1,32 @@
 {
   "id": "v1_unbiased_50m",
-  "version": "1.0-unbiased-50m",
-  "display_name": "Strategy 1.0 (Tiingo, ADV>$50M, ≥1yr)",
+  "version": "1.0-tiingo-unbiased",
+  "display_name": "Strategy 1.0 (Tiingo · 无偏差 · ADV>$50M)",
+  "subtitle": "Trend Following — Tiingo 动态标的池，ADV>$50M，无幸存者偏差",
+  "color": "#e67e22",
+  "badge_text": "Tiingo-50M",
+  "badge_color": "orange",
+  "universe_stocks": 2859,
+  "universe_etfs": 84,
+  "universe_total": 2943,
   "backtest_start": "2004-01-02",
   "backtest_end": "2026-06-12",
   "initial_capital": 10000000,
+  "cash_proxy": "SHY",
+  "key_features": [
+    "200日高点突破入场（N-Day Breakout，N=200）",
+    "ATR(20) Wilder平滑，固定止损 2×ATR",
+    "分段追踪止损：<1R用3×ATR，1-3R用3×ATR，>3R用5×ATR",
+    "成交量确认：突破日成交量 > 1.5× 60日均量，排除低成交量假突破",
+    "1% NAV 风险仓位计算（4步过滤）",
+    "相关性过滤：持仓相关性 > 0.70 时减半仓",
+    "组合热度上限 10%（总风险敞口 ≤ NAV 的 10%）",
+    "SPY 200日均线市场环境过滤：熊市停止开仓，现金投入 SHY",
+    "空仓资金投入 SHY（1-3年期国债 ETF，覆盖完整回测期 2002+）",
+    "Tiingo 动态标的池：2,943个标的（ADV>$20M满足≥1年），含历史退市标的，无幸存者偏差",
+    "退市股票自动平仓：数据截止日即时清算，消除幸存者偏差的持仓扭曲"
+  ],
+  "differs_from_previous": null,
   "params_anchor": {
     "min_price": 10.0,
     "min_market_cap_b": 2.0,
@@ -30,9 +52,17 @@
     "cash_proxy": "SHY",
     "regime_filter_enabled": true,
     "regime_ticker": "SPY",
-    "regime_sma_window": 200,
-    "consolidation_filter_enabled": false,
-    "consolidation_window": 80,
-    "consolidation_threshold": 0.25
-  }
+    "regime_sma_window": 200
+  },
+  "logic_sections": {
+    "entry": "close[t] > max(high[t-200:t-1])，且 volume[t] > 1.5×vol_ma60[t]，使用shift(1)防前视偏差，次日开盘价执行",
+    "regime": "启用——SPY adj-close[t] > SMA(200)[t] 为牛市（允许开仓），否则为熊市（停止新建仓，追踪止损继续运行，闲置现金投入 SHY）",
+    "stop": "entry_price - 2 × ATR(20)，入场价与止损价之差定义为 1R",
+    "trail": "棘轮式追踪止损：<1R用3×ATR，1-3R用3×ATR，≥3R用5×ATR；只能上移不能下移",
+    "sizing": "Step1目标风险(1%NAV)→Step2单标的上限(5%NAV)→Step3相关性调整→Step4热度检查(10%)",
+    "direction": "纯多头（Long Only）",
+    "execution": "t日收盘生成信号，t+1日开盘价执行；滑点10bps，佣金3bps，Gap过滤±2.5%；退市自动平仓at最后收盘价"
+  },
+  "etf_universe": [],
+  "regime_stats": {}
 }
