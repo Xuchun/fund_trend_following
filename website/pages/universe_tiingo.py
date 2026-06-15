@@ -406,13 +406,13 @@ with tab_del:
                        file_name="tiingo_rec_delisted.csv", mime="text/csv")
 
 with tab_all:
-    st.caption(f"全量 {len(eu):,} 个（含 {_n_lt3m+_n_3m_1y:,} 个短命标的，供参考）")
-    _df = _fmt_df(eu, "累计满足天数")
+    st.caption(f"推荐池 {len(eu_rec):,} 个（现役 {len(rec_active):,} + 已退市 {len(rec_del):,}，满足 ≥252 交易日条件）")
+    _df = _fmt_df(eu_rec, "累计满足天数")
     st.dataframe(_df, use_container_width=True, hide_index=True,
                  column_config={"累计满足天数": st.column_config.NumberColumn(format="%d 天")})
-    st.download_button("⬇ 下载全量标的列表",
+    st.download_button("⬇ 下载现役+已退市列表（推荐池）",
                        data=_df.to_csv(index=False).encode("utf-8"),
-                       file_name="tiingo_full_universe.csv", mime="text/csv")
+                       file_name="tiingo_recommended_universe.csv", mime="text/csv")
 
 st.markdown("---")
 
