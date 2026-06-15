@@ -139,7 +139,7 @@ _cmp_data = {
     "标的总数":   ["903",             f"{len(eu):,}",             f"**{len(eu_rec):,}**"],
     "含退市标的": ["❌ 无",           f"✅ {len(delisted):,} 个", f"**✅ {len(rec_del):,} 个**"],
     "幸存者偏差": ["⚠️ 严重",        "✅ 最小",                  "**✅ 大幅降低**"],
-    "无效标的噪声": ["低",            "高（1,460 个无效标的）",   "**低（已过滤）**"],
+    "无效标的噪声": ["低",            f"高（{len(eu)-len(eu_rec):,} 个无效标的）",   "**低（已过滤）**"],
 }
 st.dataframe(pd.DataFrame(_cmp_data), use_container_width=True, hide_index=True)
 
