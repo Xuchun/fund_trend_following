@@ -302,7 +302,7 @@ with tab4:
                       name="退市标的", marker_color="#e57373")
     _fig_pool.update_layout(
         barmode="stack",
-        title="各年度标的池规模（满足 close > $10 & ADV₆₀ > $20M 的标的数）",
+        title=f"各年度最终回测标的池规模（{len(eu_rec):,} 个，满足条件 ≥ 1 年）",
         xaxis_title="年份",
         yaxis_title="标的数量",
         height=440,
