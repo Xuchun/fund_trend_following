@@ -100,43 +100,49 @@ st.info(
 
 st.markdown("---")
 
-# ── 三、标的池总览 ─────────────────────────────────────────────────────────────
-st.subheader("三、标的池总览")
+# ── 三、推荐回测标的池（满足条件 ≥ 1 年）─────────────────────────────────────
+st.subheader("三、推荐回测标的池（满足条件 ≥ 1 年）")
 
-c1, c2, c3, c4, c5 = st.columns(5)
-c1.metric("标的总数", f"{len(eu):,}")
-c2.metric("现役（仍在交易）", f"{len(active):,}", help="data_end ≥ 2026-01-01")
-c3.metric("已退市", f"{len(delisted):,}", help="data_end < 2026-01-01")
-c4.metric("平均满足天数", f"{eu['eligible_days'].mean():.0f} 天")
-c5.metric("最长满足天数", f"{eu['eligible_days'].max():,} 天",
-          help=eu.loc[eu['eligible_days'].idxmax(), 'ticker'])
+st.info(
+    f"**策略 1.0 入场信号基于 200 日价格突破**，因此满足过滤条件不足 1 年（252 天）的标的"
+    f"几乎永远不会触发有效信号。过滤掉这 {len(eu) - len(eu_rec):,} 个短命标的后，"
+    f"推荐回测使用以下 **{len(eu_rec):,} 个**标的。"
+)
+
+c1, c2, c3, c4 = st.columns(4)
+c1.metric("推荐标的总数", f"{len(eu_rec):,}",
+          delta=f"vs 全量 {len(eu):,}", delta_color="off")
+c2.metric("现役", f"{len(rec_active):,}", help="data_end ≥ 2026-01-01")
+c3.metric("已退市", f"{len(rec_del):,}", help="幸存者偏差防御的核心")
+c4.metric("平均满足天数", f"{eu_rec['eligible_days'].mean():.0f} 天")
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# Active vs Delisted pie
+# Pie for recommended pool
 _pie = go.Figure(go.Pie(
     labels=["现役（Active）", "已退市（Delisted）"],
-    values=[len(active), len(delisted)],
+    values=[len(rec_active), len(rec_del)],
     hole=0.52,
     marker_colors=["#1565c0", "#e57373"],
     textinfo="label+percent+value",
     textfont_size=13,
 ))
 _pie.update_layout(
-    title="标的池构成：现役 vs 已退市",
-    height=340,
+    title=f"推荐标的池（≥1年）构成：{len(rec_active):,} 现役 + {len(rec_del):,} 已退市",
+    height=320,
     margin=dict(t=50, b=20, l=20, r=20),
     showlegend=False,
 )
 st.plotly_chart(_pie, use_container_width=True)
 
-# Comparison: this pool vs S&P 900
+# 3-way comparison table
 _cmp_data = {
-    "标的池": ["S&P 900（原始）", "Tiingo 动态标的池（推荐）"],
-    "标的总数": [903, len(eu)],
-    "含退市标的": ["❌ 无", f"✅ {len(delisted):,} 个"],
-    "幸存者偏差": ["⚠️ 严重", "✅ 大幅降低"],
-    "8GB 内存可运行": ["✅ 是", "✅ 是（约 3–4 GB）"],
+    "方案":       ["S&P 900（原始）", "Tiingo 全量（ADV > $20M）", "**Tiingo ≥ 1年（推荐）**"],
+    "标的总数":   ["903",             f"{len(eu):,}",             f"**{len(eu_rec):,}**"],
+    "含退市标的": ["❌ 无",           f"✅ {len(delisted):,} 个", f"**✅ {len(rec_del):,} 个**"],
+    "幸存者偏差": ["⚠️ 严重",        "✅ 最小",                  "**✅ 大幅降低**"],
+    "无效标的噪声": ["低",            "高（1,460 个无效标的）",   "**低（已过滤）**"],
+    "8 GB 内存":  ["✅ 轻松",        "⚠️ 勉强（~6 GB）",         "**✅ 舒适（~3 GB）**"],
 }
 st.dataframe(pd.DataFrame(_cmp_data), use_container_width=True, hide_index=True)
 
