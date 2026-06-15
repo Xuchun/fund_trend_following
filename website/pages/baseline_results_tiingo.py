@@ -505,6 +505,29 @@ with _col2_t:
         "这种「多次小亏、少次大赚」的持仓结构是趋势跟踪策略的典型特征。"
     )
 
+# ── Capital utilization ───────────────────────────────────────────────────────
+st.subheader("资金使用率")
+
+st.plotly_chart(
+    capital_utilization_chart(res.trades, res.nav, meta.color),
+    use_container_width=True,
+)
+
+_cash_proxy_name = meta.params_anchor.get("cash_proxy", "SHY")
+st.markdown(f"""
+**解读：** 纵轴为当日所有持仓标的的**入场成本之和 ÷ NAV**（百分比）。
+持有 {_cash_proxy_name}（空仓代理）不计入使用率，仅持有股票或 ETF 标的时才计为"资金已投入"。
+
+此处使用"成本基础"而非"市值"计算，对于盈利标的会小幅低估实际使用率，
+但无需访问每日价格数据、可从交易记录直接推导，结果仍能准确反映资金部署节奏。
+
+- **使用率骤降**通常对应市场进入熊市（SPY 低于 200 日均线），策略停止开仓；
+- **使用率上升**对应牛市信号密集、持仓数量增多；
+- 使用率长期远低于 100% 反映了趋势跟踪策略的"轻仓等待"特性——大多数资金以 {_cash_proxy_name} 形式持有，等待高质量突破信号。
+""")
+
+st.markdown("---")
+
 # ── Daily position count ──────────────────────────────────────────────────────
 st.subheader("每日持仓标的数目")
 st.plotly_chart(
