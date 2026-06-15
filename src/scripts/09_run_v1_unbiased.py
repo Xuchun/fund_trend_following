@@ -100,7 +100,7 @@ def _load_panel_from_cache(tickers: list[str], start: str, end: str) -> dict[str
             df = df.sort_index()
             df = df[(df.index >= start_ts) & (df.index <= end_ts)]
             if not df.empty:
-                panel[ticker] = df
+                panel[ticker] = compute_adj_prices(df)
         except Exception as e:
             logger.warning("Could not read %s: %s", ticker, e)
     if missing:
