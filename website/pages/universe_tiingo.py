@@ -180,13 +180,12 @@ tab1, tab2, tab3, tab4 = st.tabs([
 
 # ── Tab1: Duration distribution ────────────────────────────────────────────
 with tab1:
-    st.markdown("每个标的累计满足两个过滤条件（close > $10 & ADV₆₀ > $20M）的天数分布。")
-    bins   = [0, 63, 126, 252, 756, 1260, 2520, 99999]
-    labels = ["<3 个月", "3–6 个月", "6mo–1 年", "1–3 年", "3–5 年", "5–10 年", ">10 年"]
-    eu["duration_bin"] = pd.cut(eu["eligible_days"], bins=bins, labels=labels, right=True)
+    st.markdown("最终回测标的池（满足条件 ≥ 1 年）按累计满足天数的分布。")
+    bins   = [252, 756, 1260, 2520, 99999]
+    labels = ["1–3 年", "3–5 年", "5–10 年", ">10 年"]
 
-    dur_active   = active.copy()
-    dur_delisted = delisted.copy()
+    dur_active   = rec_active.copy()
+    dur_delisted = rec_del.copy()
     dur_active["duration_bin"]   = pd.cut(dur_active["eligible_days"],   bins=bins, labels=labels, right=True)
     dur_delisted["duration_bin"] = pd.cut(dur_delisted["eligible_days"], bins=bins, labels=labels, right=True)
 
@@ -198,8 +197,8 @@ with tab1:
     _fig_dur.add_bar(x=labels, y=g_del.values, name="已退市", marker_color="#e57373")
     _fig_dur.update_layout(
         barmode="stack",
-        title="满足过滤条件的累计天数分布",
-        xaxis_title="累计满足天数",
+        title=f"最终回测标的池满足条件天数分布（共 {len(eu_rec):,} 个，均已通过 ≥1 年过滤）",
+        xaxis_title="累计满足条件天数",
         yaxis_title="标的数量",
         height=420,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
@@ -208,11 +207,11 @@ with tab1:
 
     st.markdown(f"""
 **关键发现：**
-- **<3 个月（{g_act['<3 个月']+g_del['<3 个月']} 个）**：绝大多数是 SPAC、短暂上市即退市、或数据异常标的。
-  由于策略需要 200 天数据计算突破信号，这些标的**永远不会产生有效入场信号**，对回测无实质影响。
-- **>10 年（{g_act['>10 年']+g_del['>10 年']:,} 个）**：长期稳定的大中型股，是趋势跟踪策略的核心猎场。
-- **推荐回测使用 ≥ 252 天（约 1 年）的标的**，过滤后保留 {len(eu[eu['eligible_days']>=252]):,} 个，
-  既大幅降低噪声，又完整保留有价值的历史。
+- **>10 年（{g_act['>10 年']+g_del['>10 年']:,} 个）**：长期稳定的大中型股，是趋势跟踪策略的核心猎场，
+  占最终标的池的 {(g_act['>10 年']+g_del['>10 年'])/len(eu_rec)*100:.0f}%。
+- **1–3 年（{g_act['1–3 年']+g_del['1–3 年']:,} 个）**：满足最低门槛的短期标的，
+  包含部分历史上短暂流动性足够随后退市的公司——正是消除幸存者偏差的关键贡献者。
+- 现役标的 {len(rec_active):,} 个，历史已退市标的 {len(rec_del):,} 个（占 {len(rec_del)/len(eu_rec)*100:.0f}%）。
 """)
 
 # ── Tab2: New entries per year ────────────────────────────────────────────
