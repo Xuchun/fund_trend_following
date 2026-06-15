@@ -895,6 +895,3 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ── 数据更新对比 ──────────────────────────────────────────────────────────────
-from website.utils.comparison import render_data_update_comparison
-render_data_update_comparison(meta, m)
