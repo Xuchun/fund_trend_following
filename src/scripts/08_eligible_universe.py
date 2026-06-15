@@ -116,7 +116,9 @@ def main() -> None:
     print(f"{'='*60}")
 
     df.to_csv(OUTPUT_PATH, index=False)
-    print(f"\n  CSV 已保存 → {OUTPUT_PATH}\n")
+    df.to_csv(OUTPUT_PATH2, index=False)
+    print(f"\n  CSV 已保存 → {OUTPUT_PATH}")
+    print(f"  CSV 已保存 → {OUTPUT_PATH2}  (git-tracked)\n")
 
 
 if __name__ == "__main__":
