@@ -36,6 +36,7 @@ if _env.exists():
 import pandas as pd
 
 from data.pipeline import compute_adj_prices
+from data.universe import EXCLUDED_VOL_ETFS
 from indicators.precompute import precompute_indicators
 from backtest.engine import BacktestEngine
 from reports.baseline import generate_baseline_report
