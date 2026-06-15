@@ -20,13 +20,20 @@ logger = logging.getLogger(__name__)
 # leverage reset decay) and are inappropriate for a long-only trend-following
 # strategy.  Applied to BOTH the Yahoo Finance and Tiingo universe.
 EXCLUDED_VOL_ETFS: frozenset[str] = frozenset([
-    "VXX", "UVXY", "SVXY", "VIXY", "TVIX",          # VIX / vol futures
-    "SQQQ", "TQQQ", "UPRO", "SPXU", "SPXL", "SPXS", # 3× leveraged index
-    "SDS", "SSO", "SH",                               # 2× leveraged / inverse S&P
-    "TZA", "TNA", "FAS", "FAZ",                       # 3× leveraged small-cap / fin
-    "SDOW", "UDOW",                                   # 3× Dow leveraged
-    "LABU", "LABD",                                   # 3× leveraged biotech
-    "NUGT", "DUST", "JNUG", "JDST",                  # 3× leveraged gold miners
+    # Category 1: VIX / volatility / leveraged / inverse (structural negative drift)
+    "VXX", "UVXY", "SVXY", "VIXY", "TVIX",
+    "SQQQ", "TQQQ", "UPRO", "SPXU", "SPXL", "SPXS",
+    "SDS", "SSO", "SH",
+    "TZA", "TNA", "FAS", "FAZ",
+    "SDOW", "UDOW",
+    "LABU", "LABD",
+    "NUGT", "DUST", "JNUG", "JDST",
+    # Category 2: structurally unsuitable for long-only trend-following
+    "GDX",   # gold miners: company-specific risk on top of gold price; GLD/SLV suffice
+    "FXI",   # China large-cap: government intervention breaks trend signals
+    "ASHR",  # China A-shares: same; tighter capital-flow controls
+    "KWEB",  # China internet: policy risk acute (−50%+ in 2021 on regulation)
+    "EMB",   # EM bonds: credit + rate + EM risk combined; crisis-correlated with equities
 ])
 
 # ── ETF universe: loaded from data/ETFs.csv ────────────────────────────────
