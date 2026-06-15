@@ -35,8 +35,6 @@ if _env.exists():
 
 import pandas as pd
 
-from data.adapters.tiingo import TiingoAdapter
-from data.pipeline import load_price_panel
 from indicators.precompute import precompute_indicators
 from backtest.engine import BacktestEngine
 from reports.baseline import generate_baseline_report
