@@ -82,6 +82,31 @@ BASE_PARAMS = StrategyParams(
 )
 
 
+def _load_panel_from_cache(tickers: list[str], start: str, end: str) -> dict[str, pd.DataFrame]:
+    """Read parquet files directly from the Tiingo cache without any API calls."""
+    start_ts = pd.Timestamp(start)
+    end_ts   = pd.Timestamp(end)
+    panel: dict[str, pd.DataFrame] = {}
+    missing = 0
+    for ticker in tickers:
+        path = TIINGO_CACHE / f"{ticker.upper()}.parquet"
+        if not path.exists():
+            missing += 1
+            continue
+        try:
+            df = pd.read_parquet(path)
+            df.index = pd.DatetimeIndex(df.index)
+            df = df.sort_index()
+            df = df[(df.index >= start_ts) & (df.index <= end_ts)]
+            if not df.empty:
+                panel[ticker] = df
+        except Exception as e:
+            logger.warning("Could not read %s: %s", ticker, e)
+    if missing:
+        logger.warning("%d tickers not found in cache (skipped)", missing)
+    return panel
+
+
 def load_dynamic_universe(min_adv_m: float) -> list[str]:
     """
     Return tickers from tiingo_eligible_universe.csv that satisfy:
