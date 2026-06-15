@@ -284,6 +284,60 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ── 六、数据更新对比 ──────────────────────────────────────────────────────────
+# ── 六、数据质量独立验证：Yahoo Finance vs Tiingo ─────────────────────────────
+st.subheader("六、数据质量独立验证：Yahoo Finance vs Tiingo")
+
+import json as _json2
+_tiingo_metrics_path = _Path(__file__).resolve().parents[2] / "results" / "v1_tiingo" / "metrics.json"
+
+if _tiingo_metrics_path.exists():
+    _tm = _json2.loads(_tiingo_metrics_path.read_text())
+
+    _rows_cmp = [
+        ("CAGR",        f"{m.get('cagr',0)*100:.2f}%",       f"{_tm.get('cagr',0)*100:.2f}%",       f"{(_tm.get('cagr',0)-m.get('cagr',0))*100:+.2f}pp"),
+        ("Sharpe",      f"{m.get('sharpe',0):.4f}",           f"{_tm.get('sharpe',0):.4f}",           f"{_tm.get('sharpe',0)-m.get('sharpe',0):+.4f}"),
+        ("Sortino",     f"{m.get('sortino',0):.4f}",          f"{_tm.get('sortino',0):.4f}",          f"{_tm.get('sortino',0)-m.get('sortino',0):+.4f}"),
+        ("最大回撤",    f"{abs(m.get('max_drawdown',0))*100:.2f}%", f"{abs(_tm.get('max_drawdown',0))*100:.2f}%", f"{(abs(_tm.get('max_drawdown',0))-abs(m.get('max_drawdown',0)))*100:+.2f}pp"),
+        ("年化波动率",  f"{m.get('annual_vol',0)*100:.2f}%",  f"{_tm.get('annual_vol',0)*100:.2f}%",  f"{(_tm.get('annual_vol',0)-m.get('annual_vol',0))*100:+.2f}pp"),
+        ("胜率",        f"{m.get('win_rate',0)*100:.2f}%",    f"{_tm.get('win_rate',0)*100:.2f}%",    f"{(_tm.get('win_rate',0)-m.get('win_rate',0))*100:+.2f}pp"),
+        ("Profit Factor", f"{m.get('profit_factor',0):.4f}", f"{_tm.get('profit_factor',0):.4f}",    f"{_tm.get('profit_factor',0)-m.get('profit_factor',0):+.4f}"),
+        ("总交易笔数",  f"{int(m.get('n_trades',0)):,}",      f"{int(_tm.get('n_trades',0)):,}",      f"{int(_tm.get('n_trades',0)-m.get('n_trades',0)):+,}"),
+        ("平均持仓天数", f"{m.get('avg_holding_days',0):.1f}", f"{_tm.get('avg_holding_days',0):.1f}", f"{_tm.get('avg_holding_days',0)-m.get('avg_holding_days',0):+.1f}"),
+    ]
+
+    _html_cmp = ""
+    for metric, yval, tval, delta in _rows_cmp:
+        _html_cmp += f"<tr><td style='padding:6px 14px'>{metric}</td><td style='padding:6px 14px'>{yval}</td><td style='padding:6px 14px'>{tval}</td><td style='padding:6px 14px;color:#888'>{delta}</td></tr>"
+
+    st.markdown(f"""
+<table style="width:100%;border-collapse:collapse;font-size:0.9rem;margin-top:8px;">
+<thead>
+<tr style="background:#1565c0;color:white;">
+  <th style="padding:8px 14px;text-align:left;">指标</th>
+  <th style="padding:8px 14px;text-align:left;">Yahoo Finance</th>
+  <th style="padding:8px 14px;text-align:left;">Tiingo</th>
+  <th style="padding:8px 14px;text-align:left;">差异（Tiingo − Yahoo）</th>
+</tr>
+</thead>
+<tbody>
+{_html_cmp}
+</tbody>
+</table>
+<p style="font-size:0.8rem;color:#666;margin-top:6px;">
+注：两者使用完全相同的策略参数和 S&P 900 标的范围（988 只），差异纯粹来自数据质量。
+</p>
+""", unsafe_allow_html=True)
+
+    st.success(
+        "**结论：两个数据源结果几乎完全一致。** "
+        f"CAGR 仅差 {abs(_tm.get('cagr',0)-m.get('cagr',0))*100:.2f}pp，Sharpe 差 {abs(_tm.get('sharpe',0)-m.get('sharpe',0)):.4f}。"
+        "这说明：① Yahoo Finance 历史数据对策略 1.0 而言已足够可靠；"
+        "② Tiingo 数据的核心价值不在于数据质量本身，而在于**覆盖已退市股票**，"
+        "用于构建无幸存者偏差的扩展标的池（见「数据与标的池 (Tiingo)」页面）。"
+    )
+else:
+    st.info("Tiingo 回测结果未找到（`results/v1_tiingo/metrics.json`）。请先运行 `python src/scripts/05_run_v1_tiingo.py`。")
+
+# ── 七、数据更新对比 ──────────────────────────────────────────────────────────
 from website.utils.comparison import render_data_update_comparison
 render_data_update_comparison(meta, m)
