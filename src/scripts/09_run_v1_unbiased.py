@@ -110,6 +110,8 @@ def run_backtest(
     adv_m: float,
     universe: list[str],
     panel: dict,
+    indicators: dict,
+    strategy_tickers: list[str],
     output_dir: Path,
     start: str,
     end: str,
@@ -118,11 +120,7 @@ def run_backtest(
     """Run one backtest and return its metrics dict."""
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    params = deepcopy(BASE_PARAMS)
-    params.min_adv_m = adv_m
-
-    auxiliary        = {params.cash_proxy, "SPY", params.regime_ticker}
-    strategy_tickers = [t for t in universe if t in panel and t not in auxiliary]
+    params = replace(BASE_PARAMS, min_adv_m=adv_m)
 
     print(f"\n{'='*65}")
     print(f"  {label}")
@@ -132,13 +130,6 @@ def run_backtest(
     print(f"  Period       : {start} → {end}")
     print(f"  Output       : {output_dir}")
     print(f"{'='*65}\n")
-
-    t0 = time.time()
-    logger.info("Precomputing indicators …")
-    indicators = precompute_indicators(
-        {t: panel[t] for t in strategy_tickers}, params
-    )
-    logger.info("Indicators ready in %.1fs", time.time() - t0)
 
     t1 = time.time()
     logger.info("Running backtest …")
