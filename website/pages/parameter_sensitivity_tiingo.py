@@ -799,11 +799,11 @@ st.markdown("---")
 # ── Trade Execution Diagnostics ────────────────────────────────────────────────
 st.subheader("交易执行诊断（Trade Execution Diagnostics）")
 st.markdown(f"""
-> **数据来源说明：** 此诊断基于 **Baseline anchor 锚点参数**的历史回测交易日志（`results/v1/trades.csv`），
+> **数据来源说明：** 此诊断基于 **Tiingo Baseline anchor 锚点参数**的历史回测交易日志（`results/v1_unbiased_50m/trades.csv`），
 > 而非参数敏感性分析中各扰动参数的交易。
 > 诊断目的是评估策略1.0在正常运行条件下"计划止损价 vs 实际成交价"的偏差，
 > 是策略1.0执行质量的固有属性，用 Baseline 跑一次即可代表策略1.0整体。
-> 回测期间：{meta.backtest_start} → {meta.backtest_end}，锚点参数：N={p['breakout_window']}日突破，止损 {p['stop_loss_multiplier']:.0f}×ATR。
+> 回测期间：{meta.backtest_start} → {meta.backtest_end}，锚点参数：N={p['breakout_window']}日突破，止损 {p['stop_loss_multiplier']:.0f}×ATR，ADV>$50M。
 """)
 
 _DIAG_PATH = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_50m" / "diagnostics.json"
