@@ -189,20 +189,36 @@ def main():
     )
     logger.info("Loaded %d tickers in %.1fs", len(panel), time.time() - t_load)
 
+    # ── Precompute indicators once (shared by both runs) ─────────────────────
+    # Indicators depend only on breakout_window and atr_period (same in both runs).
+    # The ADV threshold (min_adv_m) is applied by the engine daily, not here.
+    auxiliary        = {BASE_PARAMS.cash_proxy, "SPY", BASE_PARAMS.regime_ticker}
+    strategy_tickers = [t for t in universe if t in panel and t not in auxiliary]
+    logger.info("Strategy pool: %d tickers", len(strategy_tickers))
+
+    t_ind = time.time()
+    logger.info("Precomputing indicators (once, shared by both runs) …")
+    indicators = precompute_indicators(
+        {t: panel[t] for t in strategy_tickers}, BASE_PARAMS
+    )
+    logger.info("Indicators ready in %.1fs", time.time() - t_ind)
+
     results_a = results_b = None
 
     # ── Run A: ADV > $20M ────────────────────────────────────────────────────
     if args.run in ("a", "both"):
         out_a = _root / "results" / "v1_unbiased_20m"
         results_a = run_backtest(
-            label          = "Run A — ADV > $20M  (unbiased baseline)",
-            adv_m          = 20.0,
-            universe       = universe,
-            panel          = panel,
-            output_dir     = out_a,
-            start          = args.start,
-            end            = args.end,
-            initial_capital = args.initial_capital,
+            label            = "Run A — ADV > $20M  (unbiased baseline)",
+            adv_m            = 20.0,
+            universe         = universe,
+            panel            = panel,
+            indicators       = indicators,
+            strategy_tickers = strategy_tickers,
+            output_dir       = out_a,
+            start            = args.start,
+            end              = args.end,
+            initial_capital  = args.initial_capital,
         )
         (out_a / "strategy_meta.json").write_text(json.dumps({
             "id": "v1_unbiased_20m", "version": "1.0-unbiased-20m",
