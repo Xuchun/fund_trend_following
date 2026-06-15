@@ -83,8 +83,14 @@ if res.spy_nav is not None:
     _spy_metrics["spy_max_dd_duration_days"] = _max_dur
 
 
-render_page_header("Baseline参数回测结果", meta)
+render_page_header("Baseline参数回测结果 (Tiingo 无偏差)", meta)
 st.caption(f"回测期间：{meta.backtest_start} → {meta.backtest_end}  ·  初始资金：$10,000,000")
+st.info(
+    "**数据来源：Tiingo 动态标的池（无幸存者偏差）**  ·  "
+    "2,943 个标的（ADV>$20M 满足 ≥1 年），含历史退市标的，"
+    "避免仅使用当前 S&P 900 成分股带来的幸存者偏差。"
+    "与 Yahoo Finance 有偏差基线相比，CAGR 约低 3–4pp，是更接近真实盘表现的参考基准。"
+)
 st.markdown("---")
 
 # ── Summary cards ─────────────────────────────────────────────────────────────
