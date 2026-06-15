@@ -277,16 +277,16 @@ with tab3:
 
 # ── Tab4: Pool size per year ───────────────────────────────────────────────
 with tab4:
-    st.markdown("每个自然年内，有多少个标的至少在该年度内的某一天满足过滤条件。")
+    st.markdown("最终回测标的池中，每个自然年内有多少标的处于活跃（满足过滤条件）状态。")
 
     years = list(range(2004, 2027))
     pool_counts = []
     for y in years:
         yr_start = pd.Timestamp(f"{y}-01-01")
         yr_end   = pd.Timestamp(f"{y}-12-31")
-        mask = (eu["first_eligible"] <= yr_end) & (eu["last_eligible"] >= yr_start)
-        act_mask = mask & eu["is_active"]
-        del_mask = mask & ~eu["is_active"]
+        mask = (eu_rec["first_eligible"] <= yr_end) & (eu_rec["last_eligible"] >= yr_start)
+        act_mask = mask & eu_rec["is_active"]
+        del_mask = mask & ~eu_rec["is_active"]
         pool_counts.append({
             "year":    y,
             "active":  int(act_mask.sum()),
