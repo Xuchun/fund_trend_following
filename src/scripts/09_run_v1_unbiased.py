@@ -125,6 +125,12 @@ def load_dynamic_universe(min_adv_m: float) -> list[str]:
     eu = pd.read_csv(EU_CSV)
     # Always load the ≥252-day ($20M) superset; the engine applies the daily ADV threshold.
     tickers = eu[eu["eligible_days"] >= MIN_ELIGIBLE_DAYS]["ticker"].tolist()
+    # Exclude volatility / inverse ETFs (structural negative drift, not suitable
+    # for a long-only trend-following strategy).
+    excluded = [t for t in tickers if t in EXCLUDED_VOL_ETFS]
+    if excluded:
+        logger.info("Excluding %d vol/inverse ETFs: %s", len(excluded), excluded)
+    tickers = [t for t in tickers if t not in EXCLUDED_VOL_ETFS]
     logger.info("Dynamic universe (%d-day filter): %d tickers loaded from CSV",
                 MIN_ELIGIBLE_DAYS, len(tickers))
     return sorted(tickers)
