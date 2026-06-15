@@ -61,7 +61,7 @@ def list_strategies() -> list[StrategyMeta]:
         return metas
     for path in sorted(RESULTS_ROOT.iterdir()):
         meta_file = path / "strategy_meta.json"
-        if path.is_dir() and meta_file.exists():
+        if path.is_dir() and meta_file.exists() and "backup" not in path.name.lower():
             try:
                 metas.append(_load_meta(meta_file))
             except Exception:
