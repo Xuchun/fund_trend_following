@@ -15,6 +15,20 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
+# ── Volatility / inverse ETF exclusion list ──────────────────────────────────
+# These products have structural negative drift (VIX futures roll cost, daily
+# leverage reset decay) and are inappropriate for a long-only trend-following
+# strategy.  Applied to BOTH the Yahoo Finance and Tiingo universe.
+EXCLUDED_VOL_ETFS: frozenset[str] = frozenset([
+    "VXX", "UVXY", "SVXY", "VIXY", "TVIX",          # VIX / vol futures
+    "SQQQ", "TQQQ", "UPRO", "SPXU", "SPXL", "SPXS", # 3× leveraged index
+    "SDS", "SSO", "SH",                               # 2× leveraged / inverse S&P
+    "TZA", "TNA", "FAS", "FAZ",                       # 3× leveraged small-cap / fin
+    "SDOW", "UDOW",                                   # 3× Dow leveraged
+    "LABU", "LABD",                                   # 3× leveraged biotech
+    "NUGT", "DUST", "JNUG", "JDST",                  # 3× leveraged gold miners
+])
+
 # ── ETF universe: loaded from data/ETFs.csv ────────────────────────────────
 # Fallback used only when the CSV cannot be read (e.g., missing file).
 _FALLBACK_ETF_TICKERS: list[str] = [
