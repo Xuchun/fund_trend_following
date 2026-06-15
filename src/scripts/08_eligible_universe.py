@@ -23,8 +23,9 @@ import pandas as pd
 _root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(_root / "src"))
 
-CACHE_DIR   = _root / "data" / "cache" / "tiingo"
-OUTPUT_PATH = _root / "data" / "cache" / "tiingo_eligible_universe.csv"
+CACHE_DIR    = _root / "data" / "cache" / "tiingo"
+OUTPUT_PATH  = _root / "data" / "cache" / "tiingo_eligible_universe.csv"
+OUTPUT_PATH2 = _root / "data" / "tiingo_eligible_universe.csv"  # git-tracked copy for website
 
 MIN_PRICE = 10.0        # raw close > $10
 MIN_ADV_M = 20.0        # ADV_60 > $20M
