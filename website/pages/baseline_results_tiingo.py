@@ -19,7 +19,7 @@ from website.components.charts import (
     r_multiple_distribution, annual_returns_chart,
     trades_per_year_chart, holding_days_distribution,
     profit_by_type_chart, daily_position_count_chart,
-    monthly_return_heatmap,
+    monthly_return_heatmap, capital_utilization_chart,
 )
 
 _TIINGO_RESULTS_ID = "v1_unbiased_20m"
