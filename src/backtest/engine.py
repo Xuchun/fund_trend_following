@@ -122,6 +122,34 @@ class BacktestEngine:
                 date, portfolio, self.price_panel, self.indicators
             )
 
+            # ── ③b DELIST: force-close positions whose data has ended ────────
+            # When a stock is acquired/delisted its parquet data stops at the
+            # last trading day.  Any position still open after that date would
+            # otherwise be carried silently to end_of_backtest with a spurious
+            # multi-year holding period.  We close it immediately at the last
+            # available adj_close, using the actual last-data date as exit_date.
+            already_exiting = {s["ticker"] for s in pending_exits}
+            for ticker in list(portfolio.positions.keys()):
+                if ticker in already_exiting:
+                    continue
+                df = self.price_panel.get(ticker)
+                if df is None or df.index.max() >= date:
+                    continue
+                last_data_date = df.index.max()
+                close_price    = float(df.at[last_data_date, "adj_close"])
+                commission     = compute_commission(
+                    close_price,
+                    portfolio.positions[ticker].shares,
+                    self.params.commission_bps,
+                )
+                portfolio.close_position(
+                    ticker, last_data_date, close_price, "delisted", commission
+                )
+                logger.info(
+                    "Force-closed delisted %s at %s (last data date)",
+                    ticker, last_data_date.date(),
+                )
+
             # Regime filter: block new entries when SPY ≤ its 200-day SMA.
             # Existing positions are NOT touched; cash continues to earn the proxy rate.
             in_bull = self._is_bull_market(date)
