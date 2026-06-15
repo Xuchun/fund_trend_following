@@ -216,11 +216,11 @@ with tab1:
 
 # ── Tab2: New entries per year ────────────────────────────────────────────
 with tab2:
-    st.markdown("每年新进入标的池的标的数量（按 `first_eligible` 年份统计）。")
-    entry_year = eu["first_eligible"].dt.year.value_counts().sort_index().reset_index()
+    st.markdown("最终回测标的池中，每年新进入的标的数量（按 `first_eligible` 年份统计）。")
+    entry_year = eu_rec["first_eligible"].dt.year.value_counts().sort_index().reset_index()
     entry_year.columns = ["year", "count"]
-    entry_active   = active["first_eligible"].dt.year.value_counts().sort_index()
-    entry_delisted = delisted["first_eligible"].dt.year.value_counts().sort_index()
+    entry_active   = rec_active["first_eligible"].dt.year.value_counts().sort_index()
+    entry_delisted = rec_del["first_eligible"].dt.year.value_counts().sort_index()
     entry_year["active"]   = entry_year["year"].map(entry_active).fillna(0).astype(int)
     entry_year["delisted"] = entry_year["year"].map(entry_delisted).fillna(0).astype(int)
 
