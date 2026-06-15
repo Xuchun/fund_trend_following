@@ -233,14 +233,16 @@ def main():
     if args.run in ("b", "both"):
         out_b = _root / "results" / "v1_unbiased_50m"
         results_b = run_backtest(
-            label          = "Run B — ADV > $50M  (sensitivity check)",
-            adv_m          = 50.0,
-            universe       = universe,   # same 2,943 loaded; engine applies $50M daily
-            panel          = panel,
-            output_dir     = out_b,
-            start          = args.start,
-            end            = args.end,
-            initial_capital = args.initial_capital,
+            label            = "Run B — ADV > $50M  (sensitivity check)",
+            adv_m            = 50.0,
+            universe         = universe,   # same 2,943 loaded; engine applies $50M daily
+            panel            = panel,
+            indicators       = indicators,
+            strategy_tickers = strategy_tickers,
+            output_dir       = out_b,
+            start            = args.start,
+            end              = args.end,
+            initial_capital  = args.initial_capital,
         )
         (out_b / "strategy_meta.json").write_text(json.dumps({
             "id": "v1_unbiased_50m", "version": "1.0-unbiased-50m",
