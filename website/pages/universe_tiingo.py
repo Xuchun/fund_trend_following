@@ -432,6 +432,7 @@ if _m20_path.exists() and _m50_path.exists():
     st.markdown("""
 使用动态标的池（≥1年过滤，2,943 个标的）运行 Strategy 1.0，
 分别测试 ADV > $20M 和 ADV > $50M 两套门槛，并与原始有偏差基线对比。
+**当前 Baseline 采用方案④（ADV>$50M），兼顾无偏差标的覆盖与实盘流动性。**
 """)
 
     # ── Survivorship bias impact ──────────────────────────────────────────────
