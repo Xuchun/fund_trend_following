@@ -20,7 +20,7 @@ import logging
 import os
 import sys
 import time
-from copy import deepcopy
+from dataclasses import replace
 from pathlib import Path
 
 _root = Path(__file__).resolve().parents[2]
