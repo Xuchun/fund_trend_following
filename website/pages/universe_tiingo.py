@@ -336,14 +336,9 @@ with tab4:
 
 st.markdown("---")
 
-# ── 五、推荐回测方案 ───────────────────────────────────────────────────────────
-st.subheader("五、推荐回测方案：应该用哪些标的？")
+# ── 六、各时长档位明细 ────────────────────────────────────────────────────────
+st.subheader("六、各时长档位明细（为什么过滤 < 1 年？）")
 
-st.markdown("""
-全量 4,402 个标的并非都适合纳入回测。以下基于策略本身的信号要求，给出推荐方案。
-""")
-
-# Detailed breakdown table
 _n_lt3m   = int((eu["eligible_days"] < 63).sum())
 _n_3m_1y  = int(((eu["eligible_days"] >= 63) & (eu["eligible_days"] < 252)).sum())
 _n_1y_3y  = int(((eu["eligible_days"] >= 252) & (eu["eligible_days"] < 756)).sum())
@@ -356,74 +351,30 @@ def _split(mask):
     d = int((~eu[mask]["is_active"]).sum())
     return a, d
 
-_m_lt3m   = eu["eligible_days"] < 63
-_m_3m_1y  = (eu["eligible_days"] >= 63) & (eu["eligible_days"] < 252)
-_m_1y_3y  = (eu["eligible_days"] >= 252) & (eu["eligible_days"] < 756)
-_m_3y_5y  = (eu["eligible_days"] >= 756) & (eu["eligible_days"] < 1260)
-_m_5y_10y = (eu["eligible_days"] >= 1260) & (eu["eligible_days"] < 2520)
-_m_gt10y  = eu["eligible_days"] >= 2520
-
 rows_detail = [
-    ("< 3 个月",  _n_lt3m,   *_split(_m_lt3m),   "❌ 几乎无用"),
-    ("3 个月–1 年", _n_3m_1y, *_split(_m_3m_1y),  "⚠️ 价值很低"),
-    ("1–3 年",    _n_1y_3y,  *_split(_m_1y_3y),  "✅ 有价值"),
-    ("3–5 年",    _n_3y_5y,  *_split(_m_3y_5y),  "✅ 有价值"),
-    ("5–10 年",   _n_5y_10y, *_split(_m_5y_10y), "✅ 核心标的"),
-    ("> 10 年",   _n_gt10y,  *_split(_m_gt10y),  "✅ 核心标的"),
+    ("< 3 个月",    _n_lt3m,   *_split(eu["eligible_days"] < 63),                                               "❌ 几乎无用"),
+    ("3 个月–1 年", _n_3m_1y,  *_split((eu["eligible_days"] >= 63) & (eu["eligible_days"] < 252)),              "⚠️ 价值很低"),
+    ("1–3 年",      _n_1y_3y,  *_split((eu["eligible_days"] >= 252) & (eu["eligible_days"] < 756)),             "✅ 有价值"),
+    ("3–5 年",      _n_3y_5y,  *_split((eu["eligible_days"] >= 756) & (eu["eligible_days"] < 1260)),            "✅ 有价值"),
+    ("5–10 年",     _n_5y_10y, *_split((eu["eligible_days"] >= 1260) & (eu["eligible_days"] < 2520)),           "✅ 核心标的"),
+    ("> 10 年",     _n_gt10y,  *_split(eu["eligible_days"] >= 2520),                                            "✅ 核心标的"),
 ]
-
-_detail_df = pd.DataFrame(
-    rows_detail,
-    columns=["满足条件时长", "标的总数", "现役", "已退市", "策略实用性"]
+st.dataframe(
+    pd.DataFrame(rows_detail, columns=["满足条件时长", "标的总数", "现役", "已退市", "策略实用性"]),
+    use_container_width=True, hide_index=True,
 )
-st.dataframe(_detail_df, use_container_width=True, hide_index=True)
-
-_n_252 = len(eu[eu["eligible_days"] >= 252])
-_n_252_act = int(eu[eu["eligible_days"] >= 252]["is_active"].sum())
-_n_252_del = int((~eu[eu["eligible_days"] >= 252]["is_active"]).sum())
-_n_below252 = len(eu) - _n_252
-
 st.markdown(f"""
-**为什么 < 1 年（{_n_below252:,} 个）几乎无用？**
-
-策略 1.0 的入场信号基于 **200 日价格突破**，计算这个信号需要至少 200 个交易日的价格历史。
-满足过滤条件不足 1 年（252 天）的标的，绝大多数**在整个满足条件的时间段内都无法产生有效入场信号**——
-策略引擎会自动跳过它们，但加载这些数据依然消耗内存和 IO 时间。
-
-具体来看，< 3 个月的 {_n_lt3m:,} 个标的，大多是：
-- **SPAC**（特殊目的收购公司）：2020–2021 年大量上市，成交额短暂冲高后迅速萎缩
-- **事件驱动爆量股**：并购传言、轧空（short squeeze）期间短暂满足 ADV 门槛
-- **数据异常**：Tiingo 数据中极少数复权异常标的
+策略 1.0 入场信号基于 **200 日价格突破**——满足条件不足 252 天的标的，
+在整个满足条件期间几乎**无法产生任何有效信号**，属于纯噪声。
+< 3 个月的 **{_n_lt3m:,} 个**主要是 SPAC、事件驱动爆量股、数据异常标的；
+3 个月–1 年的 **{_n_3m_1y:,} 个**偶尔可产生信号但占比极低。
+过滤掉这两档（**共 {_n_lt3m+_n_3m_1y:,} 个**），保留有价值的 **{len(eu_rec):,} 个**。
 """)
-
-# Recommendation comparison table
-_rec_data = {
-    "方案":       ["原始 S&P 900", "Tiingo 全量", "**≥ 1 年过滤（推荐）**"],
-    "标的总数":   [f"903", f"{len(eu):,}", f"**{_n_252:,}**"],
-    "含退市标的": ["❌ 无", f"✅ {len(delisted):,} 个", f"**✅ {_n_252_del:,} 个**"],
-    "幸存者偏差": ["⚠️ 严重", "✅ 最小", "**✅ 大幅降低**"],
-    "8 GB 内存":  ["✅ 轻松", "⚠️ 勉强（~6 GB）", "**✅ 舒适（~3 GB）**"],
-    "信号噪声":   ["低", "高（含大量无效标的）", "**低（过滤无效标的）**"],
-}
-st.dataframe(pd.DataFrame(_rec_data), use_container_width=True, hide_index=True)
-
-st.success(
-    f"**推荐方案：使用满足条件 ≥ 252 天的 {_n_252:,} 个标的**"
-    f"（{_n_252_act:,} 个现役 + {_n_252_del:,} 个已退市）。"
-    f" 相比原始 S&P 900（903 个，无退市），标的数量扩大 {_n_252/903:.1f}×，"
-    f"含 {_n_252_del:,} 个已退市标的（原来的 ∞ 倍），幸存者偏差防御大幅提升，"
-    f"同时避免加载 {_n_below252:,} 个几乎不会产生信号的短命标的。"
-)
 
 st.markdown("---")
 
-# ── 六、标的列表 ──────────────────────────────────────────────────────────────
-st.subheader("六、标的详细列表")
-
-tab_act, tab_del = st.tabs([
-    f"✅ 现役标的（{len(active):,} 个）",
-    f"📋 已退市标的（{len(delisted):,} 个）",
-])
+# ── 七、标的详细列表（≥ 1 年过滤后）──────────────────────────────────────────
+st.subheader(f"七、标的详细列表（推荐池：{len(eu_rec):,} 个）")
 
 _display_cols = {
     "ticker":          "Ticker",
@@ -434,41 +385,47 @@ _display_cols = {
     "data_end":        "数据截止日",
 }
 
-with tab_act:
-    _act_df = (
-        active[list(_display_cols.keys())]
+tab_act, tab_del, tab_all = st.tabs([
+    f"✅ 现役（推荐池，{len(rec_active):,} 个）",
+    f"📋 已退市（推荐池，{len(rec_del):,} 个）",
+    f"🔍 全量参考（{len(eu):,} 个）",
+])
+
+def _fmt_df(df, sort_col):
+    out = (
+        df[list(_display_cols.keys())]
         .rename(columns=_display_cols)
-        .sort_values("累计满足天数", ascending=False)
+        .sort_values(sort_col, ascending=False)
         .reset_index(drop=True)
     )
     for col in ["首次满足条件", "最近满足条件", "数据起始日", "数据截止日"]:
-        _act_df[col] = pd.to_datetime(_act_df[col]).dt.strftime("%Y-%m-%d")
-    st.dataframe(_act_df, use_container_width=True, hide_index=True,
+        out[col] = pd.to_datetime(out[col]).dt.strftime("%Y-%m-%d")
+    return out
+
+with tab_act:
+    _df = _fmt_df(rec_active, "累计满足天数")
+    st.dataframe(_df, use_container_width=True, hide_index=True,
                  column_config={"累计满足天数": st.column_config.NumberColumn(format="%d 天")})
-    st.download_button(
-        "⬇ 下载现役标的列表",
-        data=_act_df.to_csv(index=False).encode("utf-8"),
-        file_name="tiingo_active_universe.csv",
-        mime="text/csv",
-    )
+    st.download_button("⬇ 下载现役标的列表（推荐池）",
+                       data=_df.to_csv(index=False).encode("utf-8"),
+                       file_name="tiingo_rec_active.csv", mime="text/csv")
 
 with tab_del:
-    _del_df = (
-        delisted[list(_display_cols.keys())]
-        .rename(columns=_display_cols)
-        .sort_values("最近满足条件", ascending=False)
-        .reset_index(drop=True)
-    )
-    for col in ["首次满足条件", "最近满足条件", "数据起始日", "数据截止日"]:
-        _del_df[col] = pd.to_datetime(_del_df[col]).dt.strftime("%Y-%m-%d")
-    st.dataframe(_del_df, use_container_width=True, hide_index=True,
+    _df = _fmt_df(rec_del, "最近满足条件")
+    st.dataframe(_df, use_container_width=True, hide_index=True,
                  column_config={"累计满足天数": st.column_config.NumberColumn(format="%d 天")})
-    st.download_button(
-        "⬇ 下载已退市标的列表",
-        data=_del_df.to_csv(index=False).encode("utf-8"),
-        file_name="tiingo_delisted_universe.csv",
-        mime="text/csv",
-    )
+    st.download_button("⬇ 下载已退市标的列表（推荐池）",
+                       data=_df.to_csv(index=False).encode("utf-8"),
+                       file_name="tiingo_rec_delisted.csv", mime="text/csv")
+
+with tab_all:
+    st.caption(f"全量 {len(eu):,} 个（含 {_n_lt3m+_n_3m_1y:,} 个短命标的，供参考）")
+    _df = _fmt_df(eu, "累计满足天数")
+    st.dataframe(_df, use_container_width=True, hide_index=True,
+                 column_config={"累计满足天数": st.column_config.NumberColumn(format="%d 天")})
+    st.download_button("⬇ 下载全量标的列表",
+                       data=_df.to_csv(index=False).encode("utf-8"),
+                       file_name="tiingo_full_universe.csv", mime="text/csv")
 
 st.markdown("---")
 
