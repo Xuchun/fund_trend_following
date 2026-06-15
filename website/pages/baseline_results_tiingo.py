@@ -356,6 +356,29 @@ st.markdown(f"""
 盈亏比 {pf:.4f} > 1，期望值为正。右侧长尾（大盈利交易）是策略1.0盈利的核心来源。
 """)
 
+# ── Big-R trades table (R > 3) ────────────────────────────────────────────────
+_etf_set = set(meta.etf_universe[i]["ticker"] for i in range(len(meta.etf_universe)))
+_exit_reason_cn = {
+    "trailing_stop":    "追踪止损",
+    "stop_loss":        "初始止损",
+    "end_of_backtest":  "回测截止",
+    "delisted":         "退市/并购",
+}
+_big_r = res.trades[res.trades["pnl_r_multiple"] > 3].copy()
+_big_r["类别"]     = _big_r["ticker"].apply(lambda t: "ETF" if t in _etf_set else "股票")
+_big_r["卖出原因"] = _big_r["exit_reason"].map(_exit_reason_cn).fillna(_big_r["exit_reason"])
+_big_r_show = _big_r[[
+    "ticker", "类别", "entry_date", "exit_date", "holding_days", "pnl_r_multiple", "卖出原因"
+]].copy()
+_big_r_show.columns = ["标的", "类别", "买入日期", "卖出日期", "持仓天数", "R 倍数", "卖出原因"]
+_big_r_show["买入日期"] = _big_r_show["买入日期"].dt.strftime("%Y-%m-%d")
+_big_r_show["卖出日期"] = _big_r_show["卖出日期"].dt.strftime("%Y-%m-%d")
+_big_r_show["R 倍数"]  = _big_r_show["R 倍数"].map(lambda x: f"{x:.2f}R")
+_big_r_show = _big_r_show.sort_values("R 倍数", ascending=False).reset_index(drop=True)
+
+with st.expander(f"📋 R > 3 的大盈利交易明细（共 {len(_big_r_show)} 笔）", expanded=False):
+    st.dataframe(_big_r_show, use_container_width=True, hide_index=True, height=500)
+
 st.markdown("---")
 
 # ── Delisted / acquired trades ────────────────────────────────────────────────
