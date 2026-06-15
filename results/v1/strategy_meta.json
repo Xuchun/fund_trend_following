@@ -7,10 +7,10 @@
   "badge_text": "v1.0",
   "badge_color": "blue",
   "universe_stocks": 903,
-  "universe_etfs": 83,
-  "universe_total": 986,
+  "universe_etfs": 77,
+  "universe_total": 980,
   "backtest_start": "2004-01-01",
-  "backtest_end": "2026-06-12",
+  "backtest_end": "2026-06-14",
   "initial_capital": 10000000,
   "cash_proxy": "SHY",
   "key_features": [
@@ -295,23 +295,8 @@
       "category": "国际股票"
     },
     {
-      "ticker": "ASHR",
-      "name": "Xtrackers CSI 300 China A-Shares ETF",
-      "category": "国际股票"
-    },
-    {
-      "ticker": "FXI",
-      "name": "iShares China Large-Cap ETF",
-      "category": "国际股票"
-    },
-    {
       "ticker": "INDA",
       "name": "iShares MSCI India ETF",
-      "category": "国际股票"
-    },
-    {
-      "ticker": "KWEB",
-      "name": "KraneShares CSI China Internet ETF",
       "category": "国际股票"
     },
     {
@@ -425,11 +410,6 @@
       "category": "债券"
     },
     {
-      "ticker": "EMB",
-      "name": "iShares JP Morgan USD Emerging Markets Bond ETF",
-      "category": "债券"
-    },
-    {
       "ticker": "JPST",
       "name": "JPMorgan Ultra-Short Income ETF",
       "category": "债券"
@@ -442,11 +422,6 @@
     {
       "ticker": "SLV",
       "name": "iShares Silver Trust",
-      "category": "大宗商品"
-    },
-    {
-      "ticker": "GDX",
-      "name": "VanEck Gold Miners ETF",
       "category": "大宗商品"
     },
     {
@@ -468,11 +443,6 @@
       "ticker": "SCHH",
       "name": "Schwab U.S. REIT ETF",
       "category": "房地产"
-    },
-    {
-      "ticker": "VXX",
-      "name": "iPath Series B S&P 500 VIX Short-Term Futures ETN",
-      "category": "波动率"
     },
     {
       "ticker": "IBIT",
