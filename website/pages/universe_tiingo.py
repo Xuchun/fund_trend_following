@@ -311,15 +311,14 @@ with tab4:
     st.plotly_chart(_fig_pool, use_container_width=True)
 
     peak_row = pool_df.loc[pool_df["total"].idxmax()]
-    min_row  = pool_df.loc[pool_df["total"].idxmin()]
     st.markdown(f"""
 **观察**：
-- 标的池规模随时间显著增长，从 2004 年约 **{pool_df[pool_df['year']==2004]['total'].values[0]:,} 个**
+- 最终回测标的池规模随时间增长，从 2004 年约 **{pool_df[pool_df['year']==2004]['total'].values[0]:,} 个**
   增长至峰值年份 {int(peak_row['year'])} 年的 **{int(peak_row['total']):,} 个**。
-- 增长主要来自：①美股上市公司总量增加（IPO、新兴行业 ETF）；②整体股价随牛市上行，
-  更多标的满足 $10 价格门槛；③市场整体流动性提升，更多标的满足 $20M ADV 门槛。
-- 每年同时存在约 **{delisted['last_eligible'].dt.year.value_counts().mean():.0f} 个**退市标的，
-  保证了历史数据的完整性。
+- 增长主要来自：①美股上市公司总量增加；②整体股价随牛市上行，更多标的满足 $10 价格门槛；
+  ③市场整体流动性提升，更多标的满足 $20M ADV 门槛。
+- 每年的退市标的柱（红色）显示了在该年还在活跃交易、但最终于某时点退市的历史标的数量，
+  这是无偏差回测的核心贡献——这些标的若在当年被纳入，就会被纳入；不会因为"后来退市了"而被排除。
 """)
 
 st.markdown("---")
