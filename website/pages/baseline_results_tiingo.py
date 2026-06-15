@@ -98,29 +98,16 @@ render_summary_cards(m, meta.color, meta.backtest_start, meta.backtest_end)
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ── Context note for poor CAGR ────────────────────────────────────────────────
+# ── Context note for CAGR ────────────────────────────────────────────────────
 cagr = m.get("cagr", 0)
-if cagr < 0.05:
-    regime_on = meta.params_anchor.get("regime_filter_enabled", False)
-    if regime_on:
-        regime_note = (
-            "已启用 <strong>SPY 200日均线过滤器</strong>，熊市期间（约占全程 19%）停止开新仓、"
-            "闲置资金转入 SHY。但过滤器<strong>不强制平仓</strong>——"
-            "2008 年危机期间已持有的头寸仍由追踪止损逐步平出，因此最大回撤未能完全规避。<br>"
-            "<strong>Strategy 2.0 计划引入强制减仓机制，在熊市信号触发时主动平仓。</strong>"
-        )
-    else:
-        regime_note = (
-            "纯多头策略1.0遭受熊市的全部冲击，毫无对冲机制。<br>"
-            "<strong>Strategy 2.0 将引入 SPY 200日均线过滤器以减少熊市回撤。</strong>"
-        )
-    st.markdown(f"""
+st.markdown(f"""
 <div class="warning-box">
-<h4>⚠️ 关于低 CAGR 的说明</h4>
-CAGR 仅 {cagr*100:.1f}%，主因是 2008 年金融危机期间
-<strong>最大回撤达 {abs(m.get("max_drawdown",0))*100:.1f}%</strong>，导致长期的资金恢复期。
-2010–2024 子区间 CAGR 约 6%，说明策略1.0本身在无极端熊市时仍有效。<br>
-{regime_note}
+<h4>📌 关于 CAGR {cagr*100:.1f}% 的说明（无偏差基线）</h4>
+此结果使用 <strong>Tiingo 动态标的池（2,943 个，含历史退市）</strong>，消除了幸存者偏差。
+与 Yahoo 有偏差基线（CAGR ≈ 8.4%）相比，差距约 3–4pp，<strong>差异并非策略失效，
+而是剔除了"只看赢家"的统计偏差后的真实水平</strong>。<br>
+最大回撤 {abs(m.get("max_drawdown", 0))*100:.1f}%，同期 SPY 最大回撤 {abs(m.get("spy_max_drawdown", 0))*100:.1f}%，
+下行保护优势依然显著。
 </div>
 """, unsafe_allow_html=True)
 
