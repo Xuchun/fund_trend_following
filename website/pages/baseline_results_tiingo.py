@@ -140,7 +140,7 @@ with _col_a:
 | 最低市值 | `min_market_cap_b` | **\$2B**（注①）|
 | ADV 流动性 | `min_adv_m` | **\$20M**（60日均量）|
 """)
-    st.caption("注①：Yahoo Finance 不提供历史点位市值，该过滤在回测中实际未执行（见参数敏感性分析页）。")
+    st.caption("注①：Tiingo 不提供历史流通股数据，以 ADV>$20M 作为市值代理（≈ $5亿+），min_market_cap_b 未在引擎中启用。")
 
     st.markdown("**止损 / 最小止损距离**")
     st.markdown(f"""
