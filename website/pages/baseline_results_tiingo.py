@@ -96,21 +96,6 @@ st.markdown("---")
 # ── Summary cards ─────────────────────────────────────────────────────────────
 render_summary_cards(m, meta.color, meta.backtest_start, meta.backtest_end)
 
-st.markdown("<br>", unsafe_allow_html=True)
-
-# ── Context note for CAGR ────────────────────────────────────────────────────
-cagr = m.get("cagr", 0)
-st.markdown(f"""
-<div class="warning-box">
-<h4>📌 关于 CAGR {cagr*100:.1f}% 的说明（无偏差基线）</h4>
-此结果使用 <strong>Tiingo 动态标的池（2,943 个，含历史退市）</strong>，消除了幸存者偏差。
-与 Yahoo 有偏差基线（CAGR ≈ 8.4%）相比，差距约 3–4pp，<strong>差异并非策略失效，
-而是剔除了"只看赢家"的统计偏差后的真实水平</strong>。<br>
-最大回撤 {abs(m.get("max_drawdown", 0))*100:.1f}%，同期 SPY 最大回撤 {abs(m.get("spy_max_drawdown", 0))*100:.1f}%，
-下行保护优势依然显著。
-</div>
-""", unsafe_allow_html=True)
-
 st.markdown("---")
 
 # ── Baseline parameter table ───────────────────────────────────────────────────
