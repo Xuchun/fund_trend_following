@@ -220,12 +220,13 @@ def main():
             end              = args.end,
             initial_capital  = args.initial_capital,
         )
+        _p_a = replace(BASE_PARAMS, min_adv_m=20.0)
         (out_a / "strategy_meta.json").write_text(json.dumps({
             "id": "v1_unbiased_20m", "version": "1.0-unbiased-20m",
             "display_name": "Strategy 1.0 (Tiingo, ADV>$20M, ≥1yr)",
             "backtest_start": args.start, "backtest_end": args.end,
             "initial_capital": args.initial_capital,
-            "params_anchor": {k: getattr(BASE_PARAMS, k)
+            "params_anchor": {k: getattr(_p_a, k)
                               for k in vars(StrategyParams()) if not k.startswith("_")},
         }, ensure_ascii=False, indent=2))
 
