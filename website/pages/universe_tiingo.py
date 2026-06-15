@@ -15,7 +15,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 # ── 数据路径 ──────────────────────────────────────────────────────────────────
-_EU_CSV = _project / "data" / "cache" / "tiingo_eligible_universe.csv"
+_EU_CSV = _project / "data" / "tiingo_eligible_universe.csv"
 
 st.title("数据与标的池 (Tiingo)")
 st.caption("基于 Tiingo EOD 数据构建的无幸存者偏差动态标的池")
