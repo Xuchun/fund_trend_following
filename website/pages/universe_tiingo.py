@@ -42,9 +42,9 @@ delisted = eu[~eu["is_active"]]
 
 # ── 结构性排除名单（来自 data.universe） ──────────────────────────────────────
 import sys as _sys
-_src_root = Path(__file__).resolve().parents[3] / "src"
-if str(_src_root) not in _sys.path:
-    _sys.path.insert(0, str(_src_root))
+_src_root = str(_project / "src")
+if _src_root not in _sys.path:
+    _sys.path.insert(0, _src_root)
 from data.universe import EXCLUDED_VOL_ETFS as _EXCL_ETFS
 
 # ≥252 天（1年）过滤 + 排除结构性不适合 ETF → 与回测实际标的池一致
