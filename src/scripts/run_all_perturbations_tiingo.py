@@ -48,11 +48,11 @@ END             = "2026-06-12"
 INITIAL_CAPITAL = 10_000_000.0
 MIN_ELIGIBLE_DAYS = 252
 
-# ── Baseline 参数（与 09_run_v1_unbiased.py Run B 一致，min_adv_m=$50M） ──────
+# ── Baseline 参数（与 09_run_v1_unbiased.py Run A 一致，min_adv_m=$60M） ──────
 BASELINE = StrategyParams(
     min_price               = 10.0,
     min_market_cap_b        = 2.0,
-    min_adv_m               = 50.0,   # Tiingo Baseline
+    min_adv_m               = 60.0,   # Tiingo Baseline
     breakout_window         = 200,
     atr_period              = 20,
     stop_loss_multiplier    = 2.0,
