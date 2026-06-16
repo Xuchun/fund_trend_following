@@ -401,10 +401,10 @@ with tab_all:
 st.markdown("---")
 
 # ── ETF 标的池明细 ─────────────────────────────────────────────────────────────
-st.subheader(f"ETF 标的池明细（{len(_ETF_SET)} 只）")
-
 if _META_PATH.exists():
-    _etf_df = pd.DataFrame(_meta.get("etf_universe", []))
+    # 只显示满足 ≥252 天条件、实际进入回测底池的 ETF
+    _pool_etf_tickers = set(_etf["ticker"] for _, _etf in eu_rec[eu_rec["ticker"].isin(_ETF_SET)].iterrows())
+    _etf_df = pd.DataFrame([e for e in _meta.get("etf_universe", []) if e["ticker"] in _pool_etf_tickers])
     _cat_order = [
         "美股指数", "美股风格", "板块 SPDR", "美股行业",
         "国际股票", "美国国债", "债券", "大宗商品", "房地产",
@@ -415,6 +415,7 @@ if _META_PATH.exists():
     )
     _etf_df = _etf_df.sort_values(["_cat_order", "ticker"]).drop(columns="_cat_order")
 
+    st.subheader(f"ETF 标的池明细（{len(_etf_df)} 只）")
     _etf_tab_labels = [c for c in _cat_order if c in _etf_df["category"].values]
     _etf_tabs = st.tabs(_etf_tab_labels)
     for _etf_tab, _etf_cat in zip(_etf_tabs, _etf_tab_labels):
@@ -423,7 +424,7 @@ if _META_PATH.exists():
             _grp = _grp.rename(columns={"ticker": "Ticker", "name": "名称 / Full Name"})
             st.dataframe(_grp, use_container_width=True, hide_index=True)
 
-    st.markdown(f"**合计：{len(_etf_df)} 只 ETF**（SPY + SHY 为辅助标的，不纳入策略 1.0 交易）")
+    st.markdown(f"**合计：{len(_etf_df)} 只 ETF**（SPY + SHY 为辅助标的，不纳入策略 1.0 交易；JGLO 因数据不足 252 天未纳入底池）")
 else:
     st.info("ETF 列表未加载。请检查 results/v1_unbiased_60m/strategy_meta.json 中的 etf_universe 字段。")
 
