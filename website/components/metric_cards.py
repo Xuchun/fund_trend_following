@@ -14,7 +14,8 @@ def _card_html(label: str, value: str, sub: str, color: str) -> str:
 
 
 def render_summary_cards(metrics: dict, color: str,
-                          start: str, end: str) -> None:
+                          start: str, end: str,
+                          spy_metrics: dict | None = None) -> None:
     """Render the 8 headline metric cards."""
     cagr          = metrics.get("cagr", 0)
     max_dd        = metrics.get("max_drawdown", 0)
@@ -29,6 +30,8 @@ def render_summary_cards(metrics: dict, color: str,
     avg_deep_days = metrics.get("avg_deep_dd_duration_days", 0)
     n_episodes    = metrics.get("n_deep_dd_episodes", 0)
 
+    sm = spy_metrics or {}
+
     def fmt_pct(v):
         sign = "+" if v >= 0 else ""
         return f"{sign}{v*100:.1f}%"
@@ -36,12 +39,17 @@ def render_summary_cards(metrics: dict, color: str,
     def signed_color(v):
         return "#2ca02c" if v >= 0 else "#d62728"
 
+    spy_cagr  = sm.get("spy_cagr")
+    spy_maxdd = sm.get("spy_max_drawdown")
+    cagr_sub  = f"同期 SPY CAGR：{fmt_pct(spy_cagr)}" if spy_cagr is not None else f"回测期 {start[:4]}–{end[:4]}"
+    maxdd_sub = f"同期 SPY 最大回撤：{fmt_pct(spy_maxdd)}" if spy_maxdd is not None else "从高点到低点的最大亏损"
+
     cols = st.columns(3)
     with cols[0]:
         st.markdown(_card_html(
             "CAGR（年化复合回报）",
             f'<span style="color:{signed_color(cagr)}">{fmt_pct(cagr)}</span>',
-            f"回测期 {start[:4]}–{end[:4]}",
+            cagr_sub,
             color,
         ), unsafe_allow_html=True)
 
@@ -49,7 +57,7 @@ def render_summary_cards(metrics: dict, color: str,
         st.markdown(_card_html(
             "最大回撤",
             f'<span style="color:#d62728">{fmt_pct(max_dd)}</span>',
-            "从高点到低点的最大亏损",
+            maxdd_sub,
             color,
         ), unsafe_allow_html=True)
 
