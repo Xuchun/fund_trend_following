@@ -54,7 +54,7 @@ rec_del    = eu_rec[~eu_rec["is_active"]]
 
 # ── ETF 集合（来自 strategy_meta） ────────────────────────────────────────────
 import json as _json_mod
-_META_PATH = _project / "results" / "v1_unbiased_60m" / "strategy_meta.json"
+_META_PATH = _project / "results" / "v1_unbiased_60m_2000" / "strategy_meta.json"
 _meta: dict = {}
 _ETF_SET: set[str] = set()
 if _META_PATH.exists():
