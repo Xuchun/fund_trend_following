@@ -53,7 +53,7 @@ st.markdown("""
 st.markdown("---")
 
 # ── Constants ──────────────────────────────────────────────────────────────────
-_PERTURB_DIR = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m" / "perturbation"
+_PERTURB_DIR = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m_2000" / "perturbation"
 _RF = 0.02
 _BASELINE_CAGR  = m.get("cagr", 0)
 _BASELINE_SHARPE = m.get("sharpe", 0)
