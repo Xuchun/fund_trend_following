@@ -376,9 +376,16 @@ with tab_act:
     _df = _fmt_df(rec_active, "累计满足天数")
     st.dataframe(_df, use_container_width=True, hide_index=True,
                  column_config={"累计满足天数": st.column_config.NumberColumn(format="%d 天")})
-    st.download_button("⬇ 下载现役标的列表（推荐池）",
-                       data=_df.to_csv(index=False).encode("utf-8"),
-                       file_name="tiingo_rec_active.csv", mime="text/csv")
+    _col1, _col2 = st.columns([1, 1])
+    with _col1:
+        st.download_button("⬇ 下载现役标的列表",
+                           data=_df.to_csv(index=False).encode("utf-8"),
+                           file_name="tiingo_rec_active.csv", mime="text/csv")
+    with _col2:
+        _df_all_tab = _fmt_df(eu_rec, "累计满足天数")
+        st.download_button("⬇ 下载现役+已退市标的列表",
+                           data=_df_all_tab.to_csv(index=False).encode("utf-8"),
+                           file_name="tiingo_recommended_universe.csv", mime="text/csv")
 
 with tab_del:
     _df = _fmt_df(rec_del, "最近满足条件")
