@@ -274,12 +274,13 @@ with tab2:
     st.plotly_chart(_fig_entry, use_container_width=True)
 
     top_years = entry_year.nlargest(3, "count")
+    _start_yr_count = entry_year[entry_year['year'] == _start_year]
+    _start_yr_str = f"{_start_year} 年数量最多（{int(_start_yr_count['count'].values[0])} 个），因为所有在 {_start_year} 年 1 月 1 日之前就已满足条件的标的，`first_eligible` 均落在 {_start_year} 年初（数据起点）。" if len(_start_yr_count) > 0 else ""
     st.markdown(f"""
 **峰值年份**：{int(top_years.iloc[0]['year'])} 年（{int(top_years.iloc[0]['count'])} 个新标的），
 {int(top_years.iloc[1]['year'])} 年（{int(top_years.iloc[1]['count'])} 个），
 {int(top_years.iloc[2]['year'])} 年（{int(top_years.iloc[2]['count'])} 个）。
-2004 年数量最多（{int(entry_year[entry_year['year']==2004]['count'].values[0])} 个），
-因为所有在 2004 年 1 月 1 日之前就已满足条件的标的，`first_eligible` 均落在 2004 年初（数据起点）。
+{_start_yr_str}
 """)
 
 # ── Tab3: Exits per year (delisted) ───────────────────────────────────────
