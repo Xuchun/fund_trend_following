@@ -63,7 +63,7 @@ st.markdown("""
 | **原始下载范围** | 1996-01-01 → 今日（约 30 年） |
 | **回测使用范围** | 2004-01-02 → 今日（约 22 年，<span style="color:red;font-weight:bold">等待未来扩展至 1996</span>） |
 | **覆盖标的** | NYSE / NASDAQ / AMEX 全量历史股票 + 79 只跨资产 ETF |
-| **下载 Ticker 总数** | ~21,400（含 14,800 活跃 + 7,400 已退市/被收购） |
+| **下载 Ticker 总数** | <span style="color:red;font-weight:bold">~21,400（含 14,800 活跃 + 7,400 已退市/被收购）</span> |
 | **字段** | 开/高/低/收、复权收盘价、成交量（日度） |
 | **含退市标的** | 是 — Tiingo 保留已退市、被收购、破产公司的完整历史数据 |
 """, unsafe_allow_html=True)
