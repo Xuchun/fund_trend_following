@@ -1,4 +1,4 @@
-"""Baseline参数回测结果 (Tiingo 无偏差)"""
+"""Baseline参数回测结果（回测开始：2000-01-01）"""
 
 import sys
 from pathlib import Path
