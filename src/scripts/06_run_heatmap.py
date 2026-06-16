@@ -201,7 +201,7 @@ def main() -> None:
     parser.add_argument("--start",     default=_BASELINE_START)
     parser.add_argument("--mode",      choices=["etf", "sp500", "sp900", "full"], default="full")
     parser.add_argument("--output-dir",
-                        default=str(_project_root / "results" / "v1" / "heatmap"))
+                        default=str(_project_root / "results" / "v1_unbiased_60m" / "heatmap"))
     parser.add_argument("--force-download", action="store_true")
     args = parser.parse_args()
 
