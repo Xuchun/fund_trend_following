@@ -593,16 +593,43 @@ if _es_path.exists():
     _tot_exe = int(_entry_stats["executed"].sum())
     _tot_skp = int(_entry_stats["skipped"].sum())
     _skip_rt = _tot_skp / _tot_sig * 100 if _tot_sig > 0 else 0
-    st.markdown(
-        f"**解读：** 图中每个柱代表一年，蓝色为当年实际成功开仓次数，橙色为产生了开仓信号但被策略过滤器拒绝的次数。"
-        f"全程共产生 **{_tot_sig:,}** 个开仓信号，其中 **{_tot_exe:,}** 次成功开仓，"
-        f"**{_tot_skp:,}** 次（占 **{_skip_rt:.1f}%**）因以下原因被放弃：\n"
-        f"- **组合热度超限（heat_limit）**：已持仓总风险敞口接近 NAV 的 10%，新仓会让风险超出预算；\n"
-        f"- **相关性过高**：候选标的与已持仓标的的 60 日收益相关性 > 0.70，仓位被压缩至 0；\n"
-        f"- **资金不足**：扣除现有持仓占用后，剩余现金无法覆盖最小建仓成本。\n\n"
-        f"放弃开仓率反映了风控过滤器的「严格程度」——过高意味着策略在牛市中错过较多机会，"
-        f"过低则可能代表风控执行不够充分。"
-    )
+    _has_detail = all(c in _entry_stats.columns for c in ["skip_heat", "skip_corr", "skip_cash"])
+    if _has_detail:
+        _n_heat = int(_entry_stats["skip_heat"].sum())
+        _n_corr = int(_entry_stats["skip_corr"].sum())
+        _n_cash = int(_entry_stats["skip_cash"].sum())
+        _n_other = _tot_skp - _n_heat - _n_corr - _n_cash
+        _reason_lines = []
+        if _n_cash > 0:
+            _reason_lines.append(f"- **资金不足**（{_n_cash:,} 次）：已持仓耗尽可用现金，无法覆盖新仓成本；")
+        if _n_heat > 0:
+            _reason_lines.append(f"- **组合热度超限**（{_n_heat:,} 次）：已持仓总风险敞口接近 NAV 的 10%；")
+        if _n_corr > 0:
+            _reason_lines.append(f"- **相关性过高**（{_n_corr:,} 次）：候选标的与已持仓相关性 > 0.70，仓位压缩至 0；")
+        if _n_other > 0:
+            _reason_lines.append(f"- **其他过滤**（{_n_other:,} 次）：缺口过大、已持仓、非可交易日等；")
+        _insight = ""
+        if _n_heat == 0 and _n_corr == 0:
+            _insight = (
+                "\n\n**策略洞察：** 本配置下放弃开仓几乎完全由**资金不足**驱动，"
+                "热度超限和相关性过滤均未触发。原因在于策略每笔仓位上限为 NAV 的 5%，"
+                "约持满 20 笔后现金耗尽；而 10% 热度上限理论上需 ~10 笔高风险仓位才能触发，"
+                "实际上现金先于热度耗尽。这说明当前参数下策略受**资金约束**而非**风险约束**限制。"
+            )
+        _reason_text = "\n".join(_reason_lines)
+        st.markdown(
+            f"**解读：** 每个月柱中，下方为被拒绝的开仓信号，上方（策略主色）为成功开仓。"
+            f"全程共产生 **{_tot_sig:,}** 个开仓信号，其中 **{_tot_exe:,}** 次成功开仓，"
+            f"**{_tot_skp:,}** 次（占 **{_skip_rt:.1f}%**）被放弃，细分原因如下：\n\n"
+            + _reason_text
+            + _insight
+            + "\n\n放弃开仓率反映风控过滤器的「严格程度」——过高意味着牛市中错过较多机会，过低则风控执行不够充分。"
+        )
+    else:
+        st.markdown(
+            f"**解读：** 全程共产生 **{_tot_sig:,}** 个开仓信号，其中 **{_tot_exe:,}** 次成功开仓，"
+            f"**{_tot_skp:,}** 次（占 **{_skip_rt:.1f}%**）被放弃。"
+        )
 
 st.markdown("---")
 
