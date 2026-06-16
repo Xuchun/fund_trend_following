@@ -179,7 +179,7 @@ class BacktestEngine:
         if len(portfolio.nav_history) > 1 and portfolio.nav_history[-2][0] == last_date:
             portfolio.nav_history.pop(-2)
 
-        return self._build_results(portfolio)
+        return self._build_results(portfolio, _daily_signals, _daily_executed)
 
     # ── Execution helpers ───────────────────────────────────────────────────
 
