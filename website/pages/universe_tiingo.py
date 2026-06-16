@@ -41,7 +41,7 @@ delisted = eu[~eu["is_active"]]
 
 # ── 结构性排除名单（与 data.universe.EXCLUDED_VOL_ETFS 保持同步） ──────────────
 # 这6个ETF在CSV中存在但结构性不适合趋势跟踪，与回测引擎排除逻辑一致
-_EXCL_ETFS = {"FXI", "GDX", "KWEB", "VXX", "EMB", "ASHR"}
+_EXCL_ETFS = {"FXI", "GDX", "KWEB", "VXX", "EMB", "ASHR", "ETH"}
 
 # ≥252 天（1年）过滤 + 排除结构性不适合 ETF → 与回测实际标的池一致
 MIN_ELIGIBLE_DAYS = 252
