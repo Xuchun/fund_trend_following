@@ -226,12 +226,12 @@ def main():
 
     results_a = results_b = None
 
-    # ── Run A: ADV > $20M ────────────────────────────────────────────────────
+    # ── Run A: ADV > $60M (Baseline) ─────────────────────────────────────────
     if args.run in ("a", "both"):
-        out_a = _root / "results" / "v1_unbiased_20m"
+        out_a = _root / "results" / "v1_unbiased_60m"
         results_a = run_backtest(
-            label            = "Run A — ADV > $20M  (unbiased baseline)",
-            adv_m            = 20.0,
+            label            = "Run A — ADV > $60M  (unbiased baseline)",
+            adv_m            = 60.0,
             universe         = universe,
             panel            = panel,
             indicators       = indicators,
@@ -241,10 +241,10 @@ def main():
             end              = args.end,
             initial_capital  = args.initial_capital,
         )
-        _p_a = replace(BASE_PARAMS, min_adv_m=20.0)
+        _p_a = replace(BASE_PARAMS, min_adv_m=60.0)
         (out_a / "strategy_meta.json").write_text(json.dumps({
-            "id": "v1_unbiased_20m", "version": "1.0-unbiased-20m",
-            "display_name": "Strategy 1.0 (Tiingo, ADV>$20M, ≥1yr)",
+            "id": "v1_unbiased_60m", "version": "1.0-unbiased-60m",
+            "display_name": "Strategy 1.0 (Tiingo, ADV>$60M, ≥1yr)",
             "backtest_start": args.start, "backtest_end": args.end,
             "initial_capital": args.initial_capital,
             "params_anchor": {k: getattr(_p_a, k)
