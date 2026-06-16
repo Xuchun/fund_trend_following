@@ -157,12 +157,3 @@ SPY 基准数据来自 Yahoo Finance 实际价格，归一化到回测起始日 
 """)
 
 st.markdown("---")
-
-# ── Limitations reminder ──────────────────────────────────────────────────────
-st.markdown("""
-<div class="info-box">
-<strong>方法论局限性</strong><br>
-本回测使用固定标的池（S&P 900 当前成分股），不模拟指数调整事件。
-详见「局限性声明」页面。
-</div>
-""", unsafe_allow_html=True)
