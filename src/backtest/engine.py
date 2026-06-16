@@ -98,6 +98,8 @@ class BacktestEngine:
         pending_exits:   list[dict] = []
         pending_entries: list[dict] = []
         last_nav = float(self.initial_capital)
+        _daily_signals:  dict[pd.Timestamp, int] = {}
+        _daily_executed: dict[pd.Timestamp, int] = {}
 
         for date in trading_dates:
 
@@ -109,8 +111,13 @@ class BacktestEngine:
                     carried_exits.append(sig)   # no open price today; retry next day
             pending_exits = carried_exits
 
-            for sig in pending_entries:
-                self._execute_entry(sig, date, portfolio, log_returns, last_nav)
+            _n_signals  = len(pending_entries)
+            _n_executed = sum(
+                1 for sig in pending_entries
+                if self._execute_entry(sig, date, portfolio, log_returns, last_nav)
+            )
+            _daily_signals[date]  = _n_signals
+            _daily_executed[date] = _n_executed
             pending_entries = []
 
             # ── ② CASH: apply SGOV return to uninvested cash ────────────────
