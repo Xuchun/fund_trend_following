@@ -88,7 +88,7 @@ with _col_a:
     st.markdown(f"""
 **优势**
 - 含退市/被收购标的 → 彻底消除幸存偏差
-- 原始数据从 {_data_earliest[:4]} 年起，具备 {_download_yrs} 年完整历史储备
+- 原始数据从 {_TIINGO_DOWNLOAD_START[:4]} 年起，具备 {_download_yrs} 年完整历史储备
 - 当前回测使用 {_start_year} 年起数据，跨越多次完整牛熊周期
 - 日度复权价格，精确处理拆股/分红
 - {_pool_etf_count} 只 ETF 覆盖跨资产（股票指数、债券、大宗商品、REITs、加密、国防、建筑）
