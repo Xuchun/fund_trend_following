@@ -25,8 +25,8 @@ render_page_header("参数热力图分析", meta)
 st.caption(f"{meta.display_name} · 回测期间：{meta.backtest_start} → {meta.backtest_end}")
 st.markdown("---")
 
-_PERTURB_DIR = _root / "results" / "v1" / "perturbation"
-_HEATMAP_DIR = _root / "results" / "v1" / "heatmap"
+_PERTURB_DIR = _root / "results" / "v1_unbiased_60m" / "perturbation"
+_HEATMAP_DIR = _root / "results" / "v1_unbiased_60m" / "heatmap"
 
 
 # ── 工具函数 ──────────────────────────────────────────────────────────────────
