@@ -90,7 +90,7 @@ SWEEPS = [
     ("volume_filter_multiplier",[1.0, 1.2, 1.5, 1.7, 2.0],     False),
     ("min_price",               [8.0, 10.0, 12.0, 15.0],        False),
     ("min_market_cap_b",        [2.0, 3.0, 4.0],                False),
-    ("min_adv_m",               [10.0, 20.0, 30.0],             False),
+    ("min_adv_m",               [40.0, 50.0, 60.0, 70.0, 80.0], False),
     # Transaction costs
     ("slippage_bps",            [5.0, 8.0, 10.0, 12.0, 15.0],  False),
     ("commission_bps",          [1.0, 3.0, 5.0],                False),
