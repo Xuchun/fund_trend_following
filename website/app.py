@@ -31,8 +31,11 @@ if not strategies:
     st.stop()
 
 strategy_ids = [m.id for m in strategies]
-selected_idx = 0
-sel_meta     = strategies[selected_idx]
+try:
+    selected_idx = strategy_ids.index("v1_unbiased_60m")
+except ValueError:
+    selected_idx = 0
+sel_meta = strategies[selected_idx]
 
 selected_id = strategy_ids[selected_idx]
 cache_key   = f"_results_{selected_id}"
