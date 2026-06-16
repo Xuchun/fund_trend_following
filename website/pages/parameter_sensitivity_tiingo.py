@@ -14,7 +14,7 @@ from website.data_loader import load_strategy
 from website.shared import placeholder
 from website.components.strategy_badge import render_page_header
 
-_TIINGO_RESULTS_ID = "v1_unbiased_50m"
+_TIINGO_RESULTS_ID = "v1_unbiased_60m"
 _cache_key = f"_results_{_TIINGO_RESULTS_ID}"
 if _cache_key not in st.session_state:
     st.session_state[_cache_key] = load_strategy(_TIINGO_RESULTS_ID)
@@ -29,7 +29,7 @@ st.caption(f"{meta.display_name} · 回测期间：{meta.backtest_start} → {me
 st.markdown("---")
 
 # ── Constants ──────────────────────────────────────────────────────────────────
-_PERTURB_DIR = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_50m" / "perturbation"
+_PERTURB_DIR = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m" / "perturbation"
 _RF = 0.02
 _BASELINE_CAGR  = m.get("cagr", 0)
 _BASELINE_SHARPE = m.get("sharpe", 0)
@@ -212,7 +212,7 @@ def _render_param_section(data: dict, section_title: str, background_text: str):
     df = _make_table(data)
     st.dataframe(df, use_container_width=True, hide_index=True)
     st.caption(
-        f"来源：results/v1_unbiased_50m/perturbation/{param_name}.json  "
+        f"来源：results/v1_unbiased_60m/perturbation/{param_name}.json  "
         f"（Tiingo 无偏差宇宙，rf=2%，{data['start']} → {data['end']}）"
     )
 
@@ -799,14 +799,14 @@ st.markdown("---")
 # ── Trade Execution Diagnostics ────────────────────────────────────────────────
 st.subheader("交易执行诊断（Trade Execution Diagnostics）")
 st.markdown(f"""
-> **数据来源说明：** 此诊断基于 **Tiingo Baseline anchor 锚点参数**的历史回测交易日志（`results/v1_unbiased_50m/trades.csv`），
+> **数据来源说明：** 此诊断基于 **Tiingo Baseline anchor 锚点参数**的历史回测交易日志（`results/v1_unbiased_60m/trades.csv`），
 > 而非参数敏感性分析中各扰动参数的交易。
 > 诊断目的是评估策略1.0在正常运行条件下"计划止损价 vs 实际成交价"的偏差，
 > 是策略1.0执行质量的固有属性，用 Baseline 跑一次即可代表策略1.0整体。
 > 回测期间：{meta.backtest_start} → {meta.backtest_end}，锚点参数：N={p['breakout_window']}日突破，止损 {p['stop_loss_multiplier']:.0f}×ATR，ADV>$50M。
 """)
 
-_DIAG_PATH = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_50m" / "diagnostics.json"
+_DIAG_PATH = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m" / "diagnostics.json"
 
 if _DIAG_PATH.exists():
     import json as _json
@@ -880,7 +880,7 @@ if _DIAG_PATH.exists():
         f'</div>',
         unsafe_allow_html=True,
     )
-    st.caption("数据来源：results/v1_unbiased_50m/diagnostics.json | 仅统计 exit_reason == stop_loss 的交易")
+    st.caption("数据来源：results/v1_unbiased_60m/diagnostics.json | 仅统计 exit_reason == stop_loss 的交易")
 
     st.markdown("#### B. 连续亏损序列分析")
     sa = diag.get("streak_analysis", {})
@@ -1122,7 +1122,7 @@ else:
 
 # ── 数据更新说明 ──────────────────────────────────────────────────────────────
 import json as _json_ps
-_prev_ps = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_50m" / "prev_run_snapshot.json"
+_prev_ps = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m" / "prev_run_snapshot.json"
 if _prev_ps.exists():
     _prev_ps_data = _json_ps.loads(_prev_ps.read_text())
     _prev_end_ps = _prev_ps_data.get("_run_end", "上次运行")
