@@ -104,7 +104,7 @@ _c2.metric("股票仍在交易", f"{len(_stk[_stk['is_active']]):,}", help="目�
 _c3.metric("股票已退市/收购", f"{len(_stk[~_stk['is_active']]):,}", help="历史上退市、破产或被收购，是消除幸存偏差的关键")
 _c4.metric("ETF 数量", f"{len(_etf):,}", help="候选 ETF 池（含 SPY、债券、大宗商品等跨资产品种）")
 _c5.metric("ETF 仍在交易", f"{len(_etf[_etf['is_active']]):,}", help="目前仍在正常交易的 ETF")
-_c6.metric("合计标的数", f"{len(_eu252):,}", help="底池总量；引擎每日动态按 ADV 阈值再过滤（默认 $60M）")
+_c6.metric("合计标的数", f"{len(_eu252):,}", help="标的池总量；引擎每日动态按 ADV 阈值再过滤（默认 $60M）")
 
 st.markdown("---")
 
@@ -142,7 +142,7 @@ st.markdown("""
 """)
 
 st.markdown("""
-**过滤条件 1 + 2** 在底池 CSV 构建时逐日计算，满足条件的每一天计入 `eligible_days`；**过滤条件 3（≥252 天）** 是静态预过滤，决定哪些 ticker 纳入底池。
+**过滤条件 1 + 2** 在标的池 CSV 构建时逐日计算，满足条件的每一天计入 `eligible_days`；**过滤条件 3（≥252 天）** 是静态预过滤，决定哪些 ticker 纳入标的池。
 引擎在每个回测交易日再次检查当日是否满足价格 > $10 且 ADV > 策略参数（Baseline: $60M），动态决定标的是否参与当日信号扫描。
 这保证了整个回测过程中**不存在任何前视偏差或选择偏差**。
 
@@ -402,7 +402,7 @@ st.markdown("---")
 
 # ── ETF 标的池明细 ─────────────────────────────────────────────────────────────
 if _META_PATH.exists():
-    # 只显示满足 ≥252 天条件、实际进入回测底池的 ETF
+    # 只显示满足 ≥252 天条件、实际进入回测标的池的 ETF
     _pool_etf_tickers = set(_etf["ticker"] for _, _etf in eu_rec[eu_rec["ticker"].isin(_ETF_SET)].iterrows())
     _etf_df = pd.DataFrame([e for e in _meta.get("etf_universe", []) if e["ticker"] in _pool_etf_tickers])
     _cat_order = [
@@ -424,7 +424,7 @@ if _META_PATH.exists():
             _grp = _grp.rename(columns={"ticker": "Ticker", "name": "名称 / Full Name"})
             st.dataframe(_grp, use_container_width=True, hide_index=True)
 
-    st.markdown(f"**合计：{len(_etf_df)} 只 ETF**（SPY + SHY 为辅助标的，不纳入策略 1.0 交易；JGLO 因数据不足 252 天未纳入底池）")
+    st.markdown(f"**合计：{len(_etf_df)} 只 ETF**（SPY + SHY 为辅助标的，不纳入策略 1.0 交易；JGLO 因数据不足 252 天未纳入标的池）")
 else:
     st.info("ETF 列表未加载。请检查 results/v1_unbiased_60m/strategy_meta.json 中的 etf_universe 字段。")
 
