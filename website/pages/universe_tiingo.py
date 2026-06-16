@@ -39,13 +39,16 @@ eu = _load_universe()
 active   = eu[eu["is_active"]]
 delisted = eu[~eu["is_active"]]
 
-# ── 结构性排除名单（与 data.universe.EXCLUDED_VOL_ETFS 保持同步） ──────────────
-# 这6个ETF在CSV中存在但结构性不适合趋势跟踪，与回测引擎排除逻辑一致
+# ── 结构性排除名单（与回测引擎排除逻辑一致） ──────────────────────────────────
+# 1. 结构性不适合趋势跟踪的 vol/inverse ETF
 _EXCL_ETFS = {"FXI", "GDX", "KWEB", "VXX", "EMB", "ASHR", "ETH"}
+# 2. 辅助标的（引擎用作市场环境指标和现金代理，不参与交易）
+_EXCL_AUX  = {"SPY", "SHY"}
+_EXCL_ALL  = _EXCL_ETFS | _EXCL_AUX
 
-# ≥252 天（1年）过滤 + 排除结构性不适合 ETF → 与回测实际标的池一致
+# ≥252 天（1年）过滤 + 排除所有非交易标的 → 与回测实际策略池完全一致（2,976 个）
 MIN_ELIGIBLE_DAYS = 252
-eu_rec     = eu[(eu["eligible_days"] >= MIN_ELIGIBLE_DAYS) & (~eu["ticker"].isin(_EXCL_ETFS))]
+eu_rec     = eu[(eu["eligible_days"] >= MIN_ELIGIBLE_DAYS) & (~eu["ticker"].isin(_EXCL_ALL))]
 rec_active = eu_rec[eu_rec["is_active"]]
 rec_del    = eu_rec[~eu_rec["is_active"]]
 
