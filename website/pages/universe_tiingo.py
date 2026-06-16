@@ -52,13 +52,18 @@ rec_del    = eu_rec[~eu_rec["is_active"]]
 # ── ETF 集合（来自 strategy_meta） ────────────────────────────────────────────
 import json as _json_mod
 _META_PATH = _project / "results" / "v1_unbiased_60m" / "strategy_meta.json"
+_meta: dict = {}
 _ETF_SET: set[str] = set()
 if _META_PATH.exists():
     _meta = _json_mod.loads(_META_PATH.read_text())
     _ETF_SET = {e["ticker"] for e in _meta.get("etf_universe", [])}
 
-# ── Tiingo 数据说明 ────────────────────────────────────────────────────────────
-_data_latest = eu["data_end"].max().strftime("%Y-%m-%d")
+# ── 动态日期变量（随数据更新自动刷新） ────────────────────────────────────────
+_data_earliest  = eu["data_start"].min().strftime("%Y-%m-%d")       # Tiingo 最早数据日
+_data_latest    = eu["data_end"].max().strftime("%Y-%m-%d")          # Tiingo 最新数据日
+_backtest_start = _meta.get("backtest_start", "2004-01-02")          # 回测开始日（来自 strategy_meta）
+_download_yrs   = round((pd.Timestamp(_data_latest) - pd.Timestamp(_data_earliest)).days / 365)
+_backtest_yrs   = round((pd.Timestamp(_data_latest) - pd.Timestamp(_backtest_start)).days / 365)
 
 st.subheader("Tiingo 数据说明")
 st.markdown(f"""
