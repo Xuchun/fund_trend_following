@@ -426,6 +426,15 @@ if _META_PATH.exists():
     _etf_df = _etf_df.sort_values(["_cat_order", "ticker"]).drop(columns="_cat_order")
 
     st.subheader(f"ETF 标的池明细（{len(_etf_df)} 只）")
+    _etf_dl = _etf_df[["ticker", "name", "category"]].rename(
+        columns={"ticker": "Ticker", "name": "名称 / Full Name", "category": "类别"}
+    )
+    st.download_button(
+        "⬇ 下载 ETF 标的池列表",
+        data=_etf_dl.to_csv(index=False).encode("utf-8"),
+        file_name="etf_universe.csv",
+        mime="text/csv",
+    )
     _etf_tab_labels = [c for c in _cat_order if c in _etf_df["category"].values]
     _etf_tabs = st.tabs(_etf_tab_labels)
     for _etf_tab, _etf_cat in zip(_etf_tabs, _etf_tab_labels):
