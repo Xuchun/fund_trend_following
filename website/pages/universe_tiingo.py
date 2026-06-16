@@ -407,6 +407,7 @@ with tab_del:
 with tab_all:
     st.caption(f"推荐池 {len(eu_rec):,} 个（现役 {len(rec_active):,} + 已退市 {len(rec_del):,}，满足 ≥252 交易日条件）")
     _df = _fmt_df(eu_rec, "累计满足天数")
+    _df["状态"] = eu_rec["is_active"].map({True: "现役", False: "已退市"}).values
     st.dataframe(_df, use_container_width=True, hide_index=True,
                  column_config={"累计满足天数": st.column_config.NumberColumn(format="%d 天")})
     st.download_button("⬇ 下载现役+已退市列表（推荐池）",
