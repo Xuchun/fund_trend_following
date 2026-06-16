@@ -170,10 +170,8 @@ st.markdown("""
 > **注**：排除决策基于结构性论据，方向上与回测亏损一致属于佐证，并非事后拟合。
 """)
 
-st.markdown("---")
-
 # ── 二、潜在缺陷 ──────────────────────────────────────────────────────────────
-st.subheader("二、潜在缺陷与局限性")
+st.markdown("**二、潜在缺陷与局限性**")
 st.markdown("""
 | # | 缺陷 | 影响方向 | 说明 |
 |---|------|---------|------|
@@ -190,49 +188,8 @@ st.info(
 
 st.markdown("---")
 
-# ── 三、推荐回测标的池（满足条件 ≥ 1 年）─────────────────────────────────────
-st.subheader("三、推荐回测标的池（满足条件 ≥ 1 年）")
-
-c1, c2, c3, c4 = st.columns(4)
-c1.metric("推荐标的总数", f"{len(eu_rec):,}",
-          delta=f"vs 全量 {len(eu):,}", delta_color="off")
-c2.metric("现役", f"{len(rec_active):,}", help="data_end ≥ 2026-01-01")
-c3.metric("已退市", f"{len(rec_del):,}", help="幸存者偏差防御的核心")
-c4.metric("平均满足天数", f"{eu_rec['eligible_days'].mean():.0f} 天")
-
-st.markdown("<br>", unsafe_allow_html=True)
-
-# Pie for recommended pool
-_pie = go.Figure(go.Pie(
-    labels=["现役（Active）", "已退市（Delisted）"],
-    values=[len(rec_active), len(rec_del)],
-    hole=0.52,
-    marker_colors=["#1565c0", "#e57373"],
-    textinfo="label+percent+value",
-    textfont_size=13,
-))
-_pie.update_layout(
-    title=f"推荐标的池（≥1年）构成：{len(rec_active):,} 现役 + {len(rec_del):,} 已退市",
-    height=320,
-    margin=dict(t=50, b=20, l=20, r=20),
-    showlegend=False,
-)
-st.plotly_chart(_pie, use_container_width=True)
-
-# 3-way comparison table
-_cmp_data = {
-    "方案":       ["S&P 900（原始）", "Tiingo 全量（ADV > $20M）", "**Tiingo ≥ 1年（推荐）**"],
-    "标的总数":   ["903",             f"{len(eu):,}",             f"**{len(eu_rec):,}**"],
-    "含退市标的": ["❌ 无",           f"✅ {len(delisted):,} 个", f"**✅ {len(rec_del):,} 个**"],
-    "幸存者偏差": ["⚠️ 严重",        "✅ 最小",                  "**✅ 大幅降低**"],
-    "无效标的噪声": ["低",            f"高（{len(eu)-len(eu_rec):,} 个无效标的）",   "**低（已过滤）**"],
-}
-st.dataframe(pd.DataFrame(_cmp_data), use_container_width=True, hide_index=True)
-
-st.markdown("---")
-
-# ── 四、最终回测标的池分布图 ──────────────────────────────────────────────────
-st.subheader(f"四、最终回测标的池分布图（{len(eu_rec):,} 个）")
+# ── 标的池分布图 ──────────────────────────────────────────────────────────────
+st.subheader("标的池分布图")
 
 tab1, tab2, tab3, tab4 = st.tabs([
     "📊 满足条件时长分布",
