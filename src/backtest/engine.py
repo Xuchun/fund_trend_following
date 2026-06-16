@@ -115,12 +115,15 @@ class BacktestEngine:
             pending_exits = carried_exits
 
             _n_signals  = len(pending_entries)
-            _n_executed = sum(
-                1 for sig in pending_entries
-                if self._execute_entry(sig, date, portfolio, log_returns, last_nav)
-            )
+            _reasons = [
+                self._execute_entry(sig, date, portfolio, log_returns, last_nav)
+                for sig in pending_entries
+            ]
             _daily_signals[date]  = _n_signals
-            _daily_executed[date] = _n_executed
+            _daily_executed[date] = sum(1 for r in _reasons if r == "ok")
+            _daily_heat[date]     = sum(1 for r in _reasons if r == "heat")
+            _daily_corr[date]     = sum(1 for r in _reasons if r == "corr")
+            _daily_cash[date]     = sum(1 for r in _reasons if r == "cash")
             pending_entries = []
 
             # ── ② CASH: apply SGOV return to uninvested cash ────────────────
