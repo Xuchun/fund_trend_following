@@ -232,7 +232,7 @@ class BacktestEngine:
 
         row = df.loc[date]
         if not bool(row["is_tradable"]):
-            return
+            return False
 
         open_price   = float(row["adj_open"])
         signal_close = signal["signal_close"]
@@ -245,7 +245,7 @@ class BacktestEngine:
                 abs(open_price - signal_close) / signal_close * 100,
                 self.params.gap_filter * 100,
             )
-            return
+            return False
 
         # ── Fill price (slippage) ────────────────────────────────────────────
         entry_price = compute_fill_price(open_price, "buy", self.params.slippage_bps)
@@ -254,10 +254,10 @@ class BacktestEngine:
         atr       = signal["atr"]
         stop_loss = entry_price - self.params.stop_loss_multiplier * atr
         if stop_loss >= entry_price:
-            return  # degenerate: stop above/at entry
+            return False  # degenerate: stop above/at entry
         stop_distance_pct = (entry_price - stop_loss) / entry_price
         if stop_distance_pct < self.params.min_stop_distance_pct:
-            return
+            return False
 
         trail_stop = entry_price - self.params.trail_multiplier_r1 * atr
 
@@ -275,7 +275,7 @@ class BacktestEngine:
             params=self.params,
         )
         if shares is None:
-            return
+            return False
 
         # ── Cash check ───────────────────────────────────────────────────────
         commission = compute_commission(entry_price, shares, self.params.commission_bps)
@@ -285,7 +285,7 @@ class BacktestEngine:
                 "Entry %s skipped: cost=%.0f > cash=%.0f",
                 ticker, total_cost, portfolio.cash,
             )
-            return
+            return False
 
         # ── Open position ────────────────────────────────────────────────────
         position = Position(
@@ -299,6 +299,7 @@ class BacktestEngine:
             atr_at_entry=atr,
         )
         portfolio.open_position(position, commission)
+        return True
 
     # ── End-of-backtest liquidation ─────────────────────────────────────────
 
