@@ -87,7 +87,7 @@ render_page_header("Baseline参数回测结果", meta)
 st.markdown("---")
 
 # ── Summary cards ─────────────────────────────────────────────────────────────
-render_summary_cards(m, meta.color, meta.backtest_start, meta.backtest_end)
+render_summary_cards(m, meta.color, meta.backtest_start, meta.backtest_end, _spy_metrics)
 
 st.markdown("---")
 
