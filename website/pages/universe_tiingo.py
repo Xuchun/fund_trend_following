@@ -398,4 +398,32 @@ with tab_all:
                        data=_df.to_csv(index=False).encode("utf-8"),
                        file_name="tiingo_recommended_universe.csv", mime="text/csv")
 
+st.markdown("---")
+
+# ── ETF 标的池明细 ─────────────────────────────────────────────────────────────
+st.subheader(f"ETF 标的池明细（{len(_ETF_SET)} 只）")
+
+if _META_PATH.exists():
+    _etf_df = pd.DataFrame(_meta.get("etf_universe", []))
+    _cat_order = [
+        "美股指数", "美股风格", "板块 SPDR", "美股行业",
+        "国际股票", "美国国债", "债券", "大宗商品", "房地产",
+        "波动率", "加密货币",
+    ]
+    _etf_df["_cat_order"] = _etf_df["category"].apply(
+        lambda c: _cat_order.index(c) if c in _cat_order else 99
+    )
+    _etf_df = _etf_df.sort_values(["_cat_order", "ticker"]).drop(columns="_cat_order")
+
+    _etf_tab_labels = [c for c in _cat_order if c in _etf_df["category"].values]
+    _etf_tabs = st.tabs(_etf_tab_labels)
+    for _etf_tab, _etf_cat in zip(_etf_tabs, _etf_tab_labels):
+        with _etf_tab:
+            _grp = _etf_df[_etf_df["category"] == _etf_cat][["ticker", "name"]]
+            _grp = _grp.rename(columns={"ticker": "Ticker", "name": "名称 / Full Name"})
+            st.dataframe(_grp, use_container_width=True, hide_index=True)
+
+    st.markdown(f"**合计：{len(_etf_df)} 只 ETF**（SPY + SHY 为辅助标的，不纳入策略 1.0 交易）")
+else:
+    st.info("ETF 列表未加载。请检查 results/v1_unbiased_60m/strategy_meta.json 中的 etf_universe 字段。")
 
