@@ -40,9 +40,16 @@ eu = _load_universe()
 active   = eu[eu["is_active"]]
 delisted = eu[~eu["is_active"]]
 
-# ≥252 天（1年）过滤后的推荐标的池
+# ── 结构性排除名单（来自 data.universe） ──────────────────────────────────────
+import sys as _sys
+_src_root = Path(__file__).resolve().parents[3] / "src"
+if str(_src_root) not in _sys.path:
+    _sys.path.insert(0, str(_src_root))
+from data.universe import EXCLUDED_VOL_ETFS as _EXCL_ETFS
+
+# ≥252 天（1年）过滤 + 排除结构性不适合 ETF → 与回测实际标的池一致
 MIN_ELIGIBLE_DAYS = 252
-eu_rec     = eu[eu["eligible_days"] >= MIN_ELIGIBLE_DAYS]
+eu_rec     = eu[(eu["eligible_days"] >= MIN_ELIGIBLE_DAYS) & (~eu["ticker"].isin(_EXCL_ETFS))]
 rec_active = eu_rec[eu_rec["is_active"]]
 rec_del    = eu_rec[~eu_rec["is_active"]]
 
