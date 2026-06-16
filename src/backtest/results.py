@@ -35,6 +35,7 @@ class BacktestResults:
     daily_returns: pd.Series
     trade_log: pd.DataFrame
     initial_capital: float
+    daily_entry_stats: pd.DataFrame = field(default_factory=pd.DataFrame)
 
     # ── Public API ──────────────────────────────────────────────────────────
 
