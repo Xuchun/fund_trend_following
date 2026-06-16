@@ -1,4 +1,4 @@
-"""数据与标的池 (Tiingo) — 无幸存者偏差动态标的池"""
+"""数据与标的池 — 无幸存者偏差动态标的池"""
 
 import sys
 from pathlib import Path
@@ -17,7 +17,7 @@ import streamlit as st
 # ── 数据路径 ──────────────────────────────────────────────────────────────────
 _EU_CSV = _project / "data" / "tiingo_eligible_universe.csv"
 
-st.title("数据与标的池 (Tiingo)")
+st.title("数据与标的池")
 st.caption("基于 Tiingo EOD 数据构建的无幸存者偏差动态标的池")
 st.markdown("---")
 
