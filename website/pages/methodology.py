@@ -24,7 +24,7 @@ st.markdown("""
 
 ```
 数据层（Data Layer）
-  └── Yahoo Finance → Parquet 缓存 → 增量更新
+  └── Tiingo EOD API → Parquet 缓存 → 增量更新
 
 信号层（Signal Layer）
   └── t 日收盘后计算所有信号（突破、止损、移动止盈）
