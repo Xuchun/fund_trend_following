@@ -443,7 +443,7 @@ if _META_PATH.exists():
             _grp = _grp.rename(columns={"ticker": "Ticker", "name": "名称 / Full Name"})
             st.dataframe(_grp, use_container_width=True, hide_index=True)
 
-    st.markdown(f"**合计：{len(_etf_df)} 只 ETF**（SPY + SHY 为辅助标的，不纳入策略 1.0 交易；JGLO 因数据不足 252 天未纳入标的池）")
+    st.markdown(f"**合计：{len(_etf_df)} 只 ETF**（候选池共 87 只；未纳入原因：JGLO 仅 206 交易日数据不足 252 天；CPER 流动性不足 ADV 最高 $53M 未达 $60M 门槛；ETH 为 2x 杠杆产品已结构性排除。SPY + SHY 为辅助标的，计入标的池但不纳入策略 1.0 交易）")
 else:
     st.info("ETF 列表未加载。请检查 results/v1_unbiased_60m/strategy_meta.json 中的 etf_universe 字段。")
 
