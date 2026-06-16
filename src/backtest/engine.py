@@ -211,22 +211,24 @@ class BacktestEngine:
         portfolio: Portfolio,
         log_returns: dict[str, pd.Series],
         last_nav: float,
-    ) -> None:
+    ) -> bool:
         """
         Attempt to execute an entry order at today's open price.
 
         Applies gap filter, recomputes stop/trail using actual fill price,
         then runs position sizing before committing.
+
+        Returns True if a position was opened, False if the signal was rejected.
         """
         ticker = signal["ticker"]
 
         # Already holding this ticker (could happen if yesterday we opened it)
         if ticker in portfolio.positions:
-            return
+            return False
 
         df = self.price_panel.get(ticker)
         if df is None or date not in df.index:
-            return
+            return False
 
         row = df.loc[date]
         if not bool(row["is_tradable"]):
