@@ -431,6 +431,61 @@ def daily_position_count_chart(trades: pd.DataFrame, nav_index, color: str = "#1
     return fig
 
 
+def daily_entries_vs_skipped_chart(
+    entry_stats: pd.DataFrame,
+    color: str = "#1f77b4",
+) -> go.Figure:
+    """Stacked bar chart: daily executed entries vs skipped signals (per year)."""
+    if entry_stats.empty:
+        return go.Figure()
+
+    df = entry_stats.copy()
+    df.index = pd.to_datetime(df.index)
+    df["year"] = df.index.year
+
+    yearly = df.groupby("year")[["executed", "skipped"]].sum().reset_index()
+
+    total_signals  = int(df["signals"].sum())
+    total_executed = int(df["executed"].sum())
+    total_skipped  = int(df["skipped"].sum())
+    skip_rate      = total_skipped / total_signals * 100 if total_signals > 0 else 0
+
+    fig = go.Figure()
+    fig.add_trace(go.Bar(
+        x=yearly["year"],
+        y=yearly["executed"],
+        name="已开仓",
+        marker_color=color,
+        marker_line_width=0,
+        opacity=0.85,
+        hovertemplate="%{x}年：已开仓 %{y} 次<extra></extra>",
+    ))
+    fig.add_trace(go.Bar(
+        x=yearly["year"],
+        y=yearly["skipped"],
+        name="放弃开仓（资金/热度/相关性）",
+        marker_color="#e67e22",
+        marker_line_width=0,
+        opacity=0.85,
+        hovertemplate="%{x}年：放弃开仓 %{y} 次<extra></extra>",
+    ))
+    fig.update_layout(
+        title=(
+            f"逐年开仓信号：已开仓 vs 放弃开仓"
+            f"（全程共 {total_signals:,} 个信号，放弃率 {skip_rate:.1f}%）"
+        ),
+        xaxis_title="年份",
+        yaxis_title="信号数量（次）",
+        barmode="stack",
+        bargap=0.15,
+        height=380,
+        margin=dict(l=60, r=20, t=60, b=40),
+        legend=dict(orientation="h", x=1, xanchor="right", y=1.12),
+        hovermode="x unified",
+    )
+    return fig
+
+
 def monthly_return_heatmap(nav: pd.Series) -> go.Figure:
     """Heatmap of monthly returns: years (rows) × months (columns)."""
     monthly = nav.resample("ME").last().pct_change().dropna()
