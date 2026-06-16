@@ -525,20 +525,4 @@ else:
     st.subheader("七、无偏差回测结果对比")
     st.warning("回测结果未找到。请先运行：`python src/scripts/09_run_v1_unbiased.py`")
 
-st.markdown("---")
 
-# ── 八、数据来源说明 ──────────────────────────────────────────────────────────
-st.subheader("八、数据来源说明")
-st.markdown("""
-**数据来源：** Tiingo End-of-Day API（2026 年 6 月，Power 计划）
-
-| 项目 | 详情 |
-|------|------|
-| 下载范围 | NYSE / NASDAQ / AMEX 全量美股 + 79 只 ETF（排除波动率/杠杆及结构性不适合产品后），共约 21,381 个 ticker |
-| 成功下载 | 15,255 个（含历史退市标的） |
-| 下载失败 | 6,126 个（经验证均为 warrant、unit 等无价格数据的空壳代码） |
-| 历史深度 | 2004-01-01 → 2026-06-13 |
-| 数据格式 | 原始 OHLCV + 复权系数（adj_factor = adjClose / close），每标的一个 parquet 文件 |
-| 数据质量 | 运行 `06_check_tiingo_quality.py` 后：2,633 个复权跳变异常、5,305 个价格尖峰、8,328 个零成交量行，均通过 `is_tradable=False` 标记 |
-| 幸存者偏差防御 | ✅ 通过下载 Tiingo 官方 `supported_tickers.csv`（含历史上市/退市日期）实现全量覆盖，非基于当前成分股 |
-""")
