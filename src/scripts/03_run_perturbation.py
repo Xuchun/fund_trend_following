@@ -77,7 +77,7 @@ BASELINE_PARAMS = StrategyParams(
     regime_sma_window       = 200,
 )
 
-DEFAULT_START = "2004-01-01"
+DEFAULT_START = "2004-01-02"
 DEFAULT_END   = (datetime.date.today() - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
 
 
