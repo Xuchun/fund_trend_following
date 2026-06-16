@@ -129,10 +129,10 @@ st.markdown(f"""
 并通过追踪止损（Trailing Stop）锁定利润、控制回撤，空仓资金持有短债 ETF（SHY）。
 策略在 SPY 200 日均线以下停止开新仓，但保留已有仓位随趋势运行。
 
-**历史回测标的池**：{meta.universe_total} 只标的（{meta.backtest_start[:4]}–{meta.backtest_end[:4]}），
-含 {meta.universe_stocks} 只个股（当前 S&P 500 + S&P 400 Mid-Cap 成分股）
-及 {meta.universe_etfs} 只行业/主题 ETF。
-标的池基于 **2024 年末在指数中的成分股**，存在幸存者偏差，详见「局限性声明」。
+**历史回测标的池**：{meta.universe_total:,} 只标的（{meta.backtest_start[:4]}–{meta.backtest_end[:4]}），
+含 {meta.universe_stocks:,} 只个股（NYSE / NASDAQ / AMEX 全量历史股票，含已退市/被收购标的）
+及 {meta.universe_etfs} 只跨资产 ETF。
+标的池基于 **Tiingo EOD 全量历史数据**，无幸存者偏差，详见「数据与标的池」页面。
 """)
 
 st.markdown("---")
