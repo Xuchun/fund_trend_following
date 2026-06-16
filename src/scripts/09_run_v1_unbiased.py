@@ -189,7 +189,7 @@ def run_backtest(
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", choices=["a", "b", "both"], default="both",
-                    help="a=$20M run, b=$50M run, both=run both (default)")
+                    help="a=$60M run (Baseline), b=$50M run, both=run both (default)")
     ap.add_argument("--start",           default=DEFAULT_START)
     ap.add_argument("--end",             default=DEFAULT_END)
     ap.add_argument("--initial-capital", default=10_000_000, type=float)
