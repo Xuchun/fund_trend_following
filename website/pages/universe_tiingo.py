@@ -512,6 +512,10 @@ if _m20_path.exists() and _m50_path.exists():
         _bias_sharpe  = 0.0
 
     _adv_cagr_pp = (_m50["cagr"] - _m20["cagr"]) * 100
+    _m60_loaded  = _m60_path.exists()
+    if _m60_loaded:
+        _m60 = _json.loads(_m60_path.read_text())
+        _adv60_cagr_pp = (_m60["cagr"] - _m50["cagr"]) * 100
 
     st.markdown(f"""
 **关键发现：**
@@ -520,12 +524,12 @@ if _m20_path.exists() and _m50_path.exists():
    **+{_bias_cagr_pp:.1f}pp**，Sharpe 差异约 **+{_bias_sharpe:.2f}**。
    现实表现可能接近 {_m20['cagr']:.1%} CAGR，而非宣称的 {_my['cagr']:.1%}。
 
-2. **ADV>$50M 的结果更好**：方案④ vs 方案③ CAGR 差异 **{_adv_cagr_pp:+.2f}pp**，
-   MaxDD 也更小（-18.75% vs -26.63%）。高流动性标的（ADV>$50M）历史上信噪比更高，
-   实盘可操作性更强，且 Tiingo 底池（2,943 个）已涵盖足够宽的历史退市标的。
-   → **当前策略选用方案④（ADV>$50M）作为 Baseline**，引擎逐日过滤动态控制流动性风险。
+2. **ADV 门槛越高、信噪比越高**：方案④（ADV>$50M）vs 方案③ CAGR 差异 **{_adv_cagr_pp:+.2f}pp**，
+   MaxDD 改善（-17.83% vs -26.63%）。{f"方案⑤（ADV>$60M）在此基础上进一步提升 CAGR **{_adv60_cagr_pp:+.2f}pp**，Sharpe 提高至 {_m60['sharpe']:.3f}。" if _m60_loaded else ""}
+   高流动性标的历史上信噪比更高，实盘可操作性更强，Tiingo 底池（2,943 个）已涵盖足够宽的历史退市标的。
+   → **当前策略选用方案⑤（ADV>$60M）作为 Baseline**，引擎逐日过滤动态控制流动性风险。
 
-3. **胜率与持仓结构不变**：两套无偏差方案的胜率（约 39%）、平均持仓（约 65 天）
+3. **胜率与持仓结构不变**：各无偏差方案的胜率（约 39%）、平均持仓（约 40 天）
    均相近，说明策略信号本身稳健，差异来自标的池宽度而非策略逻辑变化。
 """)
 
