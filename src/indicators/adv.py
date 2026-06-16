@@ -34,14 +34,11 @@ def compute_adv(
     window: int = 60,
 ) -> pd.Series:
     """
-    Rolling average daily dollar volume, including the current day.
+    Rolling average daily dollar volume, shifted 1 day (no look-ahead bias).
 
-    ADV[t] = mean(dollar_vol[t-window+1 : t])   ← matches design spec ADV_60[t]
+    ADV[t] = mean(dollar_vol[t-window : t-1])   ← shift(1) matches eligible_universe.py
 
-    Today's volume is finalized at end-of-day when signals are generated,
-    so including it introduces no look-ahead bias.
-
-    NaN for the first `window` rows.
+    NaN for the first `window + 1` rows.
 
     Args:
         dollar_vol: Daily dollar volume (e.g. output of compute_dollar_volume).
@@ -50,7 +47,7 @@ def compute_adv(
     Returns:
         Series with same index as `dollar_vol`.
     """
-    return dollar_vol.rolling(window=window, min_periods=window).mean()
+    return dollar_vol.shift(1).rolling(window=window, min_periods=window).mean()
 
 
 def compute_adv_from_ohlcv(
