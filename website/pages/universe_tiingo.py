@@ -54,24 +54,6 @@ if _META_PATH.exists():
     _meta = _json_mod.loads(_META_PATH.read_text())
     _ETF_SET = {e["ticker"] for e in _meta.get("etf_universe", [])}
 
-# ── 标的池概览 ─────────────────────────────────────────────────────────────────
-st.subheader("标的池概览（历史回测 2004-01-01 → 2026-06-12）")
-
-_eu252 = eu_rec.copy()
-_eu252["_is_etf"] = _eu252["ticker"].isin(_ETF_SET)
-_stk = _eu252[~_eu252["_is_etf"]]
-_etf = _eu252[_eu252["_is_etf"]]
-
-_c1, _c2, _c3, _c4, _c5, _c6 = st.columns(6)
-_c1.metric("股票数量", f"{len(_stk):,}", help="满足 ≥1 年数据条件的历史股票（含退市/被收购）")
-_c2.metric("股票仍在交易", f"{len(_stk[_stk['is_active']]):,}", help="目前仍在正常挂牌交易")
-_c3.metric("股票已退市/收购", f"{len(_stk[~_stk['is_active']]):,}", help="历史上退市、破产或被收购，是消除幸存偏差的关键")
-_c4.metric("ETF 数量", f"{len(_etf):,}", help="候选 ETF 池（含 SPY、债券、大宗商品等跨资产品种）")
-_c5.metric("ETF 仍在交易", f"{len(_etf[_etf['is_active']]):,}", help="目前仍在正常交易的 ETF")
-_c6.metric("合计标的数", f"{len(_eu252):,}", help="底池总量；引擎每日动态按 ADV 阈值再过滤（默认 $60M）")
-
-st.markdown("---")
-
 # ── Tiingo 数据说明 ────────────────────────────────────────────────────────────
 st.subheader("Tiingo 数据说明")
 st.markdown("""
@@ -105,6 +87,24 @@ with _col_b:
 - 1996–2003 年数据已下载备用，暂未参与回测
 - 不覆盖港股、A 股等非美交易所标的
 """)
+
+st.markdown("---")
+
+# ── 标的池概览 ─────────────────────────────────────────────────────────────────
+st.subheader("标的池概览（历史回测 2004-01-01 → 2026-06-12）")
+
+_eu252 = eu_rec.copy()
+_eu252["_is_etf"] = _eu252["ticker"].isin(_ETF_SET)
+_stk = _eu252[~_eu252["_is_etf"]]
+_etf = _eu252[_eu252["_is_etf"]]
+
+_c1, _c2, _c3, _c4, _c5, _c6 = st.columns(6)
+_c1.metric("股票数量", f"{len(_stk):,}", help="满足 ≥1 年数据条件的历史股票（含退市/被收购）")
+_c2.metric("股票仍在交易", f"{len(_stk[_stk['is_active']]):,}", help="目前仍在正常挂牌交易")
+_c3.metric("股票已退市/收购", f"{len(_stk[~_stk['is_active']]):,}", help="历史上退市、破产或被收购，是消除幸存偏差的关键")
+_c4.metric("ETF 数量", f"{len(_etf):,}", help="候选 ETF 池（含 SPY、债券、大宗商品等跨资产品种）")
+_c5.metric("ETF 仍在交易", f"{len(_etf[_etf['is_active']]):,}", help="目前仍在正常交易的 ETF")
+_c6.metric("合计标的数", f"{len(_eu252):,}", help="底池总量；引擎每日动态按 ADV 阈值再过滤（默认 $60M）")
 
 st.markdown("---")
 
