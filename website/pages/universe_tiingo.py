@@ -21,7 +21,7 @@ st.title("数据与标的池")
 st.markdown("---")
 
 
-@st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner=False, ttl=3600)
 def _load_universe() -> pd.DataFrame:
     df = pd.read_csv(_EU_CSV)
     df["first_eligible"] = pd.to_datetime(df["first_eligible"])
