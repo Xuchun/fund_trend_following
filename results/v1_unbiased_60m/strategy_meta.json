@@ -6,9 +6,9 @@
   "color": "#e67e22",
   "badge_text": "Tiingo-60M",
   "badge_color": "orange",
-  "universe_stocks": 2859,
-  "universe_etfs": 85,
-  "universe_total": 2944,
+  "universe_stocks": 2892,
+  "universe_etfs": 86,
+  "universe_total": 2978,
   "backtest_start": "2004-01-02",
   "backtest_end": "2026-06-15",
   "initial_capital": 10000000,
@@ -169,6 +169,11 @@
     {
       "ticker": "EWT",
       "name": "iShares MSCI Taiwan ETF",
+      "category": "国际股票"
+    },
+    {
+      "ticker": "EWY",
+      "name": "iShares MSCI South Korea ETF",
       "category": "国际股票"
     },
     {
