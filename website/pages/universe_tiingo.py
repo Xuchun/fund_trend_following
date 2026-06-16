@@ -113,13 +113,20 @@ _eu252["_is_etf"] = _eu252["ticker"].isin(_ETF_SET)
 _stk = _eu252[~_eu252["_is_etf"]]
 _etf = _eu252[_eu252["_is_etf"]]
 
+_universe_total  = int(_meta.get("universe_total",  len(_eu252)))
+_universe_stocks = int(_meta.get("universe_stocks", len(_stk)))
+_universe_etfs   = int(_meta.get("universe_etfs",   len(_etf)))
+
 _c1, _c2, _c3, _c4, _c5, _c6 = st.columns(6)
-_c1.metric("股票数量", f"{len(_stk):,}", help="满足 ≥1 年数据条件的历史股票（含退市/被收购）")
+_c1.metric("股票数量", f"{_universe_stocks:,}",
+           help="回测实际策略池中的股票数量（候选池含 2,892 只，另有 2 只因回测期价格数据不足未参与策略）")
 _c2.metric("股票仍在交易", f"{len(_stk[_stk['is_active']]):,}", help="目前仍在正常挂牌交易")
 _c3.metric("股票已退市/收购", f"{len(_stk[~_stk['is_active']]):,}", help="历史上退市、破产或被收购，是消除幸存偏差的关键")
-_c4.metric("ETF 数量", f"{len(_etf):,}", help="候选 ETF 池（含 SPY、债券、大宗商品等跨资产品种）")
+_c4.metric("ETF 数量", f"{_universe_etfs:,}",
+           help="候选 ETF 候选池共 88 只，排除 7 只结构性不适合 ETF 后实际参与回测 86 只")
 _c5.metric("ETF 仍在交易", f"{len(_etf[_etf['is_active']]):,}", help="目前仍在正常交易的 ETF")
-_c6.metric("合计标的数", f"{len(_eu252):,}", help="标的池总量；引擎每日动态按 ADV 阈值再过滤（默认 $60M）")
+_c6.metric("合计标的数", f"{_universe_total:,}",
+           help=f"回测实际策略池总量 = {_universe_stocks:,} 只股票 + {_universe_etfs} 只 ETF；引擎每日动态按 ADV 阈值再过滤（默认 $60M）")
 
 st.markdown("---")
 
