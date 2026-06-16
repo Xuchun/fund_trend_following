@@ -62,7 +62,7 @@ if _META_PATH.exists():
     _ETF_SET = {e["ticker"] for e in _meta.get("etf_universe", [])}
 
 # ETFs that pass the ≥252-day pool filter (used in descriptions before _etf is defined)
-_pool_etf_count = int(eu[(eu["eligible_days"] >= MIN_ELIGIBLE_DAYS) & (~eu["ticker"].isin(_EXCL_ETFS))]["ticker"].isin(_ETF_SET).sum()) if _ETF_SET else 0
+_pool_etf_count = int(eu[(eu["eligible_days"] >= MIN_ELIGIBLE_DAYS) & (~eu["ticker"].isin(_EXCL_ALL))]["ticker"].isin(_ETF_SET).sum()) if _ETF_SET else 0
 
 # ── 动态日期变量（随数据更新自动刷新） ────────────────────────────────────────
 _TIINGO_DOWNLOAD_START = "1996-01-01"                                # 下载脚本起始参数（静态）
