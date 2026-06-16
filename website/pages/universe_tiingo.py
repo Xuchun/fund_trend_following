@@ -373,8 +373,9 @@ def _fmt_df(df, sort_col):
     return out
 
 # 预先构建合并列表（tab 外使用）
+_ticker_status = eu_rec.set_index("ticker")["is_active"].map({True: "现役", False: "已退市"})
 _df_all_combined = _fmt_df(eu_rec, "累计满足天数")
-_df_all_combined["状态"] = eu_rec["is_active"].map({True: "现役", False: "已退市"}).values
+_df_all_combined["状态"] = _df_all_combined["Ticker"].map(_ticker_status).values
 
 with tab_act:
     _df = _fmt_df(rec_active, "累计满足天数")
