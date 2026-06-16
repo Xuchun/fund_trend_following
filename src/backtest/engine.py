@@ -411,7 +411,12 @@ class BacktestEngine:
             return True   # no data → allow entries (conservative default)
         return bool(self._regime[date])
 
-    def _build_results(self, portfolio: Portfolio) -> BacktestResults:
+    def _build_results(
+        self,
+        portfolio: Portfolio,
+        daily_signals: dict[pd.Timestamp, int] | None = None,
+        daily_executed: dict[pd.Timestamp, int] | None = None,
+    ) -> BacktestResults:
         """Assemble BacktestResults from a completed portfolio run."""
         nav_series = pd.Series(
             {date: nav for date, nav in portfolio.nav_history},
@@ -425,10 +430,22 @@ class BacktestEngine:
 
         trade_log = portfolio.to_trade_log()
 
+        # Build daily skipped-signal DataFrame
+        if daily_signals is not None and daily_executed is not None:
+            skipped_df = pd.DataFrame({
+                "signals":  daily_signals,
+                "executed": daily_executed,
+            })
+            skipped_df.index.name = "date"
+            skipped_df["skipped"] = (skipped_df["signals"] - skipped_df["executed"]).clip(lower=0)
+        else:
+            skipped_df = pd.DataFrame(columns=["signals", "executed", "skipped"])
+
         return BacktestResults(
             params=self.params,
             daily_nav=nav_series,
             daily_returns=returns,
             trade_log=trade_log,
             initial_capital=self.initial_capital,
+            daily_entry_stats=skipped_df,
         )
