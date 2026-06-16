@@ -432,8 +432,8 @@ if _m20_path.exists() and _m50_path.exists():
     st.subheader("七、无偏差回测结果对比")
     st.markdown("""
 使用动态标的池（≥1年过滤，2,943 个标的）运行 Strategy 1.0，
-分别测试 ADV > $20M 和 ADV > $50M 两套门槛，并与原始有偏差基线对比。
-**当前 Baseline 采用方案④（ADV>$50M），兼顾无偏差标的覆盖与实盘流动性。**
+分别测试 ADV > $20M、$50M、$60M 三套门槛，并与原始有偏差基线对比。
+**当前 Baseline 采用方案⑤（ADV>$60M），信噪比更高，实盘冲击成本更低。**
 """)
 
     # ── Survivorship bias impact ──────────────────────────────────────────────
