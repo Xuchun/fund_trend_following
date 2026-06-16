@@ -314,7 +314,7 @@ with tab3:
 with tab4:
     st.markdown("最终回测标的池中，每个自然年内有多少标的处于活跃（满足过滤条件）状态。")
 
-    years = list(range(2004, 2027))
+    years = list(range(_start_year, _end_year + 1))
     pool_counts = []
     for y in years:
         yr_start = pd.Timestamp(f"{y}-01-01")
