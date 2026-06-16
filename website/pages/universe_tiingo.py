@@ -70,8 +70,8 @@ st.markdown(f"""
 | 项目 | 详情 |
 |------|------|
 | **数据来源** | [Tiingo](https://www.tiingo.com/) EOD（End-of-Day）历史价格 API |
-| **原始下载范围** | 1996-01-01 → {_data_latest}（约 30 年） |
-| **回测使用范围** | 2004-01-02 → {_data_latest}（约 22 年，<span style="color:red;font-weight:bold">等待未来扩展至 1996</span>） |
+| **原始下载范围** | {_data_earliest} → {_data_latest}（约 {_download_yrs} 年） |
+| **回测使用范围** | {_backtest_start} → {_data_latest}（约 {_backtest_yrs} 年，<span style="color:red;font-weight:bold">等待未来扩展至 1996</span>） |
 | **覆盖标的** | NYSE / NASDAQ / AMEX 全量历史股票 + 87 只跨资产 ETF |
 | **下载 Ticker 总数** | 21,384（含 14,805 活跃 + 7,402 已退市/被收购）；成功下载 15,255 个，6,129 个因 Tiingo 无数据跳过 |
 | **字段** | 开/高/低/收、复权收盘价、成交量（日度） |
