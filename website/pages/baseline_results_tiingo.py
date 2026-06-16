@@ -579,6 +579,31 @@ st.markdown(
     f"持仓数目随市场环境的起伏变化，体现了策略1.0在不同市场条件下的动态参与度。"
 )
 
+# ── 每日开仓 vs 放弃开仓 ──────────────────────────────────────────────────────
+import pandas as _pd_es
+_es_path = res.meta.results_dir / "daily_entry_stats.csv"
+if _es_path.exists():
+    _entry_stats = _pd_es.read_csv(_es_path, index_col="date", parse_dates=True)
+    st.subheader("每日开仓信号：已开仓 vs 放弃开仓")
+    st.plotly_chart(
+        daily_entries_vs_skipped_chart(_entry_stats, meta.color),
+        use_container_width=True,
+    )
+    _tot_sig = int(_entry_stats["signals"].sum())
+    _tot_exe = int(_entry_stats["executed"].sum())
+    _tot_skp = int(_entry_stats["skipped"].sum())
+    _skip_rt = _tot_skp / _tot_sig * 100 if _tot_sig > 0 else 0
+    st.markdown(
+        f"**解读：** 图中每个柱代表一年，蓝色为当年实际成功开仓次数，橙色为产生了开仓信号但被策略过滤器拒绝的次数。"
+        f"全程共产生 **{_tot_sig:,}** 个开仓信号，其中 **{_tot_exe:,}** 次成功开仓，"
+        f"**{_tot_skp:,}** 次（占 **{_skip_rt:.1f}%**）因以下原因被放弃：\n"
+        f"- **组合热度超限（heat_limit）**：已持仓总风险敞口接近 NAV 的 10%，新仓会让风险超出预算；\n"
+        f"- **相关性过高**：候选标的与已持仓标的的 60 日收益相关性 > 0.70，仓位被压缩至 0；\n"
+        f"- **资金不足**：扣除现有持仓占用后，剩余现金无法覆盖最小建仓成本。\n\n"
+        f"放弃开仓率反映了风控过滤器的「严格程度」——过高意味着策略在牛市中错过较多机会，"
+        f"过低则可能代表风控执行不够充分。"
+    )
+
 st.markdown("---")
 
 # ── Profit by type: stock vs ETF ──────────────────────────────────────────────
