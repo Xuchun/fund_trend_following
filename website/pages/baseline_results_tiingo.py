@@ -92,7 +92,7 @@ render_summary_cards(m, meta.color, meta.backtest_start, meta.backtest_end)
 st.markdown("---")
 
 # ── Data source section ───────────────────────────────────────────────────────
-st.subheader("Baseline参数回测的数据来源")
+st.subheader("回测的数据来源")
 st.markdown(f"""
 | 项目 | 详情 |
 |------|------|
