@@ -49,7 +49,7 @@ import streamlit.components.v1 as _components
 
 _col_title, _col_right = st.columns([4, 2])
 with _col_title:
-    st.title("总结")
+    st.title("总结（需要更新）")
 with _col_right:
     _components.html(f"""
     <div style="display:flex;justify-content:flex-end;align-items:center;
