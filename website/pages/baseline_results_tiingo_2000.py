@@ -1267,7 +1267,7 @@ st.markdown(f"""
 | 维度 | 结论 |
 |------|------|
 | 绝对收益 | ✅ CAGR {_cagr*100:+.2f}%，{_n_years}年累计 {(_total_ret-1)*100:.0f}%，正期望明确 |
-| 相对收益 | ⚠️ 落后 SPY {abs(_cagr_gap)*100:.1f}%/年，在长牛市中是结构性弱点 |
+| 相对收益 | {"✅ 领先 SPY " + f"{abs(_cagr_gap)*100:.1f}%/年，在完整市场周期中具备超额收益" if _beats_spy else "⚠️ 落后 SPY " + f"{abs(_cagr_gap)*100:.1f}%/年，在长牛市中是结构性弱点"} |
 | 回撤控制 | ✅ MaxDD {abs(_maxdd)*100:.1f}% vs SPY {abs(_spy_maxdd)*100:.1f}%，下行保护能力突出 |
 | 风险效率 | ✅ Sharpe {_sharpe:.3f} vs SPY {_spy_sharpe:.3f}，单位风险回报大体相当 |
 | 交易成本 | ✅ {_implied_cost:.2f}%/年，已计入净值，不影响结论可信度 |
