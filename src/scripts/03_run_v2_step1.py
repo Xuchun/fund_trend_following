@@ -1,4 +1,5 @@
 """
+[已废弃] 此脚本使用 Yahoo Finance 数据，已不再使用。请改用对应 Tiingo 版本。
 Strategy 2.0 Step 1 — v1 baseline + Condition 2: 横盘收敛 (consolidation filter).
 
 Everything is identical to Strategy 1.0 except:
@@ -46,7 +47,7 @@ V2_STEP1_PARAMS = StrategyParams(
 )
 
 DEFAULT_START = "2004-01-01"
-DEFAULT_END   = "2026-06-12"
+DEFAULT_END   = "2026-06-15"
 
 STRATEGY_META = {
     "id": "v2_step1",
