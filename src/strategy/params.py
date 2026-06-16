@@ -16,7 +16,7 @@ class StrategyParams:
     # ── Universe filters ───────────────────────────────────────────────────
     min_price: float = 10.0          # USD; reject penny stocks
     min_market_cap_b: float = 2.0    # billion USD; strategy spec: 市值 > $20亿 = $2B (not point-in-time on Yahoo)
-    min_adv_m: float = 20.0          # million USD average daily dollar volume
+    min_adv_m: float = 60.0          # million USD average daily dollar volume (Baseline)
 
     # ── Entry signal ───────────────────────────────────────────────────────
     breakout_window: int = 200       # N-day rolling-high lookback
