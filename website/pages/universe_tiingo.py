@@ -484,6 +484,18 @@ if _m20_path.exists() and _m50_path.exists():
         "胜率": f"{_m50.get('win_rate', 0):.1%}",
         "总交易数": f"{_m50.get('n_trades', 0):,}",
     })
+    if _m60_path.exists():
+        _m60 = _json.loads(_m60_path.read_text())
+        _rows_bias.append({
+            "方案": "⑤ Tiingo Unbiased（ADV>$60M，无偏）★ 当前Baseline",
+            "标的池": "2,943个底池，引擎过滤",
+            "CAGR": f"{_m60['cagr']:.2%}",
+            "Sharpe": f"{_m60['sharpe']:.3f}",
+            "Sortino": f"{_m60.get('sortino', 0):.3f}",
+            "最大回撤": f"{_m60['max_drawdown']:.2%}",
+            "胜率": f"{_m60.get('win_rate', 0):.1%}",
+            "总交易数": f"{_m60.get('n_trades', 0):,}",
+        })
 
     st.dataframe(
         pd.DataFrame(_rows_bias).set_index("方案"),
