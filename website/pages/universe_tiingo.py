@@ -46,6 +46,65 @@ eu_rec     = eu[eu["eligible_days"] >= MIN_ELIGIBLE_DAYS]
 rec_active = eu_rec[eu_rec["is_active"]]
 rec_del    = eu_rec[~eu_rec["is_active"]]
 
+# ── ETF 集合（来自 strategy_meta） ────────────────────────────────────────────
+import json as _json_mod
+_META_PATH = _project / "results" / "v1_unbiased_60m" / "strategy_meta.json"
+_ETF_SET: set[str] = set()
+if _META_PATH.exists():
+    _meta = _json_mod.loads(_META_PATH.read_text())
+    _ETF_SET = {e["ticker"] for e in _meta.get("etf_universe", [])}
+
+# ── 标的池概览 ─────────────────────────────────────────────────────────────────
+st.subheader("标的池概览")
+
+_eu252 = eu_rec.copy()
+_eu252["_is_etf"] = _eu252["ticker"].isin(_ETF_SET)
+_stk = _eu252[~_eu252["_is_etf"]]
+_etf = _eu252[_eu252["_is_etf"]]
+
+_c1, _c2, _c3, _c4, _c5, _c6 = st.columns(6)
+_c1.metric("股票数量", f"{len(_stk):,}", help="满足 ≥1 年数据条件的历史股票（含退市/被收购）")
+_c2.metric("股票仍在交易", f"{len(_stk[_stk['is_active']]):,}", help="目前仍在正常挂牌交易")
+_c3.metric("股票已退市/收购", f"{len(_stk[~_stk['is_active']]):,}", help="历史上退市、破产或被收购，是消除幸存偏差的关键")
+_c4.metric("ETF 数量", f"{len(_etf):,}", help="候选 ETF 池（含 SPY、债券、大宗商品等跨资产品种）")
+_c5.metric("ETF 仍在交易", f"{len(_etf[_etf['is_active']]):,}", help="目前仍在正常交易的 ETF")
+_c6.metric("合计标的数", f"{len(_eu252):,}", help="底池总量；引擎每日动态按 ADV 阈值再过滤（默认 $60M）")
+
+st.markdown("---")
+
+# ── Tiingo 数据说明 ────────────────────────────────────────────────────────────
+st.subheader("Tiingo 数据说明")
+st.markdown("""
+| 项目 | 详情 |
+|------|------|
+| **数据来源** | [Tiingo](https://www.tiingo.com/) EOD（End-of-Day）历史价格 API |
+| **覆盖时间** | 2004-01-02 → 2026-06-12（约 22 年） |
+| **覆盖标的** | NYSE / NASDAQ / AMEX 全量历史股票 + 79 只跨资产 ETF |
+| **字段** | 开/高/低/收、复权收盘价、成交量（日度） |
+| **含退市标的** | 是 — Tiingo 保留已退市、被收购、破产公司的完整历史数据 |
+| **总 Ticker 数** | ~15,000+（下载），满足 ≥1 年条件后约 {:,} 只纳入底池 |
+""".format(len(_eu252)))
+
+_col_a, _col_b = st.columns(2)
+with _col_a:
+    st.markdown("""
+**优势**
+- 含退市/被收购标的 → 彻底消除幸存偏差
+- 数据覆盖 2004 年至今，跨越多次完整牛熊周期
+- 日度复权价格，精确处理拆股/分红
+- 79 只 ETF 覆盖跨资产（股票指数、债券、大宗商品、REITs、加密）
+""")
+with _col_b:
+    st.markdown("""
+**局限**
+- 无日内数据（仅 EOD），无法做高频回测
+- 无历史市值快照 → 策略改用 ADV（日均成交额）作流动性代理
+- 量价数据可能被 Tiingo 事后修正（对历史回测有轻微影响）
+- 不覆盖港股、A 股等非美交易所标的
+""")
+
+st.markdown("---")
+
 # ── 一、过滤方法与理由 ─────────────────────────────────────────────────────────
 st.subheader("一、过滤方法与理由")
 st.markdown("""
