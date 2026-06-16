@@ -66,7 +66,7 @@ BASELINE = StrategyParams(
     regime_sma_window       = 200,
 )
 
-START = "2004-01-01"
+START = "2004-01-02"
 END   = (datetime.date.today() - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
 INITIAL_CAPITAL = 10_000_000.0
 OUTPUT_DIR = ROOT / "results" / "v1" / "perturbation"
