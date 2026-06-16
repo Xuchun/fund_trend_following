@@ -904,7 +904,7 @@ if _DIAG_PATH.exists():
         f'</div>',
         unsafe_allow_html=True,
     )
-    st.caption("数据来源：results/v1_unbiased_60m/diagnostics.json | 仅统计 exit_reason == stop_loss 的交易")
+    st.caption("数据来源：results/v1_unbiased_60m_2000/diagnostics.json | 仅统计 exit_reason == stop_loss 的交易")
 
     st.markdown("#### B. 连续亏损序列分析")
     sa = diag.get("streak_analysis", {})
