@@ -830,7 +830,7 @@ st.markdown(f"""
 > 回测期间：{meta.backtest_start} → {meta.backtest_end}，锚点参数：N={p['breakout_window']}日突破，止损 {p['stop_loss_multiplier']:.0f}×ATR，ADV>$50M。
 """)
 
-_DIAG_PATH = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m" / "diagnostics.json"
+_DIAG_PATH = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m_2000" / "diagnostics.json"
 
 if _DIAG_PATH.exists():
     import json as _json
