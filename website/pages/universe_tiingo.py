@@ -368,6 +368,7 @@ def _fmt_df(df, sort_col):
         .sort_values(sort_col, ascending=False)
         .reset_index(drop=True)
     )
+    out.insert(1, "类型", df["ticker"].map(lambda t: "ETF" if t in _ETF_SET else "股票").values)
     for col in ["首次满足条件", "最近满足条件", "数据起始日", "数据截止日"]:
         out[col] = pd.to_datetime(out[col]).dt.strftime("%Y-%m-%d")
     return out
