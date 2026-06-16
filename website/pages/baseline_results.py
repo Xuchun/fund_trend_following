@@ -83,7 +83,7 @@ st.caption(f"回测期间：{meta.backtest_start} → {meta.backtest_end}  ·  �
 st.markdown("---")
 
 # ── Summary cards ─────────────────────────────────────────────────────────────
-render_summary_cards(m, meta.color, meta.backtest_start, meta.backtest_end)
+render_summary_cards(m, meta.color, meta.backtest_start, meta.backtest_end, _spy_metrics)
 
 st.markdown("<br>", unsafe_allow_html=True)
 
