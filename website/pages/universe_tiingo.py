@@ -67,7 +67,7 @@ _pool_etf_count = int(eu[(eu["eligible_days"] >= MIN_ELIGIBLE_DAYS) & (~eu["tick
 # ── 动态日期变量（随数据更新自动刷新） ────────────────────────────────────────
 _TIINGO_DOWNLOAD_START = "1996-01-01"                                # 下载脚本起始参数（静态）
 _data_latest    = eu["data_end"].max().strftime("%Y-%m-%d")          # Tiingo 最新数据日（动态）
-_backtest_start = _meta.get("backtest_start", "2004-01-02")          # 回测开始日（来自 strategy_meta）
+_backtest_start = _meta.get("backtest_start", "2000-01-03")          # 回测开始日（来自 strategy_meta）
 _download_yrs   = round((pd.Timestamp(_data_latest) - pd.Timestamp(_TIINGO_DOWNLOAD_START)).days / 365)
 _backtest_yrs   = round((pd.Timestamp(_data_latest) - pd.Timestamp(_backtest_start)).days / 365)
 _start_year     = pd.Timestamp(_backtest_start).year
