@@ -222,8 +222,8 @@ with tab1:
         height=420,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     )
-    st.plotly_chart(_fig_dur, use_container_width=True)
     st.caption(f"基于标的池全部 {len(eu_rec):,} 个标的（现役 {len(rec_active):,} + 已退市 {len(rec_del):,}）")
+    st.plotly_chart(_fig_dur, use_container_width=True)
 
     st.markdown(f"""
 **关键发现：**
