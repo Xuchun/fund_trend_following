@@ -59,7 +59,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-_BASELINE_START = "2004-01-01"
+_BASELINE_START = "2004-01-02"
 _INITIAL_CAPITAL = 10_000_000.0
 
 
