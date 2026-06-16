@@ -18,6 +18,7 @@ import streamlit as st
 _EU_CSV = _project / "data" / "tiingo_eligible_universe.csv"
 
 st.title("数据与标的池")
+st.markdown("---")
 
 
 @st.cache_data(show_spinner=False)
