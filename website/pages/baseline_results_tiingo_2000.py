@@ -1277,13 +1277,22 @@ st.markdown(f"""
 # Verdict
 if _cagr > 0.06 and _sharpe > _spy_sharpe and abs(_maxdd) < abs(_spy_maxdd) * 0.5:
     verdict_icon = "✅"
-    verdict_body = (
-        f"综合评价：基准回测结果达到预期目标。"
-        f"CAGR {_cagr*100:+.2f}%，Sharpe {_sharpe:.3f}（微超 SPY {_spy_sharpe:.3f}），"
-        f"MaxDD {abs(_maxdd)*100:.1f}%（仅为 SPY {abs(_spy_maxdd)*100:.1f}% 的 {_maxdd_ratio*100:.0f}%）。"
-        f"策略1.0的核心价值在于**用约 {abs(_cagr_gap)*100:.1f}% 的年化收益损失，换取约 {(abs(_spy_maxdd)-abs(_maxdd))*100:.1f}% 的最大回撤保护**，"
-        f"是风险厌恶型投资者在权益资产中最值得考虑的量化选项之一。"
-    )
+    if _beats_spy:
+        verdict_body = (
+            f"综合评价：基准回测结果超越预期目标。"
+            f"CAGR {_cagr*100:+.2f}%（领先 SPY {abs(_cagr_gap)*100:.1f}%），Sharpe {_sharpe:.3f}（vs SPY {_spy_sharpe:.3f}），"
+            f"MaxDD {abs(_maxdd)*100:.1f}%（仅为 SPY {abs(_spy_maxdd)*100:.1f}% 的 {_maxdd_ratio*100:.0f}%）。"
+            f"在涵盖两次重大熊市的 26 年完整周期中，策略1.0同时实现了**超额绝对收益**与**大幅降低最大回撤**，"
+            f"是趋势跟踪策略的最佳实证场景。"
+        )
+    else:
+        verdict_body = (
+            f"综合评价：基准回测结果达到预期目标。"
+            f"CAGR {_cagr*100:+.2f}%，Sharpe {_sharpe:.3f}（微超 SPY {_spy_sharpe:.3f}），"
+            f"MaxDD {abs(_maxdd)*100:.1f}%（仅为 SPY {abs(_spy_maxdd)*100:.1f}% 的 {_maxdd_ratio*100:.0f}%）。"
+            f"策略1.0的核心价值在于**用约 {abs(_cagr_gap)*100:.1f}% 的年化收益损失，换取约 {(abs(_spy_maxdd)-abs(_maxdd))*100:.1f}% 的最大回撤保护**，"
+            f"是风险厌恶型投资者在权益资产中最值得考虑的量化选项之一。"
+        )
 elif _cagr > 0.05:
     verdict_icon = "🟡"
     verdict_body = (
