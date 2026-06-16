@@ -427,6 +427,9 @@ class BacktestEngine:
         portfolio: Portfolio,
         daily_signals: dict[pd.Timestamp, int] | None = None,
         daily_executed: dict[pd.Timestamp, int] | None = None,
+        daily_heat: dict[pd.Timestamp, int] | None = None,
+        daily_corr: dict[pd.Timestamp, int] | None = None,
+        daily_cash: dict[pd.Timestamp, int] | None = None,
     ) -> BacktestResults:
         """Assemble BacktestResults from a completed portfolio run."""
         nav_series = pd.Series(
@@ -446,11 +449,16 @@ class BacktestEngine:
             skipped_df = pd.DataFrame({
                 "signals":  daily_signals,
                 "executed": daily_executed,
+                "skip_heat": daily_heat or {},
+                "skip_corr": daily_corr or {},
+                "skip_cash": daily_cash or {},
             })
             skipped_df.index.name = "date"
             skipped_df["skipped"] = (skipped_df["signals"] - skipped_df["executed"]).clip(lower=0)
         else:
-            skipped_df = pd.DataFrame(columns=["signals", "executed", "skipped"])
+            skipped_df = pd.DataFrame(columns=[
+                "signals", "executed", "skipped", "skip_heat", "skip_corr", "skip_cash"
+            ])
 
         return BacktestResults(
             params=self.params,
