@@ -34,6 +34,8 @@ EXCLUDED_VOL_ETFS: frozenset[str] = frozenset([
     "ASHR",  # China A-shares: same; tighter capital-flow controls
     "KWEB",  # China internet: policy risk acute (−50%+ in 2021 on regulation)
     "EMB",   # EM bonds: credit + rate + EM risk combined; crisis-correlated with equities
+    # Category 3: misclassified leveraged products (removed from ETF universe 2026-06)
+    "ETH",   # GraniteShares 2x Long Ethereum Daily ETF — daily-reset 2x leverage, same structural decay as TQQQ/VXX
 ])
 
 # ── ETF universe: loaded from data/ETFs.csv ────────────────────────────────
