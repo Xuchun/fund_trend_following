@@ -28,7 +28,7 @@ OUTPUT_PATH  = _root / "data" / "cache" / "tiingo_eligible_universe.csv"
 OUTPUT_PATH2 = _root / "data" / "tiingo_eligible_universe.csv"  # git-tracked copy for website
 
 MIN_PRICE = 10.0        # raw close > $10
-MIN_ADV_M = 20.0        # ADV_60 > $20M
+MIN_ADV_M = 60.0        # ADV_60 > $60M
 ADV_WINDOW = 60
 ACTIVE_CUTOFF = "2026-01-01"   # last data date >= this → still active
 
