@@ -37,32 +37,17 @@ logger = logging.getLogger(__name__)
 
 
 def _load_spy(start: str, end: str) -> pd.Series | None:
-    """Load SPY daily returns from cache, or download via yfinance."""
-    # Try parquet cache first
-    cache_dir = _project_root / "src" / "data" / "cache" / "prices"
-    spy_parquet = cache_dir / "SPY.parquet"
+    """Load SPY daily returns from Tiingo cache."""
+    spy_parquet = _project_root / "data" / "cache" / "tiingo" / "SPY.parquet"
     if spy_parquet.exists():
         try:
             df = pd.read_parquet(spy_parquet)
-            col = "adj_close" if "adj_close" in df.columns else df.columns[-1]
+            col = "adjClose" if "adjClose" in df.columns else "close"
             prices = df[col].loc[start:end]
             return prices.pct_change().dropna()
-        except Exception:
-            pass
-
-    # Fallback: yfinance
-    try:
-        import yfinance as yf
-        spy = yf.download("SPY", start=start, end=end, auto_adjust=True, progress=False)
-        if spy.empty:
-            return None
-        close = spy["Close"] if "Close" in spy.columns else spy.iloc[:, 0]
-        if hasattr(close, "squeeze"):
-            close = close.squeeze()
-        return close.pct_change().dropna()
-    except Exception as e:
-        logger.warning("Could not load SPY data: %s", e)
-        return None
+        except Exception as e:
+            logger.warning("Could not load Tiingo SPY data: %s", e)
+    return None
 
 
 def main() -> None:
