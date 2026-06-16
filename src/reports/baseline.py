@@ -359,6 +359,8 @@ def generate_baseline_report(
     save_nav_csv   (results,              output_dir / "nav.csv")
     save_trades_csv(results,              output_dir / "trades.csv")
     save_metrics_json(results, spy_raw,   output_dir / "metrics.json")
+    if not results.daily_entry_stats.empty:
+        results.daily_entry_stats.to_csv(output_dir / "daily_entry_stats.csv")
 
     # Plots
     plot_nav_vs_spy      (results, spy_raw, output_dir / "nav_vs_spy.png")
