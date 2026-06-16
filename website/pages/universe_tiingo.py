@@ -456,7 +456,93 @@ if _META_PATH.exists():
             _grp = _grp.rename(columns={"ticker": "Ticker", "name": "名称 / Full Name"})
             st.dataframe(_grp, use_container_width=True, hide_index=True)
 
-    st.markdown(f"**合计：{len(_etf_df)} 只 ETF**（候选池共 87 只；未纳入原因：JGLO 仅 206 交易日数据不足 252 天；CPER 流动性不足 ADV 最高 $53M 未达 $60M 门槛；ETH 为 2x 杠杆产品已结构性排除。SPY + SHY 为辅助标的，计入标的池但不纳入策略 1.0 交易）")
+    st.markdown(f"**合计：{len(_etf_df)} 只 ETF**（候选池共 {len(_ETF_SET)} 只；未纳入原因：JGLO 仅 206 交易日数据不足 252 天；CPER 流动性不足 ADV 最高 $53M 未达 $60M 门槛；ETH 为 2x 杠杆产品已结构性排除。SPY + SHY 为辅助标的，计入标的池但不纳入策略 1.0 交易）")
 else:
     st.info("ETF 列表未加载。请检查 results/v1_unbiased_60m/strategy_meta.json 中的 etf_universe 字段。")
+
+st.markdown("---")
+
+# ── 标的池充分性分析 ────────────────────────────────────────────────────────────
+st.subheader("为什么当前标的池不需要再扩充？")
+
+_adv_analysis_col1, _adv_analysis_col2 = st.columns(2)
+
+with _adv_analysis_col1:
+    st.markdown("#### 股票池")
+
+    _eu_all        = eu[~eu["ticker"].isin(_ETF_SET)]
+    _eu_under252   = _eu_all[_eu_all["eligible_days"] < MIN_ELIGIBLE_DAYS]
+    _eu_over252    = _eu_all[_eu_all["eligible_days"] >= MIN_ELIGIBLE_DAYS]
+    _no_data_cnt   = 21_384 - 15_255   # Tiingo 无数据（已知固定值）
+
+    st.markdown(f"""
+**下载范围：NYSE / NASDAQ / AMEX 全量历史股票**
+
+下载对象不是某个指数成分股，而是美国三大交易所**有史以来所有上市公司**，包含已退市、破产、被收购的标的，从根本上消除幸存者偏差。
+
+| 阶段 | 数量 | 说明 |
+|------|-----:|------|
+| Tiingo 下载尝试 | 21,384 | 全量历史 Ticker |
+| 成功下载（有价格数据）| 15,255 | |
+| Tiingo 无数据跳过 | {_no_data_cnt:,} | 极度冷门票、权证、OTC 壳公司 |
+| 有数据但从未满足流动性条件 | {len(_eu_all) - len(_eu_over252) - len(_eu_under252):,} → 合并至下行 | ADV 和价格从未同时达标 |
+| eligible_days < 252（不足 1 年）| {len(_eu_under252):,} | SPAC、超短命公司、刚上市新股 |
+| **进入回测标的池（≥252 天）** | **{len(_eu_over252):,}** | 含活跃 {_eu_over252["is_active"].sum():,} 只 + 退市 {(~_eu_over252["is_active"]).sum():,} 只 |
+
+**为什么不需要再加？**
+- 下载源头已覆盖全量美股，没有系统性遗漏
+- 6,129 个 Tiingo 无数据的 Ticker 基本是场外（OTC/Pink Sheet）小票或纯权证，流动性极差，不适合趋势跟踪
+- 1,463 个不足 252 天的标的生命周期太短，无法形成完整趋势，合理排除
+- OTC / 粉单市场标的有意不纳入：流动性差、点差大、数据质量低
+""")
+
+with _adv_analysis_col2:
+    st.markdown("#### ETF 池")
+
+    _cat_counts = {}
+    if _ETF_SET:
+        _etf_meta_list = _meta.get("etf_universe", [])
+        for _e in _etf_meta_list:
+            _cat = _e.get("category", "其他")
+            _cat_counts[_cat] = _cat_counts.get(_cat, 0) + 1
+
+    _coverage_rows = [
+        ("美股指数",   "✅ 充分", "SPY/QQQ/IWM/DIA/RSP + 中小盘"),
+        ("美股板块",   "✅ 充分", "SPDR 11 个板块全覆盖（XLK/XLF/XLE…）"),
+        ("美股行业",   "✅ 充分", "半导体/生物科技/国防/建筑/银行/零售…"),
+        ("美股风格",   "✅ 充分", "成长/价值/动量/股息/大中小盘"),
+        ("国际股票",   "✅ 充分", "发达市场 + 新兴市场 + 主要国家 ETF"),
+        ("美国国债",   "✅ 充分", "短中长期国债全期限覆盖"),
+        ("信用债",     "✅ 充分", "投资级/高收益/TIPS/市政债"),
+        ("大宗商品",   "✅ 充分", "黄金/白银/铜/天然气/综合商品 DBC"),
+        ("房地产",     "✅ 充分", "VNQ/SCHH/XLRE 三只互为补充"),
+        ("加密货币",   "✅ 够用", "IBIT（比特币现货 ETF）"),
+    ]
+
+    st.markdown(f"""
+**候选池：{len(_ETF_SET)} 只 ETF，覆盖所有主要资产类别**
+
+| 类别 | 覆盖评估 | 代表标的 |
+|------|---------|---------|
+""" + "\n".join(f"| {r} | {s} | {d} |" for r, s, d in _coverage_rows))
+
+    st.markdown("""
+**刻意不加的 ETF 及理由：**
+
+| Ticker | 排除原因 |
+|--------|---------|
+| USO / UCO（原油） | 期货展期成本高（contango 持续侵蚀），历史回测 ≠ 真实收益 |
+| CORN / WEAT / SOYB | 农产品期货流动性低，展期损耗严重 |
+| PDBC | DBC 已在池中，两者高度重叠，冗余 |
+| GDX（黄金矿股） | 已有 GDXJ（小型矿商），两者相关性 > 0.90 |
+| TQQQ / UPRO 等杠杆 | 杠杆产品每日复利会造成长期路径损耗，不适合趋势跟踪 |
+| 新兴主题 ETF（< 3 年） | 历史数据不足，无法完成有效回测 |
+""")
+
+    st.info(
+        f"**结论：** 当前 {len(_ETF_SET)} 只 ETF 候选池已达到边际收益递减点。"
+        "再添加高度相关的 ETF 只会引入数据冗余，不会提升策略的跨资产多样性。"
+        "后续如需扩充，优先考虑新增**国别 ETF**（如 EWY-韩国已加入）或"
+        "**新兴资产类别**，而非在现有类别中继续叠加。"
+    )
 
