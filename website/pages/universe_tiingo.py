@@ -354,12 +354,6 @@ _display_cols = {
     "data_end":        "数据截止日",
 }
 
-tab_act, tab_del, tab_all = st.tabs([
-    f"✅ 现役（{len(rec_active):,} 个）",
-    f"📋 已退市（{len(rec_del):,} 个）",
-    f"🔍 现役+已退市（{len(eu_rec):,} 个）",
-])
-
 def _fmt_df(df, sort_col):
     out = (
         df[list(_display_cols.keys())]
@@ -372,53 +366,44 @@ def _fmt_df(df, sort_col):
         out[col] = pd.to_datetime(out[col]).dt.strftime("%Y-%m-%d")
     return out
 
-# 预先构建合并列表（tab 外使用）
+# 预先构建合并列表
 _ticker_status = eu_rec.set_index("ticker")["is_active"].map({True: "现役", False: "已退市"})
 _df_all_combined = _fmt_df(eu_rec, "累计满足天数")
 _df_all_combined["状态"] = _df_all_combined["Ticker"].map(_ticker_status).values
-
 _all_csv = _df_all_combined.to_csv(index=False).encode("utf-8")
+
+# 下载按钮放在 tabs 上方，永远可见
+_dl_col1, _dl_col2, _dl_col3 = st.columns([1.4, 1.7, 4])
+with _dl_col1:
+    _df_act_dl = _fmt_df(rec_active, "累计满足天数")
+    st.download_button("⬇ 下载现役标的列表",
+                       data=_df_act_dl.to_csv(index=False).encode("utf-8"),
+                       file_name="tiingo_rec_active.csv", mime="text/csv")
+with _dl_col2:
+    st.download_button("⬇ 下载现役+已退市标的列表",
+                       data=_all_csv,
+                       file_name="tiingo_recommended_universe.csv", mime="text/csv")
+
+tab_act, tab_del, tab_all = st.tabs([
+    f"✅ 现役（{len(rec_active):,} 个）",
+    f"📋 已退市（{len(rec_del):,} 个）",
+    f"🔍 现役+已退市（{len(eu_rec):,} 个）",
+])
 
 with tab_act:
     _df = _fmt_df(rec_active, "累计满足天数")
     st.dataframe(_df, use_container_width=True, hide_index=True,
                  column_config={"累计满足天数": st.column_config.NumberColumn(format="%d 天")})
-    _c1, _c2 = st.columns([1, 1])
-    with _c1:
-        st.download_button("⬇ 下载现役标的列表",
-                           data=_df.to_csv(index=False).encode("utf-8"),
-                           file_name="tiingo_rec_active.csv", mime="text/csv",
-                           key="dl_active")
-    with _c2:
-        st.download_button("⬇ 下载现役+已退市标的列表",
-                           data=_all_csv,
-                           file_name="tiingo_recommended_universe.csv", mime="text/csv",
-                           key="dl_all_from_act")
 
 with tab_del:
     _df = _fmt_df(rec_del, "最近满足条件")
     st.dataframe(_df, use_container_width=True, hide_index=True,
                  column_config={"累计满足天数": st.column_config.NumberColumn(format="%d 天")})
-    _c1, _c2 = st.columns([1, 1])
-    with _c1:
-        st.download_button("⬇ 下载已退市标的列表",
-                           data=_df.to_csv(index=False).encode("utf-8"),
-                           file_name="tiingo_rec_delisted.csv", mime="text/csv",
-                           key="dl_del")
-    with _c2:
-        st.download_button("⬇ 下载现役+已退市标的列表",
-                           data=_all_csv,
-                           file_name="tiingo_recommended_universe.csv", mime="text/csv",
-                           key="dl_all_from_del")
 
 with tab_all:
     st.caption(f"现役 {len(rec_active):,} + 已退市 {len(rec_del):,}，满足 ≥252 交易日条件")
     st.dataframe(_df_all_combined, use_container_width=True, hide_index=True,
                  column_config={"累计满足天数": st.column_config.NumberColumn(format="%d 天")})
-    st.download_button("⬇ 下载现役+已退市标的列表",
-                       data=_all_csv,
-                       file_name="tiingo_recommended_universe.csv", mime="text/csv",
-                       key="dl_all_from_all")
 
 st.markdown("---")
 
