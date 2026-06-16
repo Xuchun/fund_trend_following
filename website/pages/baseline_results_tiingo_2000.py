@@ -1035,7 +1035,7 @@ st.dataframe(trades_display, use_container_width=True, hide_index=True)
 
 # ── Streak analysis ───────────────────────────────────────────────────────────
 import json as _json_br
-_DIAG_PATH_BR = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m" / "diagnostics.json"
+_DIAG_PATH_BR = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m_2000" / "diagnostics.json"
 
 st.markdown("---")
 st.subheader("连续亏损序列分析（基于 Tiingo 无偏差回测交易）")
