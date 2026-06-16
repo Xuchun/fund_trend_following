@@ -14,7 +14,7 @@ from website.data_loader import load_strategy
 from website.shared import placeholder
 from website.components.strategy_badge import render_page_header
 
-_TIINGO_RESULTS_ID = "v1_unbiased_60m"
+_TIINGO_RESULTS_ID = "v1_unbiased_60m_2000"
 _cache_key = f"_results_{_TIINGO_RESULTS_ID}"
 if _cache_key not in st.session_state:
     st.session_state[_cache_key] = load_strategy(_TIINGO_RESULTS_ID)
