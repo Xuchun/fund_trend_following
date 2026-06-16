@@ -85,11 +85,6 @@ if res.spy_nav is not None:
 
 render_page_header("Baseline参数回测结果 (Tiingo 无偏差)", meta)
 st.caption(f"回测期间：{meta.backtest_start} → {meta.backtest_end}  ·  初始资金：$10,000,000")
-st.info(
-    "**数据来源：Tiingo 动态标的池（无幸存者偏差）**  ·  "
-    "2,943 个底池标的（满足 ≥1 年），引擎每日动态过滤 ADV>$60M，含历史退市标的，"
-    "避免仅使用当前 S&P 900 成分股带来的幸存者偏差。"
-)
 st.markdown("---")
 
 # ── Summary cards ─────────────────────────────────────────────────────────────
