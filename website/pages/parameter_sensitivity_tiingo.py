@@ -70,7 +70,7 @@ _PARAM_CFG = [
      f"${p.get('min_market_cap_b', 2):.0f}B",
      "$2B / $3B / $4B", "大盘 vs 中盘稳定性"),
     ("min_adv_m",             "ADV 流动性过滤",
-     f"${p.get('min_adv_m', 50):.0f}M",
+     f"${p.get('min_adv_m', 60):.0f}M",
      "$30M / $40M / $50M / $60M / $70M", "流动性约束 vs 可交易标的数"),
     ("slippage_bps",          "滑点（单边）",
      f"{p.get('slippage_bps', 10):.0f} bps",
