@@ -348,7 +348,7 @@ with tab4:
     peak_row = pool_df.loc[pool_df["total"].idxmax()]
     st.markdown(f"""
 **观察**：
-- 最终回测标的池规模随时间增长，从 2004 年约 **{pool_df[pool_df['year']==2004]['total'].values[0]:,} 个**
+- 最终回测标的池规模随时间增长，从 {_start_year} 年约 **{pool_df[pool_df['year']==_start_year]['total'].values[0]:,} 个**
   增长至峰值年份 {int(peak_row['year'])} 年的 **{int(peak_row['total']):,} 个**。
 - 增长主要来自：①美股上市公司总量增加；②整体股价随牛市上行，更多标的满足 $10 价格门槛；
   ③市场整体流动性提升，更多标的满足 $60M ADV 门槛。
