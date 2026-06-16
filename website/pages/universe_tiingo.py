@@ -485,7 +485,7 @@ with _adv_analysis_col1:
 | Tiingo 下载尝试 | 21,384 | 全量历史 Ticker |
 | 成功下载（有价格数据）| 15,255 | |
 | Tiingo 无数据跳过 | {_no_data_cnt:,} | 极度冷门票、权证、OTC 壳公司 |
-| 有数据但从未满足流动性条件 | {len(_eu_all) - len(_eu_over252) - len(_eu_under252):,} → 合并至下行 | ADV 和价格从未同时达标 |
+| 有数据但从未满足流动性条件 | {15_255 - len(_eu_all):,} | 价格或 ADV 从未同时达标（$10 / $20M），未进入候选池 |
 | eligible_days < 252（不足 1 年）| {len(_eu_under252):,} | SPAC、超短命公司、刚上市新股 |
 | **进入回测标的池（≥252 天）** | **{len(_eu_over252):,}** | 含活跃 {_eu_over252["is_active"].sum():,} 只 + 退市 {(~_eu_over252["is_active"]).sum():,} 只 |
 
