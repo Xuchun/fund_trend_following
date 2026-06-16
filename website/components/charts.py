@@ -453,21 +453,21 @@ def daily_entries_vs_skipped_chart(
     fig = go.Figure()
     fig.add_trace(go.Bar(
         x=yearly["year"],
+        y=yearly["skipped"],
+        name="放弃开仓（资金/热度/相关性）",
+        marker_color="#d0d0d0",
+        marker_line_width=0,
+        opacity=0.9,
+        hovertemplate="%{x}年：放弃开仓 %{y} 次<extra></extra>",
+    ))
+    fig.add_trace(go.Bar(
+        x=yearly["year"],
         y=yearly["executed"],
         name="已开仓",
         marker_color=color,
         marker_line_width=0,
-        opacity=0.85,
+        opacity=0.9,
         hovertemplate="%{x}年：已开仓 %{y} 次<extra></extra>",
-    ))
-    fig.add_trace(go.Bar(
-        x=yearly["year"],
-        y=yearly["skipped"],
-        name="放弃开仓（资金/热度/相关性）",
-        marker_color="#e67e22",
-        marker_line_width=0,
-        opacity=0.85,
-        hovertemplate="%{x}年：放弃开仓 %{y} 次<extra></extra>",
     ))
     fig.update_layout(
         title=(
