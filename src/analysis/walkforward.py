@@ -33,15 +33,15 @@ __all__ = ["WALK_FORWARD_WINDOWS", "run_walk_forward"]
 # ── Window definitions ────────────────────────────────────────────────────────
 
 WALK_FORWARD_WINDOWS: list[dict] = [
-    {"label": "Window 1", "is_start": "2004-01-01", "is_end": "2021-12-31",
+    {"label": "Window 1", "is_start": "2000-01-03", "is_end": "2021-12-31",
      "oos_start": "2022-01-01", "oos_end": "2022-12-31"},
-    {"label": "Window 2", "is_start": "2004-01-01", "is_end": "2022-12-31",
+    {"label": "Window 2", "is_start": "2000-01-03", "is_end": "2022-12-31",
      "oos_start": "2023-01-01", "oos_end": "2023-12-31"},
-    {"label": "Window 3", "is_start": "2004-01-01", "is_end": "2023-12-31",
+    {"label": "Window 3", "is_start": "2000-01-03", "is_end": "2023-12-31",
      "oos_start": "2024-01-01", "oos_end": "2024-12-31"},
-    {"label": "Window 4", "is_start": "2004-01-01", "is_end": "2024-12-31",
+    {"label": "Window 4", "is_start": "2000-01-03", "is_end": "2024-12-31",
      "oos_start": "2025-01-01", "oos_end": "2025-12-31"},
-    {"label": "Window 5", "is_start": "2004-01-01", "is_end": "2025-12-31",
+    {"label": "Window 5", "is_start": "2000-01-03", "is_end": "2025-12-31",
      "oos_start": "2026-01-01", "oos_end": "2026-12-31"},
 ]
 
