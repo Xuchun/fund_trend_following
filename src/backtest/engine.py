@@ -282,7 +282,9 @@ class BacktestEngine:
             params=self.params,
         )
         if shares is None:
-            return False
+            return ""
+        if isinstance(shares, str):
+            return shares  # "heat" or "corr" from sizing
 
         # ── Cash check ───────────────────────────────────────────────────────
         commission = compute_commission(entry_price, shares, self.params.commission_bps)
@@ -292,7 +294,7 @@ class BacktestEngine:
                 "Entry %s skipped: cost=%.0f > cash=%.0f",
                 ticker, total_cost, portfolio.cash,
             )
-            return False
+            return "cash"
 
         # ── Open position ────────────────────────────────────────────────────
         position = Position(
@@ -306,7 +308,7 @@ class BacktestEngine:
             atr_at_entry=atr,
         )
         portfolio.open_position(position, commission)
-        return True
+        return "ok"
 
     # ── End-of-backtest liquidation ─────────────────────────────────────────
 
