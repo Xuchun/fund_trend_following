@@ -527,7 +527,7 @@ with _adv_analysis_col2:
     ]
 
     st.markdown(f"""
-**候选池：{len(_ETF_SET)} 只 ETF，覆盖所有主要资产类别**
+**候选池：{len(_ETF_SET)} 只 ETF（实际参与回测 {_universe_etfs} 只），覆盖所有主要资产类别**
 
 | 类别 | 覆盖评估 | 代表标的 |
 |------|---------|---------|
