@@ -421,6 +421,7 @@ import json as _json
 
 _m20_path  = _project / "results" / "v1_unbiased_20m"  / "metrics.json"
 _m50_path  = _project / "results" / "v1_unbiased_50m"  / "metrics.json"
+_m60_path  = _project / "results" / "v1_unbiased_60m"  / "metrics.json"
 _mtiingo_p = _project / "results" / "v1_tiingo"         / "metrics.json"
 _myahoo_p  = _project / "results" / "v1"                / "metrics.json"
 
