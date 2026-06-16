@@ -355,8 +355,8 @@ _display_cols = {
 }
 
 tab_act, tab_del, tab_all = st.tabs([
-    f"✅ 现役（推荐池，{len(rec_active):,} 个）",
-    f"📋 已退市（推荐池，{len(rec_del):,} 个）",
+    f"✅ 现役（{len(rec_active):,} 个）",
+    f"📋 已退市（{len(rec_del):,} 个）",
     f"🔍 现役+已退市（{len(eu_rec):,} 个）",
 ])
 
