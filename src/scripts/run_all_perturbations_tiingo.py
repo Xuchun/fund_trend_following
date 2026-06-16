@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 # ── 路径配置 ────────────────────────────────────────────────────────────────────
 TIINGO_CACHE = ROOT / "data" / "cache" / "tiingo"
 EU_CSV       = ROOT / "data" / "tiingo_eligible_universe.csv"
-OUTPUT_DIR   = ROOT / "results" / "v1_unbiased_50m" / "perturbation"
+OUTPUT_DIR   = ROOT / "results" / "v1_unbiased_60m" / "perturbation"
 
 START           = "2004-01-02"
 END             = "2026-06-12"
