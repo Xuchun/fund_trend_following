@@ -144,8 +144,8 @@ def get_universe_at_date(
     price_panel: dict[str, pd.DataFrame],
     date: str,
     lookback_days: int = 60,
-    min_price: float = 5.0,
-    min_adv_m: float = 1.0,
+    min_price: float = 10.0,
+    min_adv_m: float = 60.0,
 ) -> list[str]:
     """
     Return tickers that are investable on `date` given the loaded price panel.
