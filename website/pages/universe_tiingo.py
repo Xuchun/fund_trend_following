@@ -85,7 +85,7 @@ st.markdown("""
 | **字段** | 开/高/低/收、复权收盘价、成交量（日度） |
 | **含退市标的** | 是 — Tiingo 保留已退市、被收购、破产公司的完整历史数据 |
 | **当前底池（≥1年条件）** | 约 {:,} 只纳入回测底池（ADV 阈值动态过滤） |
-""".format(len(_eu252)))
+""".format(len(_eu252)), unsafe_allow_html=True)
 
 _col_a, _col_b = st.columns(2)
 with _col_a:
