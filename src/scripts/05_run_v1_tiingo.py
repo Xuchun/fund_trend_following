@@ -75,7 +75,7 @@ BASELINE_PARAMS = StrategyParams(
 )
 
 DEFAULT_START = "2004-01-01"
-DEFAULT_END   = "2026-06-13"
+DEFAULT_END   = "2026-06-15"
 
 
 def parse_args():
