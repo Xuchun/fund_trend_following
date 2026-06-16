@@ -106,17 +106,27 @@ def _compute_spy_nav(nav: pd.Series, results_dir: Path) -> Optional[pd.Series]:
         except Exception:
             pass
 
-    # Priority 2: local parquet cache (dev machine)
-    spy_cache = Path(__file__).resolve().parents[1] / "data" / "cache" / "prices" / "SPY.parquet"
-    if spy_cache.exists():
-        try:
-            spy_df = pd.read_parquet(spy_cache)
-            adj = spy_df["close"] * spy_df["adj_factor"]
-            adj = adj.reindex(nav.index).ffill().bfill()
-            spy_ret = adj.pct_change().fillna(0.0)
-            return (1 + spy_ret).cumprod()
-        except Exception:
-            pass
+    # Priority 2: local parquet cache (dev machine) — prefer Tiingo (longer history)
+    _root = Path(__file__).resolve().parents[1]
+    for spy_cache in [
+        _root / "data" / "cache" / "tiingo" / "SPY.parquet",
+        _root / "data" / "cache" / "prices" / "SPY.parquet",
+    ]:
+        if spy_cache.exists():
+            try:
+                spy_df = pd.read_parquet(spy_cache)
+                adj = spy_df["close"] * spy_df["adj_factor"]
+                adj.index = pd.DatetimeIndex(adj.index)
+                adj = adj.reindex(nav.index).ffill().bfill()
+                spy_ret = adj.pct_change().fillna(0.0)
+                spy_nav = (1 + spy_ret).cumprod()
+                # Guard: skip if data coverage is poor (>20% of dates missing before bfill)
+                raw_coverage = spy_df.index.isin(nav.index).sum() / len(nav)
+                if raw_coverage < 0.5:
+                    continue
+                return spy_nav
+            except Exception:
+                pass
 
     # Priority 3: smooth CAGR fallback (no real data available)
     metrics = json.loads((results_dir / "metrics.json").read_text())
