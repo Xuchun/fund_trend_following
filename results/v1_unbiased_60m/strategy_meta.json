@@ -1,10 +1,41 @@
 {
   "id": "v1_unbiased_60m",
   "version": "1.0-unbiased-60m",
-  "display_name": "Strategy 1.0 (Tiingo, ADV>$60M, ≥1yr)",
+  "display_name": "Strategy 1.0 (Tiingo · 无偏差 · ADV>$60M)",
+  "subtitle": "Tiingo 无幸存者偏差版 — Long Only, ATR Breakout + SPY 200-Day Regime Filter，ADV>$60M",
+  "color": "#e67e22",
+  "badge_text": "Tiingo-60M",
+  "badge_color": "orange",
+  "universe_stocks": 2859,
+  "universe_etfs": 85,
+  "universe_total": 2944,
   "backtest_start": "2004-01-02",
   "backtest_end": "2026-06-15",
   "initial_capital": 10000000,
+  "cash_proxy": "SHY",
+  "key_features": [
+    "Tiingo 数据：含退市/被收购标的，无幸存偏差（vs Yahoo Finance 当前 S&P 900 成分股）",
+    "动态标的池：按历史可交易状态纳入/剔除标的，而非固定当前成分股列表",
+    "ADV 门槛 $60M：引擎每日动态过滤，底池含 2,937 只历史标的（满足 ≥1 年条件）",
+    "≥1年过滤：确保每个标的至少有1年历史数据再纳入回测",
+    "200日高点突破入场（N-Day Breakout，N=200）",
+    "ATR(20) Wilder平滑，固定止损 2×ATR",
+    "分段追踪止损：<1R用3×ATR，1-3R用3×ATR，>3R用5×ATR",
+    "成交量确认：突破日成交量 > 1.5× 60日均量，排除低成交量假突破",
+    "1% NAV 风险仓位计算（4步过滤）",
+    "相关性过滤：持仓相关性 > 0.70 时减半仓",
+    "组合热度上限 10%（总风险敞口 ≤ NAV 的 10%）",
+    "SPY 200日均线市场环境过滤：熊市停止开仓，现金投入 SHY",
+    "空仓资金投入 SHY（1-3年期国债 ETF，覆盖完整回测期 2004+）"
+  ],
+  "differs_from_previous": {
+    "vs_v1_unbiased_50m": {
+      "adv_filter": "ADV > $60M （vs $50M），流动性门槛提高 20%",
+      "cagr_improvement": "提升约 1.1pp，9.58% vs 8.47%（ADV>$50M，敏感性分析结果）",
+      "max_drawdown": "相近，约 -20%",
+      "trades": "约 3,083 笔 vs 3,185 笔，高流动标的信噪比更高"
+    }
+  },
   "params_anchor": {
     "min_price": 10.0,
     "min_market_cap_b": 2.0,
@@ -34,6 +65,15 @@
     "consolidation_filter_enabled": false,
     "consolidation_window": 80,
     "consolidation_threshold": 0.25
+  },
+  "logic_sections": {
+    "entry": "close[t] > max(high[t-200:t-1])，且 close[t]/rolling_high[t] ≥ 1.00（突破强度 ≥ 0%），且 volume[t] > 1.5×vol_ma60[t]（成交量确认），使用shift(1)防前视偏差，次日开盘执行",
+    "regime": "启用——SPY adj-close[t] > SMA(200)[t] 为牛市（允许开仓），否则为熊市（停止新建仓，追踪止损继续运行，闲置现金投入 SHY）",
+    "stop": "entry_price - 2 × ATR(20)，入场价与止损价之差定义为 1R",
+    "trail": "棘轮式追踪止损：<1R用3×ATR，1-3R用3×ATR，≥3R用5×ATR；只能上移不能下移",
+    "sizing": "Step1目标风险(1%NAV)→Step2单标的上限(5%NAV)→Step3相关性调整→Step4热度检查(10%)",
+    "direction": "纯多头（Long Only）",
+    "execution": "t日收盘生成信号，t+1日开盘价执行；滑点10bps，佣金3bps，Gap过滤±2.5%"
   },
   "etf_universe": [
     {
@@ -472,7 +512,25 @@
       "category": "美股风格"
     }
   ],
-  "universe_total": 2944,
-  "universe_stocks": 2859,
-  "universe_etfs": 85
+  "regime_stats": {
+    "bear_days_total": 1080,
+    "bear_pct": 19.1,
+    "top_episodes": [
+      {
+        "start_year": 2008,
+        "end_year": 2009,
+        "days": 257
+      },
+      {
+        "start_year": 2007,
+        "end_year": 2008,
+        "days": 88
+      },
+      {
+        "start_year": 2022,
+        "end_year": 2022,
+        "days": 87
+      }
+    ]
+  }
 }
