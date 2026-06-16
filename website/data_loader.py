@@ -120,9 +120,9 @@ def _compute_spy_nav(nav: pd.Series, results_dir: Path) -> Optional[pd.Series]:
                 adj = adj.reindex(nav.index).ffill().bfill()
                 spy_ret = adj.pct_change().fillna(0.0)
                 spy_nav = (1 + spy_ret).cumprod()
-                # Guard: skip if data coverage is poor (>20% of dates missing before bfill)
-                raw_coverage = spy_df.index.isin(nav.index).sum() / len(nav)
-                if raw_coverage < 0.5:
+                # Guard: skip if SPY data doesn't start by the strategy start date
+                spy_start = pd.Timestamp(spy_df.index.min())
+                if spy_start > nav.index[0]:
                     continue
                 return spy_nav
             except Exception:
