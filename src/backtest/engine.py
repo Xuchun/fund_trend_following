@@ -100,6 +100,9 @@ class BacktestEngine:
         last_nav = float(self.initial_capital)
         _daily_signals:  dict[pd.Timestamp, int] = {}
         _daily_executed: dict[pd.Timestamp, int] = {}
+        _daily_heat:     dict[pd.Timestamp, int] = {}
+        _daily_corr:     dict[pd.Timestamp, int] = {}
+        _daily_cash:     dict[pd.Timestamp, int] = {}
 
         for date in trading_dates:
 
