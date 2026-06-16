@@ -58,12 +58,17 @@ if _META_PATH.exists():
     _meta = _json_mod.loads(_META_PATH.read_text())
     _ETF_SET = {e["ticker"] for e in _meta.get("etf_universe", [])}
 
+# ETFs that pass the ≥252-day pool filter (used in descriptions before _etf is defined)
+_pool_etf_count = int(eu[(eu["eligible_days"] >= MIN_ELIGIBLE_DAYS) & (~eu["ticker"].isin(_EXCL_ETFS))]["ticker"].isin(_ETF_SET).sum()) if _ETF_SET else 0
+
 # ── 动态日期变量（随数据更新自动刷新） ────────────────────────────────────────
 _data_earliest  = eu["data_start"].min().strftime("%Y-%m-%d")       # Tiingo 最早数据日
 _data_latest    = eu["data_end"].max().strftime("%Y-%m-%d")          # Tiingo 最新数据日
 _backtest_start = _meta.get("backtest_start", "2004-01-02")          # 回测开始日（来自 strategy_meta）
 _download_yrs   = round((pd.Timestamp(_data_latest) - pd.Timestamp(_data_earliest)).days / 365)
 _backtest_yrs   = round((pd.Timestamp(_data_latest) - pd.Timestamp(_backtest_start)).days / 365)
+_start_year     = pd.Timestamp(_backtest_start).year
+_end_year       = pd.Timestamp(_data_latest).year
 
 st.subheader("Tiingo 数据说明")
 st.markdown(f"""
