@@ -83,8 +83,7 @@ if res.spy_nav is not None:
     _spy_metrics["spy_max_dd_duration_days"] = _max_dur
 
 
-render_page_header("Baseline参数回测结果 (Tiingo 无偏差)", meta)
-st.caption(f"回测期间：{meta.backtest_start} → {meta.backtest_end}  ·  初始资金：$10,000,000")
+render_page_header("Baseline参数回测结果", meta)
 st.markdown("---")
 
 # ── Summary cards ─────────────────────────────────────────────────────────────
