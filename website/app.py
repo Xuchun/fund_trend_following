@@ -59,7 +59,7 @@ pg = st.navigation(
             st.Page(_pages / "methodology.py",     title="回测方法论",            icon="⚙️"),
         ],
         "策略1.0": [
-            st.Page(_pages / "home.py",                       title="总结",                 icon="📋"),
+            st.Page(_pages / "home.py",                       title="总结（需要更新）",     icon="📋"),
             st.Page(_pages / "strategy_logic.py",             title="策略描述",             icon="📐"),
             st.Page(_pages / "baseline_results_tiingo.py",    title="Baseline参数回测结果", icon="📊"),
             st.Page(_pages / "parameter_sensitivity_tiingo.py", title="参数敏感性分析",     icon="🎛️"),
