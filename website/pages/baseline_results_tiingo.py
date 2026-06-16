@@ -92,9 +92,34 @@ render_summary_cards(m, meta.color, meta.backtest_start, meta.backtest_end)
 
 st.markdown("---")
 
+# ── Data source section ───────────────────────────────────────────────────────
+st.subheader("Baseline参数回测的数据来源")
+st.markdown(f"""
+| 项目 | 详情 |
+|------|------|
+| **数据来源** | Tiingo EOD（End-of-Day）历史价格 API |
+| **回测期间** | {meta.backtest_start} → {meta.backtest_end} |
+| **标的覆盖** | NYSE / NASDAQ / AMEX 全量历史股票 + 79 只跨资产 ETF，含退市 / 被收购 / 破产标的 |
+| **标的池总量** | {meta.universe_total:,} 个（满足 ≥252 交易日条件；含 {meta.universe_stocks:,} 只股票 + {meta.universe_etfs:,} 只 ETF） |
+| **无幸存者偏差** | Tiingo 保留完整历史数据（含退市标的），避免仅使用当前成分股带来的偏差 |
+""")
+st.markdown("""
+**三级过滤逻辑：**
+
+| 过滤层级 | 条件 | 执行时机 |
+|---------|------|---------|
+| 静态预过滤 | 累计满足天数 ≥ 252 天（约 1 年） | CSV 构建时，一次性筛选 |
+| 引擎每日动态 | 原始收盘价 > $10 | 每日收盘后信号生成前 |
+| 引擎每日动态 | ADV₆₀ > $60M（60 日均日成交额，shift(1) 无前视偏差） | 每日收盘后信号生成前 |
+
+完整标的池构建方法详见「数据与标的池」页面。
+""")
+
+st.markdown("---")
+
 # ── Baseline parameter table ───────────────────────────────────────────────────
 _p = meta.params_anchor
-st.subheader("📋 Baseline 锚点参数（完整）")
+st.subheader("📋 Baseline 锚点参数")
 st.caption("以下参数值与设计方案 §1.2.1.1、代码 StrategyParams 及回测脚本三处完全一致。")
 
 _col_a, _col_b = st.columns(2)
