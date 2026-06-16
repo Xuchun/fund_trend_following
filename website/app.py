@@ -52,7 +52,7 @@ pg = st.navigation(
             st.Page(_pages / "strategy_comparison.py", title="策略对比", icon="⚖️"),
         ],
         "数据与方法论": [
-            st.Page(_pages / "universe_tiingo.py", title="数据与标的池 (Tiingo)", icon="🗄️"),
+            st.Page(_pages / "universe_tiingo.py", title="数据与标的池", icon="🗄️"),
             st.Page(_pages / "methodology.py",     title="回测方法论",            icon="⚙️"),
         ],
         "策略1.0": [
