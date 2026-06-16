@@ -54,7 +54,7 @@ TIINGO_CACHE = _root / "data" / "cache" / "tiingo"
 EU_CSV       = _root / "data" / "tiingo_eligible_universe.csv"
 
 DEFAULT_START = "2004-01-02"   # matches Tiingo cache start (2004-01-01 is non-trading)
-DEFAULT_END   = "2026-06-12"   # matches Tiingo cache end; avoids incremental API calls
+DEFAULT_END   = "2026-06-15"   # matches Tiingo cache end; avoids incremental API calls
 MIN_ELIGIBLE_DAYS = 252
 
 BASE_PARAMS = StrategyParams(
