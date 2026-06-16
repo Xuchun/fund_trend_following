@@ -1,0 +1,213 @@
+{
+  "type": "2d",
+  "param1": "breakout_window",
+  "param2": "trail_multiplier_r1",
+  "metric": "sharpe",
+  "start": "2000-01-03",
+  "end": "2021-12-31",
+  "param1_values": [
+    150,
+    200,
+    250,
+    300
+  ],
+  "param2_values": [
+    2.0,
+    2.5,
+    3.0,
+    3.5,
+    4.0
+  ],
+  "grid": [
+    [
+      0.45705661173684875,
+      0.5350737569430098,
+      0.6290932176285494,
+      0.6082272668622445,
+      0.63886933883153
+    ],
+    [
+      0.538765117252841,
+      0.5602969514217092,
+      0.5662007050776792,
+      0.5433216684777594,
+      0.5770289856000553
+    ],
+    [
+      0.5150096101383073,
+      0.5319370884260322,
+      0.536536383066706,
+      0.5599936747160879,
+      0.505441672818611
+    ],
+    [
+      0.469445389764522,
+      0.5583434388708327,
+      0.5599864624507123,
+      0.5966929191704053,
+      0.5615795632918864
+    ]
+  ],
+  "records": [
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 150,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 2.0,
+      "metric_name": "sharpe",
+      "metric_value": 0.45705661173684875
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 150,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 2.5,
+      "metric_name": "sharpe",
+      "metric_value": 0.5350737569430098
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 150,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 3.0,
+      "metric_name": "sharpe",
+      "metric_value": 0.6290932176285494
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 150,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 3.5,
+      "metric_name": "sharpe",
+      "metric_value": 0.6082272668622445
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 150,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 4.0,
+      "metric_name": "sharpe",
+      "metric_value": 0.63886933883153
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 200,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 2.0,
+      "metric_name": "sharpe",
+      "metric_value": 0.538765117252841
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 200,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 2.5,
+      "metric_name": "sharpe",
+      "metric_value": 0.5602969514217092
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 200,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 3.0,
+      "metric_name": "sharpe",
+      "metric_value": 0.5662007050776792
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 200,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 3.5,
+      "metric_name": "sharpe",
+      "metric_value": 0.5433216684777594
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 200,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 4.0,
+      "metric_name": "sharpe",
+      "metric_value": 0.5770289856000553
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 250,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 2.0,
+      "metric_name": "sharpe",
+      "metric_value": 0.5150096101383073
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 250,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 2.5,
+      "metric_name": "sharpe",
+      "metric_value": 0.5319370884260322
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 250,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 3.0,
+      "metric_name": "sharpe",
+      "metric_value": 0.536536383066706
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 250,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 3.5,
+      "metric_name": "sharpe",
+      "metric_value": 0.5599936747160879
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 250,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 4.0,
+      "metric_name": "sharpe",
+      "metric_value": 0.505441672818611
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 300,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 2.0,
+      "metric_name": "sharpe",
+      "metric_value": 0.469445389764522
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 300,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 2.5,
+      "metric_name": "sharpe",
+      "metric_value": 0.5583434388708327
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 300,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 3.0,
+      "metric_name": "sharpe",
+      "metric_value": 0.5599864624507123
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 300,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 3.5,
+      "metric_name": "sharpe",
+      "metric_value": 0.5966929191704053
+    },
+    {
+      "param1_name": "breakout_window",
+      "param1_value": 300,
+      "param2_name": "trail_multiplier_r1",
+      "param2_value": 4.0,
+      "metric_name": "sharpe",
+      "metric_value": 0.5615795632918864
+    }
+  ]
+}
