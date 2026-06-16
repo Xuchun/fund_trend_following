@@ -376,7 +376,16 @@ with tab_act:
     _df = _fmt_df(rec_active, "累计满足天数")
     st.dataframe(_df, use_container_width=True, hide_index=True,
                  column_config={"累计满足天数": st.column_config.NumberColumn(format="%d 天")})
-    _col1, _col2 = st.columns([1, 1])
+    st.markdown(
+        "<style>"
+        "[data-testid='stHorizontalBlock']:has(>[data-testid='column']>[data-testid='stDownloadButton'])"
+        "{gap:0!important}"
+        "[data-testid='stHorizontalBlock']:has(>[data-testid='column']>[data-testid='stDownloadButton'])"
+        ">[data-testid='column']{padding-left:0!important;padding-right:0!important}"
+        "</style>",
+        unsafe_allow_html=True,
+    )
+    _col1, _col2, _col3 = st.columns([1.4, 1.7, 4])
     with _col1:
         st.download_button("⬇ 下载现役标的列表",
                            data=_df.to_csv(index=False).encode("utf-8"),
