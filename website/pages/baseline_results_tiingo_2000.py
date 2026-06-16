@@ -24,7 +24,12 @@ from website.components.charts import (
 )
 
 _TIINGO_RESULTS_ID = "v1_unbiased_60m_2000"
-_cache_key = f"_results_{_TIINGO_RESULTS_ID}"
+_results_path  = Path(__file__).resolve().parents[2] / "results" / _TIINGO_RESULTS_ID
+_spy_nav_mtime = int((_results_path / "spy_nav.csv").stat().st_mtime) if (_results_path / "spy_nav.csv").exists() else 0
+_cache_key = f"_results_{_TIINGO_RESULTS_ID}_{_spy_nav_mtime}"
+# Evict stale cache entries from earlier deployments
+for _stale in [k for k in st.session_state if k.startswith(f"_results_{_TIINGO_RESULTS_ID}_") and k != _cache_key]:
+    del st.session_state[_stale]
 if _cache_key not in st.session_state:
     with st.spinner("正在加载 Tiingo 无偏差回测数据（2000起）…"):
         st.session_state[_cache_key] = load_strategy(_TIINGO_RESULTS_ID)
