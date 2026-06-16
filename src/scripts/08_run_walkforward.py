@@ -50,9 +50,9 @@ def _load_spy(full_start: str, full_end: str) -> pd.Series | None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Walk-Forward OOS validation")
-    parser.add_argument("--nav",    default=str(_project_root / "results" / "v1" / "nav.csv"))
-    parser.add_argument("--trades", default=str(_project_root / "results" / "v1" / "trades.csv"))
-    parser.add_argument("--output", default=str(_project_root / "results" / "v1" / "walkforward.json"))
+    parser.add_argument("--nav",    default=str(_project_root / "results" / "v1_unbiased_60m" / "nav.csv"))
+    parser.add_argument("--trades", default=str(_project_root / "results" / "v1_unbiased_60m" / "trades.csv"))
+    parser.add_argument("--output", default=str(_project_root / "results" / "v1_unbiased_60m" / "walkforward.json"))
     parser.add_argument("--risk-free-rate", type=float, default=0.02)
     args = parser.parse_args()
 
