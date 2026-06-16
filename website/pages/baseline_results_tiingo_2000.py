@@ -1089,9 +1089,11 @@ if _DIAG_PATH_BR.exists():
     _sc3.metric("平均序列长度",       f"{_sa_br.get('avg_streak_length', 0.0):.2f}")
 
     _max_cl_br = _sa_br.get("max_consecutive_losses", 0)
+    _wr_pct_br = m.get("win_rate", 0) * 100
+    _expected_loss_gap = 1 / (1 - m.get("win_rate", 0.38)) if m.get("win_rate", 0.38) < 1 else 0
     st.markdown(
         f'<div class="info-box">'
-        f'在 38% 胜率下，随机期望每隔约 2.6 笔交易出现一次亏损连续段。'
+        f'在 {_wr_pct_br:.1f}% 胜率下，随机期望每隔约 {_expected_loss_gap:.1f} 笔交易出现一次亏损连续段。'
         f'最长 <strong>{_max_cl_br} 笔</strong>连续亏损是心理上最难承受的时刻，'
         f'但从统计上看并不异常。'
         f'</div>',
