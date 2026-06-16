@@ -55,7 +55,7 @@ if _META_PATH.exists():
     _ETF_SET = {e["ticker"] for e in _meta.get("etf_universe", [])}
 
 # ── 标的池概览 ─────────────────────────────────────────────────────────────────
-st.subheader("标的池概览（历史回测 2004 → 2026-06-12）")
+st.subheader("标的池概览（历史回测 2004-01-01 → 2026-06-12）")
 
 _eu252 = eu_rec.copy()
 _eu252["_is_etf"] = _eu252["ticker"].isin(_ETF_SET)
