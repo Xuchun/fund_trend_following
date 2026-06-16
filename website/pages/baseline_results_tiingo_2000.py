@@ -1193,15 +1193,32 @@ if _neg_details:
 else:
     _neg_yr_desc = "历史回测中无负收益年份。"
 
-st.markdown(f"""
-**1. 绝对收益可观，但跑输 SPY 约 {abs(_cagr_gap)*100:.1f} 个百分点**
+_beats_spy = _cagr_gap > 0
+_sec1_header = (
+    f"**1. 绝对收益超越 SPY {abs(_cagr_gap)*100:.1f} 个百分点**"
+    if _beats_spy else
+    f"**1. 绝对收益可观，但跑输 SPY 约 {abs(_cagr_gap)*100:.1f} 个百分点**"
+)
+_sec1_body = (
+    f"在 {meta.backtest_start[:4]}–{meta.backtest_end[:4]} 约 {_bt_years:.0f} 年的回测期内，"
+    f"策略1.0 CAGR **{_cagr*100:+.2f}%**，同期 SPY 为 **{_spy_cagr*100:+.2f}%**，领先 **{_cagr_gap*100:+.2f}%**。"
+    f"以 $10M 初始资金计算，净值增长 **{_total_ret:.2f} 倍**（期末约 ${_total_ret*10:.0f}M）。"
+    f"包含 2000–2002 科网泡沫破裂、2008–2009 金融危机的完整市场周期，在此期间 SPY 最大回撤高达 **{abs(_spy_maxdd)*100:.1f}%**；"
+    f"策略1.0通过市场环境过滤器规避了大部分熊市损失，最大回撤仅 **{abs(_maxdd)*100:.1f}%**，"
+    f"同时在 26 年间 CAGR 仍领先 SPY——这是趋势跟踪策略在完整周期中展现的全部优势。"
+    if _beats_spy else
+    f"在 {meta.backtest_start[:4]}–{meta.backtest_end[:4]} 约 {_bt_years:.0f} 年的回测期内，"
+    f"策略1.0 CAGR **{_cagr*100:+.2f}%**，同期 SPY 为 **{_spy_cagr*100:+.2f}%**，差距 **{_cagr_gap*100:+.2f}%**。"
+    f"以 $10M 初始资金计算，净值增长 **{_total_ret:.2f} 倍**（期末约 ${_total_ret*10:.0f}M）。"
+    f"跑输 SPY 是这份结果最直接的弱点，也是向任何潜在投资者解释时需要正面回答的第一个问题。"
+    f"对此的核心回答是：**SPY 在相同时间内最大回撤 {abs(_spy_maxdd)*100:.1f}%，而策略1.0最大回撤仅 {abs(_maxdd)*100:.1f}%**——"
+    f"收益更低，但承受的风险断崖式下降。"
+)
 
-在 {meta.backtest_start[:4]}–{meta.backtest_end[:4]} 约 {_bt_years:.0f} 年的回测期内，
-策略1.0 CAGR **{_cagr*100:+.2f}%**，同期 SPY 为 **{_spy_cagr*100:+.2f}%**，差距 **{_cagr_gap*100:+.2f}%**。
-以 $10M 初始资金计算，净值增长 **{_total_ret:.2f} 倍**（期末约 ${_total_ret*10:.0f}M）。
-跑输 SPY 是这份结果最直接的弱点，也是向任何潜在投资者解释时需要正面回答的第一个问题。
-对此的核心回答是：**SPY 在相同时间内最大回撤 {abs(_spy_maxdd)*100:.1f}%，而策略1.0最大回撤仅 {abs(_maxdd)*100:.1f}%**——
-收益更低，但承受的风险断崖式下降。
+st.markdown(f"""
+{_sec1_header}
+
+{_sec1_body}
 
 **2. Sharpe 轻微领先 SPY，风险调整后有竞争力**
 
