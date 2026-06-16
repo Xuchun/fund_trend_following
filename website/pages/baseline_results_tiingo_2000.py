@@ -23,10 +23,10 @@ from website.components.charts import (
     daily_entries_vs_skipped_chart,
 )
 
-_TIINGO_RESULTS_ID = "v1_unbiased_60m"
+_TIINGO_RESULTS_ID = "v1_unbiased_60m_2000"
 _cache_key = f"_results_{_TIINGO_RESULTS_ID}"
 if _cache_key not in st.session_state:
-    with st.spinner("正在加载 Tiingo 无偏差回测数据…"):
+    with st.spinner("正在加载 Tiingo 无偏差回测数据（2000起）…"):
         st.session_state[_cache_key] = load_strategy(_TIINGO_RESULTS_ID)
 res  = st.session_state[_cache_key]
 meta = res.meta
