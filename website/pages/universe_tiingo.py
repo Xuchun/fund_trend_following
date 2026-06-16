@@ -217,13 +217,13 @@ with tab1:
     _fig_dur.add_bar(x=labels, y=g_del.values, name="已退市", marker_color="#e57373")
     _fig_dur.update_layout(
         barmode="stack",
-        title=f"最终回测标的池满足条件天数分布（共 {len(eu_rec):,} 个，均已通过 ≥1 年过滤）",
         xaxis_title="累计满足条件天数",
         yaxis_title="标的数量",
         height=420,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     )
     st.plotly_chart(_fig_dur, use_container_width=True)
+    st.caption(f"基于标的池全部 {len(eu_rec):,} 个标的（现役 {len(rec_active):,} + 已退市 {len(rec_del):,}，均满足 ≥252 交易日条件）")
 
     st.markdown(f"""
 **关键发现：**
