@@ -1146,7 +1146,7 @@ else:
 
 # ── 数据更新说明 ──────────────────────────────────────────────────────────────
 import json as _json_ps
-_prev_ps = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m" / "prev_run_snapshot.json"
+_prev_ps = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m_2000" / "prev_run_snapshot.json"
 if _prev_ps.exists():
     _prev_ps_data = _json_ps.loads(_prev_ps.read_text())
     _prev_end_ps = _prev_ps_data.get("_run_end", "上次运行")
