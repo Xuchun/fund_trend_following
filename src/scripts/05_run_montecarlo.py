@@ -42,12 +42,12 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Monte Carlo risk simulation")
     parser.add_argument(
         "--nav",
-        default=str(_project_root / "results" / "v1" / "nav.csv"),
-        help="Path to nav.csv (default: results/v1/nav.csv)",
+        default=str(_project_root / "results" / "v1_unbiased_60m" / "nav.csv"),
+        help="Path to nav.csv (default: results/v1_unbiased_60m/nav.csv)",
     )
     parser.add_argument(
         "--output",
-        default=str(_project_root / "results" / "v1" / "montecarlo.json"),
+        default=str(_project_root / "results" / "v1_unbiased_60m" / "montecarlo.json"),
         help="Output JSON path",
     )
     parser.add_argument(
