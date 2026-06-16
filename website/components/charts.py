@@ -443,22 +443,46 @@ def daily_entries_vs_skipped_chart(
     df.index = pd.to_datetime(df.index)
     df["month"] = df.index.to_period("M").to_timestamp()
 
-    monthly = df.groupby("month")[["executed", "skipped"]].sum().reset_index()
+    agg_cols = ["executed", "skipped"]
+    for c in ["skip_heat", "skip_corr", "skip_cash"]:
+        if c in df.columns:
+            agg_cols.append(c)
 
-    total_signals  = int(df["signals"].sum())
-    total_skipped  = int(df["skipped"].sum())
-    skip_rate      = total_skipped / total_signals * 100 if total_signals > 0 else 0
+    monthly = df.groupby("month")[agg_cols].sum().reset_index()
+
+    has_detail = all(c in monthly.columns for c in ["skip_heat", "skip_corr", "skip_cash"])
+
+    total_signals = int(df["signals"].sum()) if "signals" in df.columns else int(monthly["executed"].sum() + monthly["skipped"].sum())
+    total_skipped = int(df["skipped"].sum()) if "skipped" in df.columns else 0
+    skip_rate     = total_skipped / total_signals * 100 if total_signals > 0 else 0
 
     fig = go.Figure()
-    fig.add_trace(go.Bar(
-        x=monthly["month"],
-        y=monthly["skipped"],
-        name="放弃开仓（资金/热度/相关性）",
-        marker_color="#d0d0d0",
-        marker_line_width=0,
-        opacity=0.9,
-        hovertemplate="%{x|%Y-%m}：放弃开仓 %{y} 次<extra></extra>",
-    ))
+    if has_detail:
+        fig.add_trace(go.Bar(
+            x=monthly["month"], y=monthly["skip_heat"],
+            name="组合热度超限", marker_color="#e74c3c",
+            marker_line_width=0, opacity=0.85,
+            hovertemplate="%{x|%Y-%m}：热度超限 %{y} 次<extra></extra>",
+        ))
+        fig.add_trace(go.Bar(
+            x=monthly["month"], y=monthly["skip_corr"],
+            name="相关性过高", marker_color="#f39c12",
+            marker_line_width=0, opacity=0.85,
+            hovertemplate="%{x|%Y-%m}：相关性过高 %{y} 次<extra></extra>",
+        ))
+        fig.add_trace(go.Bar(
+            x=monthly["month"], y=monthly["skip_cash"],
+            name="资金不足", marker_color="#95a5a6",
+            marker_line_width=0, opacity=0.85,
+            hovertemplate="%{x|%Y-%m}：资金不足 %{y} 次<extra></extra>",
+        ))
+    else:
+        fig.add_trace(go.Bar(
+            x=monthly["month"], y=monthly["skipped"],
+            name="放弃开仓", marker_color="#d0d0d0",
+            marker_line_width=0, opacity=0.9,
+            hovertemplate="%{x|%Y-%m}：放弃开仓 %{y} 次<extra></extra>",
+        ))
     fig.add_trace(go.Bar(
         x=monthly["month"],
         y=monthly["executed"],
