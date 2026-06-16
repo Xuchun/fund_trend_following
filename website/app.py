@@ -61,7 +61,8 @@ pg = st.navigation(
         "策略1.0": [
             st.Page(_pages / "home.py",                       title="总结（需要更新）",     icon="📋"),
             st.Page(_pages / "strategy_logic.py",             title="策略描述",             icon="📐"),
-            st.Page(_pages / "baseline_results_tiingo.py",    title="Baseline参数回测结果", icon="📊"),
+            st.Page(_pages / "baseline_results_tiingo.py",      title="Baseline参数回测结果",              icon="📊"),
+            st.Page(_pages / "baseline_results_tiingo_2000.py", title="Baseline参数回测结果（回测开始：2000-01-01）", icon="📊"),
             st.Page(_pages / "parameter_sensitivity_tiingo.py", title="参数敏感性分析",     icon="🎛️"),
             st.Page(_pages / "parameter_heatmap.py",          title="参数热力图分析",       icon="🗺️"),
             st.Page(_pages / "monte_carlo.py",                title="蒙特卡洛模拟",         icon="🎲"),
