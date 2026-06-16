@@ -153,7 +153,7 @@ st.markdown("""
 | **Profit Factor** | 总盈利 / 总亏损（基于 R 倍数） |
 | **R 倍数** | 实际盈亏 / 入场时风险（1R） |
 
-SPY 基准数据来自 Yahoo Finance 实际价格，归一化到回测起始日 = 1.0。
+SPY 基准数据来自 Tiingo 实际价格，归一化到回测起始日 = 1.0。
 """)
 
 st.markdown("---")
