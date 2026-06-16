@@ -69,43 +69,56 @@ def _parse_values(raw: str, as_int: bool) -> list:
 
 
 def _load_universe_and_data(mode: str, start: str, end: str, force_download: bool):
-    """Load price panel and indicators — shared with 03_run_perturbation.py."""
-    from data.adapters.yahoo import YahooFinanceAdapter
-    from data.pipeline import load_price_panel
-    from data.universe import ETF_TICKERS, fetch_sp900_tickers
+    """Load price panel and indicators from Tiingo cache."""
+    from data.universe import EXCLUDED_VOL_ETFS
     from indicators.precompute import precompute_indicators
     from strategy.params import StrategyParams
+    import pandas as pd
 
     params = StrategyParams()
 
-    adapter = YahooFinanceAdapter()
+    TIINGO_CACHE  = _project_root / "data" / "cache" / "tiingo"
+    EU_CSV        = _project_root / "data" / "tiingo_eligible_universe.csv"
+    MIN_ELIG_DAYS = 252
+
+    # Build universe list
     if mode == "etf":
-        tickers = list(ETF_TICKERS)
-    elif mode == "sp500":
-        tickers = fetch_sp900_tickers(sp500_only=True)
-    elif mode == "sp900":
-        tickers = fetch_sp900_tickers(sp500_only=False)
+        from data.universe import ETF_TICKERS
+        tickers = [t for t in ETF_TICKERS if t not in EXCLUDED_VOL_ETFS]
     else:
-        tickers = fetch_sp900_tickers(sp500_only=False) + [
-            t for t in ETF_TICKERS if t not in fetch_sp900_tickers(sp500_only=False)
-        ]
+        # full / sp500 / sp900 modes all use the Tiingo eligible universe
+        eu = pd.read_csv(EU_CSV)
+        tickers = eu[eu["eligible_days"] >= MIN_ELIG_DAYS]["ticker"].tolist()
+        tickers = [t for t in tickers if t not in EXCLUDED_VOL_ETFS]
 
     all_tickers = list({params.cash_proxy, "SPY"} | set(tickers))
 
-    logger.info("Loading price panel for %d tickers (%s mode) …", len(all_tickers), mode)
-    price_panel = load_price_panel(
-        tickers=all_tickers,
-        start=start,
-        end=end,
-        adapter=adapter,
-        force_download=force_download,
-    )
+    # Load from local parquet cache (no API calls)
+    start_ts = pd.Timestamp(start)
+    end_ts   = pd.Timestamp(end)
+    from data.pipeline import compute_adj_prices
+    price_panel: dict = {}
+    for ticker in all_tickers:
+        path = TIINGO_CACHE / f"{ticker.upper()}.parquet"
+        if not path.exists():
+            continue
+        try:
+            df = pd.read_parquet(path)
+            df.index = pd.DatetimeIndex(df.index)
+            df = df.sort_index()
+            df = df[(df.index >= start_ts) & (df.index <= end_ts)]
+            if not df.empty:
+                price_panel[ticker] = compute_adj_prices(df)
+        except Exception:
+            pass
 
     strategy_tickers = [t for t in tickers if t in price_panel and t not in {"SPY", params.cash_proxy}]
-    logger.info("Price panel: %d tickers loaded", len(price_panel))
+    logger.info("Price panel: %d tickers loaded (%s mode)", len(price_panel), mode)
 
     logger.info("Pre-computing indicators …")
-    baseline_indicators = precompute_indicators(price_panel, params)
+    baseline_indicators = precompute_indicators(
+        {t: price_panel[t] for t in strategy_tickers}, params
+    )
 
     return params, price_panel, baseline_indicators, strategy_tickers
 
