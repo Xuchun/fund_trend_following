@@ -15,7 +15,6 @@ meta = res.meta
 p    = meta.params_anchor
 
 render_page_header("策略描述", meta)
-st.caption(f"{meta.display_name} · {meta.subtitle}")
 st.markdown("---")
 
 # ── Overview ──────────────────────────────────────────────────────────────────
