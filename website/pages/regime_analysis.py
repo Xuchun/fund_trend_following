@@ -22,7 +22,7 @@ render_page_header("市场环境分析", meta)
 st.caption(f"{meta.display_name} · 回测期间：{meta.backtest_start} → {meta.backtest_end}")
 st.markdown("---")
 
-_REGIME_PATH = Path(__file__).resolve().parents[2] / "results" / "v1" / "regime.json"
+_REGIME_PATH = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m" / "regime.json"
 
 regime_data = None
 if _REGIME_PATH.exists():
