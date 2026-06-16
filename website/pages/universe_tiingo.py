@@ -40,12 +40,9 @@ eu = _load_universe()
 active   = eu[eu["is_active"]]
 delisted = eu[~eu["is_active"]]
 
-# ── 结构性排除名单（来自 data.universe） ──────────────────────────────────────
-import sys as _sys
-_src_root = str(_project / "src")
-if _src_root not in _sys.path:
-    _sys.path.insert(0, _src_root)
-from data.universe import EXCLUDED_VOL_ETFS as _EXCL_ETFS
+# ── 结构性排除名单（与 data.universe.EXCLUDED_VOL_ETFS 保持同步） ──────────────
+# 这6个ETF在CSV中存在但结构性不适合趋势跟踪，与回测引擎排除逻辑一致
+_EXCL_ETFS = {"FXI", "GDX", "KWEB", "VXX", "EMB", "ASHR"}
 
 # ≥252 天（1年）过滤 + 排除结构性不适合 ETF → 与回测实际标的池一致
 MIN_ELIGIBLE_DAYS = 252
