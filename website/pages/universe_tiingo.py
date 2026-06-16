@@ -494,7 +494,7 @@ with _adv_analysis_col1:
 | Tiingo 无数据跳过 | {_no_data_cnt:,} | 极度冷门票、权证、OTC 壳公司 |
 | 有数据但从未满足流动性条件 | {15_255 - len(_eu_all):,} | 价格或 ADV 从未同时达标（$10 / $20M），未进入候选池 |
 | eligible_days < 252（不足 1 年）| {len(_eu_under252):,} | SPAC、超短命公司、刚上市新股 |
-| **进入回测标的池（≥252 天）** | **{len(_eu_over252):,}** | 含活跃 {_eu_over252["is_active"].sum():,} 只 + 退市 {(~_eu_over252["is_active"]).sum():,} 只 |
+| **进入回测标的池（≥252 天）** | **{_universe_stocks:,}** | 回测实际策略池；候选池 {len(_eu_over252):,} 只（含活跃 {_eu_over252["is_active"].sum():,} + 退市 {(~_eu_over252["is_active"]).sum():,}），另有 2 只因回测期数据不足被引擎排除 |
 
 **为什么不需要再加？**
 - 下载源头已覆盖全量美股，没有系统性遗漏
