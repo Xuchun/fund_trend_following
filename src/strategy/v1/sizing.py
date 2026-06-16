@@ -74,7 +74,8 @@ def compute_position_size(
         min_samples=40,
     )
 
-    if max_corr > params.correlation_threshold:
+    corr_triggered = max_corr > params.correlation_threshold
+    if corr_triggered:
         final_shares = preliminary_shares * params.correlation_reduction
     else:
         final_shares = preliminary_shares
@@ -82,11 +83,11 @@ def compute_position_size(
     # ── Step 4: Portfolio heat check ────────────────────────────────────────
     int_shares = int(final_shares)
     if int_shares < 1:
-        return None
+        return "corr" if corr_triggered else None
 
     new_risk = int_shares * risk_per_share
     total_heat = (existing_risk + new_risk) / nav
     if total_heat > params.heat_limit:
-        return None
+        return "heat"
 
     return int_shares
