@@ -458,24 +458,26 @@ def daily_entries_vs_skipped_chart(
 
     fig = go.Figure()
     if has_detail:
-        fig.add_trace(go.Bar(
-            x=monthly["month"], y=monthly["skip_heat"],
-            name="组合热度超限", marker_color="#e74c3c",
-            marker_line_width=0, opacity=0.85,
-            hovertemplate="%{x|%Y-%m}：热度超限 %{y} 次<extra></extra>",
-        ))
-        fig.add_trace(go.Bar(
-            x=monthly["month"], y=monthly["skip_corr"],
-            name="相关性过高", marker_color="#f39c12",
-            marker_line_width=0, opacity=0.85,
-            hovertemplate="%{x|%Y-%m}：相关性过高 %{y} 次<extra></extra>",
-        ))
-        fig.add_trace(go.Bar(
-            x=monthly["month"], y=monthly["skip_cash"],
-            name="资金不足", marker_color="#95a5a6",
-            marker_line_width=0, opacity=0.85,
-            hovertemplate="%{x|%Y-%m}：资金不足 %{y} 次<extra></extra>",
-        ))
+        skip_traces = [
+            ("skip_heat", "组合热度超限", "#e74c3c", "热度超限"),
+            ("skip_corr", "相关性过高",   "#f39c12", "相关性过高"),
+            ("skip_cash", "资金不足",     "#95a5a6", "资金不足"),
+        ]
+        for col, name, clr, hover_label in skip_traces:
+            if monthly[col].sum() > 0:
+                fig.add_trace(go.Bar(
+                    x=monthly["month"], y=monthly[col],
+                    name=name, marker_color=clr,
+                    marker_line_width=0, opacity=0.85,
+                    hovertemplate=f"%{{x|%Y-%m}}：{hover_label} %{{y}} 次<extra></extra>",
+                ))
+        if all(monthly[c].sum() == 0 for c in ["skip_heat", "skip_corr", "skip_cash"]):
+            fig.add_trace(go.Bar(
+                x=monthly["month"], y=monthly["skipped"],
+                name="放弃开仓", marker_color="#d0d0d0",
+                marker_line_width=0, opacity=0.9,
+                hovertemplate="%{x|%Y-%m}：放弃开仓 %{y} 次<extra></extra>",
+            ))
     else:
         fig.add_trace(go.Bar(
             x=monthly["month"], y=monthly["skipped"],
