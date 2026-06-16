@@ -47,7 +47,8 @@ def compute_position_size(
         params:            StrategyParams instance.
 
     Returns:
-        Integer share count (≥ 1), or None if the position should be skipped.
+        Integer share count (≥ 1), or a skip-reason string ("heat" / "corr"),
+        or None for degenerate inputs (stop above entry, etc.).
     """
     risk_per_share = entry_price - stop_loss
 
