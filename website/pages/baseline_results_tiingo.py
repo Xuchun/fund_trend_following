@@ -99,7 +99,7 @@ st.markdown(f"""
 |------|------|
 | **数据来源** | Tiingo EOD（End-of-Day）历史价格 API |
 | **回测期间** | {meta.backtest_start} → {meta.backtest_end} |
-| **标的覆盖** | NYSE / NASDAQ / AMEX 全量历史股票 + 87 只跨资产 ETF，含退市 / 被收购 / 破产标的 |
+| **标的覆盖** | NYSE / NASDAQ / AMEX 全量历史股票 + 88 只跨资产 ETF，含退市 / 被收购 / 破产标的 |
 | **标的池总量** | {meta.universe_total:,} 个（{meta.universe_stocks:,} 只股票 + {meta.universe_etfs:,} 只 ETF） |
 | **无幸存者偏差** | Tiingo 保留完整历史数据（含退市标的），避免仅使用当前成分股带来的偏差 |
 """)
