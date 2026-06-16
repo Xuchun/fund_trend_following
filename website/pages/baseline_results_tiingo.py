@@ -1038,7 +1038,7 @@ import json as _json_br
 _DIAG_PATH_BR = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m" / "diagnostics.json"
 
 st.markdown("---")
-st.subheader("连续亏损序列分析（基于 Tiingo 无偏差回测交易）")
+st.subheader("连续亏损序列分析")
 
 if _DIAG_PATH_BR.exists():
     import plotly.graph_objects as _go_br
