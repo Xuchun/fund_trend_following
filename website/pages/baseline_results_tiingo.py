@@ -20,6 +20,7 @@ from website.components.charts import (
     trades_per_year_chart, holding_days_distribution,
     profit_by_type_chart, daily_position_count_chart,
     monthly_return_heatmap, capital_utilization_chart,
+    daily_entries_vs_skipped_chart,
 )
 
 _TIINGO_RESULTS_ID = "v1_unbiased_60m"
