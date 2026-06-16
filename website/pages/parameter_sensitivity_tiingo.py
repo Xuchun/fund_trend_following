@@ -236,7 +236,7 @@ def _render_param_section(data: dict, section_title: str, background_text: str):
     df = _make_table(data)
     st.dataframe(df, use_container_width=True, hide_index=True)
     st.caption(
-        f"来源：results/v1_unbiased_60m/perturbation/{param_name}.json  "
+        f"来源：results/v1_unbiased_60m_2000/perturbation/{param_name}.json  "
         f"（Tiingo 无偏差宇宙，rf=2%，{data['start']} → {data['end']}）"
     )
 
