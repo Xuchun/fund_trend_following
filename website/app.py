@@ -32,7 +32,7 @@ if not strategies:
 
 strategy_ids = [m.id for m in strategies]
 try:
-    selected_idx = strategy_ids.index("v1_unbiased_60m")
+    selected_idx = strategy_ids.index("v1_unbiased_60m_2000")
 except ValueError:
     selected_idx = 0
 sel_meta = strategies[selected_idx]
