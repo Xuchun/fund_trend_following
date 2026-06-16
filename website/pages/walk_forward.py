@@ -22,8 +22,8 @@ render_page_header("Walk-Forward 验证", meta)
 st.caption(f"{meta.display_name} · 回测期间：{meta.backtest_start} → {meta.backtest_end}")
 st.markdown("---")
 
-_WF_PATH     = Path(__file__).resolve().parents[2] / "results" / "v1" / "walkforward.json"
-_STRESS_PATH = Path(__file__).resolve().parents[2] / "results" / "v1" / "stress.json"
+_WF_PATH     = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m" / "walkforward.json"
+_STRESS_PATH = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m" / "stress.json"
 
 wf_data     = None
 stress_data = None
