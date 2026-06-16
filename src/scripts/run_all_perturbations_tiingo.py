@@ -188,7 +188,7 @@ def main():
     logger.info("Strategy tickers with data: %d / %d", len(strategy_tickers), len(universe))
 
     # ── 3. 预计算基准指标（所有扫描共用） ───────────────────────────────────
-    logger.info("Precomputing baseline indicators (min_adv_m=$50M) …")
+    logger.info("Precomputing baseline indicators (min_adv_m=$60M) …")
     t1 = time.time()
     strategy_panel = {t: panel[t] for t in strategy_tickers}
     baseline_indicators = precompute_indicators(strategy_panel, BASELINE)
