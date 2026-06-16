@@ -31,7 +31,7 @@ def compute_position_size(
     new_ticker: str,
     as_of_date: pd.Timestamp,
     params: "StrategyParams",
-) -> int | None:
+) -> "int | str | None":
     """
     Compute the number of shares to buy for a new position.
 
