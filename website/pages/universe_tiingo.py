@@ -344,7 +344,7 @@ with tab4:
 st.markdown("---")
 
 # ── 六、标的详细列表（≥ 1 年过滤后）──────────────────────────────────────────
-st.subheader(f"六、标的详细列表（推荐池：{len(eu_rec):,} 个）")
+st.subheader("标的详细列表（标的池）")
 
 _display_cols = {
     "ticker":          "Ticker",
