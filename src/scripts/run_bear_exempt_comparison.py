@@ -272,7 +272,7 @@ def main():
     exp_res = run_backtest(
         replace(BASE_PARAMS, bear_exempt_tickers=BEAR_EXEMPT),
         panel, indicators, strategy_tickers,
-        "豁免 TLT+GLD",
+        "豁免 TLT+GLD+UUP",
     )
 
     print_comparison(base_res, exp_res, panel)
