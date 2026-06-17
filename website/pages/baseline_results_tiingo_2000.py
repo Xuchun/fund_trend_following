@@ -591,29 +591,6 @@ with _col2_r:
 
 st.markdown("---")
 
-# ── Monthly return heatmap ────────────────────────────────────────────────────
-st.subheader("月度收益热力图")
-st.plotly_chart(monthly_return_heatmap(res.nav), use_container_width=True)
-
-_nav_mh = res.nav.copy()
-if not isinstance(_nav_mh.index, _pd_ar.DatetimeIndex):
-    _nav_mh.index = _pd_ar.to_datetime(_nav_mh.index)
-_monthly_mh  = _nav_mh.resample("ME").last().pct_change().dropna() * 100
-_pos_m_cnt   = int((_monthly_mh > 0).sum())
-_neg_m_cnt   = int((_monthly_mh <= 0).sum())
-_best_m_val  = float(_monthly_mh.max())
-_worst_m_val = float(_monthly_mh.min())
-_best_m_dt   = _monthly_mh.idxmax()
-_worst_m_dt  = _monthly_mh.idxmin()
-st.markdown(
-    f"**解读：** {_pos_m_cnt + _neg_m_cnt} 个月中 **{_pos_m_cnt}** 个月正收益（{_pos_m_cnt/(_pos_m_cnt+_neg_m_cnt)*100:.0f}%）。"
-    f"最好月份 **{_best_m_dt.strftime('%Y年%m月')}（{_best_m_val:+.1f}%）**，"
-    f"最差月份 **{_worst_m_dt.strftime('%Y年%m月')}（{_worst_m_val:+.1f}%）**。"
-    "热力图可直观识别季节性规律：红色集中区域（如某季度持续亏损）是策略1.0改进的潜在方向。"
-)
-
-st.markdown("---")
-
 # ── R-multiple distribution ───────────────────────────────────────────────────
 st.subheader("交易盈亏分布（R 倍数）")
 st.plotly_chart(r_multiple_distribution(res.trades), use_container_width=True)
