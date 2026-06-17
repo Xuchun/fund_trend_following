@@ -222,5 +222,5 @@ def render_full_metrics_table(metrics: dict, spy_metrics: dict | None = None) ->
          "100%（全仓持有）"),
     ]
 
-    df = pd.DataFrame(rows, columns=["指标", "策略 1.0", "SPY 基准"])
+    df = pd.DataFrame(rows, columns=["指标", "策略1.0", "SPY 基准"])
     st.dataframe(df, use_container_width=True, hide_index=True)
