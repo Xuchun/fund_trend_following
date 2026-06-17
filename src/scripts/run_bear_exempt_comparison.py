@@ -225,6 +225,15 @@ def print_comparison(base_res, exp_res, panel):
 
     # Save JSON
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    # Per-ticker bear-exempt breakdown
+    by_ticker: dict = {}
+    for tkr in sorted(BEAR_EXEMPT):
+        tkr_trades = bear_exempt_trades[bear_exempt_trades["ticker"] == tkr]
+        n = int(len(tkr_trades))
+        pnl = float(tkr_trades["net_pnl"].sum()) if n and "net_pnl" in tkr_trades.columns else 0.0
+        avg = float(tkr_trades["net_pnl"].mean()) if n and "net_pnl" in tkr_trades.columns else 0.0
+        by_ticker[tkr] = {"n_trades": n, "net_pnl": round(pnl, 2), "avg_pnl": round(avg, 2)}
+
     summary = {
         "start":       START,
         "end":         END,
@@ -239,6 +248,7 @@ def print_comparison(base_res, exp_res, panel):
         "n_trades_baseline": int(len(base_res.trade_log)),
         "n_trades_exempt":   int(len(exp_res.trade_log)),
         "n_bear_exempt_trades": int(len(bear_exempt_trades)),
+        "bear_exempt_by_ticker": by_ticker,
     }
     out = OUTPUT_DIR / "comparison_summary.json"
     out.write_text(json.dumps(summary, indent=2, ensure_ascii=False))
