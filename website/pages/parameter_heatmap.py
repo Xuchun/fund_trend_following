@@ -447,15 +447,28 @@ _hm_b = _load_heatmap(_HM_B_FILE)
 _log_path = _HEATMAP_DIR / "run_2d.log"
 
 
+def _get_combos(hm: dict) -> list[dict]:
+    """Extract combination records, handling both JSON formats."""
+    recs = hm.get("records") or hm.get("combinations") or []
+    # Normalise: ensure "sharpe" key exists for records that only have "metric_value"
+    out = []
+    for r in recs:
+        norm = dict(r)
+        if "sharpe" not in norm and "metric_value" in norm:
+            norm["sharpe"] = norm["metric_value"]
+        out.append(norm)
+    return out
+
+
 def _count_done(hm: dict | None, n_total: int) -> str:
     if hm is None:
         return f"0 / {n_total}"
-    n_done = len(hm.get("combinations", []))
+    n_done = len(_get_combos(hm))
     return f"{n_done} / {n_total}"
 
 
 def _render_2d_heatmap(hm: dict, metric: str = "sharpe", title: str = "") -> None:
-    combos = hm["combinations"]
+    combos = _get_combos(hm)
     v1s = sorted({c["param1_value"] for c in combos})
     v2s = sorted({c["param2_value"] for c in combos})
     p1_name = hm["param1"]
@@ -463,10 +476,9 @@ def _render_2d_heatmap(hm: dict, metric: str = "sharpe", title: str = "") -> Non
 
     # Build matrix
     z_sharpe = []
-    z_cagr   = []
     hover    = []
     for v2 in v2s:
-        row_s, row_c, row_h = [], [], []
+        row_s, row_h = [], []
         for v1 in v1s:
             m_hit = next((c for c in combos
                          if c["param1_value"] == v1 and c["param2_value"] == v2), None)
@@ -475,14 +487,16 @@ def _render_2d_heatmap(hm: dict, metric: str = "sharpe", title: str = "") -> Non
                 c_val = m_hit.get("cagr", 0) * 100
                 dd = m_hit.get("max_drawdown", 0) * 100
                 row_s.append(s)
-                row_c.append(c_val)
-                row_h.append(f"Sharpe={s:+.3f}<br>CAGR={c_val:+.2f}%<br>MaxDD={dd:.1f}%")
+                hover_txt = f"Sharpe={s:+.3f}"
+                if c_val != 0:
+                    hover_txt += f"<br>CAGR={c_val:+.2f}%"
+                if dd != 0:
+                    hover_txt += f"<br>MaxDD={dd:.1f}%"
+                row_h.append(hover_txt)
             else:
                 row_s.append(None)
-                row_c.append(None)
                 row_h.append("")
         z_sharpe.append(row_s)
-        z_cagr.append(row_c)
         hover.append(row_h)
 
     all_s = [s for row in z_sharpe for s in row if s is not None]
