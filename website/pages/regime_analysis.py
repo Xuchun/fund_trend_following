@@ -235,10 +235,10 @@ if regime_data and "regimes" in regime_data:
     crisis_strat_dd = _s("金融危机").get("max_drawdown", 0)
     crisis_spy_dd   = _spy("金融危机").get("max_drawdown", 0)
 
-    qe_alpha        = _alpha("量化宽松牛市")
-    qe_cagr         = _s("量化宽松牛市").get("cagr", 0)
-    qe_spy_cagr     = _spy("量化宽松牛市").get("cagr", 0)
-    qe_sharpe       = _s("量化宽松牛市").get("sharpe", 0)
+    qe_alpha        = _alpha("QE驱动慢牛")
+    qe_cagr         = _s("QE驱动慢牛").get("cagr", 0)
+    qe_spy_cagr     = _spy("QE驱动慢牛").get("cagr", 0)
+    qe_sharpe       = _s("QE驱动慢牛").get("sharpe", 0)
 
     covid_cagr      = _s("COVID崩盘+复苏").get("cagr", 0)
     covid_sharpe    = _s("COVID崩盘+复苏").get("sharpe", 0)
