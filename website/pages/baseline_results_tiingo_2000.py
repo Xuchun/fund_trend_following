@@ -257,7 +257,7 @@ for _i, (_lbl, _yrs) in enumerate(_periods_nd):
         _spy_norm = _spy_sl / float(_spy_sl.iloc[0])
         _fig_nd.add_trace(_go_nd.Scatter(
             x=_spy_norm.index, y=_spy_norm.values,
-            name="SPY (benchmark)", line=dict(color="#888888", width=1.2, dash="dash"),
+            name="SPY", line=dict(color="#888888", width=1.2, dash="dash"),
             hovertemplate="%{x|%Y-%m-%d}<br>SPY: %{y:.2f}x<extra></extra>",
             visible=_vis, legendgroup="spy", showlegend=(_i == _default_nd),
         ), row=1, col=1)
