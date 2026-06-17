@@ -65,8 +65,13 @@ st.markdown("""
 
 ```
 t 日收盘后（信号生成阶段）
-  ① 更新所有持仓状态（highest_high、trail_stop、ATR）
-  ② 判断平仓信号（止损 / 移动止盈）
+  ① 更新持仓状态：highest_high ← max(highest_high, adj_high[t])
+                   trail_stop 向上棘轮（只升不降）
+  ② 判断平仓信号（按优先级）：
+     - 止损     — adj_low[t]   < stop_loss  → t+1 开盘执行
+     - 移动止盈 — adj_close[t] < trail_stop → t+1 开盘执行
+     （注：若今日创新高导致 trail_stop 上移，且收盘价低于新 trail_stop，
+      则同日棘轮并触发出场，t+1 开盘平仓）
   ③ 生成新的开仓信号（突破扫描）
 
 t+1 日开盘（执行阶段）
