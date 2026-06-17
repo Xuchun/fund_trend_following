@@ -77,6 +77,7 @@ BASE_PARAMS = StrategyParams(
     slippage_bps            = 10.0,
     cash_proxy              = "SHY",
     regime_filter_enabled   = True,
+    bear_exempt_tickers     = frozenset({"TLT", "GLD", "UUP"}),
 )
 
 # Auxiliary tickers: not tradable strategy assets
