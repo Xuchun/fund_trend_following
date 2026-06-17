@@ -28,7 +28,6 @@ if _env.exists():
             k, _, v = line.partition("=")
             os.environ.setdefault(k.strip(), v.strip())
 
-import numpy as np
 import pandas as pd
 
 from data.pipeline import compute_adj_prices
@@ -39,7 +38,6 @@ from strategy.params import StrategyParams
 from strategy.v1.strategy_v1 import StrategyV1
 
 logging.basicConfig(level=logging.WARNING, format="%(asctime)s [%(levelname)s] %(message)s")
-logger = logging.getLogger(__name__)
 
 TIINGO_CACHE      = _root / "data" / "cache" / "tiingo"
 EU_CSV            = _root / "data" / "tiingo_eligible_universe.csv"
@@ -78,8 +76,6 @@ BASE_PARAMS = StrategyParams(
 AUXILIARY = {BASE_PARAMS.cash_proxy, "SPY", BASE_PARAMS.regime_ticker}
 
 
-# ── Helpers ────────────────────────────────────────────────────────────────────
-
 def load_panel(tickers, start, end):
     start_ts, end_ts = pd.Timestamp(start), pd.Timestamp(end)
     panel = {}
@@ -90,11 +86,12 @@ def load_panel(tickers, start, end):
         try:
             df = pd.read_parquet(path)
             df.index = pd.DatetimeIndex(df.index)
-            df = df.sort_index()[(df.index >= start_ts) & (df.index.date <= pd.Timestamp(end).date())]
+            df = df.sort_index()
+            df = df[(df.index >= start_ts) & (df.index <= end_ts)]
             if not df.empty:
                 panel[ticker] = compute_adj_prices(df)
         except Exception as e:
-            logger.warning("Skip %s: %s", ticker, e)
+            pass
     return panel
 
 
@@ -106,9 +103,7 @@ def load_universe():
 
 
 def run_backtest(params, panel, indicators, strategy_tickers, label):
-    print(f"\n{'='*60}")
-    print(f"  运行：{label}")
-    print(f"{'='*60}")
+    print(f"\n  运行：{label} ...")
     t0 = time.time()
     strategy = StrategyV1(params)
     engine   = BacktestEngine(
@@ -119,135 +114,134 @@ def run_backtest(params, panel, indicators, strategy_tickers, label):
         initial_capital=10_000_000,
     )
     results = engine.run(START, END, strategy_tickers)
-    elapsed = time.time() - t0
     m = results.compute_metrics()
-    print(f"  完成：{elapsed:.0f}s  |  交易数={len(results.trade_log):,}  |  CAGR={m['cagr']*100:.2f}%")
+    print(f"  完成：{time.time()-t0:.0f}s  |  交易数={len(results.trade_log):,}  |  CAGR={m['cagr']*100:.2f}%")
     return results
 
 
-def capital_util_series(results):
-    """Compute daily capital utilisation (cost basis / NAV)."""
-    util = {}
-    nav_dict = dict(results.daily_nav)
-    cost_dict = {}
-    for date, positions in results.daily_positions.items():
-        cost = sum(p.get("entry_price", 0) * p.get("shares", 0) for p in positions.values()
-                   if p.get("ticker") not in (AUXILIARY | {"SHY"}))
-        nav  = nav_dict.get(date, 1)
-        cost_dict[date] = cost / nav if nav > 0 else 0
-    return pd.Series(cost_dict).sort_index()
+def capital_util_series(trade_log, nav):
+    """Compute daily capital utilisation (cost basis / NAV) from trade_log."""
+    df = trade_log.copy()
+    if df.empty:
+        return pd.Series(0.0, index=nav.index)
+    df["entry_date"] = pd.to_datetime(df["entry_date"])
+    df["exit_date"]  = pd.to_datetime(df["exit_date"])
+    # Exclude SHY (cash proxy)
+    df = df[df["ticker"] != BASE_PARAMS.cash_proxy]
+    df["entry_value"] = df["shares"] * df["entry_price"]
+    dates = pd.to_datetime(nav.index)
+    entry_vals = df.groupby("entry_date")["entry_value"].sum().reindex(dates, fill_value=0.0)
+    exit_vals  = df.groupby("exit_date")["entry_value"].sum().reindex(dates, fill_value=0.0)
+    daily_invested = (entry_vals - exit_vals).cumsum().clip(lower=0.0)
+    util = (daily_invested / nav.values).clip(lower=0.0, upper=1.0)
+    util.index = dates
+    return util
 
 
-def compute_bear_dates(panel):
-    """Return set of dates where SPY < 200-day SMA (bear market)."""
+def bear_market_dates(panel):
+    """Return pd.DatetimeIndex of bear market days (SPY < 200-day SMA)."""
     spy_df = panel.get("SPY")
     if spy_df is None:
-        return set()
+        return pd.DatetimeIndex([])
     adj = spy_df["adj_close"] if "adj_close" in spy_df.columns else spy_df["close"]
     sma = adj.rolling(200, min_periods=200).mean()
-    bear = adj[sma.notna() & (adj <= sma)].index
-    return set(bear)
-
-
-def bear_period_trades(results, bear_dates):
-    """Return trades entered during bear market periods."""
-    trades = results.trade_log if hasattr(results, 'trade_log') else results.trades
-    if trades is None or len(trades) == 0:
-        return pd.DataFrame()
-    entry_col = "entry_date" if "entry_date" in trades.columns else trades.columns[1]
-    mask = pd.DatetimeIndex(trades[entry_col]).normalize().isin(
-        pd.DatetimeIndex(list(bear_dates)).normalize()
-    )
-    return trades[mask]
+    bear = adj.index[(sma.notna()) & (adj <= sma)]
+    return pd.DatetimeIndex(bear)
 
 
 def print_comparison(base_res, exp_res, panel):
-    bm  = base_res.compute_metrics()
-    em  = exp_res.compute_metrics()
+    bm = base_res.compute_metrics()
+    em = exp_res.compute_metrics()
 
-    bear_dates = compute_bear_dates(panel)
-    bear_pct   = len(bear_dates) / len(panel.get("SPY", pd.DataFrame())) * 100
+    bear_dates = bear_market_dates(panel)
+    total_days = len(base_res.daily_nav)
+    bear_pct   = len(bear_dates) / total_days * 100 if total_days else 0
 
-    # Capital utilisation
-    base_util = capital_util_series(base_res)
-    exp_util  = capital_util_series(exp_res)
+    # Capital utilisation series
+    base_util = capital_util_series(base_res.trade_log, base_res.daily_nav)
+    exp_util  = capital_util_series(exp_res.trade_log,  exp_res.daily_nav)
 
-    # Bear-period util
-    bear_idx_base = base_util.index[base_util.index.isin(bear_dates)]
-    bear_idx_exp  = exp_util.index[exp_util.index.isin(bear_dates)]
-    base_bear_util = base_util.loc[bear_idx_base].mean() if len(bear_idx_base) else 0
-    exp_bear_util  = exp_util.loc[bear_idx_exp].mean()   if len(bear_idx_exp)  else 0
+    # Bear-period utilisation
+    base_bear = base_util[base_util.index.isin(bear_dates)].mean()
+    exp_bear  = exp_util[exp_util.index.isin(bear_dates)].mean()
 
-    # Bear-period trades for exempt tickers
-    base_trades = base_res.trades if hasattr(base_res, 'trades') else pd.DataFrame(base_res.trade_log)
-    exp_trades  = exp_res.trades  if hasattr(exp_res,  'trades') else pd.DataFrame(exp_res.trade_log)
+    # Exempt-ticker trades during bear markets
+    exp_tl = exp_res.trade_log.copy()
+    exp_tl["entry_date"] = pd.to_datetime(exp_tl["entry_date"])
+    bear_exempt_trades = exp_tl[
+        exp_tl["ticker"].isin(BEAR_EXEMPT) &
+        exp_tl["entry_date"].isin(bear_dates)
+    ]
 
-    exempt_bear_trades = bear_period_trades(exp_res, bear_dates)
-    exempt_only = exempt_bear_trades[exempt_bear_trades["ticker"].isin(BEAR_EXEMPT)] if len(exempt_bear_trades) else pd.DataFrame()
-
-    W = 20
-    fmt = lambda v, pct=True: f"{v*100:.2f}%" if pct else f"{v:.3f}"
-
-    print(f"\n{'='*65}")
+    print(f"\n{'='*68}")
     print(f"  对比结果：基准策略 vs 熊市豁免 TLT+GLD")
-    print(f"{'='*65}")
+    print(f"{'='*68}")
     print(f"  回测期间：{START} → {END}")
-    print(f"  熊市天数：{len(bear_dates):,} 天（占全程 {bear_pct:.1f}%）")
-    print(f"\n  {'指标':<25} {'基准（Baseline）':>18} {'豁免TLT+GLD':>18} {'变化':>10}")
-    print(f"  {'-'*73}")
+    print(f"  熊市天数：{len(bear_dates):,} 天（占全程 {bear_pct:.1f}%）\n")
 
     rows = [
-        ("CAGR",           bm['cagr'],         em['cagr'],         True),
-        ("Sharpe 比率",    bm['sharpe'],        em['sharpe'],       False),
-        ("最大回撤",        bm['max_drawdown'],  em['max_drawdown'], True),
-        ("Sortino 比率",   bm.get('sortino',0), em.get('sortino',0),False),
-        ("Calmar 比率",    bm.get('calmar',0),  em.get('calmar',0), False),
-        ("Profit Factor",  bm.get('profit_factor',0), em.get('profit_factor',0), False),
+        ("CAGR",        bm['cagr'],              em['cagr'],              True),
+        ("Sharpe",      bm['sharpe'],             em['sharpe'],            False),
+        ("最大回撤",     bm['max_drawdown'],       em['max_drawdown'],      True),
+        ("Sortino",     bm.get('sortino', 0),     em.get('sortino', 0),    False),
+        ("Calmar",      bm.get('calmar', 0),      em.get('calmar', 0),     False),
+        ("Profit Factor", bm.get('profit_factor', 0), em.get('profit_factor', 0), False),
     ]
+
+    print(f"  {'指标':<20} {'基准':>16} {'豁免TLT+GLD':>16} {'变化':>12}")
+    print(f"  {'-'*66}")
     for name, bv, ev, is_pct in rows:
         diff = ev - bv
         sign = "+" if diff >= 0 else ""
-        dstr = f"{sign}{diff*100:.2f}pp" if is_pct else f"{sign}{diff:.3f}"
-        bstr = fmt(bv, is_pct)
-        estr = fmt(ev, is_pct)
-        print(f"  {name:<25} {bstr:>18} {estr:>18} {dstr:>10}")
+        if is_pct:
+            dstr = f"{sign}{diff*100:.2f}pp"
+            bstr = f"{bv*100:.2f}%"
+            estr = f"{ev*100:.2f}%"
+        else:
+            dstr = f"{sign}{diff:.3f}"
+            bstr = f"{bv:.3f}"
+            estr = f"{ev:.3f}"
+        print(f"  {name:<20} {bstr:>16} {estr:>16} {dstr:>12}")
 
-    print(f"\n  {'资金使用率（全程均值）':<25} {base_util.mean()*100:.1f}%{'':<13} {exp_util.mean()*100:.1f}%{'':<13}")
-    print(f"  {'资金使用率（仅熊市）':<25} {base_bear_util*100:.1f}%{'':<13} {exp_bear_util*100:.1f}%{'':<13}")
-    print(f"\n  {'总交易笔数':<25} {len(base_trades):>18,} {len(exp_trades):>18,}")
-    if len(exempt_only):
-        tlt_n = (exempt_only["ticker"] == "TLT").sum()
-        gld_n = (exempt_only["ticker"] == "GLD").sum()
-        print(f"  {'  熊市期间TLT交易':<25} {0:>18} {tlt_n:>18}")
-        print(f"  {'  熊市期间GLD交易':<25} {0:>18} {gld_n:>18}")
-        # PnL of exempt trades
-        if "net_pnl" in exempt_only.columns:
-            total_pnl = exempt_only["net_pnl"].sum()
-            win_rate  = (exempt_only["net_pnl"] > 0).mean()
-            print(f"\n  TLT+GLD 熊市交易净盈亏：${total_pnl:,.0f}  胜率：{win_rate*100:.0f}%")
+    print(f"\n  {'资金使用率（全程均值）':<20} {base_util.mean()*100:>15.1f}% {exp_util.mean()*100:>15.1f}%")
+    print(f"  {'资金使用率（仅熊市）':<20} {base_bear*100:>15.1f}% {exp_bear*100:>15.1f}%")
 
-    print(f"\n{'='*65}")
+    print(f"\n  {'总交易笔数':<20} {len(base_res.trade_log):>16,} {len(exp_res.trade_log):>16,}")
 
-    # Save JSON summary
+    if len(bear_exempt_trades):
+        for tkr in sorted(BEAR_EXEMPT):
+            n = (bear_exempt_trades["ticker"] == tkr).sum()
+            print(f"  {'  熊市 ' + tkr + ' 交易':<20} {'0':>16} {n:>16}")
+        if "net_pnl" in bear_exempt_trades.columns:
+            pnl  = bear_exempt_trades["net_pnl"].sum()
+            wins = (bear_exempt_trades["net_pnl"] > 0).mean()
+            print(f"\n  TLT+GLD 熊市净盈亏：${pnl:,.0f}  |  胜率：{wins*100:.0f}%")
+            if len(bear_exempt_trades) > 1:
+                by_tkr = bear_exempt_trades.groupby("ticker")["net_pnl"].agg(["sum","count","mean"])
+                for tkr, row in by_tkr.iterrows():
+                    print(f"    {tkr}:  总盈亏=${row['sum']:,.0f}  笔数={int(row['count'])}  均值=${row['mean']:,.0f}")
+
+    print(f"\n{'='*68}")
+
+    # Save JSON
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     summary = {
-        "baseline": {k: round(float(v), 6) for k, v in bm.items()},
+        "baseline":    {k: round(float(v), 6) for k, v in bm.items()},
         "bear_exempt": {k: round(float(v), 6) for k, v in em.items()},
-        "bear_exempt_tickers": list(BEAR_EXEMPT),
-        "bear_market_pct": round(bear_pct, 2),
+        "bear_exempt_tickers": sorted(BEAR_EXEMPT),
+        "bear_market_pct":     round(bear_pct, 2),
         "capital_util_mean_baseline": round(float(base_util.mean()), 4),
-        "capital_util_mean_exempt": round(float(exp_util.mean()), 4),
-        "capital_util_bear_baseline": round(float(base_bear_util), 4),
-        "capital_util_bear_exempt": round(float(exp_bear_util), 4),
-        "n_trades_baseline": len(base_trades),
-        "n_trades_exempt": len(exp_trades),
+        "capital_util_mean_exempt":   round(float(exp_util.mean()), 4),
+        "capital_util_bear_baseline": round(float(base_bear), 4),
+        "capital_util_bear_exempt":   round(float(exp_bear), 4),
+        "n_trades_baseline": int(len(base_res.trade_log)),
+        "n_trades_exempt":   int(len(exp_res.trade_log)),
+        "n_bear_exempt_trades": int(len(bear_exempt_trades)),
     }
     out = OUTPUT_DIR / "comparison_summary.json"
     out.write_text(json.dumps(summary, indent=2, ensure_ascii=False))
-    print(f"\n  结果已保存至：{out}")
+    print(f"  结果已保存至：{out}")
 
-
-# ── Main ────────────────────────────────────────────────────────────────────────
 
 def main():
     print("加载标的池...")
@@ -264,20 +258,23 @@ def main():
 
     print("预计算指标...")
     t0 = time.time()
-    indicators = precompute_indicators(
-        {t: panel[t] for t in strategy_tickers}, BASE_PARAMS
-    )
+    indicators = precompute_indicators({t: panel[t] for t in strategy_tickers}, BASE_PARAMS)
     print(f"  完成：{time.time()-t0:.1f}s")
 
-    # ── 基准回测 ──────────────────────────────────────────────────────────────
-    params_base = replace(BASE_PARAMS, bear_exempt_tickers=frozenset())
-    base_res = run_backtest(params_base, panel, indicators, strategy_tickers, "基准策略（无豁免）")
+    print(f"\n开始两组回测...(各约需 2-3 分钟)")
 
-    # ── 豁免回测 ──────────────────────────────────────────────────────────────
-    params_exempt = replace(BASE_PARAMS, bear_exempt_tickers=BEAR_EXEMPT)
-    exp_res = run_backtest(params_exempt, panel, indicators, strategy_tickers, "豁免 TLT+GLD")
+    base_res = run_backtest(
+        replace(BASE_PARAMS, bear_exempt_tickers=frozenset()),
+        panel, indicators, strategy_tickers,
+        "基准策略（无豁免）",
+    )
 
-    # ── 打印对比 ──────────────────────────────────────────────────────────────
+    exp_res = run_backtest(
+        replace(BASE_PARAMS, bear_exempt_tickers=BEAR_EXEMPT),
+        panel, indicators, strategy_tickers,
+        "豁免 TLT+GLD",
+    )
+
     print_comparison(base_res, exp_res, panel)
 
 
