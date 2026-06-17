@@ -553,16 +553,15 @@ else:
 
 st.markdown("---")
 
-# ── Annual returns + Rolling Sharpe side by side ──────────────────────────────
+# ── Annual returns + Trades per year side by side ────────────────────────────
 col1, col2 = st.columns(2)
 with col1:
     st.subheader("逐年回报对比")
     st.plotly_chart(annual_returns_chart(res.nav, res.spy_nav, meta.color, meta.display_name),
                     use_container_width=True)
 with col2:
-    st.subheader("滚动 Sharpe 比率")
-    st.plotly_chart(rolling_sharpe_chart(res.returns, res.spy_nav, meta.color, meta.display_name),
-                    use_container_width=True)
+    st.subheader("逐年交易笔数")
+    st.plotly_chart(trades_per_year_chart(res.trades), use_container_width=True)
 
 import pandas as _pd_ar
 _nav_ar = res.nav.copy()
@@ -573,6 +572,7 @@ _cur_yr_ar = _nav_ar.index[-1].year
 _ann_ar = _ann_ar[_ann_ar.index.year < _cur_yr_ar]
 _pos_yr_ar = int((_ann_ar > 0).sum())
 _n_yr_ar   = len(_ann_ar)
+_trades_per_yr = m.get("trades_per_year", 0)
 
 _col1_r, _col2_r = st.columns(2)
 with _col1_r:
@@ -582,12 +582,11 @@ with _col1_r:
         "但在下行年份（如 2008、2022）损失明显小于 SPY，体现了**截断亏损**的核心优势。"
     )
 with _col2_r:
-    _sharpe_tmp     = m.get("sharpe", 0)
-    _spy_sharpe_tmp = m.get("spy_sharpe", 0)
     st.markdown(
-        f"**解读：** 滚动 Sharpe 在 2008 年危机期间跌至深度负值，2010 年后趋于稳定并持续正值。"
-        f"全周期 Sharpe **{_sharpe_tmp:+.3f}** vs SPY **{_spy_sharpe_tmp:+.3f}**，"
-        "说明在单位风险维度上策略1.0与 SPY 大体相当，而非仅靠减少持仓频率规避风险。"
+        f"**解读：** 平均每年约 **{_trades_per_yr:.0f}** 笔交易。"
+        "熊市年份（市场环境过滤器关闭新开仓）交易笔数明显减少，"
+        "牛市年份信号密集、笔数较多。"
+        "年度笔数的波动反映的是市场状态变化，而非策略1.0本身不稳定。"
     )
 
 st.markdown("---")
