@@ -217,17 +217,59 @@ with _col_b:
 
 st.markdown("---")
 
-# ── NAV chart ─────────────────────────────────────────────────────────────────
+# ── Combined NAV + Drawdown chart (shared x-axis) ────────────────────────────
+from plotly.subplots import make_subplots as _make_subplots_nd
+import plotly.graph_objects as _go_nd
+
 st.subheader("净值曲线 vs SPY")
 _show_spy = st.checkbox("显示 SPY 基准曲线", value=True, key="nav_show_spy")
-st.plotly_chart(
-    nav_vs_spy(res.nav, res.spy_nav if _show_spy else None, meta.color, meta.display_name),
-    use_container_width=True,
-)
 
-# ── Drawdown chart ────────────────────────────────────────────────────────────
-st.subheader("回撤曲线")
-st.plotly_chart(drawdown_chart(res.nav, meta.color), use_container_width=True)
+_nav_nd = res.nav / float(res.nav.iloc[0])
+_dd_nd  = (res.nav - res.nav.cummax()) / res.nav.cummax() * 100
+
+_fig_nd = _make_subplots_nd(
+    rows=2, cols=1, shared_xaxes=True,
+    row_heights=[0.68, 0.32], vertical_spacing=0.06,
+    subplot_titles=["归一化净值曲线 vs SPY（全程起点 = 1.0）", "回撤曲线（从高点的百分比）"],
+)
+_fig_nd.add_trace(_go_nd.Scatter(
+    x=_nav_nd.index, y=_nav_nd.values,
+    name=meta.display_name, line=dict(color=meta.color, width=2),
+    hovertemplate="%{x|%Y-%m-%d}<br>NAV: %{y:.2f}x<extra></extra>",
+), row=1, col=1)
+if _show_spy and res.spy_nav is not None:
+    _spy_nd = res.spy_nav / float(res.spy_nav.iloc[0])
+    _fig_nd.add_trace(_go_nd.Scatter(
+        x=_spy_nd.index, y=_spy_nd.values,
+        name="SPY (benchmark)", line=dict(color="#888888", width=1.2, dash="dash"),
+        hovertemplate="%{x|%Y-%m-%d}<br>SPY: %{y:.2f}x<extra></extra>",
+    ), row=1, col=1)
+_fig_nd.add_trace(_go_nd.Scatter(
+    x=_dd_nd.index, y=_dd_nd.values,
+    fill="tozeroy", fillcolor="rgba(214,39,40,0.25)",
+    line=dict(color="#d62728", width=1), name="回撤",
+    hovertemplate="%{x|%Y-%m-%d}<br>回撤: %{y:.1f}%<extra></extra>",
+    showlegend=False,
+), row=2, col=1)
+_fig_nd.update_layout(
+    hovermode="x unified",
+    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+    margin=dict(l=60, r=20, t=80, b=40),
+    height=660,
+    xaxis=dict(rangeselector=dict(
+        buttons=[
+            dict(count=1,  label="1年",  step="year", stepmode="backward"),
+            dict(count=3,  label="3年",  step="year", stepmode="backward"),
+            dict(count=5,  label="5年",  step="year", stepmode="backward"),
+            dict(count=10, label="10年", step="year", stepmode="backward"),
+            dict(step="all", label="全程"),
+        ],
+        bgcolor="#f0f2f6", bordercolor="#cccccc", font=dict(size=12),
+    )),
+)
+_fig_nd.update_yaxes(ticksuffix="x", title_text="净值（倍）", row=1, col=1)
+_fig_nd.update_yaxes(ticksuffix="%", title_text="回撤 %", row=2, col=1)
+st.plotly_chart(_fig_nd, use_container_width=True)
 
 # ── Drawdown recovery analysis table ─────────────────────────────────────────
 import numpy as _np_ep
