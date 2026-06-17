@@ -92,7 +92,7 @@ if regime_enabled:
         _bear_days_total = _rs["bear_days_total"]
         _bear_pct        = _rs["bear_pct"]
         _ep_strs = []
-        for ep in _rs.get("top_episodes", [])[:2]:
+        for ep in _rs.get("top_episodes", [])[:3]:
             _lbl = str(ep["start_year"]) if ep["start_year"] == ep["end_year"] else f"{ep['start_year']}–{ep['end_year']}"
             _ep_strs.append(f"{_lbl}（封仓 {ep['days']} 天）")
         _ep_text = "，".join(_ep_strs) if _ep_strs else "无重大熊市封仓期"
