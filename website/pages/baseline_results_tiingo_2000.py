@@ -541,6 +541,8 @@ else:
 
 st.markdown("---")
 
+st.subheader("逐年回报对比 & 逐年交易笔数")
+
 # ── Annual returns + Trades per year (shared x-axis) ─────────────────────────
 from plotly.subplots import make_subplots as _msp_ay
 import plotly.graph_objects as _go_ay
