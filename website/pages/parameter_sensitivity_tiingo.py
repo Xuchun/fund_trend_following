@@ -25,6 +25,7 @@ m    = res.metrics
 
 
 render_page_header("参数敏感性分析", meta)
+st.markdown(f"**回测期间：{meta.backtest_start} → {meta.backtest_end}**")
 st.markdown("---")
 
 # ── 数据来源 ───────────────────────────────────────────────────────────────────
