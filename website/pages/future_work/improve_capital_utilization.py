@@ -169,37 +169,6 @@ st.markdown("""
 
 st.markdown("---")
 
-# ── 实施方案 ──────────────────────────────────────────────────────────────────
-st.subheader("六、实施方案")
-
-st.markdown("""
-**代码层面已完成：**
-
-已在 `StrategyParams` 中增加 `bear_exempt_tickers: frozenset` 字段，
-并修改引擎（`engine.py`）在熊市期间仅对豁免标的生成信号。
-
-```python
-# StrategyParams 新字段（已实现）
-bear_exempt_tickers: frozenset = field(default_factory=frozenset)
-
-# 引擎逻辑（已实现）
-if in_bull:
-    pending_entries = strategy.generate_entry_signals(date, universe, ...)
-elif bear_exempt:
-    exempt_universe = [t for t in universe if t in bear_exempt]
-    pending_entries = strategy.generate_entry_signals(date, exempt_universe, ...)
-else:
-    pending_entries = []
-```
-
-启用方式：
-```python
-params = replace(BASE_PARAMS, bear_exempt_tickers=frozenset({"TLT", "GLD", "UUP"}))
-```
-""")
-
-st.markdown("---")
-
 # ── 对比回测结果 ──────────────────────────────────────────────────────────────
 st.subheader("七、对比回测结果")
 
