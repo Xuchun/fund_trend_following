@@ -181,12 +181,15 @@ def get_universe_at_date(
         if row["close"] < min_price:
             continue
 
-        # ADV_60: rolling dollar volume using prior-day data to avoid look-ahead
+        # ADV_60: rolling dollar volume using prior-day data to avoid look-ahead.
+        # Compute (close × volume) first, then shift(1) so that at time t the
+        # value reflects mean(dv[t-1], dv[t-2], …, dv[t-60]) — same convention
+        # as adv.py and 08_eligible_universe.py.
         hist = df[df.index <= target].tail(lookback_days + 1)
         if len(hist) < lookback_days:
             continue
 
-        dollar_vol = hist["close"].shift(1) * hist["volume"]
+        dollar_vol = (hist["close"] * hist["volume"]).shift(1)
         adv_60 = dollar_vol.iloc[1:].mean()  # skip the first NaN from shift
 
         if adv_60 < min_adv_m * 1_000_000:
