@@ -19,7 +19,7 @@ meta = res.meta
 m    = res.metrics
 
 render_page_header("局限性声明", meta)
-st.caption(f"{meta.display_name} — 诚实评估回测的固有偏差与策略边界")
+st.markdown(f"**回测期间：{meta.backtest_start} → {meta.backtest_end}**")
 st.markdown("---")
 
 # ── Load supporting data ──────────────────────────────────────────────────────
