@@ -373,15 +373,12 @@ else:
     _recovered_ddd   = _deep_eps_ddd[_deep_eps_ddd["修复"] != "进行中"]
     _avg_rec_ddd     = float(_recovered_ddd["修复耗时（交易日）"].mean()) if len(_recovered_ddd) > 0 else 0.0
     st.markdown(
-        f"**解读：** 每根柱子代表一次回撤超过 10% 的深度情节，颜色越深表示回撤幅度越大，"
+        f"**解读：** 每根柱子代表一次回撤超过 10% 的深度回撤，颜色越深表示回撤幅度越大，"
         f"柱子越高表示水下时间越长。"
-        f"共 **{len(_deep_eps_ddd)}** 次，平均总水下时间 **{_avg_total_ddd:.0f} 交易日**"
-        f"（约 {_avg_total_ddd/252:.1f} 年）；"
-        f"已修复情节平均触底后 **{_avg_rec_ddd:.0f} 交易日**恢复至前高。"
-        f"最长情节起于 **{_longest_ddd['高点']}**，"
+        f"共 **{len(_deep_eps_ddd)}** 次，"
+        f"最长回撤起于 **{_longest_ddd['高点']}**，"
         f"历时 **{int(_longest_ddd['总水下时间（交易日）'])} 交易日**"
-        f"（约 {_longest_ddd['总水下时间（交易日）']/252:.1f} 年），"
-        f"最大回撤 **{abs(_longest_ddd['最大回撤'])*100:.1f}%**。"
+        f"（约 {_longest_ddd['总水下时间（交易日）']/252:.1f} 年）。"
     )
 
 st.markdown("---")
