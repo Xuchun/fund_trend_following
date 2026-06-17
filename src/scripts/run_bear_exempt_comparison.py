@@ -45,7 +45,7 @@ OUTPUT_DIR        = _root / "results" / "bear_exempt_comparison"
 START             = "2000-01-03"
 END               = "2026-06-15"
 MIN_ELIGIBLE_DAYS = 252
-BEAR_EXEMPT       = frozenset({"TLT", "GLD"})
+BEAR_EXEMPT       = frozenset({"TLT", "GLD", "UUP"})
 
 BASE_PARAMS = StrategyParams(
     min_price               = 10.0,
