@@ -439,8 +439,8 @@ st.markdown("---")
 
 st.subheader("🗺️ 三、2D Heatmap（双参数联合网格扫描）")
 
-_HM_A_FILE = "breakout_window_x_stop_loss_multiplier.json"
-_HM_B_FILE = "breakout_window_x_trail_multiplier_r1.json"
+_HM_A_FILE = "breakout_windowxstop_loss_multiplier_sharpe.json"
+_HM_B_FILE = "breakout_windowxtrail_multiplier_r1_sharpe.json"
 
 _hm_a = _load_heatmap(_HM_A_FILE)
 _hm_b = _load_heatmap(_HM_B_FILE)
