@@ -316,7 +316,7 @@ CAGR **{covid_cagr*100:+.2f}%**，Sharpe **{covid_sharpe:+.3f}**，最大回撤�
 
     # Verdict
     bear_markets = [n for n in ["金融危机", "加息熊市"] if _alpha(n) > 0]
-    bull_markets_neg = [n for n in ["量化宽松牛市", "AI驱动牛市"] if _alpha(n) < -0.05]
+    bull_markets_neg = [n for n in ["QE驱动慢牛", "AI驱动牛市"] if _alpha(n) < -0.05]
 
     verdict = (
         f"✅ 综合评价：策略1.0在 5 个市场环境中展示出一致的风险控制能力——"
