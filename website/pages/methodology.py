@@ -130,7 +130,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown("""
+st.markdown(f"""
 <div class="info-box">
 <strong>现金代理选择说明：为何用 SHY，而不用 SGOV？</strong><br>
 <strong>SGOV</strong>（iShares 0–3 个月国债 ETF）是更接近"无风险利率"的工具，
@@ -138,7 +138,7 @@ st.markdown("""
 则 2000–2021 年间（共 22 年）的闲置现金收益将被记为 0%，
 严重低估策略1.0在利率正常化时期的真实回报。<br><br>
 <strong>SHY</strong>（iShares 1–3 年期国债 ETF）自 <strong>2002-07-26 上市</strong>，
-覆盖回测绝大部分时段（2002-07-26 → 2026-06-15）。
+覆盖回测绝大部分时段（2002-07-26 → {meta.backtest_end}）。
 2000-01-03 至 2002-07-25 的缺口通过下方说明的模拟方法填补。
 </div>
 """, unsafe_allow_html=True)
