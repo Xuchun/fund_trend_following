@@ -541,41 +541,107 @@ else:
 
 st.markdown("---")
 
-# ── Annual returns + Trades per year side by side ────────────────────────────
-col1, col2 = st.columns(2)
-with col1:
-    st.subheader("逐年回报对比")
-    st.plotly_chart(annual_returns_chart(res.nav, res.spy_nav, meta.color, meta.display_name),
-                    use_container_width=True)
-with col2:
-    st.subheader("逐年交易笔数")
-    st.plotly_chart(trades_per_year_chart(res.trades), use_container_width=True)
-
+# ── Annual returns + Trades per year (shared x-axis) ─────────────────────────
+from plotly.subplots import make_subplots as _msp_ay
+import plotly.graph_objects as _go_ay
 import pandas as _pd_ar
+
 _nav_ar = res.nav.copy()
 if not isinstance(_nav_ar.index, _pd_ar.DatetimeIndex):
     _nav_ar.index = _pd_ar.to_datetime(_nav_ar.index)
-_ann_ar = _nav_ar.resample("YE").last().pct_change().dropna()
-_cur_yr_ar = _nav_ar.index[-1].year
-_ann_ar = _ann_ar[_ann_ar.index.year < _cur_yr_ar]
-_pos_yr_ar = int((_ann_ar > 0).sum())
-_n_yr_ar   = len(_ann_ar)
+_strat_ann = _nav_ar.resample("YE").last().pct_change().dropna()
+_strat_ann.index = _strat_ann.index.year
+_cur_yr_ar  = _nav_ar.index[-1].year
+_strat_ann  = _strat_ann[_strat_ann.index < _cur_yr_ar]
+_pos_yr_ar  = int((_strat_ann > 0).sum())
+_n_yr_ar    = len(_strat_ann)
 _trades_per_yr = m.get("trades_per_year", 0)
 
-_col1_r, _col2_r = st.columns(2)
-with _col1_r:
-    st.markdown(
-        f"**解读：** {_n_yr_ar} 个完整年度中 **{_pos_yr_ar}** 年正收益（{_pos_yr_ar/_n_yr_ar*100:.0f}%）。"
-        "趋势策略1.0在强牛市年份（SPY 单边大涨）因持仓不满往往落后，"
-        "但在下行年份（如 2008、2022）损失明显小于 SPY，体现了**截断亏损**的核心优势。"
-    )
-with _col2_r:
-    st.markdown(
-        f"**解读：** 平均每年约 **{_trades_per_yr:.0f}** 笔交易。"
-        "熊市年份（市场环境过滤器关闭新开仓）交易笔数明显减少，"
-        "牛市年份信号密集、笔数较多。"
-        "年度笔数的波动反映的是市场状态变化，而非策略1.0本身不稳定。"
-    )
+_has_spy_ay = res.spy_nav is not None
+if _has_spy_ay:
+    _spy_ann    = res.spy_nav.resample("YE").last().pct_change().dropna()
+    _spy_ann.index = _spy_ann.index.year
+    _common_yrs = _strat_ann.index.intersection(_spy_ann.index)
+
+_tr_df_ay = res.trades.copy()
+_tr_df_ay["year"] = _tr_df_ay["exit_date"].dt.year
+
+_fig_ay = _msp_ay(
+    rows=2, cols=1, shared_xaxes=True,
+    row_heights=[0.55, 0.45], vertical_spacing=0.06,
+    subplot_titles=["逐年回报对比", "逐年交易笔数"],
+)
+
+# Row 1 — annual returns
+if _has_spy_ay:
+    _fig_ay.add_trace(_go_ay.Bar(
+        x=list(_common_yrs), y=(_spy_ann.loc[_common_yrs] * 100).tolist(),
+        name="SPY", marker_color="#888888", opacity=0.7, offsetgroup="spy",
+        hovertemplate="%{x}年<br>SPY: %{y:+.1f}%<extra></extra>",
+    ), row=1, col=1)
+
+_fig_ay.add_trace(_go_ay.Bar(
+    x=list(_strat_ann.index), y=(_strat_ann.values * 100).tolist(),
+    name="策略1.0",
+    marker_color=["#2ca02c" if v >= 0 else "#d62728" for v in _strat_ann.values],
+    opacity=0.85, offsetgroup="strat",
+    text=[f"{v*100:+.1f}%" for v in _strat_ann.values],
+    textposition="outside", textfont=dict(size=9), cliponaxis=False,
+    hovertemplate="%{x}年<br>策略1.0: %{y:+.1f}%<extra></extra>",
+), row=1, col=1)
+_fig_ay.add_hline(y=0, line_color="#333", line_width=0.8, row=1, col=1)
+
+# Row 2 — trades per year (manually stacked via base)
+_reason_cfg_ay = [
+    ("trailing_stop",   "#1f77b4", "移动止盈"),
+    ("stop_loss",       "#d62728", "固定止损"),
+    ("end_of_backtest", "#aaaaaa", "回测结束"),
+]
+_all_yrs_ay = sorted(_tr_df_ay["year"].unique())
+_base_ay = {yr: 0 for yr in _all_yrs_ay}
+for _rsn_ay, _rclr_ay, _rlbl_ay in _reason_cfg_ay:
+    _sub_ay = _tr_df_ay[_tr_df_ay["exit_reason"] == _rsn_ay].groupby("year").size()
+    _y_ay   = [int(_sub_ay.get(yr, 0)) for yr in _all_yrs_ay]
+    _b_ay   = [_base_ay[yr] for yr in _all_yrs_ay]
+    if sum(_y_ay) == 0:
+        continue
+    _fig_ay.add_trace(_go_ay.Bar(
+        x=_all_yrs_ay, y=_y_ay, base=_b_ay,
+        name=_rlbl_ay, marker_color=_rclr_ay, offsetgroup="trades",
+        hovertemplate=f"%{{x}}年<br>{_rlbl_ay}: %{{y}} 笔<extra></extra>",
+    ), row=2, col=1)
+    for _j_ay, _yr_ay in enumerate(_all_yrs_ay):
+        _base_ay[_yr_ay] += _y_ay[_j_ay]
+
+_avg_tr_ay = float(_tr_df_ay.groupby("year").size().mean())
+_fig_ay.add_hline(
+    y=_avg_tr_ay, line_dash="dot", line_color="#555", line_width=1,
+    annotation_text=f"均值 {_avg_tr_ay:.0f} 笔/年",
+    annotation_position="top right",
+    row=2, col=1,
+)
+
+_fig_ay.update_layout(
+    barmode="group",
+    hovermode="x unified",
+    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+    margin=dict(l=60, r=20, t=80, b=40),
+    height=640,
+)
+_fig_ay.update_yaxes(ticksuffix="%", title_text="年回报率 %", row=1, col=1)
+_fig_ay.update_yaxes(title_text="交易笔数", row=2, col=1)
+st.plotly_chart(_fig_ay, use_container_width=True)
+
+st.markdown(
+    f"**解读（上）：** {_n_yr_ar} 个完整年度中 **{_pos_yr_ar}** 年正收益（{_pos_yr_ar/_n_yr_ar*100:.0f}%）。"
+    "策略1.0在强牛市年份因持仓不满往往落后 SPY，但下行年份（如 2008、2022）损失明显小于 SPY，"
+    "体现了**截断亏损**的核心优势。"
+)
+st.markdown(
+    f"**解读（下）：** 平均每年约 **{_trades_per_yr:.0f}** 笔交易。"
+    "熊市年份（市场环境过滤器关闭新开仓）交易笔数明显减少，"
+    "牛市年份信号密集、笔数较多。"
+)
 
 st.markdown("---")
 
