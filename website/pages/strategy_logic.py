@@ -245,13 +245,18 @@ st.markdown(f"""
 - 与移动止盈（用收盘价触发）不同：止损使用日内最低价，能捕捉当天盘中价格大幅下破的情形
 """)
 
-st.markdown("""
+_stop_dist    = (res.trades["entry_price"] - res.trades["stop_loss"]) / res.trades["entry_price"] * 100
+_n_trades     = len(res.trades)
+_n_below_05   = int((_stop_dist < 0.5).sum())
+_median_dist  = round(_stop_dist.median(), 1)
+
+st.markdown(f"""
 <div style="background:#e3f2fd;border-left:4px solid #1565c0;padding:12px 16px;border-radius:6px;margin-top:4px;">
 <strong>0.5% 最小止损距离的作用</strong><br>
 这个门槛不是策略1.0噪音防护的主要机制，而是一个<strong>数据质量兜底检查</strong>：
 当 ATR 异常趋近于零时（数据错误或极端低波动），拒绝入场，防止仓位计算出现除以近零的错误。<br>
-实盘中几乎从不触发——3,340 笔历史交易中无一笔止损距离低于 0.5%，
-实际止损距离中位数为 <strong>4.7%</strong>（= 2×ATR）。
+实盘中几乎从不触发——{_n_trades:,} 笔历史交易中{"无一笔" if _n_below_05 == 0 else f"{_n_below_05} 笔"}止损距离低于 0.5%，
+实际止损距离中位数为 <strong>{_median_dist}%</strong>（= 2×ATR）。
 真正防止被噪音震出的机制是 <strong>2×ATR 初始止损</strong>本身：ATR(20) 已量化了该股票正常的日波动幅度，
 2×ATR 的止损天然位于日常噪音范围之外。
 </div>
