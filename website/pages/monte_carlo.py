@@ -18,7 +18,7 @@ res  = get_results()
 meta = res.meta
 
 render_page_header("蒙特卡洛模拟", meta)
-st.caption(f"{meta.display_name} · 回测期间：{meta.backtest_start} → {meta.backtest_end}")
+st.markdown(f"**回测期间：{meta.backtest_start} → {meta.backtest_end}**")
 
 # ── Baseline anchor parameter declaration ─────────────────────────────────────
 _p = meta.params_anchor
