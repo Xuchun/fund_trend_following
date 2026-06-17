@@ -75,7 +75,10 @@ def _load_universe_and_data(mode: str, start: str, end: str, force_download: boo
     from strategy.params import StrategyParams
     import pandas as pd
 
-    params = StrategyParams()
+    params = StrategyParams(
+        regime_filter_enabled = True,
+        bear_exempt_tickers   = frozenset({"TLT", "GLD", "UUP"}),
+    )
 
     TIINGO_CACHE  = _project_root / "data" / "cache" / "tiingo"
     EU_CSV        = _project_root / "data" / "tiingo_eligible_universe.csv"
