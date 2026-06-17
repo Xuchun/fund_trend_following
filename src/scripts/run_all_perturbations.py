@@ -1,4 +1,5 @@
 """
+[已废弃] 此脚本使用 Yahoo Finance 数据，已不再使用。请改用对应 Tiingo 版本。
 Master batch perturbation script — loads data ONCE, sweeps all parameters.
 
 Runs one-at-a-time sensitivity tests for all parameters listed in the
@@ -64,6 +65,7 @@ BASELINE = StrategyParams(
     regime_filter_enabled   = True,
     regime_ticker           = "SPY",
     regime_sma_window       = 200,
+    bear_exempt_tickers     = frozenset({"TLT", "GLD", "UUP"}),
 )
 
 START = "2004-01-02"
