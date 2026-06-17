@@ -226,6 +226,8 @@ def print_comparison(base_res, exp_res, panel):
     # Save JSON
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     summary = {
+        "start":       START,
+        "end":         END,
         "baseline":    {k: round(float(v), 6) for k, v in bm.items()},
         "bear_exempt": {k: round(float(v), 6) for k, v in em.items()},
         "bear_exempt_tickers": sorted(BEAR_EXEMPT),
