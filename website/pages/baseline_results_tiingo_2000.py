@@ -217,55 +217,78 @@ with _col_b:
 
 st.markdown("---")
 
-# ── Combined NAV + Drawdown chart (shared x-axis) ────────────────────────────
+# ── Combined NAV + Drawdown chart (shared x-axis, re-baselined per period) ───
 from plotly.subplots import make_subplots as _make_subplots_nd
 import plotly.graph_objects as _go_nd
+import pandas as _pd_nd
 
 st.subheader("净值曲线 vs SPY")
 _show_spy = st.checkbox("显示 SPY 基准曲线", value=True, key="nav_show_spy")
 
-_nav_nd = res.nav / float(res.nav.iloc[0])
-_dd_nd  = (res.nav - res.nav.cummax()) / res.nav.cummax() * 100
+_periods_nd = [("1年", 1), ("3年", 3), ("5年", 5), ("10年", 10), ("全程", None)]
+_default_nd = len(_periods_nd) - 1   # 全程 active by default
+_has_spy_nd = _show_spy and res.spy_nav is not None
+_n_per_nd   = (2 if _has_spy_nd else 1) + 1  # nav [+ spy] + drawdown
 
 _fig_nd = _make_subplots_nd(
     rows=2, cols=1, shared_xaxes=True,
     row_heights=[0.68, 0.32], vertical_spacing=0.06,
-    subplot_titles=["归一化净值曲线 vs SPY（全程起点 = 1.0）", "回撤曲线（从高点的百分比）"],
+    subplot_titles=["归一化净值曲线 vs SPY（各期起点 = 1.0）", "回撤曲线（从各期高点的百分比）"],
 )
-_fig_nd.add_trace(_go_nd.Scatter(
-    x=_nav_nd.index, y=_nav_nd.values,
-    name=meta.display_name, line=dict(color=meta.color, width=2),
-    hovertemplate="%{x|%Y-%m-%d}<br>NAV: %{y:.2f}x<extra></extra>",
-), row=1, col=1)
-if _show_spy and res.spy_nav is not None:
-    _spy_nd = res.spy_nav / float(res.spy_nav.iloc[0])
+
+for _i, (_lbl, _yrs) in enumerate(_periods_nd):
+    _end_nd   = res.nav.index[-1]
+    _start_nd = (_end_nd - _pd_nd.DateOffset(years=_yrs)) if _yrs else res.nav.index[0]
+    _nav_sl   = res.nav.loc[_start_nd:]
+    _nav_sl   = res.nav if _nav_sl.empty else _nav_sl
+    _nav_norm = _nav_sl / float(_nav_sl.iloc[0])
+    _vis      = (_i == _default_nd)
+
     _fig_nd.add_trace(_go_nd.Scatter(
-        x=_spy_nd.index, y=_spy_nd.values,
-        name="SPY (benchmark)", line=dict(color="#888888", width=1.2, dash="dash"),
-        hovertemplate="%{x|%Y-%m-%d}<br>SPY: %{y:.2f}x<extra></extra>",
+        x=_nav_norm.index, y=_nav_norm.values,
+        name=meta.display_name, line=dict(color=meta.color, width=2),
+        hovertemplate="%{x|%Y-%m-%d}<br>NAV: %{y:.2f}x<extra></extra>",
+        visible=_vis, legendgroup="strategy", showlegend=(_i == _default_nd),
     ), row=1, col=1)
-_fig_nd.add_trace(_go_nd.Scatter(
-    x=_dd_nd.index, y=_dd_nd.values,
-    fill="tozeroy", fillcolor="rgba(214,39,40,0.25)",
-    line=dict(color="#d62728", width=1), name="回撤",
-    hovertemplate="%{x|%Y-%m-%d}<br>回撤: %{y:.1f}%<extra></extra>",
-    showlegend=False,
-), row=2, col=1)
+
+    if _has_spy_nd:
+        _spy_sl   = res.spy_nav.loc[_start_nd:]
+        _spy_sl   = res.spy_nav if _spy_sl.empty else _spy_sl
+        _spy_norm = _spy_sl / float(_spy_sl.iloc[0])
+        _fig_nd.add_trace(_go_nd.Scatter(
+            x=_spy_norm.index, y=_spy_norm.values,
+            name="SPY (benchmark)", line=dict(color="#888888", width=1.2, dash="dash"),
+            hovertemplate="%{x|%Y-%m-%d}<br>SPY: %{y:.2f}x<extra></extra>",
+            visible=_vis, legendgroup="spy", showlegend=(_i == _default_nd),
+        ), row=1, col=1)
+
+    _dd_sl = (_nav_sl - _nav_sl.cummax()) / _nav_sl.cummax() * 100
+    _fig_nd.add_trace(_go_nd.Scatter(
+        x=_dd_sl.index, y=_dd_sl.values,
+        fill="tozeroy", fillcolor="rgba(214,39,40,0.25)",
+        line=dict(color="#d62728", width=1), name="回撤",
+        hovertemplate="%{x|%Y-%m-%d}<br>回撤: %{y:.1f}%<extra></extra>",
+        visible=_vis, showlegend=False,
+    ), row=2, col=1)
+
+_total_nd   = len(_periods_nd) * _n_per_nd
+_buttons_nd = []
+for _i, (_lbl, _) in enumerate(_periods_nd):
+    _vis_arr = [False] * _total_nd
+    for _j in range(_n_per_nd):
+        _vis_arr[_i * _n_per_nd + _j] = True
+    _buttons_nd.append(dict(label=_lbl, method="update", args=[{"visible": _vis_arr}]))
+
 _fig_nd.update_layout(
     hovermode="x unified",
     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     margin=dict(l=60, r=20, t=80, b=40),
     height=660,
-    xaxis=dict(rangeselector=dict(
-        buttons=[
-            dict(count=1,  label="1年",  step="year", stepmode="backward"),
-            dict(count=3,  label="3年",  step="year", stepmode="backward"),
-            dict(count=5,  label="5年",  step="year", stepmode="backward"),
-            dict(count=10, label="10年", step="year", stepmode="backward"),
-            dict(step="all", label="全程"),
-        ],
+    updatemenus=[dict(
+        type="buttons", direction="left", buttons=_buttons_nd,
+        active=_default_nd, x=0.0, xanchor="left", y=1.13, yanchor="top",
         bgcolor="#f0f2f6", bordercolor="#cccccc", font=dict(size=12),
-    )),
+    )],
 )
 _fig_nd.update_yaxes(ticksuffix="x", title_text="净值（倍）", row=1, col=1)
 _fig_nd.update_yaxes(ticksuffix="%", title_text="回撤 %", row=2, col=1)
