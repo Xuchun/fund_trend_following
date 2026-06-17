@@ -1,4 +1,5 @@
 """
+[已废弃] 此脚本使用 Yahoo Finance 数据，已不再使用。请改用对应 Tiingo 版本。
 Script: one-at-a-time parameter perturbation sensitivity test.
 
 Loads the full price panel once from cache, sweeps a single StrategyParams
@@ -68,6 +69,8 @@ BASELINE_PARAMS = StrategyParams(
     correlation_window      = 60,
     correlation_threshold   = 0.70,
     correlation_reduction   = 0.50,
+    volume_filter_multiplier= 1.5,
+    breakout_strength_min   = 0.0,
     gap_filter              = 0.025,
     commission_bps          = 3.0,
     slippage_bps            = 10.0,
@@ -75,6 +78,7 @@ BASELINE_PARAMS = StrategyParams(
     regime_filter_enabled   = True,
     regime_ticker           = "SPY",
     regime_sma_window       = 200,
+    bear_exempt_tickers     = frozenset({"TLT", "GLD", "UUP"}),
 )
 
 DEFAULT_START = "2004-01-02"
