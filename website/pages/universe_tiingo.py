@@ -553,7 +553,7 @@ with _adv_analysis_col2:
 
     st.info(
         f"**结论：** 当前 {len(_ETF_SET)} 只 ETF 候选池中，**{_universe_etfs} 只**实际参与趋势跟踪信号"
-        "（7 只结构性排除 + SPY 用于市场环境过滤 + SHY 用于现金代理，共排除 {len(_ETF_SET) - _universe_etfs} 只）。"
+        f"（7 只结构性排除 + SPY 用于市场环境过滤 + SHY 用于现金代理，共排除 {len(_ETF_SET) - _universe_etfs} 只）。"
         "已达到边际收益递减点。再添加高度相关的 ETF 只会引入数据冗余，不会提升策略的跨资产多样性。"
         "后续如需扩充，优先考虑新增**国别 ETF**（如 EWY-韩国已加入）或"
         "**新兴资产类别**，而非在现有类别中继续叠加。"
