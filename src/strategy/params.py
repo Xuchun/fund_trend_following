@@ -8,7 +8,7 @@ Usage:
     variant  = replace(baseline, heat_limit=0.08)      # immutable copy with change
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
