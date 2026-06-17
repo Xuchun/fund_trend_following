@@ -68,3 +68,9 @@ class StrategyParams:
     consolidation_filter_enabled: bool = False   # disabled → v1 behaviour unchanged
     consolidation_window: int = 80               # lookback days for range check
     consolidation_threshold: float = 0.25        # (max_high - min_low) / min_low < threshold
+
+    # ── Bear-market exempt tickers ─────────────────────────────────────────
+    # Tickers listed here can still receive entry signals during bear markets
+    # (SPY < 200-day SMA). All other strategy rules (ATR stop, position sizing,
+    # heat limit, correlation filter) still apply normally.
+    bear_exempt_tickers: frozenset = field(default_factory=frozenset)
