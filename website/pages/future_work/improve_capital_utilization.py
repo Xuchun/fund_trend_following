@@ -8,7 +8,7 @@ if str(_root) not in sys.path:
 
 import streamlit as st
 
-st.title("提高资金使用率")
+st.title("提高熊市资金使用率")
 st.caption("通过熊市期间允许 TLT、GLD、UUP 三只避险 ETF 开仓，填补熊市现金空窗")
 st.markdown("---")
 
