@@ -246,7 +246,7 @@ for _i, (_lbl, _yrs) in enumerate(_periods_nd):
 
     _fig_nd.add_trace(_go_nd.Scatter(
         x=_nav_norm.index, y=_nav_norm.values,
-        name=meta.display_name, line=dict(color=meta.color, width=2),
+        name="策略1.0", line=dict(color=meta.color, width=2),
         hovertemplate="%{x|%Y-%m-%d}<br>NAV: %{y:.2f}x<extra></extra>",
         visible=_vis, legendgroup="strategy", showlegend=(_i == _default_nd),
     ), row=1, col=1)
