@@ -186,11 +186,14 @@ if regime_data and "regimes" in regime_data:
     bc3.metric("MaxDD",      f"{full_p.get('max_drawdown',0)*100:.1f}%")
     bc4.metric("总交易笔数",  f"{full_p.get('n_trades',0):,}")
 
+    _crisis_s   = regimes.get("金融危机", {})
+    _crisis_dd  = _crisis_s.get("strategy", {}).get("max_drawdown", 0)
+    _crisis_spy_dd = _crisis_s.get("spy", {}).get("max_drawdown", 0)
     st.markdown(
         f'<div class="info-box">'
         f'策略1.0在 <strong>QE驱动慢牛（2009–2020）</strong>和 <strong>AI驱动牛市（2023–今）</strong>绝对收益可观，但跑输 SPY。'
-        f'<strong>金融危机</strong>期间纯多头策略1.0跟随下跌（无做空），但最大回撤仅 {crisis_strat_dd*100:.1f}%，'
-        f'远低于 SPY 的 {crisis_spy_dd*100:.1f}%。'
+        f'<strong>金融危机</strong>期间纯多头策略1.0跟随下跌（无做空），但最大回撤仅 {_crisis_dd*100:.1f}%，'
+        f'远低于 SPY 的 {_crisis_spy_dd*100:.1f}%。'
         f'<strong>加息熊市（2022）</strong>是最大考验：SPY 过滤器阻止了大量开仓，但已持仓跟随下行直至止损触发。'
         f'</div>',
         unsafe_allow_html=True,
