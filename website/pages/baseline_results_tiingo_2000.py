@@ -353,7 +353,7 @@ else:
             "总水下：%{y} 交易日"
             "<extra></extra>"
         ),
-        text=[f"{v}天" for v in _y_vals_ddd],
+        text=[f"{v}天<br>回撤{p:.1f}%" for v, p in zip(_y_vals_ddd, _dd_pct_ddd)],
         textposition="outside",
     ))
     _fig_ddd.update_layout(
