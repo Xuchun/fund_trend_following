@@ -188,9 +188,10 @@ if regime_data and "regimes" in regime_data:
 
     st.markdown(
         f'<div class="info-box">'
-        f'策略1.0在 <strong>量化宽松牛市（2010–2019）</strong>表现最强，长趋势环境与追踪止损模型完美契合。'
-        f'<strong>金融危机</strong>期间纯多头策略1.0跟随下跌（无做空），但最大回撤显著低于 SPY（-55%）。'
-        f'<strong>加息熊市（2022）</strong>是最大的考验：SPY 过滤器阻止了大量开仓但已持仓无法规避。'
+        f'策略1.0在 <strong>QE驱动慢牛（2009–2020）</strong>和 <strong>AI驱动牛市（2023–今）</strong>绝对收益可观，但跑输 SPY。'
+        f'<strong>金融危机</strong>期间纯多头策略1.0跟随下跌（无做空），但最大回撤仅 {crisis_strat_dd*100:.1f}%，'
+        f'远低于 SPY 的 {crisis_spy_dd*100:.1f}%。'
+        f'<strong>加息熊市（2022）</strong>是最大考验：SPY 过滤器阻止了大量开仓，但已持仓跟随下行直至止损触发。'
         f'</div>',
         unsafe_allow_html=True,
     )
