@@ -1124,68 +1124,6 @@ with st.expander("📋 交易次数最多的 TOP 10 标的", expanded=False):
     )
     st.dataframe(_topfreq_df, use_container_width=True, hide_index=True)
 
-# ── 四、每标的胜率分布 ────────────────────────────────────────────────────────
-st.markdown("#### 四、每标的胜率分布（≥ 3 笔交易）")
-
-_multi3_ta  = _tk[_tk["交易次数"] >= 3].copy()
-_wr_bins_ta = [0, 0.2, 0.4, 0.6, 0.8, 1.001]
-_wr_lbl_ta  = ["0–20%", "20–40%", "40–60%", "60–80%", "80–100%"]
-_wr_cut_ta  = _pd_ta.cut(_multi3_ta["胜率"], bins=_wr_bins_ta, labels=_wr_lbl_ta, right=False)
-_wr_dist_ta = _wr_cut_ta.value_counts().reindex(_wr_lbl_ta).fillna(0).astype(int)
-
-_fig_wr_ta = _go.Figure(_go.Bar(
-    x=_wr_lbl_ta, y=_wr_dist_ta.values.tolist(),
-    marker_color=meta.color,
-    text=_wr_dist_ta.values.tolist(), textposition="outside",
-))
-_fig_wr_ta.update_layout(
-    title=f"每标的胜率分布（{len(_multi3_ta):,} 个标的，≥3 笔交易）",
-    xaxis_title="胜率区间", yaxis_title="标的数量",
-    height=320, margin=dict(l=50, r=20, t=50, b=40),
-)
-st.plotly_chart(_fig_wr_ta, use_container_width=True)
-
-_wr_med_ta = float(_multi3_ta["胜率"].median())
-_gt50_ta   = int((_multi3_ta["胜率"] >= 0.5).sum())
-st.markdown(
-    f"≥3 笔交易的 {len(_multi3_ta):,} 个标的中，胜率中位数 **{_wr_med_ta*100:.0f}%**，"
-    f"**{_gt50_ta:,} 个**（{_gt50_ta/len(_multi3_ta)*100:.0f}%）胜率 ≥50%。"
-    "胜率分布分散并不意味着策略不稳定——关键在于盈利幅度（R 倍数）远大于亏损幅度，"
-    "即使多数标的胜率偏低，整体期望值仍为正。"
-)
-
-# ── 五、首次建仓年份分布 ──────────────────────────────────────────────────────
-st.markdown("#### 五、首次建仓年份分布")
-
-_first_yr_ta = (
-    _ta.groupby("ticker")["entry_date"].min()
-    .dt.year.value_counts().sort_index()
-    .reset_index()
-)
-_first_yr_ta.columns = ["year", "count"]
-
-_fig_yr_ta = _go.Figure(_go.Bar(
-    x=_first_yr_ta["year"].astype(str),
-    y=_first_yr_ta["count"],
-    marker_color=meta.color,
-    text=_first_yr_ta["count"], textposition="outside",
-))
-_fig_yr_ta.update_layout(
-    title="各年度首次建仓的新标的数量",
-    xaxis_title="年份", yaxis_title="新增标的数",
-    height=320, margin=dict(l=50, r=20, t=50, b=40),
-)
-st.plotly_chart(_fig_yr_ta, use_container_width=True)
-
-_peak_yr_ta  = int(_first_yr_ta.loc[_first_yr_ta["count"].idxmax(), "year"])
-_peak_cnt_ta = int(_first_yr_ta["count"].max())
-st.markdown(
-    f"**解读：** 各年度策略首次买入的新标的数量，反映市场趋势机会的时间分布。"
-    f"**{_peak_yr_ta} 年**新增标的最多（{_peak_cnt_ta:,} 个），"
-    "通常对应牛市突破年——大量标的同时创出 200 日新高。"
-    "熊市年份（如 2008、2022）新增标的极少，说明 Regime Filter 有效拦截了潜在假突破信号。"
-)
-
 st.markdown("---")
 
 # ── Monthly return heatmap ────────────────────────────────────────────────────
