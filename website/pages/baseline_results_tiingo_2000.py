@@ -217,26 +217,62 @@ with _col_b:
 
 st.markdown("---")
 
-# ── Combined NAV + Drawdown chart (shared x-axis, re-baselined per period) ───
+# ── Combined NAV + Drawdown chart (Streamlit date-range → re-baselined) ──────
 from plotly.subplots import make_subplots as _make_subplots_nd
 import plotly.graph_objects as _go_nd
-import pandas as _pd_nd
+import datetime as _dt_nd
 
 st.subheader("净值曲线 & 回撤曲线")
 _show_spy = st.checkbox("显示 SPY 基准曲线", value=True, key="nav_show_spy")
 
+_nav_start_abs = res.nav.index[0].date()
+_nav_end_abs   = res.nav.index[-1].date()
+
+# ── Period quick-select buttons ───────────────────────────────────────────────
 _periods_nd = [("1年", 1), ("3年", 3), ("5年", 5), ("10年", 10), ("全程", None)]
+_p_cols = st.columns([1, 1, 1, 1, 1, 6])
+for _ci, (_lbl, _yrs) in enumerate(_periods_nd):
+    with _p_cols[_ci]:
+        if st.button(_lbl, key=f"nd_btn_{_lbl}"):
+            _ps = (_nav_end_abs - _dt_nd.timedelta(days=round(365.25 * _yrs))
+                   if _yrs else _nav_start_abs)
+            _ps = max(_ps, _nav_start_abs)
+            st.session_state["nd_range_input"] = (_ps, _nav_end_abs)
+
+# ── Date range picker ─────────────────────────────────────────────────────────
+_sel_range = st.date_input(
+    "选择时间范围",
+    value=(_nav_start_abs, _nav_end_abs),
+    min_value=_nav_start_abs,
+    max_value=_nav_end_abs,
+    key="nd_range_input",
+    label_visibility="collapsed",
+)
+
+if isinstance(_sel_range, (list, tuple)) and len(_sel_range) == 2:
+    _sel_s, _sel_e = _sel_range[0], _sel_range[1]
+else:
+    _sel_s, _sel_e = _nav_start_abs, _nav_end_abs
+
+# ── Re-baseline for selected range ────────────────────────────────────────────
+_nav_sl = res.nav.loc[str(_sel_s):str(_sel_e)]
+if len(_nav_sl) < 2:
+    _nav_sl = res.nav
+_nav_norm = _nav_sl / float(_nav_sl.iloc[0])
 _has_spy_nd = _show_spy and res.spy_nav is not None
 
+if _has_spy_nd:
+    _spy_sl = res.spy_nav.loc[str(_sel_s):str(_sel_e)]
+    if len(_spy_sl) < 2:
+        _spy_sl = res.spy_nav
+    _spy_norm = _spy_sl / float(_spy_sl.iloc[0])
+
+# ── Build figure ──────────────────────────────────────────────────────────────
 _fig_nd = _make_subplots_nd(
     rows=2, cols=1, shared_xaxes=True,
     row_heights=[0.65, 0.35], vertical_spacing=0.05,
     subplot_titles=["", ""],
 )
-
-# ── Single full-period traces ─────────────────────────────────────────────────
-_nav_full = res.nav
-_nav_norm = _nav_full / float(_nav_full.iloc[0])
 
 _fig_nd.add_trace(_go_nd.Scatter(
     x=_nav_norm.index, y=_nav_norm.values,
@@ -245,16 +281,15 @@ _fig_nd.add_trace(_go_nd.Scatter(
 ), row=1, col=1)
 
 if _has_spy_nd:
-    _spy_norm = res.spy_nav / float(res.spy_nav.iloc[0])
     _fig_nd.add_trace(_go_nd.Scatter(
         x=_spy_norm.index, y=_spy_norm.values,
         name="SPY", line=dict(color="#888888", width=1.2, dash="dash"),
         hovertemplate="%{x|%Y-%m-%d}<br>SPY: %{y:.2f}x<extra></extra>",
     ), row=1, col=1)
 
-_dd_full = (_nav_full - _nav_full.cummax()) / _nav_full.cummax() * 100
+_dd_sl = (_nav_sl - _nav_sl.cummax()) / _nav_sl.cummax() * 100
 _fig_nd.add_trace(_go_nd.Scatter(
-    x=_dd_full.index, y=_dd_full.values,
+    x=_dd_sl.index, y=_dd_sl.values,
     fill="tozeroy", fillcolor="rgba(214,39,40,0.25)",
     line=dict(color="#d62728", width=1), name="策略回撤",
     hovertemplate="%{x|%Y-%m-%d}<br>回撤: %{y:.1f}%<extra></extra>",
@@ -262,7 +297,7 @@ _fig_nd.add_trace(_go_nd.Scatter(
 ), row=2, col=1)
 
 if _has_spy_nd:
-    _spy_dd = (res.spy_nav - res.spy_nav.cummax()) / res.spy_nav.cummax() * 100
+    _spy_dd = (_spy_sl - _spy_sl.cummax()) / _spy_sl.cummax() * 100
     _fig_nd.add_trace(_go_nd.Scatter(
         x=_spy_dd.index, y=_spy_dd.values,
         line=dict(color="#888888", width=1.2, dash="dash"), name="SPY回撤",
@@ -270,34 +305,11 @@ if _has_spy_nd:
         showlegend=False,
     ), row=2, col=1)
 
-# ── Period quick-select buttons (relayout sets x range) ───────────────────────
-_end_dt = res.nav.index[-1]
-_buttons_nd = []
-for _lbl, _yrs in _periods_nd:
-    if _yrs is None:
-        _rng = [res.nav.index[0].strftime("%Y-%m-%d"), _end_dt.strftime("%Y-%m-%d")]
-    else:
-        _rng = [(_end_dt - _pd_nd.DateOffset(years=_yrs)).strftime("%Y-%m-%d"),
-                _end_dt.strftime("%Y-%m-%d")]
-    _buttons_nd.append(dict(
-        label=_lbl, method="relayout",
-        args=[{"xaxis.range": _rng, "xaxis2.range": _rng}],
-    ))
-
 _fig_nd.update_layout(
     hovermode="x unified",
     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-    margin=dict(l=60, r=20, t=80, b=40),
-    height=720,
-    xaxis2=dict(
-        rangeslider=dict(visible=True, thickness=0.07, bgcolor="#f0f2f6"),
-        type="date",
-    ),
-    updatemenus=[dict(
-        type="buttons", direction="left", buttons=_buttons_nd,
-        x=0.0, xanchor="left", y=1.13, yanchor="top",
-        bgcolor="#f0f2f6", bordercolor="#cccccc", font=dict(size=12),
-    )],
+    margin=dict(l=60, r=20, t=60, b=40),
+    height=640,
 )
 _fig_nd.update_yaxes(ticksuffix="x", title_text="净值（倍）", row=1, col=1)
 _fig_nd.update_yaxes(ticksuffix="%", title_text="回撤 %", row=2, col=1)
