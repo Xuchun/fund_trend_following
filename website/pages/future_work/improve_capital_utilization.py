@@ -1,5 +1,6 @@
 """提高资金使用率"""
 
+import json
 import sys
 from pathlib import Path
 _root = Path(__file__).resolve().parents[4]
@@ -7,6 +8,27 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
+
+# ── 加载对比回测结果 JSON（动态，随回测更新）──────────────────────────────────
+_CMP_PATH = _root / "results" / "bear_exempt_comparison" / "comparison_summary.json"
+_cmp: dict = {}
+if _CMP_PATH.exists():
+    try:
+        _cmp = json.loads(_CMP_PATH.read_text())
+    except Exception:
+        _cmp = {}
+
+def _fmt_pct(v: float, sign: bool = False) -> str:
+    s = f"{v*100:.2f}%"
+    return ("+" if v >= 0 else "") + s if sign else s
+
+def _fmt_delta_pct(b: float, e: float) -> str:
+    d = e - b
+    return f"{'+' if d>=0 else ''}{d*100:.2f}pp"
+
+def _fmt_delta(b: float, e: float) -> str:
+    d = e - b
+    return f"{'+' if d>=0 else ''}{d:.3f}"
 
 st.title("提高熊市资金使用率")
 st.caption("通过熊市期间允许 TLT、GLD、UUP 三只避险 ETF 开仓，填补熊市现金空窗")
