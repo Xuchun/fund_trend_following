@@ -19,7 +19,7 @@ res  = get_results()
 meta = res.meta
 
 render_page_header("Walk-Forward 验证", meta)
-st.caption(f"{meta.display_name} · 回测期间：{meta.backtest_start} → {meta.backtest_end}")
+st.markdown(f"**回测期间：{meta.backtest_start} → {meta.backtest_end}**")
 st.markdown("---")
 
 _WF_PATH     = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m_2000" / "walkforward.json"
