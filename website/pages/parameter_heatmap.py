@@ -687,8 +687,8 @@ st.markdown(f"""
 ### 2D Heatmap 结论
 """)
 
-if _hm_a and len(_hm_a.get("combinations", [])) == 28:
-    _combos_a = _hm_a["combinations"]
+if _hm_a and _n_a == 28:
+    _combos_a = _get_combos(_hm_a)
     _all_s_a  = [c["sharpe"] for c in _combos_a]
     _peak_a   = max(_all_s_a)
     _n_stable_a = sum(1 for s in _all_s_a if s >= _peak_a * 0.90)
@@ -699,13 +699,12 @@ if _hm_a and len(_hm_a.get("combinations", [])) == 28:
 - {"✅ 两参数联合大范围稳定，策略对 N 与止损乘数的组合选择鲁棒" if _n_stable_a/28 >= 0.5 else "⚠️ 稳定区间较窄，需谨慎"}
 """)
 elif _hm_a:
-    _n_done_a = len(_hm_a.get("combinations", []))
-    st.info(f"⏳ Grid A 计算进行中（{_n_done_a}/28），结论待更新。")
+    st.info(f"⏳ Grid A 计算进行中（{_n_a}/28），结论待更新。")
 else:
     st.info("⏳ 2D Heatmap 计算尚未完成。完成后刷新页面查看 2D 联合稳定性结论。")
 
-if _hm_b and len(_hm_b.get("combinations", [])) == 20:
-    _combos_b = _hm_b["combinations"]
+if _hm_b and _n_b == 20:
+    _combos_b = _get_combos(_hm_b)
     _all_s_b  = [c["sharpe"] for c in _combos_b]
     _peak_b   = max(_all_s_b)
     _n_stable_b = sum(1 for s in _all_s_b if s >= _peak_b * 0.90)
@@ -715,8 +714,7 @@ if _hm_b and len(_hm_b.get("combinations", [])) == 20:
 - 稳定格子数：{_n_stable_b} / 20（{_n_stable_b/20*100:.0f}%）
 """)
 elif _hm_b:
-    _n_done_b = len(_hm_b.get("combinations", []))
-    st.info(f"⏳ Grid B 计算进行中（{_n_done_b}/20），结论待更新。")
+    st.info(f"⏳ Grid B 计算进行中（{_n_b}/20），结论待更新。")
 
 st.markdown("""
 ---
