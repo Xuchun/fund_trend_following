@@ -289,7 +289,8 @@ def main():
             "initial_capital": args.initial_capital,
             "params_anchor": {k: getattr(_p_b, k)
                               for k in vars(StrategyParams()) if not k.startswith("_")},
-        }, ensure_ascii=False, indent=2))
+        }, ensure_ascii=False, indent=2,
+        default=lambda x: sorted(x) if isinstance(x, (frozenset, set)) else str(x)))
 
     # ── Compare ───────────────────────────────────────────────────────────────
     if results_a and results_b:
