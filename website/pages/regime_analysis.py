@@ -257,6 +257,11 @@ if regime_data and "regimes" in regime_data:
     ai_sharpe       = _s("AI驱动牛市").get("sharpe", 0)
     ai_strat_dd     = _s("AI驱动牛市").get("max_drawdown", 0)
 
+    bubble_cagr     = _s("互联网泡沫崩溃").get("cagr", 0)
+    bubble_spy_cagr = _spy("互联网泡沫崩溃").get("cagr", 0)
+    recovery_cagr   = _s("熊市后复苏").get("cagr", 0)
+    recovery_spy_cagr = _spy("熊市后复苏").get("cagr", 0)
+
     full_cagr   = full_p.get("cagr", 0)
     full_sharpe = full_p.get("sharpe", 0)
     full_dd     = full_p.get("max_drawdown", 0)
