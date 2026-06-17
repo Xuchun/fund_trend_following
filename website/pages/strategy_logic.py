@@ -219,7 +219,7 @@ if bs_min > 0:
 """, unsafe_allow_html=True)
 else:
     st.markdown("""
-**【当前未启用】** `breakout_strength_min = 0`，只要价格高于 N 日高点即触发入场信号，不要求最小突破幅度。
+**【当前未启用】** `breakout_strength_min = 0`，只要价格高于 N 日高点即触发入场信号，不要求最小突破幅度。但是多信号处理机制，已经把所有信号按突破强度降序排列优先执行，从而优先处理突破最强的信号。
 """)
 
 st.markdown("---")
