@@ -518,23 +518,23 @@
     }
   ],
   "regime_stats": {
-    "bear_days_total": 1080,
-    "bear_pct": 19.1,
+    "bear_days_total": 1723,
+    "bear_pct": 25.8,
     "top_episodes": [
+      {
+        "start_year": 2000,
+        "end_year": 2001,
+        "days": 303
+      },
       {
         "start_year": 2008,
         "end_year": 2009,
         "days": 257
       },
       {
-        "start_year": 2007,
-        "end_year": 2008,
-        "days": 88
-      },
-      {
-        "start_year": 2022,
-        "end_year": 2022,
-        "days": 87
+        "start_year": 2002,
+        "end_year": 2003,
+        "days": 233
       }
     ]
   }
