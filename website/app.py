@@ -78,7 +78,8 @@ pg = st.navigation(
             st.Page(_pages / "strategy_comparison.py",    title="策略对比（1.0 vs 2.0）", icon="⚖️"),
         ],
         "Future Work": [
-            st.Page(_fw / "multi_strategy_plan.py", title="多策略开发 Plan", icon="🚀"),
+            st.Page(_fw / "multi_strategy_plan.py",              title="多策略开发 Plan",  icon="🚀"),
+            st.Page(_fw / "improve_capital_utilization.py",      title="提高资金使用率",    icon="📈"),
         ],
     },
     position="sidebar",
