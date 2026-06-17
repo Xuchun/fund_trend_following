@@ -78,6 +78,7 @@ BASELINE = StrategyParams(
     consolidation_filter_enabled = False,
     consolidation_window    = 80,
     consolidation_threshold = 0.25,
+    bear_exempt_tickers     = frozenset({"TLT", "GLD", "UUP"}),
 )
 
 # ── 扫描配置 ────────────────────────────────────────────────────────────────────
