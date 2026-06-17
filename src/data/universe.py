@@ -162,8 +162,8 @@ def get_universe_at_date(
         price_panel:   Dict mapping ticker → standardized OHLCV DataFrame.
         date:          Selection date "YYYY-MM-DD".
         lookback_days: Rolling window for ADV calculation (default 60).
-        min_price:     Minimum close price in USD (default $5).
-        min_adv_m:     Minimum average daily dollar volume in millions (default $1M).
+        min_price:     Minimum close price in USD (default $10).
+        min_adv_m:     Minimum average daily dollar volume in millions (default $60M).
 
     Returns:
         Sorted list of tickers passing all filters.
