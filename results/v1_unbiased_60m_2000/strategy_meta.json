@@ -1,7 +1,7 @@
 {
   "id": "v1_unbiased_60m_2000",
   "version": "1.0-unbiased-60m-2000",
-  "display_name": "Strategy 1.0 (Tiingo · 无偏差 · ADV>$60M · 2000起)",
+  "display_name": "策略1.0",
   "subtitle": "Tiingo 无幸存者偏差版 — Long Only, ATR Breakout + SPY 200-Day Regime Filter，ADV>$60M，回测起始 2000-01-03",
   "color": "#e67e22",
   "badge_text": "Tiingo-60M",
