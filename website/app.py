@@ -80,6 +80,7 @@ pg = st.navigation(
         ],
         "Future Work": [
             st.Page(_fw / "multi_strategy_plan.py",              title="多策略开发 Plan",  icon="🚀"),
+            st.Page(_fw / "pyramiding.py",                        title="加仓机制（金字塔）", icon="📐"),
         ],
     },
     position="sidebar",
