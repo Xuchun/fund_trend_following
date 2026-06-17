@@ -215,7 +215,7 @@ def print_comparison(base_res, exp_res, panel):
         if "net_pnl" in bear_exempt_trades.columns:
             pnl  = bear_exempt_trades["net_pnl"].sum()
             wins = (bear_exempt_trades["net_pnl"] > 0).mean()
-            print(f"\n  TLT+GLD 熊市净盈亏：${pnl:,.0f}  |  胜率：{wins*100:.0f}%")
+            print(f"\n  TLT+GLD+UUP 熊市净盈亏：${pnl:,.0f}  |  胜率：{wins*100:.0f}%")
             if len(bear_exempt_trades) > 1:
                 by_tkr = bear_exempt_trades.groupby("ticker")["net_pnl"].agg(["sum","count","mean"])
                 for tkr, row in by_tkr.iterrows():
