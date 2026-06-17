@@ -165,10 +165,17 @@ class BacktestEngine:
 
             # Regime filter: block new entries when SPY ≤ its 200-day SMA.
             # Existing positions are NOT touched; cash continues to earn the proxy rate.
+            # bear_exempt_tickers (e.g. TLT, GLD) may still receive signals in bear markets.
             in_bull = self._is_bull_market(date)
+            bear_exempt = self.params.bear_exempt_tickers
             if in_bull:
                 pending_entries = self.strategy.generate_entry_signals(
                     date, universe, self.price_panel, self.indicators, portfolio
+                )
+            elif bear_exempt:
+                exempt_universe = [t for t in universe if t in bear_exempt]
+                pending_entries = self.strategy.generate_entry_signals(
+                    date, exempt_universe, self.price_panel, self.indicators, portfolio
                 )
             else:
                 pending_entries = []
