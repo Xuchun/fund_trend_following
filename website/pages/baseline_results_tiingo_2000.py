@@ -222,7 +222,7 @@ from plotly.subplots import make_subplots as _make_subplots_nd
 import plotly.graph_objects as _go_nd
 import pandas as _pd_nd
 
-st.subheader("净值曲线 vs SPY")
+st.subheader("净值曲线 & 回撤曲线")
 _show_spy = st.checkbox("显示 SPY 基准曲线", value=True, key="nav_show_spy")
 
 _periods_nd = [("1年", 1), ("3年", 3), ("5年", 5), ("10年", 10), ("全程", None)]
@@ -233,7 +233,7 @@ _n_per_nd   = (2 if _has_spy_nd else 1) + 1  # nav [+ spy] + drawdown
 _fig_nd = _make_subplots_nd(
     rows=2, cols=1, shared_xaxes=True,
     row_heights=[0.68, 0.32], vertical_spacing=0.06,
-    subplot_titles=["归一化净值曲线 vs SPY（各期起点 = 1.0）", "回撤曲线（从各期高点的百分比）"],
+    subplot_titles=["净值曲线", "回撤曲线"],
 )
 
 for _i, (_lbl, _yrs) in enumerate(_periods_nd):
