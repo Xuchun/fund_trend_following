@@ -410,7 +410,8 @@ if _DIAG_PATH_BR.exists():
                 _bar_colors_br.append("#f57c00")
 
         _x_labels_br.append("≥10")
-        _y_counts_br.append(_streak_counts_br.get("10+", 0))
+        _ge10_br = sum(v for k, v in _streak_counts_br.items() if str(k).isdigit() and int(k) >= 10)
+        _y_counts_br.append(_ge10_br)
         _bar_colors_br.append("#d62728")
 
         _fig_streak = _go_br.Figure(
