@@ -28,7 +28,7 @@ def generate_entry_signals_v1(
       a. Ticker is not already held.
       b. Row exists for `date` and is_tradable is True.
       c. close[t] >= params.min_price.
-      d. ADV_60[t] >= params.min_adv_m × 1e6  (includes today t, no shift; no look-ahead since signal is generated after close).
+      d. ADV_60[t] >= params.min_adv_m × 1e6  (shift(1): mean of dv[t-60:t-1]; no look-ahead).
       e. breakout_signal[t] is True  (close[t] > rolling_high_N[t]).
       f. ATR[t] is not NaN.
       g. Preliminary stop distance >= params.min_stop_distance_pct.
