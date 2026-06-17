@@ -22,7 +22,7 @@ meta = res.meta
 p    = meta.params_anchor
 
 render_page_header("参数热力图分析", meta)
-st.caption(f"{meta.display_name} · 回测期间：{meta.backtest_start} → {meta.backtest_end}")
+st.markdown(f"**回测期间：{meta.backtest_start} → {meta.backtest_end}**")
 st.markdown("---")
 
 _PERTURB_DIR = _root / "results" / "v1_unbiased_60m_2000" / "perturbation"
