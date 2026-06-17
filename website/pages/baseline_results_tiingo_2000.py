@@ -90,6 +90,7 @@ if res.spy_nav is not None:
 
 
 render_page_header("Baseline参数回测结果", meta)
+st.markdown("<p style='color:black;font-weight:bold;font-size:16px;margin-top:-8px;'>回测期间：2000-01-03 → 2026-06-15</p>", unsafe_allow_html=True)
 st.markdown("---")
 
 # ── Summary cards ─────────────────────────────────────────────────────────────
