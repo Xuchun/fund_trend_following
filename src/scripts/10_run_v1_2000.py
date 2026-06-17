@@ -201,7 +201,10 @@ def main():
                                 if t in {e.get("ticker","") for e in existing_meta.get("etf_universe", [])}]),
         "params_anchor":   {k: getattr(params, k) for k in vars(StrategyParams()) if not k.startswith("_")},
     })
-    META_TEMPLATE.write_text(json.dumps(existing_meta, ensure_ascii=False, indent=2))
+    META_TEMPLATE.write_text(json.dumps(
+        existing_meta, ensure_ascii=False, indent=2,
+        default=lambda x: sorted(x) if isinstance(x, (frozenset, set)) else str(x),
+    ))
     logger.info("strategy_meta.json updated → %s", META_TEMPLATE)
 
     print(f"\n✓ 全部完成。总耗时 {time.time() - t_total:.1f}s")
