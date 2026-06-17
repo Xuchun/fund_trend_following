@@ -579,14 +579,14 @@ def _render_2d_heatmap(hm: dict, metric: str = "sharpe", title: str = "") -> Non
 
 st.markdown("#### 3.1 N × ATR止损乘数（28 次回测）")
 
-if _hm_a and len(_hm_a.get("combinations", [])) == 28:
+_n_a = len(_get_combos(_hm_a)) if _hm_a else 0
+if _hm_a and _n_a == 28:
     _render_2d_heatmap(_hm_a, title="2D 热力图：突破窗口 N × ATR止损乘数（Sharpe）")
-elif _hm_a and len(_hm_a.get("combinations", [])) > 0:
-    _n_done_a = len(_hm_a["combinations"])
-    st.info(f"⏳ **计算进行中** — 已完成 {_n_done_a} / 28 次回测 …")
-    if _n_done_a >= 4:
+elif _hm_a and _n_a > 0:
+    st.info(f"⏳ **计算进行中** — 已完成 {_n_a} / 28 次回测 …")
+    if _n_a >= 4:
         st.markdown("**已有结果（部分）：**")
-        _render_2d_heatmap(_hm_a, title=f"2D 热力图（部分，{_n_done_a}/28）：突破窗口 N × ATR止损乘数")
+        _render_2d_heatmap(_hm_a, title=f"2D 热力图（部分，{_n_a}/28）：突破窗口 N × ATR止损乘数")
 else:
     st.info(
         "⏳ **2D 网格计算进行中（0/28）** — 预计约 3 小时完成。"
@@ -604,13 +604,13 @@ st.markdown("---")
 
 st.markdown("#### 3.2 N × 移动止盈乘数（20 次回测，可选）")
 
-if _hm_b and len(_hm_b.get("combinations", [])) == 20:
+_n_b = len(_get_combos(_hm_b)) if _hm_b else 0
+if _hm_b and _n_b == 20:
     _render_2d_heatmap(_hm_b, title="2D 热力图：突破窗口 N × 移动止盈乘数（Sharpe）")
-elif _hm_b and len(_hm_b.get("combinations", [])) > 0:
-    _n_done_b = len(_hm_b["combinations"])
-    st.info(f"⏳ **计算进行中** — 已完成 {_n_done_b} / 20 次回测 …")
-    if _n_done_b >= 4:
-        _render_2d_heatmap(_hm_b, title=f"2D 热力图（部分，{_n_done_b}/20）：突破窗口 N × 移动止盈乘数")
+elif _hm_b and _n_b > 0:
+    st.info(f"⏳ **计算进行中** — 已完成 {_n_b} / 20 次回测 …")
+    if _n_b >= 4:
+        _render_2d_heatmap(_hm_b, title=f"2D 热力图（部分，{_n_b}/20）：突破窗口 N × 移动止盈乘数")
 else:
     st.info(
         "⏳ **2D 网格计算进行中（0/20）** — Grid A 完成后开始。"
