@@ -1,9 +1,10 @@
 """
 Compute the date range each ticker was eligible for Strategy 1.0 universe.
 
-Filters applied (point-in-time, same as strategy engine):
+Filters applied (point-in-time, coarse pre-filter for CSV):
   - close (raw, unadjusted) > $10
-  - ADV_60 = 60-day rolling avg of (close × volume), shift(1) > $60M
+  - ADV_60 = 60-day rolling avg of (close × volume), shift(1) > $20M
+  (The backtest engine applies the stricter $60M threshold daily at execution time.)
 
 Output: data/cache/tiingo_eligible_universe.csv
   ticker, first_eligible, last_eligible, eligible_days,
