@@ -37,13 +37,19 @@ logger = logging.getLogger(__name__)
 
 
 def _load_spy(start: str, end: str) -> pd.Series | None:
-    """Load SPY daily returns from Tiingo cache."""
+    """Load SPY adjusted daily returns from Tiingo cache."""
     spy_parquet = _project_root / "data" / "cache" / "tiingo" / "SPY.parquet"
     if spy_parquet.exists():
         try:
             df = pd.read_parquet(spy_parquet)
-            col = "adjClose" if "adjClose" in df.columns else "close"
-            prices = df[col].loc[start:end]
+            # Use adjusted close = close × adj_factor (consistent with backtest engine)
+            if "adj_factor" in df.columns:
+                prices = df["close"] * df["adj_factor"]
+            elif "adjClose" in df.columns:
+                prices = df["adjClose"]
+            else:
+                prices = df["close"]
+            prices = prices.loc[start:end]
             return prices.pct_change().dropna()
         except Exception as e:
             logger.warning("Could not load Tiingo SPY data: %s", e)
