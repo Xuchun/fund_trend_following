@@ -372,18 +372,6 @@ if _in_ep:   # ongoing episode (not yet recovered)
     })
 
 _ep_df = _pd_ep.DataFrame(_ep_rows)
-if len(_ep_df) > 0:
-    _ep_df_sorted  = _ep_df.sort_values("最大回撤").head(10).copy()
-    _ep_df_sorted["最大回撤"] = _ep_df_sorted["最大回撤"].apply(lambda v: f"{v*100:.1f}%")
-    st.markdown("##### 主要回撤情节（按深度排序，前 10 次，仅含回撤 ≥ 5% 的情节）")
-    st.dataframe(_ep_df_sorted, use_container_width=True, hide_index=True)
-    _avg_rec = _ep_df[_ep_df["修复"] != "进行中"]["修复耗时（交易日）"].mean()
-    _avg_trough = _ep_df["至低谷（交易日）"].mean()
-    st.caption(
-        f"共 {len(_ep_df)} 次回撤 ≥ 5% 的情节；"
-        f"平均 {_avg_trough:.0f} 个交易日触底，"
-        f"触底后平均 {_avg_rec:.0f} 个交易日修复（已修复情节）。"
-    )
 
 # ── Deep drawdown episode duration chart ─────────────────────────────────────
 import plotly.graph_objects as _go_ddd
