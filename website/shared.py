@@ -67,11 +67,17 @@ def setup_sidebar() -> StrategyResults:
 
     selected_id = strategy_ids[selected_idx]
 
-    # Cache per strategy to avoid re-loading on every interaction
+    # Cache per strategy; invalidate when strategy_meta.json changes on disk
     cache_key = f"_results_{selected_id}"
-    if cache_key not in st.session_state:
+    mtime_key = f"_mtime_{selected_id}"
+    results_root = _root / "results"
+    meta_path = results_root / selected_id / "strategy_meta.json"
+    current_mtime = meta_path.stat().st_mtime if meta_path.exists() else 0.0
+
+    if cache_key not in st.session_state or st.session_state.get(mtime_key) != current_mtime:
         with st.spinner(f"正在加载 {strategies[selected_idx].display_name} 数据…"):
             st.session_state[cache_key] = load_strategy(selected_id)
+            st.session_state[mtime_key] = current_mtime
 
     return st.session_state[cache_key]
 
