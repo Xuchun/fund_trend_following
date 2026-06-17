@@ -133,14 +133,6 @@ if regime_enabled:
 200 日高点这道门槛是天然保护：例如 2022 年 TLT 持续下跌 −31%，永远不会触发突破信号，豁免自动失效，不产生任何损害。
 """)
 
-    st.markdown("""
-<div class="info-box">
-<strong>对比回测结果（2000-01-03 → 2026-06-15，基准 vs 豁免 TLT+GLD）</strong><br>
-CAGR <strong>+10.14% → +10.36%</strong>（+0.22pp），Sharpe 0.620 → 0.634，最大回撤几乎不变（−20.75% → −20.74%）。<br>
-26 年新增 15 笔熊市交易（TLT 9 笔 +$81,502，GLD 6 笔 −$7,801），净盈亏 +$73,701。<br>
-<em>注：TLT+GLD+UUP 三标的完整对比回测进行中，结果将在「提高熊市资金使用率」页面更新。</em>
-</div>
-""", unsafe_allow_html=True)
 else:
     st.markdown(f"""
 **【当前参数未启用市场环境过滤器】**
