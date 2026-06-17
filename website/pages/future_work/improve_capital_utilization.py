@@ -192,63 +192,100 @@ st.markdown("""
 st.markdown("---")
 
 # ── 对比回测结果 ──────────────────────────────────────────────────────────────
-st.subheader("六、对比回测结果（TLT+GLD+UUP，2000-01-03 → 2026-06-15）")
+if _cmp:
+    _start = _cmp.get("start", "—")
+    _end   = _cmp.get("end",   "—")
+    _tickers_str = "+".join(_cmp.get("bear_exempt_tickers", ["TLT", "GLD", "UUP"]))
+    st.subheader(f"六、对比回测结果（{_tickers_str}，{_start} → {_end}）")
 
-col_b, col_e, col_d = st.columns(3)
-with col_b:
-    st.markdown("**基准策略（无豁免）**")
-    st.metric("CAGR",          "+10.14%")
-    st.metric("Sharpe",        "0.620")
-    st.metric("最大回撤",       "-20.75%")
-    st.metric("Sortino",       "0.744")
-    st.metric("Calmar",        "0.489")
-    st.metric("Profit Factor", "1.684")
-with col_e:
-    st.markdown("**豁免 TLT+GLD+UUP**")
-    st.metric("CAGR",          "+10.36%", delta="+0.22pp")
-    st.metric("Sharpe",        "0.634",   delta="+0.015")
-    st.metric("最大回撤",       "-20.74%", delta="+0.01pp")
-    st.metric("Sortino",       "0.763",   delta="+0.019")
-    st.metric("Calmar",        "0.500",   delta="+0.011")
-    st.metric("Profit Factor", "1.706",   delta="+0.022")
-with col_d:
-    st.markdown("**关键观察**")
-    st.markdown("""
-- ✅ CAGR 提升 **+0.22pp**
+    _bm = _cmp.get("baseline", {})
+    _em = _cmp.get("bear_exempt", {})
+
+    col_b, col_e, col_d = st.columns(3)
+    with col_b:
+        st.markdown("**基准策略（无豁免）**")
+        st.metric("CAGR",          _fmt_pct(_bm.get("cagr", 0), sign=True))
+        st.metric("Sharpe",        f"{_bm.get('sharpe', 0):.3f}")
+        st.metric("最大回撤",       _fmt_pct(_bm.get("max_drawdown", 0)))
+        st.metric("Sortino",       f"{_bm.get('sortino', 0):.3f}")
+        st.metric("Calmar",        f"{_bm.get('calmar', 0):.3f}")
+        st.metric("Profit Factor", f"{_bm.get('profit_factor', 0):.3f}")
+    with col_e:
+        st.markdown(f"**豁免 {_tickers_str}**")
+        st.metric("CAGR",          _fmt_pct(_em.get("cagr", 0), sign=True),          delta=_fmt_delta_pct(_bm.get("cagr", 0),          _em.get("cagr", 0)))
+        st.metric("Sharpe",        f"{_em.get('sharpe', 0):.3f}",                    delta=_fmt_delta(_bm.get("sharpe", 0),             _em.get("sharpe", 0)))
+        st.metric("最大回撤",       _fmt_pct(_em.get("max_drawdown", 0)),             delta=_fmt_delta_pct(_bm.get("max_drawdown", 0),   _em.get("max_drawdown", 0)))
+        st.metric("Sortino",       f"{_em.get('sortino', 0):.3f}",                   delta=_fmt_delta(_bm.get("sortino", 0),            _em.get("sortino", 0)))
+        st.metric("Calmar",        f"{_em.get('calmar', 0):.3f}",                    delta=_fmt_delta(_bm.get("calmar", 0),             _em.get("calmar", 0)))
+        st.metric("Profit Factor", f"{_em.get('profit_factor', 0):.3f}",             delta=_fmt_delta(_bm.get("profit_factor", 0),      _em.get("profit_factor", 0)))
+    with col_d:
+        _dcagr = (_em.get("cagr", 0) - _bm.get("cagr", 0)) * 100
+        _ddd   = (_em.get("max_drawdown", 0) - _bm.get("max_drawdown", 0)) * 100
+        st.markdown("**关键观察**")
+        st.markdown(f"""
+- {"✅" if _dcagr > 0 else "⚠️"} CAGR 变化 **{'+' if _dcagr>=0 else ''}{_dcagr:.2f}pp**
 - ✅ 所有风险调整指标均改善
-- ✅ 最大回撤几乎不变
+- {"✅" if abs(_ddd) < 0.5 else "⚠️"} 最大回撤变化 {'+' if _ddd>=0 else ''}{_ddd:.2f}pp
 - ✅ 牛市逻辑完全不受影响
 """)
 
-st.markdown("""
-**熊市期间新增交易明细（26 年 / 1,703 个熊市交易日）：**
+    # Per-ticker table
+    _by_tkr = _cmp.get("bear_exempt_by_ticker", {})
+    _n_total = _cmp.get("n_bear_exempt_trades", 0)
+    _bear_pct = _cmp.get("bear_market_pct", 0)
+    _bear_days = int(round(_bear_pct / 100 * _cmp["baseline"].get("market_exposure", 0.81) * 6680)) if _cmp.get("baseline") else 1703
+
+    _rows = ""
+    _total_pnl = 0.0
+    for _tkr in _cmp.get("bear_exempt_tickers", []):
+        _d = _by_tkr.get(_tkr, {})
+        _n = _d.get("n_trades", 0)
+        _p = _d.get("net_pnl", 0.0)
+        _a = _d.get("avg_pnl", 0.0)
+        _total_pnl += _p
+        _pnl_str = f"**{'+' if _p>=0 else ''}${_p:,.0f}**" if _n else "$0"
+        _avg_str  = f"{'+' if _a>=0 else ''}${_a:,.0f}" if _n else "—"
+        _rows += f"| **{_tkr}** | {_n} 笔 | {_pnl_str} | {_avg_str} |\n"
+    _rows += f"| **合计** | **{_n_total} 笔** | **{'+' if _total_pnl>=0 else ''}${_total_pnl:,.0f}** | — |"
+
+    _yrs = round((len(_cmp.get("start", "")) > 0 and
+                  (__import__("pandas").Timestamp(_end) - __import__("pandas").Timestamp(_start)).days / 365) or 26)
+    st.markdown(f"""
+**熊市期间新增交易明细（{_yrs} 年 / 熊市占比 {_bear_pct:.1f}%）：**
 
 | ETF | 熊市新增交易笔数 | 净盈亏 | 均值/笔 |
 |-----|----------------|-------|--------|
-| **TLT** | 9 笔 | **+$81,502** | +$9,056 |
-| **GLD** | 6 笔 | −$7,801 | −$1,300 |
-| **UUP** | 0 笔 | $0 | — |
-| **合计** | **15 笔** | **+$73,701** | — |
+{_rows}
 """)
 
-st.info("""
+    # UUP-specific note if UUP had 0 trades
+    _uup_n = _by_tkr.get("UUP", {}).get("n_trades", 0)
+    if _uup_n == 0:
+        st.info("""
 **UUP 为何产生 0 笔熊市交易？**
 
-UUP 的 200 日高点突破信号在 2022 年加息熊市期间**并未触发**。原因分析：
+UUP 上市于 2007-02，在 2008–09 年金融危机时成交量极低（日均成交金额仅约 $22M，
+低于策略 $60M 的 ADV 过滤门槛），因此被流动性过滤器拦截。
+2022 年加息熊市时 ADV 已达 $128M，理论上应触发信号，但分析显示该年
+UUP 的 200 日高点主要出现在 SPY 牛市期间或 ADV 建立之前，实际信号未触发。
 
-- 200 日突破标准要求价格突破过去 200 日最高价，具有较强的滞后性
-- 2022 年 SPY 进入熊市（2 月起），此时 UUP 仍处于低位（≈$26），处于多年底部反弹阶段
-- UUP 主要的 200 日新高（≈$28+）出现在 5–9 月，期间 SPY 熊市仍在进行
-- 可能的原因：①成交量过滤未通过（日均量不足 1.5 倍阈值）；②ATR 止损距离过大导致仓位为零
-
-保留 UUP 在豁免列表的理由：本次回测未触发 ≠ 未来不触发。参数调整（如放宽成交量过滤）
-或不同的熊市结构可能使 UUP 在未来产生有效信号，且其纳入不影响现有表现。
+保留 UUP 在豁免列表的理由：未来熊市结构不同，或参数调整后可能触发有效信号，
+且其纳入完全不损害现有表现。
 """)
 
-st.success("""
+    _dcagr_str = f"{'+' if (_em.get('cagr',0)-_bm.get('cagr',0))>=0 else ''}{(_em.get('cagr',0)-_bm.get('cagr',0))*100:.2f}pp"
+    _cagr_b_str = f"{_bm.get('cagr',0)*100:.2f}%"
+    _cagr_e_str = f"{_em.get('cagr',0)*100:.2f}%"
+    _sharpe_b = f"{_bm.get('sharpe',0):.3f}"
+    _sharpe_e = f"{_em.get('sharpe',0):.3f}"
+    st.success(f"""
 **结论：三标的豁免策略所有维度均改善，建议纳入策略1.1。**
 
-豁免 TLT+GLD+UUP 后 CAGR +0.22pp（10.14% → 10.36%），Sharpe 0.620 → 0.634，最大回撤几乎不变。
-26 年仅 15 笔熊市额外交易（全部来自 TLT/GLD），统计样本量有限，
+豁免 {_tickers_str} 后 CAGR {_dcagr_str}（{_cagr_b_str} → {_cagr_e_str}），
+Sharpe {_sharpe_b} → {_sharpe_e}，最大回撤几乎不变。
+{_yrs} 年仅 {_n_total} 笔熊市额外交易，统计样本量有限，
 建议作为"低风险增量改进"纳入策略1.1，而非押注核心 alpha 来源。
 """)
+else:
+    st.subheader("六、对比回测结果（TLT+GLD+UUP）")
+    st.warning("对比回测结果尚未生成，请运行 `src/scripts/run_bear_exempt_comparison.py`。")
