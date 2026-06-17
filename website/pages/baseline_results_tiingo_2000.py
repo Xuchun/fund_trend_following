@@ -664,7 +664,7 @@ _pos_pnl_c2  = float(_tk_c2[_tk_c2["总盈亏"] > 0]["总盈亏"].sum())
 _n_profit_c2 = int((_tk_c2["总盈亏"] > 0).sum())
 _n_loss_c2   = int((_tk_c2["总盈亏"] <= 0).sum())
 
-st.markdown("#### 二、盈利集中度")
+st.markdown("#### 盈利集中度")
 _top20_c2 = _tk_c2.nlargest(20, "总盈亏")
 _fig_top20_c2 = _go_c2.Figure(_go_c2.Bar(
     y=_top20_c2["ticker"].tolist()[::-1],
