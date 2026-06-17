@@ -57,5 +57,22 @@
   "capital_util_bear_exempt": 0.1237,
   "n_trades_baseline": 3340,
   "n_trades_exempt": 3337,
-  "n_bear_exempt_trades": 15
+  "n_bear_exempt_trades": 15,
+  "bear_exempt_by_ticker": {
+    "GLD": {
+      "n_trades": 6,
+      "net_pnl": -7801.18,
+      "avg_pnl": -1300.2
+    },
+    "TLT": {
+      "n_trades": 9,
+      "net_pnl": 81502.27,
+      "avg_pnl": 9055.81
+    },
+    "UUP": {
+      "n_trades": 0,
+      "net_pnl": 0.0,
+      "avg_pnl": 0.0
+    }
+  }
 }
