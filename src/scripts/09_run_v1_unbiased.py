@@ -261,7 +261,10 @@ def main():
             "universe_etfs":   len([t for t in universe if t in {e.get("ticker","") for e in _existing_meta.get("etf_universe", [])}]),
             "params_anchor":   {k: getattr(_p_a, k) for k in vars(StrategyParams()) if not k.startswith("_")},
         })
-        _meta_path.write_text(json.dumps(_existing_meta, ensure_ascii=False, indent=2))
+        _meta_path.write_text(json.dumps(
+            _existing_meta, ensure_ascii=False, indent=2,
+            default=lambda x: sorted(x) if isinstance(x, (frozenset, set)) else str(x),
+        ))
 
     # ── Run B: ADV > $50M ────────────────────────────────────────────────────
     if args.run in ("b", "both"):
