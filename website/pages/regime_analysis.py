@@ -328,11 +328,12 @@ SPY 过滤器在趋势下行初期阻断了大量新仓，限制了新增敞口�
     # Verdict
     bear_markets = [n for n in ["金融危机", "加息熊市"] if _alpha(n) > 0]
     bull_markets_neg = [n for n in ["QE驱动慢牛", "AI驱动牛市"] if _alpha(n) < -0.05]
+    n_outperform = sum(1 for n in regimes if _alpha(n) > 0)
 
     verdict = (
-        f"✅ 综合评价：策略1.0在 5 个市场环境中展示出一致的风险控制能力——"
-        f"熊市/危机场景（金融危机、加息熊市）均跑赢 SPY，"
-        f"牛市环境获得正绝对收益但落后于 SPY。"
+        f"✅ 综合评价：策略1.0在 {n_outperform} / {len(regimes)} 个市场环境中实现正超额收益——"
+        f"熊市/危机场景（互联网泡沫崩溃、金融危机、加息熊市）均大幅跑赢 SPY，"
+        f"牛市环境（QE驱动慢牛、COVID复苏）获得正绝对收益但落后于 SPY。"
         f"全周期 CAGR {full_cagr*100:+.2f}%、Sharpe {full_sharpe:+.3f}、MaxDD {full_dd*100:.1f}%，"
         f"定位是**攻守兼备但偏重防守**的量化策略，"
         f"适合将其视为投资组合的风险对冲配置而非单纯超越指数的工具。"
