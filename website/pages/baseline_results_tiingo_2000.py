@@ -303,54 +303,86 @@ if len(_ep_df) > 0:
         f"触底后平均 {_avg_rec:.0f} 个交易日修复（已修复情节）。"
     )
 
-# ── Deep drawdown days per year ───────────────────────────────────────────────
+# ── Deep drawdown episode duration chart ─────────────────────────────────────
 import plotly.graph_objects as _go_ddd
 
 st.subheader("平均深度水下时间分布图（回撤 > 10%）")
 
-_nav_ddd = res.nav.copy()
-if not isinstance(_nav_ddd.index, _pd_ep.DatetimeIndex):
-    _nav_ddd.index = _pd_ep.to_datetime(_nav_ddd.index)
-_roll_max_ddd  = _nav_ddd.cummax()
-_dd_series_ddd = (_nav_ddd - _roll_max_ddd) / _roll_max_ddd   # daily drawdown (≤ 0)
-_deep_uw_ddd   = (_dd_series_ddd < -0.10)                      # True on deep underwater days
+_deep_eps_ddd = _ep_df[_ep_df["最大回撤"] < -0.10].copy() if len(_ep_df) > 0 else _pd_ep.DataFrame()
 
-_by_year_ddd = _deep_uw_ddd.groupby(_nav_ddd.index.year).sum().astype(int)
-_all_years_ddd = _pd_ep.RangeIndex(_nav_ddd.index.year.min(), _nav_ddd.index.year.max() + 1)
-_by_year_full_ddd = _by_year_ddd.reindex(_all_years_ddd, fill_value=0)
+if len(_deep_eps_ddd) == 0:
+    st.info("回测期间未出现回撤超过 10% 的深度情节。")
+else:
+    _deep_eps_ddd = _deep_eps_ddd.sort_values("高点")
 
-_colors_ddd = ["#d62728" if v > 0 else "#aec7e8" for v in _by_year_full_ddd.values]
+    # X 轴：起始年份；同一年出现两次情节则用 YYYY-MM 区分
+    _x_labels_ddd: list[str] = []
+    _seen_yr_ddd: dict[str, int] = {}
+    for _, _row_ddd in _deep_eps_ddd.iterrows():
+        _yr_ddd = _row_ddd["高点"][:4]
+        if _yr_ddd not in _seen_yr_ddd:
+            _seen_yr_ddd[_yr_ddd] = 1
+            _x_labels_ddd.append(_yr_ddd)
+        else:
+            _seen_yr_ddd[_yr_ddd] += 1
+            _x_labels_ddd.append(_row_ddd["高点"])
 
-_fig_ddd = _go_ddd.Figure(_go_ddd.Bar(
-    x=_by_year_full_ddd.index.astype(str),
-    y=_by_year_full_ddd.values,
-    marker_color=_colors_ddd,
-    hovertemplate="<b>%{x} 年</b><br>深度水下交易日：%{y} 天<extra></extra>",
-    text=[str(v) if v > 0 else "" for v in _by_year_full_ddd.values],
-    textposition="outside",
-))
-_fig_ddd.update_layout(
-    title="各年度深度水下交易日数（当日回撤 > 10%）",
-    xaxis_title="年份",
-    yaxis_title="交易日数",
-    height=360,
-    margin=dict(l=60, r=40, t=60, b=40),
-    bargap=0.25,
-)
-st.plotly_chart(_fig_ddd, use_container_width=True)
+    _y_vals_ddd   = _deep_eps_ddd["总水下时间（交易日）"].tolist()
+    _dd_pct_ddd   = [abs(v) * 100 for v in _deep_eps_ddd["最大回撤"].tolist()]
+    _custom_ddd   = [
+        [f"{abs(r['最大回撤'])*100:.1f}", r["高点"], r["低点"], r["修复"], int(r["总水下时间（交易日）"])]
+        for _, r in _deep_eps_ddd.iterrows()
+    ]
 
-_total_deep_days_ddd = int(_deep_uw_ddd.sum())
-_years_affected_ddd  = int((_by_year_full_ddd > 0).sum())
-_worst_yr_ddd        = int(_by_year_full_ddd.idxmax())
-_worst_days_ddd      = int(_by_year_full_ddd.max())
-_total_days_ddd      = len(_nav_ddd)
-st.markdown(
-    f"**解读：** 每根红色柱表示当年有多少个交易日处于 > 10% 的深度回撤中。"
-    f"回测全程共 **{_total_deep_days_ddd:,} 个交易日**（占全程 {_total_deep_days_ddd/_total_days_ddd*100:.1f}%）"
-    f"深度水下，涉及 **{_years_affected_ddd}** 个年度。"
-    f"最严重的年份是 **{_worst_yr_ddd} 年**（{_worst_days_ddd} 个交易日），"
-    f"蓝灰色柱代表当年全年未触及 > 10% 回撤。"
-)
+    _fig_ddd = _go_ddd.Figure(_go_ddd.Bar(
+        x=_x_labels_ddd,
+        y=_y_vals_ddd,
+        marker=dict(
+            color=_dd_pct_ddd,
+            colorscale="Reds",
+            colorbar=dict(title="最大回撤 (%)"),
+            cmin=10,
+            cmax=max(_dd_pct_ddd) if _dd_pct_ddd else 30,
+        ),
+        customdata=_custom_ddd,
+        hovertemplate=(
+            "<b>起始：%{customdata[1]}</b><br>"
+            "低谷：%{customdata[2]}<br>"
+            "修复：%{customdata[3]}<br>"
+            "最大回撤：%{customdata[0]}%<br>"
+            "总水下：%{y} 交易日"
+            "<extra></extra>"
+        ),
+        text=[f"{v}天" for v in _y_vals_ddd],
+        textposition="outside",
+    ))
+    _fig_ddd.update_layout(
+        title="每次深度回撤（> 10%）的总水下交易日数",
+        xaxis_title="起始年份",
+        yaxis_title="交易日数",
+        height=400,
+        margin=dict(l=60, r=20, t=60, b=50),
+        bargap=0.35,
+        xaxis=dict(type="category"),
+    )
+    st.plotly_chart(_fig_ddd, use_container_width=True)
+
+    _avg_total_ddd   = float(_deep_eps_ddd["总水下时间（交易日）"].mean())
+    _longest_idx_ddd = _deep_eps_ddd["总水下时间（交易日）"].idxmax()
+    _longest_ddd     = _deep_eps_ddd.loc[_longest_idx_ddd]
+    _recovered_ddd   = _deep_eps_ddd[_deep_eps_ddd["修复"] != "进行中"]
+    _avg_rec_ddd     = float(_recovered_ddd["修复耗时（交易日）"].mean()) if len(_recovered_ddd) > 0 else 0.0
+    st.markdown(
+        f"**解读：** 每根柱子代表一次回撤超过 10% 的深度情节，颜色越深表示回撤幅度越大，"
+        f"柱子越高表示水下时间越长。"
+        f"共 **{len(_deep_eps_ddd)}** 次，平均总水下时间 **{_avg_total_ddd:.0f} 交易日**"
+        f"（约 {_avg_total_ddd/252:.1f} 年）；"
+        f"已修复情节平均触底后 **{_avg_rec_ddd:.0f} 交易日**恢复至前高。"
+        f"最长情节起于 **{_longest_ddd['高点']}**，"
+        f"历时 **{int(_longest_ddd['总水下时间（交易日）'])} 交易日**"
+        f"（约 {_longest_ddd['总水下时间（交易日）']/252:.1f} 年），"
+        f"最大回撤 **{abs(_longest_ddd['最大回撤'])*100:.1f}%**。"
+    )
 
 st.markdown("---")
 
