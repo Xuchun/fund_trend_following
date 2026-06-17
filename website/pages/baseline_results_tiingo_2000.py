@@ -409,9 +409,26 @@ if _DIAG_PATH_BR.exists():
             else:
                 _bar_colors_br.append("#f57c00")
 
-        _x_labels_br.append("≥10")
-        _y_counts_br.append(_streak_counts_br.get("10+", 0))
-        _bar_colors_br.append("#d62728")
+        # Compute per-length counts for streaks >= 10 from trades
+        import pandas as _pd_streak
+        _trades_streak = res.trades.sort_values("exit_date").reset_index(drop=True) \
+            if "exit_date" in res.trades.columns else res.trades.reset_index(drop=True)
+        _ge10_counts: dict[int, int] = {}
+        _cur_s = 0
+        for _v_s in _trades_streak["net_pnl"].values:
+            if _v_s <= 0:
+                _cur_s += 1
+            else:
+                if _cur_s >= 10:
+                    _ge10_counts[_cur_s] = _ge10_counts.get(_cur_s, 0) + 1
+                _cur_s = 0
+        if _cur_s >= 10:
+            _ge10_counts[_cur_s] = _ge10_counts.get(_cur_s, 0) + 1
+
+        for _len_ge10 in sorted(_ge10_counts.keys()):
+            _x_labels_br.append(str(_len_ge10))
+            _y_counts_br.append(_ge10_counts[_len_ge10])
+            _bar_colors_br.append("#d62728")
 
         _fig_streak = _go_br.Figure(
             data=[_go_br.Bar(
@@ -427,8 +444,9 @@ if _DIAG_PATH_BR.exists():
             xaxis_title="连续亏损笔数",
             yaxis_title="出现次数",
             showlegend=False,
-            height=360,
+            height=400,
             margin=dict(t=50, b=40, l=40, r=20),
+            xaxis=dict(type="category"),
         )
         st.plotly_chart(_fig_streak, use_container_width=True)
 
