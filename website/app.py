@@ -75,6 +75,7 @@ pg = st.navigation(
             st.Page(_v2 / "walk_forward_v2.py",          title="Walk-Forward 验证", icon="🔄"),
             st.Page(_v2 / "regime_analysis_v2.py",       title="市场环境分析",   icon="🌦️"),
             st.Page(_v2 / "limitations_v2.py",           title="局限性声明",     icon="⚠️"),
+            st.Page(_pages / "strategy_comparison.py",    title="策略对比（1.0 vs 2.0）", icon="⚖️"),
         ],
         "Future Work": [
             st.Page(_fw / "multi_strategy_plan.py", title="多策略开发 Plan", icon="🚀"),
