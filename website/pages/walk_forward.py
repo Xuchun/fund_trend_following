@@ -314,7 +314,9 @@ if wf_data:
     _w1_spy   = _w_by_label.get("Window 1", {}).get("spy_oos", {}).get("cagr", 0)
     _w2_spy   = _w_by_label.get("Window 2", {}).get("spy_oos", {}).get("cagr", 0)
     _w3_spy   = _w_by_label.get("Window 3", {}).get("spy_oos", {}).get("cagr", 0)
-    _w4_spy   = _w_by_label.get("Window 4", {}).get("spy_oos", {}).get("cagr", 0)
+    _w4_spy      = _w_by_label.get("Window 4", {}).get("spy_oos", {}).get("cagr", 0)
+    _w5_oos_start = _w_by_label.get("Window 5", {}).get("oos_start", "")[:7]
+    _w5_oos_end   = _w_by_label.get("Window 5", {}).get("oos_end",   "")
 
     st.markdown(f"""
 **1. 无过拟合，策略1.0样本外有正收益**
