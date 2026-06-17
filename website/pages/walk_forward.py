@@ -356,7 +356,7 @@ Window 4（2025 全年 OOS）CAGR **{_w4_cagr*100:+.1f}%**，Sharpe **{_w4_sharp
 
 **6. 2026 年（部分 OOS，Window 5）表现强劲**
 
-Window 5（2026-01 至 2026-06-09，约半年）OOS CAGR 年化 **{_w5_cagr*100:+.1f}%**，
+Window 5（{_w5_oos_start} 至 {_w5_oos_end}，约半年）OOS CAGR 年化 **{_w5_cagr*100:+.1f}%**，
 Sharpe **{_w5_sharpe:+.3f}**，是 5 个窗口中表现最强的一个。
 需注意这仅为约 6 个月的短期数据，统计意义有限，但结果积极。
 
