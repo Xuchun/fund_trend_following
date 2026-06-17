@@ -233,7 +233,7 @@ _n_per_nd   = (2 if _has_spy_nd else 1) + 1  # nav [+ spy] + drawdown
 _fig_nd = _make_subplots_nd(
     rows=2, cols=1, shared_xaxes=True,
     row_heights=[0.68, 0.32], vertical_spacing=0.06,
-    subplot_titles=["净值曲线", "回撤曲线"],
+    subplot_titles=["", ""],
 )
 
 for _i, (_lbl, _yrs) in enumerate(_periods_nd):
