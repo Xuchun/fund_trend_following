@@ -647,6 +647,69 @@ st.markdown(
 
 st.markdown("---")
 
+# ── 二、盈利集中度 (moved before R-multiple section) ──────────────────────────
+import plotly.graph_objects as _go_c2
+
+_tk_c2 = res.trades.groupby("ticker").agg(
+    交易次数=("net_pnl", "count"),
+    总盈亏  =("net_pnl", "sum"),
+    胜率    =("net_pnl", lambda x: (x > 0).mean()),
+    平均R   =("pnl_r_multiple", "mean"),
+    最大R   =("pnl_r_multiple", "max"),
+).reset_index()
+_tk_c2["类别"] = _tk_c2["ticker"].apply(lambda t: "ETF" if t in _ETF_SET else "股票")
+
+_n_ta_c2     = res.trades["ticker"].nunique()
+_pos_pnl_c2  = float(_tk_c2[_tk_c2["总盈亏"] > 0]["总盈亏"].sum())
+_n_profit_c2 = int((_tk_c2["总盈亏"] > 0).sum())
+_n_loss_c2   = int((_tk_c2["总盈亏"] <= 0).sum())
+
+st.markdown("#### 二、盈利集中度")
+_top20_c2 = _tk_c2.nlargest(20, "总盈亏")
+_fig_top20_c2 = _go_c2.Figure(_go_c2.Bar(
+    y=_top20_c2["ticker"].tolist()[::-1],
+    x=(_top20_c2["总盈亏"] / 1e6).tolist()[::-1],
+    orientation="h",
+    marker_color=["#2ca02c" if v > 0 else "#d62728"
+                  for v in _top20_c2["总盈亏"].tolist()[::-1]],
+    text=[f"${v:.1f}M" for v in (_top20_c2["总盈亏"] / 1e6).tolist()[::-1]],
+    textposition="outside",
+))
+_fig_top20_c2.update_layout(
+    title="累计净盈亏 TOP 20 标的",
+    xaxis_title="净盈亏（$M）",
+    height=520,
+    margin=dict(l=70, r=80, t=50, b=40),
+    showlegend=False,
+)
+st.plotly_chart(_fig_top20_c2, use_container_width=True)
+
+_top5_c2   = float(_tk_c2.nlargest(5,  "总盈亏")["总盈亏"].sum())
+_top10_c2  = float(_tk_c2.nlargest(10, "总盈亏")["总盈亏"].sum())
+_top20_c2v = float(_tk_c2.nlargest(20, "总盈亏")["总盈亏"].sum())
+st.markdown(f"""
+实际交易的 {_n_ta_c2:,} 个标的中，**{_n_profit_c2:,} 个**（{_n_profit_c2/_n_ta_c2*100:.0f}%）净盈利，**{_n_loss_c2:,} 个**净亏损。
+
+| 维度 | 金额 | 占全部净盈利比例 |
+|------|------|----------------|
+| TOP 5 标的 | ${_top5_c2/1e6:.1f}M | {_top5_c2/_pos_pnl_c2*100:.0f}% |
+| TOP 10 标的 | ${_top10_c2/1e6:.1f}M | {_top10_c2/_pos_pnl_c2*100:.0f}% |
+| TOP 20 标的 | ${_top20_c2v/1e6:.1f}M | {_top20_c2v/_pos_pnl_c2*100:.0f}% |
+
+这是趋势跟踪的核心统计特征：**少数大赢标的贡献绝大多数利润**，整体正期望来自右尾效应。
+""")
+
+with st.expander("📋 亏损最大的 10 个标的", expanded=False):
+    _bot10_c2 = _tk_c2.nsmallest(10, "总盈亏")[
+        ["ticker", "类别", "交易次数", "总盈亏", "胜率", "平均R"]
+    ].copy()
+    _bot10_c2["总盈亏"] = _bot10_c2["总盈亏"].map(lambda v: f"${v:+,.0f}")
+    _bot10_c2["胜率"]   = _bot10_c2["胜率"].map(lambda v: f"{v*100:.0f}%")
+    _bot10_c2["平均R"]  = _bot10_c2["平均R"].map(lambda v: f"{v:.2f}R")
+    st.dataframe(_bot10_c2, use_container_width=True, hide_index=True)
+
+st.markdown("---")
+
 # ── R-multiple distribution ───────────────────────────────────────────────────
 st.subheader("交易盈亏分布（R 倍数）")
 st.plotly_chart(r_multiple_distribution(res.trades), use_container_width=True)
