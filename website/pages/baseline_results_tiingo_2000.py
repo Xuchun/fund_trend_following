@@ -1143,57 +1143,6 @@ st.caption(
     "要么突破发生时恰逢熊市阶段（Regime Filter 关闭新开仓）。"
 )
 
-# ── 二、盈利集中度 ────────────────────────────────────────────────────────────
-st.markdown("#### 二、盈利集中度")
-
-_total_pnl_ta = float(_tk["总盈亏"].sum())
-_pos_pnl_ta   = float(_tk[_tk["总盈亏"] > 0]["总盈亏"].sum())
-_n_profit_tk  = int((_tk["总盈亏"] > 0).sum())
-_n_loss_tk    = int((_tk["总盈亏"] <= 0).sum())
-
-_top20_ta = _tk.nlargest(20, "总盈亏")
-_fig_top20 = _go.Figure(_go.Bar(
-    y=_top20_ta["ticker"].tolist()[::-1],
-    x=(_top20_ta["总盈亏"] / 1e6).tolist()[::-1],
-    orientation="h",
-    marker_color=["#2ca02c" if v > 0 else "#d62728"
-                  for v in _top20_ta["总盈亏"].tolist()[::-1]],
-    text=[f"${v:.1f}M" for v in (_top20_ta["总盈亏"] / 1e6).tolist()[::-1]],
-    textposition="outside",
-))
-_fig_top20.update_layout(
-    title="累计净盈亏 TOP 20 标的",
-    xaxis_title="净盈亏（$M）",
-    height=520,
-    margin=dict(l=70, r=80, t=50, b=40),
-    showlegend=False,
-)
-st.plotly_chart(_fig_top20, use_container_width=True)
-
-_top5_pnl_ta  = float(_tk.nlargest(5,  "总盈亏")["总盈亏"].sum())
-_top10_pnl_ta = float(_tk.nlargest(10, "总盈亏")["总盈亏"].sum())
-_top20_pnl_ta = float(_tk.nlargest(20, "总盈亏")["总盈亏"].sum())
-st.markdown(f"""
-实际交易的 {_n_ta:,} 个标的中，**{_n_profit_tk:,} 个**（{_n_profit_tk/_n_ta*100:.0f}%）净盈利，**{_n_loss_tk:,} 个**净亏损。
-
-| 维度 | 金额 | 占全部净盈利比例 |
-|------|------|----------------|
-| TOP 5 标的 | ${_top5_pnl_ta/1e6:.1f}M | {_top5_pnl_ta/_pos_pnl_ta*100:.0f}% |
-| TOP 10 标的 | ${_top10_pnl_ta/1e6:.1f}M | {_top10_pnl_ta/_pos_pnl_ta*100:.0f}% |
-| TOP 20 标的 | ${_top20_pnl_ta/1e6:.1f}M | {_top20_pnl_ta/_pos_pnl_ta*100:.0f}% |
-
-这是趋势跟踪的核心统计特征：**少数大赢标的贡献绝大多数利润**，整体正期望来自右尾效应。
-""")
-
-with st.expander("📋 亏损最大的 10 个标的", expanded=False):
-    _bot10_ta = _tk.nsmallest(10, "总盈亏")[
-        ["ticker", "类别", "交易次数", "总盈亏", "胜率", "平均R"]
-    ].copy()
-    _bot10_ta["总盈亏"] = _bot10_ta["总盈亏"].map(lambda v: f"${v:+,.0f}")
-    _bot10_ta["胜率"]   = _bot10_ta["胜率"].map(lambda v: f"{v*100:.0f}%")
-    _bot10_ta["平均R"]  = _bot10_ta["平均R"].map(lambda v: f"{v:.2f}R")
-    st.dataframe(_bot10_ta, use_container_width=True, hide_index=True)
-
 # ── 三、每标的交易次数分布 ─────────────────────────────────────────────────────
 st.markdown("#### 三、每标的交易次数分布")
 
