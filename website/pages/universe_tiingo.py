@@ -110,7 +110,7 @@ with _col_b:
 st.markdown("---")
 
 # ── 标的池概览 ─────────────────────────────────────────────────────────────────
-st.subheader(f"标的池概览（历史回测 {_backtest_start} → {_data_latest}，标的过滤方法如下）")
+st.subheader(f"标的池概览（历史回测 {_backtest_start} → {_backtest_end}，标的过滤方法如下）")
 
 _eu252 = eu_rec.copy()
 _eu252["_is_etf"] = _eu252["ticker"].isin(_ETF_SET)
