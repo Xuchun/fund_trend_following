@@ -849,7 +849,7 @@ if _es_path.exists():
 st.markdown("---")
 
 # ── Profit by type: stock vs ETF ──────────────────────────────────────────────
-st.subheader("策略1.0盈利来源：股票 vs ETF")
+st.subheader("盈利来源：股票 vs ETF")
 st.plotly_chart(profit_by_type_chart(res.trades, _ETF_SET), use_container_width=True)
 
 etf_pnl   = res.trades[res.trades["ticker"].isin(_ETF_SET)]["net_pnl"].sum()
