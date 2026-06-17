@@ -36,7 +36,7 @@ def precompute_indicators(
             'rolling_high':      pd.Series,   # max(high[t-N:t-1])
             'breakout_signal':   pd.Series,   # bool: close > rolling_high
             'breakout_strength': pd.Series,   # close / rolling_high
-            'adv':               pd.Series,   # ADV_60 dollar volume (includes today, no shift)
+            'adv':               pd.Series,   # ADV_60 dollar volume, shift(1): mean(dv[t-60:t-1])
             'volume_ma':         pd.Series,   # 60-day avg share volume (shift=1)
             'log_returns':       pd.Series,   # ln(close[t]/close[t-1])
         }
