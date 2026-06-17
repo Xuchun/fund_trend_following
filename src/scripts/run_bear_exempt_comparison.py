@@ -174,7 +174,7 @@ def print_comparison(base_res, exp_res, panel):
     ]
 
     print(f"\n{'='*68}")
-    print(f"  对比结果：基准策略 vs 熊市豁免 TLT+GLD")
+    print(f"  对比结果：基准策略 vs 熊市豁免 TLT+GLD+UUP")
     print(f"{'='*68}")
     print(f"  回测期间：{START} → {END}")
     print(f"  熊市天数：{len(bear_dates):,} 天（占全程 {bear_pct:.1f}%）\n")
