@@ -75,10 +75,11 @@ st.info(
 st.subheader("1. 集中型牛市跑输大盘（最核心局限）")
 st.markdown("**问题：** 趋势跟踪策略在少数股票主导的集中型牛市中，收益率系统性低于买入持有 SPY；在多板块同步走强的宽基牛市中则具有竞争力。")
 
+_qe_gap = None
+_ai_gap = None
+
 if _reg:
     _rows = []
-    _qe_gap = None
-    _ai_gap = None
     for name, data in _reg.get("regimes", {}).items():
         sc  = data["strategy"].get("cagr", 0) * 100
         pc  = data.get("spy", {}).get("cagr", 0) * 100
