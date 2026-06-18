@@ -429,7 +429,7 @@ else:
         textposition="outside",
     ))
     _fig_ddd.update_layout(
-        title=None,
+        title="",
         height=400,
         margin=dict(l=60, r=20, t=30, b=50),
         bargap=0.35,
