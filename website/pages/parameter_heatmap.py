@@ -687,19 +687,19 @@ st.markdown(f"""
 ### 2D Heatmap 结论
 """)
 
-if _hm_a and _n_a == 28:
+if _hm_a and _n_a == 16:
     _combos_a = _get_combos(_hm_a)
     _all_s_a  = [c["sharpe"] for c in _combos_a]
     _peak_a   = max(_all_s_a)
     _n_stable_a = sum(1 for s in _all_s_a if s >= _peak_a * 0.90)
     st.markdown(f"""
-**N × ATR止损乘数（已完成 28/28）：**
+**N × ATR止损乘数（已完成 16/16）：**
 - 峰值 Sharpe = {_peak_a:+.3f}，90% 阈值 = {_peak_a * 0.90:.3f}
-- 稳定格子数：{_n_stable_a} / 28（{_n_stable_a/28*100:.0f}%）
-- {"✅ 两参数联合大范围稳定，策略对 N 与止损乘数的组合选择鲁棒" if _n_stable_a/28 >= 0.5 else "⚠️ 稳定区间较窄，需谨慎"}
+- 稳定格子数：{_n_stable_a} / 16（{_n_stable_a/16*100:.0f}%）
+- {"✅ 两参数联合大范围稳定，策略对 N 与止损乘数的组合选择鲁棒" if _n_stable_a/16 >= 0.5 else "⚠️ 稳定区间较窄，需谨慎"}
 """)
 elif _hm_a:
-    st.info(f"⏳ Grid A 计算进行中（{_n_a}/28），结论待更新。")
+    st.info(f"⏳ Grid A 计算进行中（{_n_a}/16），结论待更新。")
 else:
     st.info("⏳ 2D Heatmap 计算尚未完成。完成后刷新页面查看 2D 联合稳定性结论。")
 
