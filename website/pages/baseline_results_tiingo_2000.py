@@ -542,6 +542,167 @@ else:
 
 st.markdown("---")
 
+# ── Top 20 亏损交易分析 ────────────────────────────────────────────────────────
+import plotly.graph_objects as _go_l20
+import numpy as _np_l20
+
+st.subheader("Top 20亏损交易分析")
+st.caption("已平仓交易中 R 倍数最差的 20 笔——寻找大亏家的共性规律")
+
+_l20 = res.trades.nsmallest(20, "pnl_r_multiple").copy()
+_l20["类别"]     = _l20["ticker"].apply(lambda t: "ETF" if t in _ETF_SET else "股票")
+_l20["卖出原因"] = _l20["exit_reason"].map({
+    "trailing_stop":   "追踪止损",
+    "stop_loss":       "初始止损",
+    "end_of_backtest": "回测截止",
+    "delisted":        "退市/并购",
+}).fillna(_l20["exit_reason"])
+_l20["入场年份"] = _l20["entry_date"].dt.year
+
+_l20_n_stoploss  = int((_l20["exit_reason"] == "stop_loss").sum())
+_l20_n_delisted  = int((_l20["exit_reason"] == "delisted").sum())
+_l20_n_stocks    = int((_l20["类别"] == "股票").sum())
+_l20_avg_hold    = float(_l20["holding_days"].mean())
+_l20_med_hold    = float(_l20["holding_days"].median())
+_l20_min_hold    = int(_l20["holding_days"].min())
+_l20_max_hold    = int(_l20["holding_days"].max())
+_l20_all_loss_avg = float(res.trades[res.trades["net_pnl"] <= 0]["holding_days"].mean())
+_l20_n_gap       = int((_l20["gap_adjusted_loss_multiple"] < -1.05).sum())
+
+# ── R 倍数排名图（横向柱状图）────────────────────────────────────────────────
+_l20_desc = _l20.sort_values("pnl_r_multiple", ascending=False)  # 最差的在 y 列表末尾 → 顶部
+_fig_l20r = _go_l20.Figure(_go_l20.Bar(
+    y=[f"{row['ticker']}  ({int(row['入场年份'])})" for _, row in _l20_desc.iterrows()],
+    x=_l20_desc["pnl_r_multiple"].tolist(),
+    orientation="h",
+    marker_color="#d62728",
+    text=[f"{r:.2f}R" for r in _l20_desc["pnl_r_multiple"].tolist()],
+    textposition="outside",
+))
+_fig_l20r.update_layout(
+    title="Top 20 大亏家 R 倍数（括号内为入场年份）",
+    xaxis_title="R 倍数",
+    height=560,
+    margin=dict(l=140, r=80, t=50, b=40),
+    showlegend=False,
+)
+st.plotly_chart(_fig_l20r, use_container_width=True)
+
+# ── 指标行 ────────────────────────────────────────────────────────────────────
+_lm1, _lm2, _lm3, _lm4 = st.columns(4)
+with _lm1:
+    st.metric("初始止损退出",
+              f"{_l20_n_stoploss} / 20  ({_l20_n_stoploss / 20 * 100:.0f}%)",
+              help="触发初始止损退出 = 风控正常运作（快速截断亏损）")
+with _lm2:
+    st.metric("平均持仓天数",
+              f"{_l20_avg_hold:.0f} 天",
+              delta=f"vs 全部亏损交易 {_l20_all_loss_avg:.0f} 天",
+              delta_color="inverse",
+              help="大亏家持仓时间是否更长？趋势跟踪应快速止损，持仓异常长说明止损被绕开")
+with _lm3:
+    st.metric("跳空穿透 / 退市",
+              f"{_l20_n_gap} 笔跳空 / {_l20_n_delisted} 笔退市",
+              help="gap_adjusted_loss_multiple < -1.05R：止损被跳空穿透，实际亏损超 1R")
+with _lm4:
+    st.metric("股票 / ETF",
+              f"{_l20_n_stocks} : {len(_l20) - _l20_n_stocks}",
+              help="大亏家的资产类别分布")
+
+# ── 散点图 + 年份分布 ─────────────────────────────────────────────────────────
+_lca, _lcb = st.columns(2)
+
+with _lca:
+    _l20_corr = float(_np_l20.corrcoef(_l20["holding_days"], _l20["pnl_r_multiple"])[0, 1])
+    _fig_lsc = _go_l20.Figure(_go_l20.Scatter(
+        x=_l20["holding_days"].tolist(),
+        y=_l20["pnl_r_multiple"].tolist(),
+        mode="markers+text",
+        text=_l20["ticker"].tolist(),
+        textposition="top center",
+        marker=dict(size=10, color="#d62728"),
+    ))
+    _fig_lsc.add_annotation(
+        text=f"相关系数 r = {_l20_corr:.2f}",
+        xref="paper", yref="paper", x=0.98, y=0.95,
+        showarrow=False, align="right",
+        bgcolor="wheat", bordercolor="#ccc", borderwidth=1,
+        font=dict(size=11),
+    )
+    _fig_lsc.update_layout(
+        title="持仓天数 vs R 倍数（大亏家）",
+        xaxis_title="持仓天数",
+        yaxis_title="R 倍数",
+        height=380,
+        margin=dict(l=50, r=30, t=50, b=40),
+    )
+    st.plotly_chart(_fig_lsc, use_container_width=True)
+
+with _lcb:
+    _l20_yr = _l20["入场年份"].value_counts().sort_index()
+    _fig_lyr = _go_l20.Figure(_go_l20.Bar(
+        x=_l20_yr.index.tolist(),
+        y=_l20_yr.values.tolist(),
+        marker_color="#d62728",
+        text=_l20_yr.values.tolist(),
+        textposition="outside",
+    ))
+    _fig_lyr.update_layout(
+        title="大亏家入场年份分布",
+        xaxis_title="入场年份",
+        yaxis_title="笔数",
+        height=380,
+        margin=dict(l=50, r=30, t=50, b=40),
+    )
+    st.plotly_chart(_fig_lyr, use_container_width=True)
+
+# ── 明细表 ────────────────────────────────────────────────────────────────────
+_l20_show = _l20.sort_values("pnl_r_multiple")[[
+    "ticker", "类别", "entry_date", "exit_date", "holding_days",
+    "pnl_r_multiple", "net_pnl", "gap_adjusted_loss_multiple", "卖出原因", "入场年份",
+]].copy().reset_index(drop=True)
+_l20_show.columns = ["标的", "类别", "买入日期", "卖出日期", "持仓天数",
+                     "R 倍数", "净亏损($)", "实际R(含跳空)", "卖出原因", "入场年份"]
+_l20_show["买入日期"]      = _l20_show["买入日期"].dt.strftime("%Y-%m-%d")
+_l20_show["卖出日期"]      = _l20_show["卖出日期"].dt.strftime("%Y-%m-%d")
+_l20_show["净亏损($)"]     = _l20_show["净亏损($)"].map(lambda v: f"${v:+,.0f}")
+_l20_show["R 倍数"]        = _l20_show["R 倍数"].map(lambda v: f"{v:.2f}R")
+_l20_show["实际R(含跳空)"] = _l20_show["实际R(含跳空)"].map(
+    lambda v: f"{v:.2f}R" if v == v else "—"
+)
+
+with st.expander("📋 Top 20 大亏家明细", expanded=True):
+    st.dataframe(_l20_show, use_container_width=True, hide_index=True)
+
+# ── 共性总结 ──────────────────────────────────────────────────────────────────
+_l20_yr_top3 = _l20["入场年份"].value_counts().nlargest(3)
+_lyr_str  = "、".join([f"{int(yr)}年({int(cnt)}笔)" for yr, cnt in _l20_yr_top3.items()])
+_exit_dist = _l20["卖出原因"].value_counts()
+_exit_str  = "、".join([f"{reason}({cnt}笔)" for reason, cnt in _exit_dist.items()])
+_hold_note = (
+    f"大亏家持仓更长（{_l20_avg_hold:.0f} vs {_l20_all_loss_avg:.0f} 天），某些交易在慢慢亏损后才止损"
+    if _l20_avg_hold > _l20_all_loss_avg + 5
+    else f"大亏家与普通亏损持仓相近（{_l20_avg_hold:.0f} vs {_l20_all_loss_avg:.0f} 天），止损执行及时"
+)
+_cat_note = (
+    "个股风险更大，大亏家以股票为主" if _l20_n_stocks >= 15
+    else f"股票 {_l20_n_stocks} 笔 / ETF {len(_l20) - _l20_n_stocks} 笔，ETF 也存在较大回撤"
+)
+
+st.markdown(f"""
+**共性总结：**
+
+| 维度 | 数据 | 解读 |
+|------|------|------|
+| 退出方式 | {_exit_str} | {"大亏家主要由初始止损退出，风控在正常运作，截断亏损逻辑有效" if _l20_n_stoploss >= 12 else f"退市/并购导致 {_l20_n_delisted} 笔异常亏损，为不可控风险（公司事件）"} |
+| 持仓时长 | 平均 {_l20_avg_hold:.0f} 天（中位 {_l20_med_hold:.0f} 天），区间 [{_l20_min_hold}–{_l20_max_hold}] 天 | {_hold_note} |
+| 跳空风险 | {_l20_n_gap} 笔止损被跳空穿透（实际 > 1R 亏损）/ {_l20_n_delisted} 笔退市 | {"跳空和退市是超额亏损的主因，属于单笔风险中的尾部事件" if (_l20_n_gap + _l20_n_delisted) > 3 else "跳空穿透较少，止损执行质量良好"} |
+| 资产类别 | {_l20_n_stocks} 只股票 / {len(_l20) - _l20_n_stocks} 只 ETF | {_cat_note} |
+| 年份集中度 | 集中于 {_lyr_str} | 大亏家往往出现在特定市场环境（熊市或黑天鹅事件），与整体市场条件相关 |
+""")
+
+st.markdown("---")
+
 st.subheader("逐年回报对比 & 逐年交易笔数")
 
 # ── Annual returns + Trades per year (shared x-axis) ─────────────────────────
