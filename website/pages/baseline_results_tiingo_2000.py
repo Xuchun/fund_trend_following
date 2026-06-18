@@ -429,13 +429,19 @@ else:
         textposition="outside",
     ))
     _fig_ddd.update_layout(
-        title="每次深度回撤（> 10%）的总水下交易日数",
+        title=None,
         xaxis_title="深度回撤起始年份",
         yaxis_title="深度回撤日数",
         height=400,
-        margin=dict(l=60, r=20, t=60, b=50),
+        margin=dict(l=60, r=20, t=30, b=50),
         bargap=0.35,
-        xaxis=dict(type="category"),
+        xaxis=dict(
+            type="category",
+            title_font=dict(color="black", size=13, family="Arial Black, Arial, sans-serif"),
+        ),
+        yaxis=dict(
+            title_font=dict(color="black", size=13, family="Arial Black, Arial, sans-serif"),
+        ),
     )
     st.plotly_chart(_fig_ddd, use_container_width=True)
 
