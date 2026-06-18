@@ -360,7 +360,7 @@ if _str:
             _slip20_str = f"20bps 滑点 → CAGR {_slip20_cagr:.2f}%（较基准低 {_diff:.2f}%）"
 
 _qe_gap_str = f"QE 慢牛 11 年每年少赚约 {abs(_qe_gap):.1f}% vs SPY" if _qe_gap is not None else "QE 慢牛期间跑输 SPY 约 8%/年"
-_w1_cagr_str = f"{_w1_oos_cagr:+.1f}%" if "_w1_oos_cagr" in dir() else "−9.0%"
+_w1_cagr_str = f"{_w1_oos_cagr:+.1f}%" if globals().get("_w1_oos_cagr") is not None else "−9.0%"
 
 st.markdown(f"""
 | # | 局限性 | 严重程度 | 影响方向 | 量化估计 |
