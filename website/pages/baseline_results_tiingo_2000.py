@@ -1141,18 +1141,16 @@ def _fetch_unadj_entry_prices(trade_keys: tuple) -> dict:
     for ticker, date_str in trade_keys:
         key = f"{ticker}|{date_str}"
         try:
-            d0 = _dt2.date.fromisoformat(date_str)
-            d1 = d0 + _dt2.timedelta(days=7)
-            df = _yf2.download(
-                ticker,
+            d0   = _dt2.date.fromisoformat(date_str)
+            d1   = d0 + _dt2.timedelta(days=7)
+            # 用 Ticker.history() 而非 download()，避免新版 yfinance 的 MultiIndex 问题
+            hist = _yf2.Ticker(ticker).history(
                 start=d0.isoformat(),
                 end=d1.isoformat(),
                 auto_adjust=False,
-                progress=False,
             )
-            if df is not None and not df.empty:
-                close = df["Close"]
-                result[key] = float(close.iloc[0] if hasattr(close.iloc[0], "__float__") else close.values[0])
+            if hist is not None and not hist.empty and "Close" in hist.columns:
+                result[key] = float(hist["Close"].iloc[0])
         except Exception:
             pass
     return result
