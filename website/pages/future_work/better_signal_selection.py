@@ -15,7 +15,7 @@ from plotly.subplots import make_subplots
 _results_path = _root / "results" / "v1_unbiased_60m_2000"
 
 st.title("如何选中更优开仓信号")
-st.caption("基于"每日开仓信号：已开仓 vs 放弃开仓"分析，找到改进信号选择机制的方向，从而提高 CAGR 并保持甚至降低最大回撤")
+st.caption('基于"每日开仓信号：已开仓 vs 放弃开仓"分析，找到改进信号选择机制的方向，从而提高 CAGR 并保持甚至降低最大回撤')
 
 st.markdown("---")
 
