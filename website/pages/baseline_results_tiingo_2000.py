@@ -750,6 +750,153 @@ with st.expander(f"📋 R > 3 的大盈利交易明细（共 {len(_big_r_show)} 
 
 st.markdown("---")
 
+# ── Top 20 盈利交易分析 ────────────────────────────────────────────────────────
+import plotly.graph_objects as _go_t20
+import numpy as _np_t20
+
+st.subheader("Top 20盈利交易分析")
+st.caption("已平仓交易中 R 倍数最高的 20 笔——寻找大赢家的共性规律")
+
+_t20 = res.trades.nlargest(20, "pnl_r_multiple").copy()
+_t20["类别"]     = _t20["ticker"].apply(lambda t: "ETF" if t in _ETF_SET else "股票")
+_t20["卖出原因"] = _t20["exit_reason"].map({
+    "trailing_stop":   "追踪止损",
+    "stop_loss":       "初始止损",
+    "end_of_backtest": "回测截止",
+    "delisted":        "退市/并购",
+}).fillna(_t20["exit_reason"])
+_t20["入场年份"] = _t20["entry_date"].dt.year
+
+_t20_n_trailing  = int((_t20["exit_reason"] == "trailing_stop").sum())
+_t20_n_stocks    = int((_t20["类别"] == "股票").sum())
+_t20_avg_hold    = float(_t20["holding_days"].mean())
+_t20_med_hold    = float(_t20["holding_days"].median())
+_t20_min_hold    = int(_t20["holding_days"].min())
+_t20_max_hold    = int(_t20["holding_days"].max())
+_t20_all_win_avg = float(res.trades[res.trades["net_pnl"] > 0]["holding_days"].mean())
+_t20_corr        = float(_np_t20.corrcoef(_t20["holding_days"], _t20["pnl_r_multiple"])[0, 1])
+
+# ── R 倍数排名图（横向柱状图）────────────────────────────────────────────────
+_t20_asc = _t20.sort_values("pnl_r_multiple")
+_fig_t20r = _go_t20.Figure(_go_t20.Bar(
+    y=[f"{row['ticker']}  ({int(row['入场年份'])})" for _, row in _t20_asc.iterrows()],
+    x=_t20_asc["pnl_r_multiple"].tolist(),
+    orientation="h",
+    marker_color="#2ca02c",
+    text=[f"{r:.1f}R" for r in _t20_asc["pnl_r_multiple"].tolist()],
+    textposition="outside",
+))
+_fig_t20r.update_layout(
+    title="Top 20 大赢家 R 倍数（括号内为入场年份）",
+    xaxis_title="R 倍数",
+    height=560,
+    margin=dict(l=140, r=80, t=50, b=40),
+    showlegend=False,
+)
+st.plotly_chart(_fig_t20r, use_container_width=True)
+
+# ── 指标行 ────────────────────────────────────────────────────────────────────
+_tm1, _tm2, _tm3, _tm4 = st.columns(4)
+with _tm1:
+    st.metric("追踪止损退出",
+              f"{_t20_n_trailing} / 20  ({_t20_n_trailing / 20 * 100:.0f}%)",
+              help="大赢家通过追踪止损离场 = 让利润奔跑到趋势结束")
+with _tm2:
+    st.metric("平均持仓天数",
+              f"{_t20_avg_hold:.0f} 天",
+              delta=f"vs 全部盈利交易 {_t20_all_win_avg:.0f} 天",
+              help="大赢家是否比普通盈利交易持仓更久？")
+with _tm3:
+    st.metric("持仓区间",
+              f"{_t20_min_hold} – {_t20_max_hold} 天",
+              help="最短与最长持仓天数")
+with _tm4:
+    st.metric("股票 / ETF",
+              f"{_t20_n_stocks} : {len(_t20) - _t20_n_stocks}",
+              help="大赢家的资产类别分布")
+
+# ── 持仓天数 vs R 倍数 散点图 + 年份分布 ──────────────────────────────────────
+_tca, _tcb = st.columns(2)
+
+with _tca:
+    _fig_scatter = _go_t20.Figure(_go_t20.Scatter(
+        x=_t20["holding_days"].tolist(),
+        y=_t20["pnl_r_multiple"].tolist(),
+        mode="markers+text",
+        text=_t20["ticker"].tolist(),
+        textposition="top center",
+        marker=dict(size=10, color="#2ca02c"),
+    ))
+    _fig_scatter.add_annotation(
+        text=f"相关系数 r = {_t20_corr:.2f}",
+        xref="paper", yref="paper", x=0.98, y=0.05,
+        showarrow=False, align="right",
+        bgcolor="wheat", bordercolor="#ccc", borderwidth=1,
+        font=dict(size=11),
+    )
+    _fig_scatter.update_layout(
+        title="持仓天数 vs R 倍数（大赢家）",
+        xaxis_title="持仓天数",
+        yaxis_title="R 倍数",
+        height=380,
+        margin=dict(l=50, r=30, t=50, b=40),
+    )
+    st.plotly_chart(_fig_scatter, use_container_width=True)
+
+with _tcb:
+    _t20_yr = _t20["入场年份"].value_counts().sort_index()
+    _fig_yr = _go_t20.Figure(_go_t20.Bar(
+        x=_t20_yr.index.tolist(),
+        y=_t20_yr.values.tolist(),
+        marker_color="#f28e2b",
+        text=_t20_yr.values.tolist(),
+        textposition="outside",
+    ))
+    _fig_yr.update_layout(
+        title="大赢家入场年份分布",
+        xaxis_title="入场年份",
+        yaxis_title="笔数",
+        height=380,
+        margin=dict(l=50, r=30, t=50, b=40),
+    )
+    st.plotly_chart(_fig_yr, use_container_width=True)
+
+# ── 明细表 ────────────────────────────────────────────────────────────────────
+_t20_show = _t20.sort_values("pnl_r_multiple", ascending=False)[[
+    "ticker", "类别", "entry_date", "exit_date", "holding_days",
+    "pnl_r_multiple", "net_pnl", "卖出原因", "入场年份",
+]].copy().reset_index(drop=True)
+_t20_show.columns = ["标的", "类别", "买入日期", "卖出日期", "持仓天数",
+                     "R 倍数", "净盈亏($)", "卖出原因", "入场年份"]
+_t20_show["买入日期"] = _t20_show["买入日期"].dt.strftime("%Y-%m-%d")
+_t20_show["卖出日期"] = _t20_show["卖出日期"].dt.strftime("%Y-%m-%d")
+_t20_show["净盈亏($)"] = _t20_show["净盈亏($)"].map(lambda v: f"${v:,.0f}")
+_t20_show["R 倍数"]   = _t20_show["R 倍数"].map(lambda v: f"{v:.2f}R")
+
+with st.expander("📋 Top 20 大赢家明细", expanded=True):
+    st.dataframe(_t20_show, use_container_width=True, hide_index=True)
+
+# ── 共性总结 ──────────────────────────────────────────────────────────────────
+_t20_yr_top3 = _t20["入场年份"].value_counts().nlargest(3)
+_yr_str = "、".join([f"{int(yr)}年({int(cnt)}笔)" for yr, cnt in _t20_yr_top3.items()])
+_etf_note = (
+    "股票贡献了绝大多数大赢家，个股爆发力远超 ETF"
+    if _t20_n_stocks > len(_t20) - _t20_n_stocks
+    else f"股票与 ETF 均有贡献（{_t20_n_stocks} vs {len(_t20) - _t20_n_stocks}）"
+)
+st.markdown(f"""
+**共性总结：**
+
+| 维度 | 数据 | 解读 |
+|------|------|------|
+| 退出方式 | {_t20_n_trailing}/20 笔（{_t20_n_trailing / 20 * 100:.0f}%）为追踪止损 | 大赢家几乎全靠"让利润奔跑"，极少被初始止损打出 |
+| 持仓时长 | 平均 {_t20_avg_hold:.0f} 天（中位 {_t20_med_hold:.0f} 天），区间 [{_t20_min_hold}–{_t20_max_hold}] 天 | 比全部盈利交易均值（{_t20_all_win_avg:.0f} 天）长出 {_t20_avg_hold - _t20_all_win_avg:.0f} 天；**持仓时间越长 R 越大**（r={_t20_corr:.2f}） |
+| 资产类别 | {_t20_n_stocks} 只股票 / {len(_t20) - _t20_n_stocks} 只 ETF | {_etf_note} |
+| 年份集中度 | 集中于 {_yr_str} | 大赢家往往出现在特定行情年份，验证了顺势交易的核心逻辑 |
+""")
+
+st.markdown("---")
+
 # ── Profit by type: stock vs ETF ──────────────────────────────────────────────
 st.subheader("盈利来源：股票 vs ETF")
 st.plotly_chart(profit_by_type_chart(res.trades, _ETF_SET), use_container_width=True)
