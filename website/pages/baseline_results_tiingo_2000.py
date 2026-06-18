@@ -1248,7 +1248,7 @@ _t20_show["卖出日期"]    = _t20_show["卖出日期"].dt.strftime("%Y-%m-%d")
 _t20_show["净盈亏($)"]   = _t20_show["净盈亏($)"].map(lambda v: f"${v:,.0f}")
 _t20_show["R 倍数"]      = _t20_show["R 倍数"].map(lambda v: f"{v:.2f}R")
 _t20_show["原始买入价($)"] = _t20_show["原始买入价($)"].map(
-    lambda v: f"${v:.2f}" if v == v else "—"
+    lambda v: f"${v:.2f}" if v is not None and v == v else "—"
 )
 
 with st.expander("📋 Top 20 大赢家明细", expanded=True):
