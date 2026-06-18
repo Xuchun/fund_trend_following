@@ -131,6 +131,35 @@ def render_summary_cards(metrics: dict, color: str,
             color,
         ), unsafe_allow_html=True)
 
+    cols4 = st.columns(3)
+    with cols4[0]:
+        sortino_color = "#2ca02c" if sortino > 0.5 else ("#d62728" if sortino < 0 else "#f57c00")
+        st.markdown(_card_html(
+            "Sortino 比率",
+            f'<span style="color:{sortino_color}">{sortino:+.3f}</span>',
+            "仅惩罚下行波动率，比 Sharpe 更关注亏损风险",
+            color,
+        ), unsafe_allow_html=True)
+
+    with cols4[1]:
+        sharpe_color = "#2ca02c" if sharpe > 0.5 else ("#d62728" if sharpe < 0 else "#f57c00")
+        st.markdown(_card_html(
+            "Sharpe 比率",
+            f'<span style="color:{sharpe_color}">{sharpe:+.3f}</span>',
+            "无风险利率 2%（历史均值，日度计算）",
+            color,
+        ), unsafe_allow_html=True)
+
+    with cols4[2]:
+        pf_color = "#2ca02c" if profit_factor > 1.5 else ("#d62728" if profit_factor < 1.0 else "#f57c00")
+        pf_val = f"{profit_factor:.2f}" if profit_factor else "—"
+        st.markdown(_card_html(
+            "Profit Factor",
+            f'<span style="color:{pf_color}">{pf_val}</span>',
+            "总盈利 ÷ 总亏损；> 1 策略1.0有正期望，> 1.5 为良好，> 2.0 为优秀",
+            color,
+        ), unsafe_allow_html=True)
+
 
 def render_full_metrics_table(metrics: dict, spy_metrics: dict | None = None) -> None:
     """Render the full comparison metrics table."""
