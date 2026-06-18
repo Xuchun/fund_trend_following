@@ -72,6 +72,7 @@ pg = st.navigation(
             st.Page(_pt / "paper_trading_monitor.py", title="策略1.0模拟交易监控", icon="📡"),
         ],
         "策略1.0改进方案（开发中）": [
+            st.Page(_fw / "better_signal_selection.py",   title="如何选中更优开仓信号",    icon="🎯"),
             st.Page(_fw / "improve_cagr.py",              title="如何提高年化收益",        icon="🚀"),
             st.Page(_fw / "reduce_large_losses.py",       title="如何减少大R的亏损交易",  icon="🛡️"),
             st.Page(_fw / "reduce_consecutive_losses.py", title="如何降低连续亏损次数",    icon="📉"),
