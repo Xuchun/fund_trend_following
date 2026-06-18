@@ -1846,6 +1846,57 @@ else:
 
 st.markdown("---")
 
+# ── 每标的交易次数分布 ─────────────────────────────────────────────────────────
+st.subheader("每标的交易次数分布")
+
+_freq_ta     = _ta.groupby("ticker").size()
+_once_ta     = int((_freq_ta == 1).sum())
+_multi_ta    = int((_freq_ta > 1).sum())
+_max_freq_ta = int(_freq_ta.max())
+_top_tk_ta   = _freq_ta.idxmax()
+
+_fdist_x, _fdist_y = [], []
+for _k in range(1, 10):
+    _fdist_x.append(str(_k))
+    _fdist_y.append(int((_freq_ta == _k).sum()))
+_ge10_ta = int((_freq_ta >= 10).sum())
+_fdist_x.append("≥10")
+_fdist_y.append(_ge10_ta)
+
+_fig_freq_ta = _go.Figure(_go.Bar(
+    x=_fdist_x, y=_fdist_y,
+    marker_color=meta.color,
+    text=_fdist_y, textposition="outside",
+))
+_fig_freq_ta.update_layout(
+    title="每标的历史交易次数分布",
+    xaxis_title="交易次数（该标的整个回测期内合计）",
+    yaxis_title="标的数量",
+    height=320, margin=dict(l=50, r=20, t=50, b=40),
+)
+st.plotly_chart(_fig_freq_ta, use_container_width=True)
+st.markdown(
+    f"**{_once_ta:,} 个**标的（{_once_ta/_n_ta*100:.0f}%）仅交易过 1 次；"
+    f"**{_multi_ta:,} 个**（{_multi_ta/_n_ta*100:.0f}%）被多次买卖，"
+    f"交易最多的是 **{_top_tk_ta}**（{_max_freq_ta} 次）。"
+    "一次性交易占主导，说明策略追求的是独立的、非重复性趋势机会；"
+    "多次交易的标的往往是趋势明显的 ETF 或大盘龙头。"
+)
+
+with st.expander("📋 交易次数最多的 TOP 10 标的", expanded=False):
+    _topfreq_df = _freq_ta.sort_values(ascending=False).head(10).reset_index()
+    _topfreq_df.columns = ["标的", "交易次数"]
+    _topfreq_df["类别"] = _topfreq_df["标的"].apply(
+        lambda t: "ETF" if t in _ETF_SET else "股票"
+    )
+    _tk_pnl_map = _tk.set_index("ticker")["总盈亏"].to_dict()
+    _topfreq_df["总净盈亏($)"] = _topfreq_df["标的"].map(_tk_pnl_map).map(
+        lambda v: f"${v:+,.0f}"
+    )
+    st.dataframe(_topfreq_df, use_container_width=True, hide_index=True)
+
+st.markdown("---")
+
 # ── Monthly return heatmap ────────────────────────────────────────────────────
 st.subheader("月度收益热力图")
 st.plotly_chart(monthly_return_heatmap(res.nav), use_container_width=True)
