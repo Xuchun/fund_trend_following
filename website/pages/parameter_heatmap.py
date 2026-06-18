@@ -577,19 +577,19 @@ def _render_2d_heatmap(hm: dict, metric: str = "sharpe", title: str = "") -> Non
 
 # ── 3.1 Grid A ────────────────────────────────────────────────────────────────
 
-st.markdown("#### 3.1 N × ATR止损乘数（28 次回测）")
+st.markdown("#### 3.1 N × ATR止损乘数（16 次回测）")
 
 _n_a = len(_get_combos(_hm_a)) if _hm_a else 0
-if _hm_a and _n_a == 28:
+if _hm_a and _n_a == 16:
     _render_2d_heatmap(_hm_a, title="2D 热力图：突破窗口 N × ATR止损乘数（Sharpe）")
 elif _hm_a and _n_a > 0:
-    st.info(f"⏳ **计算进行中** — 已完成 {_n_a} / 28 次回测 …")
+    st.info(f"⏳ **计算进行中** — 已完成 {_n_a} / 16 次回测 …")
     if _n_a >= 4:
         st.markdown("**已有结果（部分）：**")
-        _render_2d_heatmap(_hm_a, title=f"2D 热力图（部分，{_n_a}/28）：突破窗口 N × ATR止损乘数")
+        _render_2d_heatmap(_hm_a, title=f"2D 热力图（部分，{_n_a}/16）：突破窗口 N × ATR止损乘数")
 else:
     st.info(
-        "⏳ **2D 网格计算进行中（0/28）** — 预计约 3 小时完成。"
+        "⏳ **2D 网格计算进行中（0/16）** — 预计约 3 小时完成。"
         "完成后刷新页面即可查看结果。"
     )
     if _log_path.exists():
