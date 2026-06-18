@@ -839,15 +839,15 @@ st.markdown(
 # ── 明细表 ────────────────────────────────────────────────────────────────────
 _l20_show = _l20.sort_values("pnl_r_multiple")[[
     "ticker", "行业", "类别", "entry_date", "exit_date", "holding_days",
-    "pnl_r_multiple", "net_pnl", "原始买入价", "gap_adjusted_loss_multiple", "卖出原因", "入场年份",
+    "pnl_r_multiple", "net_pnl", "入场价", "gap_adjusted_loss_multiple", "卖出原因", "入场年份",
 ]].copy().reset_index(drop=True)
 _l20_show.columns = ["标的", "行业", "类别", "买入日期", "卖出日期", "持仓天数",
-                     "R 倍数", "净亏损($)", "原始买入价($)", "实际R(含跳空)", "卖出原因", "入场年份"]
+                     "R 倍数", "净亏损($)", "入场价($,复权)", "实际R(含跳空)", "卖出原因", "入场年份"]
 _l20_show["买入日期"]      = _l20_show["买入日期"].dt.strftime("%Y-%m-%d")
 _l20_show["卖出日期"]      = _l20_show["卖出日期"].dt.strftime("%Y-%m-%d")
 _l20_show["净亏损($)"]     = _l20_show["净亏损($)"].map(lambda v: f"${v:+,.0f}")
 _l20_show["R 倍数"]        = _l20_show["R 倍数"].map(lambda v: f"{v:.2f}R")
-_l20_show["原始买入价($)"] = _l20_show["原始买入价($)"].map(
+_l20_show["入场价($,复权)"] = _l20_show["入场价($,复权)"].map(
     lambda v: f"${v:.2f}" if v is not None and v == v else "—"
 )
 _l20_show["实际R(含跳空)"] = _l20_show["实际R(含跳空)"].map(
