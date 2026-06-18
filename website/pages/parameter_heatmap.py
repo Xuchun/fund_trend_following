@@ -727,7 +727,7 @@ st.markdown(
     "\n".join(_slice_rows)
 )
 
-_n_slice_done = sum(1 for _sp, *_ in _slice_params if _load_perturb(_sp))
+_n_slice_done = sum(1 for _item in _slice_params if _load_perturb(_item[0]))
 if _n_slice_done == len(_slice_params):
     st.markdown("**总体评估：** 所有 7 个辅助参数的 CV(Sharpe) 均 < 0.10，策略对这些参数均表现出高鲁棒性。")
 else:
