@@ -112,6 +112,7 @@ long["退出方式"] = long["exit_reason"].map({
     "end_of_backtest": "回测截止",
     "delisted":        "退市/并购",
 }).fillna(long["exit_reason"])
+long["持仓天数"] = long["holding_days"]
 long["R 倍数"] = long["pnl_r_multiple"].map(lambda v: f"{v:.1f}R")
 long["净盈亏"] = long["net_pnl"].map(lambda v: f"${v/1e3:.0f}K")
 long["入场日期"] = long["entry_date"].dt.strftime("%Y-%m-%d")
