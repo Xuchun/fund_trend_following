@@ -1022,12 +1022,120 @@ with _tcb:
     )
     st.plotly_chart(_fig_yr, use_container_width=True)
 
+# ── 行业分布 ──────────────────────────────────────────────────────────────────
+_SECTOR_CN_T20 = {
+    "Technology":             "科技",
+    "Healthcare":             "医疗健康",
+    "Consumer Cyclical":      "消费（周期）",
+    "Consumer Defensive":     "消费（防御）",
+    "Financial Services":     "金融",
+    "Basic Materials":        "基础材料",
+    "Energy":                 "能源",
+    "Industrials":            "工业",
+    "Real Estate":            "房地产",
+    "Communication Services": "通信服务",
+    "Utilities":              "公用事业",
+}
+_etf_cat_t20 = {e["ticker"]: f"ETF-{e.get('category', '其他')}" for e in meta.etf_universe}
+
+@st.cache_data(ttl=86400 * 7, show_spinner="正在查询行业分类…")
+def _get_sector_map_t20(tickers: tuple) -> dict:
+    import yfinance as _yf
+    result = {}
+    for tk in tickers:
+        try:
+            raw = _yf.Ticker(tk).info.get("sector") or ""
+            result[tk] = _SECTOR_CN_T20.get(raw, raw or "未知")
+        except Exception:
+            result[tk] = "未知"
+    return result
+
+_stock_tkrs_t20 = tuple(
+    row["ticker"] for _, row in _t20.iterrows() if row["类别"] != "ETF"
+)
+_sec_map_t20 = _get_sector_map_t20(_stock_tkrs_t20)
+
+_t20["行业"] = _t20.apply(
+    lambda row: (
+        _etf_cat_t20.get(row["ticker"], "ETF")
+        if row["类别"] == "ETF"
+        else _sec_map_t20.get(row["ticker"], "未知")
+    ),
+    axis=1,
+)
+
+_sec_grp = (
+    _t20.groupby("行业", sort=False)
+    .agg(
+        笔数  = ("ticker", "count"),
+        合计R = ("pnl_r_multiple", "sum"),
+        标的  = ("ticker", lambda x: "、".join(x.tolist())),
+    )
+    .reset_index()
+    .sort_values("笔数", ascending=False)
+)
+
+st.markdown("#### 行业分布")
+_sec_colors = [
+    "#4e79a7","#f28e2b","#e15759","#76b7b2","#59a14f",
+    "#edc948","#b07aa1","#ff9da7","#9c755f","#bab0ac",
+]
+_col_pie, _col_bar = st.columns(2)
+
+with _col_pie:
+    _fig_sec_pie = _go_t20.Figure(_go_t20.Pie(
+        labels=_sec_grp["行业"].tolist(),
+        values=_sec_grp["笔数"].tolist(),
+        hole=0.38,
+        marker_colors=_sec_colors[:len(_sec_grp)],
+        customdata=[[r, s] for r, s in zip(_sec_grp["合计R"].tolist(), _sec_grp["标的"].tolist())],
+        hovertemplate=(
+            "<b>%{label}</b><br>笔数：%{value}<br>"
+            "合计 R：%{customdata[0]:.1f}R<br>标的：%{customdata[1]}<extra></extra>"
+        ),
+        textinfo="label+value",
+        textfont_size=12,
+    ))
+    _fig_sec_pie.update_layout(
+        title="行业分布（交易笔数）",
+        height=400,
+        margin=dict(l=10, r=10, t=50, b=10),
+        showlegend=False,
+    )
+    st.plotly_chart(_fig_sec_pie, use_container_width=True)
+
+with _col_bar:
+    _sec_grp_s = _sec_grp.sort_values("合计R")
+    _fig_sec_bar = _go_t20.Figure(_go_t20.Bar(
+        y=_sec_grp_s["行业"].tolist(),
+        x=_sec_grp_s["合计R"].tolist(),
+        orientation="h",
+        marker_color="#2ca02c",
+        text=[f"{v:.1f}R" for v in _sec_grp_s["合计R"].tolist()],
+        textposition="outside",
+        customdata=_sec_grp_s["标的"].tolist(),
+        hovertemplate="<b>%{y}</b><br>合计 R：%{x:.1f}R<br>标的：%{customdata}<extra></extra>",
+    ))
+    _fig_sec_bar.update_layout(
+        title="各行业合计 R 倍数",
+        xaxis_title="合计 R",
+        height=400,
+        margin=dict(l=120, r=70, t=50, b=40),
+        showlegend=False,
+    )
+    st.plotly_chart(_fig_sec_bar, use_container_width=True)
+
+_sec_grp_show = _sec_grp.copy()
+_sec_grp_show.columns = ["行业 / 类别", "笔数", "合计 R", "包含标的"]
+_sec_grp_show["合计 R"] = _sec_grp_show["合计 R"].map(lambda v: f"{v:.1f}R")
+st.dataframe(_sec_grp_show, use_container_width=True, hide_index=True)
+
 # ── 明细表 ────────────────────────────────────────────────────────────────────
 _t20_show = _t20.sort_values("pnl_r_multiple", ascending=False)[[
-    "ticker", "类别", "entry_date", "exit_date", "holding_days",
+    "ticker", "行业", "类别", "entry_date", "exit_date", "holding_days",
     "pnl_r_multiple", "net_pnl", "卖出原因", "入场年份",
 ]].copy().reset_index(drop=True)
-_t20_show.columns = ["标的", "类别", "买入日期", "卖出日期", "持仓天数",
+_t20_show.columns = ["标的", "行业", "类别", "买入日期", "卖出日期", "持仓天数",
                      "R 倍数", "净盈亏($)", "卖出原因", "入场年份"]
 _t20_show["买入日期"] = _t20_show["买入日期"].dt.strftime("%Y-%m-%d")
 _t20_show["卖出日期"] = _t20_show["卖出日期"].dt.strftime("%Y-%m-%d")
