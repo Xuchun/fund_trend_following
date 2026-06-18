@@ -430,17 +430,17 @@ else:
     ))
     _fig_ddd.update_layout(
         title=None,
-        xaxis_title="深度回撤起始年份",
-        yaxis_title="深度回撤日数",
         height=400,
         margin=dict(l=60, r=20, t=30, b=50),
         bargap=0.35,
         xaxis=dict(
             type="category",
-            title_font=dict(color="black", size=13, family="Arial Black, Arial, sans-serif"),
+            title_text="<b>深度回撤起始年份</b>",
+            title_font=dict(color="black", size=13),
         ),
         yaxis=dict(
-            title_font=dict(color="black", size=13, family="Arial Black, Arial, sans-serif"),
+            title_text="<b>深度回撤日数</b>",
+            title_font=dict(color="black", size=13),
         ),
     )
     st.plotly_chart(_fig_ddd, use_container_width=True)
