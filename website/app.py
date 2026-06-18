@@ -64,8 +64,8 @@ pg = st.navigation(
             st.Page(_pages / "monte_carlo.py",                title="蒙特卡洛模拟",         icon="🎲"),
             st.Page(_pages / "walk_forward.py",               title="Walk-Forward 验证",    icon="🔄"),
             st.Page(_pages / "regime_analysis.py",            title="市场环境分析",         icon="🌦️"),
-            st.Page(_pages / "limitations.py",                title="局限性声明",           icon="⚠️"),
             st.Page(_fw / "improve_capital_utilization.py",   title="提高熊市资金使用率",    icon="📈"),
+            st.Page(_pages / "limitations.py",                title="局限性声明",           icon="⚠️"),
         ],
         "策略2.0（开发中）": [
             st.Page(_v2 / "strategy_logic_v2.py",        title="策略描述",       icon="📐"),
