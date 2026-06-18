@@ -1357,17 +1357,57 @@ _sec_grp_show.columns = ["行业 / 类别", "笔数", "合计 R", "包含标的"
 _sec_grp_show["合计 R"] = _sec_grp_show["合计 R"].map(lambda v: f"{v:.1f}R")
 st.dataframe(_sec_grp_show, use_container_width=True, hide_index=True)
 
-# ── 买入股价分布（Tiingo 复权入场价）────────────────────────────────────────────
-st.markdown("#### 买入股价分布（回测入场价，Tiingo 复权价）")
+# ── 买入股价分布（还原拆股后的真实市场价）────────────────────────────────────────────
+st.markdown("#### 买入股价分布（入场当日真实市场价，已还原拆股）")
 st.caption(
-    "⚠️ **关于价格说明**：图中为策略实际使用的 Tiingo 复权价（adj_open + 滑点），"
-    "已对拆股和分红倒退调整。策略的 `min_price=$10` 过滤器基于 Tiingo **原始未复权价**（`close` 列），"
-    "两者是不同基准——例如 AAPL 2003 年实际入场价约 **$33**，"
-    "经历 2005/2014/2020 年三次拆股（共 56 倍）调整后显示约 **$0.6**，"
-    "但过滤器比较的是原始 $33 > $10，符合要求。"
+    "价格 = yfinance 拆股调整价 × 入场日期之后的累计拆股倍数，还原为当日实际成交价。"
+    "例如 AAPL 2004 年入场价约 **$34**（此后 2×7×4=56 倍拆股）；"
+    "BB 2003 年入场价约 **$38**（此后 2×3=6 倍拆股）。"
+    "与策略 `min_price=$10` 过滤器所用的原始价格口径一致。"
 )
 
-_t20["入场价"] = _t20["entry_price"]
+@st.cache_data(ttl=86400 * 30, show_spinner="正在计算原始买入价…")
+def _fetch_raw_entry_prices(trade_keys: tuple) -> dict:
+    import yfinance as _yf_rt
+    import pandas as _pd_rt
+    result = {}
+    unique_tks = list({tk for tk, _ in trade_keys})
+    split_map = {}
+    for tk in unique_tks:
+        try:
+            sp = _yf_rt.Ticker(tk).splits
+            if sp is not None and not sp.empty:
+                sp.index = sp.index.tz_localize(None) if sp.index.tz else sp.index
+            split_map[tk] = sp if sp is not None else _pd_rt.Series(dtype=float)
+        except Exception:
+            split_map[tk] = _pd_rt.Series(dtype=float)
+    for ticker, date_str in trade_keys:
+        key = f"{ticker}|{date_str}"
+        entry_dt = _pd_rt.Timestamp(date_str)
+        try:
+            sp = split_map.get(ticker, _pd_rt.Series(dtype=float))
+            future = sp[sp.index > entry_dt] if not sp.empty else sp
+            factor = float(future.prod()) if not future.empty else 1.0
+            d1 = (entry_dt + _pd_rt.Timedelta(days=7)).strftime("%Y-%m-%d")
+            hist = _yf_rt.Ticker(ticker).history(start=date_str, end=d1, auto_adjust=False)
+            if hist is not None and not hist.empty and "Close" in hist.columns:
+                result[key] = float(hist["Close"].iloc[0]) * factor
+        except Exception:
+            pass
+    return result
+
+_t20_trade_keys = tuple(
+    (row["ticker"], row["entry_date"].strftime("%Y-%m-%d"))
+    for _, row in _t20.iterrows()
+)
+_raw_map_t20 = _fetch_raw_entry_prices(_t20_trade_keys)
+
+_t20["入场价"] = _t20.apply(
+    lambda row: _raw_map_t20.get(
+        f"{row['ticker']}|{row['entry_date'].strftime('%Y-%m-%d')}"
+    ),
+    axis=1,
+)
 
 _PRICE_TIERS = [
     ("低价股 (<$20)",       lambda p: p < 20,           "#59a14f"),
@@ -1397,7 +1437,7 @@ _fig_price = _go_t20.Figure(_go_t20.Bar(
     x=_t20_wp_s["入场价"].tolist(),
     orientation="h",
     marker_color=[_price_color(p) for p in _t20_wp_s["入场价"].tolist()],
-    text=[f"${p:.1f}" for p in _t20_wp_s["入场价"].tolist()],
+    text=[f"${p:.0f}" for p in _t20_wp_s["入场价"].tolist()],
     textposition="outside",
     customdata=[
         [row["entry_date"].strftime("%Y-%m-%d"), f"{row['pnl_r_multiple']:.2f}R", row["价格区间"]]
@@ -1405,15 +1445,15 @@ _fig_price = _go_t20.Figure(_go_t20.Bar(
     ],
     hovertemplate=(
         "<b>%{y}</b><br>"
-        "回测入场价：$%{x:.2f}<br>"
+        "真实买入价：$%{x:.2f}<br>"
         "入场日期：%{customdata[0]}<br>"
         "R 倍数：%{customdata[1]}<br>"
         "价格区间：%{customdata[2]}<extra></extra>"
     ),
 ))
 _fig_price.update_layout(
-    title="Top 20 大赢家回测入场价（Tiingo 复权价，含滑点）",
-    xaxis_title="回测入场价（$，Tiingo 复权）",
+    title="Top 20 大赢家入场当日真实市场价（已还原拆股）",
+    xaxis_title="真实买入价（$）",
     height=540,
     margin=dict(l=80, r=90, t=50, b=40),
     showlegend=False,
@@ -1425,12 +1465,15 @@ _pt_cols = st.columns(4)
 for _ptc, (label, _, color) in zip(_pt_cols, _PRICE_TIERS):
     _ptc.metric(label, f"{_tier_cnt.get(label, 0)} 笔")
 
-_median_p = float(_t20_wp["入场价"].median())
-_max_p    = float(_t20_wp["入场价"].max())
-_min_p    = float(_t20_wp["入场价"].min())
-st.markdown(
-    f"中位数 **${_median_p:.1f}**，区间 **${_min_p:.1f} – ${_max_p:.1f}**（Tiingo 复权价）。"
-)
+if not _t20_wp.empty:
+    _median_p = float(_t20_wp["入场价"].median())
+    _max_p    = float(_t20_wp["入场价"].max())
+    _min_p    = float(_t20_wp["入场价"].min())
+    st.markdown(
+        f"中位数 **${_median_p:.0f}**，区间 **${_min_p:.0f} – ${_max_p:.0f}**（真实市场价，已还原拆股）。"
+    )
+else:
+    st.info("股价数据获取失败，请检查网络连接。")
 
 # ── 明细表 ────────────────────────────────────────────────────────────────────
 _t20_show = _t20.sort_values("pnl_r_multiple", ascending=False)[[
