@@ -68,6 +68,9 @@ pg = st.navigation(
             st.Page(_fw / "improve_capital_utilization.py",   title="提高熊市资金使用率",    icon="📈"),
             st.Page(_pages / "limitations.py",                title="局限性声明",           icon="⚠️"),
         ],
+        "策略1.0模拟交易（开发中）": [
+            st.Page(_pt / "paper_trading_monitor.py", title="策略1.0模拟交易监控", icon="📡"),
+        ],
         "策略1.0改进方案（开发中）": [
             st.Page(_fw / "improve_cagr.py",              title="如何提高年化收益",        icon="🚀"),
             st.Page(_fw / "reduce_large_losses.py",       title="如何减少大R的亏损交易",  icon="🛡️"),
