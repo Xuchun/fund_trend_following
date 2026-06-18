@@ -360,6 +360,7 @@ if _str:
             _slip20_str = f"20bps 滑点 → CAGR {_slip20_cagr:.2f}%（较基准低 {_diff:.2f}%）"
 
 _qe_gap_str = f"QE 慢牛 11 年每年少赚约 {abs(_qe_gap):.1f}% vs SPY" if _qe_gap is not None else "QE 慢牛期间跑输 SPY 约 8%/年"
+_ai_gap_str = (f"AI牛市{'+' if _ai_gap and _ai_gap > 0 else ''}{_ai_gap:.1f}% " + ("小幅跑赢" if _ai_gap and _ai_gap > 0 else "小幅跑输")) if _ai_gap is not None else "AI牛市小幅跑赢"
 _w1_cagr_str = f"{_w1_oos_cagr:+.1f}%" if globals().get("_w1_oos_cagr") is not None else "−9.0%"
 
 st.markdown(f"""
