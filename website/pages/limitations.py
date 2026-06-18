@@ -77,13 +77,19 @@ st.markdown("**问题：** 趋势跟踪策略在单边上涨的持续牛市中�
 
 if _reg:
     _rows = []
+    _qe_gap = None
+    _ai_gap = None
     for name, data in _reg.get("regimes", {}).items():
         sc  = data["strategy"].get("cagr", 0) * 100
         pc  = data.get("spy", {}).get("cagr", 0) * 100
         gap = sc - pc
-        if name in ("量化宽松牛市", "AI驱动牛市"):
+        if name in ("QE驱动慢牛", "AI驱动牛市"):
             tag = "⚠️ 跑输" if gap < 0 else "✅ 跑赢"
             _rows.append(f"| **{name}** | {data['start'][:7]} → {data['end'][:7]} | {sc:+.1f}% | {pc:+.1f}% | {gap:+.1f}% | {tag} |")
+            if name == "QE驱动慢牛":
+                _qe_gap = gap
+            elif name == "AI驱动牛市":
+                _ai_gap = gap
     if _rows:
         st.markdown(
             "| 市场环境 | 区间 | 策略 CAGR | SPY CAGR | 差距 | 评估 |\n"
