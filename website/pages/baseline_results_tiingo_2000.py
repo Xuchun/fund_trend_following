@@ -767,47 +767,18 @@ st.dataframe(_sec_grp_l_show, use_container_width=True, hide_index=True)
 # ── 买入股价分布（还原拆股后的真实市场价）────────────────────────────────────────────
 st.markdown("#### 买入股价分布（入场当日真实市场价，已还原拆股）")
 st.caption(
-    "价格 = yfinance 拆股调整价 × 入场日期之后的累计拆股倍数，还原为当日实际成交价。"
-    "例如 BB 2003 年入场价约 **$38**（此后经历 2×3=6 倍拆股）；"
+    "价格来自预计算文件（Tiingo 历史数据 + 拆股还原），反映当日实际市场成交价。"
+    "例如 BB 2003 年入场价约 **$38**（此后 2×3=6 倍拆股）；"
     "AAPL 2004 年入场价约 **$34**（此后 2×7×4=56 倍拆股）。"
     "与策略 `min_price=$10` 过滤器所用的原始价格口径一致。"
 )
 
-@st.cache_data(ttl=86400 * 30, show_spinner="正在计算原始买入价…")
-def _fetch_raw_entry_prices_l20(trade_keys: tuple) -> dict:
-    import yfinance as _yf_rl
-    import pandas as _pd_rl
-    result = {}
-    unique_tks = list({tk for tk, _ in trade_keys})
-    split_map = {}
-    for tk in unique_tks:
-        try:
-            sp = _yf_rl.Ticker(tk).splits
-            if sp is not None and not sp.empty:
-                sp.index = sp.index.tz_localize(None) if sp.index.tz else sp.index
-            split_map[tk] = sp if sp is not None else _pd_rl.Series(dtype=float)
-        except Exception:
-            split_map[tk] = _pd_rl.Series(dtype=float)
-    for ticker, date_str in trade_keys:
-        key = f"{ticker}|{date_str}"
-        entry_dt = _pd_rl.Timestamp(date_str)
-        try:
-            sp = split_map.get(ticker, _pd_rl.Series(dtype=float))
-            future = sp[sp.index > entry_dt] if not sp.empty else sp
-            factor = float(future.prod()) if not future.empty else 1.0
-            d1 = (entry_dt + _pd_rl.Timedelta(days=7)).strftime("%Y-%m-%d")
-            hist = _yf_rl.Ticker(ticker).history(start=date_str, end=d1, auto_adjust=False)
-            if hist is not None and not hist.empty and "Close" in hist.columns:
-                result[key] = float(hist["Close"].iloc[0]) * factor
-        except Exception:
-            pass
-    return result
-
-_l20_trade_keys = tuple(
-    (row["ticker"], row["entry_date"].strftime("%Y-%m-%d"))
-    for _, row in _l20.iterrows()
-)
-_raw_map_l20 = _fetch_raw_entry_prices_l20(_l20_trade_keys)
+import json as _json_l20
+_raw_price_json_l20 = _results_path / "top20_raw_entry_prices.json"
+_raw_map_l20: dict = {}
+if _raw_price_json_l20.exists():
+    with open(_raw_price_json_l20) as _f_l20:
+        _raw_map_l20 = _json_l20.load(_f_l20)
 
 _l20["入场价"] = _l20.apply(
     lambda row: _raw_map_l20.get(
