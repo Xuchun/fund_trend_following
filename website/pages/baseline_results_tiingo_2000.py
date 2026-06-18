@@ -1736,9 +1736,6 @@ st.markdown("---")
 # ── Traded ticker analysis ────────────────────────────────────────────────────
 import pandas as _pd_ta
 
-st.subheader("实际交易标的分析")
-st.caption("从标的维度分析回测期间哪些标的被实际建仓，以及其覆盖率、盈亏集中度、交易频次、胜率等特征")
-
 _ta = res.trades.copy()
 _ta["_is_etf"] = _ta["ticker"].isin(_ETF_SET)
 
