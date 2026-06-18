@@ -1241,14 +1241,17 @@ else:
 # ── 明细表 ────────────────────────────────────────────────────────────────────
 _t20_show = _t20.sort_values("pnl_r_multiple", ascending=False)[[
     "ticker", "行业", "类别", "entry_date", "exit_date", "holding_days",
-    "pnl_r_multiple", "net_pnl", "卖出原因", "入场年份",
+    "pnl_r_multiple", "net_pnl", "原始买入价", "卖出原因", "入场年份",
 ]].copy().reset_index(drop=True)
 _t20_show.columns = ["标的", "行业", "类别", "买入日期", "卖出日期", "持仓天数",
-                     "R 倍数", "净盈亏($)", "卖出原因", "入场年份"]
-_t20_show["买入日期"] = _t20_show["买入日期"].dt.strftime("%Y-%m-%d")
-_t20_show["卖出日期"] = _t20_show["卖出日期"].dt.strftime("%Y-%m-%d")
-_t20_show["净盈亏($)"] = _t20_show["净盈亏($)"].map(lambda v: f"${v:,.0f}")
-_t20_show["R 倍数"]   = _t20_show["R 倍数"].map(lambda v: f"{v:.2f}R")
+                     "R 倍数", "净盈亏($)", "原始买入价($)", "卖出原因", "入场年份"]
+_t20_show["买入日期"]    = _t20_show["买入日期"].dt.strftime("%Y-%m-%d")
+_t20_show["卖出日期"]    = _t20_show["卖出日期"].dt.strftime("%Y-%m-%d")
+_t20_show["净盈亏($)"]   = _t20_show["净盈亏($)"].map(lambda v: f"${v:,.0f}")
+_t20_show["R 倍数"]      = _t20_show["R 倍数"].map(lambda v: f"{v:.2f}R")
+_t20_show["原始买入价($)"] = _t20_show["原始买入价($)"].map(
+    lambda v: f"${v:.2f}" if v == v else "—"
+)
 
 with st.expander("📋 Top 20 大赢家明细", expanded=True):
     st.dataframe(_t20_show, use_container_width=True, hide_index=True)
