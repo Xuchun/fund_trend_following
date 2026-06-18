@@ -135,17 +135,25 @@ if _wf:
         _wf_rows.append(f"| {label}{note} | {is_c:+.1f}% | {oos_c:+.1f}% | {oos_sh:+.3f} | −{oos_dd:.1f}% |")
     st.markdown(_wf_header + "\n".join(_wf_rows))
 
-st.markdown("""
+if _wf:
+    _w1 = next((w for w in _wf.get("windows", []) if w.get("oos_start", "").startswith("2022")), None)
+    _w1_oos_cagr = _w1["oos"]["cagr"] * 100 if _w1 else -9.0
+    _oos_stitched = _wf.get("oos_stitched", {}).get("metrics", {})
+    _oos_cagr = _oos_stitched.get("cagr", 0) * 100
+    _oos_sharpe = _oos_stitched.get("sharpe", 0)
+    _pos_windows = sum(1 for w in _wf.get("windows", [])
+                       if w.get("oos", {}).get("cagr", 0) > 0)
+    _total_windows = len(_wf.get("windows", []))
+    st.markdown(f"""
 **关键发现：**
-- **2022 年（加息熊市）** 是策略1.0唯一出现负收益的 OOS 年份（−9.1%）。
+- **2022 年（加息熊市）** 是策略1.0唯一出现负收益的 OOS 年份（**{_w1_oos_cagr:+.1f}%**）。
   美联储激进加息导致债券与股票同步下跌，现金代理 SHY 也受价格冲击，
   这是策略设计对"股债双杀"环境准备不足的体现。
-- **2023–2025 连续3年 OOS 均为正收益**，且逐年加速，显示策略在非加息环境中
-  样本外表现稳健，但 2022 的单年深度亏损提醒：极端宏观环境下，策略无法完全脱离影响。
-- **统计样本量不足**：仅 5 个 OOS 窗口（各 1 年），置信度有限。
-
----
+- **2023–2025 连续3年 OOS 均为正收益**，且逐年加速，显示策略在非加息环境中样本外表现稳健，但 2022 的单年深度亏损提醒：极端宏观环境下，策略无法完全脱离影响。
+- **OOS 拼接净值**（5个窗口合计）：CAGR **{_oos_cagr:+.1f}%**，Sharpe **{_oos_sharpe:+.3f}**，{_pos_windows}/{_total_windows} 个窗口实现正收益。
+- **统计样本量不足**：仅 {_total_windows} 个 OOS 窗口（各约 1 年），置信度有限。2026 年窗口为半年数据，年化指标波动较大，仅供参考。
 """)
+st.markdown("---")
 
 # ── 3. Prolonged underwater ───────────────────────────────────────────────────
 st.subheader("3. 长期资金占用：水下时间可达数年")
