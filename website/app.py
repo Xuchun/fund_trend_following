@@ -48,6 +48,7 @@ st.session_state["current_results"] = st.session_state[cache_key]
 _pages = Path(__file__).parent / "pages"
 _v2    = _pages / "v2"
 _fw    = _pages / "future_work"
+_pt    = _pages / "paper_trading"
 
 pg = st.navigation(
     {
