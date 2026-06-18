@@ -233,24 +233,6 @@ _fig_sk.add_trace(go.Scatter(
     ),
 ))
 
-# 标注重大事件
-_key_events = [
-    ("2001-09", "9/11 & 科技股崩溃"),
-    ("2007-10", "GFC 开始"),
-    ("2010-05", "Flash Crash"),
-    ("2015-08", "A股熔断传导"),
-    ("2018-09", "美联储加息"),
-    ("2022-01", "利率急升"),
-]
-for _dt_str, _label in _key_events:
-    _match = _major_sk[_major_sk["start_dt"].dt.to_period("M").astype(str) == _dt_str]
-    if not _match.empty:
-        _row = _match.iloc[0]
-        _fig_sk.add_annotation(
-            x=_row["start_dt"], y=_row["length"],
-            text=_label, showarrow=True, arrowhead=2, arrowlen=15,
-            font=dict(size=8, color="#555"), ax=40, ay=-25,
-        )
 
 _fig_sk.update_layout(
     title="≥7 笔连亏序列时间分布（气泡越大 = 连亏越长，颜色越深 = 初始止损触发率越高）",
