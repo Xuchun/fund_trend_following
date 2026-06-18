@@ -656,17 +656,230 @@ with _lcb:
     )
     st.plotly_chart(_fig_lyr, use_container_width=True)
 
+# ── 行业分布（亏损）────────────────────────────────────────────────────────────
+_SECTOR_CN_L20 = {
+    "Technology":             "科技",
+    "Healthcare":             "医疗健康",
+    "Consumer Cyclical":      "消费（周期）",
+    "Consumer Defensive":     "消费（防御）",
+    "Financial Services":     "金融",
+    "Basic Materials":        "基础材料",
+    "Energy":                 "能源",
+    "Industrials":            "工业",
+    "Real Estate":            "房地产",
+    "Communication Services": "通信服务",
+    "Utilities":              "公用事业",
+}
+_etf_cat_l20 = {e["ticker"]: f"ETF-{e.get('category', '其他')}" for e in meta.etf_universe}
+
+@st.cache_data(ttl=86400 * 7, show_spinner="正在查询行业分类…")
+def _get_sector_map_l20(tickers: tuple) -> dict:
+    import yfinance as _yfl
+    result = {}
+    for tk in tickers:
+        try:
+            raw = _yfl.Ticker(tk).info.get("sector") or ""
+            result[tk] = _SECTOR_CN_L20.get(raw, raw or "未知")
+        except Exception:
+            result[tk] = "未知"
+    return result
+
+_stock_tkrs_l20 = tuple(
+    row["ticker"] for _, row in _l20.iterrows() if row["类别"] != "ETF"
+)
+_sec_map_l20 = _get_sector_map_l20(_stock_tkrs_l20)
+
+_l20["行业"] = _l20.apply(
+    lambda row: (
+        _etf_cat_l20.get(row["ticker"], "ETF")
+        if row["类别"] == "ETF"
+        else _sec_map_l20.get(row["ticker"], "未知")
+    ),
+    axis=1,
+)
+
+_sec_grp_l20 = (
+    _l20.groupby("行业", sort=False)
+    .agg(
+        笔数  = ("ticker", "count"),
+        合计R = ("pnl_r_multiple", "sum"),
+        标的  = ("ticker", lambda x: "、".join(x.tolist())),
+    )
+    .reset_index()
+    .sort_values("笔数", ascending=False)
+)
+
+st.markdown("#### 行业分布")
+_sec_colors_l20 = [
+    "#d62728","#e15759","#f28e2b","#ff9da7","#b07aa1",
+    "#4e79a7","#76b7b2","#59a14f","#edc948","#bab0ac",
+]
+_col_pie_l, _col_bar_l = st.columns(2)
+
+with _col_pie_l:
+    _fig_sec_l_pie = _go_l20.Figure(_go_l20.Pie(
+        labels=_sec_grp_l20["行业"].tolist(),
+        values=_sec_grp_l20["笔数"].tolist(),
+        hole=0.38,
+        marker_colors=_sec_colors_l20[:len(_sec_grp_l20)],
+        customdata=[[r, s] for r, s in zip(_sec_grp_l20["合计R"].tolist(), _sec_grp_l20["标的"].tolist())],
+        hovertemplate=(
+            "<b>%{label}</b><br>笔数：%{value}<br>"
+            "合计 R：%{customdata[0]:.1f}R<br>标的：%{customdata[1]}<extra></extra>"
+        ),
+        textinfo="label+value",
+        textfont_size=12,
+    ))
+    _fig_sec_l_pie.update_layout(
+        title="行业分布（交易笔数）",
+        height=400,
+        margin=dict(l=10, r=10, t=50, b=10),
+        showlegend=False,
+    )
+    st.plotly_chart(_fig_sec_l_pie, use_container_width=True)
+
+with _col_bar_l:
+    _sec_grp_ls = _sec_grp_l20.sort_values("合计R", ascending=False)
+    _fig_sec_l_bar = _go_l20.Figure(_go_l20.Bar(
+        y=_sec_grp_ls["行业"].tolist(),
+        x=_sec_grp_ls["合计R"].tolist(),
+        orientation="h",
+        marker_color="#d62728",
+        text=[f"{v:.1f}R" for v in _sec_grp_ls["合计R"].tolist()],
+        textposition="outside",
+        customdata=_sec_grp_ls["标的"].tolist(),
+        hovertemplate="<b>%{y}</b><br>合计 R：%{x:.1f}R<br>标的：%{customdata}<extra></extra>",
+    ))
+    _fig_sec_l_bar.update_layout(
+        title="各行业合计 R 倍数（亏损）",
+        xaxis_title="合计 R",
+        height=400,
+        margin=dict(l=120, r=70, t=50, b=40),
+        showlegend=False,
+    )
+    st.plotly_chart(_fig_sec_l_bar, use_container_width=True)
+
+_sec_grp_l_show = _sec_grp_l20.copy()
+_sec_grp_l_show.columns = ["行业 / 类别", "笔数", "合计 R", "包含标的"]
+_sec_grp_l_show["合计 R"] = _sec_grp_l_show["合计 R"].map(lambda v: f"{v:.1f}R")
+st.dataframe(_sec_grp_l_show, use_container_width=True, hide_index=True)
+
+# ── 买入股价分布（亏损，原始未复权）────────────────────────────────────────────
+st.markdown("#### 买入股价分布（原始价格，未复权）")
+
+@st.cache_data(ttl=86400 * 30, show_spinner="正在获取原始买入股价…")
+def _fetch_unadj_entry_prices_l20(trade_keys: tuple) -> dict:
+    import yfinance as _yf_l20
+    import datetime as _dt_l20
+    result = {}
+    for ticker, date_str in trade_keys:
+        key = f"{ticker}|{date_str}"
+        try:
+            d0   = _dt_l20.date.fromisoformat(date_str)
+            d1   = d0 + _dt_l20.timedelta(days=7)
+            hist = _yf_l20.Ticker(ticker).history(
+                start=d0.isoformat(),
+                end=d1.isoformat(),
+                auto_adjust=False,
+            )
+            if hist is not None and not hist.empty and "Close" in hist.columns:
+                result[key] = float(hist["Close"].iloc[0])
+        except Exception:
+            pass
+    return result
+
+_l20_trade_keys = tuple(
+    (row["ticker"], row["entry_date"].strftime("%Y-%m-%d"))
+    for _, row in _l20.iterrows()
+)
+_unadj_map_l20 = _fetch_unadj_entry_prices_l20(_l20_trade_keys)
+
+_l20["原始买入价"] = _l20.apply(
+    lambda row: _unadj_map_l20.get(
+        f"{row['ticker']}|{row['entry_date'].strftime('%Y-%m-%d')}"
+    ),
+    axis=1,
+)
+
+_PRICE_TIERS_L20 = [
+    ("低价股 (<$20)",      lambda p: p < 20,          "#59a14f"),
+    ("中价股 ($20–$100)",  lambda p: 20 <= p < 100,   "#4e79a7"),
+    ("高价股 ($100–$500)", lambda p: 100 <= p < 500,  "#f28e2b"),
+    ("超高价股 (>$500)",   lambda p: p >= 500,        "#e15759"),
+]
+
+def _price_tier_l20(p):
+    for label, cond, _ in _PRICE_TIERS_L20:
+        if cond(p):
+            return label
+    return "未知"
+
+def _price_color_l20(p):
+    for _, cond, color in _PRICE_TIERS_L20:
+        if cond(p):
+            return color
+    return "#aaaaaa"
+
+_l20_wp = _l20[_l20["原始买入价"].notna()].copy()
+_l20_wp["价格区间"] = _l20_wp["原始买入价"].apply(_price_tier_l20)
+_l20_wp_s = _l20_wp.sort_values("原始买入价")
+
+_fig_price_l = _go_l20.Figure(_go_l20.Bar(
+    y=_l20_wp_s["ticker"].tolist(),
+    x=_l20_wp_s["原始买入价"].tolist(),
+    orientation="h",
+    marker_color=[_price_color_l20(p) for p in _l20_wp_s["原始买入价"].tolist()],
+    text=[f"${p:.1f}" for p in _l20_wp_s["原始买入价"].tolist()],
+    textposition="outside",
+    customdata=[
+        [row["entry_date"].strftime("%Y-%m-%d"), f"{row['pnl_r_multiple']:.2f}R", row["价格区间"]]
+        for _, row in _l20_wp_s.iterrows()
+    ],
+    hovertemplate=(
+        "<b>%{y}</b><br>原始买入价：$%{x:.2f}<br>"
+        "入场日期：%{customdata[0]}<br>R 倍数：%{customdata[1]}<br>"
+        "价格区间：%{customdata[2]}<extra></extra>"
+    ),
+))
+_fig_price_l.update_layout(
+    title="Top 20 大亏家原始买入股价（买入当日收盘价，未复权）",
+    xaxis_title="原始股价（$）",
+    height=540,
+    margin=dict(l=80, r=90, t=50, b=40),
+    showlegend=False,
+)
+st.plotly_chart(_fig_price_l, use_container_width=True)
+
+_tier_cnt_l = _l20_wp["价格区间"].value_counts() if not _l20_wp.empty else {}
+_pt_cols_l = st.columns(4)
+for _ptc_l, (label, _, _c) in zip(_pt_cols_l, _PRICE_TIERS_L20):
+    _ptc_l.metric(label, f"{_tier_cnt_l.get(label, 0)} 笔")
+
+if not _l20_wp.empty:
+    _med_pl = float(_l20_wp["原始买入价"].median())
+    _max_pl = float(_l20_wp["原始买入价"].max())
+    _min_pl = float(_l20_wp["原始买入价"].min())
+    st.markdown(
+        f"中位数 **${_med_pl:.1f}**，区间 **${_min_pl:.1f} – ${_max_pl:.1f}**。"
+        f"原始价格 = 买入当日真实收盘价（`auto_adjust=False`）。"
+    )
+else:
+    st.info("股价数据获取失败，请检查网络连接。")
+
 # ── 明细表 ────────────────────────────────────────────────────────────────────
 _l20_show = _l20.sort_values("pnl_r_multiple")[[
-    "ticker", "类别", "entry_date", "exit_date", "holding_days",
-    "pnl_r_multiple", "net_pnl", "gap_adjusted_loss_multiple", "卖出原因", "入场年份",
+    "ticker", "行业", "类别", "entry_date", "exit_date", "holding_days",
+    "pnl_r_multiple", "net_pnl", "原始买入价", "gap_adjusted_loss_multiple", "卖出原因", "入场年份",
 ]].copy().reset_index(drop=True)
-_l20_show.columns = ["标的", "类别", "买入日期", "卖出日期", "持仓天数",
-                     "R 倍数", "净亏损($)", "实际R(含跳空)", "卖出原因", "入场年份"]
+_l20_show.columns = ["标的", "行业", "类别", "买入日期", "卖出日期", "持仓天数",
+                     "R 倍数", "净亏损($)", "原始买入价($)", "实际R(含跳空)", "卖出原因", "入场年份"]
 _l20_show["买入日期"]      = _l20_show["买入日期"].dt.strftime("%Y-%m-%d")
 _l20_show["卖出日期"]      = _l20_show["卖出日期"].dt.strftime("%Y-%m-%d")
 _l20_show["净亏损($)"]     = _l20_show["净亏损($)"].map(lambda v: f"${v:+,.0f}")
 _l20_show["R 倍数"]        = _l20_show["R 倍数"].map(lambda v: f"{v:.2f}R")
+_l20_show["原始买入价($)"] = _l20_show["原始买入价($)"].map(
+    lambda v: f"${v:.2f}" if v is not None and v == v else "—"
+)
 _l20_show["实际R(含跳空)"] = _l20_show["实际R(含跳空)"].map(
     lambda v: f"{v:.2f}R" if v == v else "—"
 )
