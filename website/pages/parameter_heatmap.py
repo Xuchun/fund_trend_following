@@ -639,14 +639,24 @@ _sl_stab_str = (f"{_sl_stab[0]:.1f}× – {_sl_stab[1]:.1f}×"
 _tm_stab_str = (f"{_tm_stab[0]:.1f}× – {_tm_stab[1]:.1f}×"
                 if _tm_stab[0] is not None else "无连续稳定区间")
 
+_bw_d = _load_perturb("breakout_window")
+_sl_d = _load_perturb("stop_loss_multiplier")
+_tm_d = _load_perturb("trail_multiplier_r1")
+_bw_sharpes = [r["sharpe"] for r in _bw_d["results"]] if _bw_d else None
+_sl_sharpes = [r["sharpe"] for r in _sl_d["results"]] if _sl_d else None
+_tm_sharpes = [r["sharpe"] for r in _tm_d["results"]] if _tm_d else None
+_bw_range_str = f"{min(_bw_sharpes):.3f}–{max(_bw_sharpes):.3f}" if _bw_sharpes else "⏳"
+_sl_range_str = f"{min(_sl_sharpes):.3f}–{max(_sl_sharpes):.3f}" if _sl_sharpes else "⏳"
+_tm_range_str = f"{min(_tm_sharpes):.3f}–{max(_tm_sharpes):.3f}" if _tm_sharpes else "⏳"
+
 st.markdown(f"""
 ### 1D Heatmap 结论（三核心参数）
 
 | 参数 | 基准值 | Sharpe 范围 | CV（Sharpe）| 鲁棒性评级 | 连续稳定区间（≥90%峰值）|
 |------|--------|------------|------------|----------|----------------------|
-| 突破窗口 N | N={p['breakout_window']} | 0.481–0.608 | {f'{_bw_cv:.3f}' if _bw_cv else '—'} | {"✅ 高鲁棒" if _bw_cv and _bw_cv < 0.10 else "🟡 中等"} | {_bw_stab_str} |
-| ATR 止损乘数 | {p['stop_loss_multiplier']:.1f}× | 0.514–0.570 | {f'{_sl_cv:.3f}' if _sl_cv else '—'} | {"✅ 高鲁棒" if _sl_cv and _sl_cv < 0.10 else "🟡 中等"} | {_sl_stab_str} |
-| 移动止盈乘数 | {p['trail_multiplier_r1']:.0f}×  | 0.498–0.604 | {f'{_tm_cv:.3f}' if _tm_cv else '—'} | {"✅ 高鲁棒" if _tm_cv and _tm_cv < 0.10 else "🟡 中等"} | {_tm_stab_str} |
+| 突破窗口 N | N={p['breakout_window']} | {_bw_range_str} | {f'{_bw_cv:.3f}' if _bw_cv else '—'} | {"✅ 高鲁棒" if _bw_cv and _bw_cv < 0.10 else "🟡 中等"} | {_bw_stab_str} |
+| ATR 止损乘数 | {p['stop_loss_multiplier']:.1f}× | {_sl_range_str} | {f'{_sl_cv:.3f}' if _sl_cv else '—'} | {"✅ 高鲁棒" if _sl_cv and _sl_cv < 0.10 else "🟡 中等"} | {_sl_stab_str} |
+| 移动止盈乘数 | {p['trail_multiplier_r1']:.0f}×  | {_tm_range_str} | {f'{_tm_cv:.3f}' if _tm_cv else '—'} | {"✅ 高鲁棒" if _tm_cv and _tm_cv < 0.10 else "🟡 中等"} | {_tm_stab_str} |
 
 **关键发现：**
 
