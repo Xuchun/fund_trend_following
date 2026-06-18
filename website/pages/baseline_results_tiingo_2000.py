@@ -378,7 +378,7 @@ _ep_df = _pd_ep.DataFrame(_ep_rows)
 import plotly.graph_objects as _go_ddd
 
 st.markdown("---")
-st.subheader("深度水下交易分析（回撤 > 10%）")
+st.subheader("策略NAV深度水下分析（回撤 > 10%）")
 
 _deep_eps_ddd = _ep_df[_ep_df["最大回撤"] < -0.10].copy() if len(_ep_df) > 0 else _pd_ep.DataFrame()
 
