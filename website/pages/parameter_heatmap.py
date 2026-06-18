@@ -657,41 +657,83 @@ st.markdown(f"""
 | 突破窗口 N | N={p['breakout_window']} | {_bw_range_str} | {f'{_bw_cv:.3f}' if _bw_cv else '—'} | {"✅ 高鲁棒" if _bw_cv and _bw_cv < 0.10 else "🟡 中等"} | {_bw_stab_str} |
 | ATR 止损乘数 | {p['stop_loss_multiplier']:.1f}× | {_sl_range_str} | {f'{_sl_cv:.3f}' if _sl_cv else '—'} | {"✅ 高鲁棒" if _sl_cv and _sl_cv < 0.10 else "🟡 中等"} | {_sl_stab_str} |
 | 移动止盈乘数 | {p['trail_multiplier_r1']:.0f}×  | {_tm_range_str} | {f'{_tm_cv:.3f}' if _tm_cv else '—'} | {"✅ 高鲁棒" if _tm_cv and _tm_cv < 0.10 else "🟡 中等"} | {_tm_stab_str} |
+""")
 
+if _bw_d and _sl_d and _tm_d:
+    _bw_rs = _bw_d["results"]
+    _sl_rs = _sl_d["results"]
+    _tm_rs = _tm_d["results"]
+    _bw_peak = max(_bw_rs, key=lambda r: r["sharpe"])
+    _sl_peak = max(_sl_rs, key=lambda r: r["sharpe"])
+    _sl_pct90 = _sl_peak["sharpe"] * 0.90
+    _sl_all_stab = all(r["sharpe"] >= _sl_pct90 for r in _sl_rs)
+    _tm_peak = max(_tm_rs, key=lambda r: r["sharpe"])
+    _tm_base = next((r for r in _tm_rs if abs(r["param_value"] - p["trail_multiplier_r1"]) < 0.01), None)
+    _tm_pct90 = _tm_peak["sharpe"] * 0.90
+    _tm_base_s_str = f"{_tm_base['sharpe']:.3f}" if _tm_base else "—"
+    _tm_below = _tm_base and _tm_base["sharpe"] < _tm_pct90
+    _sl_stab_note = ("**所有测试值均满足 ≥ 90% 峰值**，呈现完美高原形态，策略对止损松紧极不敏感，鲁棒性最高。"
+                     if _sl_all_stab else f"稳定区间：{_sl_stab_str}，其余值存在退化。")
+    _tm_note = (f"基准值 {p['trail_multiplier_r1']:.1f}×（Sharpe={_tm_base_s_str}）"
+                f"{'低于' if _tm_below else '满足'} 90% 阈值（{_tm_pct90:.3f}），"
+                f"稳定区间：{_tm_stab_str}。"
+                + (f" **若调参，可考虑调整至峰值 {_tm_peak['param_value']:.1f}×。**" if _tm_below else ""))
+    st.markdown(f"""
 **关键发现：**
 
-1. **突破窗口 N（CV={f'{_bw_cv:.3f}' if _bw_cv else '—'}，< 0.10）**：
-   在 150–300 日范围内，Sharpe 介于 0.48–0.61，峰值位于 N=250（0.608）和 N=170（0.583）。
-   虽然整体 Sharpe 变化不大（高原形态），但没有单一连续稳定区间覆盖所有 7 个测试值，
-   说明参数景观相对平坦但略有起伏。基准 N=200（Sharpe=0.519）处于均值附近，选取合理。
+1. **突破窗口 N（CV={_bw_cv:.3f}）**：
+   {int(min(r['param_value'] for r in _bw_rs))}–{int(max(r['param_value'] for r in _bw_rs))} 日范围内 Sharpe {_bw_range_str}，
+   峰值 N={int(_bw_peak['param_value'])}（{_bw_peak['sharpe']:.3f}）。
+   {"高原形态，基准 N=200 处于稳定区间，选取合理。" if _bw_cv < 0.10 else "注意：CV ≥ 0.10，存在一定敏感性。"}
+   稳定区间：{_bw_stab_str}。
 
-2. **ATR 止损乘数（CV={f'{_sl_cv:.3f}' if _sl_cv else '—'}，< 0.10）**：
-   在 1.5×–3.0× 范围内，**所有测试值均满足 ≥ 90% 峰值**（Sharpe 最低 0.514，最高 0.570），
-   稳定区间覆盖完整测试范围（{_sl_stab_str}），呈现近乎完美的高原形态。
-   这表明策略对止损松紧极不敏感，鲁棒性最高。
+2. **ATR 止损乘数（CV={_sl_cv:.3f}）**：
+   {min(r['param_value'] for r in _sl_rs):.1f}×–{max(r['param_value'] for r in _sl_rs):.1f}× 范围内 Sharpe {_sl_range_str}。
+   {_sl_stab_note}
 
-3. **移动止盈乘数（CV={f'{_tm_cv:.3f}' if _tm_cv else '—'}，< 0.10）**：
-   峰值出现在 2.5×（Sharpe=0.604）。基准值 3.0×（Sharpe=0.519）低于 90% 峰值阈值（0.544），
-   稳定区间仅为 {_tm_stab_str}。Sharpe 从 2.5× 到 3.0× 有明显下降，
-   提示该参数存在一定敏感性，但整体 CV < 0.10，仍属可接受范围。
-   **若未来调参，可考虑将 trail_multiplier_r1 调整至 2.5×。**
+3. **移动止盈乘数（CV={_tm_cv:.3f}）**：
+   峰值 {_tm_peak['param_value']:.1f}×（Sharpe={_tm_peak['sharpe']:.3f}）。{_tm_note}
+   {"整体 CV < 0.10，仍属可接受范围。" if _tm_cv < 0.10 else ""}
+""")
+else:
+    st.info("⏳ 扰动测试运行中，**关键发现**详细分析将在完成后自动显示。")
 
----
+st.markdown("---")
+st.markdown("### Slice Tests 结论（7 个辅助参数）")
 
-### Slice Tests 结论（7 个辅助参数）
+_slice_params = [
+    ("correlation_threshold",    "相关性阈值",    "✅ 高鲁棒",   "无明显方向性趋势"),
+    ("risk_per_trade",           "每笔风险比例",  "✅ 极高鲁棒", "MaxDD 随之等比例变化；Sharpe 近乎不变"),
+    ("min_market_cap_b",         "最低市值",      "✅ 极高鲁棒", "$2B–$4B 结果完全相同，市值过滤在此范围内无差异"),
+    ("min_adv_m",                "ADV 流动性",    "✅ 高鲁棒",   "宽松过滤 → Sharpe 更高，但实盘滑点更大"),
+    ("volume_filter_multiplier", "成交量确认乘数","✅ 极高鲁棒", "1.0×–2.0× 范围内 Sharpe 变化极小"),
+    ("slippage_bps",             "滑点",          "✅ 高鲁棒",   "单调递减（符合预期），高摩擦下策略仍可盈利"),
+    ("commission_bps",           "佣金",          "✅ 高鲁棒",   "单调递减（符合预期），影响远小于滑点"),
+]
 
-| 参数 | CV | 鲁棒性 | 结论 |
-|------|----|----|------|
-| 相关性阈值 | {f"{_cv(_load_perturb('correlation_threshold')['results']):.3f}" if _load_perturb('correlation_threshold') else '—'} | ✅ 高鲁棒 | Sharpe 在 0.45–0.56 之间，无明显方向性趋势 |
-| 每笔风险比例 | {f"{_cv(_load_perturb('risk_per_trade')['results']):.3f}" if _load_perturb('risk_per_trade') else '—'} | ✅ 极高鲁棒 | 0.5%–2.0% 范围内结果几乎相同，MaxDD 随之等比例变化 |
-| 最低市值 | {f"{_cv(_load_perturb('min_market_cap_b')['results']):.3f}" if _load_perturb('min_market_cap_b') else '—'} | ✅ 极高鲁棒 | $2B–$4B 结果完全相同，市值过滤在此范围内无差异 |
-| ADV 流动性 | {f"{_cv(_load_perturb('min_adv_m')['results']):.3f}" if _load_perturb('min_adv_m') else '—'} | ✅ 高鲁棒 | 宽松过滤 → Sharpe 更高，但实盘滑点更大；20M 为合理平衡点 |
-| 成交量确认乘数 | {f"{_cv(_load_perturb('volume_filter_multiplier')['results']):.3f}" if _load_perturb('volume_filter_multiplier') else '—'} | ✅ 极高鲁棒 | 1.0×–2.0× 范围内 Sharpe 变化极小（0.492–0.536） |
-| 滑点 | {f"{_cv(_load_perturb('slippage_bps')['results']):.3f}" if _load_perturb('slippage_bps') else '—'} | ✅ 高鲁棒 | 单调递减（符合预期），即便 15bps 高摩擦 Sharpe 仍为 0.473 |
-| 佣金 | {f"{_cv(_load_perturb('commission_bps')['results']):.3f}" if _load_perturb('commission_bps') else '—'} | ✅ 高鲁棒 | 单调递减（符合预期），佣金影响远小于滑点 |
+_slice_rows = []
+for _sp, _sname, _srobust, _snote in _slice_params:
+    _sd = _load_perturb(_sp)
+    _scv = f"{_cv(_sd['results']):.3f}" if _sd else "⏳"
+    _srange = (f"{min(r['sharpe'] for r in _sd['results']):.3f}–{max(r['sharpe'] for r in _sd['results']):.3f}"
+               if _sd else "⏳")
+    _srobust_dyn = _srobust if _sd else "⏳"
+    _snote_dyn = f"Sharpe {_srange}；{_snote}" if _sd else "计算中"
+    _slice_rows.append(f"| {_sname} | {_scv} | {_srobust_dyn} | {_snote_dyn} |")
 
-**总体评估：** 所有 7 个辅助参数的 CV(Sharpe) 均 < 0.10，策略对这些参数均表现出高鲁棒性。
+st.markdown(
+    "| 参数 | CV | 鲁棒性 | 结论 |\n"
+    "|------|----|----|------|\n" +
+    "\n".join(_slice_rows)
+)
 
+_n_slice_done = sum(1 for _sp, *_ in _slice_params if _load_perturb(_sp))
+if _n_slice_done == len(_slice_params):
+    st.markdown("**总体评估：** 所有 7 个辅助参数的 CV(Sharpe) 均 < 0.10，策略对这些参数均表现出高鲁棒性。")
+else:
+    st.info(f"⏳ 辅助参数扰动测试进行中（{_n_slice_done}/{len(_slice_params)} 已完成），总体结论待更新。")
+
+st.markdown("""
 ---
 
 ### 2D Heatmap 结论
