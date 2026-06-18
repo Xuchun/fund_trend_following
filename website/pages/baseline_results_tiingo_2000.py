@@ -1632,6 +1632,29 @@ st.markdown(
     "这种「多次小亏、少次大赚」的持仓结构是趋势跟踪策略的典型特征。"
 )
 
+# ── Trades with holding days > 200 ────────────────────────────────────────────
+_lh200 = res.trades[res.trades["holding_days"] > 200].copy()
+if len(_lh200) > 0:
+    _lh200["类别"] = _lh200["ticker"].apply(lambda t: "ETF" if t in _ETF_SET else "股票")
+    _lh200["卖出原因"] = _lh200["exit_reason"].map({
+        "trailing_stop":   "追踪止损",
+        "stop_loss":       "初始止损",
+        "end_of_backtest": "回测截止",
+        "delisted":        "退市/并购",
+    }).fillna(_lh200["exit_reason"])
+    _lh200_show = _lh200[[
+        "ticker", "类别", "entry_date", "exit_date", "holding_days",
+        "pnl_r_multiple", "net_pnl", "卖出原因",
+    ]].copy()
+    _lh200_show.columns = ["标的", "类别", "开仓日期", "平仓日期", "持仓天数", "R 倍数", "净盈亏($)", "卖出原因"]
+    _lh200_show["开仓日期"] = _lh200_show["开仓日期"].dt.strftime("%Y-%m-%d")
+    _lh200_show["平仓日期"] = _lh200_show["平仓日期"].dt.strftime("%Y-%m-%d")
+    _lh200_show["净盈亏($)"] = _lh200_show["净盈亏($)"].map(lambda v: f"${v:+,.0f}")
+    _lh200_show["R 倍数"]    = _lh200_show["R 倍数"].map(lambda v: f"{v:.2f}R")
+    _lh200_show = _lh200_show.sort_values("持仓天数", ascending=False).reset_index(drop=True)
+    with st.expander(f"📋 持仓天数 > 200 天的交易（共 {len(_lh200_show)} 笔）", expanded=True):
+        st.dataframe(_lh200_show, use_container_width=True, hide_index=True)
+
 # ── Capital utilization ───────────────────────────────────────────────────────
 st.subheader("资金使用率")
 
