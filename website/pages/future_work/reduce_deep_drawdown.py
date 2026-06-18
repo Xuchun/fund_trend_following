@@ -8,7 +8,7 @@ if str(_root) not in sys.path:
 
 import streamlit as st
 
-st.title("如果减少深度回撤幅度")
+st.title("如何减少深度回撤幅度")
 st.caption("探讨三种可降低深度回撤持续时长的改进方向，基于策略1.0深度回撤分析（18次回撤 > 10%）")
 
 st.markdown("---")
