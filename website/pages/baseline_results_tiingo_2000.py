@@ -1805,7 +1805,7 @@ st.dataframe(_pd_ta.DataFrame([
 ]), use_container_width=True, hide_index=True)
 st.caption(
     f"未触发开仓的 {_n_pt - _n_ta:,} 个标的：要么在可交易期内始终未发出 200 日高点突破信号，"
-    "要么突破发生时恰逢熊市阶段（Regime Filter 关闭新开仓）。"
+    "要么突破发生时恰逢熊市阶段（Regime Filter 关闭大多数标的新开仓，TLT / GLD / UUP 豁免）。"
 )
 
 # ── Delisted / acquired trades ────────────────────────────────────────────────
