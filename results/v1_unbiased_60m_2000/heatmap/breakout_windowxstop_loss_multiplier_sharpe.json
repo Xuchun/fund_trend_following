@@ -4,14 +4,11 @@
   "param2": "stop_loss_multiplier",
   "metric": "sharpe",
   "start": "2000-01-03",
-  "end": "2021-12-31",
+  "end": "2026-06-15",
   "param1_values": [
     150,
-    170,
     200,
-    230,
     250,
-    270,
     300
   ],
   "param2_values": [
@@ -22,46 +19,28 @@
   ],
   "grid": [
     [
-      0.6376721609380068,
-      0.6290932176285494,
-      0.5363070486432394,
-      0.4333269515375711
+      0.6676677887668935,
+      0.6065119221536982,
+      0.5659726215915627,
+      0.49518730353895735
     ],
     [
-      0.6681027721956824,
-      0.5832389765972672,
-      0.5077067243477299,
-      0.4755698733793819
+      0.6201168542724707,
+      0.6342029822796178,
+      0.5550910769003157,
+      0.5701819565691997
     ],
     [
-      0.6453347170867592,
-      0.5662007050776792,
-      0.5488546394506525,
-      0.5685175607043157
+      0.603296979524909,
+      0.5954185271853739,
+      0.5684804732438826,
+      0.5537582024705092
     ],
     [
-      0.5809376068156973,
-      0.5837899927892445,
-      0.5477328174500959,
-      0.5646619634259981
-    ],
-    [
-      0.624848519357443,
-      0.536536383066706,
-      0.5331864848995779,
-      0.5478657701146106
-    ],
-    [
-      0.584598845173441,
-      0.4980022264603055,
-      0.4833027853977775,
-      0.5357532101371916
-    ],
-    [
-      0.5984205345236857,
-      0.5599864624507123,
-      0.5640916368716539,
-      0.5617493851655792
+      0.5664804315454873,
+      0.5754557165829872,
+      0.5845674706247561,
+      0.572887833673459
     ]
   ],
   "records": [
@@ -71,7 +50,7 @@
       "param2_name": "stop_loss_multiplier",
       "param2_value": 1.5,
       "metric_name": "sharpe",
-      "metric_value": 0.6376721609380068
+      "metric_value": 0.6676677887668935
     },
     {
       "param1_name": "breakout_window",
@@ -79,7 +58,7 @@
       "param2_name": "stop_loss_multiplier",
       "param2_value": 2.0,
       "metric_name": "sharpe",
-      "metric_value": 0.6290932176285494
+      "metric_value": 0.6065119221536982
     },
     {
       "param1_name": "breakout_window",
@@ -87,7 +66,7 @@
       "param2_name": "stop_loss_multiplier",
       "param2_value": 2.5,
       "metric_name": "sharpe",
-      "metric_value": 0.5363070486432394
+      "metric_value": 0.5659726215915627
     },
     {
       "param1_name": "breakout_window",
@@ -95,39 +74,7 @@
       "param2_name": "stop_loss_multiplier",
       "param2_value": 3.0,
       "metric_name": "sharpe",
-      "metric_value": 0.4333269515375711
-    },
-    {
-      "param1_name": "breakout_window",
-      "param1_value": 170,
-      "param2_name": "stop_loss_multiplier",
-      "param2_value": 1.5,
-      "metric_name": "sharpe",
-      "metric_value": 0.6681027721956824
-    },
-    {
-      "param1_name": "breakout_window",
-      "param1_value": 170,
-      "param2_name": "stop_loss_multiplier",
-      "param2_value": 2.0,
-      "metric_name": "sharpe",
-      "metric_value": 0.5832389765972672
-    },
-    {
-      "param1_name": "breakout_window",
-      "param1_value": 170,
-      "param2_name": "stop_loss_multiplier",
-      "param2_value": 2.5,
-      "metric_name": "sharpe",
-      "metric_value": 0.5077067243477299
-    },
-    {
-      "param1_name": "breakout_window",
-      "param1_value": 170,
-      "param2_name": "stop_loss_multiplier",
-      "param2_value": 3.0,
-      "metric_name": "sharpe",
-      "metric_value": 0.4755698733793819
+      "metric_value": 0.49518730353895735
     },
     {
       "param1_name": "breakout_window",
@@ -135,7 +82,7 @@
       "param2_name": "stop_loss_multiplier",
       "param2_value": 1.5,
       "metric_name": "sharpe",
-      "metric_value": 0.6453347170867592
+      "metric_value": 0.6201168542724707
     },
     {
       "param1_name": "breakout_window",
@@ -143,7 +90,7 @@
       "param2_name": "stop_loss_multiplier",
       "param2_value": 2.0,
       "metric_name": "sharpe",
-      "metric_value": 0.5662007050776792
+      "metric_value": 0.6342029822796178
     },
     {
       "param1_name": "breakout_window",
@@ -151,7 +98,7 @@
       "param2_name": "stop_loss_multiplier",
       "param2_value": 2.5,
       "metric_name": "sharpe",
-      "metric_value": 0.5488546394506525
+      "metric_value": 0.5550910769003157
     },
     {
       "param1_name": "breakout_window",
@@ -159,39 +106,7 @@
       "param2_name": "stop_loss_multiplier",
       "param2_value": 3.0,
       "metric_name": "sharpe",
-      "metric_value": 0.5685175607043157
-    },
-    {
-      "param1_name": "breakout_window",
-      "param1_value": 230,
-      "param2_name": "stop_loss_multiplier",
-      "param2_value": 1.5,
-      "metric_name": "sharpe",
-      "metric_value": 0.5809376068156973
-    },
-    {
-      "param1_name": "breakout_window",
-      "param1_value": 230,
-      "param2_name": "stop_loss_multiplier",
-      "param2_value": 2.0,
-      "metric_name": "sharpe",
-      "metric_value": 0.5837899927892445
-    },
-    {
-      "param1_name": "breakout_window",
-      "param1_value": 230,
-      "param2_name": "stop_loss_multiplier",
-      "param2_value": 2.5,
-      "metric_name": "sharpe",
-      "metric_value": 0.5477328174500959
-    },
-    {
-      "param1_name": "breakout_window",
-      "param1_value": 230,
-      "param2_name": "stop_loss_multiplier",
-      "param2_value": 3.0,
-      "metric_name": "sharpe",
-      "metric_value": 0.5646619634259981
+      "metric_value": 0.5701819565691997
     },
     {
       "param1_name": "breakout_window",
@@ -199,7 +114,7 @@
       "param2_name": "stop_loss_multiplier",
       "param2_value": 1.5,
       "metric_name": "sharpe",
-      "metric_value": 0.624848519357443
+      "metric_value": 0.603296979524909
     },
     {
       "param1_name": "breakout_window",
@@ -207,7 +122,7 @@
       "param2_name": "stop_loss_multiplier",
       "param2_value": 2.0,
       "metric_name": "sharpe",
-      "metric_value": 0.536536383066706
+      "metric_value": 0.5954185271853739
     },
     {
       "param1_name": "breakout_window",
@@ -215,7 +130,7 @@
       "param2_name": "stop_loss_multiplier",
       "param2_value": 2.5,
       "metric_name": "sharpe",
-      "metric_value": 0.5331864848995779
+      "metric_value": 0.5684804732438826
     },
     {
       "param1_name": "breakout_window",
@@ -223,39 +138,7 @@
       "param2_name": "stop_loss_multiplier",
       "param2_value": 3.0,
       "metric_name": "sharpe",
-      "metric_value": 0.5478657701146106
-    },
-    {
-      "param1_name": "breakout_window",
-      "param1_value": 270,
-      "param2_name": "stop_loss_multiplier",
-      "param2_value": 1.5,
-      "metric_name": "sharpe",
-      "metric_value": 0.584598845173441
-    },
-    {
-      "param1_name": "breakout_window",
-      "param1_value": 270,
-      "param2_name": "stop_loss_multiplier",
-      "param2_value": 2.0,
-      "metric_name": "sharpe",
-      "metric_value": 0.4980022264603055
-    },
-    {
-      "param1_name": "breakout_window",
-      "param1_value": 270,
-      "param2_name": "stop_loss_multiplier",
-      "param2_value": 2.5,
-      "metric_name": "sharpe",
-      "metric_value": 0.4833027853977775
-    },
-    {
-      "param1_name": "breakout_window",
-      "param1_value": 270,
-      "param2_name": "stop_loss_multiplier",
-      "param2_value": 3.0,
-      "metric_name": "sharpe",
-      "metric_value": 0.5357532101371916
+      "metric_value": 0.5537582024705092
     },
     {
       "param1_name": "breakout_window",
@@ -263,7 +146,7 @@
       "param2_name": "stop_loss_multiplier",
       "param2_value": 1.5,
       "metric_name": "sharpe",
-      "metric_value": 0.5984205345236857
+      "metric_value": 0.5664804315454873
     },
     {
       "param1_name": "breakout_window",
@@ -271,7 +154,7 @@
       "param2_name": "stop_loss_multiplier",
       "param2_value": 2.0,
       "metric_name": "sharpe",
-      "metric_value": 0.5599864624507123
+      "metric_value": 0.5754557165829872
     },
     {
       "param1_name": "breakout_window",
@@ -279,7 +162,7 @@
       "param2_name": "stop_loss_multiplier",
       "param2_value": 2.5,
       "metric_name": "sharpe",
-      "metric_value": 0.5640916368716539
+      "metric_value": 0.5845674706247561
     },
     {
       "param1_name": "breakout_window",
@@ -287,7 +170,7 @@
       "param2_name": "stop_loss_multiplier",
       "param2_value": 3.0,
       "metric_name": "sharpe",
-      "metric_value": 0.5617493851655792
+      "metric_value": 0.572887833673459
     }
   ]
 }
