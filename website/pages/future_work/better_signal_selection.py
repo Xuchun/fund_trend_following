@@ -326,6 +326,46 @@ st.markdown("""
 单笔仓位变小通常有助于分散风险、降低最大回撤，但同时持仓数增多也增加了整体风险敞口。
 """)
 
+# Chart: position_cap sensitivity from actual backtest data
+_pcap_f = _perturb_path / "position_cap.json"
+if _pcap_f.exists():
+    _pcd = json.loads(_pcap_f.read_text())
+    _pcv  = _pcd["param_values"]
+    _pcc  = [r["cagr"] * 100 for r in _pcd["results"]]
+    _pcm  = [abs(r["max_drawdown"]) * 100 for r in _pcd["results"]]
+    _pcn  = [r["n_trades"] for r in _pcd["results"]]
+    _baseline_pc = _pcd["baseline_value"]
+    _fig_pc = go.Figure()
+    _fig_pc.add_trace(go.Bar(
+        x=[f"{v:.0%}" for v in _pcv], y=_pcc, name="CAGR (%)",
+        marker_color=["#22c55e" if v == _baseline_pc else "#6366f1" for v in _pcv],
+        yaxis="y",
+    ))
+    _fig_pc.add_trace(go.Scatter(
+        x=[f"{v:.0%}" for v in _pcv], y=_pcm, name="最大回撤（%，右轴）",
+        mode="lines+markers", marker=dict(size=9, color="#ef4444"),
+        line=dict(color="#ef4444", width=2), yaxis="y2",
+    ))
+    _fig_pc.add_trace(go.Scatter(
+        x=[f"{v:.0%}" for v in _pcv], y=_pcn, name="交易笔数（右轴2）",
+        mode="lines+markers", marker=dict(size=7, color="#94a3b8"),
+        line=dict(color="#94a3b8", width=1.5, dash="dot"), yaxis="y3",
+    ))
+    _fig_pc.update_layout(
+        title="单笔仓位上限（position_cap）敏感性：CAGR、MaxDD、交易笔数",
+        xaxis_title="position_cap（% NAV）",
+        yaxis=dict(title="CAGR (%)", side="left", range=[7, 12]),
+        yaxis2=dict(title="最大回撤（%）", side="right", overlaying="y", position=1.0, range=[18, 28]),
+        yaxis3=dict(title="交易笔数", side="right", overlaying="y", position=0.85, showgrid=False),
+        legend=dict(x=0.4, y=0.05), height=380, margin=dict(t=50, b=40, r=80),
+    )
+    st.plotly_chart(_fig_pc, use_container_width=True)
+    st.caption(
+        f"当前 position_cap = {_baseline_pc:.0%}（绿色），CAGR = {_pcc[_pcv.index(_baseline_pc)]:.2f}%，{_pcn[_pcv.index(_baseline_pc)]:.0f} 笔交易。"
+        f"降至 3% 时交易笔数大幅增加至 {_pcn[0]:.0f} 笔，但每笔规模缩小，CAGR 降至 {_pcc[0]:.2f}%。"
+        "提高至 7% 时交易笔数减少、持仓集中度上升，MaxDD 增至 22.9%。当前 5% 是 CAGR 最优点。"
+    )
+
 st.markdown("---")
 
 # 建议 4
