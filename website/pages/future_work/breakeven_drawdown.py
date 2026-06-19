@@ -347,7 +347,7 @@ _fig_sc.add_annotation(
 )
 
 _fig_sc.update_layout(
-    title=dict(text="168 笔受影响交易：原始 P&L vs 平价保护后 P&L（单位：R）", font=dict(size=13)),
+    title=dict(text=f"{len(_ch)} 笔受影响交易：原始 P&L vs 平价保护后 P&L（单位：R）", font=dict(size=13)),
     xaxis_title="原始 P&L（R）",
     yaxis_title="平价保护后 P&L（R）",
     height=420,
