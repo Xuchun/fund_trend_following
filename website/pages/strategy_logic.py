@@ -270,8 +270,8 @@ st.markdown(f"""
 ```
 
 开仓初期，止损（2×ATR）比移动止盈（3×ATR）更紧，由止损提供主要保护。
-当持仓最高价突破 `entry_price + 1×ATR` 后，移动止盈线（`highest_high − 3×ATR`）
-开始高于止损线（`entry − 2×ATR`），从此由移动止盈主导退出。
+当持仓最高价突破 entry_price + 1×ATR 后，移动止盈线（highest_high − 3×ATR）
+开始高于止损线（entry − 2×ATR），从此由移动止盈主导退出。
 （此接管时机由数学自然保证，代码无需显式判断：trail_stop 从 entry − 3×ATR 起步，
 低于固定止损位 entry − 2×ATR；一旦 highest_high 超过 entry + 1×ATR，
 trail_stop 数学上必然超过固定止损位，自动成为约束性条件。）
