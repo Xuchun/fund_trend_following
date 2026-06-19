@@ -436,9 +436,9 @@ st.plotly_chart(_fig_pyra, use_container_width=True)
 
 _total_pyramid = _big_trades["pyramid_gain"].sum()
 _total_current_big = _big_trades["net_pnl"].sum()
-st.caption(
-    f"R>3 的 {len(_big_trades)} 笔交易当前利润共 ${_total_current_big/1e6:.1f}M；"
-    f"若在 3R 时追加 50% 仓位，粗估额外利润约 ${_total_pyramid/1e6:.1f}M"
+st.markdown(
+    f"R>3 的 {len(_big_trades)} 笔交易当前利润共 \${_total_current_big/1e6:.1f}M；"
+    f"若在 3R 时追加 50% 仓位，粗估额外利润约 \${_total_pyramid/1e6:.1f}M"
     f"（+{_total_pyramid/_total_current_big*100:.0f}%，相当于总利润的 {_total_pyramid/_total_pnl*100:.0f}%）。"
     "高 R 区间（>10R）是金字塔加仓的主要受益来源。"
     "（粗估基于静态计算，实际效果需完整回测验证，加仓会同步扩大潜在回撤。）"
