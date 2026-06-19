@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "method": "ib_paper_trading",
+  "description": "Strategy 1.0 IB Paper Trading — initial capital $200K",
+  "debug_start_date": "2026-06-19",
+  "live_start_date": "2026-07-01",
+  "initial_capital": 200000.0,
+  "currency": "USD",
+  "ib_host": "127.0.0.1",
+  "ib_port": 7497,
+  "last_update_date": null,
+  "nav": 200000.0,
+  "cash": 200000.0,
+  "account_summary": {},
+  "positions": [],
+  "closed_trades": [],
+  "nav_history": [],
+  "orders_history": [],
+  "today_signals": {
+    "exits": [],
+    "entries": []
+  }
+}
