@@ -1586,154 +1586,144 @@ st.markdown("---")
 import numpy as _np_ks
 import pandas as _pd_ks
 
+_SIM_CSV = _results_path / "all_signals_simulated.csv"
+
 @st.cache_data(ttl=86400)
-def _compute_kstrength():
-    _prices_dir = _root / "data" / "cache" / "prices"
-    _tr = res.trades[["ticker", "entry_date", "pnl_r_multiple", "net_pnl"]].copy()
-    _tr["entry_date"] = _pd_ks.to_datetime(_tr["entry_date"])
-    _out = []
-    for _ticker, _grp in _tr.groupby("ticker"):
-        _f = _prices_dir / f"{_ticker}.parquet"
-        if not _f.exists():
-            continue
-        try:
-            _p = _pd_ks.read_parquet(_f)
-            _p["adj_close"] = _p["close"] * _p["adj_factor"]
-            _p = _p.sort_index()
-        except Exception:
-            continue
-        for _, _row in _grp.iterrows():
-            _mask = _p.index < _row["entry_date"]
-            if _mask.sum() < 2:
-                continue
-            _idx = _p.index[_mask]
-            _ct  = float(_p.loc[_idx[-1], "adj_close"])
-            _ct1 = float(_p.loc[_idx[-2], "adj_close"])
-            if _ct1 == 0:
-                continue
-            _out.append({
-                "k_strength": (_ct - _ct1) / _ct1 * 100,
-                "pnl_r": float(_row["pnl_r_multiple"]),
-                "winner": float(_row["net_pnl"]) > 0,
-            })
-    return _pd_ks.DataFrame(_out, columns=["k_strength", "pnl_r", "winner"])
+def _load_sim_signals():
+    if not _SIM_CSV.exists():
+        return None
+    _df = _pd_ks.read_csv(_SIM_CSV, parse_dates=["signal_date", "entry_date", "exit_date"])
+    return _df[~_df["gap_filtered"]].reset_index(drop=True)
 
 def _render_kstrength():
     import plotly.graph_objects as _go_ks_i
     from scipy.stats import pearsonr as _pearsonr, spearmanr as _spearmanr
 
-    _ks_df    = _compute_kstrength()
-    _ks_n     = len(_ks_df)
+    _sim = _load_sim_signals()
     _ks_total = len(res.trades)
 
     st.subheader("开仓K线强度分析")
-    st.markdown(f"""
+    st.markdown("""
 **开仓K线强度** 定义为开仓信号产生当天的日涨幅（使用复权收盘价）：
 
 开仓K线强度 = （信号日收盘价 − 前一日收盘价）÷ 前一日收盘价
 
 其中**信号日** = entry_date 的前一个交易日（策略在收盘后生成信号，次日开盘执行）。
-
-共 **{_ks_n:,}** 笔已执行交易具有价格数据（占全部 {_ks_total:,} 笔的 {_ks_n/_ks_total*100:.0f}%），
-另有 **{_ks_total - _ks_n:,}** 笔因标的退市或更名无法获取历史价格。
-由于策略不记录未执行信号的个股级数据，本分析仅限于**已执行的开仓信号**。
 """)
 
-    if _ks_n == 0:
-        st.info("本地价格数据不在当前运行环境中，无法计算开仓K线强度。请在本地环境运行以查看此分析。")
+    if _sim is None:
+        st.info("全信号模拟数据不在当前运行环境中。请在本地运行 `src/scripts/simulate_all_signals.py` 生成数据后重新查看。")
         return
 
-    # ── Distribution chart ────────────────────────────────────────────────────
-    _ks_win  = _ks_df[_ks_df["winner"]]["k_strength"].clip(-5, 30)
-    _ks_lose = _ks_df[~_ks_df["winner"]]["k_strength"].clip(-5, 30)
+    _ex  = _sim[_sim["executed"]]
+    _nex = _sim[~_sim["executed"]]
 
+    st.markdown(f"""
+本分析基于 **全量信号模拟**（`simulate_all_signals.py`），包含已执行与未执行开仓信号：
+通过技术过滤器的信号共 **{len(_sim):,}** 个
+（已执行 **{len(_ex):,}** 个 / 未执行 **{len(_nex):,}** 个）。
+Gap > 2.5% 被过滤的信号另外 {_pd_ks.read_csv(_SIM_CSV)['gap_filtered'].sum():,} 个，未计入分析。
+""")
+
+    # ── Distribution chart ────────────────────────────────────────────────────
     _fig_dist = _go_ks_i.Figure()
-    _fig_dist.add_trace(_go_ks_i.Histogram(
-        x=_ks_lose, name="亏损", marker_color="#d62728",
-        opacity=0.65, bingroup=1, xbins=dict(size=0.5),
-    ))
-    _fig_dist.add_trace(_go_ks_i.Histogram(
-        x=_ks_win, name="盈利", marker_color="#2ca02c",
-        opacity=0.65, bingroup=1, xbins=dict(size=0.5),
-    ))
+    for _label, _sub, _col in [
+        ("未执行", _nex, "#aec7e8"),
+        ("已执行·亏损", _ex[_ex["pnl_r"] <= 0], "#d62728"),
+        ("已执行·盈利", _ex[_ex["pnl_r"] > 0],  "#2ca02c"),
+    ]:
+        _fig_dist.add_trace(_go_ks_i.Histogram(
+            x=_sub["k_strength"].clip(-2, 25),
+            name=_label, marker_color=_col,
+            opacity=0.7, bingroup=1, xbins=dict(size=0.5),
+        ))
     _fig_dist.update_layout(
-        barmode="stack",
-        title="开仓K线强度分布（已执行信号）",
-        xaxis_title="K线强度（%）",
-        yaxis_title="交易笔数",
-        height=340,
-        margin=dict(l=60, r=30, t=50, b=50),
-        legend=dict(orientation="h", x=0.7, y=1.12),
+        barmode="overlay",
+        title="开仓K线强度分布（已执行 vs 未执行）",
+        xaxis_title="K线强度（%）", yaxis_title="信号数",
+        height=360, margin=dict(l=60, r=30, t=50, b=50),
+        legend=dict(orientation="h", x=0.4, y=1.14),
     )
     st.plotly_chart(_fig_dist, use_container_width=True)
 
-    # ── Bucket analysis ───────────────────────────────────────────────────────
-    _ks_df2 = _ks_df.copy()
-    _ks_df2["bucket"] = _pd_ks.cut(
-        _ks_df2["k_strength"],
-        bins=[-_np_ks.inf, 0, 1, 2, 3, 5, _np_ks.inf],
-        labels=["< 0%", "0–1%", "1–2%", "2–3%", "3–5%", "> 5%"],
-    )
-    _ks_bkt = _ks_df2.groupby("bucket", observed=True).agg(
-        n=("pnl_r", "count"),
-        win_rate=("winner", "mean"),
-        avg_r=("pnl_r", "mean"),
-    ).reset_index()
-    _ks_bkt["win_pct"] = _ks_bkt["win_rate"] * 100
-    _bkt_labels = _ks_bkt["bucket"].astype(str).tolist()
+    _col_a, _col_b = st.columns(2)
+    with _col_a:
+        st.metric("已执行 K线强度均值", f"{_ex['k_strength'].mean():.2f}%",
+                  help="已执行信号按突破强度排序优先入场，倾向于更大的信号日涨幅")
+    with _col_b:
+        st.metric("未执行 K线强度均值", f"{_nex['k_strength'].mean():.2f}%")
 
-    _fig_bkt = _go_ks_i.Figure()
-    _fig_bkt.add_trace(_go_ks_i.Bar(
-        x=_bkt_labels, y=_ks_bkt["win_pct"].tolist(),
-        name="胜率（%）", marker_color="#1f77b4", yaxis="y1",
-        text=[f"{v:.1f}%" for v in _ks_bkt["win_pct"].tolist()],
-        textposition="outside",
-    ))
-    _fig_bkt.add_trace(_go_ks_i.Scatter(
-        x=_bkt_labels, y=_ks_bkt["avg_r"].tolist(),
-        name="平均R", mode="lines+markers",
-        marker=dict(size=9, color="#ff7f0e"), line=dict(color="#ff7f0e", width=2),
-        yaxis="y2",
-    ))
-    _fig_bkt.update_layout(
-        title="各K线强度分组的胜率与平均R",
-        xaxis_title="K线强度（%）",
-        yaxis=dict(title="胜率（%）", range=[0, 65], ticksuffix="%"),
-        yaxis2=dict(title="平均R倍数", overlaying="y", side="right", range=[-0.5, 1.2]),
-        height=380,
-        margin=dict(l=60, r=70, t=50, b=50),
-        legend=dict(orientation="h", x=0.55, y=1.12),
-    )
-    for _lb, _nv, _wr_v in zip(_bkt_labels, _ks_bkt["n"].tolist(), _ks_bkt["win_pct"].tolist()):
-        _fig_bkt.add_annotation(
-            x=_lb, y=_wr_v + 5,
-            text=f"n={int(_nv)}", showarrow=False,
-            font=dict(size=9, color="gray"), yref="y",
+    # ── Bucket analysis: all signals ──────────────────────────────────────────
+    def _bkt_chart(df, title, color_bar, color_line):
+        _d = df.copy()
+        _d["bucket"] = _pd_ks.cut(
+            _d["k_strength"],
+            bins=[-_np_ks.inf, 1, 2, 3, 5, _np_ks.inf],
+            labels=["0–1%", "1–2%", "2–3%", "3–5%", "> 5%"],
         )
-    st.plotly_chart(_fig_bkt, use_container_width=True)
+        _b = _d.groupby("bucket", observed=True).agg(
+            n=("pnl_r", "count"),
+            win_pct=("pnl_r", lambda x: (x > 0).mean() * 100),
+            avg_r=("pnl_r", "mean"),
+        ).reset_index()
+        _lbs = _b["bucket"].astype(str).tolist()
+        _fig = _go_ks_i.Figure()
+        _fig.add_trace(_go_ks_i.Bar(
+            x=_lbs, y=_b["win_pct"].tolist(), name="胜率（%）",
+            marker_color=color_bar, yaxis="y1",
+            text=[f"{v:.0f}%" for v in _b["win_pct"].tolist()], textposition="outside",
+        ))
+        _fig.add_trace(_go_ks_i.Scatter(
+            x=_lbs, y=_b["avg_r"].tolist(), name="平均R",
+            mode="lines+markers", yaxis="y2",
+            marker=dict(size=8, color=color_line), line=dict(color=color_line, width=2),
+        ))
+        _fig.update_layout(
+            title=title,
+            xaxis_title="K线强度",
+            yaxis=dict(title="胜率（%）", range=[0, 65], ticksuffix="%"),
+            yaxis2=dict(title="平均R", overlaying="y", side="right", range=[-0.3, 0.8]),
+            height=340, margin=dict(l=60, r=70, t=50, b=50),
+            legend=dict(orientation="h", x=0.5, y=1.14),
+        )
+        for _lb, _nv, _wv in zip(_lbs, _b["n"].tolist(), _b["win_pct"].tolist()):
+            _fig.add_annotation(x=_lb, y=_wv + 4, text=f"n={int(_nv)}",
+                                showarrow=False, font=dict(size=9, color="gray"), yref="y")
+        return _fig
+
+    _c1, _c2 = st.columns(2)
+    with _c1:
+        st.plotly_chart(_bkt_chart(_sim, "全量信号（已执行 + 未执行）", "#1f77b4", "#ff7f0e"),
+                        use_container_width=True)
+    with _c2:
+        st.plotly_chart(_bkt_chart(_ex, "仅已执行信号", "#2ca02c", "#d62728"),
+                        use_container_width=True)
 
     # ── Correlation stats ─────────────────────────────────────────────────────
-    _r_p, _p_p = _pearsonr(_ks_df["k_strength"], _ks_df["pnl_r"])
-    _r_s, _p_s = _spearmanr(_ks_df["k_strength"], _ks_df["pnl_r"])
+    _r_p_all, _p_p_all = _pearsonr(_sim["k_strength"], _sim["pnl_r"])
+    _r_s_all, _p_s_all = _spearmanr(_sim["k_strength"], _sim["pnl_r"])
+    _r_p_ex,  _       = _pearsonr(_ex["k_strength"],  _ex["pnl_r"])
+    _r_s_ex,  _       = _spearmanr(_ex["k_strength"], _ex["pnl_r"])
 
-    _col_c1, _col_c2, _col_c3 = st.columns(3)
-    with _col_c1:
-        st.metric("Pearson 相关系数", f"{_r_p:.4f}", help="线性相关；受极端值影响较大")
-    with _col_c2:
-        st.metric("Spearman 相关系数", f"{_r_s:.4f}", help="秩次相关；对异常值更稳健")
-    with _col_c3:
-        st.metric("样本量", f"{_ks_n:,}")
+    _cc1, _cc2, _cc3, _cc4 = st.columns(4)
+    with _cc1:
+        st.metric("Pearson r（全量）", f"{_r_p_all:.4f}")
+    with _cc2:
+        st.metric("Spearman r（全量）", f"{_r_s_all:.4f}")
+    with _cc3:
+        st.metric("Pearson r（已执行）", f"{_r_p_ex:.4f}")
+    with _cc4:
+        st.metric("Spearman r（已执行）", f"{_r_s_ex:.4f}")
 
-    _n_neg = int((_ks_bkt.loc[_ks_bkt["bucket"].astype(str) == "< 0%", "n"]).values[0]) if "< 0%" in _bkt_labels else 0
     st.markdown(f"""
-Pearson 相关系数 {_r_p:.4f}（p = {_p_p:.3f}），在 5% 显著性水平下**不显著**；
-Spearman 秩次相关系数仅 {_r_s:.4f}（p = {_p_s:.3f}），接近零，说明**排序层面也没有单调关系**。
+全量信号（n={len(_sim):,}）：Pearson r = {_r_p_all:.4f}（p = {_p_p_all:.3f}），Spearman r = {_r_s_all:.4f}（p = {_p_s_all:.3f}）。
+样本量大，相关性达到统计显著，但**绝对值仅约 0.02**，说明 k_strength 只解释了约 0.05% 的收益方差——**实际预测力可忽略不计**。
 
-各分组胜率在 36%–43% 之间窄幅波动，无明显趋势。平均R在不同分组之间也缺乏单调性。
-唯一例外是 "< 0%"（当天收跌即触发信号，仅 {_n_neg} 笔）— 但样本量太小，统计意义有限。
+各分组胜率在 33%–36% 之间，平均R也无单调趋势。
+值得注意的是，**已执行信号的 k_strength 均值（{_ex['k_strength'].mean():.1f}%）高于未执行（{_nex['k_strength'].mean():.1f}%）**，
+但这来自策略按**突破强度（breakout_strength = close/rolling_high）排序**优先入场，而非 k_strength 本身的筛选。
 
-**结论：开仓K线强度与后续收益之间不存在有意义的正向关系，不建议将其用作开仓过滤条件。**
-这与趋势跟踪的底层逻辑一致：信号日收盘前的涨幅大小，对于突破能否持续并无预测力。
+**结论：开仓K线强度与后续收益之间不存在有预测意义的关系，不建议将其用作开仓过滤条件。**
 """)
 
 _render_kstrength()
