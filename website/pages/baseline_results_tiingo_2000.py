@@ -1582,6 +1582,156 @@ with st.expander("📋 亏损最大的 10 个标的", expanded=False):
 
 st.markdown("---")
 
+# ── 平价保护分析 ──────────────────────────────────────────────────────────────
+import numpy as _np_be
+import pandas as _pd_be
+
+_BE_CSV   = _results_path / "breakeven_scenarios.csv"
+_BE_MTIME = int(_BE_CSV.stat().st_mtime) if _BE_CSV.exists() else 0
+
+
+@st.cache_data(ttl=86400)
+def _load_be_scenarios(_mtime: int):
+    if _mtime == 0:
+        return None
+    return _pd_be.read_csv(
+        _BE_CSV,
+        parse_dates=["entry_date", "orig_exit_date",
+                     "be1r_exit_date", "be15r_exit_date", "be2r_exit_date"],
+    )
+
+
+def _render_breakeven():
+    import plotly.graph_objects as _go_be
+
+    st.subheader("平价保护分析")
+    st.markdown("""
+**平价保护**（Breakeven Protection）：开仓后，一旦浮盈达到设定阈值，将追踪止损上移至开仓价格，
+确保该笔交易至少盈亏平衡。其他策略设置（过滤条件、仓位管理、执行与成本假设）均保持不变。
+
+本分析对所有已执行信号分别模拟三种平价保护规则：
+
+| 规则 | 触发条件 | 止损调整 |
+|------|----------|----------|
+| 平价保护 1R | 浮盈（以最高价计）≥ 1×R | 追踪止损上移至开仓价格 |
+| 平价保护 1.5R | 浮盈（以最高价计）≥ 1.5×R | 追踪止损上移至开仓价格 |
+| 平价保护 2R | 浮盈（以最高价计）≥ 2×R | 追踪止损上移至开仓价格 |
+
+**NAV 重建方法**：对每笔因平价保护提前出场的交易，将原始 P&L 替换为平价保护后的 P&L（delta P&L 方法），
+其余交易保持不变。
+""")
+
+    _be = _load_be_scenarios(_BE_MTIME)
+    if _be is None:
+        st.info("平价保护分析数据不在当前运行环境中。请在本地运行 `python src/scripts/compute_breakeven_scenarios.py` 后重新部署。")
+        return
+
+    _nav_orig = res.nav  # pd.Series, DatetimeIndex
+
+    def _build_nav(_lbl: str):
+        _dc = f"{_lbl}_exit_date"
+        _pc = f"{_lbl}_net_pnl"
+        _tc = f"{_lbl}_triggered"
+        # Only apply delta for genuine BE-caused early exits
+        _mask = _be[_tc] & _be[_dc].notna() & (_be[_dc] < _be["orig_exit_date"])
+        _ch   = _be[_mask]
+        _d    = _pd_be.Series(0.0, index=_nav_orig.index, dtype=float)
+        for _dt, _v in _ch.groupby("orig_exit_date")["orig_net_pnl"].sum().items():
+            if _dt in _d.index:
+                _d[_dt] -= _v
+        for _dt, _v in _ch.groupby(_dc)[_pc].sum().items():
+            if _dt in _d.index:
+                _d[_dt] += _v
+        return _nav_orig + _d.cumsum()
+
+    _navs = {
+        "原始策略":      _nav_orig,
+        "平价保护 1R":   _build_nav("be1r"),
+        "平价保护 1.5R": _build_nav("be15r"),
+        "平价保护 2R":   _build_nav("be2r"),
+    }
+
+    # ── NAV comparison chart ──────────────────────────────────────────────────
+    _fig_nav = _go_be.Figure()
+    _clrs  = ["#1f77b4", "#2ca02c", "#ff7f0e", "#d62728"]
+    _dashes = ["solid", "dash", "dash", "dash"]
+    _wds   = [2.5, 1.5, 1.5, 1.5]
+    for (_nm, _nav), _cl, _ds, _wd in zip(_navs.items(), _clrs, _dashes, _wds):
+        _nr = _nav / _nav.iloc[0]
+        _fig_nav.add_trace(_go_be.Scatter(
+            x=_nr.index, y=_nr.values, name=_nm,
+            line=dict(color=_cl, dash=_ds, width=_wd),
+        ))
+    _fig_nav.update_layout(
+        title=dict(text="NAV 对比：原始策略 vs 平价保护（归一化至起始=1）", font=dict(size=14)),
+        height=420,
+        margin=dict(l=60, r=20, t=60, b=40),
+        yaxis_title="归一化 NAV",
+        legend=dict(x=0.01, y=0.99),
+        hovermode="x unified",
+    )
+    st.plotly_chart(_fig_nav, use_container_width=True)
+
+    # ── Metrics table ─────────────────────────────────────────────────────────
+    def _cagr(_nav):
+        _ny = (_nav.index[-1] - _nav.index[0]).days / 365.25
+        return (_nav.iloc[-1] / _nav.iloc[0]) ** (1.0 / _ny) - 1
+
+    def _maxdd(_nav):
+        return ((_nav - _nav.cummax()) / _nav.cummax()).min()
+
+    _orig_c = _cagr(_nav_orig)
+    _orig_d = _maxdd(_nav_orig)
+
+    _m_rows = []
+    for _nm, _nav in _navs.items():
+        _c = _cagr(_nav)
+        _d = _maxdd(_nav)
+        _row = {"方案": _nm, "年化收益 CAGR": f"{_c*100:.2f}%"}
+        if _nm == "原始策略":
+            _row["CAGR 变化"] = "—"
+            _row["最大回撤"]  = f"{_d*100:.2f}%"
+            _row["最大回撤变化"] = "—"
+        else:
+            _dc2 = (_c - _orig_c) * 100
+            _dd2 = (_d - _orig_d) * 100
+            _row["CAGR 变化"]   = f"{'+' if _dc2 >= 0 else ''}{_dc2:.2f} pp"
+            _row["最大回撤"]    = f"{_d*100:.2f}%"
+            _row["最大回撤变化"] = f"{'+' if _dd2 >= 0 else ''}{_dd2:.2f} pp"
+        _m_rows.append(_row)
+
+    _c1, _c2 = st.columns([3, 2])
+    with _c1:
+        st.markdown("**各方案 CAGR 与最大回撤对比**")
+        st.dataframe(_pd_be.DataFrame(_m_rows), use_container_width=True, hide_index=True)
+
+    # ── Trade impact breakdown ────────────────────────────────────────────────
+    with _c2:
+        _total = len(_be)
+        st.markdown(f"**平价保护触发情况（共 {_total:,} 笔已执行交易）**")
+        _imp = []
+        for _lbl2, _name in [("be1r", "1R"), ("be15r", "1.5R"), ("be2r", "2R")]:
+            _dc3 = f"{_lbl2}_exit_date"
+            _tc3 = f"{_lbl2}_triggered"
+            _n_trig  = int(_be[_tc3].sum())
+            _n_early = int((_be[_tc3] & _be[_dc3].notna() & (_be[_dc3] < _be["orig_exit_date"])).sum())
+            _imp.append({
+                "阈值": f"{_name}",
+                "曾触发": f"{_n_trig} 笔 ({_n_trig/_total*100:.0f}%)",
+                "实际提前出场": f"{_n_early} 笔 ({_n_early/_total*100:.1f}%)",
+            })
+        st.dataframe(_pd_be.DataFrame(_imp), use_container_width=True, hide_index=True)
+
+    st.caption(
+        "注：「曾触发」= 该交易浮盈曾达到阈值（止损已上移至开仓价格）。"
+        "「实际提前出场」= 平价保护使退出日期早于原始策略。"
+        "触发但未提前出场 = 浮盈达到阈值后价格继续上涨，原始追踪止损已高于开仓价格，平价保护无额外保护作用。"
+    )
+
+
+_render_breakeven()
+st.markdown("---")
+
 # ── 开仓K线强度分析 ─────────────────────────────────────────────────────────────
 import numpy as _np_ks
 import pandas as _pd_ks
