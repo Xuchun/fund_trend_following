@@ -52,9 +52,11 @@ TRAIL_R5       = float(_P["trail_multiplier_r5"])         # 5.0
 SLIPPAGE_BPS   = float(_P["slippage_bps"])                # 10.0
 COMMISSION_BPS = float(_P["commission_bps"])              # 3.0
 
-BACKTEST_END = pd.Timestamp("2026-06-15")
-THRESHOLDS   = [1.0, 1.5, 2.0]
-BE_LABELS    = ["be1r", "be15r", "be2r"]
+BACKTEST_END       = pd.Timestamp("2026-06-15")
+THRESHOLDS         = [1.0, 1.5, 2.0]
+BE_LABELS          = ["be1r", "be15r", "be2r"]
+TARGET_NET_PROFIT  = 1.0   # dollars; BE stop set so net_pnl ≈ +$1 after all costs
+_ADJ               = 1.0 - SLIPPAGE_BPS / 10_000 - COMMISSION_BPS / 10_000
 
 
 # ── Wilder ATR (vectorized) ───────────────────────────────────────────────────
