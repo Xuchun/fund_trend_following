@@ -3,9 +3,13 @@ compute_breakeven_scenarios.py — Breakeven protection scenario analysis
 
 For each executed trade in the v1 backtest, re-simulates the exit under three
 breakeven protection rules:
-  - 1R:   if peak unrealized profit ≥ 1.0 × R, move trailing stop to entry_price
-  - 1.5R: if peak unrealized profit ≥ 1.5 × R, move trailing stop to entry_price
-  - 2R:   if peak unrealized profit ≥ 2.0 × R, move trailing stop to entry_price
+  - 1R:   if peak unrealized profit ≥ 1.0 × R, move trailing stop to be_stop_price
+  - 1.5R: if peak unrealized profit ≥ 1.5 × R, move trailing stop to be_stop_price
+  - 2R:   if peak unrealized profit ≥ 2.0 × R, move trailing stop to be_stop_price
+
+where be_stop_price is set slightly above entry_price so that the net_pnl ≈ +$1 after
+all costs (slippage + commissions), rather than exactly at entry_price which would yield
+a small loss due to those costs.
 
 All other strategy settings are unchanged.
 
