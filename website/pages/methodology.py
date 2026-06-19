@@ -145,7 +145,7 @@ with col2:
 st.markdown("---")
 
 # ── Cash management ───────────────────────────────────────────────────────────
-st.subheader("5. 资金管理与价格体系")
+st.subheader("6. 资金管理与价格体系")
 st.markdown(f"""
 **闲置资金处理：** 未持仓部分投入 **{meta.cash_proxy}**（iShares 1–3 年期国债 ETF）
 
