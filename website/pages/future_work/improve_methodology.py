@@ -316,9 +316,8 @@ _t_stat  = _sharpe_tstat(_sr,     _T_years)
 _t_spy   = _sharpe_tstat(_sr_spy, _T_years)
 
 # p-value from t-distribution (one-tailed)
-from scipy import stats as _scipy_stats
-_p_val     = _scipy_stats.t.sf(abs(_t_stat), df=int(_T_years) - 1)
-_p_val_spy = _scipy_stats.t.sf(abs(_t_spy),  df=int(_T_years) - 1)
+_p_val     = _t_sf(_t_stat, df=int(_T_years) - 1)
+_p_val_spy = _t_sf(_t_spy,  df=int(_T_years) - 1)
 
 _col_a, _col_b = st.columns(2)
 with _col_a:
