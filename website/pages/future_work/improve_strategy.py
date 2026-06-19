@@ -1074,8 +1074,8 @@ st.markdown("""
 
 st.markdown("---")
 
-# ── 十一、综合实施路径 ─────────────────────────────────────────────────────────
-st.subheader("十一、综合实施路径")
+# ── 十三、综合实施路径 ─────────────────────────────────────────────────────────
+st.subheader("十三、综合实施路径")
 
 st.markdown(f"""
 **当前基线：CAGR {metrics['cagr']*100:.2f}%，MaxDD -{abs(metrics['max_drawdown'])*100:.2f}%，Sharpe {metrics['sharpe']:.3f}**
