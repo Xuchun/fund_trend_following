@@ -258,9 +258,9 @@ st.markdown(f"""
 | 1R – 3R | {p['trail_multiplier_r3']:.0f}×ATR | 趋势中段，继续保护利润 |
 | ≥ 3R | {p['trail_multiplier_r5']:.0f}×ATR | 放宽，让利润继续奔跑 |
 
-移动止盈**只升不降**：`new_stop = max(old_stop, highest_high − k×ATR)`
+移动止盈**只升不降**：new_stop = max(old_stop, highest_high − k×ATR)
 
-其中 `highest_high` = 持仓期间（自入场日起）adj_high 的累计最大值；**初始化为 `entry_price`**（不使用入场日当天盘中最高价，避免引入未来信息）。移动止盈锚定最高点而非当日收盘价，确保移动止盈仅在创新高时上移，不会因某天大涨后小幅回调就提前触发。
+其中 highest_high = 持仓期间（自入场日起）adj_high 的累计最大值；**初始化为 entry_price**（不使用入场日当天盘中最高价，避免引入未来信息）。移动止盈锚定最高点而非当日收盘价，确保移动止盈仅在创新高时上移，不会因某天大涨后小幅回调就提前触发。
 
 **初始值与止损的切换逻辑：**
 
