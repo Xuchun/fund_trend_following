@@ -602,6 +602,194 @@ st.markdown(f"""
 
 st.markdown("---")
 
+# ── 改进⑥ Gap 过滤改为 2×ATR 标准 ──────────────────────────────────────────────
+st.subheader("改进⑥ Gap 过滤：从固定 2.5% 改为 2×ATR 标准（提高精准度与回测真实性）")
+
+st.markdown("""
+**问题描述（对应方法论 §2）**
+
+当前引擎在 t+1 日开盘后判断：若 `|open[t+1] - close[t]| / close[t] > 2.5%`，则拒绝开仓。
+
+**这条规则与策略其他部分使用 ATR 的逻辑不一致。**
+
+策略的止损设置、仓位计算、移动止盈全部基于 **ATR（平均真实波幅）**——
+即用当前市场波动率来衡量"多少算多"。唯独 Gap 过滤使用固定百分比 2.5%，
+无论该股票的波动率高低，一律以同一把尺子量。
+
+导致的不对称：
+""")
+
+# 图1：固定 2.5% 等于多少 ATR？（不同 ATR 股票对比）
+_atr_levels  = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0]
+_gap_fixed   = 2.5
+_gap_in_atr  = [_gap_fixed / a for a in _atr_levels]           # 固定 2.5% = ? ATR
+_threshold_2atr_pct = [2 * a for a in _atr_levels]            # 2ATR 对应的 % 门槛
+
+_fig_inc = _go.Figure()
+_fig_inc.add_trace(_go.Bar(
+    x=[f"ATR={a}%<br>（{'低' if a<=1 else '中' if a<=3 else '高'}波动）" for a in _atr_levels],
+    y=_gap_in_atr,
+    name="固定 2.5% 等于多少 ATR",
+    marker_color=[("#4CAF50" if v >= 2 else "#FF9800" if v >= 1 else "#F44336") for v in _gap_in_atr],
+    text=[f"{v:.1f}×ATR" for v in _gap_in_atr],
+    textposition="outside",
+    hovertemplate="ATR = %{x}<br>2.5%% gap = %{y:.2f}×ATR<br>拒绝门槛：若 gap > 2.5%%<extra></extra>",
+))
+_fig_inc.add_hline(y=2.0, line_dash="dash", line_color="#E91E63", line_width=2,
+                   annotation_text="2ATR（建议标准）",
+                   annotation_position="top right")
+_fig_inc.update_layout(
+    title="固定 2.5% Gap 门槛 等于多少倍 ATR？（按不同波动率股票）",
+    xaxis_title="股票 ATR 水平（占价格 %）",
+    yaxis_title="2.5% 固定门槛 = ? 倍 ATR",
+    height=400, margin=dict(l=60, r=80, t=50, b=60),
+    showlegend=False,
+)
+st.plotly_chart(_fig_inc, use_container_width=True)
+
+st.markdown(f"""
+**图表解读：内在矛盾**
+
+| 股票波动率 | ATR 水平 | 固定 2.5% = ? ATR | 判断 |
+|-----------|---------|-----------------|------|
+| 低波动股（公用事业、消费） | ~0.5–1% | **2.5–5.0× ATR** | 2.5% gap 是极度异常事件，拒绝合理 |
+| 中等波动股（标普500 成分） | ~1.5–2.5% | **1.0–1.7× ATR** | 2.5% gap 是较大但不罕见的波动 |
+| 高波动成长股（动量股主力）| ~3–5% | **0.5–0.8× ATR** | 2.5% gap 连 **1 个 ATR 都不到**，是日常普通跳空 |
+
+策略的主力是高波动成长股——正是这类股最容易因 Gap 过滤被拒绝，
+而 2.5% 对它们来说根本不算大。这意味着当前过滤器对高波动股**过于保守**，
+但对低波动股又**相对宽松**（允许高达 5 ATR 的异常跳空）。
+""")
+
+# 图2：已执行交易的 2ATR 阈值分布
+_trd_gap = _trd.copy()
+_trd_gap["_atr_pct"]       = _trd_gap["atr_at_entry"] / _trd_gap["entry_price"] * 100
+_trd_gap["_threshold_2atr"] = 2 * _trd_gap["_atr_pct"]
+
+_n_above_2atr = (_trd_gap["_threshold_2atr"] > _gap_fixed).sum()
+_n_below_2atr = (_trd_gap["_threshold_2atr"] <= _gap_fixed).sum()
+_median_2atr  = float(_trd_gap["_threshold_2atr"].median())
+_mean_2atr    = float(_trd_gap["_threshold_2atr"].mean())
+
+_bins_above = _trd_gap.loc[_trd_gap["_threshold_2atr"] > _gap_fixed, "_threshold_2atr"]
+_bins_below = _trd_gap.loc[_trd_gap["_threshold_2atr"] <= _gap_fixed, "_threshold_2atr"]
+
+_fig_dist = _go.Figure()
+_fig_dist.add_trace(_go.Histogram(
+    x=_bins_below.clip(0, 15),
+    xbins=dict(start=0, end=_gap_fixed, size=0.25),
+    name=f"2ATR ≤ 2.5%（{_n_below_2atr} 笔，{_n_below_2atr/len(_trd_gap)*100:.1f}%）<br>2ATR 比当前更严格",
+    marker_color="#FF7043", opacity=0.85,
+))
+_fig_dist.add_trace(_go.Histogram(
+    x=_bins_above.clip(0, 15),
+    xbins=dict(start=_gap_fixed, end=15, size=0.25),
+    name=f"2ATR > 2.5%（{_n_above_2atr} 笔，{_n_above_2atr/len(_trd_gap)*100:.1f}%）<br>2ATR 比当前更宽松（允许更大Gap）",
+    marker_color="#42A5F5", opacity=0.85,
+))
+_fig_dist.add_vline(x=_gap_fixed, line_dash="solid", line_color="black", line_width=2,
+                    annotation_text=f"当前固定门槛 {_gap_fixed}%",
+                    annotation_position="top left")
+_fig_dist.add_vline(x=_median_2atr, line_dash="dash", line_color="#E91E63", line_width=2,
+                    annotation_text=f"中位数 2ATR = {_median_2atr:.2f}%",
+                    annotation_position="top right")
+_fig_dist.update_layout(
+    barmode="overlay",
+    title=f"已执行 {len(_trd_gap):,} 笔交易的 2×ATR 阈值分布（x = 若按 2ATR 标准，允许的最大 Gap%）",
+    xaxis=dict(title="2×ATR 阈值（%，即建议新标准允许的最大 Gap）", range=[0, 15]),
+    yaxis=dict(title="交易笔数"),
+    legend=dict(orientation="h", yanchor="bottom", y=-0.3),
+    height=400, margin=dict(l=60, r=20, t=50, b=100),
+)
+st.plotly_chart(_fig_dist, use_container_width=True)
+
+st.markdown(f"""
+**关键数据**：{len(_trd_gap):,} 笔已执行交易中，有 **{_n_above_2atr:,} 笔（{_n_above_2atr/len(_trd_gap)*100:.1f}%）**
+的 2×ATR 阈值 > 2.5%——即对这些股票，2ATR 标准**比当前固定标准更宽松**。
+中位数 2ATR 为 **{_median_2atr:.2f}%**，是固定值的 **{_median_2atr/2.5:.1f} 倍**。
+
+这意味着：如果存在因 Gap 过大被拒绝的突破信号，其中绝大多数来自高波动成长股，
+而这类股在 2ATR 标准下本应被允许入场。
+""")
+
+# 图3：按波动率分组的绩效对比
+_trd_gap["_vol_grp"] = pd.cut(
+    _trd_gap["_threshold_2atr"],
+    bins=[0, _gap_fixed, 5, 7.5, 100],
+    labels=["低波动\n(2ATR≤2.5%)", "中低波动\n(2.5%<2ATR≤5%)",
+            "中高波动\n(5%<2ATR≤7.5%)", "高波动\n(2ATR>7.5%)"],
+)
+_grp_perf = _trd_gap.groupby("_vol_grp", observed=False).agg(
+    笔数=("net_pnl", "count"),
+    胜率=("net_pnl", lambda x: (x > 0).mean() * 100),
+    平均R=("pnl_r_multiple", "mean"),
+    总盈亏=("net_pnl", "sum"),
+).round(2)
+
+_grp_labels   = [str(g) for g in _grp_perf.index]
+_grp_total_pnl = _grp_perf["总盈亏"].tolist()
+_grp_avg_r     = _grp_perf["平均R"].tolist()
+_grp_win_rate  = _grp_perf["胜率"].tolist()
+_grp_n         = _grp_perf["笔数"].tolist()
+
+_bar_colors = ["#FF7043", "#FFA726", "#66BB6A", "#42A5F5"]
+
+_fig_perf = _go.Figure()
+_fig_perf.add_trace(_go.Bar(
+    x=_grp_labels, y=[p / 1e6 for p in _grp_total_pnl],
+    name="总盈亏（$M）",
+    marker_color=_bar_colors, opacity=0.85,
+    text=[f"${p/1e6:.1f}M<br>({n}笔)" for p, n in zip(_grp_total_pnl, _grp_n)],
+    textposition="outside",
+    yaxis="y1",
+    hovertemplate="%{x}<br>总盈亏: $%{y:.1f}M<extra></extra>",
+))
+_fig_perf.add_trace(_go.Scatter(
+    x=_grp_labels, y=_grp_avg_r,
+    name="平均 R 倍数",
+    mode="lines+markers",
+    line=dict(color="#E91E63", width=2.5),
+    marker=dict(size=10, symbol="diamond"),
+    yaxis="y2",
+    hovertemplate="%{x}<br>平均R: %{y:.3f}<extra></extra>",
+))
+_fig_perf.update_layout(
+    title="各波动率组别的交易绩效（按 2×ATR 阈值分组）",
+    xaxis=dict(title="波动率分组（2×ATR 阈值）"),
+    yaxis=dict(title="总盈亏（$M）", side="left"),
+    yaxis2=dict(title="平均 R 倍数", side="right", overlaying="y",
+                showgrid=False, zeroline=True),
+    legend=dict(orientation="h", yanchor="bottom", y=-0.25),
+    height=420, margin=dict(l=70, r=70, t=50, b=80),
+)
+st.plotly_chart(_fig_perf, use_container_width=True)
+
+_total_pnl_all = sum(_grp_total_pnl)
+_high_vol_pnl  = _grp_total_pnl[-1]  # 高波动组
+
+st.markdown(f"""
+**绩效数据解读**
+
+| 波动率分组 | 交易笔数 | 胜率 | 平均 R | 总盈亏 | 占全策略盈亏 |
+|-----------|--------|-----|-------|-------|-----------|
+{"".join(f'| {g} | {n:.0f} | {w:.1f}% | {r:.3f} | ${p/1e6:.1f}M | {p/_total_pnl_all*100:.1f}% |' + chr(10) for g, n, w, r, p in zip(_grp_labels, _grp_n, _grp_win_rate, _grp_avg_r, _grp_total_pnl))}
+
+**关键发现：高波动成长股（2ATR > 7.5%）以仅 {_grp_n[-1]:.0f} 笔交易
+贡献了全策略 {_high_vol_pnl/_total_pnl_all*100:.1f}% 的总盈亏（${_high_vol_pnl/1e6:.1f}M）。**
+
+这类股票正是最容易在突破日出现 2.5%+ 跳空的标的——它们每日 ATR 就有 3–5%，
+一个 3% 的开盘跳空在它们来说只是半个正常日内波动。
+当前固定 2.5% 的 Gap 过滤会系统性地拒绝这些股票的 Gap-up 突破信号，
+而这些信号在历史回测中平均 R 最高、总盈亏贡献最大。
+
+**建议：将 Gap 过滤条件从 `|gap| > 2.5%` 改为 `|gap| > 2 × ATR_t / close[t]`**
+
+优先级：需重新运行策略引擎并对比回测结果。
+预期效果：增加部分高波动股的有效开仓信号，CAGR 有改善空间（需实测验证）。
+""")
+
+st.markdown("---")
+
 # ── 其他已识别问题 ─────────────────────────────────────────────────────────────
 st.subheader("其他已识别问题（已认识、建议在方法论中说明）")
 
