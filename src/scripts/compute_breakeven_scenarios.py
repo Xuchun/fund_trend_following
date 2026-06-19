@@ -112,6 +112,7 @@ def _simulate_be(
     orig_exit_date: pd.Timestamp,
     orig_exit_reason: str,
     threshold: float,
+    be_stop_price: float,
 ) -> dict | None:
     """
     Returns dict:
@@ -120,6 +121,8 @@ def _simulate_be(
         exit_price    – None  if outcome is identical to original
         exit_reason   – None  if outcome is identical to original
     Returns None if entry date not found in price data.
+    be_stop_price is the floor applied to trail_stop once BE is triggered; set slightly
+    above entry_price so that net_pnl ≈ +TARGET_NET_PROFIT after slippage + commissions.
     """
     idx_arr = d["index"]
     n       = len(idx_arr)
