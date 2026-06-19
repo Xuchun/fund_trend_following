@@ -321,7 +321,7 @@ if _vol_d:
         legend=dict(x=0.4, y=0.05), height=380, margin=dict(t=50, b=40, r=80),
     )
     st.plotly_chart(_fig_vol, use_container_width=True)
-    st.caption(
+    st.markdown(
         f"当前 1.5×（绿色）：CAGR {_vc[_vv.index(_vbase)]:.2f}%，MaxDD {_vm[_vv.index(_vbase)]:.2f}%，{_vn[_vv.index(_vbase)]:.0f} 笔交易。"
         f"调高至 2.0× 时 MaxDD 恶化至 {_vm[-1]:.2f}%（因过度过滤了成交量并非总是高的真实趋势）；"
         f"调低至 1.0× 时 MaxDD 最差 {_vm[0]:.2f}%（假突破增多）。1.5× 同时是 CAGR 和 MaxDD 的最优点。"
