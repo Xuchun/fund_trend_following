@@ -286,13 +286,14 @@ _n_orig_win  = int((_ch["orig_net_pnl"] > 0).sum())
 st.markdown(f"""
 共 **{len(_ch)} 笔**交易因平价保护 1R 提前出场（占全部 {_total:,} 笔的 {len(_ch)/_total*100:.1f}%）：
 
-| 分类 | 数量 | 说明 |
-|------|------|------|
-| 原始为亏损，BE 改善（↑） | **{_n_orig_loss} 笔** | 原本会亏损，BE 使其在开仓价附近出场（0R 或小亏）|
-| 原始为盈利，BE 截短（↓） | **{_n_orig_win} 笔** | 本来盈利，但 BE 保护止损触发导致提前出场获利减少 |
+| 原始结果 | 数量 | 说明 |
+|---------|------|------|
+| 原始亏损（pnl ≤ 0） | **{_n_orig_loss} 笔** | 原始策略会亏损，BE 使其在开仓价附近出场（减少亏损） |
+| 原始盈利（pnl > 0） | **{_n_orig_win} 笔** | 原始策略有盈利，BE 止损触发导致提前出场、获利减少 |
 
-平均每笔交易的 P&L 变化：原始 {_ch["orig_pnl_r"].mean():.2f}R → BE 后 {_ch["be_pnl_r"].mean():.2f}R
-（+{_ch["be_pnl_r"].mean() - _ch["orig_pnl_r"].mean():.2f}R / 笔，共节省损失 **${_ch["pnl_r_delta"].mul(_ch["R"]*_ch["shares"]).sum():,.0f}**）
+**净效果**：{_n_helped} 笔（{_n_helped/len(_ch)*100:.0f}%）被 BE 改善，{_n_hurt} 笔（{_n_hurt/len(_ch)*100:.0f}%）被 BE 削减。
+平均每笔 P&L 变化：{_ch["orig_pnl_r"].mean():.2f}R → {_ch["be_pnl_r"].mean():.2f}R
+（净改善 +{_ch["be_pnl_r"].mean() - _ch["orig_pnl_r"].mean():.2f}R / 笔，共减少损失约 **${_ch["pnl_r_delta"].mul(_ch["R"]*_ch["shares"]).sum():,.0f}**）
 """)
 
 # Scatter plot: original pnl_r vs be pnl_r
