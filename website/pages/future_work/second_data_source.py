@@ -8,14 +8,14 @@ if str(_root) not in sys.path:
 
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.io as _pio
 import streamlit as st
 
+_pio.templates.default = "plotly_white"
+
 st.title("是否购买第二家数据源？")
-st.markdown("""
-当前回测完全基于 **Tiingo EOD** 数据。一个合理的质疑是：回测结果是否有可能是 Tiingo
-特有的数据质量问题（价格尖峰、复权系数跳变、退市数据缺失等）所造成的假象？
-以下评估是否有必要购买第二家数据源重跑同一套策略。
-""")
+st.caption("评估 Tiingo EOD 数据质量及是否需要第二数据源交叉验证回测结论")
+st.markdown("---")
 
 st.markdown("---")
 
