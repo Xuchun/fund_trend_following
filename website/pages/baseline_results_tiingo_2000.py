@@ -1612,7 +1612,7 @@ def _compute_kstrength():
             if _ct == 0:
                 continue
             _out.append({
-                "k_strength": (_ct - _ct1) / _ct * 100,
+                "k_strength": (_ct - _ct1) / _ct1 * 100,
                 "pnl_r": float(_row["pnl_r_multiple"]),
                 "winner": float(_row["net_pnl"]) > 0,
             })
@@ -1627,7 +1627,7 @@ st.subheader("开仓K线强度分析")
 st.markdown(f"""
 **开仓K线强度** 定义为开仓信号产生当天的日涨幅（使用复权收盘价）：
 
-开仓K线强度 = （信号日收盘价 − 前一日收盘价）÷ 信号日收盘价
+开仓K线强度 = （信号日收盘价 − 前一日收盘价）÷ 前一日收盘价
 
 其中**信号日** = entry_date 的前一个交易日（策略在收盘后生成信号，次日开盘执行）。
 
@@ -1636,9 +1636,13 @@ st.markdown(f"""
 由于策略不记录未执行信号的个股级数据，本分析仅限于**已执行的开仓信号**。
 """)
 
+if _ks_n == 0:
+    st.info("本地价格数据不在当前运行环境中，无法计算开仓K线强度。请在本地环境运行以查看此分析。")
+else:
+
 # ── Distribution chart ────────────────────────────────────────────────────────
-_ks_win  = _ks_df[_ks_df["winner"]]["k_strength"].clip(-5, 30)
-_ks_lose = _ks_df[~_ks_df["winner"]]["k_strength"].clip(-5, 30)
+ _ks_win  = _ks_df[_ks_df["winner"]]["k_strength"].clip(-5, 30)
+ _ks_lose = _ks_df[~_ks_df["winner"]]["k_strength"].clip(-5, 30)
 
 _fig_dist = _go_ks.Figure()
 _fig_dist.add_trace(_go_ks.Histogram(
