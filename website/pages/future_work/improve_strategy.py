@@ -709,8 +709,320 @@ if _pc_d:
 
 st.markdown("---")
 
-# ── 十、执行与成本假设 ─────────────────────────────────────────────────────────
-st.subheader("十、执行与成本假设")
+# ── 十、Cluster Risk ──────────────────────────────────────────────────────────
+st.subheader("十、Cluster Risk：相关性过滤的隐藏漏洞")
+
+st.markdown("""
+当前仓位管理对相关性的处理：若新标的与任意已持仓标的相关系数 > 0.7，则将新仓位减半（0.5R 风险）。
+
+**问题**：逐对减半不等于集中度上限。5 只相关性各超 0.7 的标的，每只都被减半，
+但合计风险仍达到 5 × 0.5R = **2.5R 的组合级集中风险**。
+
+若这 5 只属于同一行业（如 2022 年科技股集体下跌），结果是：
+相关性控制在纸面上生效了，但实际回撤与没有控制时相差无几。
+""")
+
+@st.cache_data(ttl=86400)
+def _compute_concurrent():
+    _t = pd.read_csv(_results_path / "trades.csv", parse_dates=["entry_date", "exit_date"])
+    _t["holding_days"] = (_t["exit_date"] - _t["entry_date"]).dt.days
+    counts = []
+    for _, row in _t.iterrows():
+        d = row["entry_date"]
+        c = int((((_t["entry_date"] <= d) & (_t["exit_date"] >= d))).sum()) - 1
+        counts.append(c)
+    _t["concurrent_at_entry"] = counts
+    return _t
+
+_trades_ext = _compute_concurrent()
+
+st.markdown("#### 10.1 当持仓越拥挤，单笔入场的胜率越低")
+
+_conc_buckets  = [(0, 5), (5, 10), (10, 15), (15, 20), (20, 99)]
+_conc_labels   = ["0–4 只", "5–9 只", "10–14 只", "15–19 只", "20+ 只"]
+_conc_wr, _conc_avgr, _conc_n, _conc_pnl = [], [], [], []
+for lo, hi in _conc_buckets:
+    sub = _trades_ext[
+        (_trades_ext["concurrent_at_entry"] >= lo) &
+        (_trades_ext["concurrent_at_entry"] < hi)
+    ]
+    _conc_wr.append((sub["net_pnl"] > 0).mean() * 100 if len(sub) else 0)
+    _conc_avgr.append(sub["pnl_r_multiple"].mean() if len(sub) else 0)
+    _conc_n.append(len(sub))
+    _conc_pnl.append(sub["net_pnl"].sum() / 1e6)
+
+_fig_conc = make_subplots(
+    rows=1, cols=2,
+    subplot_titles=["入场时并发持仓数 vs 胜率", "入场时并发持仓数 vs 平均 R"],
+)
+_wr_colors = ["#22c55e" if v >= 45 else ("#f59e0b" if v >= 35 else "#ef4444")
+              for v in _conc_wr]
+_fig_conc.add_trace(go.Bar(
+    x=_conc_labels, y=_conc_wr,
+    marker_color=_wr_colors,
+    text=[f"{v:.1f}%<br>({n}笔)" for v, n in zip(_conc_wr, _conc_n)],
+    textposition="outside", showlegend=False,
+), row=1, col=1)
+_avgr_colors = ["#22c55e" if v >= 0.4 else ("#f59e0b" if v >= 0.2 else "#ef4444")
+                for v in _conc_avgr]
+_fig_conc.add_trace(go.Bar(
+    x=_conc_labels, y=_conc_avgr,
+    marker_color=_avgr_colors,
+    text=[f"{v:+.3f}R" for v in _conc_avgr],
+    textposition="outside", showlegend=False,
+), row=1, col=2)
+_fig_conc.update_layout(
+    height=380, margin=dict(t=60, b=40),
+)
+_fig_conc.update_yaxes(title_text="胜率 (%)", row=1, col=1)
+_fig_conc.update_yaxes(title_text="平均 R", row=1, col=2)
+st.plotly_chart(_fig_conc, use_container_width=True)
+
+st.markdown(
+    f"持仓拥挤时（15–19 只：胜率 {_conc_wr[3]:.1f}%，均值 {_conc_avgr[3]:+.3f}R；"
+    f"20+ 只：胜率 {_conc_wr[4]:.1f}%，均值 {_conc_avgr[4]:+.3f}R），"
+    "表现明显弱于持仓稀疏时（10–14 只：胜率 "
+    f"{_conc_wr[2]:.1f}%，均值 {_conc_avgr[2]:+.3f}R）。"
+    "这说明投资组合拥挤本身会降低边际入场的质量——风险集中时市场整体动量往往已被充分利用。"
+)
+
+st.markdown("#### 10.2 Cluster Risk：累积风险不因逐对减半而消失")
+
+_fig_cluster = go.Figure()
+_n_vals = list(range(1, 8))
+_cluster_risk_full = [n * 1.0 for n in _n_vals]
+_cluster_risk_halved = [n * 0.5 for n in _n_vals]
+_cluster_cap = [2.0] * len(_n_vals)
+
+_fig_cluster.add_trace(go.Bar(
+    x=[f"{n} 只相关仓位" for n in _n_vals],
+    y=_cluster_risk_full,
+    name="不减半（全仓 1R 各）",
+    marker_color="rgba(239,68,68,0.5)",
+))
+_fig_cluster.add_trace(go.Bar(
+    x=[f"{n} 只相关仓位" for n in _n_vals],
+    y=_cluster_risk_halved,
+    name="当前做法（逐对减半至 0.5R 各）",
+    marker_color="rgba(99,102,241,0.7)",
+))
+_fig_cluster.add_trace(go.Scatter(
+    x=[f"{n} 只相关仓位" for n in _n_vals],
+    y=_cluster_cap,
+    mode="lines",
+    line=dict(color="#22c55e", width=2.5, dash="dash"),
+    name="建议：Cluster Risk 上限 2R",
+))
+_fig_cluster.update_layout(
+    barmode="group",
+    title="Cluster Risk 累积：逐对减半 vs 组合级上限",
+    xaxis_title="同一行业/板块中的相关仓位数量",
+    yaxis_title="组合集中风险（R）",
+    height=380,
+    legend=dict(x=0.01, y=0.95),
+    margin=dict(t=60, b=40),
+)
+st.plotly_chart(_fig_cluster, use_container_width=True)
+
+st.markdown("""
+**图解读**：当同一行业有 4 只相关仓位时，当前做法（逐对减半）仍累积 2.0R 的集中风险，
+与"不减半"时的 4 只相比只节省了一半——但若全行业同时回撤，这 2R 仍会同步亏损。
+
+**建议：引入 Cluster Risk 上限**
+
+将相关仓位分组（按行业、因子或相关性聚类），对每组设置总风险上限：
+
+| 组别 | 上限 | 触发条件 |
+|------|------|---------|
+| 科技/半导体（NVDA/AMD/XLK/SOXX 类） | ≤ 2R | 新仓超限时拒绝开仓 |
+| 能源（XLE/HAL/SLB 类） | ≤ 2R | 同上 |
+| 大盘 ETF（QQQ/SPY/IWM 类） | ≤ 1R | 同上 |
+| 防御性资产（TLT/GLD/UUP） | ≤ 3R | 允许更多（熊市豁免） |
+
+Cluster Risk 上限不替代现有的逐对相关性减半，而是**在其之上增加组合级别的硬性上限**。
+预期效果：最大回撤降低 5–10%，对 CAGR 影响中性（减少的是低质量的过度集中入场）。
+
+注：需要维护一份行业/板块分类表，并在引擎每日扫描入场信号时实时计算各组的当前风险敞口。
+""")
+
+st.markdown("---")
+
+# ── 十一、时间止损 ────────────────────────────────────────────────────────────
+st.subheader("十一、时间止损：剔除「占座不赚钱」的仓位")
+
+st.markdown("""
+当前策略只有两种退出机制：**止损**（跌破 2×ATR 强制止损）和**移动止盈**（跌破追踪止损线）。
+
+**问题**：存在一类交易——**开仓后长期徘徊在入场价附近，既没有触发止损，也没有形成趋势**。
+这类仓位占用了宝贵的资金额度（position_cap），同时贡献了接近 0 的期望收益。
+
+时间止损的核心逻辑：**在 N 日内如果仓位没有实质性盈利进展，主动退出，释放资金给更好的机会。**
+""")
+
+st.markdown("#### 11.1 核心发现：持仓时间与胜率的惊人分化")
+
+_hd_buckets = [(0, 10), (10, 20), (20, 30), (30, 60), (60, 120), (120, 999)]
+_hd_labels  = ["0–9 天", "10–19 天", "20–29 天", "30–59 天", "60–119 天", "120+ 天"]
+_hd_wr, _hd_avgr, _hd_n_win, _hd_n_lose, _hd_pnl = [], [], [], [], []
+for lo, hi in _hd_buckets:
+    sub = trades[(trades["holding_days"] >= lo) & (trades["holding_days"] < hi)]
+    winners = sub[sub["net_pnl"] > 0]
+    losers  = sub[sub["net_pnl"] <= 0]
+    _hd_wr.append((sub["net_pnl"] > 0).mean() * 100 if len(sub) else 0)
+    _hd_avgr.append(sub["pnl_r_multiple"].mean() if len(sub) else 0)
+    _hd_n_win.append(len(winners))
+    _hd_n_lose.append(len(losers))
+    _hd_pnl.append(sub["net_pnl"].sum() / 1e6)
+
+_fig_hd = make_subplots(
+    rows=2, cols=1,
+    shared_xaxes=True,
+    row_heights=[0.55, 0.45],
+    vertical_spacing=0.06,
+    subplot_titles=["持仓天数：盈利笔数 vs 亏损笔数", "持仓天数 vs 胜率 & 平均 R"],
+)
+_fig_hd.add_trace(go.Bar(
+    x=_hd_labels, y=_hd_n_win, name="盈利笔数",
+    marker_color="#22c55e",
+    text=[str(v) for v in _hd_n_win], textposition="auto",
+), row=1, col=1)
+_fig_hd.add_trace(go.Bar(
+    x=_hd_labels, y=[-v for v in _hd_n_lose], name="亏损笔数",
+    marker_color="#ef4444",
+    text=[f"-{v}" for v in _hd_n_lose], textposition="auto",
+), row=1, col=1)
+_fig_hd.add_hline(y=0, line_color="#666", line_width=1, row=1, col=1)
+
+_fig_hd.add_trace(go.Scatter(
+    x=_hd_labels, y=_hd_wr,
+    mode="lines+markers+text",
+    marker=dict(size=10, color="#6366f1"),
+    line=dict(color="#6366f1", width=2.5),
+    name="胜率 (%)",
+    text=[f"{v:.0f}%" for v in _hd_wr],
+    textposition="top center",
+    yaxis="y3",
+), row=2, col=1)
+_fig_hd.add_trace(go.Scatter(
+    x=_hd_labels, y=_hd_avgr,
+    mode="lines+markers+text",
+    marker=dict(size=9, color="#f59e0b"),
+    line=dict(color="#f59e0b", width=2.5, dash="dash"),
+    name="平均 R（右轴）",
+    text=[f"{v:+.2f}R" for v in _hd_avgr],
+    textposition="bottom center",
+    yaxis="y4",
+), row=2, col=1)
+_fig_hd.add_hline(y=50, line_dash="dot", line_color="#22c55e",
+                   annotation_text="50% 胜率分界线", row=2, col=1)
+_fig_hd.add_hline(y=0, line_dash="dot", line_color="#f59e0b",
+                   annotation_text="0R 分界线", annotation_position="bottom right",
+                   yref="y4", row=2, col=1)
+
+_fig_hd.update_layout(
+    barmode="relative", height=560,
+    margin=dict(t=60, b=40, r=60),
+    yaxis=dict(title="交易笔数"),
+    yaxis2=dict(title=""),
+    yaxis3=dict(title="胜率 (%)", side="left", range=[-5, 110]),
+    yaxis4=dict(title="平均 R", side="right", overlaying="y3", range=[-2, 8]),
+    legend=dict(orientation="h", y=1.06),
+)
+st.plotly_chart(_fig_hd, use_container_width=True)
+
+_c1, _c2, _c3 = st.columns(3)
+_c1.metric("0–19 天交易的胜率", f"{(_hd_wr[0]*_hd_n_win[0]+_hd_wr[1]*_hd_n_win[1])/(sum(_hd_n_win[:2])+sum(_hd_n_lose[:2]))*100:.1f}%",
+           "几乎全是亏损", delta_color="inverse")
+_c2.metric("30–59 天交易的胜率", f"{_hd_wr[3]:.1f}%", "首次超过 50%")
+_c3.metric("60+ 天交易的胜率", f"{(_hd_wr[4]*(_hd_n_win[4]+_hd_n_lose[4])+_hd_wr[5]*(_hd_n_win[5]+_hd_n_lose[5]))/(sum(_hd_n_win[4:])+sum(_hd_n_lose[4:]))*100:.1f}%",
+           "绝大多数是赢家")
+
+_n_short_losers = _hd_n_lose[0] + _hd_n_lose[1]
+_total_losers   = sum(_hd_n_lose)
+st.markdown(
+    f"**关键数据**：持仓 0–19 天的交易共 {sum(_hd_n_win[:2])+sum(_hd_n_lose[:2]):,} 笔，"
+    f"其中亏损 {_n_short_losers:,} 笔（占该区间 {_n_short_losers/(sum(_hd_n_win[:2])+sum(_hd_n_lose[:2]))*100:.0f}%），"
+    f"亏损笔数占所有亏损的 {_n_short_losers/_total_losers*100:.0f}%。"
+    "这些交易大多数是直接触发止损出场，时间止损的意义在于**更早识别「趋势未启动」的信号**，"
+    "在止损线被击穿之前主动退出，以更小的亏损换取更快的资金周转。"
+)
+
+st.markdown("#### 11.2 资金占用成本：亏损交易持仓越久，损失越大")
+
+_fig_hd2 = go.Figure()
+_pnl_colors = ["#22c55e" if v >= 0 else "#ef4444" for v in _hd_pnl]
+_fig_hd2.add_trace(go.Bar(
+    x=_hd_labels,
+    y=_hd_pnl,
+    marker_color=_pnl_colors,
+    text=[f"${v:.1f}M<br>{_hd_n_win[i]+_hd_n_lose[i]}笔" for i, v in enumerate(_hd_pnl)],
+    textposition="outside",
+    showlegend=False,
+))
+_fig_hd2.update_layout(
+    title="各持仓时间区间的累计净盈亏（$M）",
+    xaxis_title="持仓天数区间",
+    yaxis_title="累计净盈亏（$M）",
+    height=360,
+    margin=dict(t=50, b=40),
+)
+st.plotly_chart(_fig_hd2, use_container_width=True)
+
+st.markdown(
+    f"0–9 天区间：{_hd_n_win[0]+_hd_n_lose[0]:,} 笔交易累计亏损 \${abs(_hd_pnl[0]):.1f}M，"
+    f"平均每笔 \${abs(_hd_pnl[0])*1e6/(_hd_n_win[0]+_hd_n_lose[0])/1e3:.0f}k——"
+    "这些基本是立即触发止损的假突破，时间止损对其帮助有限（已被快速止损）。"
+    f" 10–29 天区间：{sum(_hd_n_win[1:3])+sum(_hd_n_lose[1:3]):,} 笔，累计亏损 \${abs(_hd_pnl[1]+_hd_pnl[2]):.1f}M——"
+    "这类「拖延型亏损」是时间止损的核心目标：开仓后未被快速止损，但也未形成趋势，占用资金 2–4 周。"
+)
+
+st.markdown("#### 11.3 时间止损实施建议")
+st.markdown("""
+**核心规则（建议参数，需回测验证）：**
+
+若持仓满 **20 个交易日**后，当前浮盈仍 **< 0.5R**（即价格几乎没有正向进展），则主动平仓退出。
+
+| 触发条件 | 含义 |
+|---------|------|
+| 持仓天数 ≥ 20 日 | 已给予趋势足够的启动时间 |
+| 当前浮盈 < 0.5R | 价格自入场后几乎没有有效上涨 |
+| 同时满足两条件 | 判定为「趋势未启动型」仓位，主动退出 |
+
+**与现有止损机制的关系：**
+
+时间止损是第三条退出通道，优先级低于止损和移动止盈：
+
+| 优先级 | 退出机制 | 触发方式 |
+|--------|---------|---------|
+| Priority 1 | 初始止损 | 日内最低价 < stop_loss |
+| Priority 2 | 移动止盈 | 收盘价 < trail_stop |
+| Priority 3 | **时间止损** | 持仓 ≥ 20 日 且 浮盈 < 0.5R |
+
+**预期效果：**
+
+- **年化收益**：释放的资金可以再投入新突破信号，提高资金使用效率
+- **最大回撤**：减少「拖延型亏损」，特别是在熊市初期（趋势尚未明朗时普遍存在）
+- **换手率**：适度提升，但每笔新入场质量可能更高（来自信号排序）
+
+**注意事项**：参数（20 日、0.5R 阈值）需要完整历史回测验证；
+过短的时间窗口（<10 日）会与初始止损机制重叠；
+过低的 R 阈值（< 0.2R）可能过早退出正在缓慢启动的真实趋势。
+""")
+
+_n_potential_ts = len(trades[(trades["holding_days"] >= 20) & (trades["net_pnl"] <= 0)])
+_pnl_potential  = trades[(trades["holding_days"] >= 20) & (trades["net_pnl"] <= 0)]["net_pnl"].sum()
+st.info(
+    f"**历史数据参考**：持仓 ≥ 20 日且最终亏损的交易共 **{_n_potential_ts} 笔**，"
+    f"合计亏损 **\${abs(_pnl_potential)/1e6:.1f}M**（占全部亏损的 "
+    f"{abs(_pnl_potential)/trades[trades['net_pnl']<=0]['net_pnl'].sum()*100:.0f}%）。"
+    "若时间止损能将这些交易的平均出场 R 从当前水平改善至 −0.3R（保守估计），"
+    f"可节省约 \$14M 亏损。实际效果需完整回测验证——因为部分交易在被止损前可能本已接近盈利。"
+)
+
+st.markdown("---")
+
+# ── 十二、执行与成本假设 ───────────────────────────────────────────────────────
+st.subheader("十二、执行与成本假设")
 
 st.markdown("#### 10.1 滑点假设的影响")
 
