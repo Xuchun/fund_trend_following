@@ -1,0 +1,42 @@
+name: Paper Trading M1 — Daily Update
+
+on:
+  schedule:
+    # 21:30 UTC = 5:30 PM ET (summer/EDT) = 4:30 PM ET (winter/EST)
+    # Runs Mon–Fri after US market close
+    - cron: '30 21 * * 1-5'
+  workflow_dispatch:   # allow manual trigger from GitHub Actions UI
+
+permissions:
+  contents: write    # needed to push positions.json back to repo
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install yfinance pandas numpy
+
+      - name: Run paper trading daily update
+        run: python src/scripts/paper_trading_daily.py
+
+      - name: Commit and push results
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/paper_trading/positions.json
+          git diff --staged --quiet && echo "No changes to commit" || \
+            git commit -m "auto: paper trading M1 $(date -u +%Y-%m-%d)" && git push
