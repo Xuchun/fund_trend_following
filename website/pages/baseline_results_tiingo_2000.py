@@ -1884,8 +1884,6 @@ if _es_path.exists():
     _esy_raw  = _pd_es.read_csv(_es_path, index_col="date", parse_dates=True)
     _esy_ann  = _esy_raw.resample("YE").sum()
     _esy_ann.index = _esy_ann.index.year
-    _cur_yr_esy = _esy_raw.index[-1].year
-    _esy_ann    = _esy_ann[_esy_ann.index < _cur_yr_esy]
 
     _years_esy    = _esy_ann.index.tolist()
     _all_sigs_esy = (_esy_ann["signals"].tolist()  if "signals"  in _esy_ann.columns else [0] * len(_years_esy))
