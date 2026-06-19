@@ -54,7 +54,7 @@ st.markdown(f"""
 
 **实现细节：**
 - **价格** 使用**原始价格**（非复权），确保标的在当时实际可以 ≥ \${p.get('min_price', 10):.0f} 买入
-- **ADV₆₀** 基于**滚动 60 日成交额均值**，使用 `shift(1)` 无前视偏差：ADV₆₀[t] = mean(close × volume[t-60:t-1])（不含当天，共 60 天历史数据）；\${p.get('min_adv_m', 60):.0f}M ADV 对应约 \$12 亿以上市值
+- **ADV₆₀** 基于**滚动 60 日成交额均值**，使用 shift(1) 无前视偏差：ADV₆₀[t] = mean(close × volume[t-60:t-1])（不含当天，共 60 天历史数据）；\${p.get('min_adv_m', 60):.0f}M ADV 对应约 \$12 亿以上市值
 """)
 
 st.markdown(f"""
