@@ -1716,12 +1716,12 @@ def _render_breakeven():
     st.markdown("**各方案指标对比**")
     st.dataframe(_pd_be.DataFrame(_m_rows), use_container_width=True, hide_index=True)
 
-    _c1, _c2 = st.columns([1, 1])
-    with _c1:
-
     # ── Trade impact breakdown ────────────────────────────────────────────────
-    with _c2:
-        _total = len(_be)
+    _total = len(_be)
+    with st.expander(f"平价保护触发情况（共 {_total:,} 笔已执行交易）", expanded=True):
+        _imp = []
+        # dummy assignment to keep the block non-empty before the for loop
+        _total = _total
         st.markdown(f"**平价保护触发情况（共 {_total:,} 笔已执行交易）**")
         _imp = []
         for _lbl2, _name in [("be1r", "1R"), ("be15r", "1.5R"), ("be2r", "2R")]:
