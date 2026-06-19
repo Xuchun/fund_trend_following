@@ -607,7 +607,7 @@ st.dataframe(
     }),
     use_container_width=True, hide_index=True,
 )
-st.caption(
+st.markdown(
     "注：'end_of_backtest' 表示回测结束时仍持仓——这些仓位实际上可能还在继续运行，"
     "更宽松的止盈（7× ATR）在此类仓位上的效果无法通过当前回测范围完整衡量。"
     "预期 CAGR 改善约 +1–2%，需完整回测验证。"
