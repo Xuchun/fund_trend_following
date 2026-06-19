@@ -742,7 +742,7 @@ if _sp_d:
     st.plotly_chart(_fig_sp, use_container_width=True)
 
     _sp_base_i = _spv.index(_spbase)
-    st.caption(
+    st.markdown(
         f"当前 {_spbase:.0f} bps（绿色）：CAGR {_spc[_sp_base_i]:.2f}%。"
         f"若实际滑点降至 5 bps（大盘高流动性股票的实际水平），CAGR 可提升至 {_spc[0]:.2f}%（+{_spc[0]-_spc[_sp_base_i]:.2f} pp）——"
         "这是「正向惊喜」来源：回测保守，实盘可能超越回测。"
