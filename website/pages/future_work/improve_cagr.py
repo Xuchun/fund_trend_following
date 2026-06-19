@@ -226,6 +226,36 @@ st.markdown("""
 潜在额外盈利可观。
 """)
 
+# Chart: Trail multiplier sensitivity
+_trail_f = _perturb_path / "trail_multiplier_r1.json"
+if _trail_f.exists():
+    _td = json.loads(_trail_f.read_text())
+    _tv  = _td["param_values"]
+    _tc  = [r["cagr"] * 100 for r in _td["results"]]
+    _tm  = [abs(r["max_drawdown"]) * 100 for r in _td["results"]]
+    _fig_trail = go.Figure()
+    _fig_trail.add_trace(go.Bar(
+        x=[str(v) for v in _tv], y=_tc, name="CAGR (%)", marker_color="#6366f1", yaxis="y",
+    ))
+    _fig_trail.add_trace(go.Scatter(
+        x=[str(v) for v in _tv], y=_tm, name="最大回撤（%，右轴）",
+        mode="lines+markers", marker=dict(size=9, color="#ef4444"),
+        line=dict(color="#ef4444", width=2), yaxis="y2",
+    ))
+    _fig_trail.update_layout(
+        title="移动止盈乘数（trail_multiplier_r1）敏感性：CAGR vs MaxDD",
+        xaxis_title="trail_multiplier（× ATR，1R→3R 阶段）",
+        yaxis=dict(title="CAGR (%)", side="left", range=[8.5, 11.5]),
+        yaxis2=dict(title="最大回撤（%）", side="right", overlaying="y", range=[18, 23]),
+        legend=dict(x=0.6, y=0.05), height=360, margin=dict(t=50, b=40),
+    )
+    st.plotly_chart(_trail_f and _fig_trail, use_container_width=True)
+    st.caption(
+        "当前 trail_multiplier_r1 = 3.0（1R→3R 阶段）已是 CAGR 最优点（10.36%）。"
+        "建议 2 针对的是 >10R 阶段新增第四档（trail_multiplier_r10 = 7.0×），"
+        "现有敏感性分析未覆盖此参数，需单独回测验证。"
+    )
+
 st.markdown("---")
 
 # ── 建议 3：大赢家不受相关性减仓影响 ─────────────────────────────────────────────
