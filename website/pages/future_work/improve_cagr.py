@@ -285,6 +285,40 @@ for new_signal in today_signals:
     # （原来如果存在相关性惩罚对已持仓也生效，需要去除）
 """, language="python")
 
+# Chart: Correlation threshold sensitivity
+_corr_f = _perturb_path / "correlation_threshold.json"
+if _corr_f.exists():
+    _cd = json.loads(_corr_f.read_text())
+    _cv  = _cd["param_values"]
+    _cc  = [r["cagr"] * 100 for r in _cd["results"]]
+    _cm  = [abs(r["max_drawdown"]) * 100 for r in _cd["results"]]
+    _cn  = [r["n_trades"] for r in _cd["results"]]
+    _baseline_corr = _cd["baseline_value"]
+    _fig_corr = go.Figure()
+    _fig_corr.add_trace(go.Bar(
+        x=[str(v) for v in _cv], y=_cc, name="CAGR (%)",
+        marker_color=["#22c55e" if v == _baseline_corr else "#6366f1" for v in _cv],
+        yaxis="y",
+    ))
+    _fig_corr.add_trace(go.Scatter(
+        x=[str(v) for v in _cv], y=_cm, name="最大回撤（%，右轴）",
+        mode="lines+markers", marker=dict(size=9, color="#ef4444"),
+        line=dict(color="#ef4444", width=2), yaxis="y2",
+    ))
+    _fig_corr.update_layout(
+        title="相关性阈值（correlation_threshold）敏感性：CAGR vs MaxDD",
+        xaxis_title="相关性阈值",
+        yaxis=dict(title="CAGR (%)", side="left", range=[7, 11.5]),
+        yaxis2=dict(title="最大回撤（%）", side="right", overlaying="y", range=[15, 26]),
+        legend=dict(x=0.5, y=0.05), height=360, margin=dict(t=50, b=40),
+    )
+    st.plotly_chart(_fig_corr, use_container_width=True)
+    st.caption(
+        f"当前 correlation_threshold = {_baseline_corr}（绿色）。"
+        f"更严格的阈值（0.5）大幅增加交易笔数（{_cn[0]:.0f}），MaxDD 升至 {_cm[0]:.1f}%，CAGR 反而降至 {_cc[0]:.2f}%。"
+        "说明过度扩展信号数量会摊薄质量；维持当前阈值是合理的，但需保护好已有盈利仓位的规模。"
+    )
+
 st.markdown("---")
 
 # ── 建议 4：突破强度过滤 ──────────────────────────────────────────────────────────
