@@ -447,8 +447,8 @@ st.markdown("""
 
 | 优先级 | 条件 | 触发方式 |
 |--------|------|---------|
-| Priority 1 | 止损：`low[t] < stop_loss` | 日内最低价，同日两条件均满足时此项优先 |
-| Priority 2 | 移动止盈：`close[t] < trail_stop` | 收盘价，仅在止损未触发时检查 |
+| Priority 1 | 止损：low[t] < stop_loss | 日内最低价，同日两条件均满足时此项优先 |
+| Priority 2 | 移动止盈：close[t] < trail_stop | 收盘价，仅在止损未触发时检查 |
 
 **执行时序：**
 1. **t 日收盘后**：更新持仓状态（highest_high、trail_stop）；生成止盈信号；生成开仓信号
