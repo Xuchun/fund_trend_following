@@ -17,8 +17,6 @@ st.title("是否购买第二家数据源？")
 st.caption("评估 Tiingo EOD 数据质量及是否需要第二数据源交叉验证回测结论")
 st.markdown("---")
 
-st.markdown("---")
-
 # ── Tiingo Data Quality Visualization ────────────────────────────────────────
 st.subheader("Tiingo 数据质量现状（基于全量 15,255 个标的扫描）")
 
