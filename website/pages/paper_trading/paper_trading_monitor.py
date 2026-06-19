@@ -297,15 +297,21 @@ with tab1:
             columns={"ticker":"标的","entry_date":"入场日","exit_date":"出场日","holding_days":"天数","exit_reason":"原因"}
         ), use_container_width=True, hide_index=True)
 
-    # ── How to run ───────────────────────────────────────────────────────────
-    with st.expander("📋 每日更新操作"):
-        st.code("""# 每个交易日收盘后运行
-python src/scripts/paper_trading_daily.py
+    # ── Automation info ───────────────────────────────────────────────────────
+    with st.expander("⚙️ 自动化配置说明"):
+        st.markdown("""
+**GitHub Actions 自动运行**（无需任何手动操作）
 
-# 推送到 GitHub（触发网站更新）
-git add results/paper_trading/positions.json
-git commit -m "paper trading M1: YYYY-MM-DD"
-git push""", language="bash")
+- 工作流文件：`.github/workflows/paper_trading_m1.yml`
+- 触发时间：每个交易日 **美东 4:30 PM**（21:30 UTC）自动运行
+- 运行内容：下载 Yahoo Finance 数据 → 计算信号 → 更新 positions.json → 自动推送到 GitHub
+- 也可在 GitHub → Actions → "Paper Trading M1" 页面手动触发
+
+如需临时手动运行（调试用）：
+```bash
+python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
+```
+""")
 
     # ── Backtest reference ────────────────────────────────────────────────────
     with st.expander("📊 回测基准（2000–2026）"):
