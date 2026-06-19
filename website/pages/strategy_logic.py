@@ -193,7 +193,7 @@ st.markdown(f"""
 - Gap 过滤：若 `|t+1开盘价 − t收盘价| / t收盘价 > {p.get('gap_filter',0.025)*100:.1f}%`，跳过该信号（双向：跳空高开或跳空低开均过滤）
 
 **多信号处理（同一天多个标的同时触发突破）：**
-- 所有信号按 **突破强度（breakout_strength）降序排列**优先执行：`breakout_strength = adj_close[t] / max(adj_high[t-N:t-1])`
+- 所有信号按 **突破强度（breakout_strength）降序排列**优先执行：breakout_strength = adj_close[t] / max(adj_high[t-N:t-1])
 - 每执行完一笔后**立即更新**当前持仓和风险敞口，后续信号的相关性计算与组合热度检查均基于最新状态
 - 优先处理突破最强的信号，可在热度上限耗尽前最大化资金利用效率
 """)
