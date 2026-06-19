@@ -172,7 +172,7 @@ if vol_mult > 0:
 """, unsafe_allow_html=True)
 else:
     st.markdown("""
-**【当前未启用】** `volume_filter_multiplier = 0`，所有价格突破信号均有效，不检查成交量。
+**【当前未启用】** volume_filter_multiplier = 0，所有价格突破信号均有效，不检查成交量。
 """)
 
 st.markdown("---")
