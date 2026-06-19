@@ -371,7 +371,7 @@ if _bw_d:
         legend=dict(x=0.35, y=0.05), height=380, margin=dict(t=50, b=40, r=80),
     )
     st.plotly_chart(_fig_bw, use_container_width=True)
-    st.caption(
+    st.markdown(
         f"200 日突破（绿色）是所有测试窗口中 CAGR 和 Sharpe 的最优点。"
         f"更短窗口（150日）CAGR {_bwc[0]:.2f}% 但 MaxDD 更低 {_bwm[0]:.2f}%；"
         f"更长窗口（300日）CAGR 和 Sharpe 均明显下降。200日突破窗口无需改变。"
