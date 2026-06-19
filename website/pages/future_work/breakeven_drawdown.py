@@ -151,13 +151,15 @@ for (_nm, _nav), _lbl_wr in zip(_navs_all.items(), ["orig", "be1r", "be15r", "be
 st.dataframe(pd.DataFrame(_m_rows), use_container_width=True, hide_index=True)
 
 st.markdown("""
-**核心结论**：在 {total:,} 笔已执行交易中，平价保护 1R（浮盈达到 1R 时将止损移至开仓价）可使最大回撤
-从 **{orig_dd:.2f}%** 降至 **{be1r_dd:.2f}%**，同时年化收益略有提升（+0.09 pp）、胜率略有提升（+0.3 pp）。
+**核心结论**：在 {total:,} 笔已执行交易中，平价保护 1R（浮盈达到 1R 时将止损移至略高于开仓价的位置，使出场净盈利 ≈ +$1）可使最大回撤
+从 **{orig_dd:.2f}%** 降至 **{be1r_dd:.2f}%**，同时年化收益略有提升（+{cagr_pp:.2f} pp）、胜率略有提升（+{wr_pp:.2f} pp）。
 1.5R 和 2R 的效果几乎为零（原因见下节）。
 """.format(
     total=_total,
     orig_dd=_maxdd(_nav_orig) * 100,
     be1r_dd=_maxdd(_nav_be1r) * 100,
+    cagr_pp=_be1r_c_pp,
+    wr_pp=_be1r_wr_pp,
 ))
 
 st.markdown("---")
