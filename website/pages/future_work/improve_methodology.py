@@ -10,9 +10,11 @@ import math
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as _go
+import plotly.io as _pio
 import streamlit as st
 from website.shared import get_results
-from website.components.strategy_badge import render_page_header
+
+_pio.templates.default = "plotly_white"
 
 try:
     from scipy import stats as _scipy_stats
@@ -20,22 +22,16 @@ try:
         return _scipy_stats.t.sf(abs(t), df=df)
 except ImportError:
     def _t_sf(t, df):
-        # normal distribution approximation (accurate for df > 20)
         return 0.5 * math.erfc(abs(t) / math.sqrt(2))
 
 _res   = get_results()
-_meta  = _res.meta
 _trd   = _res.trades.copy()
 _nav   = _res.nav.copy()
 _m     = dict(_res.metrics)
 
-render_page_header("如何改进回测方法论", _meta)
+st.title("如何改进回测方法论")
+st.caption("对「回测方法论」页面的系统性审查，从回测有效性、精准度、年化收益、最大回撤四个角度量化改进空间")
 st.markdown("---")
-
-st.markdown("""
-本页对「回测方法论」页面的各环节做系统性审查，从 **回测有效性、回测精准度、年化收益、最大回撤**
-四个角度识别可改进之处，并以策略实际数据量化改进空间。
-""")
 
 # ── 优先矩阵 ───────────────────────────────────────────────────────────────────
 st.subheader("改进建议一览")
