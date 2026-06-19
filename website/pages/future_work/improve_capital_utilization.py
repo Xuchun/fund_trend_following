@@ -270,7 +270,7 @@ if _cmp:
     _start = _cmp.get("start", "—")
     _end   = _cmp.get("end",   "—")
     _tickers_str = "+".join(_cmp.get("bear_exempt_tickers", ["TLT", "GLD", "UUP"]))
-    st.subheader(f"六、对比回测结果（{_tickers_str}，{_start} → {_end}）")
+    st.subheader(f"七、对比回测结果（{_tickers_str}，{_start} → {_end}）")
 
     _bm = _cmp.get("baseline", {})
     _em = _cmp.get("bear_exempt", {})
