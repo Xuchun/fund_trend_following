@@ -33,12 +33,8 @@ def _be_csv_key() -> str:
     with open(_BE_CSV, "rb") as _f:
         return _hl.md5(_f.read()).hexdigest()
 
-_BE_KEY = _be_csv_key()
-
-
-@st.cache_data(ttl=86400)
-def _load_be(_key: str):
-    if _key == "missing":
+def _load_be():
+    if not _BE_CSV.exists():
         return None
     return pd.read_csv(
         _BE_CSV,
@@ -47,7 +43,7 @@ def _load_be(_key: str):
     )
 
 
-_be = _load_be(_BE_KEY)
+_be = _load_be()
 
 
 def _build_nav(nav_orig, lbl):
