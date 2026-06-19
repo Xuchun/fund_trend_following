@@ -215,7 +215,7 @@ if _adv_d and _prc_d:
     st.plotly_chart(_fig_univ, use_container_width=True)
 
     _best_adv_i = _adv_cagr.index(max(_adv_cagr))
-    st.caption(
+    st.markdown(
         f"ADV 门槛：当前 \${_adv_base:.0f}M（绿色），CAGR = {_adv_cagr[_adv_vals.index(_adv_base)]:.2f}%，是所有测试值中的最优点。"
         f"降至 \$30M 或 \$40M 时 CAGR 反而下降（{_adv_cagr[0]:.2f}% / {_adv_cagr[1]:.2f}%），说明低流动性标的引入噪音。"
         f" 价格门槛：降至 \$8 CAGR（{_prc_cagr[0]:.2f}%）略高于当前 \$10（{_prc_cagr[1]:.2f}%），可作为候选改进点，但幅度有限。"
