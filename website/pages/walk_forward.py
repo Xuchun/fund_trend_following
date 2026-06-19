@@ -43,7 +43,7 @@ if _STRESS_PATH.exists():
 # ── Section 1: Walk-Forward ───────────────────────────────────────────────────
 st.subheader("Walk-Forward OOS 验证方法")
 st.markdown(f"""
-采用**扩展窗口（Expanding Window）**设计：IS 起始固定在 2000 年，OOS 为逐年滚动向前的单年度：
+采用**扩展窗口**（Expanding Window）设计：IS 起始固定在 2000 年，OOS 为逐年滚动向前的单年度：
 
 ```
 IS: 2000──────────────2021  │  OOS: 2022
