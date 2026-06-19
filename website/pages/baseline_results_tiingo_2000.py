@@ -1586,13 +1586,21 @@ st.markdown("---")
 import numpy as _np_be
 import pandas as _pd_be
 
-_BE_CSV   = _results_path / "breakeven_scenarios.csv"
-_BE_MTIME = int(_BE_CSV.stat().st_mtime) if _BE_CSV.exists() else 0
+_BE_CSV = _results_path / "breakeven_scenarios.csv"
+
+def _be_csv_key() -> str:
+    if not _BE_CSV.exists():
+        return "missing"
+    import hashlib as _hl
+    with open(_BE_CSV, "rb") as _f:
+        return _hl.md5(_f.read()).hexdigest()
+
+_BE_KEY = _be_csv_key()
 
 
 @st.cache_data(ttl=86400)
-def _load_be_scenarios(_mtime: int):
-    if _mtime == 0:
+def _load_be_scenarios(_key: str):
+    if _key == "missing":
         return None
     return _pd_be.read_csv(
         _BE_CSV,
