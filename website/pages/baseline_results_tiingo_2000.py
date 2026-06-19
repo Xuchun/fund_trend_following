@@ -1875,6 +1875,75 @@ else:
 
 st.markdown("---")
 
+# ── 每年开仓信号数量柱状图 ────────────────────────────────────────────────────
+st.subheader("每年开仓信号数量柱状图")
+
+if _es_path.exists():
+    import plotly.graph_objects as _go_esy
+
+    _esy_raw  = _pd_es.read_csv(_es_path, index_col="date", parse_dates=True)
+    _esy_ann  = _esy_raw.resample("YE").sum()
+    _esy_ann.index = _esy_ann.index.year
+    _cur_yr_esy = _esy_raw.index[-1].year
+    _esy_ann    = _esy_ann[_esy_ann.index < _cur_yr_esy]
+
+    _years_esy    = _esy_ann.index.tolist()
+    _all_sigs_esy = (_esy_ann["signals"].tolist()  if "signals"  in _esy_ann.columns else [0] * len(_years_esy))
+    _exe_sigs_esy = (_esy_ann["executed"].tolist() if "executed" in _esy_ann.columns else [0] * len(_years_esy))
+
+    _fig_esy = _go_esy.Figure()
+    _fig_esy.add_trace(_go_esy.Bar(
+        x=_years_esy,
+        y=_all_sigs_esy,
+        name="所有开仓信号（含未执行）",
+        marker_color="#aaaaaa",
+        opacity=0.85,
+        offsetgroup="A",
+        hovertemplate="%{x}年<br>所有信号（含未执行）：%{y:,} 个<extra></extra>",
+    ))
+    _fig_esy.add_trace(_go_esy.Bar(
+        x=_years_esy,
+        y=_exe_sigs_esy,
+        name="实际执行的开仓信号",
+        marker_color=meta.color,
+        offsetgroup="B",
+        hovertemplate="%{x}年<br>实际执行：%{y:,} 个<extra></extra>",
+    ))
+    _fig_esy.update_layout(
+        barmode="group",
+        hovermode="x unified",
+        height=440,
+        margin=dict(l=60, r=20, t=30, b=50),
+        bargap=0.2,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        xaxis=dict(title_text="<b>年份</b>", title_font=dict(size=13), dtick=1),
+        yaxis=dict(title_text="<b>信号数量（个）</b>", title_font=dict(size=13)),
+    )
+    st.plotly_chart(_fig_esy, use_container_width=True)
+
+    _tot_all_esy = int(sum(_all_sigs_esy))
+    _tot_exe_esy = int(sum(_exe_sigs_esy))
+    _exe_rt_esy  = _tot_exe_esy / _tot_all_esy * 100 if _tot_all_esy > 0 else 0
+    _avg_all_esy = _tot_all_esy / len(_years_esy) if _years_esy else 0
+    _avg_exe_esy = _tot_exe_esy / len(_years_esy) if _years_esy else 0
+
+    _ec1, _ec2, _ec3 = st.columns(3)
+    _ec1.metric("全程总候选信号",   f"{_tot_all_esy:,} 个")
+    _ec2.metric("全程实际执行",     f"{_tot_exe_esy:,} 个",   delta=f"执行率 {_exe_rt_esy:.1f}%")
+    _ec3.metric("平均每年执行信号", f"{_avg_exe_esy:.0f} 个", help=f"所有候选信号均值 {_avg_all_esy:.0f} 个/年")
+
+    st.markdown(
+        f"**解读：** 灰色柱表示每年策略**产生的所有开仓候选信号**（满足 200 日高点突破、成交量确认、"
+        f"最低股价与流动性过滤条件），彩色柱为其中**实际完成建仓的信号**。"
+        f"两根柱子之差即被风控系统放弃的信号（资金不足 / 热度超限 / 相关性过高）。"
+        f"牛市年份候选信号密集；熊市年份（2002、2008、2022）因 Regime Filter 关闭大部分标的新开仓，"
+        f"两根柱子同时骤降，体现了策略1.0的**动态风险管理**能力。"
+    )
+else:
+    st.info("开仓信号数据尚未生成。运行：python src/scripts/04_run_diagnostics.py")
+
+st.markdown("---")
+
 # ── 每标的交易次数分布 ─────────────────────────────────────────────────────────
 st.subheader("每标的交易次数分布")
 
