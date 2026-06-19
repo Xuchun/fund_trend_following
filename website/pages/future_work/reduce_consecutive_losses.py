@@ -255,6 +255,41 @@ st.markdown("""
 **代价：** 会错过少量真实突破（入场信号发出时强度不足，但后续确实上涨的标的）。
 """)
 
+# Chart: Volume filter multiplier (proxy for breakout quality) sensitivity
+_volf2 = _perturb_path / "volume_filter_multiplier.json"
+if _volf2.exists():
+    _vd2 = json.loads(_volf2.read_text())
+    _vv2 = _vd2["param_values"]
+    _vc2 = [r["cagr"] * 100 for r in _vd2["results"]]
+    _vn2 = [r["n_trades"] for r in _vd2["results"]]
+    _vs2 = [r["sharpe"] for r in _vd2["results"]]
+    _baseline_v2 = _vd2["baseline_value"]
+    _win2 = [r.get("win_rate", 0) * 100 for r in _vd2["results"]]
+    _fig_v2 = go.Figure()
+    _fig_v2.add_trace(go.Bar(
+        x=[str(v) for v in _vv2], y=_vc2, name="CAGR (%)",
+        marker_color=["#22c55e" if v == _baseline_v2 else "#6366f1" for v in _vv2],
+        yaxis="y",
+    ))
+    _fig_v2.add_trace(go.Scatter(
+        x=[str(v) for v in _vv2], y=_vn2, name="交易笔数（右轴）",
+        mode="lines+markers", marker=dict(size=9, color="#94a3b8"),
+        line=dict(color="#94a3b8", width=2, dash="dot"), yaxis="y2",
+    ))
+    _fig_v2.update_layout(
+        title="成交量过滤倍数敏感性（突破强度代理指标）：CAGR vs 交易笔数",
+        xaxis_title="volume_filter_multiplier（× 均量）",
+        yaxis=dict(title="CAGR (%)", side="left", range=[7.5, 11.5]),
+        yaxis2=dict(title="交易笔数", side="right", overlaying="y", range=[2800, 3900]),
+        legend=dict(x=0.6, y=0.05), height=360, margin=dict(t=50, b=40),
+    )
+    st.plotly_chart(_fig_v2, use_container_width=True)
+    st.caption(
+        f"成交量要求从 1.0× 升至当前值 {_baseline_v2}×，CAGR 从 {_vc2[0]:.2f}% 升至 {_vc2[_vv2.index(_baseline_v2)]:.2f}%，"
+        f"交易笔数从 {_vn2[0]:.0f} 降至 {_vn2[_vv2.index(_baseline_v2)]:.0f}。"
+        "过滤低量突破提升了每笔交易质量，减少了假突破比例。继续提高阈值至 2.0× 反而伤害绩效（过度过滤）。"
+    )
+
 st.markdown("---")
 
 # 建议 3
