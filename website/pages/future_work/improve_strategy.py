@@ -571,7 +571,7 @@ if _tr_d:
     st.plotly_chart(_fig_tr, use_container_width=True)
 
     _tr_base_i = _trv.index(_trbase)
-    st.caption(
+    st.markdown(
         f"当前 3× ATR（绿色）：CAGR {_trc[_tr_base_i]:.2f}%（所有测试值中最优），"
         f"MaxDD {_trm[_tr_base_i]:.2f}%，{_trn[_tr_base_i]:.0f} 笔交易。"
         f"收紧至 2× ATR 时 CAGR 降至 {_trc[0]:.2f}%，且交易笔数大幅增加（{_trn[0]:.0f} 笔）——"
