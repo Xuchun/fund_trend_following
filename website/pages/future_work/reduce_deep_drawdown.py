@@ -10,8 +10,11 @@ import json
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.io as _pio
 import streamlit as st
 from website.shared import get_results
+
+_pio.templates.default = "plotly_white"
 
 _res = get_results()
 _trd = _res.trades.copy()
