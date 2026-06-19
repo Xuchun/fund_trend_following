@@ -6,12 +6,22 @@ _root = Path(__file__).resolve().parents[3]
 if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
+import math
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as _go
 import streamlit as st
 from website.shared import get_results
 from website.components.strategy_badge import render_page_header
+
+try:
+    from scipy import stats as _scipy_stats
+    def _t_sf(t, df):
+        return _scipy_stats.t.sf(abs(t), df=df)
+except ImportError:
+    def _t_sf(t, df):
+        # normal distribution approximation (accurate for df > 20)
+        return 0.5 * math.erfc(abs(t) / math.sqrt(2))
 
 _res   = get_results()
 _meta  = _res.meta
