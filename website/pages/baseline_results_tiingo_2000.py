@@ -1665,32 +1665,59 @@ def _render_breakeven():
         _pnl[_mask] = _be.loc[_mask, _pc]
         return (_pnl > 0).mean()
 
+    def _max_consec(_lbl: str) -> int:
+        if _lbl == "orig":
+            _pnl_arr = _be.sort_values("orig_exit_date")["orig_net_pnl"].values
+        else:
+            _dc = f"{_lbl}_exit_date"
+            _pc = f"{_lbl}_net_pnl"
+            _tc = f"{_lbl}_triggered"
+            _mask = _be[_tc] & _be[_dc].notna() & (_be[_dc] < _be["orig_exit_date"])
+            _dates = _be["orig_exit_date"].copy()
+            _pnls  = _be["orig_net_pnl"].copy()
+            _dates[_mask] = _be.loc[_mask, _dc]
+            _pnls[_mask]  = _be.loc[_mask, _pc]
+            _pnl_arr = _pnls.iloc[_np_be.argsort(_dates.values)].values
+        _mx = _cur = 0
+        for _v in _pnl_arr:
+            if _v <= 0:
+                _cur += 1
+                _mx = max(_mx, _cur)
+            else:
+                _cur = 0
+        return _mx
+
     _orig_c = _cagr(_nav_orig)
     _orig_d = _maxdd(_nav_orig)
-    _orig_w = _winrate("orig")
 
     _m_rows = []
     for (_nm, _nav), _lbl_wr in zip(_navs.items(), ["orig", "be1r", "be15r", "be2r"]):
-        _c = _cagr(_nav)
-        _d = _maxdd(_nav)
-        _w = _winrate(_lbl_wr)
-        _row = {"方案": _nm, "年化收益 CAGR": f"{_c*100:.2f}%", "胜率": f"{_w*100:.1f}%"}
+        _c  = _cagr(_nav)
+        _d  = _maxdd(_nav)
+        _w  = _winrate(_lbl_wr)
+        _mc = _max_consec(_lbl_wr)
+        _row = {"方案": _nm, "年化收益 CAGR": f"{_c*100:.2f}%"}
         if _nm == "原始策略":
-            _row["CAGR 变化"]    = "—"
-            _row["最大回撤"]     = f"{_d*100:.2f}%"
-            _row["最大回撤变化"] = "—"
+            _row["CAGR 变化"]          = "—"
+            _row["胜率"]               = f"{_w*100:.1f}%"
+            _row["最大回撤"]           = f"{_d*100:.2f}%"
+            _row["最大回撤变化"]       = "—"
+            _row["最长连续亏损次数"]   = str(_mc)
         else:
             _dc2 = (_c - _orig_c) * 100
             _dd2 = (_d - _orig_d) * 100
-            _row["CAGR 变化"]    = f"{'+' if _dc2 >= 0 else ''}{_dc2:.2f} pp"
-            _row["最大回撤"]     = f"{_d*100:.2f}%"
-            _row["最大回撤变化"] = f"{'+' if _dd2 >= 0 else ''}{_dd2:.2f} pp"
+            _row["CAGR 变化"]          = f"{'+' if _dc2 >= 0 else ''}{_dc2:.2f} pp"
+            _row["胜率"]               = f"{_w*100:.1f}%"
+            _row["最大回撤"]           = f"{_d*100:.2f}%"
+            _row["最大回撤变化"]       = f"{'+' if _dd2 >= 0 else ''}{_dd2:.2f} pp"
+            _row["最长连续亏损次数"]   = str(_mc)
         _m_rows.append(_row)
 
-    _c1, _c2 = st.columns([3, 2])
+    st.markdown("**各方案指标对比**")
+    st.dataframe(_pd_be.DataFrame(_m_rows), use_container_width=True, hide_index=True)
+
+    _c1, _c2 = st.columns([1, 1])
     with _c1:
-        st.markdown("**各方案 CAGR 与最大回撤对比**")
-        st.dataframe(_pd_be.DataFrame(_m_rows), use_container_width=True, hide_index=True)
 
     # ── Trade impact breakdown ────────────────────────────────────────────────
     with _c2:
