@@ -11,7 +11,10 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
+import plotly.io as _pio
 from plotly.subplots import make_subplots
+
+_pio.templates.default = "plotly_white"
 
 _results_path = _root / "results" / "v1_unbiased_60m_2000"
 _perturb_path = _root / "results" / "v1_unbiased_60m_2000" / "perturbation"
