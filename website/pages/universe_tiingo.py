@@ -468,7 +468,7 @@ if _META_PATH.exists():
             _grp = _grp.rename(columns={"ticker": "Ticker", "name": "名称 / Full Name"})
             st.dataframe(_grp, use_container_width=True, hide_index=True)
 
-    st.markdown(f"**合计：{len(_etf_df)} 只 ETF**（候选池共 {len(_ETF_SET)} 只；排除原因：7 只结构性不适合 ETF 已排除；JGLO 仅 206 交易日数据不足 252 天；CPER 流动性不足 ADV 最高 $53M 未达 $60M 门槛；SPY 为市场环境过滤标的、SHY 为现金代理，均不参与趋势跟踪信号）")
+    st.markdown(f"**合计：{len(_etf_df)} 只 ETF**（候选池共 {len(_ETF_SET)} 只；排除原因：7 只结构性不适合 ETF 已排除；JGLO 仅 206 交易日数据不足 252 天；CPER 流动性不足 ADV 最高 \$53M 未达 \$60M 门槛；SPY 为市场环境过滤标的、SHY 为现金代理，均不参与趋势跟踪信号）")
 else:
     st.info("ETF 列表未加载。请检查 results/v1_unbiased_60m_2000/strategy_meta.json 中的 etf_universe 字段。")
 
