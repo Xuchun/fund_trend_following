@@ -1718,23 +1718,19 @@ def _render_breakeven():
 
     # ── Trade impact breakdown ────────────────────────────────────────────────
     _total = len(_be)
-    with st.expander(f"平价保护触发情况（共 {_total:,} 笔已执行交易）", expanded=True):
-        _imp = []
-        # dummy assignment to keep the block non-empty before the for loop
-        _total = _total
-        st.markdown(f"**平价保护触发情况（共 {_total:,} 笔已执行交易）**")
-        _imp = []
-        for _lbl2, _name in [("be1r", "1R"), ("be15r", "1.5R"), ("be2r", "2R")]:
-            _dc3 = f"{_lbl2}_exit_date"
-            _tc3 = f"{_lbl2}_triggered"
-            _n_trig  = int(_be[_tc3].sum())
-            _n_early = int((_be[_tc3] & _be[_dc3].notna() & (_be[_dc3] < _be["orig_exit_date"])).sum())
-            _imp.append({
-                "阈值": f"{_name}",
-                "曾触发": f"{_n_trig} 笔 ({_n_trig/_total*100:.0f}%)",
-                "实际提前出场": f"{_n_early} 笔 ({_n_early/_total*100:.1f}%)",
-            })
-        st.dataframe(_pd_be.DataFrame(_imp), use_container_width=True, hide_index=True)
+    st.markdown(f"**平价保护触发情况（共 {_total:,} 笔已执行交易）**")
+    _imp = []
+    for _lbl2, _name in [("be1r", "1R"), ("be15r", "1.5R"), ("be2r", "2R")]:
+        _dc3 = f"{_lbl2}_exit_date"
+        _tc3 = f"{_lbl2}_triggered"
+        _n_trig  = int(_be[_tc3].sum())
+        _n_early = int((_be[_tc3] & _be[_dc3].notna() & (_be[_dc3] < _be["orig_exit_date"])).sum())
+        _imp.append({
+            "阈值": _name,
+            "曾触发": f"{_n_trig} 笔 ({_n_trig/_total*100:.0f}%)",
+            "实际提前出场": f"{_n_early} 笔 ({_n_early/_total*100:.1f}%)",
+        })
+    st.dataframe(_pd_be.DataFrame(_imp), use_container_width=True, hide_index=True)
 
     st.markdown(
         "注：「曾触发」= 该交易浮盈曾达到阈值（止损已上移至开仓价格）。"
