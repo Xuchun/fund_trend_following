@@ -177,9 +177,9 @@ def _simulate_be(
         if not be_triggered and (highest_high - entry_price) >= threshold * R:
             be_triggered = True
 
-        # Apply breakeven floor to trail stop
+        # Apply breakeven floor to trail stop (be_stop_price > entry_price so net_pnl ≈ +$1)
         if be_triggered:
-            trail_stop = max(trail_stop, entry_price)
+            trail_stop = max(trail_stop, be_stop_price)
 
         # Check exit conditions
         if al_j < stop_loss:
