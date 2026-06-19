@@ -1,6 +1,6 @@
 """策略1.0模拟交易监控"""
 
-import sys
+import sys, json
 from pathlib import Path
 _root = Path(__file__).resolve().parents[3]
 if str(_root) not in sys.path:
@@ -8,268 +8,407 @@ if str(_root) not in sys.path:
 
 import streamlit as st
 import pandas as pd
-import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-_results_path = _root / "results" / "v1_unbiased_60m_2000"
+_results = _root / "results" / "v1_unbiased_60m_2000"
+_pt_file = _root / "results" / "paper_trading" / "positions.json"
 
+# ── Strategy constants ────────────────────────────────────────────────────────
+_TRAIL_R1   = 3.0
+_TRAIL_R3   = 3.0
+_TRAIL_R5   = 5.0
+_ATR_PERIOD = 20
+_SMA_WINDOW = 200
+
+# ── Page header ───────────────────────────────────────────────────────────────
 st.title("策略1.0 模拟交易监控")
-st.caption("基于策略1.0回测参数的实盘前模拟验证——跟踪策略信号、持仓状态与绩效表现")
+st.caption("数据来源：Yahoo Finance（每小时自动刷新）| 止损价格基于最新 ATR-20 实时计算")
 
-st.warning("""
-⚠️ **开发中** — 本页面目前展示回测结束日（2026-06-15）的"继承持仓"作为模拟交易起点。
-完整的模拟交易系统需要接入实时行情数据源（Tiingo 实时 EOD API）和每日信号生成管道，正在开发中。
-""")
+# ── Load paper trading state ──────────────────────────────────────────────────
+@st.cache_data(ttl=86400)
+def _load_pt_state(path: str) -> dict | None:
+    p = Path(path)
+    return json.loads(p.read_text()) if p.exists() else None
 
-st.markdown("---")
+_state = _load_pt_state(str(_pt_file))
+if _state is None:
+    st.error("未找到模拟交易状态文件（results/paper_trading/positions.json）。")
+    st.info("请在本地运行：`python src/scripts/paper_trading_daily.py` 初始化后提交到 GitHub。")
+    st.stop()
 
-# ── 加载数据 ──────────────────────────────────────────────────────────────────
+_positions     = [p for p in _state["positions"] if not p.get("closed")]
+_closed_trades = _state.get("closed_trades", [])
+_nav_history   = _state.get("nav_history", [])
+_last_update   = _state.get("last_update_date", "N/A")
+_initial_nav   = _state["initial_nav"]
+_cash          = _state.get("cash", 0.0)
+
+# ── Yahoo Finance data ────────────────────────────────────────────────────────
+_pos_tickers = [p["ticker"] for p in _positions]
+_all_tickers = tuple(sorted(set(_pos_tickers + ["SPY"])))
+
 @st.cache_data(ttl=3600)
-def _load():
-    import json
-    trades = pd.read_csv(_results_path / "trades.csv", parse_dates=["entry_date","exit_date"])
-    trades["holding_days"] = (trades["exit_date"] - trades["entry_date"]).dt.days
-    nav    = pd.read_csv(_results_path / "nav.csv", index_col=0, parse_dates=True)
-    spy    = pd.read_csv(_results_path / "spy_nav.csv", index_col=0, parse_dates=True)
-    with open(_results_path / "metrics.json") as f:
-        metrics = json.load(f)
-    return trades, nav, spy, metrics
+def _fetch_yf(tickers: tuple, period: str = "300d") -> pd.DataFrame:
+    import yfinance as yf
+    if not tickers:
+        return pd.DataFrame()
+    return yf.download(list(tickers), period=period, auto_adjust=True, progress=False)
 
-trades, nav, spy_nav, metrics = _load()
+with st.spinner("从 Yahoo Finance 加载最新行情…"):
+    _yf_raw = _fetch_yf(_all_tickers, period="300d")
 
-BACKTEST_END   = "2026-06-15"
-INITIAL_CAPITAL = 10_000_000
-FINAL_NAV       = float(nav["nav"].iloc[-1])
 
-# ── 一、策略状态概览 ──────────────────────────────────────────────────────────
+def _get_df(ticker: str) -> pd.DataFrame | None:
+    if _yf_raw.empty:
+        return None
+    if isinstance(_yf_raw.columns, pd.MultiIndex):
+        if ticker not in _yf_raw.columns.get_level_values(1):
+            return None
+        df = _yf_raw.xs(ticker, level=1, axis=1).dropna(subset=["Close"])
+    else:
+        df = _yf_raw.dropna(subset=["Close"])
+    return df if not df.empty else None
+
+
+# ── ATR (Wilder) ─────────────────────────────────────────────────────────────
+def _wilder_atr(high: pd.Series, low: pd.Series, close: pd.Series, period: int = 20) -> pd.Series:
+    tr = pd.concat(
+        [high - low,
+         (high - close.shift(1)).abs(),
+         (low  - close.shift(1)).abs()],
+        axis=1,
+    ).max(axis=1)
+    return tr.ewm(alpha=1 / period, adjust=False, min_periods=period).mean()
+
+
+# ── Live position enrichment ──────────────────────────────────────────────────
+def _enrich(pos: dict) -> dict:
+    df = _get_df(pos["ticker"])
+    if df is None:
+        return {**pos, "_ok": False}
+
+    entry_dt    = pd.to_datetime(pos["entry_date"])
+    since_entry = df[df.index >= entry_dt]
+    if since_entry.empty:
+        return {**pos, "_ok": False}
+
+    cur_price  = float(since_entry["Close"].iloc[-1])
+    cur_date   = str(since_entry.index[-1].date())
+    peak_price = max(pos["peak_price"], float(since_entry["High"].max()))
+
+    atr_s   = _wilder_atr(df["High"], df["Low"], df["Close"], _ATR_PERIOD)
+    cur_atr = float(atr_s.iloc[-1])
+    if pd.isna(cur_atr):
+        cur_atr = pos["atr_at_entry"]
+
+    risk = pos["entry_price"] - pos["initial_stop_loss"]
+    R    = (cur_price - pos["entry_price"]) / risk if risk > 0 else 0.0
+
+    trail_mult = _TRAIL_R5 if R >= 3.0 else (_TRAIL_R3 if R >= 1.0 else _TRAIL_R1)
+    new_stop   = peak_price - trail_mult * cur_atr
+    cur_stop   = max(pos["current_stop_loss"], new_stop)
+
+    mkt_value      = cur_price * pos["shares"]
+    unreal_pnl     = (cur_price - pos["entry_price"]) * pos["shares"]
+    stop_buffer_pct = (cur_price - cur_stop) / cur_price * 100
+    is_stopped     = cur_price <= cur_stop
+
+    return {
+        **pos,
+        "_ok":            True,
+        "current_price":  cur_price,
+        "current_date":   cur_date,
+        "peak_price":     peak_price,
+        "current_atr":    cur_atr,
+        "current_stop":   cur_stop,
+        "trail_mult":     trail_mult,
+        "R":              R,
+        "mkt_value":      mkt_value,
+        "unreal_pnl":     unreal_pnl,
+        "stop_buffer_pct": stop_buffer_pct,
+        "is_stopped":     is_stopped,
+    }
+
+
+_live = [_enrich(p) for p in _positions]
+_ok   = [p for p in _live if p["_ok"]]
+_active  = [p for p in _ok if not p["is_stopped"]]
+_stopped = [p for p in _ok if p["is_stopped"]]
+
+# ── SPY regime ────────────────────────────────────────────────────────────────
+_spy_df    = _get_df("SPY")
+_spy_close = None
+_spy_sma   = None
+_bull      = False
+if _spy_df is not None and len(_spy_df) >= _SMA_WINDOW:
+    _spy_close = float(_spy_df["Close"].iloc[-1])
+    _spy_sma   = float(_spy_df["Close"].rolling(_SMA_WINDOW).mean().iloc[-1])
+    _bull      = _spy_close > _spy_sma
+
+# ── NAV estimate ──────────────────────────────────────────────────────────────
+_total_mkt    = sum(p["mkt_value"] for p in _ok)
+_total_unreal = sum(p["unreal_pnl"] for p in _ok)
+_est_nav      = _total_mkt + _cash
+_data_date    = max((p.get("current_date", "") for p in _ok), default="N/A")
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Section 1 — Overview
+# ═══════════════════════════════════════════════════════════════════════════════
 st.subheader("一、策略状态概览")
-
-_open = trades[trades["exit_reason"] == "end_of_backtest"].copy()
-_open["unrealized_pnl"] = _open["net_pnl"]
-_open["notional"]       = _open["entry_price"] * _open["shares"]
-_total_unrealized       = float(_open["unrealized_pnl"].sum())
-_n_open                 = len(_open)
-_nav_latest             = FINAL_NAV
-_cash_deployed_pct      = _open["notional"].sum() / _nav_latest * 100
+st.caption(f"行情日期：{_data_date} ｜ 上次日常更新：{_last_update} ｜ Yahoo Finance（1小时缓存）")
 
 c1, c2, c3, c4 = st.columns(4)
 c1.metric(
-    "模拟交易起始 NAV",
-    f"${_nav_latest/1e6:.2f}M",
-    help=f"回测结束日（{BACKTEST_END}）的策略净值，作为模拟交易起点"
+    "模拟交易 NAV（估算）",
+    f"${_est_nav / 1e6:.2f}M",
+    delta=f"{(_est_nav / _initial_nav - 1) * 100:+.2f}% vs 起始",
+    help=f"持仓市值 ${_total_mkt/1e6:.2f}M + 现金 ${_cash/1e6:.2f}M",
 )
 c2.metric(
-    "当前持仓数量",
-    f"{_n_open} 只",
-    help="回测截止时仍持有的标的，继承进入模拟交易阶段"
+    "当前持仓",
+    f"{len(_active)} 只",
+    delta=f"触及止损 {len(_stopped)} 只" if _stopped else None,
+    delta_color="inverse" if _stopped else "normal",
 )
 c3.metric(
-    "继承持仓浮盈",
-    f"${_total_unrealized/1e6:.2f}M",
-    delta=f"+{_total_unrealized/_nav_latest*100:.1f}% NAV",
-    help="这些持仓在回测结束时已有的浮动盈利"
+    "持仓浮盈",
+    f"${_total_unreal / 1e6:+.2f}M",
+    delta=f"{_total_unreal / _est_nav * 100:+.1f}% NAV" if _est_nav else None,
+    help="持仓当前市值 − 入场成本（未扣除佣金）",
 )
 c4.metric(
-    "资金使用率（成本基础）",
-    f"{_cash_deployed_pct:.1f}%",
-    help="当前持仓入场成本之和 ÷ NAV"
+    "现金",
+    f"${_cash / 1e6:.2f}M",
+    help="可用于新开仓的现金（每次止损出场后增加）",
 )
 
-# ── 策略 Regime 状态 ──────────────────────────────────────────────────────────
-st.markdown("#### 市场环境（Regime Filter）状态")
-_regime_col1, _regime_col2 = st.columns([1, 3])
-with _regime_col1:
-    st.markdown("""
-<div style="background:#2ca02c;color:white;padding:18px 24px;border-radius:10px;text-align:center;font-size:20px;font-weight:bold;">
-✅ 开启开仓
-</div>
-""", unsafe_allow_html=True)
-with _regime_col2:
-    st.markdown("""
-**当前判断**（基于回测最终状态）：SPY 收盘价位于 200 日均线**上方** → Regime Filter 通过 → 允许新开仓信号。
-
-> 模拟交易正式上线后，此状态将每日收盘后自动更新。
-""")
+# ── Regime status ─────────────────────────────────────────────────────────────
+st.markdown("#### 市场环境（Regime Filter）")
+_rc1, _rc2 = st.columns([1, 3])
+with _rc1:
+    if _bull:
+        st.markdown(
+            '<div style="background:#2ca02c;color:white;padding:18px 24px;border-radius:10px;'
+            'text-align:center;font-size:18px;font-weight:bold;">✅ 允许开仓</div>',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            '<div style="background:#d62728;color:white;padding:18px 24px;border-radius:10px;'
+            'text-align:center;font-size:18px;font-weight:bold;">🚫 暂停开仓</div>',
+            unsafe_allow_html=True,
+        )
+with _rc2:
+    if _spy_close and _spy_sma:
+        _gap = (_spy_close / _spy_sma - 1) * 100
+        if _bull:
+            st.success(f"SPY ${_spy_close:.2f} ＞ SMA200 ${_spy_sma:.2f}（高出 {_gap:+.1f}%）→ Regime 通过，允许新开仓")
+        else:
+            st.error(f"SPY ${_spy_close:.2f} ＜ SMA200 ${_spy_sma:.2f}（低 {abs(_gap):.1f}%）→ Regime 拦截，暂停新开仓")
+    else:
+        st.warning("无法获取 SPY 数据，Regime 状态未知")
 
 st.markdown("---")
 
-# ── 二、当前持仓明细 ──────────────────────────────────────────────────────────
-st.subheader("二、当前持仓明细（继承自回测）")
-st.caption(f"以下 {_n_open} 只持仓均在 {BACKTEST_END} 回测截止时仍处于开仓状态，作为模拟交易初始持仓。")
+# ═══════════════════════════════════════════════════════════════════════════════
+# Section 2 — Live Positions
+# ═══════════════════════════════════════════════════════════════════════════════
+st.subheader("二、当前持仓实时状态（Yahoo Finance）")
 
-_etf_csv = _root / "data" / "ETFs.csv"
-_ETF_SET = set(pd.read_csv(_etf_csv)["SYMBOL"].dropna().str.strip()) if _etf_csv.exists() else set()
+if _stopped:
+    st.warning(f"⚠️ **{len(_stopped)} 只持仓已触及移动止损** — 当前价 ≤ 当前止损价，建议执行止损出场。")
 
-_open_show = _open.copy()
-_open_show["类别"]    = _open_show["ticker"].apply(lambda t: "ETF" if t in _ETF_SET else "股票")
-_open_show["持仓天数 (至回测结束)"] = _open_show["holding_days"]
-_open_show["浮盈 R"]  = _open_show["pnl_r_multiple"].map(lambda v: f"{v:+.2f}R")
-_open_show["浮盈 ($)"] = _open_show["unrealized_pnl"].map(lambda v: f"${v:+,.0f}")
-_open_show["入场价"]  = _open_show["entry_price"].map(lambda v: f"${v:.2f}")
-_open_show["回测截止价"] = _open_show["exit_price"].map(lambda v: f"${v:.2f}")
-_open_show["股数"]    = _open_show["shares"].map(lambda v: f"{v:,.0f}")
-_open_show["入场日期"] = _open_show["entry_date"].dt.strftime("%Y-%m-%d")
-_open_show_sorted = _open_show.sort_values("pnl_r_multiple", ascending=False)
+if _ok:
+    _rows = []
+    for p in sorted(_ok, key=lambda x: x.get("R", 0), reverse=True):
+        _rows.append({
+            "标的":      p["ticker"],
+            "状态":      "🔴 触及止损" if p["is_stopped"] else "🟢 持有",
+            "入场日":    p["entry_date"],
+            "入场价":    f"${p['entry_price']:.2f}",
+            "当前价":    f"${p['current_price']:.2f}",
+            "移动止损":  f"${p['current_stop']:.2f}",
+            "止损缓冲":  f"{p['stop_buffer_pct']:.1f}%",
+            "浮盈 R":    f"{p['R']:+.2f}R",
+            "浮盈 $":    f"${p['unreal_pnl']:+,.0f}",
+            "市值":      f"${p['mkt_value']/1e3:.0f}K",
+            "股数":      f"{p['shares']:,}",
+        })
+    st.dataframe(pd.DataFrame(_rows), use_container_width=True, hide_index=True)
 
-st.dataframe(
-    _open_show_sorted[[
-        "ticker", "类别", "入场日期", "持仓天数 (至回测结束)",
-        "入场价", "回测截止价", "股数", "浮盈 R", "浮盈 ($)"
-    ]].rename(columns={"ticker": "标的"}),
-    use_container_width=True,
-    hide_index=True,
-)
-
-# 持仓浮盈分布图
-_fig_pos = go.Figure(go.Bar(
-    y=_open_show_sorted["ticker"].tolist(),
-    x=_open_show_sorted["pnl_r_multiple"].tolist(),
-    orientation="h",
-    marker_color=["#2ca02c" if v >= 0 else "#d62728"
-                  for v in _open_show_sorted["pnl_r_multiple"].tolist()],
-    text=[f"{v:+.2f}R" for v in _open_show_sorted["pnl_r_multiple"].tolist()],
-    textposition="outside",
-    hovertemplate="<b>%{y}</b><br>浮盈: %{x:+.2f}R<extra></extra>",
-))
-_fig_pos.update_layout(
-    title="当前持仓浮盈分布（R 倍数）",
-    xaxis_title="浮盈 R 倍数",
-    height=520,
-    margin=dict(l=70, r=80, t=50, b=40),
-    template="plotly_white",
-    showlegend=False,
-)
-st.plotly_chart(_fig_pos, use_container_width=True)
-
-st.markdown("---")
-
-# ── 三、回测历史绩效回顾 ──────────────────────────────────────────────────────
-st.subheader("三、回测历史绩效（模拟交易基准）")
-st.caption("以下为回测期间完整绩效，作为模拟交易阶段的历史对照基准。")
-
-_cagr    = metrics.get("cagr", 0)
-_maxdd   = metrics.get("max_drawdown", 0)
-_sharpe  = metrics.get("sharpe", 0)
-_sortino = metrics.get("sortino", 0)
-_calmar  = metrics.get("calmar", 0)
-_pf      = metrics.get("profit_factor", 0)
-_wr      = metrics.get("win_rate", 0)
-_n       = metrics.get("n_trades", 0)
-
-mc1, mc2, mc3, mc4 = st.columns(4)
-mc1.metric("回测 CAGR", f"{_cagr*100:.2f}%", help="2000-01-03 → 2026-06-15")
-mc2.metric("最大回撤",  f"{_maxdd*100:.2f}%")
-mc3.metric("Sharpe 比率", f"{_sharpe:.3f}")
-mc4.metric("Calmar 比率", f"{_calmar:.3f}")
-
-mc5, mc6, mc7, mc8 = st.columns(4)
-mc5.metric("Sortino 比率",  f"{_sortino:.3f}")
-mc6.metric("Profit Factor", f"{_pf:.3f}")
-mc7.metric("胜率",          f"{_wr*100:.1f}%")
-mc8.metric("总交易笔数",    f"{int(_n):,}")
-
-# ── NAV 曲线（简化版） ────────────────────────────────────────────────────────
-_nav_plot  = nav["nav"].copy()
-_spy_plot  = spy_nav["spy_nav"].copy()
-_nav_norm  = _nav_plot / float(_nav_plot.iloc[0])
-_spy_norm  = _spy_plot / float(_spy_plot.iloc[0])
-
-_fig_nav = make_subplots(rows=2, cols=1, shared_xaxes=True,
-                          row_heights=[0.65, 0.35], vertical_spacing=0.05)
-
-_fig_nav.add_trace(go.Scatter(
-    x=_nav_norm.index, y=_nav_norm.values,
-    name="策略1.0", line=dict(color="#1f77b4", width=2),
-    hovertemplate="%{x|%Y-%m-%d}<br>NAV: %{y:.2f}x<extra></extra>",
-), row=1, col=1)
-_fig_nav.add_trace(go.Scatter(
-    x=_spy_norm.index, y=_spy_norm.values,
-    name="SPY", line=dict(color="#888888", width=1.2, dash="dash"),
-    hovertemplate="%{x|%Y-%m-%d}<br>SPY: %{y:.2f}x<extra></extra>",
-), row=1, col=1)
-
-_dd = (_nav_plot - _nav_plot.cummax()) / _nav_plot.cummax() * 100
-_fig_nav.add_trace(go.Scatter(
-    x=_dd.index, y=_dd.values,
-    fill="tozeroy", fillcolor="rgba(214,39,40,0.2)",
-    line=dict(color="#d62728", width=1),
-    hovertemplate="%{x|%Y-%m-%d}<br>回撤: %{y:.1f}%<extra></extra>",
-    showlegend=False,
-), row=2, col=1)
-
-_fig_nav.update_layout(
-    title="策略1.0 净值曲线（回测历史）",
-    hovermode="x unified",
-    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-    height=500,
-    margin=dict(l=60, r=20, t=60, b=40),
-    template="plotly_white",
-)
-_fig_nav.update_yaxes(ticksuffix="x", title_text="净值（倍）", row=1, col=1)
-_fig_nav.update_yaxes(ticksuffix="%", title_text="回撤 %", row=2, col=1)
-st.plotly_chart(_fig_nav, use_container_width=True)
+    # R-multiple bar chart
+    _sorted = sorted(_ok, key=lambda x: x.get("R", 0), reverse=True)
+    _tks    = [p["ticker"] for p in _sorted]
+    _Rs     = [p["R"] for p in _sorted]
+    _cols   = ["#d62728" if p["is_stopped"] else ("#2ca02c" if r >= 0 else "#ff7f0e")
+                for p, r in zip(_sorted, _Rs)]
+    _fig_r  = go.Figure(go.Bar(
+        y=_tks, x=_Rs, orientation="h", marker_color=_cols,
+        text=[f"{v:+.2f}R" for v in _Rs], textposition="outside",
+        hovertemplate="<b>%{y}</b><br>R = %{x:+.2f}<extra></extra>",
+    ))
+    _fig_r.update_layout(
+        title="持仓实时浮盈（R 倍数）— 红色 = 已触及止损",
+        xaxis_title="R 倍数",
+        height=max(400, len(_tks) * 28),
+        margin=dict(l=70, r=100, t=50, b=40),
+        template="plotly_white",
+        showlegend=False,
+    )
+    st.plotly_chart(_fig_r, use_container_width=True)
+else:
+    st.info("当前无持仓数据（Yahoo Finance 未能返回行情）。")
 
 st.markdown("---")
 
-# ── 四、模拟交易系统建设路线图 ────────────────────────────────────────────────
-st.subheader("四、模拟交易系统建设路线图")
+# ═══════════════════════════════════════════════════════════════════════════════
+# Section 3 — Trailing Stop Detail
+# ═══════════════════════════════════════════════════════════════════════════════
+st.subheader("三、移动止损明细")
+st.caption("止损价 = max(继承止损, 历史最高价 − 止损乘数 × ATR20)，只能向上棘轮，不能下调")
 
-col_a, col_b = st.columns(2)
-
-with col_a:
-    st.markdown("""
-**已完成 ✅**
-- 回测引擎（2000-01-03 → 2026-06-15）
-- 策略参数固化（Baseline 参数集）
-- 回测结果分析（本网站全部页面）
-- 继承持仓确认（20 只标的）
-""")
-
-with col_b:
-    st.markdown("""
-**开发中 🔧**
-- 每日 EOD 数据拉取管道（Tiingo API 自动化）
-- 信号生成脚本（每日收盘后运行）
-- 持仓跟踪数据库（SQLite / CSV 日志）
-- 本页面实时数据接入
-- 模拟盈亏 vs 回测对比图表
-""")
-
-st.markdown("""
-#### 模拟交易 vs 回测的预期差异
-
-| 来源 | 说明 |
-|------|------|
-| **数据时差** | 回测使用历史 EOD，模拟交易使用 T+0 EOD（同日数据） |
-| **滑点差异** | 回测按固定 10 bps 估算，实际成交滑点因流动性而异 |
-| **信号延迟** | 信号在收盘后生成，次日开盘按开盘价或指定价格执行 |
-| **分红 / 拆股** | Tiingo 数据已还原，实盘需同步调整持仓成本 |
-| **市场环境变化** | 2026 年后市场结构可能与回测历史存在差异 |
-""")
+if _ok:
+    _stop_rows = sorted(_ok, key=lambda x: x.get("stop_buffer_pct", 999))
+    _sd = pd.DataFrame([{
+        "标的":         p["ticker"],
+        "状态":         "🔴 触及" if p["is_stopped"] else "✅",
+        "入场价":       f"${p['entry_price']:.2f}",
+        "当前价":       f"${p['current_price']:.2f}",
+        "历史最高":     f"${p['peak_price']:.2f}",
+        "ATR(20)":      f"${p['current_atr']:.2f}",
+        "止损乘数":     f"{p['trail_mult']:.1f}×",
+        "当前止损价":   f"${p['current_stop']:.2f}",
+        "价格距止损":   f"{p['stop_buffer_pct']:.1f}%",
+    } for p in _stop_rows])
+    st.dataframe(_sd, use_container_width=True, hide_index=True)
 
 st.markdown("---")
 
-# ── 五、近期交易记录（回测最后30笔） ─────────────────────────────────────────
-st.subheader("五、近期平仓记录（回测最后 30 笔，供参考）")
+# ═══════════════════════════════════════════════════════════════════════════════
+# Section 4 — NAV History
+# ═══════════════════════════════════════════════════════════════════════════════
+if _nav_history:
+    st.subheader("四、模拟交易 NAV 走势")
+    _nh = pd.DataFrame(_nav_history)
+    _nh["date"] = pd.to_datetime(_nh["date"])
+    _nh = _nh.sort_values("date")
 
-_recent = trades[trades["exit_reason"] != "end_of_backtest"].sort_values("exit_date", ascending=False).head(30).copy()
-_recent["类别"]    = _recent["ticker"].apply(lambda t: "ETF" if t in _ETF_SET else "股票")
-_recent["退出方式"] = _recent["exit_reason"].map({
-    "trailing_stop": "追踪止损",
-    "stop_loss":     "初始止损",
-    "delisted":      "退市/并购",
-}).fillna(_recent["exit_reason"])
-_recent["R 倍数"] = _recent["pnl_r_multiple"].map(lambda v: f"{v:+.2f}R")
-_recent["净盈亏"] = _recent["net_pnl"].map(lambda v: f"${v:+,.0f}")
-_recent["入场日"] = _recent["entry_date"].dt.strftime("%Y-%m-%d")
-_recent["出场日"] = _recent["exit_date"].dt.strftime("%Y-%m-%d")
+    # Append today's live estimate if not already present
+    if _data_date != "N/A":
+        _today_dt = pd.to_datetime(_data_date)
+        if not (_nh["date"] == _today_dt).any():
+            _nh = pd.concat(
+                [_nh, pd.DataFrame([{"date": _today_dt, "nav": _est_nav}])],
+                ignore_index=True,
+            )
 
-st.dataframe(
-    _recent[["ticker", "类别", "入场日", "出场日", "holding_days",
-             "R 倍数", "净盈亏", "退出方式"]].rename(columns={
-        "ticker": "标的", "holding_days": "持仓天数"
-    }),
-    use_container_width=True,
-    hide_index=True,
-)
+    _norm = _nh["nav"] / _initial_nav
+    _fig_nav = go.Figure(go.Scatter(
+        x=_nh["date"], y=_norm,
+        mode="lines+markers",
+        line=dict(color="#1f77b4", width=2.5),
+        hovertemplate="%{x|%Y-%m-%d}<br>NAV: %{y:.3f}x<extra></extra>",
+    ))
+    _fig_nav.add_hline(y=1.0, line_dash="dash", line_color="gray", opacity=0.5,
+                        annotation_text="起始 NAV", annotation_position="right")
+    _fig_nav.update_layout(
+        title="模拟交易净值（相对起始 NAV）",
+        yaxis_title="NAV 倍数",
+        height=300,
+        margin=dict(l=60, r=20, t=50, b=40),
+        template="plotly_white",
+    )
+    st.plotly_chart(_fig_nav, use_container_width=True)
+    st.markdown("---")
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Section 5 — Closed Paper Trades
+# ═══════════════════════════════════════════════════════════════════════════════
+if _closed_trades:
+    st.subheader(f"五、模拟交易平仓记录（共 {len(_closed_trades)} 笔）")
+    _ct = pd.DataFrame(_closed_trades).sort_values("exit_date", ascending=False)
+    _ct["R 倍数"] = _ct["pnl_r"].map(lambda v: f"{v:+.2f}R")
+    _ct["净盈亏"] = _ct["net_pnl"].map(lambda v: f"${v:+,.0f}")
+    _ct["退出方式"] = _ct["exit_reason"].map({"trailing_stop": "追踪止损", "stop_loss": "初始止损"}).fillna(_ct["exit_reason"])
+    st.dataframe(
+        _ct[["ticker", "entry_date", "exit_date", "holding_days", "entry_price", "exit_price", "R 倍数", "净盈亏", "退出方式"]].rename(
+            columns={"ticker": "标的", "entry_date": "入场日", "exit_date": "出场日",
+                     "holding_days": "持仓天数", "entry_price": "入场价", "exit_price": "出场价"}
+        ),
+        use_container_width=True,
+        hide_index=True,
+    )
+    st.markdown("---")
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Section 6 — How to run daily updates (instructions)
+# ═══════════════════════════════════════════════════════════════════════════════
+with st.expander("📋 如何运行每日更新脚本", expanded=False):
+    st.markdown(f"""
+每个交易日收盘后（美东时间 4PM 之后），在项目根目录运行：
+
+```bash
+# 自动使用今天日期
+python src/scripts/paper_trading_daily.py
+
+# 指定日期（用于补跑）
+python src/scripts/paper_trading_daily.py --date 2026-06-20
+
+# 跳过新开仓扫描（只更新止损 / 检查出场）
+python src/scripts/paper_trading_daily.py --no-entries
+```
+
+运行后将更新 `results/paper_trading/positions.json`，**提交并推送到 GitHub** 后，本页面自动更新：
+
+```bash
+git add results/paper_trading/positions.json
+git commit -m "paper trading: update YYYY-MM-DD"
+git push
+```
+
+**状态文件位置：** `results/paper_trading/positions.json`
+**起始 NAV：** ${_initial_nav/1e6:.2f}M（回测结束日 {_state.get('backtest_end_date', '2026-06-15')}）
+**继承持仓：** {len(_state['positions'])} 只（从回测 end_of_backtest 持仓继承）
+""")
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Section 7 — Backtest reference (collapsed)
+# ═══════════════════════════════════════════════════════════════════════════════
+with st.expander("📊 回测基准参考（策略1.0历史绩效 2000–2026）", expanded=False):
+    @st.cache_data(ttl=86400)
+    def _load_bt() -> tuple:
+        with open(_results / "metrics.json") as f:
+            m = json.load(f)
+        nav = pd.read_csv(_results / "nav.csv", index_col=0, parse_dates=True)
+        spy = pd.read_csv(_results / "spy_nav.csv", index_col=0, parse_dates=True)
+        return m, nav, spy
+
+    _bm, _bt_nav, _bt_spy = _load_bt()
+    bm1, bm2, bm3, bm4 = st.columns(4)
+    bm1.metric("CAGR",    f"{_bm.get('cagr', 0)*100:.2f}%", help="2000-01-03 → 2026-06-15")
+    bm2.metric("最大回撤", f"{_bm.get('max_drawdown', 0)*100:.2f}%")
+    bm3.metric("Sharpe",   f"{_bm.get('sharpe', 0):.3f}")
+    bm4.metric("Calmar",   f"{_bm.get('calmar', 0):.3f}")
+
+    _nn = _bt_nav["nav"]
+    _ss = _bt_spy["spy_nav"]
+    _fig_ref = make_subplots(rows=2, cols=1, shared_xaxes=True,
+                              row_heights=[0.65, 0.35], vertical_spacing=0.05)
+    _fig_ref.add_trace(go.Scatter(x=_nn.index, y=_nn / _nn.iloc[0], name="策略1.0",
+                                   line=dict(color="#1f77b4", width=2)), row=1, col=1)
+    _fig_ref.add_trace(go.Scatter(x=_ss.index, y=_ss / _ss.iloc[0], name="SPY",
+                                   line=dict(color="#888", width=1.2, dash="dash")), row=1, col=1)
+    _dd = (_nn - _nn.cummax()) / _nn.cummax() * 100
+    _fig_ref.add_trace(go.Scatter(x=_dd.index, y=_dd.values, fill="tozeroy",
+                                   fillcolor="rgba(214,39,40,0.2)",
+                                   line=dict(color="#d62728", width=1),
+                                   showlegend=False), row=2, col=1)
+    _fig_ref.update_layout(
+        height=450, template="plotly_white", hovermode="x unified",
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        margin=dict(l=60, r=20, t=40, b=40),
+    )
+    _fig_ref.update_yaxes(ticksuffix="x", title_text="净值（倍）", row=1, col=1)
+    _fig_ref.update_yaxes(ticksuffix="%", title_text="回撤", row=2, col=1)
+    st.plotly_chart(_fig_ref, use_container_width=True)
