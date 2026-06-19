@@ -139,31 +139,17 @@ with tab1:
     def _load_m1():
         if _m1_file.exists():
             return json.loads(_m1_file.read_text()), False
-        # Fallback from backtest
-        open_pos = _bt_trades[_bt_trades["exit_reason"] == "end_of_backtest"].copy()
-        nav_df   = pd.read_csv(_results / "nav.csv", index_col=0, parse_dates=True)
-        init_nav = float(nav_df["nav"].iloc[-1])
-        mkt_val  = float((open_pos["exit_price"] * open_pos["shares"]).sum())
-        positions = []
-        for _, r in open_pos.iterrows():
-            positions.append({
-                "ticker": r["ticker"], "entry_date": str(r["entry_date"].date()),
-                "entry_price": float(r["entry_price"]), "shares": int(r["shares"]),
-                "initial_stop_loss": float(r["stop_loss"]),
-                "current_stop_loss": float(r["stop_loss"]),
-                "peak_price": float(r["exit_price"]), "atr_at_entry": float(r["atr_at_entry"]),
-                "R_at_backtest_end": float(r["pnl_r_multiple"]),
-                "last_known_price": float(r["exit_price"]), "last_price_date": "2026-06-15",
-            })
+        # Fallback: empty $200K fresh state
         return {
-            "initial_nav": round(init_nav, 2), "cash": round(init_nav - mkt_val, 2),
-            "positions": positions, "closed_trades": [], "nav_history": [{"date": "2026-06-15", "nav": round(init_nav, 2)}],
-            "last_update_date": "2026-06-15",
+            "initial_nav": 200000.0, "cash": 200000.0,
+            "positions": [], "closed_trades": [],
+            "nav_history": [{"date": "2026-06-19", "nav": 200000.0}],
+            "last_update_date": "尚未运行",
         }, True
 
     _m1, _m1_fallback = _load_m1()
     if _m1_fallback:
-        st.info("ℹ️ 从回测结果初始化（positions.json 未找到）")
+        st.info("ℹ️ positions.json 尚未生成，等待 GitHub Actions 首次运行后自动创建。")
 
     _m1_positions = [p for p in _m1["positions"] if not p.get("closed")]
     _m1_closed    = _m1.get("closed_trades", [])
