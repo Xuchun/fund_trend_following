@@ -1587,10 +1587,11 @@ import numpy as _np_ks
 import pandas as _pd_ks
 
 _SIM_CSV = _results_path / "all_signals_simulated.csv"
+_SIM_MTIME = int(_SIM_CSV.stat().st_mtime) if _SIM_CSV.exists() else 0
 
 @st.cache_data(ttl=86400)
-def _load_sim_signals():
-    if not _SIM_CSV.exists():
+def _load_sim_signals(_mtime: int):
+    if _mtime == 0:
         return None
     _df = _pd_ks.read_csv(_SIM_CSV, parse_dates=["signal_date", "entry_date", "exit_date"])
     return _df[~_df["gap_filtered"]].reset_index(drop=True)
