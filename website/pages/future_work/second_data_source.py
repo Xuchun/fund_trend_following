@@ -1,5 +1,13 @@
 """是否购买第二家数据源"""
 
+import sys
+from pathlib import Path
+_root = Path(__file__).resolve().parents[3]
+if str(_root) not in sys.path:
+    sys.path.insert(0, str(_root))
+
+import pandas as pd
+import plotly.graph_objects as go
 import streamlit as st
 
 st.title("是否购买第二家数据源？")
@@ -8,6 +16,79 @@ st.markdown("""
 特有的数据质量问题（价格尖峰、复权系数跳变、退市数据缺失等）所造成的假象？
 以下评估是否有必要购买第二家数据源重跑同一套策略。
 """)
+
+st.markdown("---")
+
+# ── Tiingo Data Quality Visualization ────────────────────────────────────────
+st.subheader("Tiingo 数据质量现状（基于全量 15,255 个标的扫描）")
+
+_qr_path = _root / "data" / "cache" / "tiingo_quality_report.csv"
+if _qr_path.exists():
+    _qr = pd.read_csv(_qr_path)
+    _total = len(_qr)
+    _has_spike   = int((_qr["price_spikes"] > 0).sum())
+    _has_adj     = int((_qr["adj_jump_rows"] > 0).sum())
+    _has_zerovol = int((_qr["zero_vol_days"] > 0).sum())
+    _clean       = int(((_qr["price_spikes"] == 0) & (_qr["adj_jump_rows"] == 0)).sum())
+
+    _col1, _col2, _col3, _col4 = st.columns(4)
+    _col1.metric("总覆盖标的数", f"{_total:,}")
+    _col2.metric("完全无异常", f"{_clean:,}", f"{_clean/_total*100:.0f}%")
+    _col3.metric("价格尖峰异常", f"{_has_spike:,}", f"{_has_spike/_total*100:.0f}%", delta_color="inverse")
+    _col4.metric("复权系数跳变", f"{_has_adj:,}", f"{_has_adj/_total*100:.0f}%", delta_color="inverse")
+
+    # Donut chart: issue breakdown
+    _fig_qual = go.Figure(go.Pie(
+        labels=["无异常（已过滤）", "含价格尖峰", "含复权跳变", "仅含零量日"],
+        values=[_clean,
+                _has_spike - int(((_qr["price_spikes"] > 0) & (_qr["adj_jump_rows"] > 0)).sum()),
+                _has_adj - int(((_qr["price_spikes"] > 0) & (_qr["adj_jump_rows"] > 0)).sum()),
+                int(((_qr["price_spikes"] == 0) & (_qr["adj_jump_rows"] == 0) & (_qr["zero_vol_days"] > 0)).sum()),
+               ],
+        hole=0.5,
+        marker_colors=["#22c55e", "#f97316", "#ef4444", "#fbbf24"],
+    ))
+    _fig_qual.update_layout(
+        title=f"Tiingo 全量标的数据质量分布（共 {_total:,} 个）",
+        height=360,
+        margin=dict(t=50, b=10),
+        legend=dict(orientation="h", y=-0.1),
+        annotations=[dict(text=f"{_clean/_total*100:.0f}%<br>无异常", x=0.5, y=0.5, showarrow=False, font_size=14)],
+    )
+    st.plotly_chart(_fig_qual, use_container_width=True)
+
+    # Price spike count distribution
+    _sp_dist = _qr[_qr["price_spikes"] > 0]["price_spikes"].clip(upper=10)
+    _sp_vcnt = _sp_dist.value_counts().sort_index()
+    _sp_xcnt = int((_qr["price_spikes"] > 10).sum())
+    _sp_labels = [str(i) for i in _sp_vcnt.index] + ["11+"]
+    _sp_vals   = list(_sp_vcnt.values) + [_sp_xcnt]
+
+    _fig_sp = go.Figure(go.Bar(
+        x=_sp_labels,
+        y=_sp_vals,
+        marker_color="#f97316",
+        text=[str(v) for v in _sp_vals],
+        textposition="outside",
+    ))
+    _fig_sp.update_layout(
+        title="含价格尖峰的标的：尖峰数量分布",
+        xaxis_title="价格尖峰次数",
+        yaxis_title="标的数量",
+        height=300,
+        margin=dict(t=50, b=40),
+    )
+    st.plotly_chart(_fig_sp, use_container_width=True)
+
+    st.info(
+        f"**策略1.0的处理方式：** 引擎在回测前会扫描每个标的的价格序列，"
+        f"对 {_has_spike:,} 个含价格尖峰的标的进行打标——极端异常价格（偏离均值超过 5σ）"
+        "会被替换为前一日收盘价，不产生虚假突破信号。"
+        f"同样，{_has_adj:,} 个含复权跳变的标的已在回测引擎中特殊处理，"
+        "不会因复权调整不连续而触发错误信号。"
+    )
+else:
+    st.info("Tiingo 数据质量报告文件未找到。")
 
 st.markdown("---")
 
