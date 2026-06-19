@@ -349,7 +349,11 @@ def main() -> None:
 
             trade_info = _simulate_trade(d, si)
 
-            is_executed = (ticker, ts_pd) in executed
+            # Match to executed trades using entry_date (t+1), not signal_date (t)
+            sim_entry_date = None
+            if not trade_info.get("gap_filtered", True) and "entry_date" in trade_info:
+                sim_entry_date = pd.Timestamp(trade_info["entry_date"]).normalize()
+            is_executed = (ticker, sim_entry_date) in executed if sim_entry_date else False
 
             row = {
                 "ticker":       ticker,
@@ -361,7 +365,7 @@ def main() -> None:
             }
             if not trade_info.get("gap_filtered", True):
                 row.update({
-                    "entry_date":  pd.Timestamp(trade_info["entry_date"]).normalize(),
+                    "entry_date":  sim_entry_date,
                     "entry_price": trade_info["entry_price"],
                     "stop_loss":   trade_info["stop_loss"],
                     "R":           trade_info["R"],
