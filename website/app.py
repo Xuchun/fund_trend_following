@@ -76,6 +76,7 @@ pg = st.navigation(
             st.Page(_fw / "improve_cagr.py",              title="如何提高年化收益",        icon="🚀"),
             st.Page(_fw / "reduce_large_losses.py",       title="如何减少大R的亏损交易",  icon="🛡️"),
             st.Page(_fw / "reduce_consecutive_losses.py", title="如何降低连续亏损次数",    icon="📉"),
+            st.Page(_fw / "breakeven_drawdown.py",        title="如何用平价保护改善最大回撤", icon="🛡️"),
             st.Page(_fw / "reduce_max_drawdown.py",       title="如何降低最大回撤",        icon="📉"),
             st.Page(_fw / "improve_universe.py",          title="如何改进数据与标的池",    icon="🔬"),
             st.Page(_fw / "improve_methodology.py",      title="如何改进回测方法论",       icon="🧪"),
