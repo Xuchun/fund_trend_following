@@ -78,6 +78,7 @@ pg = st.navigation(
             st.Page(_fw / "reduce_max_drawdown.py",       title="如何降低最大回撤",        icon="📉"),
             st.Page(_fw / "holding_days_advice.py",       title="有关持仓天数的建议",      icon="📅"),
             st.Page(_fw / "reduce_deep_drawdown.py",      title="如何减少深度回撤幅度",    icon="🔻"),
+            st.Page(_fw / "improve_capital_utilization.py", title="提高熊市资金使用率",    icon="📈"),
         ],
         "策略2.0（开发中）": [
             st.Page(_v2 / "strategy_logic_v2.py",        title="策略描述",       icon="📐"),
