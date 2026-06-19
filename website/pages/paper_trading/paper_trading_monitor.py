@@ -11,70 +11,26 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-_results = _root / "results" / "v1_unbiased_60m_2000"
-_pt_file = _root / "results" / "paper_trading" / "positions.json"
+_results  = _root / "results" / "v1_unbiased_60m_2000"
+_pt_dir   = _root / "results" / "paper_trading"
+_m1_file  = _pt_dir / "positions.json"
+_m2_file  = _pt_dir / "ib_state.json"
 
-# ── Strategy constants ────────────────────────────────────────────────────────
 _TRAIL_R1   = 3.0
 _TRAIL_R3   = 3.0
 _TRAIL_R5   = 5.0
 _ATR_PERIOD = 20
 _SMA_WINDOW = 200
 
-# ── Page header ───────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
 st.title("策略1.0 模拟交易监控")
-st.caption("数据来源：Yahoo Finance（每小时自动刷新）| 止损价格基于最新 ATR-20 实时计算")
+st.caption("同时运行两种模拟交易方法，互相验证信号与执行质量")
 
-# ── Load paper trading state (fallback: build from backtest data) ─────────────
-@st.cache_data(ttl=86400)
-def _load_pt_state():
-    if _pt_file.exists():
-        return json.loads(_pt_file.read_text()), False
-    # Fallback: build initial state from backtest trades + nav
-    trades = pd.read_csv(_results / "trades.csv", parse_dates=["entry_date", "exit_date"])
-    nav_df = pd.read_csv(_results / "nav.csv", index_col=0, parse_dates=True)
-    open_pos = trades[trades["exit_reason"] == "end_of_backtest"].copy()
-    initial_nav = float(nav_df["nav"].iloc[-1])
-    market_value = float((open_pos["exit_price"] * open_pos["shares"]).sum())
-    cash = initial_nav - market_value
-    positions = []
-    for _, r in open_pos.iterrows():
-        positions.append({
-            "ticker":            r["ticker"],
-            "entry_date":        str(r["entry_date"].date()),
-            "entry_price":       float(r["entry_price"]),
-            "shares":            int(r["shares"]),
-            "initial_stop_loss": float(r["stop_loss"]),
-            "current_stop_loss": float(r["stop_loss"]),
-            "peak_price":        float(r["exit_price"]),
-            "atr_at_entry":      float(r["atr_at_entry"]),
-            "R_at_backtest_end": float(r["pnl_r_multiple"]),
-            "last_known_price":  float(r["exit_price"]),
-            "last_price_date":   "2026-06-15",
-        })
-    state = {
-        "schema_version": 1, "initialized_from": "backtest_end",
-        "backtest_end_date": "2026-06-15", "last_update_date": "2026-06-15",
-        "initial_nav": round(initial_nav, 2), "cash": round(cash, 2),
-        "positions": positions, "closed_trades": [],
-        "nav_history": [{"date": "2026-06-15", "nav": round(initial_nav, 2)}],
-    }
-    return state, True   # True = fallback mode
+tab1, tab2 = st.tabs(["📊 方法一：手动跟踪（Yahoo Finance）", "🤖 方法二：IB 自动交易（Interactive Brokers）"])
 
-_state, _fallback = _load_pt_state()
-if _fallback:
-    st.info("ℹ️ 使用回测继承数据（positions.json 未找到，正在从回测结果初始化）")
-
-_positions     = [p for p in _state["positions"] if not p.get("closed")]
-_closed_trades = _state.get("closed_trades", [])
-_nav_history   = _state.get("nav_history", [])
-_last_update   = _state.get("last_update_date", "N/A")
-_initial_nav   = _state["initial_nav"]
-_cash          = _state.get("cash", 0.0)
-
-# ── Yahoo Finance data ────────────────────────────────────────────────────────
-_pos_tickers = [p["ticker"] for p in _positions]
-_all_tickers = tuple(sorted(set(_pos_tickers + ["SPY"])))
+# ═══════════════════════════════════════════════════════════════════════════════
+# ── Shared helpers ─────────────────────────────────────────────────────────
+# ═══════════════════════════════════════════════════════════════════════════════
 
 @st.cache_data(ttl=3600)
 def _fetch_yf(tickers: tuple, period: str = "300d") -> pd.DataFrame:
@@ -83,24 +39,20 @@ def _fetch_yf(tickers: tuple, period: str = "300d") -> pd.DataFrame:
         return pd.DataFrame()
     return yf.download(list(tickers), period=period, auto_adjust=True, progress=False)
 
-with st.spinner("从 Yahoo Finance 加载最新行情…"):
-    _yf_raw = _fetch_yf(_all_tickers, period="300d")
 
-
-def _get_df(ticker: str) -> pd.DataFrame | None:
-    if _yf_raw.empty:
+def _get_df(raw: pd.DataFrame, ticker: str):
+    if raw.empty:
         return None
-    if isinstance(_yf_raw.columns, pd.MultiIndex):
-        if ticker not in _yf_raw.columns.get_level_values(1):
+    if isinstance(raw.columns, pd.MultiIndex):
+        if ticker not in raw.columns.get_level_values(1):
             return None
-        df = _yf_raw.xs(ticker, level=1, axis=1).dropna(subset=["Close"])
+        df = raw.xs(ticker, level=1, axis=1).dropna(subset=["Close"])
     else:
-        df = _yf_raw.dropna(subset=["Close"])
+        df = raw.dropna(subset=["Close"])
     return df if not df.empty else None
 
 
-# ── ATR (Wilder) ─────────────────────────────────────────────────────────────
-def _wilder_atr(high: pd.Series, low: pd.Series, close: pd.Series, period: int = 20) -> pd.Series:
+def _wilder_atr(high, low, close, period=20):
     tr = pd.concat(
         [high - low,
          (high - close.shift(1)).abs(),
@@ -110,9 +62,9 @@ def _wilder_atr(high: pd.Series, low: pd.Series, close: pd.Series, period: int =
     return tr.ewm(alpha=1 / period, adjust=False, min_periods=period).mean()
 
 
-# ── Live position enrichment ──────────────────────────────────────────────────
-def _enrich(pos: dict) -> dict:
-    df = _get_df(pos["ticker"])
+def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
+    """Add live price + computed trailing stop to a position dict."""
+    df = _get_df(raw_yf, pos["ticker"])
     if df is None:
         return {**pos, "_ok": False}
 
@@ -132,15 +84,13 @@ def _enrich(pos: dict) -> dict:
 
     risk = pos["entry_price"] - pos["initial_stop_loss"]
     R    = (cur_price - pos["entry_price"]) / risk if risk > 0 else 0.0
+    tm   = _TRAIL_R5 if R >= 3.0 else (_TRAIL_R3 if R >= 1.0 else _TRAIL_R1)
+    stop = max(pos["current_stop_loss"], peak_price - tm * cur_atr)
 
-    trail_mult = _TRAIL_R5 if R >= 3.0 else (_TRAIL_R3 if R >= 1.0 else _TRAIL_R1)
-    new_stop   = peak_price - trail_mult * cur_atr
-    cur_stop   = max(pos["current_stop_loss"], new_stop)
-
-    mkt_value      = cur_price * pos["shares"]
-    unreal_pnl     = (cur_price - pos["entry_price"]) * pos["shares"]
-    stop_buffer_pct = (cur_price - cur_stop) / cur_price * 100
-    is_stopped     = cur_price <= cur_stop
+    mkt_val    = cur_price * pos["shares"]
+    unreal     = (cur_price - pos["entry_price"]) * pos["shares"]
+    buf_pct    = (cur_price - stop) / cur_price * 100
+    is_stopped = cur_price <= stop
 
     return {
         **pos,
@@ -149,294 +99,492 @@ def _enrich(pos: dict) -> dict:
         "current_date":   cur_date,
         "peak_price":     peak_price,
         "current_atr":    cur_atr,
-        "current_stop":   cur_stop,
-        "trail_mult":     trail_mult,
+        "current_stop":   stop,
+        "trail_mult":     tm,
         "R":              R,
-        "mkt_value":      mkt_value,
-        "unreal_pnl":     unreal_pnl,
-        "stop_buffer_pct": stop_buffer_pct,
+        "mkt_value":      mkt_val,
+        "unreal_pnl":     unreal,
+        "stop_buffer_pct": buf_pct,
         "is_stopped":     is_stopped,
     }
 
 
-_live = [_enrich(p) for p in _positions]
-_ok   = [p for p in _live if p["_ok"]]
-_active  = [p for p in _ok if not p["is_stopped"]]
-_stopped = [p for p in _ok if p["is_stopped"]]
+@st.cache_data(ttl=86400)
+def _load_bt():
+    with open(_results / "metrics.json") as f:
+        m = json.load(f)
+    nav = pd.read_csv(_results / "nav.csv", index_col=0, parse_dates=True)
+    spy = pd.read_csv(_results / "spy_nav.csv", index_col=0, parse_dates=True)
+    trades = pd.read_csv(_results / "trades.csv", parse_dates=["entry_date", "exit_date"])
+    return m, nav, spy, trades
 
-# ── SPY regime ────────────────────────────────────────────────────────────────
-_spy_df    = _get_df("SPY")
-_spy_close = None
-_spy_sma   = None
-_bull      = False
-if _spy_df is not None and len(_spy_df) >= _SMA_WINDOW:
-    _spy_close = float(_spy_df["Close"].iloc[-1])
-    _spy_sma   = float(_spy_df["Close"].rolling(_SMA_WINDOW).mean().iloc[-1])
-    _bull      = _spy_close > _spy_sma
 
-# ── NAV estimate ──────────────────────────────────────────────────────────────
-_total_mkt    = sum(p["mkt_value"] for p in _ok)
-_total_unreal = sum(p["unreal_pnl"] for p in _ok)
-_est_nav      = _total_mkt + _cash
-_data_date    = max((p.get("current_date", "") for p in _ok), default="N/A")
+_bm, _bt_nav, _bt_spy, _bt_trades = _load_bt()
+
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# Section 1 — Overview
+# TAB 1 — 方法一：手动跟踪（Yahoo Finance）
 # ═══════════════════════════════════════════════════════════════════════════════
-st.subheader("一、策略状态概览")
-st.caption(f"行情日期：{_data_date} ｜ 上次日常更新：{_last_update} ｜ Yahoo Finance（1小时缓存）")
 
-c1, c2, c3, c4 = st.columns(4)
-c1.metric(
-    "模拟交易 NAV（估算）",
-    f"${_est_nav / 1e6:.2f}M",
-    delta=f"{(_est_nav / _initial_nav - 1) * 100:+.2f}% vs 起始",
-    help=f"持仓市值 ${_total_mkt/1e6:.2f}M + 现金 ${_cash/1e6:.2f}M",
-)
-c2.metric(
-    "当前持仓",
-    f"{len(_active)} 只",
-    delta=f"触及止损 {len(_stopped)} 只" if _stopped else None,
-    delta_color="inverse" if _stopped else "normal",
-)
-c3.metric(
-    "持仓浮盈",
-    f"${_total_unreal / 1e6:+.2f}M",
-    delta=f"{_total_unreal / _est_nav * 100:+.1f}% NAV" if _est_nav else None,
-    help="持仓当前市值 − 入场成本（未扣除佣金）",
-)
-c4.metric(
-    "现金",
-    f"${_cash / 1e6:.2f}M",
-    help="可用于新开仓的现金（每次止损出场后增加）",
-)
+with tab1:
+    st.markdown("""
+    **运行方式：** 每个交易日收盘后在本地运行 `python src/scripts/paper_trading_daily.py`，
+    将更新后的 `results/paper_trading/positions.json` 推送到 GitHub，本页面自动刷新。
 
-# ── Regime status ─────────────────────────────────────────────────────────────
-st.markdown("#### 市场环境（Regime Filter）")
-_rc1, _rc2 = st.columns([1, 3])
-with _rc1:
-    if _bull:
-        st.markdown(
-            '<div style="background:#2ca02c;color:white;padding:18px 24px;border-radius:10px;'
-            'text-align:center;font-size:18px;font-weight:bold;">✅ 允许开仓</div>',
-            unsafe_allow_html=True,
-        )
-    else:
-        st.markdown(
-            '<div style="background:#d62728;color:white;padding:18px 24px;border-radius:10px;'
-            'text-align:center;font-size:18px;font-weight:bold;">🚫 暂停开仓</div>',
-            unsafe_allow_html=True,
-        )
-with _rc2:
-    if _spy_close and _spy_sma:
-        _gap = (_spy_close / _spy_sma - 1) * 100
+    **初始资金：** 继承自回测结束（2026-06-15）的真实持仓，NAV ≈ $136.39M
+    """)
+
+    # ── Load Method 1 state ──────────────────────────────────────────────────
+    @st.cache_data(ttl=86400)
+    def _load_m1():
+        if _m1_file.exists():
+            return json.loads(_m1_file.read_text()), False
+        # Fallback from backtest
+        open_pos = _bt_trades[_bt_trades["exit_reason"] == "end_of_backtest"].copy()
+        nav_df   = pd.read_csv(_results / "nav.csv", index_col=0, parse_dates=True)
+        init_nav = float(nav_df["nav"].iloc[-1])
+        mkt_val  = float((open_pos["exit_price"] * open_pos["shares"]).sum())
+        positions = []
+        for _, r in open_pos.iterrows():
+            positions.append({
+                "ticker": r["ticker"], "entry_date": str(r["entry_date"].date()),
+                "entry_price": float(r["entry_price"]), "shares": int(r["shares"]),
+                "initial_stop_loss": float(r["stop_loss"]),
+                "current_stop_loss": float(r["stop_loss"]),
+                "peak_price": float(r["exit_price"]), "atr_at_entry": float(r["atr_at_entry"]),
+                "R_at_backtest_end": float(r["pnl_r_multiple"]),
+                "last_known_price": float(r["exit_price"]), "last_price_date": "2026-06-15",
+            })
+        return {
+            "initial_nav": round(init_nav, 2), "cash": round(init_nav - mkt_val, 2),
+            "positions": positions, "closed_trades": [], "nav_history": [{"date": "2026-06-15", "nav": round(init_nav, 2)}],
+            "last_update_date": "2026-06-15",
+        }, True
+
+    _m1, _m1_fallback = _load_m1()
+    if _m1_fallback:
+        st.info("ℹ️ 从回测结果初始化（positions.json 未找到）")
+
+    _m1_positions = [p for p in _m1["positions"] if not p.get("closed")]
+    _m1_closed    = _m1.get("closed_trades", [])
+    _m1_history   = _m1.get("nav_history", [])
+    _m1_cash      = _m1.get("cash", 0.0)
+    _m1_init_nav  = _m1["initial_nav"]
+    _m1_last_upd  = _m1.get("last_update_date", "N/A")
+
+    # ── Fetch live prices ────────────────────────────────────────────────────
+    _m1_tickers = tuple(sorted(set([p["ticker"] for p in _m1_positions] + ["SPY"])))
+    with st.spinner("从 Yahoo Finance 加载行情…"):
+        _m1_raw = _fetch_yf(_m1_tickers, "300d")
+
+    _m1_live = [_enrich_position(p, _m1_raw) for p in _m1_positions]
+    _m1_ok   = [p for p in _m1_live if p.get("_ok")]
+    _m1_act  = [p for p in _m1_ok if not p["is_stopped"]]
+    _m1_stop = [p for p in _m1_ok if p["is_stopped"]]
+
+    # SPY regime
+    _spy_df    = _get_df(_m1_raw, "SPY")
+    _spy_close = None; _spy_sma = None; _bull = False
+    if _spy_df is not None and len(_spy_df) >= _SMA_WINDOW:
+        _spy_close = float(_spy_df["Close"].iloc[-1])
+        _spy_sma   = float(_spy_df["Close"].rolling(_SMA_WINDOW).mean().iloc[-1])
+        _bull      = _spy_close > _spy_sma
+
+    _m1_mkt  = sum(p["mkt_value"] for p in _m1_ok)
+    _m1_unrl = sum(p["unreal_pnl"] for p in _m1_ok)
+    _m1_nav  = _m1_mkt + _m1_cash
+    _m1_date = max((p.get("current_date", "") for p in _m1_ok), default="N/A")
+
+    # ── Overview ─────────────────────────────────────────────────────────────
+    st.subheader("一、策略状态概览")
+    st.caption(f"行情日期：{_m1_date} ｜ 上次更新：{_m1_last_upd} ｜ Yahoo Finance（1小时缓存）")
+
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("模拟 NAV（估算）", f"${_m1_nav/1e6:.2f}M",
+              delta=f"{(_m1_nav/_m1_init_nav-1)*100:+.2f}% vs 起始")
+    c2.metric("持仓数量", f"{len(_m1_act)} 只",
+              delta=f"触止损 {len(_m1_stop)} 只" if _m1_stop else None,
+              delta_color="inverse" if _m1_stop else "normal")
+    c3.metric("持仓浮盈", f"${_m1_unrl/1e6:+.2f}M",
+              delta=f"{_m1_unrl/_m1_nav*100:+.1f}% NAV" if _m1_nav else None)
+    c4.metric("现金", f"${_m1_cash/1e6:.2f}M")
+
+    # Regime badge
+    st.markdown("#### Regime Filter")
+    _rc1, _rc2 = st.columns([1, 3])
+    with _rc1:
         if _bull:
-            st.success(f"SPY ${_spy_close:.2f} ＞ SMA200 ${_spy_sma:.2f}（高出 {_gap:+.1f}%）→ Regime 通过，允许新开仓")
+            st.markdown('<div style="background:#2ca02c;color:white;padding:14px 20px;border-radius:8px;text-align:center;font-weight:bold;">✅ 允许开仓</div>', unsafe_allow_html=True)
         else:
-            st.error(f"SPY ${_spy_close:.2f} ＜ SMA200 ${_spy_sma:.2f}（低 {abs(_gap):.1f}%）→ Regime 拦截，暂停新开仓")
-    else:
-        st.warning("无法获取 SPY 数据，Regime 状态未知")
+            st.markdown('<div style="background:#d62728;color:white;padding:14px 20px;border-radius:8px;text-align:center;font-weight:bold;">🚫 暂停开仓</div>', unsafe_allow_html=True)
+    with _rc2:
+        if _spy_close and _spy_sma:
+            gap = (_spy_close / _spy_sma - 1) * 100
+            msg = f"SPY ${_spy_close:.2f} {'＞' if _bull else '＜'} SMA200 ${_spy_sma:.2f}（{gap:+.1f}%）"
+            (st.success if _bull else st.error)(msg)
+        else:
+            st.warning("无法获取 SPY 数据")
 
-st.markdown("---")
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# Section 2 — Live Positions
-# ═══════════════════════════════════════════════════════════════════════════════
-st.subheader("二、当前持仓实时状态（Yahoo Finance）")
-
-if _stopped:
-    st.warning(f"⚠️ **{len(_stopped)} 只持仓已触及移动止损** — 当前价 ≤ 当前止损价，建议执行止损出场。")
-
-if _ok:
-    _rows = []
-    for p in sorted(_ok, key=lambda x: x.get("R", 0), reverse=True):
-        _rows.append({
-            "标的":      p["ticker"],
-            "状态":      "🔴 触及止损" if p["is_stopped"] else "🟢 持有",
-            "入场日":    p["entry_date"],
-            "入场价":    f"${p['entry_price']:.2f}",
-            "当前价":    f"${p['current_price']:.2f}",
-            "移动止损":  f"${p['current_stop']:.2f}",
-            "止损缓冲":  f"{p['stop_buffer_pct']:.1f}%",
-            "浮盈 R":    f"{p['R']:+.2f}R",
-            "浮盈 $":    f"${p['unreal_pnl']:+,.0f}",
-            "市值":      f"${p['mkt_value']/1e3:.0f}K",
-            "股数":      f"{p['shares']:,}",
-        })
-    st.dataframe(pd.DataFrame(_rows), use_container_width=True, hide_index=True)
-
-    # R-multiple bar chart
-    _sorted = sorted(_ok, key=lambda x: x.get("R", 0), reverse=True)
-    _tks    = [p["ticker"] for p in _sorted]
-    _Rs     = [p["R"] for p in _sorted]
-    _cols   = ["#d62728" if p["is_stopped"] else ("#2ca02c" if r >= 0 else "#ff7f0e")
-                for p, r in zip(_sorted, _Rs)]
-    _fig_r  = go.Figure(go.Bar(
-        y=_tks, x=_Rs, orientation="h", marker_color=_cols,
-        text=[f"{v:+.2f}R" for v in _Rs], textposition="outside",
-        hovertemplate="<b>%{y}</b><br>R = %{x:+.2f}<extra></extra>",
-    ))
-    _fig_r.update_layout(
-        title="持仓实时浮盈（R 倍数）— 红色 = 已触及止损",
-        xaxis_title="R 倍数",
-        height=max(400, len(_tks) * 28),
-        margin=dict(l=70, r=100, t=50, b=40),
-        template="plotly_white",
-        showlegend=False,
-    )
-    st.plotly_chart(_fig_r, use_container_width=True)
-else:
-    st.info("当前无持仓数据（Yahoo Finance 未能返回行情）。")
-
-st.markdown("---")
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# Section 3 — Trailing Stop Detail
-# ═══════════════════════════════════════════════════════════════════════════════
-st.subheader("三、移动止损明细")
-st.caption("止损价 = max(继承止损, 历史最高价 − 止损乘数 × ATR20)，只能向上棘轮，不能下调")
-
-if _ok:
-    _stop_rows = sorted(_ok, key=lambda x: x.get("stop_buffer_pct", 999))
-    _sd = pd.DataFrame([{
-        "标的":         p["ticker"],
-        "状态":         "🔴 触及" if p["is_stopped"] else "✅",
-        "入场价":       f"${p['entry_price']:.2f}",
-        "当前价":       f"${p['current_price']:.2f}",
-        "历史最高":     f"${p['peak_price']:.2f}",
-        "ATR(20)":      f"${p['current_atr']:.2f}",
-        "止损乘数":     f"{p['trail_mult']:.1f}×",
-        "当前止损价":   f"${p['current_stop']:.2f}",
-        "价格距止损":   f"{p['stop_buffer_pct']:.1f}%",
-    } for p in _stop_rows])
-    st.dataframe(_sd, use_container_width=True, hide_index=True)
-
-st.markdown("---")
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# Section 4 — NAV History
-# ═══════════════════════════════════════════════════════════════════════════════
-if _nav_history:
-    st.subheader("四、模拟交易 NAV 走势")
-    _nh = pd.DataFrame(_nav_history)
-    _nh["date"] = pd.to_datetime(_nh["date"])
-    _nh = _nh.sort_values("date")
-
-    # Append today's live estimate if not already present
-    if _data_date != "N/A":
-        _today_dt = pd.to_datetime(_data_date)
-        if not (_nh["date"] == _today_dt).any():
-            _nh = pd.concat(
-                [_nh, pd.DataFrame([{"date": _today_dt, "nav": _est_nav}])],
-                ignore_index=True,
-            )
-
-    _norm = _nh["nav"] / _initial_nav
-    _fig_nav = go.Figure(go.Scatter(
-        x=_nh["date"], y=_norm,
-        mode="lines+markers",
-        line=dict(color="#1f77b4", width=2.5),
-        hovertemplate="%{x|%Y-%m-%d}<br>NAV: %{y:.3f}x<extra></extra>",
-    ))
-    _fig_nav.add_hline(y=1.0, line_dash="dash", line_color="gray", opacity=0.5,
-                        annotation_text="起始 NAV", annotation_position="right")
-    _fig_nav.update_layout(
-        title="模拟交易净值（相对起始 NAV）",
-        yaxis_title="NAV 倍数",
-        height=300,
-        margin=dict(l=60, r=20, t=50, b=40),
-        template="plotly_white",
-    )
-    st.plotly_chart(_fig_nav, use_container_width=True)
     st.markdown("---")
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# Section 5 — Closed Paper Trades
-# ═══════════════════════════════════════════════════════════════════════════════
-if _closed_trades:
-    st.subheader(f"五、模拟交易平仓记录（共 {len(_closed_trades)} 笔）")
-    _ct = pd.DataFrame(_closed_trades).sort_values("exit_date", ascending=False)
-    _ct["R 倍数"] = _ct["pnl_r"].map(lambda v: f"{v:+.2f}R")
-    _ct["净盈亏"] = _ct["net_pnl"].map(lambda v: f"${v:+,.0f}")
-    _ct["退出方式"] = _ct["exit_reason"].map({"trailing_stop": "追踪止损", "stop_loss": "初始止损"}).fillna(_ct["exit_reason"])
-    st.dataframe(
-        _ct[["ticker", "entry_date", "exit_date", "holding_days", "entry_price", "exit_price", "R 倍数", "净盈亏", "退出方式"]].rename(
-            columns={"ticker": "标的", "entry_date": "入场日", "exit_date": "出场日",
-                     "holding_days": "持仓天数", "entry_price": "入场价", "exit_price": "出场价"}
-        ),
-        use_container_width=True,
-        hide_index=True,
-    )
+    # ── Live positions ───────────────────────────────────────────────────────
+    st.subheader("二、当前持仓实时状态")
+    if _m1_stop:
+        st.warning(f"⚠️ **{len(_m1_stop)} 只已触及止损** — 建议执行止损出场")
+
+    if _m1_ok:
+        _rows = [{
+            "标的": p["ticker"],
+            "状态": "🔴 触止损" if p["is_stopped"] else "🟢 持有",
+            "入场日": p["entry_date"],
+            "入场价": f"${p['entry_price']:.2f}",
+            "当前价": f"${p['current_price']:.2f}",
+            "移动止损": f"${p['current_stop']:.2f}",
+            "缓冲": f"{p['stop_buffer_pct']:.1f}%",
+            "R": f"{p['R']:+.2f}R",
+            "浮盈 $": f"${p['unreal_pnl']:+,.0f}",
+            "市值": f"${p['mkt_value']/1e3:.0f}K",
+        } for p in sorted(_m1_ok, key=lambda x: x.get("R", 0), reverse=True)]
+        st.dataframe(pd.DataFrame(_rows), use_container_width=True, hide_index=True)
+
+        _sorted = sorted(_m1_ok, key=lambda x: x.get("R", 0), reverse=True)
+        _fig = go.Figure(go.Bar(
+            y=[p["ticker"] for p in _sorted],
+            x=[p["R"] for p in _sorted],
+            orientation="h",
+            marker_color=["#d62728" if p["is_stopped"] else ("#2ca02c" if p["R"] >= 0 else "#ff7f0e")
+                          for p in _sorted],
+            text=[f"{p['R']:+.2f}R" for p in _sorted],
+            textposition="outside",
+            hovertemplate="<b>%{y}</b><br>R = %{x:+.2f}<extra></extra>",
+        ))
+        _fig.update_layout(
+            title="持仓浮盈（R 倍数，红色 = 触及止损）",
+            xaxis_title="R 倍数", height=max(380, len(_sorted) * 26),
+            margin=dict(l=70, r=100, t=50, b=40),
+            template="plotly_white", showlegend=False,
+        )
+        st.plotly_chart(_fig, use_container_width=True)
+
     st.markdown("---")
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# Section 6 — How to run daily updates (instructions)
-# ═══════════════════════════════════════════════════════════════════════════════
-with st.expander("📋 如何运行每日更新脚本", expanded=False):
-    st.markdown(f"""
-每个交易日收盘后（美东时间 4PM 之后），在项目根目录运行：
+    # ── Stop detail ──────────────────────────────────────────────────────────
+    st.subheader("三、移动止损明细")
+    if _m1_ok:
+        _sd = pd.DataFrame([{
+            "标的": p["ticker"], "状态": "🔴" if p["is_stopped"] else "✅",
+            "当前价": f"${p['current_price']:.2f}", "历史最高": f"${p['peak_price']:.2f}",
+            "ATR(20)": f"${p['current_atr']:.2f}", "乘数": f"{p['trail_mult']:.1f}×",
+            "止损价": f"${p['current_stop']:.2f}", "价格距止损": f"{p['stop_buffer_pct']:.1f}%",
+        } for p in sorted(_m1_ok, key=lambda x: x.get("stop_buffer_pct", 999))])
+        st.dataframe(_sd, use_container_width=True, hide_index=True)
 
-```bash
-# 自动使用今天日期
+    st.markdown("---")
+
+    # ── NAV history ──────────────────────────────────────────────────────────
+    if _m1_history:
+        st.subheader("四、NAV 走势")
+        _nh = pd.DataFrame(_m1_history)
+        _nh["date"] = pd.to_datetime(_nh["date"])
+        _nh = _nh.sort_values("date")
+        if _m1_date != "N/A" and not (_nh["date"] == pd.to_datetime(_m1_date)).any():
+            _nh = pd.concat([_nh, pd.DataFrame([{"date": pd.to_datetime(_m1_date), "nav": _m1_nav}])], ignore_index=True)
+        _fig_nav = go.Figure(go.Scatter(
+            x=_nh["date"], y=_nh["nav"] / _m1_init_nav,
+            mode="lines+markers", line=dict(color="#1f77b4", width=2.5),
+            hovertemplate="%{x|%Y-%m-%d}<br>%{y:.3f}x<extra></extra>",
+        ))
+        _fig_nav.add_hline(y=1.0, line_dash="dash", line_color="gray", opacity=0.5)
+        _fig_nav.update_layout(
+            title="方法一 NAV（相对起始）", yaxis_title="倍数",
+            height=280, margin=dict(l=60, r=20, t=45, b=40), template="plotly_white",
+        )
+        st.plotly_chart(_fig_nav, use_container_width=True)
+
+    # ── Closed trades ─────────────────────────────────────────────────────────
+    if _m1_closed:
+        st.subheader(f"五、平仓记录（{len(_m1_closed)} 笔）")
+        _ct = pd.DataFrame(_m1_closed).sort_values("exit_date", ascending=False)
+        _ct["R"] = _ct["pnl_r"].map(lambda v: f"{v:+.2f}R")
+        _ct["净盈亏"] = _ct["net_pnl"].map(lambda v: f"${v:+,.0f}")
+        st.dataframe(_ct[["ticker","entry_date","exit_date","holding_days","R","净盈亏","exit_reason"]].rename(
+            columns={"ticker":"标的","entry_date":"入场日","exit_date":"出场日","holding_days":"天数","exit_reason":"原因"}
+        ), use_container_width=True, hide_index=True)
+
+    # ── How to run ───────────────────────────────────────────────────────────
+    with st.expander("📋 每日更新操作"):
+        st.code("""# 每个交易日收盘后运行
 python src/scripts/paper_trading_daily.py
 
-# 指定日期（用于补跑）
-python src/scripts/paper_trading_daily.py --date 2026-06-20
+# 推送到 GitHub（触发网站更新）
+git add results/paper_trading/positions.json
+git commit -m "paper trading M1: YYYY-MM-DD"
+git push""", language="bash")
 
-# 跳过新开仓扫描（只更新止损 / 检查出场）
-python src/scripts/paper_trading_daily.py --no-entries
-```
+    # ── Backtest reference ────────────────────────────────────────────────────
+    with st.expander("📊 回测基准（2000–2026）"):
+        bm1, bm2, bm3, bm4 = st.columns(4)
+        bm1.metric("CAGR",    f"{_bm.get('cagr',0)*100:.2f}%")
+        bm2.metric("最大回撤", f"{_bm.get('max_drawdown',0)*100:.2f}%")
+        bm3.metric("Sharpe",   f"{_bm.get('sharpe',0):.3f}")
+        bm4.metric("Calmar",   f"{_bm.get('calmar',0):.3f}")
+        _nn = _bt_nav["nav"]; _ss = _bt_spy["spy_nav"]
+        _fig_ref = make_subplots(rows=2, cols=1, shared_xaxes=True, row_heights=[0.65, 0.35], vertical_spacing=0.05)
+        _fig_ref.add_trace(go.Scatter(x=_nn.index, y=_nn/_nn.iloc[0], name="策略1.0", line=dict(color="#1f77b4", width=2)), row=1, col=1)
+        _fig_ref.add_trace(go.Scatter(x=_ss.index, y=_ss/_ss.iloc[0], name="SPY", line=dict(color="#888", width=1.2, dash="dash")), row=1, col=1)
+        _dd = (_nn - _nn.cummax()) / _nn.cummax() * 100
+        _fig_ref.add_trace(go.Scatter(x=_dd.index, y=_dd.values, fill="tozeroy", fillcolor="rgba(214,39,40,0.2)", line=dict(color="#d62728", width=1), showlegend=False), row=2, col=1)
+        _fig_ref.update_layout(height=440, template="plotly_white", hovermode="x unified",
+                               legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+                               margin=dict(l=60, r=20, t=40, b=40))
+        _fig_ref.update_yaxes(ticksuffix="x", row=1, col=1)
+        _fig_ref.update_yaxes(ticksuffix="%", row=2, col=1)
+        st.plotly_chart(_fig_ref, use_container_width=True)
 
-运行后将更新 `results/paper_trading/positions.json`，**提交并推送到 GitHub** 后，本页面自动更新：
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TAB 2 — 方法二：IB 自动交易
+# ═══════════════════════════════════════════════════════════════════════════════
+
+with tab2:
+    st.markdown("""
+    **运行方式：** 每个交易日收盘后在本地运行 `python src/scripts/ib_paper_trading_daily.py`，
+    脚本自动连接 IB TWS（Paper Trading 模式）下单，并将结果推送到 GitHub。
+
+    **初始资金：** $200,000 USD（独立账户，不依赖回测历史）
+    """)
+
+    # ── Load Method 2 state ──────────────────────────────────────────────────
+    @st.cache_data(ttl=86400)
+    def _load_m2():
+        if _m2_file.exists():
+            return json.loads(_m2_file.read_text())
+        return None
+
+    _m2 = _load_m2()
+
+    if _m2 is None:
+        st.error("未找到 IB 状态文件（results/paper_trading/ib_state.json）。")
+        st.stop()
+
+    _m2_positions  = [p for p in _m2.get("positions", []) if not p.get("closed")]
+    _m2_closed     = _m2.get("closed_trades", [])
+    _m2_history    = _m2.get("nav_history", [])
+    _m2_last_upd   = _m2.get("last_update_date") or "尚未运行"
+    _m2_init_cap   = _m2.get("initial_capital", 200_000.0)
+    _m2_nav        = _m2.get("nav", _m2_init_cap)
+    _m2_cash       = _m2.get("cash", _m2_init_cap)
+    _m2_orders_hist = _m2.get("orders_history", [])
+    _m2_today_sig  = _m2.get("today_signals", {})
+    _m2_live_start = _m2.get("live_start_date", "2026-07-01")
+    _m2_debug_start = _m2.get("debug_start_date", "2026-06-19")
+    _m2_ib_summary = _m2.get("account_summary", {})
+
+    # Phase banner
+    import datetime as _dt
+    _today_dt = _dt.date.today()
+    _live_start_dt = _dt.date.fromisoformat(_m2_live_start)
+    if _today_dt < _live_start_dt:
+        days_left = (_live_start_dt - _today_dt).days
+        st.warning(f"🔧 **调试阶段** — 正式启动日期：{_m2_live_start}（还有 {days_left} 天）。建议使用 `--dry-run` 参数先验证信号。")
+    else:
+        st.success(f"🚀 **已正式启动** — 自 {_m2_live_start} 起实盘模拟交易运行中")
+
+    st.markdown("---")
+
+    # ── Overview metrics ─────────────────────────────────────────────────────
+    st.subheader("一、账户状态概览")
+    st.caption(f"上次脚本运行：{_m2_last_upd} ｜ 初始资金：${_m2_init_cap:,.0f}")
+
+    _m2_pnl = _m2_nav - _m2_init_cap
+    _m2_pnl_pct = (_m2_nav / _m2_init_cap - 1) * 100
+
+    a1, a2, a3, a4 = st.columns(4)
+    a1.metric("账户 NAV", f"${_m2_nav:,.0f}",
+              delta=f"{_m2_pnl_pct:+.2f}%  (${_m2_pnl:+,.0f})",
+              delta_color="normal" if _m2_pnl >= 0 else "inverse")
+    a2.metric("当前持仓", f"{len(_m2_positions)} 只")
+    a3.metric("现金", f"${_m2_cash:,.0f}",
+              delta=f"{_m2_cash/_m2_nav*100:.1f}% of NAV" if _m2_nav else None)
+    a4.metric("已平仓笔数", f"{len(_m2_closed)} 笔")
+
+    # IB Account Summary (if available)
+    if _m2_ib_summary:
+        st.markdown("#### IB 账户实时数据（最近一次连接）")
+        ib1, ib2, ib3, ib4 = st.columns(4)
+        ib1.metric("IB NetLiquidation", f"${_m2_ib_summary.get('NetLiquidation', 0):,.0f}")
+        ib2.metric("IB AvailableFunds", f"${_m2_ib_summary.get('AvailableFunds', 0):,.0f}")
+        ib3.metric("IB UnrealizedPnL",  f"${_m2_ib_summary.get('UnrealizedPnL', 0):+,.0f}")
+        ib4.metric("IB RealizedPnL",    f"${_m2_ib_summary.get('RealizedPnL', 0):+,.0f}")
+
+    st.markdown("---")
+
+    # ── Today's signals ───────────────────────────────────────────────────────
+    st.subheader("二、今日信号")
+    if _m2_today_sig:
+        sig_date    = _m2_today_sig.get("date", "N/A")
+        sig_regime  = _m2_today_sig.get("regime", "N/A")
+        sig_spy     = _m2_today_sig.get("spy_close")
+        sig_exits   = _m2_today_sig.get("exits", [])
+        sig_entries = _m2_today_sig.get("entries", [])
+        st.caption(f"信号日期：{sig_date} ｜ Regime：{'🟢 BULL' if sig_regime == 'BULL' else '🔴 BEAR'}" +
+                   (f" ｜ SPY：${sig_spy:.2f}" if sig_spy else ""))
+
+        _sc1, _sc2 = st.columns(2)
+        with _sc1:
+            st.markdown(f"**退出信号（{len(sig_exits)} 笔）**")
+            if sig_exits:
+                _ex_df = pd.DataFrame([{
+                    "标的": e["ticker"],
+                    "操作": "SELL",
+                    "股数": e["shares"],
+                    "止损价": f"${e['stop_price']:.2f}",
+                    "订单类型": e["order_type"],
+                } for e in sig_exits])
+                st.dataframe(_ex_df, use_container_width=True, hide_index=True)
+            else:
+                st.info("无退出信号")
+
+        with _sc2:
+            st.markdown(f"**入场信号（{len(sig_entries)} 笔）**")
+            if sig_entries:
+                _en_df = pd.DataFrame([{
+                    "标的": e["ticker"],
+                    "操作": "BUY",
+                    "股数": e["shares"],
+                    "信号价": f"${e['signal_price']:.2f}",
+                    "止损价": f"${e['stop_price']:.2f}",
+                    "风险%": f"{e['trade_risk']*100:.2f}%",
+                    "订单类型": e["order_type"],
+                } for e in sig_entries])
+                st.dataframe(_en_df, use_container_width=True, hide_index=True)
+            else:
+                st.info("无入场信号")
+    else:
+        st.info(f"尚无今日信号。请运行 `python src/scripts/ib_paper_trading_daily.py`")
+
+    st.markdown("---")
+
+    # ── Live positions (fetch prices from Yahoo Finance) ──────────────────────
+    st.subheader("三、当前持仓状态")
+    if _m2_positions:
+        _m2_tickers = tuple(sorted(set([p["ticker"] for p in _m2_positions] + ["SPY"])))
+        with st.spinner("从 Yahoo Finance 加载持仓行情…"):
+            _m2_raw = _fetch_yf(_m2_tickers, "300d")
+
+        _m2_live = [_enrich_position(p, _m2_raw) for p in _m2_positions]
+        _m2_ok   = [p for p in _m2_live if p.get("_ok")]
+        _m2_stp  = [p for p in _m2_ok if p["is_stopped"]]
+
+        if _m2_stp:
+            st.warning(f"⚠️ **{len(_m2_stp)} 只已触及止损** — IB 脚本运行后将自动生成退出订单")
+
+        _m2_rows = [{
+            "标的": p["ticker"],
+            "状态": "🔴 触止损" if p["is_stopped"] else "🟢 持有",
+            "入场日": p["entry_date"],
+            "入场价": f"${p['entry_price']:.2f}",
+            "当前价": f"${p['current_price']:.2f}",
+            "移动止损": f"${p['current_stop']:.2f}",
+            "缓冲": f"{p['stop_buffer_pct']:.1f}%",
+            "R": f"{p['R']:+.2f}R",
+            "浮盈 $": f"${p['unreal_pnl']:+,.0f}",
+            "股数": p["shares"],
+        } for p in sorted(_m2_ok, key=lambda x: x.get("R", 0), reverse=True)]
+
+        if _m2_rows:
+            st.dataframe(pd.DataFrame(_m2_rows), use_container_width=True, hide_index=True)
+    else:
+        st.info("当前无持仓。Regime 允许时，下次运行脚本将扫描开仓信号。")
+
+    st.markdown("---")
+
+    # ── NAV History ───────────────────────────────────────────────────────────
+    if _m2_history:
+        st.subheader("四、NAV 走势")
+        _m2_nh = pd.DataFrame(_m2_history)
+        _m2_nh["date"] = pd.to_datetime(_m2_nh["date"])
+        _m2_nh = _m2_nh.sort_values("date")
+        _fig_m2nav = go.Figure(go.Scatter(
+            x=_m2_nh["date"], y=_m2_nh["nav"] / _m2_init_cap,
+            mode="lines+markers", line=dict(color="#ff7f0e", width=2.5),
+            hovertemplate="%{x|%Y-%m-%d}<br>%{y:.3f}x<extra></extra>",
+        ))
+        _fig_m2nav.add_hline(y=1.0, line_dash="dash", line_color="gray", opacity=0.5)
+        _fig_m2nav.update_layout(
+            title="方法二 NAV（相对起始 $200K）", yaxis_title="倍数",
+            height=280, margin=dict(l=60, r=20, t=45, b=40), template="plotly_white",
+        )
+        st.plotly_chart(_fig_m2nav, use_container_width=True)
+        st.markdown("---")
+
+    # ── Closed trades ─────────────────────────────────────────────────────────
+    if _m2_closed:
+        st.subheader(f"五、已平仓记录（{len(_m2_closed)} 笔）")
+        _m2_ct = pd.DataFrame(_m2_closed).sort_values("exit_date", ascending=False)
+        if "pnl_r_est" in _m2_ct.columns:
+            _m2_ct["R"] = _m2_ct["pnl_r_est"].map(lambda v: f"{v:+.2f}R")
+        if "net_pnl_est" in _m2_ct.columns:
+            _m2_ct["净盈亏(估)"] = _m2_ct["net_pnl_est"].map(lambda v: f"${v:+,.0f}")
+        cols = [c for c in ["ticker","entry_date","exit_date","holding_days","R","净盈亏(估)","exit_reason"] if c in _m2_ct.columns]
+        st.dataframe(_m2_ct[cols].rename(columns={"ticker":"标的","entry_date":"入场日","exit_date":"出场日","holding_days":"天数","exit_reason":"原因"}),
+                     use_container_width=True, hide_index=True)
+        st.markdown("---")
+
+    # ── Order history ─────────────────────────────────────────────────────────
+    if _m2_orders_hist:
+        with st.expander(f"📋 订单历史（最近 {min(50, len(_m2_orders_hist))} 条）"):
+            _ord_df = pd.DataFrame(_m2_orders_hist[-50:][::-1])
+            _show_cols = [c for c in ["ticker","action","shares","order_type","reason","signal_price","stop_price","ib_status","submitted_at","dry_run"] if c in _ord_df.columns]
+            st.dataframe(_ord_df[_show_cols], use_container_width=True, hide_index=True)
+
+    # ── Setup guide ───────────────────────────────────────────────────────────
+    with st.expander("⚙️ IB Paper Trading 配置与使用指南"):
+        st.markdown(f"""
+### IB TWS 配置
+
+1. 登录 **IB Paper Trading 账户**（TWS 或 IB Gateway）
+2. **启用 API 连接**：
+   - TWS：File → Global Configuration → API → Settings
+   - 勾选 "Enable ActiveX and Socket Clients"
+   - Socket port：**7497**（TWS Paper Trading）
+   - 勾选 "Allow connections from localhost only"（安全）
+3. 推荐**重置 Paper Trading 账户**初始资金：
+   - 右键账户 → Reset Paper Trading Account
+   - 脚本使用自己的 $200K NAV 计算，但 IB 账户余额一致更易对账
+
+### 每日运行
 
 ```bash
-git add results/paper_trading/positions.json
-git commit -m "paper trading: update YYYY-MM-DD"
+# 调试阶段（不实际下单，只看信号）
+python src/scripts/ib_paper_trading_daily.py --dry-run
+
+# 正式模式（实际通过 IB API 下单）
+python src/scripts/ib_paper_trading_daily.py
+
+# 可选参数
+python src/scripts/ib_paper_trading_daily.py \\
+    --port 4002 \\          # IB Gateway 端口（默认 7497 为 TWS）
+    --client-id 10 \\       # IB 客户端 ID（避免与 TWS 手动操作冲突）
+    --no-entries            # 只检查止损，不扫描开仓
+
+# 完成后推送到 GitHub
+git add results/paper_trading/ib_state.json
+git commit -m "IB paper trading: YYYY-MM-DD"
 git push
 ```
 
-**状态文件位置：** `results/paper_trading/positions.json`
-**起始 NAV：** ${_initial_nav/1e6:.2f}M（回测结束日 {_state.get('backtest_end_date', '2026-06-15')}）
-**继承持仓：** {len(_state['positions'])} 只（从回测 end_of_backtest 持仓继承）
+### 关键参数
+
+| 参数 | 值 |
+|------|-----|
+| 初始资金 | $200,000 |
+| 每笔风险 | 1% NAV ($2,000 at start) |
+| 最大热度 | 10% NAV |
+| 单仓上限 | 5% NAV ($10,000 at start) |
+| 开仓信号 | 200日突破 + ATR止损 |
+| 止损方式 | 追踪止损（ATR×3/5，每日更新） |
+| 订单类型 | MOO（次日开盘价执行） |
+| 股数取整 | **四舍五入**（小数≥0.5进一） |
+| 正式启动 | **{_m2_live_start}** |
 """)
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# Section 7 — Backtest reference (collapsed)
-# ═══════════════════════════════════════════════════════════════════════════════
-with st.expander("📊 回测基准参考（策略1.0历史绩效 2000–2026）", expanded=False):
-    @st.cache_data(ttl=86400)
-    def _load_bt() -> tuple:
-        with open(_results / "metrics.json") as f:
-            m = json.load(f)
-        nav = pd.read_csv(_results / "nav.csv", index_col=0, parse_dates=True)
-        spy = pd.read_csv(_results / "spy_nav.csv", index_col=0, parse_dates=True)
-        return m, nav, spy
-
-    _bm, _bt_nav, _bt_spy = _load_bt()
-    bm1, bm2, bm3, bm4 = st.columns(4)
-    bm1.metric("CAGR",    f"{_bm.get('cagr', 0)*100:.2f}%", help="2000-01-03 → 2026-06-15")
-    bm2.metric("最大回撤", f"{_bm.get('max_drawdown', 0)*100:.2f}%")
-    bm3.metric("Sharpe",   f"{_bm.get('sharpe', 0):.3f}")
-    bm4.metric("Calmar",   f"{_bm.get('calmar', 0):.3f}")
-
-    _nn = _bt_nav["nav"]
-    _ss = _bt_spy["spy_nav"]
-    _fig_ref = make_subplots(rows=2, cols=1, shared_xaxes=True,
-                              row_heights=[0.65, 0.35], vertical_spacing=0.05)
-    _fig_ref.add_trace(go.Scatter(x=_nn.index, y=_nn / _nn.iloc[0], name="策略1.0",
-                                   line=dict(color="#1f77b4", width=2)), row=1, col=1)
-    _fig_ref.add_trace(go.Scatter(x=_ss.index, y=_ss / _ss.iloc[0], name="SPY",
-                                   line=dict(color="#888", width=1.2, dash="dash")), row=1, col=1)
-    _dd = (_nn - _nn.cummax()) / _nn.cummax() * 100
-    _fig_ref.add_trace(go.Scatter(x=_dd.index, y=_dd.values, fill="tozeroy",
-                                   fillcolor="rgba(214,39,40,0.2)",
-                                   line=dict(color="#d62728", width=1),
-                                   showlegend=False), row=2, col=1)
-    _fig_ref.update_layout(
-        height=450, template="plotly_white", hovermode="x unified",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-        margin=dict(l=60, r=20, t=40, b=40),
-    )
-    _fig_ref.update_yaxes(ticksuffix="x", title_text="净值（倍）", row=1, col=1)
-    _fig_ref.update_yaxes(ticksuffix="%", title_text="回撤", row=2, col=1)
-    st.plotly_chart(_fig_ref, use_container_width=True)
