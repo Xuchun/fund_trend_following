@@ -76,6 +76,7 @@ pg = st.navigation(
             st.Page(_fw / "reduce_large_losses.py",       title="如何减少大R的亏损交易",  icon="🛡️"),
             st.Page(_fw / "reduce_consecutive_losses.py", title="如何降低连续亏损次数",    icon="📉"),
             st.Page(_fw / "reduce_max_drawdown.py",       title="如何降低最大回撤",        icon="📉"),
+            st.Page(_fw / "improve_universe.py",          title="如何改进数据与标的池",    icon="🔬"),
             st.Page(_fw / "holding_days_advice.py",       title="有关持仓天数的建议",      icon="📅"),
             st.Page(_fw / "reduce_deep_drawdown.py",      title="如何减少深度回撤幅度",    icon="🔻"),
             st.Page(_fw / "improve_capital_utilization.py", title="如何提高熊市资金使用率", icon="📈"),
