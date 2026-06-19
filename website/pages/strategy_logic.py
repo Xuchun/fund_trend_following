@@ -144,39 +144,9 @@ Strategy 1.0 Baseline 默认启用此过滤器（`regime_filter_enabled = True`�
 
 st.markdown("---")
 
-# ── Entry ─────────────────────────────────────────────────────────────────────
-st.subheader("3. 入场条件")
-st.markdown(f"""
-当复权收盘价突破过去 **{p['breakout_window']} 个交易日的最高价**时触发买入信号。
-
-```
-信号（t 日收盘后）：adj_close[t] > max(adj_high[t-{p['breakout_window']}:t-1])
-执行（t+1 日开盘）：以 t+1 日复权开盘价 × (1 + 滑点) 买入
-```
-
-- 使用复权价格（adj_factor），所有价格计算已包含分红
-- 使用 `shift(1)` 防止前视偏差（look-ahead bias）
-- 仅在满足仓位过滤条件后建仓（见仓位管理）
-- Gap 过滤：若 `|t+1开盘价 − t收盘价| / t收盘价 > {p.get('gap_filter',0.025)*100:.1f}%`，跳过该信号（双向：跳空高开或跳空低开均过滤）
-
-**多信号处理（同一天多个标的同时触发突破）：**
-- 所有信号按 **突破强度（breakout_strength）降序排列**优先执行：`breakout_strength = adj_close[t] / max(adj_high[t-N:t-1])`
-- 每执行完一笔后**立即更新**当前持仓和风险敞口，后续信号的相关性计算与组合热度检查均基于最新状态
-- 优先处理突破最强的信号，可在热度上限耗尽前最大化资金利用效率
-""")
-
-st.markdown(f"""
-<div class="info-box">
-<strong>突破窗口为何选 {p['breakout_window']} 日？</strong><br>
-{'<strong>200 日</strong>（约 10 个月）即市场常说的"52 周新高"，是机构趋势跟踪中最经典的突破周期。相比 100 日突破，200 日只捕捉更持久、更强劲的趋势，信号更少但质量更高，可有效减少假突破带来的频繁进出场。200日突破是 Donchian 通道的经典实现，学术和实践中均有充分验证。' if p['breakout_window'] == 200 else f'当前使用 {p["breakout_window"]} 日突破，覆盖约 {p["breakout_window"]//20} 个月的价格区间，在信号频率与趋势质量之间取得平衡。'}
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("---")
-
 # ── Volume filter ──────────────────────────────────────────────────────────────
 vol_mult = p.get("volume_filter_multiplier", 0.0)
-st.subheader("4. 成交量过滤")
+st.subheader("3. 成交量过滤")
 
 if vol_mult > 0:
     st.markdown(f"""
@@ -209,41 +179,33 @@ else:
 
 st.markdown("---")
 
-# ── Breakout strength filter ──────────────────────────────────────────────────
-bs_min = p.get("breakout_strength_min", 0.0)
-st.subheader("5. 突破强度过滤")
-
-if bs_min > 0:
-    st.markdown(f"""
-突破信号还需通过**突破强度过滤**：不仅要求收盘价超过 N 日高点，
-还要求**超出幅度至少达到 {bs_min*100:.0f}%**，排除边际突破。
+# ── Entry ─────────────────────────────────────────────────────────────────────
+st.subheader("4. 入场条件")
+st.markdown(f"""
+当复权收盘价突破过去 **{p['breakout_window']} 个交易日的最高价**时触发买入信号。
 
 ```
-过滤条件（t 日）：close[t] / rolling_high_{p['breakout_window']}[t] ≥ {1+bs_min:.2f}
-等价于：close[t] ≥ rolling_high_{p['breakout_window']}[t] × {1+bs_min:.2f}
+信号（t 日收盘后）：adj_close[t] > max(adj_high[t-{p['breakout_window']}:t-1])
+执行（t+1 日开盘）：以 t+1 日复权开盘价 × (1 + 滑点) 买入
 ```
 
-- 突破强度（`breakout_strength`）= close[t] / rolling_high_N[t]
-- 当前阈值：**{bs_min*100:.0f}%**，即收盘价须高于 {p['breakout_window']} 日高点 {bs_min*100:.0f}% 以上
-- 边际突破（仅超出 0.1%）被过滤，只保留有决定性突破意义的信号
+- 使用复权价格（adj_factor），所有价格计算已包含分红
+- 使用 `shift(1)` 防止前视偏差（look-ahead bias）
+- 仅在满足仓位过滤条件后建仓（见仓位管理）
+- Gap 过滤：若 `|t+1开盘价 − t收盘价| / t收盘价 > {p.get('gap_filter',0.025)*100:.1f}%`，跳过该信号（双向：跳空高开或跳空低开均过滤）
+
+**多信号处理（同一天多个标的同时触发突破）：**
+- 所有信号按 **突破强度（breakout_strength）降序排列**优先执行：`breakout_strength = adj_close[t] / max(adj_high[t-N:t-1])`
+- 每执行完一笔后**立即更新**当前持仓和风险敞口，后续信号的相关性计算与组合热度检查均基于最新状态
+- 优先处理突破最强的信号，可在热度上限耗尽前最大化资金利用效率
 """)
-    st.markdown(f"""
+
+st.markdown(f"""
 <div class="info-box">
-<strong>为何需要突破强度过滤？</strong><br>
-传统的 N 日突破条件（close &gt; rolling_high）对于"仅超出一分钱"的突破同样有效，
-这类边际突破缺乏真正的动量支撑，更可能是随机噪音而非趋势起点。<br><br>
-要求 <strong>close/rolling_high &gt; {1+bs_min:.2f}</strong>（即超出 {bs_min*100:.0f}%）能确保：
-<ul>
-<li>进场信号具有一定的趋势惯性，不会因微小波动立即回撤触发止损</li>
-<li>与成交量确认配合，大幅提升每笔入场的质量</li>
-<li>预期效果：入场信号进一步减少约 15–20%，但胜率和平均盈亏比（profit factor）改善</li>
-</ul>
+<strong>突破窗口为何选 {p['breakout_window']} 日？</strong><br>
+{'<strong>200 日</strong>（约 10 个月）即市场常说的"52 周新高"，是机构趋势跟踪中最经典的突破周期。相比 100 日突破，200 日只捕捉更持久、更强劲的趋势，信号更少但质量更高，可有效减少假突破带来的频繁进出场。200日突破是 Donchian 通道的经典实现，学术和实践中均有充分验证。' if p['breakout_window'] == 200 else f'当前使用 {p["breakout_window"]} 日突破，覆盖约 {p["breakout_window"]//20} 个月的价格区间，在信号频率与趋势质量之间取得平衡。'}
 </div>
 """, unsafe_allow_html=True)
-else:
-    st.markdown("""
-**【当前未启用】** `breakout_strength_min = 0`，只要价格高于 N 日高点即触发入场信号，不要求最小突破幅度。但是多信号处理机制，已经把所有信号按突破强度降序排列优先执行，从而优先处理突破最强的信号。
-""")
 
 st.markdown("---")
 
