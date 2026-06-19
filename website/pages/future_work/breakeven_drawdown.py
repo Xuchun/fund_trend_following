@@ -26,9 +26,19 @@ if _cache_key not in st.session_state:
 _res = st.session_state[_cache_key]
 
 
+def _be_csv_key() -> str:
+    if not _BE_CSV.exists():
+        return "missing"
+    import hashlib as _hl
+    with open(_BE_CSV, "rb") as _f:
+        return _hl.md5(_f.read()).hexdigest()
+
+_BE_KEY = _be_csv_key()
+
+
 @st.cache_data(ttl=86400)
-def _load_be(mtime: int):
-    if mtime == 0:
+def _load_be(_key: str):
+    if _key == "missing":
         return None
     return pd.read_csv(
         _BE_CSV,
@@ -37,8 +47,7 @@ def _load_be(mtime: int):
     )
 
 
-_BE_MTIME = int(_BE_CSV.stat().st_mtime) if _BE_CSV.exists() else 0
-_be = _load_be(_BE_MTIME)
+_be = _load_be(_BE_KEY)
 
 
 def _build_nav(nav_orig, lbl):
