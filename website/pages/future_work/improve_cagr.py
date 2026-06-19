@@ -377,6 +377,41 @@ st.markdown("""
 > 详见页面：**如何降低连续亏损次数** — 建议 2（突破强度过滤）
 """)
 
+# Chart: Volume filter multiplier as proxy for breakout strength
+_volf = _perturb_path / "volume_filter_multiplier.json"
+if _volf.exists():
+    _vd = json.loads(_volf.read_text())
+    _vv  = _vd["param_values"]
+    _vc  = [r["cagr"] * 100 for r in _vd["results"]]
+    _vm  = [abs(r["max_drawdown"]) * 100 for r in _vd["results"]]
+    _vn  = [r["n_trades"] for r in _vd["results"]]
+    _baseline_v = _vd["baseline_value"]
+    _fig_vol = go.Figure()
+    _fig_vol.add_trace(go.Bar(
+        x=[str(v) for v in _vv], y=_vc, name="CAGR (%)",
+        marker_color=["#22c55e" if v == _baseline_v else "#6366f1" for v in _vv],
+        yaxis="y",
+    ))
+    _fig_vol.add_trace(go.Scatter(
+        x=[str(v) for v in _vv], y=_vn, name="交易笔数（右轴）",
+        mode="lines+markers", marker=dict(size=9, color="#94a3b8"),
+        line=dict(color="#94a3b8", width=2), yaxis="y2",
+    ))
+    _fig_vol.update_layout(
+        title="成交量过滤倍数（volume_filter_multiplier）敏感性：CAGR vs 交易笔数",
+        xaxis_title="volume_filter_multiplier（× 均量）",
+        yaxis=dict(title="CAGR (%)", side="left", range=[7, 11.5]),
+        yaxis2=dict(title="交易笔数", side="right", overlaying="y"),
+        legend=dict(x=0.6, y=0.05), height=360, margin=dict(t=50, b=40),
+    )
+    st.plotly_chart(_fig_vol, use_container_width=True)
+    best_vidx = _vc.index(max(_vc))
+    st.caption(
+        f"当前 volume_filter_multiplier = {_baseline_v}（绿色），CAGR = {_vc[_vv.index(_baseline_v)]:.2f}%。"
+        f"成交量要求过高（2.0×）使交易笔数从 3,337 降至 {_vn[-1]:.0f}，CAGR 反降至 {_vc[-1]:.2f}%。"
+        "说明成交量过滤存在最优点，过度过滤会遗漏真实突破。"
+    )
+
 st.markdown("---")
 
 # ── 效益评估汇总 ──────────────────────────────────────────────────────────────
