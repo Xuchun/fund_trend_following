@@ -361,5 +361,5 @@ Sharpe {_sharpe_b} → {_sharpe_e}，最大回撤几乎不变。
 建议作为"低风险增量改进"纳入策略1.1，而非押注核心 alpha 来源。
 """)
 else:
-    st.subheader("六、对比回测结果（TLT+GLD+UUP）")
+    st.subheader("七、对比回测结果（TLT+GLD+UUP）")
     st.warning("对比回测结果尚未生成，请运行 `src/scripts/run_bear_exempt_comparison.py`。")
