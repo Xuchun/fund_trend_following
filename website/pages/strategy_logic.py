@@ -136,7 +136,7 @@ else:
     st.markdown(f"""
 **【当前参数未启用市场环境过滤器】**
 
-Strategy 1.0 Baseline 默认启用此过滤器（`regime_filter_enabled = True`）。
+Strategy 1.0 Baseline 默认启用此过滤器（regime_filter_enabled = True）。
 当前运行已将其关闭，策略1.0将在整个回测期内无论牛熊均扫描入场信号，
 可能导致在 2008 年金融危机等极端行情中承受显著回撤。
 """)
