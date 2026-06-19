@@ -25,17 +25,45 @@ _SMA_WINDOW = 200
 st.title("策略1.0 模拟交易监控")
 st.caption("数据来源：Yahoo Finance（每小时自动刷新）| 止损价格基于最新 ATR-20 实时计算")
 
-# ── Load paper trading state ──────────────────────────────────────────────────
+# ── Load paper trading state (fallback: build from backtest data) ─────────────
 @st.cache_data(ttl=86400)
-def _load_pt_state(path: str) -> dict | None:
-    p = Path(path)
-    return json.loads(p.read_text()) if p.exists() else None
+def _load_pt_state():
+    if _pt_file.exists():
+        return json.loads(_pt_file.read_text()), False
+    # Fallback: build initial state from backtest trades + nav
+    trades = pd.read_csv(_results / "trades.csv", parse_dates=["entry_date", "exit_date"])
+    nav_df = pd.read_csv(_results / "nav.csv", index_col=0, parse_dates=True)
+    open_pos = trades[trades["exit_reason"] == "end_of_backtest"].copy()
+    initial_nav = float(nav_df["nav"].iloc[-1])
+    market_value = float((open_pos["exit_price"] * open_pos["shares"]).sum())
+    cash = initial_nav - market_value
+    positions = []
+    for _, r in open_pos.iterrows():
+        positions.append({
+            "ticker":            r["ticker"],
+            "entry_date":        str(r["entry_date"].date()),
+            "entry_price":       float(r["entry_price"]),
+            "shares":            int(r["shares"]),
+            "initial_stop_loss": float(r["stop_loss"]),
+            "current_stop_loss": float(r["stop_loss"]),
+            "peak_price":        float(r["exit_price"]),
+            "atr_at_entry":      float(r["atr_at_entry"]),
+            "R_at_backtest_end": float(r["pnl_r_multiple"]),
+            "last_known_price":  float(r["exit_price"]),
+            "last_price_date":   "2026-06-15",
+        })
+    state = {
+        "schema_version": 1, "initialized_from": "backtest_end",
+        "backtest_end_date": "2026-06-15", "last_update_date": "2026-06-15",
+        "initial_nav": round(initial_nav, 2), "cash": round(cash, 2),
+        "positions": positions, "closed_trades": [],
+        "nav_history": [{"date": "2026-06-15", "nav": round(initial_nav, 2)}],
+    }
+    return state, True   # True = fallback mode
 
-_state = _load_pt_state(str(_pt_file))
-if _state is None:
-    st.error("未找到模拟交易状态文件（results/paper_trading/positions.json）。")
-    st.info("请在本地运行：`python src/scripts/paper_trading_daily.py` 初始化后提交到 GitHub。")
-    st.stop()
+_state, _fallback = _load_pt_state()
+if _fallback:
+    st.info("ℹ️ 使用回测继承数据（positions.json 未找到，正在从回测结果初始化）")
 
 _positions     = [p for p in _state["positions"] if not p.get("closed")]
 _closed_trades = _state.get("closed_trades", [])
