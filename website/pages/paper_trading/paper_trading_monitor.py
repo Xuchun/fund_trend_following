@@ -128,10 +128,10 @@ _bm, _bt_nav, _bt_spy, _bt_trades = _load_bt()
 
 with tab1:
     st.markdown("""
-    **运行方式：** 每个交易日收盘后在本地运行 `python src/scripts/paper_trading_daily.py`，
-    将更新后的 `results/paper_trading/positions.json` 推送到 GitHub，本页面自动刷新。
+    **运行方式：** 由 **GitHub Actions 自动运行**，每个交易日美东时间 4:30 PM 收盘后自动触发，
+    无需任何手动操作。运行结果自动推送到 GitHub，本页面随即刷新。
 
-    **初始资金：** 继承自回测结束（2026-06-15）的真实持仓，NAV ≈ $136.39M
+    **初始资金：** $200,000 USD（全新独立账户，调试期 2026-06-19 起，正式启动 2026-07-01）
     """)
 
     # ── Load Method 1 state ──────────────────────────────────────────────────
