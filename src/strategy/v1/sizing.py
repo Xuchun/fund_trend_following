@@ -81,7 +81,8 @@ def compute_position_size(
         final_shares = preliminary_shares
 
     # ── Step 4: Portfolio heat check ────────────────────────────────────────
-    int_shares = int(final_shares)
+    # 四舍五入 (round-half-up), not truncation
+    int_shares = math.floor(final_shares + 0.5)
     if int_shares < 1:
         return "corr" if corr_triggered else None
 
