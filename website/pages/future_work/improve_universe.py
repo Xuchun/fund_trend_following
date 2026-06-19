@@ -7,8 +7,11 @@ if str(_root) not in sys.path:
 
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.io as _pio
 from plotly.subplots import make_subplots
 import streamlit as st
+
+_pio.templates.default = "plotly_white"
 
 _project = Path(__file__).resolve().parents[3]
 _EU_CSV    = _project / "data" / "tiingo_eligible_universe.csv"
