@@ -144,6 +144,38 @@ st.markdown("""
 > 详见单独页面：**加仓机制（金字塔）**（Future Work 分组）
 """)
 
+# Chart: Pyramid gain by R bucket
+_big = trades[trades["pnl_r_multiple"] >= 3.0].copy()
+_big["initial_risk"] = _big["net_pnl"] / _big["pnl_r_multiple"]
+_big["pyramid_gain"] = (_big["pnl_r_multiple"] - 3.0) * 0.5 * _big["initial_risk"]
+
+_r_buckets = [(3, 5), (5, 10), (10, 15), (15, 20), (20, 30), (30, 99)]
+_r_labels  = ["3-5R", "5-10R", "10-15R", "15-20R", "20-30R", "30R+"]
+_r_current, _r_pyramid = [], []
+for lo, hi in _r_buckets:
+    sub = _big[(_big["pnl_r_multiple"] >= lo) & (_big["pnl_r_multiple"] < hi)]
+    _r_current.append(sub["net_pnl"].sum() / 1e6)
+    _r_pyramid.append(sub["pyramid_gain"].sum() / 1e6)
+
+_fig_pyra = go.Figure()
+_fig_pyra.add_trace(go.Bar(x=_r_labels, y=_r_current, name="当前利润（$M）", marker_color="#22c55e"))
+_fig_pyra.add_trace(go.Bar(x=_r_labels, y=_r_pyramid, name="金字塔加仓额外利润（$M）", marker_color="#86efac"))
+_fig_pyra.update_layout(
+    barmode="stack",
+    title=f"金字塔加仓潜在额外利润（R>3 的 {len(_big)} 笔交易，在 3R 时追加 50%）",
+    xaxis_title="R 倍数区间",
+    yaxis_title="利润（$M）",
+    height=380,
+    legend=dict(x=0.55, y=0.95),
+    margin=dict(t=50, b=40),
+)
+st.plotly_chart(_fig_pyra, use_container_width=True)
+st.caption(
+    f"R>3 的 {len(_big)} 笔交易当前利润共 ${_big['net_pnl'].sum()/1e6:.1f}M；"
+    f"若在 3R 时追加 50% 仓位，额外利润约 ${_big['pyramid_gain'].sum()/1e6:.1f}M（+{_big['pyramid_gain'].sum()/_big['net_pnl'].sum()*100:.0f}%）。"
+    "高 R 区间（>10R）是金字塔加仓的主要受益来源，因为剩余利润空间最大。"
+)
+
 st.markdown("---")
 
 # ── 建议 2：放宽大赢家的追踪止损 ───────────────────────────────────────────────
