@@ -369,16 +369,16 @@ _ch["year"] = pd.to_datetime(_ch["entry_date"]).dt.year
 _yearly = _ch.groupby("year").agg(
     笔数=("orig_pnl_r", "count"),
     改善笔数=("helped", "sum"),
-    平均P&L变化=("pnl_r_delta", "mean"),
+    均变化R=("pnl_r_delta", "mean"),
 ).reset_index()
 _yearly["改善率"] = _yearly["改善笔数"] / _yearly["笔数"]
 
 _fig_yr = go.Figure()
-_bar_clr = ["#2ca02c" if v >= 0 else "#d62728" for v in _yearly["平均P&L变化"]]
+_bar_clr = ["#2ca02c" if v >= 0 else "#d62728" for v in _yearly["均变化R"]]
 _fig_yr.add_trace(go.Bar(
-    x=_yearly["year"].astype(str), y=_yearly["平均P&L变化"],
+    x=_yearly["year"].astype(str), y=_yearly["均变化R"],
     marker_color=_bar_clr,
-    text=[f"{v:.2f}R" for v in _yearly["平均P&L变化"]],
+    text=[f"{v:.2f}R" for v in _yearly["均变化R"]],
     textposition="outside",
     name="年均 P&L 变化（R）",
     customdata=np.stack([_yearly["笔数"], _yearly["改善笔数"]], axis=1),
