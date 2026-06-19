@@ -312,7 +312,7 @@ st.markdown("""
 st.markdown("---")
 
 # ── Position sizing ───────────────────────────────────────────────────────────
-st.subheader("8. 仓位管理")
+st.subheader("7. 仓位管理")
 
 cols = st.columns(4)
 steps = [
