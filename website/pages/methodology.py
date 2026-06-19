@@ -215,7 +215,7 @@ st.markdown("""
 st.markdown("---")
 
 # ── Performance metrics ───────────────────────────────────────────────────────
-st.subheader("6. 绩效指标计算方法")
+st.subheader("7. 绩效指标计算方法")
 st.markdown("""
 | 指标 | 计算方法 |
 |------|---------|
