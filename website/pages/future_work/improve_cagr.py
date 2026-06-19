@@ -249,7 +249,7 @@ if _trail_f.exists():
         yaxis2=dict(title="最大回撤（%）", side="right", overlaying="y", range=[18, 23]),
         legend=dict(x=0.6, y=0.05), height=360, margin=dict(t=50, b=40),
     )
-    st.plotly_chart(_trail_f and _fig_trail, use_container_width=True)
+    st.plotly_chart(_fig_trail, use_container_width=True)
     st.caption(
         "当前 trail_multiplier_r1 = 3.0（1R→3R 阶段）已是 CAGR 最优点（10.36%）。"
         "建议 2 针对的是 >10R 阶段新增第四档（trail_multiplier_r10 = 7.0×），"
