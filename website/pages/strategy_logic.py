@@ -188,9 +188,9 @@ st.markdown(f"""
 ```
 
 - 使用复权价格（adj_factor），所有价格计算已包含分红
-- 使用 `shift(1)` 防止前视偏差（look-ahead bias）
+- 使用 shift(1) 防止前视偏差（look-ahead bias）
 - 仅在满足仓位过滤条件后建仓（见仓位管理）
-- Gap 过滤：若 `|t+1开盘价 − t收盘价| / t收盘价 > {p.get('gap_filter',0.025)*100:.1f}%`，跳过该信号（双向：跳空高开或跳空低开均过滤）
+- Gap 过滤：若 |t+1开盘价 − t收盘价| / t收盘价 > {p.get('gap_filter',0.025)*100:.1f}%，跳过该信号（双向：跳空高开或跳空低开均过滤）
 
 **多信号处理（同一天多个标的同时触发突破）：**
 - 所有信号按 **突破强度（breakout_strength）降序排列**优先执行：breakout_strength = adj_close[t] / max(adj_high[t-N:t-1])
