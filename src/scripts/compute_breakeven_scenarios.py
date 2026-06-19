@@ -248,17 +248,27 @@ def main() -> None:
                 rows.append(base)
                 continue
 
+            # BE stop set so net_pnl ≈ +TARGET_NET_PROFIT after slippage + commissions:
+            #   exit_proceeds = be_stop_price × shares × (1 - slip - comm)
+            #   net_pnl = exit_proceeds - entry_price × shares - entry_commission = TARGET
+            #   → be_stop_price = (entry_price × shares + entry_commission + TARGET) / (shares × _ADJ)
+            _qty = float(tr["shares"])
+            _ec  = float(tr["entry_commission"])
+            _ep  = float(tr["entry_price"])
+            be_stop_price = (_ep * _qty + _ec + TARGET_NET_PROFIT) / (_qty * _ADJ)
+
             for threshold, lbl in zip(THRESHOLDS, BE_LABELS):
                 res = _simulate_be(
                     d,
                     tr["entry_date"].normalize(),
-                    float(tr["entry_price"]),
+                    _ep,
                     float(tr["stop_loss"]),
                     float(tr["R"]),
                     float(tr["atr_at_entry"]),
                     tr["exit_date"].normalize(),
                     str(tr["exit_reason"]),
                     threshold,
+                    be_stop_price,
                 )
 
                 if res is None or res["exit_date"] is None:
