@@ -421,9 +421,11 @@ st.markdown(f"""
 
 4. **实现简单**：在出场循环中，追踪止损更新后加一行判断即可：
    ```
+   # be_stop_price = (entry_price × shares + entry_commission + 1) / (shares × (1 − slip − comm))
    if peak_profit >= 1 × R:
-       trail_stop = max(trail_stop, entry_price)
+       trail_stop = max(trail_stop, be_stop_price)
    ```
+   其中 `be_stop_price` 略高于开仓价，使得在平价保护价格出场时净盈利 ≈ +$1（扣除滑点和佣金后）。
 
 **注意事项：**
 - 约有 {_n_orig_win} 笔原本盈利的交易会因平价保护提前出场而减少获利，这是不可避免的代价。
