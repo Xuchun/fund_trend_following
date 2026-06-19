@@ -18,8 +18,7 @@ _pio.templates.default = "plotly_white"
 
 _res = get_results()
 _trd = _res.trades.copy()
-_nav = _res.nav.copy()
-_nav_s = _nav["nav"]
+_nav_s = _res.nav.copy()
 
 # ── Pre-compute drawdown series ───────────────────────────────────────────────
 _roll_max = _nav_s.expanding().max()
