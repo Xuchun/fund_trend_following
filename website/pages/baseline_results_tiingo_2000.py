@@ -1621,7 +1621,7 @@ def _render_breakeven():
 **策略参数提示**：本策略止损为 2×ATR，追踪止损倍数为 3×ATR。当浮盈恰好为 1.5R 时，追踪止损 = 最高价 − 3×ATR = (开仓价 + 1.5R) − 3×ATR = (开仓价 + 3×ATR) − 3×ATR = 开仓价。即原始追踪止损在浮盈达到 1.5R 时自然等于开仓价，因此平价保护 1.5R 和 2R 的实际效果极为有限。
 """)
 
-    _be = _load_be_scenarios(_BE_KEY)
+    _be = _load_be_scenarios()
     if _be is None:
         st.info("平价保护分析数据不在当前运行环境中。请在本地运行 `python src/scripts/compute_breakeven_scenarios.py` 后重新部署。")
         return
