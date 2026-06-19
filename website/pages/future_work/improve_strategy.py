@@ -501,7 +501,7 @@ if _sl_d:
     st.plotly_chart(_fig_sl, use_container_width=True)
 
     _sl_base_i = _slv.index(_slbase)
-    st.caption(
+    st.markdown(
         f"当前 2× ATR（绿色）：CAGR {_slc[_sl_base_i]:.2f}%（最优），但 Sharpe {_sls[_sl_base_i]:.3f} 不是最优。"
         f"扩大至 2.5× ATR 时 CAGR 降至 {_slc[2]:.2f}% 但 MaxDD 轻微改善（{_slm[2]:.2f}%）；"
         f"收紧至 1.5× ATR 时 CAGR 略降（{_slc[0]:.2f}%）但 MaxDD 最高（{_slm[0]:.2f}%）—— 频繁假止损反而扩大回撤。"
@@ -510,19 +510,19 @@ if _sl_d:
 
 st.markdown("#### 7.2 止损执行价精准度改进（最高回测精准度改进优先级）")
 st.markdown("""
-当前止损触发逻辑：`low[t] < stop_loss → 次日开盘价平仓`
+当前止损触发逻辑：low[t] < stop_loss → 次日开盘价平仓
 
 **问题**：假设次日高开（stock gaps up），回测仍用高开价执行，而实盘止损单会在止损价执行——
 回测系统性高估了止损出场价，隐含 CAGR 被高估。
 
-**建议**：将止损执行价改为 `min(stop_loss_price, open[t+1])`：
+**建议**：将止损执行价改为 min(stop_loss_price, open[t+1])：
 - 若次日低开 → 按开盘价执行（与当前相同，正确）
 - 若次日高开 → 按止损价执行（实盘止损单的行为，更保守、更真实）
 
 **估算影响**：约 −0.74 pp CAGR（CAGR 从 10.58% 降至约 9.84%），让回测更保守但更准确。
 这是一行代码的改动，却能显著提升回测可信度。
 
-> 注：此改进详见"如何改进回测方法论"页面 — 改进①。
+注：此改进详见"如何改进回测方法论"页面 — 改进①。
 """)
 
 st.markdown("---")
