@@ -122,6 +122,8 @@ _navs_all = {
 }
 _orig_c = _cagr(_nav_orig)
 _orig_d = _maxdd(_nav_orig)
+_be1r_c_pp = (_cagr(_nav_be1r) - _orig_c) * 100
+_be1r_wr_pp = (_winrate("be1r") - _winrate("orig")) * 100
 
 _m_rows = []
 for (_nm, _nav), _lbl_wr in zip(_navs_all.items(), ["orig", "be1r", "be15r", "be2r"]):
