@@ -439,7 +439,7 @@ st.markdown("---")
 st.subheader("11. 信号执行顺序（跟策略1.0一样）")
 st.markdown("""
 **多信号处理（同一天多个标的同时触发突破）：**
-- 所有信号按 **突破强度（breakout_strength）降序排列**优先执行：`breakout_strength = adj_close[t] / max(adj_high[t-N:t-1])`
+- 所有信号按 **突破强度（breakout_strength）降序排列**优先执行：breakout_strength = adj_close[t] / max(adj_high[t-N:t-1])
 - 每执行完一笔后**立即更新**当前持仓和风险敞口，后续信号的相关性计算与组合热度检查均基于最新状态
 - 优先处理突破最强的信号，可在热度上限耗尽前最大化资金利用效率
 
