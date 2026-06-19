@@ -1647,15 +1647,8 @@ Gap > 2.5% 被过滤的信号另外 {_pd_ks.read_csv(_SIM_CSV)['gap_filtered'].s
     )
     st.plotly_chart(_fig_dist, use_container_width=True)
 
-    _col_a, _col_b = st.columns(2)
-    with _col_a:
-        st.metric("已执行 K线强度均值", f"{_ex['k_strength'].mean():.2f}%",
-                  help="已执行信号按突破强度排序优先入场，倾向于更大的信号日涨幅")
-    with _col_b:
-        st.metric("未执行 K线强度均值", f"{_nex['k_strength'].mean():.2f}%")
-
-    # ── Bucket analysis: all signals ──────────────────────────────────────────
-    def _bkt_chart(df, title, color_bar, color_line):
+    # ── Bucket analysis charts ────────────────────────────────────────────────
+    def _bkt_chart(df, title, ks_mean, color_bar, color_line):
         _d = df.copy()
         _d["bucket"] = _pd_ks.cut(
             _d["k_strength"],
@@ -1683,12 +1676,15 @@ Gap > 2.5% 被过滤的信号另外 {_pd_ks.read_csv(_SIM_CSV)['gap_filtered'].s
             marker=dict(size=8, color=color_line), line=dict(color=color_line, width=2),
         ))
         _fig.update_layout(
-            title=title,
+            title=dict(
+                text=f"{title}   <span style='font-size:13px;color:#666'>（K线强度均值 {ks_mean:.2f}%，共 {len(df):,} 个信号）</span>",
+                font=dict(size=14),
+            ),
             xaxis_title="K线强度",
             yaxis=dict(title="胜率（%）", range=[0, 70], ticksuffix="%"),
             yaxis2=dict(title="平均R", overlaying="y", side="right", range=[-0.3, 0.8]),
-            height=360, margin=dict(l=60, r=70, t=70, b=50),
-            legend=dict(orientation="h", x=0.5, y=1.14),
+            height=380, margin=dict(l=60, r=70, t=80, b=50),
+            legend=dict(orientation="h", x=0.5, y=1.12),
         )
         for _lb, _nv, _wv in zip(_lbs, _b["n"].tolist(), _b["win_pct"].tolist()):
             _fig.add_annotation(
@@ -1699,11 +1695,17 @@ Gap > 2.5% 被过滤的信号另外 {_pd_ks.read_csv(_SIM_CSV)['gap_filtered'].s
 
     _c1, _c2 = st.columns(2)
     with _c1:
-        st.plotly_chart(_bkt_chart(_sim, "全量信号（已执行 + 未执行）", "#1f77b4", "#ff7f0e"),
-                        use_container_width=True)
+        st.plotly_chart(
+            _bkt_chart(_sim, "全量信号（已执行 + 未执行）",
+                       _sim["k_strength"].mean(), "#1f77b4", "#ff7f0e"),
+            use_container_width=True,
+        )
     with _c2:
-        st.plotly_chart(_bkt_chart(_ex, "仅已执行信号", "#2ca02c", "#d62728"),
-                        use_container_width=True)
+        st.plotly_chart(
+            _bkt_chart(_ex, "仅已执行信号",
+                       _ex["k_strength"].mean(), "#2ca02c", "#d62728"),
+            use_container_width=True,
+        )
 
     # ── Correlation stats ─────────────────────────────────────────────────────
     _r_p_all, _p_p_all = _pearsonr(_sim["k_strength"], _sim["pnl_r"])
