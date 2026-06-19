@@ -26,13 +26,6 @@ if _cache_key not in st.session_state:
 _res = st.session_state[_cache_key]
 
 
-def _be_csv_key() -> str:
-    if not _BE_CSV.exists():
-        return "missing"
-    import hashlib as _hl
-    with open(_BE_CSV, "rb") as _f:
-        return _hl.md5(_f.read()).hexdigest()
-
 def _load_be():
     if not _BE_CSV.exists():
         return None
