@@ -931,12 +931,14 @@ _fig_hd.update_layout(
 )
 st.plotly_chart(_fig_hd, use_container_width=True)
 
+_wr_0_19 = sum(_hd_n_win[:2]) / (sum(_hd_n_win[:2]) + sum(_hd_n_lose[:2])) * 100
+_wr_60p  = sum(_hd_n_win[4:]) / (sum(_hd_n_win[4:]) + sum(_hd_n_lose[4:])) * 100
+
 _c1, _c2, _c3 = st.columns(3)
-_c1.metric("0–19 天交易的胜率", f"{(_hd_wr[0]*_hd_n_win[0]+_hd_wr[1]*_hd_n_win[1])/(sum(_hd_n_win[:2])+sum(_hd_n_lose[:2]))*100:.1f}%",
+_c1.metric("0–19 天交易的胜率", f"{_wr_0_19:.1f}%",
            "几乎全是亏损", delta_color="inverse")
 _c2.metric("30–59 天交易的胜率", f"{_hd_wr[3]:.1f}%", "首次超过 50%")
-_c3.metric("60+ 天交易的胜率", f"{(_hd_wr[4]*(_hd_n_win[4]+_hd_n_lose[4])+_hd_wr[5]*(_hd_n_win[5]+_hd_n_lose[5]))/(sum(_hd_n_win[4:])+sum(_hd_n_lose[4:]))*100:.1f}%",
-           "绝大多数是赢家")
+_c3.metric("60+ 天交易的胜率", f"{_wr_60p:.1f}%", "绝大多数是赢家")
 
 _n_short_losers = _hd_n_lose[0] + _hd_n_lose[1]
 _total_losers   = sum(_hd_n_lose)
