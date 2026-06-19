@@ -316,6 +316,36 @@ st.markdown("""
 突破可信度偏低，此时少开仓比多开仓更安全。
 """)
 
+# Chart: Daily signal count distribution
+_es2 = pd.read_csv(_results_path / "daily_entry_stats.csv", index_col="date", parse_dates=True)
+_sig_by_day2 = _es2["signals"][_es2["signals"] > 0]
+_sig_bins2   = [(1,1),(2,3),(4,5),(6,10),(11,20),(21,9999)]
+_sig_labels2 = ["1个", "2-3个", "4-5个", "6-10个", "11-20个", "21+个"]
+_sig_counts2 = [(((_sig_by_day2 >= lo) & (_sig_by_day2 <= hi)).sum()) for lo, hi in _sig_bins2]
+_sig_pcts2   = [c / len(_sig_by_day2) * 100 for c in _sig_counts2]
+
+_fig_sig2 = go.Figure(go.Bar(
+    x=_sig_labels2,
+    y=_sig_counts2,
+    marker_color=["#22c55e","#22c55e","#fbbf24","#f97316","#ef4444","#dc2626"],
+    text=[f"{c}天<br>({p:.1f}%)" for c, p in zip(_sig_counts2, _sig_pcts2)],
+    textposition="outside",
+))
+_fig_sig2.update_layout(
+    title="每日突破信号数分布（2000-2026，共 4,099 个有信号交易日）",
+    xaxis_title="当日信号数",
+    yaxis_title="天数",
+    height=360,
+    margin=dict(t=50, b=40),
+    yaxis=dict(range=[0, max(_sig_counts2) * 1.2]),
+)
+st.plotly_chart(_fig_sig2, use_container_width=True)
+st.caption(
+    f"有 {_sig_counts2[3]+_sig_counts2[4]+_sig_counts2[5]:,} 天（{_sig_pcts2[3]+_sig_pcts2[4]+_sig_pcts2[5]:.1f}%）每日信号数 ≥ 6个，"
+    "这类高拥挤日下集中开仓风险最大。"
+    "限制单日开仓数可防止在同一市场环境下押注过多相关标的。"
+)
+
 st.markdown("---")
 
 # 建议 4
