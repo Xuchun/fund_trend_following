@@ -1588,13 +1588,6 @@ import pandas as _pd_be
 
 _BE_CSV = _results_path / "breakeven_scenarios.csv"
 
-def _be_csv_key() -> str:
-    if not _BE_CSV.exists():
-        return "missing"
-    import hashlib as _hl
-    with open(_BE_CSV, "rb") as _f:
-        return _hl.md5(_f.read()).hexdigest()
-
 def _load_be_scenarios():
     if not _BE_CSV.exists():
         return None
