@@ -1672,7 +1672,10 @@ Gap > 2.5% 被过滤的信号另外 {_pd_ks.read_csv(_SIM_CSV)['gap_filtered'].s
         _fig.add_trace(_go_ks_i.Bar(
             x=_lbs, y=_b["win_pct"].tolist(), name="胜率（%）",
             marker_color=color_bar, yaxis="y1",
-            text=[f"{v:.0f}%" for v in _b["win_pct"].tolist()], textposition="outside",
+            text=[f"{v:.0f}%" for v in _b["win_pct"].tolist()],
+            textposition="inside",
+            insidetextanchor="middle",
+            textfont=dict(color="white", size=13),
         ))
         _fig.add_trace(_go_ks_i.Scatter(
             x=_lbs, y=_b["avg_r"].tolist(), name="平均R",
@@ -1682,14 +1685,16 @@ Gap > 2.5% 被过滤的信号另外 {_pd_ks.read_csv(_SIM_CSV)['gap_filtered'].s
         _fig.update_layout(
             title=title,
             xaxis_title="K线强度",
-            yaxis=dict(title="胜率（%）", range=[0, 65], ticksuffix="%"),
+            yaxis=dict(title="胜率（%）", range=[0, 70], ticksuffix="%"),
             yaxis2=dict(title="平均R", overlaying="y", side="right", range=[-0.3, 0.8]),
-            height=340, margin=dict(l=60, r=70, t=50, b=50),
+            height=360, margin=dict(l=60, r=70, t=70, b=50),
             legend=dict(orientation="h", x=0.5, y=1.14),
         )
         for _lb, _nv, _wv in zip(_lbs, _b["n"].tolist(), _b["win_pct"].tolist()):
-            _fig.add_annotation(x=_lb, y=_wv + 4, text=f"n={int(_nv)}",
-                                showarrow=False, font=dict(size=9, color="gray"), yref="y")
+            _fig.add_annotation(
+                x=_lb, y=_wv + 5, text=f"n={int(_nv)}",
+                showarrow=False, font=dict(size=11, color="#444"), yref="y",
+            )
         return _fig
 
     _c1, _c2 = st.columns(2)
