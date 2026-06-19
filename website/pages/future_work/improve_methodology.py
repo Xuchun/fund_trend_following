@@ -163,7 +163,7 @@ st.info(f"""
 
 差距约 **{(_m['cagr'] - _conservative_cagr)*100:.2f} pp**。
 影响不大但方向明确：当前模型略微高估了止损出场的平均成交价格。
-建议在引擎中将止损平仓执行价改为 `min(stop_loss_price, open[t+1])`。
+建议在引擎中将止损平仓执行价改为 min(stop_loss_price, open[t+1])。
 """)
 
 st.markdown("---")
