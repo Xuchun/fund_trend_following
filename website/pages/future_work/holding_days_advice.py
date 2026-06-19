@@ -198,14 +198,41 @@ st.markdown("---")
 # ── 五、真正的资金使用率问题 ────────────────────────────────────────────────
 st.subheader("五、真正的资金低效来自哪里？")
 
-st.markdown("""
-**0-30 天的快速止损交易才是资金使用率的主要拖累：**
+st.markdown("**0-30 天的快速止损交易才是资金使用率的主要拖累：**")
 
+# Chart: 0-30 days vs all others — direct comparison
+_fast = trades[(trades["holding_days"] <= 30)].copy()
+_fast_loss = _fast[_fast["net_pnl"] < 0]
+_slow = trades[(trades["holding_days"] > 30)].copy()
+_slow_loss = _slow[_slow["net_pnl"] < 0]
+_rest_gain = trades[(trades["holding_days"] > 90)].copy()
+
+_fig_split = go.Figure()
+_fig_split.add_trace(go.Bar(
+    x=["0-30天<br>快速止损（1,871笔）", ">30天<br>其余交易（1,466笔）"],
+    y=[_fast["net_pnl"].sum() / 1e6, _slow["net_pnl"].sum() / 1e6],
+    marker_color=["#ef4444", "#22c55e"],
+    text=[
+        f"${_fast['net_pnl'].sum()/1e6:.1f}M<br>胜率={(_fast['net_pnl']>0).mean()*100:.1f}%",
+        f"${_slow['net_pnl'].sum()/1e6:.1f}M<br>胜率={(_slow['net_pnl']>0).mean()*100:.1f}%",
+    ],
+    textposition="outside",
+))
+_fig_split.update_layout(
+    title="0-30天快速止损 vs 其余交易的净盈亏对比",
+    yaxis_title="净盈亏（$M）",
+    height=320,
+    margin=dict(t=50, b=40),
+    yaxis=dict(range=[_fast["net_pnl"].sum() / 1e6 * 1.15, _slow["net_pnl"].sum() / 1e6 * 1.2]),
+)
+st.plotly_chart(_fig_split, use_container_width=True)
+
+st.markdown(f"""
 | 问题 | 数据 | 说明 |
 |------|------|------|
-| 0-30 天快速止损 | 1,871 笔，净亏损 -$140.6M | 占总交易 56%，贡献负利润 -116% |
-| 其中第 1-10 天就止损 | 占比最高 | 说明入场质量是核心问题 |
-| 31-90 天的慢速磨损 | 1,081 笔，胜率 67% | 部分是趋势发展缓慢，部分是假突破 |
+| 0-30 天快速止损 | {len(_fast):,} 笔，净亏损 ${abs(_fast['net_pnl'].sum()/1e6):.1f}M | 占总交易 {len(_fast)/total_n*100:.0f}%，胜率仅 {(_fast['net_pnl']>0).mean()*100:.1f}% |
+| 其中第 1-10 天就止损 | 占 0-30 天组 {len(_fast[_fast['holding_days']<=10])/len(_fast)*100:.0f}% | 说明入场质量是核心问题 |
+| >30 天（趋势充分发展） | {len(_slow):,} 笔，净盈利 ${_slow['net_pnl'].sum()/1e6:.1f}M | 胜率 {(_slow['net_pnl']>0).mean()*100:.0f}%，策略真正的利润来源 |
 
 这些快速亏损是**趋势跟踪策略必须支付的"保费"**——策略通过截断这些亏损，换来了少数大赢家的右尾收益。
 但如果能**提高入场质量**，减少假突破比例，则可以：
