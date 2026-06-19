@@ -356,8 +356,16 @@ with tab2:
     _m2 = _load_m2()
 
     if _m2 is None:
-        st.error("未找到 IB 状态文件（results/paper_trading/ib_state.json）。")
-        st.stop()
+        # Fallback: show empty $200K initial state
+        st.info("ℹ️ ib_state.json 尚未生成，显示初始状态（$200K，0 持仓）。")
+        _m2 = {
+            "schema_version": 1, "method": "ib_paper_trading",
+            "debug_start_date": "2026-06-19", "live_start_date": "2026-07-01",
+            "initial_capital": 200000.0, "currency": "USD",
+            "last_update_date": None, "nav": 200000.0, "cash": 200000.0,
+            "account_summary": {}, "positions": [], "closed_trades": [],
+            "nav_history": [], "orders_history": [], "today_signals": {},
+        }
 
     _m2_positions  = [p for p in _m2.get("positions", []) if not p.get("closed")]
     _m2_closed     = _m2.get("closed_trades", [])
