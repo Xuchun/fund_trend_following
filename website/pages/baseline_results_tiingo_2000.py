@@ -1600,7 +1600,7 @@ def _render_kstrength():
     import plotly.graph_objects as _go_ks_i
     from scipy.stats import pearsonr as _pearsonr, spearmanr as _spearmanr
 
-    _sim = _load_sim_signals()
+    _sim = _load_sim_signals(_SIM_MTIME)
     _ks_total = len(res.trades)
 
     st.subheader("开仓K线强度分析")
