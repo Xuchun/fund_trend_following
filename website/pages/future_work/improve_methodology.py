@@ -25,6 +25,7 @@ except ImportError:
         return 0.5 * math.erfc(abs(t) / math.sqrt(2))
 
 _res   = get_results()
+_meta  = _res.meta
 _trd   = _res.trades.copy()
 _nav   = _res.nav.copy()
 _m     = dict(_res.metrics)
