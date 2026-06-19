@@ -698,7 +698,7 @@ if _pc_d:
             f" heat_limit：当前 {_hl_d['baseline_value']:.0%}（绿色）CAGR {_hlc_list[_hl_base_i]:.2f}%，MaxDD {_hlm_list[_hl_base_i]:.2f}%；"
             "降低 heat_limit 可轻微改善 MaxDD，代价是 CAGR 小幅下降。"
         )
-    st.caption(
+    st.markdown(
         f"position_cap：当前 {_pcbase:.0%}（绿色）是 CAGR 最优点（{_pcc[_pc_base_i]:.2f}%）。"
         f"降低至 3% 时交易笔数增加（{_pcn[0]:.0f} 笔）但每笔规模缩小，CAGR 降至 {_pcc[0]:.2f}%。"
         f"提高至 7% 时 MaxDD 增至 {_pcm[-1]:.2f}%。5% 是当前最优平衡点。"
