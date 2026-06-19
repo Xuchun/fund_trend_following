@@ -61,8 +61,8 @@ st.markdown(f"""
 <div class="info-box">
 <strong>为何需要这两个过滤条件？</strong><br>
 <ul>
-<li><strong>价格 > \${p.get('min_price', 10):.0f}：</strong>低价股（Penny Stocks）波动极大、流动性差，ATR 计算容易失真，仓位规模计算也会产生极端结果。</li>
-<li><strong>ADV > \${p.get('min_adv_m', 60):.0f}M：</strong>直接量化流动性，同时替代无法获取的历史市值数据。\${p.get('min_adv_m', 60):.0f}M ADV 对应约 \$12 亿以上市值，确保目标仓位（最大 5% NAV = \$50 万）不超过该股票单日成交额的约 1%，减少实盘滑点超出假设的风险。</li>
+<li><strong>价格 > ${p.get('min_price', 10):.0f}：</strong>低价股（Penny Stocks）波动极大、流动性差，ATR 计算容易失真，仓位规模计算也会产生极端结果。</li>
+<li><strong>ADV > ${p.get('min_adv_m', 60):.0f}M：</strong>直接量化流动性，同时替代无法获取的历史市值数据。${p.get('min_adv_m', 60):.0f}M ADV 对应约 $12 亿以上市值，确保目标仓位（最大 5% NAV = $50 万）不超过该股票单日成交额的约 1%，减少实盘滑点超出假设的风险。</li>
 </ul>
 </div>
 """, unsafe_allow_html=True)
