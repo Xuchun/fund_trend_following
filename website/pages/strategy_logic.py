@@ -357,10 +357,6 @@ with col1:
 - 滑点：{p.get('slippage_bps',10):.0f} bps（单边）
 - 佣金：{p.get('commission_bps',3):.0f} bps（单边）
 - 总成本约 {(p.get('slippage_bps',10)+p.get('commission_bps',3))*2:.0f} bps/往返
-
-> 实现说明：代码中滑点已直接嵌入成交价，
-> `fill_price = open_price × (1 + slippage_bps/10000)`，
-> 与设计方案将 entry_price 和成本分开记录的方式在 PnL 上数值等价。
 """)
 with col2:
     st.markdown(f"""
