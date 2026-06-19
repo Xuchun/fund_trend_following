@@ -1,5 +1,6 @@
 """如何降低连续亏损次数"""
 
+import json
 import sys
 from pathlib import Path
 _root = Path(__file__).resolve().parents[3]
@@ -13,6 +14,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 _results_path = _root / "results" / "v1_unbiased_60m_2000"
+_perturb_path = _root / "results" / "v1_unbiased_60m_2000" / "perturbation"
 
 st.title("如何降低连续亏损次数")
 st.caption("基于连续亏损序列分析，识别长序列的根本成因并提出可落地的改进建议")
