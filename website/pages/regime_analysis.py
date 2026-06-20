@@ -251,6 +251,7 @@ if regime_data and "regimes" in regime_data:
 
     hike_cagr       = _s("加息熊市").get("cagr", 0)
     hike_spy_cagr   = _spy("加息熊市").get("cagr", 0)
+    hike_spy_dd     = _spy("加息熊市").get("max_drawdown", 0)
     hike_alpha      = _alpha("加息熊市")
     hike_winrate    = _s("加息熊市").get("win_rate", 0)
     hike_strat_dd   = _s("加息熊市").get("max_drawdown", 0)
