@@ -744,7 +744,7 @@ Sharpe 稳定区间：**{stab_str}**。
     st.markdown(
         f"- **选择 ${base['param_value']:.0f}M ADV 的理由：** 对 $10M 初始资金，典型仓位约 $500K，"
         "$60M ADV 意味着占当日成交量约 0.8%，冲击成本极低，可轻松完成建仓退出；"
-        "相比 $50M 门槛，$60M 信噪比更高（CAGR +1.1pp，Sharpe +0.074），标的池仍覆盖 2,937 只历史标的"
+        "相比 $50M 门槛，$60M 信噪比更高（CAGR +1.1pp，Sharpe +0.074），标的池仍覆盖 2,976 只历史标的"
     )
     _section_meta["min_adv_m"] = _info
 else:
