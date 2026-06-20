@@ -176,7 +176,7 @@ with _col_b:
 | 减仓比例 | `correlation_reduction` | **{_p['correlation_reduction']*100:.0f}%**（仓位乘以 0.5）|
 """)
 
-    st.markdown("**市场环境过滤（Regime Filter）**")
+    st.markdown("**市场环境过滤**")
     st.markdown(f"""
 | 参数 | 代码名 | Baseline 值 |
 |---|---|---|
