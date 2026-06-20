@@ -126,7 +126,7 @@ st.subheader("一、策略概述与标的池")
 st.markdown(f"""
 **策略1.0** 是一套基于**趋势跟踪**（Trend Following）原理的纯多头量化策略。
 核心逻辑：当股票突破近期最高价（N 日突破信号），以 ATR 倍数为单位开仓，
-并通过追踪止损（Trailing Stop）锁定利润、控制回撤，空仓资金持有短债 ETF（SHY）。
+并通过移动止盈（Trailing Stop）锁定利润、控制回撤，空仓资金持有短债 ETF（SHY）。
 策略在 SPY 200 日均线以下停止开新仓，但保留已有仓位随趋势运行。
 
 **历史回测标的池**：{meta.universe_total:,} 只标的（{meta.backtest_start[:4]}–{meta.backtest_end[:4]}），

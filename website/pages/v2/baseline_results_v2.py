@@ -16,7 +16,7 @@ st.markdown("---")
 placeholder_v2(
     "Baseline参数回测结果",
     "将展示策略2.0 Baseline参数下的核心绩效指标、净值曲线、年度收益、交易统计等。"
-    "Baseline 参数：突破窗口 N=100，横盘回望 80 日，收敛阈值 25%，追踪止损 20 日 2×ATR。",
+    "Baseline 参数：突破窗口 N=100，横盘回望 80 日，收敛阈值 25%，移动止盈 20 日 2×ATR。",
 )
 
 st.markdown("---")

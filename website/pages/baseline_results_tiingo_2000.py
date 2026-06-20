@@ -689,7 +689,7 @@ for _, _sr2 in _long_s2.iterrows():
         "连续亏损笔数": int(_sr2["length"]),
         "持续（天）": _cd2,
         "止损": f"{_sl_pct}笔",
-        "追踪止损": f"{_ts_pct}笔",
+        "移动止盈": f"{_ts_pct}笔",
         "平均盈亏（R）": round(float(_sl2["pnl_r_multiple"].mean()), 2),
         "期间SPY": f"{_spy_r2:+.1f}%",
         "前20日SPY": f"{_spy_pre2:+.1f}%",
@@ -726,7 +726,7 @@ st.markdown(
     f'<strong>主要共性：</strong>'
     f'<ul style="margin:6px 0 0 16px">'
     f'<li><strong>止损主导</strong>：{len(_long_s2)} 次长连亏中，每次都以止损（stop_loss）为主要出场方式，'
-    f'说明行情在持仓期间快速反向，未给追踪止损机会。</li>'
+    f'说明行情在持仓期间快速反向，未给移动止盈机会。</li>'
     f'<li><strong>市场不总是下跌</strong>：{len(_long_s2)} 次长连亏中有 {_n_neg_spy} 次 SPY 同期为负，'
     f'{_n_pos_spy} 次 SPY 同期为正。说明部分长连亏发生于市场上涨背景下——'
     f'策略所持个股未能跟随大盘，或入场时机恰好处于短期回调高点。</li>'
@@ -752,7 +752,7 @@ st.caption("已平仓交易中 R 倍数最差的 20 笔——寻找大亏家的�
 _l20 = res.trades.nsmallest(20, "pnl_r_multiple").copy()
 _l20["类别"]     = _l20["ticker"].apply(lambda t: "ETF" if t in _ETF_SET else "股票")
 _l20["卖出原因"] = _l20["exit_reason"].map({
-    "trailing_stop":   "追踪止损",
+    "trailing_stop":   "移动止盈",
     "stop_loss":       "止损",
     "end_of_backtest": "回测截止",
     "delisted":        "退市/并购",
@@ -1216,7 +1216,7 @@ st.markdown(f"""
 # ── Big-R trades table (R > 3) ────────────────────────────────────────────────
 _etf_set = set(meta.etf_universe[i]["ticker"] for i in range(len(meta.etf_universe)))
 _exit_reason_cn = {
-    "trailing_stop":    "追踪止损",
+    "trailing_stop":    "移动止盈",
     "stop_loss":        "止损",
     "end_of_backtest":  "回测截止",
     "delisted":         "退市/并购",
@@ -1248,7 +1248,7 @@ st.caption("已平仓交易中 R 倍数最高的 20 笔——寻找大赢家的�
 _t20 = res.trades.nlargest(20, "pnl_r_multiple").copy()
 _t20["类别"]     = _t20["ticker"].apply(lambda t: "ETF" if t in _ETF_SET else "股票")
 _t20["卖出原因"] = _t20["exit_reason"].map({
-    "trailing_stop":   "追踪止损",
+    "trailing_stop":   "移动止盈",
     "stop_loss":       "止损",
     "end_of_backtest": "回测截止",
     "delisted":        "退市/并购",
@@ -1286,9 +1286,9 @@ st.plotly_chart(_fig_t20r, use_container_width=True)
 # ── 指标行 ────────────────────────────────────────────────────────────────────
 _tm1, _tm2, _tm3, _tm4 = st.columns(4)
 with _tm1:
-    st.metric("追踪止损退出",
+    st.metric("移动止盈退出",
               f"{_t20_n_trailing} / 20  ({_t20_n_trailing / 20 * 100:.0f}%)",
-              help="大赢家通过追踪止损离场 = 让利润奔跑到趋势结束")
+              help="大赢家通过移动止盈离场 = 让利润奔跑到趋势结束")
 with _tm2:
     st.metric("平均持仓天数",
               f"{_t20_avg_hold:.0f} 天",
@@ -1568,7 +1568,7 @@ st.markdown(f"""
 
 | 维度 | 数据 | 解读 |
 |------|------|------|
-| 退出方式 | {_t20_n_trailing}/20 笔（{_t20_n_trailing / 20 * 100:.0f}%）为追踪止损 | 大赢家几乎全靠"让利润奔跑"，极少被止损打出 |
+| 退出方式 | {_t20_n_trailing}/20 笔（{_t20_n_trailing / 20 * 100:.0f}%）为移动止盈 | 大赢家几乎全靠"让利润奔跑"，极少被止损打出 |
 | 持仓时长 | 平均 {_t20_avg_hold:.0f} 天（中位 {_t20_med_hold:.0f} 天），区间 [{_t20_min_hold}–{_t20_max_hold}] 天 | 比全部盈利交易均值（{_t20_all_win_avg:.0f} 天）长出 {_t20_avg_hold - _t20_all_win_avg:.0f} 天；**持仓时间越长 R 越大**（r={_t20_corr:.2f}） |
 | 资产类别 | {_t20_n_stocks} 只股票 / {len(_t20) - _t20_n_stocks} 只 ETF | {_etf_note} |
 | 年份集中度 | 集中于 {_yr_str} | 大赢家往往出现在特定行情年份，验证了顺势交易的核心逻辑 |
@@ -1969,17 +1969,17 @@ def _load_be_scenarios():
 def _render_breakeven():
     st.subheader("平价保护分析")
     st.markdown("""
-**平价保护**（Breakeven Protection）：开仓后，一旦浮盈达到设定阈值，将追踪止损上移至略高于开仓价格的位置，使出场时净盈利 ≈ +$1（扣除滑点和佣金后）。其他策略设置（过滤条件、仓位管理、执行与成本假设）均保持不变。
+**平价保护**（Breakeven Protection）：开仓后，一旦浮盈达到设定阈值，将移动止盈上移至略高于开仓价格的位置，使出场时净盈利 ≈ +$1（扣除滑点和佣金后）。其他策略设置（过滤条件、仓位管理、执行与成本假设）均保持不变。
 
 本分析对所有已执行信号分别模拟三种平价保护规则：
 
 | 规则 | 触发条件 | 止损调整 |
 |------|----------|----------|
-| 平价保护 1R | 浮盈（以最高价计）≥ 1×R | 追踪止损上移至略高于开仓价格的位置（净盈利 ≈ +$1） |
-| 平价保护 1.5R | 浮盈（以最高价计）≥ 1.5×R | 追踪止损上移至略高于开仓价格的位置（净盈利 ≈ +$1） |
-| 平价保护 2R | 浮盈（以最高价计）≥ 2×R | 追踪止损上移至略高于开仓价格的位置（净盈利 ≈ +$1） |
+| 平价保护 1R | 浮盈（以最高价计）≥ 1×R | 移动止盈上移至略高于开仓价格的位置（净盈利 ≈ +$1） |
+| 平价保护 1.5R | 浮盈（以最高价计）≥ 1.5×R | 移动止盈上移至略高于开仓价格的位置（净盈利 ≈ +$1） |
+| 平价保护 2R | 浮盈（以最高价计）≥ 2×R | 移动止盈上移至略高于开仓价格的位置（净盈利 ≈ +$1） |
 
-**策略参数提示**：本策略止损为 2×ATR，追踪止损倍数为 3×ATR。当浮盈恰好为 1.5R 时，追踪止损 = 最高价 − 3×ATR = (开仓价 + 1.5R) − 3×ATR = (开仓价 + 3×ATR) − 3×ATR = 开仓价。即原始追踪止损在浮盈达到 1.5R 时自然等于开仓价，因此平价保护 1.5R 和 2R 的实际效果极为有限。
+**策略参数提示**：本策略止损为 2×ATR，移动止盈倍数为 3×ATR。当浮盈恰好为 1.5R 时，移动止盈 = 最高价 − 3×ATR = (开仓价 + 1.5R) − 3×ATR = (开仓价 + 3×ATR) − 3×ATR = 开仓价。即原始移动止盈在浮盈达到 1.5R 时自然等于开仓价，因此平价保护 1.5R 和 2R 的实际效果极为有限。
 """)
 
     _be = _load_be_scenarios()
@@ -2100,7 +2100,7 @@ def _render_breakeven():
     st.markdown(
         "注：「曾触发」= 该交易浮盈曾达到阈值（止损已上移至略高于开仓价格的位置）。"
         "「实际提前出场」= 平价保护使退出日期早于原始策略。"
-        "触发但未提前出场 = 浮盈达到阈值后价格继续上涨，原始追踪止损已高于平价保护止损价，平价保护无额外保护作用。"
+        "触发但未提前出场 = 浮盈达到阈值后价格继续上涨，原始移动止盈已高于平价保护止损价，平价保护无额外保护作用。"
     )
 
 
@@ -2324,7 +2324,7 @@ _lh200 = res.trades[res.trades["holding_days"] > 200].copy()
 if len(_lh200) > 0:
     _lh200["类别"] = _lh200["ticker"].apply(lambda t: "ETF" if t in _ETF_SET else "股票")
     _lh200["卖出原因"] = _lh200["exit_reason"].map({
-        "trailing_stop":   "追踪止损",
+        "trailing_stop":   "移动止盈",
         "stop_loss":       "止损",
         "end_of_backtest": "回测截止",
         "delisted":        "退市/并购",

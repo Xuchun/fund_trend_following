@@ -74,7 +74,7 @@ with col_v1:
     <li><strong>核心 Edge</strong>：价格突破近期前高 → 趋势延续</li>
     <li><strong>入场</strong>：200 日最高价突破（单一条件）</li>
     <li><strong>止损</strong>：ATR 止损（2×ATR）</li>
-    <li><strong>止盈</strong>：分段追踪止损（3/3/5×ATR）</li>
+    <li><strong>止盈</strong>：分段移动止盈（3/3/5×ATR）</li>
     <li><strong>过滤</strong>：市场环境 + 相关性 + 成交量</li>
     <li><strong>参数数量</strong>：~13 个</li>
     <li><strong>状态</strong>：✅ 回测完成，推荐实盘</li>
@@ -90,7 +90,7 @@ with col_v2:
     <li><strong>核心 Edge</strong>：横盘收敛积聚能量 → 突破后更持久</li>
     <li><strong>入场</strong>：100 日突破 + 80 日收敛 + 突破强度（4 条件）</li>
     <li><strong>止损</strong>：结构止损（ATR + 近期低点）</li>
-    <li><strong>止盈</strong>：单层追踪止损（20日最高 - 2×ATR）</li>
+    <li><strong>止盈</strong>：单层移动止盈（20日最高 - 2×ATR）</li>
     <li><strong>过滤</strong>：极简（仅跳空保护）</li>
     <li><strong>参数数量</strong>：5 个</li>
     <li><strong>状态</strong>：⏳ 开发中，回测待完成</li>
