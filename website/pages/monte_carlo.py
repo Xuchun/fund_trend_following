@@ -58,7 +58,7 @@ with st.expander("📋 点击展开：本次模拟使用的 Baseline Anchor 锚�
 
 # ── Load montecarlo.json ──────────────────────────────────────────────────────
 _MC_PATH   = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m_2000" / "montecarlo.json"
-_DIAG_PATH = Path(__file__).resolve().parents[2] / "results" / "v1" / "diagnostics.json"
+_DIAG_PATH = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m_2000" / "diagnostics.json"
 
 mc = None
 if _MC_PATH.exists():
