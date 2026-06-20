@@ -75,15 +75,16 @@ def render_summary_cards(metrics: dict, color: str,
         st.markdown(_card_html(
             "交易胜率",
             f"{win_rate*100:.1f}%",
-            "胜率低但期望值为正（趋势跟踪特征）",
+            "",
             color,
         ), unsafe_allow_html=True)
 
     with cols2[1]:
+        trades_per_yr = metrics.get('trades_per_year', 0)
         st.markdown(_card_html(
             "总交易笔数",
-            f"{int(n_trades):,}",
-            f"约 {metrics.get('trades_per_year',0):.0f} 笔/年",
+            f'{int(n_trades):,} <span style="font-size:0.5em;color:#666;font-weight:normal">约 {trades_per_yr:.0f} 笔/年</span>',
+            "",
             color,
         ), unsafe_allow_html=True)
 
@@ -92,7 +93,7 @@ def render_summary_cards(metrics: dict, color: str,
         st.markdown(_card_html(
             "最长连续亏钱交易次数",
             f'<span style="color:{cl_color}">{max_cl} 笔</span>',
-            "历史最长连续亏损交易序列",
+            "",
             color,
         ), unsafe_allow_html=True)
 
@@ -112,11 +113,10 @@ def render_summary_cards(metrics: dict, color: str,
         ), unsafe_allow_html=True)
 
     with cols3[1]:
-        yrs2 = f"{avg_deep_days/252:.1f} 年" if avg_deep_days else "—"
         st.markdown(_card_html(
             "平均深度水下时间（回撤 > 10%，≥5 天情节）",
             f'<span style="color:#d62728">{avg_deep_days:.0f} 交易日</span>',
-            f"≈ {yrs2}（交易日计），共 {n_episodes} 次有效情节（已过滤 1–4 天噪声触碰）",
+            "",
             color,
         ), unsafe_allow_html=True)
 
@@ -127,36 +127,7 @@ def render_summary_cards(metrics: dict, color: str,
         st.markdown(_card_html(
             "隐含年化交易成本",
             f'<span style="color:#d62728">≈ {implied_cost:.2f}%</span>',
-            f"换手率 {turnover:.1f}x × 往返 {rt_bps:.0f} bps，已含于回测净值",
-            color,
-        ), unsafe_allow_html=True)
-
-    cols4 = st.columns(3)
-    with cols4[0]:
-        sortino_color = "#2ca02c" if sortino > 0.5 else ("#d62728" if sortino < 0 else "#f57c00")
-        st.markdown(_card_html(
-            "Sortino 比率",
-            f'<span style="color:{sortino_color}">{sortino:+.3f}</span>',
-            "仅惩罚下行波动率，比 Sharpe 更关注亏损风险",
-            color,
-        ), unsafe_allow_html=True)
-
-    with cols4[1]:
-        sharpe_color = "#2ca02c" if sharpe > 0.5 else ("#d62728" if sharpe < 0 else "#f57c00")
-        st.markdown(_card_html(
-            "Sharpe 比率",
-            f'<span style="color:{sharpe_color}">{sharpe:+.3f}</span>',
-            "无风险利率 2%（历史均值，日度计算）",
-            color,
-        ), unsafe_allow_html=True)
-
-    with cols4[2]:
-        pf_color = "#2ca02c" if profit_factor > 1.5 else ("#d62728" if profit_factor < 1.0 else "#f57c00")
-        pf_val = f"{profit_factor:.2f}" if profit_factor else "—"
-        st.markdown(_card_html(
-            "Profit Factor",
-            f'<span style="color:{pf_color}">{pf_val}</span>',
-            "总盈利 ÷ 总亏损；> 1 策略1.0有正期望，> 1.5 为良好，> 2.0 为优秀",
+            "",
             color,
         ), unsafe_allow_html=True)
 
