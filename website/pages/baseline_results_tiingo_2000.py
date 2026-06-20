@@ -597,13 +597,15 @@ st.markdown(f"#### 1. 最长连续亏损：{_max_len_s2} 笔连续亏损")
 
 _mc1, _mc2, _mc3, _mc4, _mc5 = st.columns(5)
 with _mc1:
-    st.markdown("持续时间（日历日）")
-    st.markdown(f"**:red[{_max_cal_days} 天]**")
-_mc2.metric("初始止损触发占比", f"{int((_max_trades_s2['exit_reason']=='stop_loss').sum())}/{_max_len_s2} 笔")
+    st.markdown('<p style="font-size:0.875rem;color:#555;margin-bottom:0">持续时间（日历日）</p>'
+                f'<p style="font-size:2.25rem;font-weight:700;color:#d62728;margin-top:0">{_max_cal_days} 天</p>',
+                unsafe_allow_html=True)
+_mc2.metric("止损触发占比", f"{int((_max_trades_s2['exit_reason']=='stop_loss').sum())}/{_max_len_s2} 笔")
 _mc3.metric("合计亏损（R）", f"{_max_trades_s2['pnl_r_multiple'].sum():.1f}R")
 with _mc4:
-    st.markdown("合计策略涨跌")
-    st.markdown(f"**:red[{_streak_dd_pct:.1f}%]**")
+    st.markdown('<p style="font-size:0.875rem;color:#555;margin-bottom:0">合计策略涨跌</p>'
+                f'<p style="font-size:2.25rem;font-weight:700;color:#d62728;margin-top:0">{_streak_dd_pct:.1f}%</p>',
+                unsafe_allow_html=True)
 _mc5.metric("同期 SPY 涨跌", f"{_spy_dur_ret:+.1f}%")
 
 # Bar chart: all 34 trades as individual bars, colored by exit reason
