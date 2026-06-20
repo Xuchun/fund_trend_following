@@ -607,23 +607,31 @@ _mc3.metric("合计亏损（R）", f"{_max_trades_s2['pnl_r_multiple'].sum():.1f
 _mc4.metric("平均亏损（R）", f"{_max_trades_s2['pnl_r_multiple'].mean():.2f}R")
 _mc5.metric("同期 SPY 涨跌", f"{_spy_dur_ret:+.1f}%")
 
-# Scatter: exit date vs pnl_r for the 34-trade streak
+# Bar chart: all 34 trades as individual bars, labeled by ticker+date
+_max_labels = [
+    f"{t}<br>{d}" for t, d in zip(
+        _max_trades_s2["ticker"],
+        _max_trades_s2["exit_date"].dt.strftime("%m/%d"),
+    )
+]
 _fig_max_s = _go_streak2.Figure()
 _fig_max_s.add_trace(_go_streak2.Bar(
-    x=_max_trades_s2["exit_date"].dt.strftime("%Y-%m-%d"),
+    x=_max_labels,
     y=_max_trades_s2["pnl_r_multiple"],
     marker_color="#d62728",
-    text=_max_trades_s2["ticker"],
+    text=[f"{v:.2f}R" for v in _max_trades_s2["pnl_r_multiple"]],
     textposition="outside",
-    hovertemplate="%{text}<br>出场：%{x}<br>盈亏：%{y:.2f}R<extra></extra>",
+    hovertemplate="<b>%{x}</b><br>盈亏：%{y:.2f}R<extra></extra>",
+    customdata=_max_trades_s2["exit_date"].dt.strftime("%Y-%m-%d").values,
 ))
 _fig_max_s.update_layout(
-    title=f"最长连续亏损 {_max_len_s2} 笔：各交易盈亏（R）",
-    xaxis_title="出场日期",
+    title=f"最长连续亏损 {_max_len_s2} 笔：各交易盈亏（R）——每笔均单独显示",
+    xaxis_title="个股（出场月/日）",
     yaxis_title="盈亏（R倍数）",
     showlegend=False,
-    height=380,
-    margin=dict(t=50, b=60, l=50, r=20),
+    height=420,
+    margin=dict(t=50, b=80, l=50, r=20),
+    xaxis=dict(type="category", tickangle=-45, tickfont=dict(size=10)),
 )
 st.plotly_chart(_fig_max_s, use_container_width=True)
 
