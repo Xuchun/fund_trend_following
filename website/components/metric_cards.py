@@ -102,11 +102,11 @@ def render_summary_cards(metrics: dict, color: str,
         yrs = f"{max_dd_days/252:.1f}年" if max_dd_days else "—"
         spy_maxdd_days = sm.get("spy_max_dd_duration_days", 0)
         spy_uw_sub = (
-            f"同期 SPY 最长水下 {spy_maxdd_days:,} 交易日（约 {spy_maxdd_days/252:.1f} 年）"
-            if spy_maxdd_days else "同期 SPY 的最长水下时间"
+            f"同期 SPY 回撤 {spy_maxdd_days:,} 交易日（约 {spy_maxdd_days/252:.1f} 年）"
+            if spy_maxdd_days else "同期 SPY 的最长回撤时间"
         )
         st.markdown(_card_html(
-            "最长水下时间",
+            "最长回撤时间",
             f'<span style="color:#d62728">{max_dd_days:,} 交易日（约{yrs}）</span>',
             spy_uw_sub,
             color,
@@ -114,7 +114,7 @@ def render_summary_cards(metrics: dict, color: str,
 
     with cols3[1]:
         st.markdown(_card_html(
-            "平均深度水下时间（回撤 > 10%，≥5 天情节）",
+            "平均深度回撤时间（回撤 > 10%，≥5 天情节）",
             f'<span style="color:#d62728">{avg_deep_days:.0f} 交易日</span>',
             "",
             color,
