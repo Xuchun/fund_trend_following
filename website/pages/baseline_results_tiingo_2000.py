@@ -166,7 +166,6 @@ with _col_b:
 | 单标的仓位上限 | `position_cap` | **{_p['position_cap']*100:.0f}% NAV** |
 | 热度上限 | `heat_limit` | **{_p['heat_limit']*100:.0f}% NAV**（注②）|
 """)
-    st.caption("注②：由于 position_cap 架空效应，实际每笔风险约 0.24% NAV，heat_limit ≥ 10% 在回测中从未触发（见参数敏感性分析页）。")
 
     st.markdown("**相关性过滤**")
     st.markdown(f"""
