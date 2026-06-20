@@ -2299,9 +2299,7 @@ with col3:
 st.markdown(f"""
 **解读：** 年换手率 {turnover:.1f}x（{turnover*100:.0f}%）表示每年平均买入约 {turnover:.1f} 倍 NAV 的股票。
 以单边 {slippage_bps:.0f} bps 滑点 + {commission_bps:.0f} bps 佣金（合计 {slippage_bps+commission_bps:.0f} bps）、往返 {rt_cost_bps:.0f} bps 计，
-隐含年化交易摩擦约 **{implied_cost_pct:.2f}%**，已完整计入回测净值，无需额外扣除。
-
-> 趋势跟踪策略的换手率通常在每年 500%–2,000%，本策略 {turnover*100:.0f}% 处于正常范围。
+隐含年化交易摩擦约 **{implied_cost_pct:.2f}%**，已完整计入回测净值，无需额外扣除。趋势跟踪策略的换手率通常在每年 500%–2,000%，本策略 {turnover*100:.0f}% 处于正常范围。
 """)
 
 st.markdown("---")
