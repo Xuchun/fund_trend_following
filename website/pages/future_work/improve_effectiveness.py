@@ -260,99 +260,103 @@ st.markdown(
 st.markdown("---")
 
 # ── Section 3: 改进路径一 ─────────────────────────────────────────────────────
-st.subheader("三、改进路径一：SPY 200 日均线过滤——只在上升趋势中做多")
+st.subheader("三、改进路径一：优化市场环境过滤（已有200MA基础，针对「过热区间」进一步提升）")
 
-st.markdown(
-    "最直接的改进：**当 SPY 跌破 200 日均线时，暂停新开多仓**。"
-    "这将避免在熊市中逆势入场，减少大量低胜率交易。"
+st.info(
+    "**📌 策略1.0 已启用 SPY 200日均线过滤**（`regime_filter_enabled = True`）：当 SPY 收盘价低于其200日SMA时，"
+    "系统自动暂停所有非豁免品种的新开仓信号；仅 TLT、GLD、UUP 等防御性 ETF 在熊市中仍可接受信号。"
+    "因此「新增200MA过滤」不是改进方向——该机制早已存在。"
 )
 
-# Filter analysis
-_above = trades[trades["spy_ma_ratio"] > 0]
-_below = trades[trades["spy_ma_ratio"] <= 0]
-_above_strict = trades[trades["spy_ma_ratio"] > 0.10]   # SPY > 200MA by > 10%
-_above_moderate = trades[(trades["spy_ma_ratio"] > 0) & (trades["spy_ma_ratio"] <= 0.10)]
+st.markdown(
+    "**真正的优化空间在于：当 SPY 处于特定「过热区间」时，交易质量出现明显下滑。**"
+    "下表按 SPY 与200日均线的距离将交易细分为5个子区间："
+)
 
-_filter_rows = [
-    {
-        "条件": "SPY 0–10% 高于200MA（健康牛市）",
-        "交易笔数": len(_above_moderate),
-        "胜率": f"{(_above_moderate['net_pnl']>0).mean()*100:.1f}%",
-        "平均R": round(float(_above_moderate["pnl_r_multiple"].mean()), 3),
-        "合计净盈亏": f"${_above_moderate['net_pnl'].sum()/1e6:.1f}M",
-    },
-    {
-        "条件": "SPY >10% 高于200MA（过热牛市）",
-        "交易笔数": len(_above_strict),
-        "胜率": f"{(_above_strict['net_pnl']>0).mean()*100:.1f}%",
-        "平均R": round(float(_above_strict["pnl_r_multiple"].mean()), 3),
-        "合计净盈亏": f"${_above_strict['net_pnl'].sum()/1e6:.1f}M",
-    },
-    {
-        "条件": "SPY 低于200MA（熊市）",
-        "交易笔数": len(_below),
-        "胜率": f"{(_below['net_pnl']>0).mean()*100:.1f}%",
-        "平均R": round(float(_below["pnl_r_multiple"].mean()), 3),
-        "合计净盈亏": f"${_below['net_pnl'].sum()/1e6:.1f}M",
-    },
+# 5-zone analysis
+_zones = [
+    ("SPY < 200MA（熊市，豁免品种仍可开仓）", -99, 0.00),
+    ("SPY 0–5% 高于200MA（健康初期牛市）",     0.00, 0.05),
+    ("SPY 5–10% 高于200MA（稳定牛市）",         0.05, 0.10),
+    ("SPY 10–15% 高于200MA ⚠️ 过热区间",        0.10, 0.15),
+    ("SPY >15% 高于200MA（强劲热牛）",           0.15, 99),
 ]
-st.dataframe(pd.DataFrame(_filter_rows), use_container_width=True, hide_index=True)
+_zone_rows = []
+for label, lo, hi in _zones:
+    m = (trades["spy_ma_ratio"] >= lo) & (trades["spy_ma_ratio"] < hi)
+    g = trades[m]
+    if len(g) == 0:
+        continue
+    wr   = float((g["net_pnl"] > 0).mean() * 100)
+    avgr = float(g["pnl_r_multiple"].mean())
+    pct3r = float((g["pnl_r_multiple"] >= 3).mean() * 100)
+    pnl  = float(g["net_pnl"].sum())
+    _zone_rows.append({
+        "市场状态": label,
+        "交易笔数": len(g),
+        "胜率":    f"{wr:.1f}%",
+        "平均R":   round(avgr, 3),
+        "3R+占比": f"{pct3r:.0f}%",
+        "合计净盈亏": f"${pnl/1e6:+.2f}M",
+    })
+_zone_df = pd.DataFrame(_zone_rows)
+st.dataframe(_zone_df, use_container_width=True, hide_index=True)
 
-# Simulate: strategy NAV without below-200MA trades
-# Build daily NAV approximation: use trade-level PnL aggregated by exit date
-_base_pnl = trades.groupby("exit_date")["net_pnl"].sum().sort_index()
-_bull_pnl  = trades[trades["spy_ma_ratio"] > 0].groupby("exit_date")["net_pnl"].sum().sort_index()
+# Bar chart: avg R by zone
+_zone_labels = [r["市场状态"][:12] + "…" if len(r["市场状态"]) > 14 else r["市场状态"]
+                for r in _zone_rows]
+_zone_avgr   = [float(r["平均R"]) for r in _zone_rows]
+_zone_colors = ["#d62728" if v < 0.05 else ("#ff7f0e" if v < 0.20 else "#2ca02c")
+                for v in _zone_avgr]
+fig_zone = go.Figure()
+fig_zone.add_trace(go.Bar(
+    x=list(range(len(_zone_labels))),
+    y=_zone_avgr,
+    marker_color=_zone_colors,
+    text=[f"{v:.3f}R" for v in _zone_avgr],
+    textposition="outside",
+    hovertemplate="%{customdata}<br>平均R: %{y:.3f}<extra></extra>",
+    customdata=[r["市场状态"] for r in _zone_rows],
+))
+fig_zone.update_layout(
+    title="SPY 与200日均线距离 vs 平均交易R倍数",
+    xaxis=dict(
+        tickmode="array",
+        tickvals=list(range(len(_zone_labels))),
+        ticktext=["熊市\n(已过滤)", "0–5%↑", "5–10%↑", "10–15%↑\n⚠️过热", ">15%↑"],
+        tickfont=dict(size=11),
+    ),
+    yaxis_title="平均R倍数",
+    showlegend=False,
+    height=360,
+    margin=dict(l=60, r=30, t=55, b=70),
+)
+fig_zone.add_hline(y=0, line_color="black", line_width=1)
+st.plotly_chart(fig_zone, use_container_width=True)
 
-# Build cumulative PnL curves (additive, starting from 0)
-_all_dates = pd.date_range(_idx[0], _idx[-1], freq="B")
-_base_cum  = _base_pnl.reindex(_all_dates, fill_value=0).cumsum()
-_bull_cum  = _bull_pnl.reindex(_all_dates, fill_value=0).cumsum()
-
-_pnl_saved = float(_below["net_pnl"].sum())
-_pct_saved = _pnl_saved / float(trades["net_pnl"].sum()) * 100
+# Identify the overheated zone
+_hot_zone = [r for r in _zone_rows if "10–15%" in r["市场状态"]]
+_hot_n = _hot_zone[0]["交易笔数"] if _hot_zone else 0
+_hot_avgr = float(_hot_zone[0]["平均R"]) if _hot_zone else 0.0
+_hot_pnl  = _hot_zone[0]["合计净盈亏"] if _hot_zone else "N/A"
 
 st.markdown(
-    f'<div style="background:#f0f4ff;border-left:4px solid #1f77b4;padding:12px 16px;border-radius:4px;margin:8px 0">'
-    f'SPY低于200MA期间共发生 <strong>{len(_below)} 笔交易</strong>，'
-    f'合计净亏损 <strong>${abs(_pnl_saved)/1e6:.2f}M</strong>（约占总盈亏的 {abs(_pct_saved):.1f}%），'
-    f'胜率仅 28.3%（全局39.1%）。'
-    f'若过滤掉这些交易，可在几乎不影响整体开仓次数（仅减少 {len(_below)/len(trades)*100:.1f}%）的情况下'
-    f'，节省这部分亏损。'
+    f'<div style="background:#fff8e1;border-left:4px solid #ff9800;padding:12px 16px;border-radius:4px;margin:8px 0">'
+    f'<strong>关键发现：SPY 10–15% 高于200MA 是「过热区间」。</strong>'
+    f'在这 {_hot_n} 笔交易中，平均R仅 {_hot_avgr:.3f}——几乎为零，是所有区间中最低的。'
+    f'这意味着市场在从200MA上方10%爬升至15%的过程中，个股趋势信号质量最差：'
+    f'多数股票已在高位，假突破率高，趋势持续性弱。'
     f'</div>',
     unsafe_allow_html=True,
 )
 
-# Chart: cumulative PnL of below-200MA trades by year
-_bear_by_yr = trades[trades["spy_ma_ratio"] <= 0].groupby(
-    trades[trades["spy_ma_ratio"] <= 0]["exit_date"].dt.year
-)["net_pnl"].agg(["sum","count"]).reset_index()
-_bear_by_yr.columns = ["year","net_pnl","n"]
-fig_bear_pnl = go.Figure()
-_bear_colors = ["#d62728" if v < 0 else "#2ca02c" for v in _bear_by_yr["net_pnl"]]
-fig_bear_pnl.add_trace(go.Bar(
-    x=_bear_by_yr["year"].astype(str),
-    y=(_bear_by_yr["net_pnl"] / 1e3).round(1),
-    marker_color=_bear_colors,
-    text=[f"n={n}" for n in _bear_by_yr["n"]],
-    textposition="outside",
-    hovertemplate="<b>%{x}</b><br>净盈亏: %{y:.0f}K<extra></extra>",
-))
-fig_bear_pnl.update_layout(
-    title="SPY < 200MA 期间各年交易的合计净盈亏（千美元）",
-    xaxis_title="年份",
-    yaxis_title="净盈亏（$K）",
-    height=320,
-    margin=dict(l=60, r=30, t=55, b=50),
-    showlegend=False,
-)
-st.plotly_chart(fig_bear_pnl, use_container_width=True)
-
 st.markdown(
-    "**实施建议：**\n\n"
-    "- **规则**：在 SPY 收盘价跌破并**连续3个交易日处于200日均线以下**时，暂停所有新开多仓信号。"
-    " 当 SPY 重回200日均线以上时，恢复入场。\n"
-    "- **代价**：在某些快速「假跌破」行情（如2018年底、2020年3月快速 V 形反转）可能错过部分最佳入场时机。\n"
-    "- **预期收益**：消除低胜率的熊市交易，历史上可节省约 $834K 净亏损，同时提升整体胜率约 1 个百分点。"
+    "**实施建议：在「过热区间」降低风险敞口**\n\n"
+    "- **仓位缩减**：当 SPY 高于200日均线 10–15% 时，将每笔交易的风险金额缩减至标准的 **0.5×**。"
+    " 这不会错过信号，只是减小单笔亏损幅度，在过热区间的质量更差时少冒风险。\n"
+    "- **信号更严格**：在该区间内，要求突破幅度更大（如突破价格需超过近期高点的 1.005× 而非默认值）"
+    " 以过滤掉更多假突破。\n"
+    "- **实施难度**：低。只需在现有 regime 过滤后再加一层距离计算，无需修改策略核心逻辑。"
 )
 
 st.markdown("---")
