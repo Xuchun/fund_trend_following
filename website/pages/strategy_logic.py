@@ -29,7 +29,7 @@ st.markdown(f"""
 | 策略类型 | 趋势跟踪（Trend Following）|
 | 方向 | 纯多头（Long Only） |
 | 入场信号 | N 日高点突破 |
-| 止损 | ATR 固定止损 |
+| 止损 | ATR 止损 |
 | 止盈 | 移动止盈 |
 | 仓位管理 | 固定比例风险（1% NAV/笔） |
 | 执行 | 次日开盘价成交 |
@@ -210,7 +210,7 @@ st.markdown("---")
 # ── Stop loss ─────────────────────────────────────────────────────────────────
 st.subheader("5. 止损")
 st.markdown(f"""
-入场后立即设置固定止损位，基于 **ATR(20) Wilder 平滑**计算：
+入场后立即设置止损位，基于 **ATR(20) Wilder 平滑**计算：
 
 ```
 止损价  = 入场价 − {p['stop_loss_multiplier']:.1f} × ATR(20)
@@ -273,8 +273,8 @@ st.markdown(f"""
 当持仓最高价突破 entry_price + 1×ATR 后，移动止盈线（highest_high − 3×ATR）
 开始高于止损线（entry − 2×ATR），从此由移动止盈主导退出。
 （此接管时机由数学自然保证，代码无需显式判断：trail_stop 从 entry − 3×ATR 起步，
-低于固定止损位 entry − 2×ATR；一旦 highest_high 超过 entry + 1×ATR，
-trail_stop 数学上必然超过固定止损位，自动成为约束性条件。）
+低于止损位 entry − 2×ATR；一旦 highest_high 超过 entry + 1×ATR，
+trail_stop 数学上必然超过止损位，自动成为约束性条件。）
 两者同时有效，以**收盘价穿越移动止盈**或**日内最低价穿越止损**中先触发者为准。
 """)
 

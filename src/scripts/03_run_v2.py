@@ -1,4 +1,5 @@
 """
+[已废弃] 此脚本使用 Yahoo Finance 数据，已不再使用。请改用对应 Tiingo 版本。
 Script: run Strategy 2.0 backtest — adds SPY 200-day SMA regime filter.
 
 New in v2 vs v1:

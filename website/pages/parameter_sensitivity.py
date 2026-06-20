@@ -382,7 +382,7 @@ if _d:
     _info = _render_param_section(
         _d,
         "✅ ATR 止损乘数（stop_loss_multiplier）",
-        """**背景：** 固定止损线 = 入场价 − N×ATR(20)。
+        """**背景：** 止损线 = 入场价 − N×ATR(20)。
 乘数越小止损越紧，止损频率更高但每次亏损更小；乘数越大止损更宽，
 止损频率更低但风险每次更大。在 1R 风险框架下，乘数影响仓位大小（同等资金暴露下，
 止损越宽持仓越小）。""",
@@ -807,7 +807,7 @@ if _DIAG_PATH.exists():
     import json as _json
     diag = _json.loads(_DIAG_PATH.read_text(encoding="utf-8"))
 
-    st.markdown("#### A. Gap 止损分析（只统计触发固定止损的交易）")
+    st.markdown("#### A. Gap 止损分析（只统计触发止损的交易）")
     gs = diag.get("gap_loss_stats", {})
     col1, col2, col3 = st.columns(3)
     col1.metric("止损交易笔数", f"{gs.get('n_stop_trades', 0):,}")

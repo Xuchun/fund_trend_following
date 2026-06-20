@@ -1148,7 +1148,7 @@ _fig_ay.add_hline(y=0, line_color="#333", line_width=0.8, row=1, col=1)
 # Row 2 — trades per year (manually stacked via base)
 _reason_cfg_ay = [
     ("trailing_stop",   "#1f77b4", "移动止盈"),
-    ("stop_loss",       "#d62728", "固定止损"),
+    ("stop_loss",       "#d62728", "止损"),
     ("end_of_backtest", "#aaaaaa", "回测结束"),
 ]
 _all_yrs_ay = sorted(_tr_df_ay["year"].unique())

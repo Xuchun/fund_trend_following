@@ -73,7 +73,7 @@ with col_v1:
     <ul style="margin:0;padding-left:18px;">
     <li><strong>核心 Edge</strong>：价格突破近期前高 → 趋势延续</li>
     <li><strong>入场</strong>：200 日最高价突破（单一条件）</li>
-    <li><strong>止损</strong>：ATR 固定止损（2×ATR）</li>
+    <li><strong>止损</strong>：ATR 止损（2×ATR）</li>
     <li><strong>止盈</strong>：分段追踪止损（3/3/5×ATR）</li>
     <li><strong>过滤</strong>：市场环境 + 相关性 + 成交量</li>
     <li><strong>参数数量</strong>：~13 个</li>
@@ -111,7 +111,7 @@ _param_rows = [
     ("入场", "成交量确认", "有（1.5×均量）", "无"),
     ("入场", "市场环境过滤", "有（SPY 200 日均线）", "无"),
     ("入场", "相关性过滤", "有（Pearson > 0.7 则减仓）", "无"),
-    ("止损", "机制", "ATR 固定止损（entry - 2×ATR）", "结构止损（max(ATR止损, 近期低点×0.995)）"),
+    ("止损", "机制", "ATR 止损（entry - 2×ATR）", "结构止损（max(ATR止损, 近期低点×0.995)）"),
     ("止盈", "机制", "分段追踪（3/3/5×ATR，按盈利档位）", "单层追踪（highest(high,20) - 2×ATR）"),
     ("仓位", "风险单位", "1% NAV / 笔", "1% NAV / 笔"),
     ("仓位", "单标的上限", "5% NAV", "5% NAV"),

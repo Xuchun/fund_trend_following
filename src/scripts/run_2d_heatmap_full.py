@@ -1,4 +1,5 @@
 """
+[已废弃] 此脚本使用 Yahoo Finance 数据，已不再使用。请改用对应 Tiingo 版本。
 2-D parameter heatmap — full-metrics version.
 
 Runs two 2-D parameter grids and saves ALL backtest metrics per combination.

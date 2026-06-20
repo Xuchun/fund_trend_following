@@ -1,4 +1,5 @@
 """
+[已废弃] 此脚本使用 Yahoo Finance 数据，已不再使用。请改用对应 Tiingo 版本。
 Script: run the Strategy 1.0 baseline backtest and generate a full report.
 
 Usage examples:
