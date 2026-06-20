@@ -277,8 +277,110 @@ CI 过滤能精准识别并跳过这类"假牛市"期间的信号。
 
 st.markdown("---")
 
-# ── 五、成交量过滤 ─────────────────────────────────────────────────────────────
-st.subheader("五、成交量过滤")
+# ── 五、熊市做空对冲（新增）──────────────────────────────────────────────────────
+st.subheader("五、熊市中加入 SPY 反向敞口（做空对冲）")
+
+st.markdown(
+    "> 📊 本节的完整数据分析详见「**如何改进策略有效性 → 三、改进路径一**」。\n\n"
+    "**优先级定位：🟠 中高等** — 历史模拟 CAGR 提升 **+2.4 pp**，Sharpe **0.79 → 0.94**，实施难度中等（★★）。"
+)
+
+st.markdown(
+    "策略在熊市中依靠追踪止损保护资本，但未能主动**从下跌中获利**。"
+    "当 SPY 处于确认熊市（低于200日均线）时，叠加 20% 的指数反向敞口（如购买 SH 等反向 ETF），"
+    "可在熊市年份显著提升组合收益。"
+)
+
+@st.cache_data
+def _load_spy_nav_is():
+    _spy_is = pd.read_csv(_results_path / "spy_nav.csv", parse_dates=["date"], index_col="date")["spy_nav"]
+    _nav_df_is = pd.read_csv(_results_path / "nav.csv", parse_dates=["date"], index_col="date")
+    return _spy_is, _nav_df_is.iloc[:, 0]
+
+_spy_is, _nav_is = _load_spy_nav_is()
+_spy_200ma_is = _spy_is.rolling(200, min_periods=150).mean()
+_idx_is  = _nav_is.index.intersection(_spy_is.index)
+_s_is    = _nav_is[_idx_is] / float(_nav_is[_idx_is[0]])
+_b_is    = _spy_is[_idx_is] / float(_spy_is[_idx_is[0]])
+_ny_is   = len(_idx_is) / 252
+
+_s_ret_d_is  = _s_is.pct_change().fillna(0)
+_b_ret_d_is  = _b_is.pct_change().fillna(0)
+_in_bear_is  = (_spy_is[_idx_is] < _spy_200ma_is[_idx_is]).fillna(False)
+
+_blend_ret_is = _s_ret_d_is.copy()
+_blend_ret_is[_in_bear_is] = (
+    0.80 * _s_ret_d_is[_in_bear_is] + 0.20 * (-_b_ret_d_is[_in_bear_is])
+)
+_blend_nav_is = (1 + _blend_ret_is).cumprod()
+
+_s_cagr_is   = (float(_s_is.iloc[-1]) ** (1 / _ny_is) - 1) * 100
+_b_cagr_is   = (float(_b_is.iloc[-1]) ** (1 / _ny_is) - 1) * 100
+_bl_cagr_is  = (float(_blend_nav_is.iloc[-1]) ** (1 / _ny_is) - 1) * 100
+_s_dd_is     = float(((_s_is - _s_is.cummax()) / _s_is.cummax()).min()) * 100
+_bl_dd_is    = float(((_blend_nav_is - _blend_nav_is.cummax()) / _blend_nav_is.cummax()).min()) * 100
+_s_sh_is     = float(_s_ret_d_is.mean() / _s_ret_d_is.std() * np.sqrt(252))
+_bl_sh_is    = float(_blend_ret_is.mean() / _blend_ret_is.std() * np.sqrt(252))
+_n_bear_d_is = int(_in_bear_is.sum())
+_n_total_d_is = len(_in_bear_is)
+
+_stat_rows_is = [
+    {"指标": "年化收益 CAGR",  "当前策略": f"{_s_cagr_is:.2f}%",              "加入熊市对冲后": f"{_bl_cagr_is:.2f}%"},
+    {"指标": "最大回撤",       "当前策略": f"{_s_dd_is:.2f}%",               "加入熊市对冲后": f"{_bl_dd_is:.2f}%"},
+    {"指标": "Sharpe 比率",   "当前策略": f"{_s_sh_is:.2f}",                 "加入熊市对冲后": f"{_bl_sh_is:.2f}"},
+    {"指标": "vs SPY Alpha",  "当前策略": f"{_s_cagr_is - _b_cagr_is:+.2f} pp", "加入熊市对冲后": f"{_bl_cagr_is - _b_cagr_is:+.2f} pp"},
+]
+st.dataframe(pd.DataFrame(_stat_rows_is), use_container_width=True, hide_index=True)
+
+_fig_nav_is = go.Figure()
+_fig_nav_is.add_trace(go.Scatter(
+    name="策略1.0（当前）",
+    x=_s_is.index, y=_s_is.values,
+    mode="lines", line=dict(color="#2ca02c", width=2),
+))
+_fig_nav_is.add_trace(go.Scatter(
+    name="策略1.0 + 熊市对冲（20% 反向SPY）",
+    x=_blend_nav_is.index, y=_blend_nav_is.values,
+    mode="lines", line=dict(color="#ff7f0e", width=2, dash="dot"),
+))
+_fig_nav_is.add_trace(go.Scatter(
+    name="SPY（基准）",
+    x=_b_is.index, y=_b_is.values,
+    mode="lines", line=dict(color="#1f77b4", width=1.5, dash="dash"),
+    opacity=0.6,
+))
+_fig_nav_is.update_layout(
+    title="净值曲线对比：当前策略 vs 加入熊市对冲后",
+    yaxis_title="净值（初始 = 1.0）",
+    height=400,
+    margin=dict(l=60, r=30, t=55, b=50),
+    legend=dict(orientation="h", x=0, y=1.10),
+)
+st.plotly_chart(_fig_nav_is, use_container_width=True)
+
+st.markdown(
+    f'<div style="background:#f0f4ff;border-left:4px solid #ff7f0e;padding:12px 16px;border-radius:4px;margin:8px 0">'
+    f'<strong>模拟结果：</strong>历史上 SPY 有 {_n_bear_d_is} 个交易日（占 {_n_bear_d_is/_n_total_d_is*100:.0f}%）处于200日均线以下。'
+    f'在这些日期叠加 20% 反向 SPY 敞口后，CAGR 从 {_s_cagr_is:.1f}% 提升至 {_bl_cagr_is:.1f}%（+{_bl_cagr_is-_s_cagr_is:.1f} pp），'
+    f'Sharpe 从 {_s_sh_is:.2f} → {_bl_sh_is:.2f}，最大回撤从 {_s_dd_is:.1f}% 改善至 {_bl_dd_is:.1f}%。'
+    f'</div>',
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    "**实施建议：**\n\n"
+    "- **触发条件**：SPY 低于200日均线且持续 10 个交易日以上（避免假信号），将 20% 仓位配置至反向 ETF（如 SH）。\n"
+    "- **退出条件**：SPY 重回200日均线以上时，平仓反向 ETF，恢复全仓趋势跟踪策略。\n"
+    "- **风险提示**：若 SPY 出现快速 V 形反转（如 2020年3月），持有反向 ETF 可能放大短期亏损；"
+    " 建议设置反向 ETF 仓位的止损线（如跌幅超过 10% 平仓）。\n"
+    "- **本质**：这不改变策略的信号逻辑，只是在确认熊市环境中增加一个对冲层，"
+    "是策略从「纯多头」升级为「多空双向」的轻量化第一步，也是 **策略2.0** 的重要组成方向。"
+)
+
+st.markdown("---")
+
+# ── 六、成交量过滤 ─────────────────────────────────────────────────────────────
+st.subheader("六、成交量过滤")
 
 st.markdown("""
 当前 volume_filter_multiplier = 1.5×，要求突破当日成交量 ≥ 60日均量的 1.5 倍。
