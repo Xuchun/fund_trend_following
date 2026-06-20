@@ -662,7 +662,7 @@ st.markdown("---")
 # ── Section 2: 连续亏损 ≥ 15 笔的共性分析 ─────────────────────────────────────
 st.markdown("#### 2. 连续亏损 ≥ 15 笔的共性分析")
 
-_long_s2 = _sdf_s2[_sdf_s2["length"] >= 15].sort_values("length", ascending=False).reset_index(drop=True)
+_long_s2 = _sdf_s2[_sdf_s2["length"] >= 15].sort_values("start_exit", ascending=True).reset_index(drop=True)
 
 # Build summary table
 _tbl_rows: list[dict] = []
