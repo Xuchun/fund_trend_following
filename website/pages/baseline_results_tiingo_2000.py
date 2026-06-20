@@ -1256,6 +1256,8 @@ _t20["卖出原因"] = _t20["exit_reason"].map({
 _t20["入场年份"] = _t20["entry_date"].dt.year
 
 _t20_n_trailing  = int((_t20["exit_reason"] == "trailing_stop").sum())
+_t20_non_trail   = _t20[_t20["exit_reason"] != "trailing_stop"][["ticker", "pnl_r_multiple"]]
+_t20_non_trail_str = "、".join([f"{r['ticker']}: +{r['pnl_r_multiple']:.1f}R" for _, r in _t20_non_trail.iterrows()])
 _t20_n_stocks    = int((_t20["类别"] == "股票").sum())
 _t20_avg_hold    = float(_t20["holding_days"].mean())
 _t20_med_hold    = float(_t20["holding_days"].median())
