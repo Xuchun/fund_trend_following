@@ -801,9 +801,10 @@ with _lm2:
               delta_color="inverse",
               help="大亏家持仓时间是否更长？趋势跟踪应快速止损，持仓异常长说明止损被绕开")
 with _lm3:
-    st.metric("跳空穿透 / 退市",
-              f"{_l20_n_gap} 笔跳空 / {_l20_n_delisted} 笔退市",
-              help="gap_adjusted_loss_multiple < -1.05R：止损被跳空穿透，实际亏损超 1R")
+    st.markdown('<p style="font-size:0.875rem;color:#555;margin-bottom:0">跳空穿透 / 退市</p>'
+                f'<p style="font-size:2.25rem;font-weight:700;color:#d62728;margin-top:0">'
+                f'{_l20_n_gap} 笔跳空 / {_l20_n_delisted} 笔退市</p>',
+                unsafe_allow_html=True)
 with _lm4:
     st.metric("股票 / ETF",
               f"{_l20_n_stocks} : {len(_l20) - _l20_n_stocks}",
