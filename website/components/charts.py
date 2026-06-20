@@ -169,7 +169,9 @@ def r_multiple_distribution(trades: pd.DataFrame) -> go.Figure:
         fig.add_vline(x=x, line_dash=dash, line_color="#555", line_width=1,
                       annotation_text=label, annotation_position="top")
 
-    win_rate = len(wins) / len(r) if len(r) > 0 else 0
+    pnl_col = "net_pnl" if "net_pnl" in trades.columns else "gross_pnl"
+    valid = trades.loc[trades["pnl_r_multiple"].notna()]
+    win_rate = (valid[pnl_col] > 0).mean() if len(valid) > 0 else 0
     fig.add_annotation(
         text=(f"n={len(r)} | 中位数={r.median():.2f}R | "
               f"均值={r.mean():.2f}R | 胜率={win_rate:.1%}"),
