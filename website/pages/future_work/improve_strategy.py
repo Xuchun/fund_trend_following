@@ -722,7 +722,7 @@ st.markdown(
 st.markdown("---")
 
 # ── 九、仓位管理 ───────────────────────────────────────────────────────────────
-st.subheader("九、仓位管理")
+st.subheader("十、仓位管理")
 
 st.markdown("""
 当前仓位管理参数：risk_per_trade = 1%、position_cap = 5%、heat_limit = 10%、correlation_threshold = 0.7。
