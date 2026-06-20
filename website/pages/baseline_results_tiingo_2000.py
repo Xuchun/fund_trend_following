@@ -642,15 +642,13 @@ _fig_max_s.update_layout(
 )
 st.plotly_chart(_fig_max_s, use_container_width=True)
 
-st.caption(
-    "📌 为什么部分红色（止损）柱的亏损小于 −1R？"
-    "止损触发条件是「当天最低价 < 止损价」，但实际成交发生在**次日开盘**。"
-    "若股票当天盘中跌破止损后隔夜回升，次日开盘价高于止损价，实际成交价就优于止损位，"
-    "导致亏损小于 −1R。这是对策略有利的「隔夜回补」情形，出场原因仍被记为止损。"
-)
-
 st.markdown(
     f'<div class="info-box">'
+    f'📌 为什么部分红色（止损）柱的亏损小于 −1R？'
+    f'止损触发条件是「当天最低价 &lt; 止损价」，但实际成交发生在次日开盘。'
+    f'若股票当天盘中跌破止损后隔夜回升，次日开盘价高于止损价，实际成交价就优于止损位，'
+    f'导致亏损小于 −1R。这是对策略有利的「隔夜回补」情形，出场原因仍被记为止损。'
+    f'<br><br>'
     f'<strong>市场背景：</strong>该 {_max_len_s2} 笔连续亏损发生于 '
     f'{_max_start_s2.strftime("%Y年%m月%d日")} 至 {_max_end_s2.strftime("%Y年%m月%d日")}，'
     f'历时 {_max_cal_days} 个日历日（约 {_max_cal_days/30:.1f} 个月）。'
