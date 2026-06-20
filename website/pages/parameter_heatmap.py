@@ -349,7 +349,7 @@ _SLICE_PARAMS = [
     ("correlation_threshold",   "相关性阈值",     f"{p['correlation_threshold']:.2f}",  lambda v: f"{v:.1f}"),
     ("risk_per_trade",          "每笔风险比例",   f"{p['risk_per_trade']*100:.1f}%",    lambda v: f"{v*100:.1f}%"),
     ("min_market_cap_b",        "最低市值",        f"${p.get('min_market_cap_b',2):.0f}B", lambda v: f"${v:.0f}B"),
-    ("min_adv_m",               "ADV 流动性",     f"${p.get('min_adv_m',20):.0f}M",    lambda v: f"${v:.0f}M"),
+    ("min_adv_m",               "ADV 流动性",     f"${p.get('min_adv_m',60):.0f}M",    lambda v: f"${v:.0f}M"),
     ("volume_filter_multiplier","成交量确认乘数", f"{p.get('volume_filter_multiplier',1.5):.1f}×", lambda v: f"{v:.1f}×"),
     ("slippage_bps",            "滑点（单边）",   f"{p.get('slippage_bps',10):.0f} bps", lambda v: f"{v:.0f}bps"),
     ("commission_bps",          "佣金（单边）",   f"{p.get('commission_bps',3):.0f} bps", lambda v: f"{v:.0f}bps"),
