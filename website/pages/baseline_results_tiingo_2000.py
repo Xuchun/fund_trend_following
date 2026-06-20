@@ -966,7 +966,7 @@ _sec_grp_l_show["合计 R"] = _sec_grp_l_show["合计 R"].map(lambda v: f"{v:.1f
 st.dataframe(_sec_grp_l_show, use_container_width=True, hide_index=True)
 
 # ── 买入股价分布（还原拆股后的真实市场价）────────────────────────────────────────────
-st.markdown("#### 买入股价分布（入场当日真实市场价，已还原拆股）")
+st.markdown("#### 买入原始股价分布")
 
 import json as _json_l20
 _raw_price_json_l20 = _results_path / "top20_raw_entry_prices.json"
@@ -1459,7 +1459,7 @@ _sec_grp_show["合计 R"] = _sec_grp_show["合计 R"].map(lambda v: f"{v:.1f}R")
 st.dataframe(_sec_grp_show, use_container_width=True, hide_index=True)
 
 # ── 买入股价分布（还原拆股后的真实市场价）────────────────────────────────────────────
-st.markdown("#### 买入股价分布（入场当日真实市场价，已还原拆股）")
+st.markdown("#### 买入原始股价分布")
 
 import json as _json_t20
 _raw_price_json_t20 = _results_path / "top20_raw_entry_prices.json"
