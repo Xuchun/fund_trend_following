@@ -72,6 +72,7 @@ pg = st.navigation(
         ],
         "策略1.0改进方案（开发中）": [
             st.Page(_fw / "improve_strategy.py",          title="如何改进策略1.0",         icon="🔧"),
+            st.Page(_fw / "improve_effectiveness.py",     title="如何改进策略有效性",      icon="📈"),
             st.Page(_fw / "better_signal_selection.py",   title="如何选中更优开仓信号",    icon="🎯"),
             st.Page(_fw / "improve_cagr.py",              title="如何提高年化收益",        icon="🚀"),
             st.Page(_fw / "reduce_large_losses.py",       title="如何减少大R的亏损交易",  icon="🛡️"),
