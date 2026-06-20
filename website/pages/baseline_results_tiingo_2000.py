@@ -116,7 +116,6 @@ st.markdown("---")
 # ── Baseline parameter table ───────────────────────────────────────────────────
 _p = meta.params_anchor
 st.subheader("📋 Baseline 锚点参数")
-st.caption("以下参数值与设计方案 §1.2.1.1、代码 StrategyParams 及回测脚本三处完全一致。")
 
 _col_a, _col_b = st.columns(2)
 
