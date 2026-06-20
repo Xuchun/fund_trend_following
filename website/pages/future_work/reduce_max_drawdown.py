@@ -220,7 +220,7 @@ _fig_sk.add_trace(go.Scatter(
         color=_major_sk["sl_pct"],
         colorscale="Reds",
         cmin=0.4, cmax=1.0,
-        colorbar=dict(title="初始止损<br>触发率", thickness=14),
+        colorbar=dict(title="止损<br>触发率", thickness=14),
         showscale=True,
         line=dict(width=1, color="white"),
     ),
@@ -235,7 +235,7 @@ _fig_sk.add_trace(go.Scatter(
 
 
 _fig_sk.update_layout(
-    title="≥7 笔连亏序列时间分布（气泡越大 = 连亏越长，颜色越深 = 初始止损触发率越高）",
+    title="≥7 笔连亏序列时间分布（气泡越大 = 连亏越长，颜色越深 = 止损触发率越高）",
     xaxis_title="序列起始日期",
     yaxis_title="连亏笔数",
     height=400,
@@ -251,16 +251,16 @@ _n_sl_dom  = int((_major_sk["sl_pct"] > 0.7).sum())
 _m1, _m2, _m3 = st.columns(3)
 _m1.metric("≥7笔连亏序列", f"{_n_major} 个")
 _m2.metric("合计净亏损",    f"${abs(_total_loss):.1f}M")
-_m3.metric("初始止损主导(>70%)的序列", f"{_n_sl_dom} / {_n_major}")
+_m3.metric("止损主导(>70%)的序列", f"{_n_sl_dom} / {_n_major}")
 
 st.markdown("""
 **图表解读（关键洞察）：**
 
-- **气泡越大且颜色越深**：该连亏序列以"快速初始止损"为主——
+- **气泡越大且颜色越深**：该连亏序列以"快速止损"为主——
   入场后平均 10–20 天内就被打出（全局均值 42 天），说明市场在密集发出假突破信号
 - **这类序列集中在 2–6 周内完成**：不是时间序列上一笔一笔的随机亏损，
   而是同批仓位集中失败、集中出清
-- **这就是 MaxDD 的微观积累机制**：每笔 −1.0R 的初始止损，
+- **这就是 MaxDD 的微观积累机制**：每笔 −1.0R 的止损，
   在组合层面叠加成 NAV 的持续下滑
 
 **现有 Regime Filter 的盲区：**
@@ -390,7 +390,7 @@ st.error(f"""
 **核心数据：0–30天的 {_n030:,} 笔交易（占总数 {_r030["笔数占比"]:.1f}%），
 胜率仅 {_wr030:.1f}%，合计净亏损 ${abs(_pnl030):.1f}M。**
 
-这批交易几乎都是"假突破"——开仓后股价迅速回头，触发初始止损，每笔亏损约 −1.0R。
+这批交易几乎都是"假突破"——开仓后股价迅速回头，触发止损，每笔亏损约 −1.0R。
 它们是最大回撤的核心来源：在深度回撤期，每一笔 −1R 不断叠加，
 形成组合 NAV 的持续下行，把最大回撤一步步拉深。
 """)
@@ -408,13 +408,13 @@ _fig_rdist.add_trace(go.Histogram(
     nbinsx=40,
     marker_color="#d62728",
     opacity=0.8,
-    name="0–30天初始止损交易",
+    name="0–30天止损交易",
 ))
 _fig_rdist.add_vline(x=_avg_r_fb, line_dash="dash", line_color="#333",
                      annotation_text=f"均值 {_avg_r_fb:.2f}R",
                      annotation_position="top right")
 _fig_rdist.update_layout(
-    title=f"0–30天初始止损交易的 R 倍数分布（共 {_n_fb:,} 笔）",
+    title=f"0–30天止损交易的 R 倍数分布（共 {_n_fb:,} 笔）",
     xaxis_title="R 倍数（负值 = 亏损）",
     yaxis_title="交易笔数",
     height=340,
@@ -426,7 +426,7 @@ st.plotly_chart(_fig_rdist, use_container_width=True)
 st.markdown(f"""
 **数据摘要：**
 
-- 0–30天内被初始止损打出的交易：**{_n_fb:,} 笔**
+- 0–30天内被止损打出的交易：**{_n_fb:,} 笔**
 - 平均 R 倍数：**{_avg_r_fb:.3f}R**（几乎等于完整的 −1.0R）
 - 合计亏损：**${abs(_pnl_fb):.1f}M**
 
@@ -460,7 +460,7 @@ _saving_total_m = _est_n_applicable * _saving_per_trade_r * 0.01 * 10
 st.info(f"""
 **潜在效果估算（保守假设）：**
 
-- 0–30天初始止损交易共 {_n_fb:,} 笔
+- 0–30天止损交易共 {_n_fb:,} 笔
 - 假设 50% 适用假突破规则（~{_est_n_applicable:,}笔），每笔节省 0.7R（从 −1.0R 压至 −0.3R）
 - 以 $1,000万初始资金、1% 单笔风险计算，每笔节省约 $7,000
 - 累计节省：约 **${_est_n_applicable * 0.007:.1f}M**（直接压缩 MaxDD 深度）

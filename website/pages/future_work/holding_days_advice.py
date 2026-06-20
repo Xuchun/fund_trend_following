@@ -108,7 +108,7 @@ long = trades[trades["holding_days"] > 365].sort_values("pnl_r_multiple", ascend
 long["持仓年数"] = (long["holding_days"] / 365.25).map(lambda x: f"{x:.1f} 年")
 long["退出方式"] = long["exit_reason"].map({
     "trailing_stop":   "追踪止损",
-    "stop_loss":       "初始止损",
+    "stop_loss":       "止损",
     "end_of_backtest": "回测截止",
     "delisted":        "退市/并购",
 }).fillna(long["exit_reason"])

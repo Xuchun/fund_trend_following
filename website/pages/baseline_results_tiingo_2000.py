@@ -628,7 +628,7 @@ _fig_max_s.add_trace(_go_streak2.Bar(
     textposition="outside",
     hovertemplate="<b>%{x}</b><br>出场方式：%{customdata}<br>盈亏：%{y:.2f}R<extra></extra>",
     customdata=_max_trades_s2["exit_reason"].map(
-        {"stop_loss": "初始止损", "trailing_stop": "移动止盈"}
+        {"stop_loss": "止损", "trailing_stop": "移动止盈"}
     ).fillna(_max_trades_s2["exit_reason"]).values,
 ))
 _fig_max_s.update_layout(
@@ -653,7 +653,7 @@ st.markdown(
     f'{_max_start_s2.strftime("%Y年%m月%d日")} 至 {_max_end_s2.strftime("%Y年%m月%d日")}，'
     f'历时 {_max_cal_days} 个日历日（约 {_max_cal_days/30:.1f} 个月）。'
     f'触发前 20 个交易日 SPY 已下跌 {_spy_pre_ret:+.1f}%，连亏期间 SPY 累计涨跌 {_spy_dur_ret:+.1f}%。'
-    f'{int((_max_trades_s2["exit_reason"]=="stop_loss").sum())} 笔为初始止损触发，'
+    f'{int((_max_trades_s2["exit_reason"]=="stop_loss").sum())} 笔为止损触发，'
     f'市场大幅震荡导致多个方向性开仓被逐一止损出局。'
     f'</div>',
     unsafe_allow_html=True,
@@ -688,7 +688,7 @@ for _, _sr2 in _long_s2.iterrows():
         "出场日期区间": f"{_se2.strftime('%Y-%m-%d')} → {_ee2.strftime('%Y-%m-%d')}",
         "连续亏损笔数": int(_sr2["length"]),
         "持续（天）": _cd2,
-        "初始止损": f"{_sl_pct}笔",
+        "止损": f"{_sl_pct}笔",
         "追踪止损": f"{_ts_pct}笔",
         "平均盈亏（R）": round(float(_sl2["pnl_r_multiple"].mean()), 2),
         "期间SPY": f"{_spy_r2:+.1f}%",
@@ -725,7 +725,7 @@ st.markdown(
     f'<div class="info-box">'
     f'<strong>主要共性：</strong>'
     f'<ul style="margin:6px 0 0 16px">'
-    f'<li><strong>初始止损主导</strong>：{len(_long_s2)} 次长连亏中，每次都以初始止损（stop_loss）为主要出场方式，'
+    f'<li><strong>止损主导</strong>：{len(_long_s2)} 次长连亏中，每次都以止损（stop_loss）为主要出场方式，'
     f'说明行情在持仓期间快速反向，未给追踪止损机会。</li>'
     f'<li><strong>市场不总是下跌</strong>：{len(_long_s2)} 次长连亏中有 {_n_neg_spy} 次 SPY 同期为负，'
     f'{_n_pos_spy} 次 SPY 同期为正。说明部分长连亏发生于市场上涨背景下——'
@@ -762,7 +762,7 @@ _l20 = res.trades.nsmallest(20, "pnl_r_multiple").copy()
 _l20["类别"]     = _l20["ticker"].apply(lambda t: "ETF" if t in _ETF_SET else "股票")
 _l20["卖出原因"] = _l20["exit_reason"].map({
     "trailing_stop":   "追踪止损",
-    "stop_loss":       "初始止损",
+    "stop_loss":       "止损",
     "end_of_backtest": "回测截止",
     "delisted":        "退市/并购",
 }).fillna(_l20["exit_reason"])
@@ -800,9 +800,9 @@ st.plotly_chart(_fig_l20r, use_container_width=True)
 # ── 指标行 ────────────────────────────────────────────────────────────────────
 _lm1, _lm2, _lm3, _lm4 = st.columns(4)
 with _lm1:
-    st.metric("初始止损退出",
+    st.metric("止损退出",
               f"{_l20_n_stoploss} / 20  ({_l20_n_stoploss / 20 * 100:.0f}%)",
-              help="触发初始止损退出 = 风控正常运作（快速截断亏损）")
+              help="触发止损退出 = 风控正常运作（快速截断亏损）")
 with _lm2:
     st.metric("平均持仓天数",
               f"{_l20_avg_hold:.0f} 天",
@@ -1100,7 +1100,7 @@ st.markdown(f"""
 
 | 维度 | 数据 | 解读 |
 |------|------|------|
-| 退出方式 | {_exit_str} | {"大亏家主要由初始止损退出，风控在正常运作，截断亏损逻辑有效" if _l20_n_stoploss >= 12 else f"退市/并购导致 {_l20_n_delisted} 笔异常亏损，为不可控风险（公司事件）"} |
+| 退出方式 | {_exit_str} | {"大亏家主要由止损退出，风控在正常运作，截断亏损逻辑有效" if _l20_n_stoploss >= 12 else f"退市/并购导致 {_l20_n_delisted} 笔异常亏损，为不可控风险（公司事件）"} |
 | 持仓时长 | 平均 {_l20_avg_hold:.0f} 天（中位 {_l20_med_hold:.0f} 天），区间 [{_l20_min_hold}–{_l20_max_hold}] 天 | {_hold_note} |
 | 跳空风险 | {_l20_n_gap} 笔止损被跳空穿透（实际 > 1R 亏损）/ {_l20_n_delisted} 笔退市 | {"跳空和退市是超额亏损的主因，属于单笔风险中的尾部事件" if (_l20_n_gap + _l20_n_delisted) > 3 else "跳空穿透较少，止损执行质量良好"} |
 | 资产类别 | {_l20_n_stocks} 只股票 / {len(_l20) - _l20_n_stocks} 只 ETF | {_cat_note} |
@@ -1233,7 +1233,7 @@ st.markdown(f"""
 _etf_set = set(meta.etf_universe[i]["ticker"] for i in range(len(meta.etf_universe)))
 _exit_reason_cn = {
     "trailing_stop":    "追踪止损",
-    "stop_loss":        "初始止损",
+    "stop_loss":        "止损",
     "end_of_backtest":  "回测截止",
     "delisted":         "退市/并购",
 }
@@ -1265,7 +1265,7 @@ _t20 = res.trades.nlargest(20, "pnl_r_multiple").copy()
 _t20["类别"]     = _t20["ticker"].apply(lambda t: "ETF" if t in _ETF_SET else "股票")
 _t20["卖出原因"] = _t20["exit_reason"].map({
     "trailing_stop":   "追踪止损",
-    "stop_loss":       "初始止损",
+    "stop_loss":       "止损",
     "end_of_backtest": "回测截止",
     "delisted":        "退市/并购",
 }).fillna(_t20["exit_reason"])
@@ -1592,7 +1592,7 @@ st.markdown(f"""
 
 | 维度 | 数据 | 解读 |
 |------|------|------|
-| 退出方式 | {_t20_n_trailing}/20 笔（{_t20_n_trailing / 20 * 100:.0f}%）为追踪止损 | 大赢家几乎全靠"让利润奔跑"，极少被初始止损打出 |
+| 退出方式 | {_t20_n_trailing}/20 笔（{_t20_n_trailing / 20 * 100:.0f}%）为追踪止损 | 大赢家几乎全靠"让利润奔跑"，极少被止损打出 |
 | 持仓时长 | 平均 {_t20_avg_hold:.0f} 天（中位 {_t20_med_hold:.0f} 天），区间 [{_t20_min_hold}–{_t20_max_hold}] 天 | 比全部盈利交易均值（{_t20_all_win_avg:.0f} 天）长出 {_t20_avg_hold - _t20_all_win_avg:.0f} 天；**持仓时间越长 R 越大**（r={_t20_corr:.2f}） |
 | 资产类别 | {_t20_n_stocks} 只股票 / {len(_t20) - _t20_n_stocks} 只 ETF | {_etf_note} |
 | 年份集中度 | 集中于 {_yr_str} | 大赢家往往出现在特定行情年份，验证了顺势交易的核心逻辑 |
@@ -2349,7 +2349,7 @@ if len(_lh200) > 0:
     _lh200["类别"] = _lh200["ticker"].apply(lambda t: "ETF" if t in _ETF_SET else "股票")
     _lh200["卖出原因"] = _lh200["exit_reason"].map({
         "trailing_stop":   "追踪止损",
-        "stop_loss":       "初始止损",
+        "stop_loss":       "止损",
         "end_of_backtest": "回测截止",
         "delisted":        "退市/并购",
     }).fillna(_lh200["exit_reason"])

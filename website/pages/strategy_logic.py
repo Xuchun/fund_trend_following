@@ -208,7 +208,7 @@ st.markdown(f"""
 st.markdown("---")
 
 # ── Stop loss ─────────────────────────────────────────────────────────────────
-st.subheader("5. 初始止损")
+st.subheader("5. 止损")
 st.markdown(f"""
 入场后立即设置固定止损位，基于 **ATR(20) Wilder 平滑**计算：
 
@@ -240,7 +240,7 @@ st.markdown(f"""
 当 ATR 异常趋近于零时（数据错误或极端低波动），拒绝入场，防止仓位计算出现除以近零的错误。<br>
 实盘中几乎从不触发——{_n_trades:,} 笔历史交易中{"无一笔" if _n_below_05 == 0 else f"{_n_below_05} 笔"}止损距离低于 0.5%，
 实际止损距离中位数为 <strong>{_median_dist}%</strong>（= 2×ATR）。
-真正防止被噪音震出的机制是 <strong>2×ATR 初始止损</strong>本身：ATR(20) 已量化了该股票正常的日波动幅度，
+真正防止被噪音震出的机制是 <strong>2×ATR 止损</strong>本身：ATR(20) 已量化了该股票正常的日波动幅度，
 2×ATR 的止损天然位于日常噪音范围之外。
 </div>
 """, unsafe_allow_html=True)
@@ -286,7 +286,7 @@ st.markdown(f"""
 年换手率高达 11.24x，隐含年化交易成本 2.92%（基于早期参数实验的估算值）。<br>
 调整为 {p['trail_multiplier_r1']:.0f}×ATR 后，给予早期趋势更多发展空间，
 预期降低换手率约 20%，节省约 0.6%/年的交易摩擦成本。
-初始止损（Initial Stop）不受影响——跌破入场价 − 2×ATR 仍立即平仓。<br><br>
+止损（Initial Stop）不受影响——跌破入场价 − 2×ATR 仍立即平仓。<br><br>
 <strong>盈利 &gt; 3R 后为何改用 {p['trail_multiplier_r5']:.0f}×ATR，反而更宽？</strong><br>
 k 越大，止损线离当前价格越远，需要股价跌得更多才能触发止损。
 5×ATR 比 3×ATR 更宽松，不是"更早卖出"，而是"更晚卖出"——

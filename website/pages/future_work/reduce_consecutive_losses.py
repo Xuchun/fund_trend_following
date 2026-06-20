@@ -236,7 +236,7 @@ st.markdown(f"""
 | 特征 | 数据 | 含义 |
 |------|------|------|
 | 平均持仓天数 | **10–20 天**（显著低于全局均值） | 进场后极快被止损打出 |
-| 初始止损（stop_loss）比例 | **70%–95%** | 不是趋势反转后被追踪止损打出，而是"假突破"快速失败 |
+| 止损（stop_loss）比例 | **70%–95%** | 不是趋势反转后被追踪止损打出，而是"假突破"快速失败 |
 | 序列时间集中度 | 单个序列往往在 **2–6 周内**完成 | 这是同期多个仓位集中出清，而非时序上一笔一笔的随机亏损 |
 
 **最长连亏（{_max34_len} 笔）关键数据：**
@@ -244,7 +244,7 @@ st.markdown(f"""
 | 指标 | 数值 | 含义 |
 |------|------|------|
 | 时间区间 | {_max34_start.strftime("%Y年%m月%d日")} — {_max34_end.strftime("%Y年%m月%d日")} | 历时约 {_max34_cal} 个日历日 |
-| 初始止损占比 | {_max34_sl_n}/{_max34_len} 笔（{_max34_sl_n/_max34_len*100:.0f}%） | 绝大多数为"假突破快速失败" |
+| 止损占比 | {_max34_sl_n}/{_max34_len} 笔（{_max34_sl_n/_max34_len*100:.0f}%） | 绝大多数为"假突破快速失败" |
 | 合计亏损（R） | {_max34_tot_r:.1f}R | 每笔平均 {_max34_avg_r:.2f}R |
 | 策略回撤 | {_streak_dd_pct:.1f}% | 从连亏前高点到谷底 |
 | SPY位置 | 处于200日均线**上方** | 200MA过滤已启用但未触发，说明震荡市可在均线上方发生 |
@@ -265,7 +265,7 @@ fig_sc = go.Figure(go.Scatter(
         size=major["sl_pct"] * 20 + 6,
         color=major["sl_pct"],
         colorscale="Reds",
-        colorbar=dict(title="初始止损%"),
+        colorbar=dict(title="止损%"),
         cmin=0.4, cmax=1.0,
         showscale=True,
     ),
@@ -278,13 +278,13 @@ fig_sc = go.Figure(go.Scatter(
         "<b>%{text}</b><br>"
         "序列长度：%{y} 笔<br>"
         "平均持仓：%{x:.1f} 天<br>"
-        "初始止损占比：%{customdata[0]:.0f}%<br>"
+        "止损占比：%{customdata[0]:.0f}%<br>"
         "净亏损：$%{customdata[1]:.0f}万<br>"
         "序列跨度：%{customdata[2]} 天<extra></extra>"
     ),
 ))
 fig_sc.update_layout(
-    title="≥10 笔连亏序列：平均持仓天数 vs 序列长度（气泡大小 = 初始止损占比）",
+    title="≥10 笔连亏序列：平均持仓天数 vs 序列长度（气泡大小 = 止损占比）",
     xaxis_title="平均持仓天数（越短 = 越快被打出）",
     yaxis_title="连亏笔数",
     height=420,
@@ -293,8 +293,8 @@ fig_sc.update_layout(
 st.plotly_chart(fig_sc, use_container_width=True)
 
 st.markdown("""
-**图表解读：** 持仓天数越短（横轴越靠左）、气泡颜色越深（初始止损占比越高），
-说明该序列是典型的"假突破密集失败"场景——市场在反复发出突破信号，但每次突破都迅速失败并触发初始止损。
+**图表解读：** 持仓天数越短（横轴越靠左）、气泡颜色越深（止损占比越高），
+说明该序列是典型的"假突破密集失败"场景——市场在反复发出突破信号，但每次突破都迅速失败并触发止损。
 
 **这一规律有重要的战略含义：**
 长连亏序列不是策略1.0在某段时间一直做了错误决策，
@@ -303,10 +303,10 @@ st.markdown("""
 
 with st.expander("📋 全部 ≥10 笔连亏序列明细", expanded=False):
     show = major[["length","start_date","end_date","avg_hold","sl_pct","span_days","net_pnl"]].copy()
-    show.columns = ["长度(笔)","起始日期","结束日期","均持仓(天)","初始止损%","跨度(天)","净亏损($)"]
+    show.columns = ["长度(笔)","起始日期","结束日期","均持仓(天)","止损%","跨度(天)","净亏损($)"]
     show["起始日期"] = show["起始日期"].dt.strftime("%Y-%m-%d")
     show["结束日期"] = show["结束日期"].dt.strftime("%Y-%m-%d")
-    show["初始止损%"] = show["初始止损%"].map(lambda v: f"{v*100:.0f}%")
+    show["止损%"] = show["止损%"].map(lambda v: f"{v*100:.0f}%")
     show["净亏损($)"] = show["净亏损($)"].map(lambda v: f"${v:,.0f}")
     show = show.sort_values("长度(笔)", ascending=False).reset_index(drop=True)
     st.dataframe(show, use_container_width=True, hide_index=True)
@@ -569,14 +569,14 @@ st.markdown("""
 
 st.markdown("#### 方案 A：同日批量止损熔断")
 st.markdown("""
-34笔最长连亏的分析显示，多笔交易在同一天或相邻日触发初始止损。
+34笔最长连亏的分析显示，多笔交易在同一天或相邻日触发止损。
 这是"市场已进入快速下跌/震荡"的明确信号，但策略仍继续开新仓被逐一打出。
 
-当同一个自然日内有 **≥N 笔**仓位触发初始止损（stop_loss），
+当同一个自然日内有 **≥N 笔**仓位触发止损（stop_loss），
 自动暂停新开仓 **M 个交易日**，等待市场企稳。
 """)
 st.code("""
-# 每日统计触发初始止损的仓位数
+# 每日统计触发止损的仓位数
 daily_stop_losses = count_stop_losses_today()
 
 # 参数（需回测调优）
@@ -658,7 +658,7 @@ if "exit_reason" in trades.columns and "exit_date" in trades.columns:
         textposition="outside",
     ))
     _fig_sl.update_layout(
-        title="每日触发初始止损笔数分布（批量止损熔断阈值参考）",
+        title="每日触发止损笔数分布（批量止损熔断阈值参考）",
         xaxis_title="当日止损笔数",
         yaxis_title="天数",
         height=320,
