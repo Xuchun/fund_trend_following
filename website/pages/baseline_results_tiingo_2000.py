@@ -1462,11 +1462,6 @@ st.dataframe(_sec_grp_show, use_container_width=True, hide_index=True)
 
 # ── 买入股价分布（还原拆股后的真实市场价）────────────────────────────────────────────
 st.markdown("#### 买入股价分布（入场当日真实市场价，已还原拆股）")
-st.caption(
-    "价格直接来自 Tiingo 原始历史数据（`close` 字段 = 当日真实收盘价，未做任何拆股或股息调整）。"
-    "例如 AAPL 2004-08-27 真实价格 **$34.35**；BB 2003-09-29 真实价格 **$38.50**。"
-    "与策略 `min_price=$10` 过滤器使用同一列数据，口径完全一致。"
-)
 
 import json as _json_t20
 _raw_price_json_t20 = _results_path / "top20_raw_entry_prices.json"
