@@ -1290,10 +1290,11 @@ with _tm1:
               f"{_t20_n_trailing} / 20  ({_t20_n_trailing / 20 * 100:.0f}%)",
               help="大赢家通过移动止盈离场 = 让利润奔跑到趋势结束")
 with _tm2:
-    st.metric("平均持仓天数",
-              f"{_t20_avg_hold:.0f} 天",
-              delta=f"vs 全部盈利交易 {_t20_all_win_avg:.0f} 天",
-              help="大赢家是否比普通盈利交易持仓更久？")
+    st.markdown(
+        '<p style="font-size:0.875rem;color:#555;margin-bottom:0">平均持仓天数</p>'
+        f'<p style="font-size:2.25rem;font-weight:700;color:#2ca02c;margin-top:0;margin-bottom:0">{_t20_avg_hold:.0f} 天</p>',
+        unsafe_allow_html=True)
+    st.markdown(f'<span style="background:#e6f4ea;color:#2ca02c;font-size:0.75rem;padding:2px 6px;border-radius:4px">↑ vs 全部盈利交易 {_t20_all_win_avg:.0f} 天</span>', unsafe_allow_html=True)
 with _tm3:
     st.metric("持仓区间",
               f"{_t20_min_hold} – {_t20_max_hold} 天",
