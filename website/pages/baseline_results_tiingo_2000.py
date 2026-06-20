@@ -600,11 +600,12 @@ else:
 
 st.markdown(f"#### 1. 最长连续亏损：{_max_len_s2} 笔连续亏损")
 
-_mc1, _mc2, _mc3, _mc4 = st.columns(4)
+_mc1, _mc2, _mc3, _mc4, _mc5 = st.columns(5)
 _mc1.metric("持续时间（日历日）", f"{_max_cal_days} 天")
 _mc2.metric("初始止损触发占比", f"{int((_max_trades_s2['exit_reason']=='stop_loss').sum())}/{_max_len_s2} 笔")
-_mc3.metric("平均亏损（R）", f"{_max_trades_s2['pnl_r_multiple'].mean():.2f}R")
-_mc4.metric(f"同期 SPY 涨跌", f"{_spy_dur_ret:+.1f}%")
+_mc3.metric("合计亏损（R）", f"{_max_trades_s2['pnl_r_multiple'].sum():.1f}R")
+_mc4.metric("平均亏损（R）", f"{_max_trades_s2['pnl_r_multiple'].mean():.2f}R")
+_mc5.metric("同期 SPY 涨跌", f"{_spy_dur_ret:+.1f}%")
 
 # Scatter: exit date vs pnl_r for the 34-trade streak
 _fig_max_s = _go_streak2.Figure()
