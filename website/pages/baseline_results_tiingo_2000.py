@@ -632,7 +632,7 @@ _fig_max_s.add_trace(_go_streak2.Bar(
     ).fillna(_max_trades_s2["exit_reason"]).values,
 ))
 _fig_max_s.update_layout(
-    title=f"最长连续亏损 {_max_len_s2} 笔：各交易盈亏（R）——红=初始止损，绿=移动止盈",
+    title=f"最长连续亏损 {_max_len_s2} 笔：各交易盈亏（R）——红=止损，绿=移动止盈",
     xaxis_title="个股（出场月/日）",
     yaxis_title="盈亏（R倍数）",
     showlegend=False,
