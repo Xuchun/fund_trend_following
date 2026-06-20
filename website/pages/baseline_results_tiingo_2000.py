@@ -164,7 +164,7 @@ with _col_b:
 |---|---|---|
 | 每笔风险比例 | `risk_per_trade` | **{_p['risk_per_trade']*100:.1f}% NAV** |
 | 单标的仓位上限 | `position_cap` | **{_p['position_cap']*100:.0f}% NAV** |
-| 热度上限 | `heat_limit` | **{_p['heat_limit']*100:.0f}% NAV**（注②）|
+| 热度上限 | `heat_limit` | **{_p['heat_limit']*100:.0f}% NAV** |
 """)
 
     st.markdown("**相关性过滤**")
