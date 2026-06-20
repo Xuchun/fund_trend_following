@@ -241,7 +241,7 @@ st.markdown(
 )
 
 # 2b: "Sluggish bull" analysis - SPY >15% years where strategy lagged
-st.markdown("#### 策略在"高速牛市"中的追赶极限")
+st.markdown("#### 策略在「高速牛市」中的追赶极限")
 _bull_drag = ann[(ann["b_ret"] > 15) & (ann["alpha"] < 0)].sort_values("alpha")
 _bull_drag_show = _bull_drag[["year","b_ret","s_ret","alpha","spy_vol"]].copy()
 _bull_drag_show.columns = ["年份","SPY年度收益%","策略年度收益%","Alpha pp","SPY波动率%"]
