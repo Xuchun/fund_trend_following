@@ -1040,9 +1040,6 @@ if not _l20_wp.empty:
     _med_pl = float(_l20_wp["入场价"].median())
     _max_pl = float(_l20_wp["入场价"].max())
     _min_pl = float(_l20_wp["入场价"].min())
-    st.markdown(
-        f"中位数 **${_med_pl:.0f}**，区间 **${_min_pl:.0f} – ${_max_pl:.0f}**（真实市场价，已还原拆股）。"
-    )
 else:
     st.info("股价数据获取失败，请检查网络连接。")
 
