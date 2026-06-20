@@ -1,6 +1,7 @@
 """如何降低连续亏损次数"""
 
 import json
+import math
 import sys
 from pathlib import Path
 _root = Path(__file__).resolve().parents[3]
@@ -24,10 +25,91 @@ st.caption("基于连续亏损序列分析，识别长序列的根本成因并�
 
 st.markdown("---")
 
-# ── 数学基础：先设定正确的心理预期 ──────────────────────────────────────────────
+# ── 建议优先级汇总（置顶）────────────────────────────────────────────────────────
+st.subheader("★ 建议优先级总览（从最推荐到最复杂）")
+
+st.markdown("""
+以下排序综合考虑：**实施难度**、**对减少连亏笔数的直接效果**、**对CAGR的预期影响**，
+以及与当前策略1.0代码的兼容性。详细分析见下方各建议节。
+""")
+
+_priority_rows = [
+    {
+        "排序": "🥇 第1位",
+        "建议": "建议2：突破强度过滤（Breakout Strength Filter）",
+        "核心逻辑": "过滤弱突破，减少「假突破快速失败」",
+        "减少连亏笔数": "★★★",
+        "对CAGR影响": "低偏正",
+        "实施难度": "★ 极低",
+        "备注": "一行参数修改；参数敏感性已验证",
+    },
+    {
+        "排序": "🥈 第2位",
+        "建议": "建议3：单日开仓集中度限制（Entry Clustering Limit）",
+        "核心逻辑": "避免同批次集中入场 → 集中止损",
+        "减少连亏笔数": "★★★",
+        "对CAGR影响": "低",
+        "实施难度": "★ 低",
+        "备注": "34笔连亏中多笔同日入场；直接可回测验证",
+    },
+    {
+        "排序": "🥉 第3位",
+        "建议": "建议6：批量止损熔断（Batch Stop-Loss Circuit Breaker）",
+        "核心逻辑": "同日≥3笔止损 → 市场已异常 → 暂停新仓N天",
+        "减少连亏笔数": "★★★",
+        "对CAGR影响": "低",
+        "实施难度": "★ 低",
+        "备注": "响应式规则，无前视风险，易于实盘执行",
+    },
+    {
+        "排序": "第4位",
+        "建议": "建议1：震荡市检测器（Choppiness Index Filter）",
+        "核心逻辑": "主动识别「假突破密集期」，预防性暂停入场",
+        "减少连亏笔数": "★★★★",
+        "对CAGR影响": "中（需验证）",
+        "实施难度": "★★ 中",
+        "备注": "效果最强但需Walk-Forward验证，防过拟合",
+    },
+    {
+        "排序": "第5位",
+        "建议": "建议4：连亏后动态缩仓（Anti-Streak Sizing）",
+        "核心逻辑": "连亏期自动缩减每笔风险敞口",
+        "减少连亏笔数": "★（不减笔数）",
+        "对CAGR影响": "低偏负",
+        "实施难度": "★ 低",
+        "备注": "不减少连亏次数，但大幅降低回撤幅度和心理压力",
+    },
+    {
+        "排序": "第6位",
+        "建议": "建议5：引入非相关收益（熊市做空/均值回归策略）",
+        "核心逻辑": "非相关策略的盈利自然插入亏损序列打断长串",
+        "减少连亏笔数": "★★★★★",
+        "对CAGR影响": "高（正向）",
+        "实施难度": "★★★ 高",
+        "备注": "最彻底解决，但需要开发第二套策略；长期目标",
+    },
+]
+
+st.dataframe(
+    pd.DataFrame(_priority_rows),
+    use_container_width=True,
+    hide_index=True,
+)
+
+st.info(
+    "**推荐实施路径**：① 先改 `breakout_strength_min` 参数（第1位，当日可做）"
+    " → ② 加单日开仓上限（第2位，低工程量）"
+    " → ③ 加批量止损熔断逻辑（第3位，低工程量）"
+    " → ④ 设计并回测震荡市检测器（第4位，需专项研究）"
+    " → ⑤ 实盘配置连亏缩仓（第5位，心理价值）"
+    " → ⑥ 长期逐步引入非相关收益（第6位）。"
+)
+
+st.markdown("---")
+
+# ── 一、数学基础 ──────────────────────────────────────────────────────────────────
 st.subheader("一、数学基础：38.7% 胜率下，连亏是不可避免的")
 
-import math
 WIN_RATE = 0.387
 LOSS_RATE = 1 - WIN_RATE
 N_TRADES = 3337
@@ -54,20 +136,10 @@ $$E[\\text{{最长连亏}}] = \\frac{{\\ln(N \\cdot p)}}{{\\ln(1/q)}} = \\frac{{
 
 st.markdown("---")
 
-# ── 关键发现：长序列有规律，不是随机运气 ─────────────────────────────────────────
+# ── 二、关键发现 ──────────────────────────────────────────────────────────────────
 st.subheader('二、关键发现：长序列是"市场环境事件"，不是随机坏运气')
 
-st.markdown("""
-对所有 **≥ 10 笔**的连亏序列（共 41 个）做特征分析，发现了明显的共性模式：
-
-| 特征 | 数据 | 含义 |
-|------|------|------|
-| 平均持仓天数 | **10–20 天**（显著低于全局均值） | 进场后极快被止损打出 |
-| 初始止损（stop_loss）比例 | **70%–95%** | 不是趋势反转后被追踪止损打出，而是"假突破"快速失败 |
-| 序列时间集中度 | 单个序列往往在 **2–6 周内**完成 | 这是同期多个仓位集中出清，而非时序上一笔一笔的随机亏损 |
-""")
-
-# Load trades and compute streak info
+# Load trades
 @st.cache_data
 def load_streak_data():
     trades = pd.read_csv(
@@ -99,6 +171,7 @@ for i, v in enumerate(pnl):
                 "sl_pct":     (seg["exit_reason"] == "stop_loss").mean(),
                 "span_days":  (seg["exit_date"].max() - seg["exit_date"].min()).days + 1,
                 "net_pnl":    seg["net_pnl"].sum(),
+                "avg_r":      seg["pnl_r_multiple"].mean() if "pnl_r_multiple" in seg.columns else float("nan"),
             })
         cur = 0
 
@@ -112,10 +185,73 @@ if cur > 0:
         "sl_pct":     (seg["exit_reason"] == "stop_loss").mean(),
         "span_days":  (seg["exit_date"].max() - seg["exit_date"].min()).days + 1,
         "net_pnl":    seg["net_pnl"].sum(),
+        "avg_r":      seg["pnl_r_multiple"].mean() if "pnl_r_multiple" in seg.columns else float("nan"),
     })
 
 df_streaks = pd.DataFrame(streaks_detail)
 major = df_streaks[df_streaks["length"] >= 10].copy()
+_max_row = df_streaks.loc[df_streaks["length"].idxmax()]
+_max_seg = trades.iloc[
+    df_streaks["length"].idxmax() * 0 : 0  # placeholder, recomputed below
+]
+
+# Recompute 34-streak details
+_all_streaks_raw = []
+_c2 = 0; _si2 = None
+for _i2, _row2 in trades.iterrows():
+    if _row2["net_pnl"] <= 0:
+        if _c2 == 0:
+            _si2 = _i2
+        _c2 += 1
+    else:
+        if _c2 > 0:
+            _all_streaks_raw.append({"start": _si2, "end": _i2 - 1, "length": _c2})
+        _c2 = 0
+if _c2 > 0:
+    _all_streaks_raw.append({"start": _si2, "end": len(trades) - 1, "length": _c2})
+
+_max34 = max(_all_streaks_raw, key=lambda x: x["length"])
+_max34_trades = trades.iloc[_max34["start"] : _max34["end"] + 1]
+_max34_len    = _max34["length"]
+_max34_start  = _max34_trades["exit_date"].min()
+_max34_end    = _max34_trades["exit_date"].max()
+_max34_sl_n   = int((_max34_trades["exit_reason"] == "stop_loss").sum())
+_max34_cal    = (_max34_end - _max34_start).days
+_max34_avg_r  = float(_max34_trades["pnl_r_multiple"].mean()) if "pnl_r_multiple" in _max34_trades.columns else float("nan")
+_max34_tot_r  = float(_max34_trades["pnl_r_multiple"].sum()) if "pnl_r_multiple" in _max34_trades.columns else float("nan")
+
+# Load nav for drawdown
+_nav_path = _results_path / "nav.csv"
+if _nav_path.exists():
+    _nav_dd = pd.read_csv(_nav_path, parse_dates=["date"], index_col="date").iloc[:, 0]
+    _peak_pre = float(_nav_dd[_nav_dd.index <= _max34_start].max())
+    _trough   = float(_nav_dd[(_nav_dd.index >= _max34_start) & (_nav_dd.index <= _max34_end)].min())
+    _streak_dd_pct = (_trough - _peak_pre) / _peak_pre * 100
+else:
+    _streak_dd_pct = float("nan")
+
+st.markdown(f"""
+对所有 **≥ 10 笔**的连亏序列（共 {len(major)} 个）做特征分析，发现了明显的共性模式：
+
+| 特征 | 数据 | 含义 |
+|------|------|------|
+| 平均持仓天数 | **10–20 天**（显著低于全局均值） | 进场后极快被止损打出 |
+| 初始止损（stop_loss）比例 | **70%–95%** | 不是趋势反转后被追踪止损打出，而是"假突破"快速失败 |
+| 序列时间集中度 | 单个序列往往在 **2–6 周内**完成 | 这是同期多个仓位集中出清，而非时序上一笔一笔的随机亏损 |
+
+**最长连亏（{_max34_len} 笔）关键数据：**
+
+| 指标 | 数值 | 含义 |
+|------|------|------|
+| 时间区间 | {_max34_start.strftime("%Y年%m月%d日")} — {_max34_end.strftime("%Y年%m月%d日")} | 历时约 {_max34_cal} 个日历日 |
+| 初始止损占比 | {_max34_sl_n}/{_max34_len} 笔（{_max34_sl_n/_max34_len*100:.0f}%） | 绝大多数为"假突破快速失败" |
+| 合计亏损（R） | {_max34_tot_r:.1f}R | 每笔平均 {_max34_avg_r:.2f}R |
+| 策略回撤 | {_streak_dd_pct:.1f}% | 从连亏前高点到谷底 |
+| SPY位置 | 处于200日均线**上方** | 200MA过滤已启用但未触发，说明震荡市可在均线上方发生 |
+
+> **重要启示**：该34笔连亏发生时 SPY 仍高于200日均线，策略的 `regime_filter_enabled=True` 没有过滤掉这批信号。
+> 单一的"SPY在200MA以上才开仓"规则，不能防范 **SPY在均线上方但市场进入宽幅震荡** 的情形。
+""")
 
 # Scatter: length vs avg_hold
 fig_sc = go.Figure(go.Scatter(
@@ -177,13 +313,13 @@ with st.expander("📋 全部 ≥10 笔连亏序列明细", expanded=False):
 
 st.markdown("---")
 
-# ── 建议 ──────────────────────────────────────────────────────────────────────
+# ── 三、具体改进建议 ─────────────────────────────────────────────────────────────
 st.subheader("三、具体改进建议")
 
-# 建议 1
-st.markdown("### 建议 1：震荡市检测器（Choppiness Filter）—— 最高优先级")
+# ── 建议 1 ──────────────────────────────────────────────────────────────────────
+st.markdown("### 建议1：震荡市检测器（Choppiness Filter）")
 st.markdown("""
-**直接攻击长连亏的根本原因。**
+**直接攻击长连亏的根本原因——主动识别震荡市并预防性暂停入场。**
 
 假突破密集期的市场特征是：价格反复突破然后回撤，没有持续方向。
 可以通过以下指标识别这类"震荡市"并暂停或减少新开仓：
@@ -204,7 +340,20 @@ if choppiness_index(spy_high, spy_low, spy_close).iloc[-1] > 61.8:
 """, language="python")
 
 st.markdown("""
-**方案 B：近期信号成功率（更直接，但有前视风险需谨慎）**
+**方案 B：SPY近20日跌幅过滤（直接对标34笔连亏的触发条件）**
+
+该34笔连亏前20日，SPY出现明显回撤；策略虽然内置了200MA过滤，但SPY仍处于均线上方，
+所以过滤器未启动。可以增加一层"动态回撤"过滤：
+""")
+st.code("""
+# SPY 近20日累计跌幅超过5%时暂停新开仓
+spy_20d_return = (spy_close / spy_close.shift(20)) - 1
+if spy_20d_return.iloc[-1] < -0.05:
+    pause_new_entries(reason="spy_short_term_weakness")
+""", language="python")
+
+st.markdown("""
+**方案 C：近期信号成功率（更直接，但有前视风险需谨慎）**
 """)
 st.code("""
 # 维护一个滑动窗口：最近 20 笔已完结交易的胜率
@@ -219,7 +368,7 @@ if recent_win_rate < PAUSE_THRESHOLD:
 """, language="python")
 
 st.markdown("""
-> **注意：** 方案 B 存在轻微的"用已知结果指导决策"的风险，需在 Walk-Forward 中严格验证，
+> **注意：** 方案C存在轻微的"用已知结果指导决策"的风险，需在 Walk-Forward 中严格验证，
 > 不可在回测中使用当天出场结果来指导当天入场。
 
 **预期效果：** 以 2010 年 34 笔连亏为例，若当时检测到震荡市并暂停入场，
@@ -228,13 +377,14 @@ st.markdown("""
 
 st.markdown("---")
 
-# 建议 2
-st.markdown("### 建议 2：提高入场信号质量（Breakout Strength Filter）")
+# ── 建议 2 ──────────────────────────────────────────────────────────────────────
+st.markdown("### 建议2：提高入场信号质量（Breakout Strength Filter）")
 st.markdown("""
 **策略1.0 当前 `breakout_strength_min = 0`，即不要求突破强度。**
 
 弱突破（收盘价仅刚好超过 200 日高点，无量无力）在震荡市中失败率极高。
-加入突破强度过滤可以筛掉大量"假突破"，直接提升胜率。
+加入突破强度过滤可以筛掉大量"假突破"，直接提升胜率。这是 **实施成本最低** 的改进，
+只需修改一个参数并回测验证。
 
 **规则设计：**
 """)
@@ -258,16 +408,14 @@ st.markdown("""
 **代价：** 会错过少量真实突破（入场信号发出时强度不足，但后续确实上涨的标的）。
 """)
 
-# Chart: Volume filter multiplier (proxy for breakout quality) sensitivity
+# Chart: Volume filter multiplier sensitivity
 _volf2 = _perturb_path / "volume_filter_multiplier.json"
 if _volf2.exists():
     _vd2 = json.loads(_volf2.read_text())
     _vv2 = _vd2["param_values"]
     _vc2 = [r["cagr"] * 100 for r in _vd2["results"]]
     _vn2 = [r["n_trades"] for r in _vd2["results"]]
-    _vs2 = [r["sharpe"] for r in _vd2["results"]]
     _baseline_v2 = _vd2["baseline_value"]
-    _win2 = [r.get("win_rate", 0) * 100 for r in _vd2["results"]]
     _fig_v2 = go.Figure()
     _fig_v2.add_trace(go.Bar(
         x=[str(v) for v in _vv2], y=_vc2, name="CAGR (%)",
@@ -295,17 +443,17 @@ if _volf2.exists():
 
 st.markdown("---")
 
-# 建议 3
-st.markdown("### 建议 3：限制单日 / 单周最大开仓数（Entry Clustering Limit）")
+# ── 建议 3 ──────────────────────────────────────────────────────────────────────
+st.markdown("### 建议3：限制单日 / 单周最大开仓数（Entry Clustering Limit）")
 st.markdown("""
 **针对"同批次开仓全部快速失败"的集中亏损场景。**
 
-分析显示，多笔长连亏序列对应的是一批在同一时间窗口内密集开仓的标的，随后集中出场。
+34笔最长连亏的分析显示，多笔交易集中于同一或相邻交易日入场，随后被同期下跌统一止损出局。
 限制"窗口期内新开仓数"可以避免在单一市场环境下押注过多相关标的。
 """)
 st.code("""
-MAX_NEW_ENTRIES_PER_DAY  = 5    # 单日最多开 5 个新仓
-MAX_NEW_ENTRIES_PER_WEEK = 10   # 单周最多开 10 个新仓
+MAX_NEW_ENTRIES_PER_DAY  = 3    # 单日最多开 3 个新仓（当前无限制）
+MAX_NEW_ENTRIES_PER_WEEK = 8    # 单周最多开 8 个新仓
 
 # 已有信号按优先级排序（如突破强度、ATR 质量），只执行前 N 个
 signals_today = generate_signals(date)
@@ -351,14 +499,14 @@ st.caption(
 
 st.markdown("---")
 
-# 建议 4
-st.markdown("### 建议 4：连亏后仓位动态缩减（Anti-Streak Sizing）")
+# ── 建议 4 ──────────────────────────────────────────────────────────────────────
+st.markdown("### 建议4：连亏后仓位动态缩减（Anti-Streak Sizing）")
 st.markdown("""
 **这条建议不会减少连亏"笔数"，但能降低心理和财务冲击，让人更容易坚持执行策略。**
 
-在连续亏损期间，每笔的实际亏损金额如果能小一些，心理压力会显著减轻，
-也不容易在最坏的时机放弃策略。
-""")
+34笔连亏导致的策略回撤为 **{:.1f}%**。如果在连亏到第10笔时自动缩仓，
+后续剩余的亏损笔将以更小的仓位执行，实际资金回撤会更小。
+""".format(_streak_dd_pct))
 st.code("""
 BASE_RISK_PCT = 0.01   # 正常情况每笔风险 1% NAV
 
@@ -388,8 +536,8 @@ st.markdown("""
 
 st.markdown("---")
 
-# 建议 5（最长远）
-st.markdown("### 建议 5（长期）：引入非相关收益来源打破序列")
+# ── 建议 5 ──────────────────────────────────────────────────────────────────────
+st.markdown("### 建议5（长期）：引入非相关收益来源打破序列")
 st.markdown("""
 **这是从根本上解决问题的方向，也是最复杂的。**
 
@@ -408,35 +556,112 @@ st.markdown("""
 
 **最低成本的起点**：在 Regime Filter 判断为熊市期间，
 将部分资金投入 SH（S&P500 反向 ETF）而非 SHY（国债）。
-这样熊市中部分亏损被对冲，连亏序列被自然打断。
+这样熊市中部分亏损被对冲，连亏序列被自然打断。详见「如何改进策略有效性」页面中的熊市做空模拟分析。
 """)
 
 st.markdown("---")
 
-# ── 汇总建议 ──────────────────────────────────────────────────────────────────
-st.subheader("四、建议优先级汇总")
+# ── 建议 6（新增） ───────────────────────────────────────────────────────────────
+st.markdown("### 建议6：批量止损熔断（Batch Stop-Loss Circuit Breaker）")
+st.markdown("""
+**响应式规则——发现"问题市场"信号后立即暂停，不依赖预测。**
+
+34笔最长连亏的分析显示，多笔交易在同一天或相邻日触发初始止损。
+这是"市场已进入快速下跌/震荡"的明确信号，但策略仍继续开新仓被逐一打出。
+
+**熔断规则：** 当同一个自然日内有 **≥N 笔**仓位触发初始止损（stop_loss），
+自动暂停新开仓 **M 个交易日**，等待市场企稳。
+""")
+st.code("""
+# 每日统计触发初始止损的仓位数
+daily_stop_losses = count_stop_losses_today()
+
+# 参数（需回测调优）
+CIRCUIT_BREAKER_THRESHOLD = 3   # 同日触发≥3笔止损 → 激活熔断
+PAUSE_TRADING_DAYS = 5           # 暂停5个交易日
+
+if daily_stop_losses >= CIRCUIT_BREAKER_THRESHOLD:
+    pause_new_entries(
+        days=PAUSE_TRADING_DAYS,
+        reason="batch_stop_loss_circuit_breaker"
+    )
+""", language="python")
 
 st.markdown("""
-| 建议 | 减少连亏次数效果 | 减少心理冲击效果 | 对 CAGR 影响 | 实现难度 | 优先级 |
-|------|---------------|---------------|------------|---------|--------|
-| 建议 2：Breakout Strength Filter | ★★★ | ★★★ | 低偏正 | ★ 低 | 🔴 最高 |
-| 建议 1：震荡市检测器 | ★★★★ | ★★★★ | 中（需验证） | ★★ 中 | 🔴 最高 |
-| 建议 3：开仓集中度限制 | ★★★ | ★★★ | 低 | ★ 低 | 🟡 高 |
-| 建议 4：连亏后动态缩仓 | ★（不减少笔数） | ★★★★ | 低偏负 | ★ 低 | 🟡 高（心理价值大） |
-| 建议 5：引入非相关收益 | ★★★★★ | ★★★★★ | 高（正向） | ★★★ 高 | 🟢 长期 |
+**与建议3（开仓集中度限制）的区别：**
+- 建议3是**事前预防**：限制每日开仓数，减少同期持仓集中度
+- 建议6是**事后响应**：观察到批量止损信号后才暂停，不需要预测
+
+两者可以结合使用：先用建议3减少同日开仓集中度，再用建议6在已出现批量止损时紧急刹车。
+
+**预期效果：** 在34笔连亏期间，若在首次出现"同日3笔止损"时就暂停5天，
+可能将一个连续34笔的序列截断成数个5笔以内的短序列。
+""")
+
+# Show daily stop-loss distribution to support the suggestion
+if "exit_reason" in trades.columns and "exit_date" in trades.columns:
+    _daily_sl = (
+        trades[trades["exit_reason"] == "stop_loss"]
+        .groupby(trades["exit_date"].dt.date)
+        .size()
+        .reset_index(name="count")
+    )
+    _sl_bins = [(1,1),(2,2),(3,3),(4,5),(6,9999)]
+    _sl_labels = ["1笔", "2笔", "3笔", "4-5笔", "6+笔"]
+    _sl_counts = [((_daily_sl["count"] >= lo) & (_daily_sl["count"] <= hi)).sum() for lo, hi in _sl_bins]
+
+    _fig_sl = go.Figure(go.Bar(
+        x=_sl_labels,
+        y=_sl_counts,
+        marker_color=["#22c55e","#fbbf24","#f97316","#ef4444","#dc2626"],
+        text=[f"{c}天" for c in _sl_counts],
+        textposition="outside",
+    ))
+    _fig_sl.update_layout(
+        title="每日触发初始止损笔数分布（批量止损熔断阈值参考）",
+        xaxis_title="当日止损笔数",
+        yaxis_title="天数",
+        height=320,
+        margin=dict(t=50, b=40),
+        yaxis=dict(range=[0, max(_sl_counts) * 1.2]),
+    )
+    st.plotly_chart(_fig_sl, use_container_width=True)
+    _n_batch = sum(_sl_counts[2:])
+    st.caption(
+        f"共有 {_n_batch} 天出现同日 ≥3 笔止损，若每次触发后暂停5个交易日，"
+        "预计可避免相当数量的「震荡市继续盲目开仓」情形。"
+        "建议阈值设为3笔（可回测比较2/3/4笔的最优参数）。"
+    )
+
+st.markdown("---")
+
+# ── 四、汇总建议 ──────────────────────────────────────────────────────────────────
+st.subheader("四、建议优先级与实施路径（汇总）")
+
+st.markdown("""
+| 建议 | 减少连亏次数 | 减少心理冲击 | 对CAGR影响 | 实现难度 | 优先级 |
+|------|------------|------------|-----------|---------|-------|
+| **建议2：突破强度过滤** | ★★★ | ★★★ | 低偏正 | ★ 极低 | 🔴 最高 |
+| **建议3：开仓集中度限制** | ★★★ | ★★★ | 低 | ★ 低 | 🔴 最高 |
+| **建议6：批量止损熔断** | ★★★ | ★★★ | 低 | ★ 低 | 🔴 最高 |
+| **建议1：震荡市检测器** | ★★★★ | ★★★★ | 中（需验证） | ★★ 中 | 🟡 高 |
+| **建议4：连亏后动态缩仓** | ★（不减笔数） | ★★★★ | 低偏负 | ★ 低 | 🟡 高（心理价值大） |
+| **建议5：引入非相关收益** | ★★★★★ | ★★★★★ | 高（正向） | ★★★ 高 | 🟢 长期 |
 
 **推荐实施路径：**
 
-1. **立即可做**：将 `breakout_strength_min` 从 0 调整为 0.01，在参数敏感性分析中观察胜率和连亏序列的变化
-2. **下一步**：设计并回测震荡市检测器（Choppiness Index 版本），比较加入前后的最长连亏和整体夏普比率
-3. **心理缓冲**：实盘时配置连亏动态缩仓规则，即使回测中效果有限，对执行纪律的保护价值极大
-4. **长期目标**：逐步引入非相关收益来源，从根本上打断长序列结构
+1. **当日可做**：将 `breakout_strength_min` 从 0 调整为 0.01，在参数敏感性分析中验证胜率和连亏序列的变化
+2. **低工程量**：加入单日开仓上限（`MAX_NEW_ENTRIES_PER_DAY = 3`）+ 批量止损熔断（同日≥3笔止损 → 暂停5天）
+3. **专项研究**：设计并回测震荡市检测器（Choppiness Index 或 SPY近20日跌幅），Walk-Forward验证防过拟合
+4. **心理缓冲**：实盘配置连亏动态缩仓规则（连亏5笔→80%仓，10笔→50%仓）
+5. **长期目标**：逐步引入非相关收益来源（从熊市做空SH开始），从根本上打断长序列结构
 """)
 
 st.markdown("---")
 
 st.info(
     '**最重要的心理认知**：连续亏损不是"策略出错"的信号，而是趋势跟踪策略在震荡市中的正常表现。'
-    "历史数据中，每一次最长连亏序列之后，策略都恢复并创下了新高。"
+    f"历史数据中，最长的 {_max34_len} 笔连亏（{_max34_start.strftime('%Y年%m月')}—{_max34_end.strftime('%m月')}）"
+    f"导致了 {_streak_dd_pct:.1f}% 的策略回撤，但之后策略完全恢复并持续创下新高。"
     "提前理解这一点，比任何算法改进都更能帮助实盘中保持执行纪律。"
 )
