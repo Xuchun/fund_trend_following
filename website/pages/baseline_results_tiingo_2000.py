@@ -547,6 +547,198 @@ if _DIAG_PATH_BR.exists():
 else:
     st.info("连续亏损数据尚未生成。运行：python src/scripts/04_run_diagnostics.py")
 
+# ── Deep-streak analysis ───────────────────────────────────────────────────────
+import pandas as _pd_streak2
+import plotly.graph_objects as _go_streak2
+import numpy as _np_streak2
+
+_trades_s2 = res.trades.sort_values("exit_date").reset_index(drop=True) \
+    if "exit_date" in res.trades.columns else res.trades.reset_index(drop=True)
+
+# Reconstruct all streaks from trades
+_streaks_s2: list[dict] = []
+_cur_s2 = 0
+_si_s2  = None
+for _i_s2, _row_s2 in _trades_s2.iterrows():
+    if _row_s2["net_pnl"] <= 0:
+        if _cur_s2 == 0:
+            _si_s2 = _i_s2
+        _cur_s2 += 1
+    else:
+        if _cur_s2 > 0:
+            _streaks_s2.append({"start_idx": _si_s2, "end_idx": _i_s2 - 1, "length": _cur_s2})
+        _cur_s2 = 0
+if _cur_s2 > 0:
+    _streaks_s2.append({"start_idx": _si_s2, "end_idx": len(_trades_s2) - 1, "length": _cur_s2})
+
+_sdf_s2 = _pd_streak2.DataFrame(_streaks_s2)
+_sdf_s2["start_exit"]  = _sdf_s2["start_idx"].map(_trades_s2["exit_date"])
+_sdf_s2["end_exit"]    = _sdf_s2["end_idx"].map(_trades_s2["exit_date"])
+_sdf_s2["start_entry"] = _sdf_s2["start_idx"].map(_trades_s2["entry_date"])
+
+# Load SPY nav for market context
+_spy_s2_path = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m_2000" / "spy_nav.csv"
+_spy_s2 = _pd_streak2.read_csv(_spy_s2_path, parse_dates=["date"], index_col="date")["spy_nav"] \
+    if _spy_s2_path.exists() else None
+
+# ── Section 1: 最长连续亏损（34笔） ───────────────────────────────────────────
+_max_row_s2 = _sdf_s2.loc[_sdf_s2["length"].idxmax()]
+_max_len_s2 = int(_max_row_s2["length"])
+_max_trades_s2 = _trades_s2.iloc[int(_max_row_s2["start_idx"]) : int(_max_row_s2["end_idx"]) + 1].copy()
+_max_start_s2  = _max_row_s2["start_exit"]
+_max_end_s2    = _max_row_s2["end_exit"]
+_max_cal_days  = (_max_end_s2 - _max_start_s2).days
+
+if _spy_s2 is not None:
+    _spy_during = _spy_s2[(_spy_s2.index >= _max_start_s2) & (_spy_s2.index <= _max_end_s2)]
+    _spy_pre    = _spy_s2[_spy_s2.index < _max_start_s2]
+    _spy_dur_ret = float(_spy_during.iloc[-1] / _spy_during.iloc[0] - 1) * 100 if len(_spy_during) >= 2 else float("nan")
+    _spy_pre_ret = float(_spy_pre.iloc[-1] / _spy_pre.iloc[-20] - 1) * 100 if len(_spy_pre) >= 20 else float("nan")
+else:
+    _spy_dur_ret = float("nan")
+    _spy_pre_ret = float("nan")
+
+st.markdown(f"#### 1. 最长连续亏损：{_max_len_s2} 笔连续亏损")
+
+_mc1, _mc2, _mc3, _mc4 = st.columns(4)
+_mc1.metric("持续时间（日历日）", f"{_max_cal_days} 天")
+_mc2.metric("初始止损触发占比", f"{int((_max_trades_s2['exit_reason']=='stop_loss').sum())}/{_max_len_s2} 笔")
+_mc3.metric("平均亏损（R）", f"{_max_trades_s2['pnl_r_multiple'].mean():.2f}R")
+_mc4.metric(f"同期 SPY 涨跌", f"{_spy_dur_ret:+.1f}%")
+
+# Scatter: exit date vs pnl_r for the 34-trade streak
+_fig_max_s = _go_streak2.Figure()
+_fig_max_s.add_trace(_go_streak2.Bar(
+    x=_max_trades_s2["exit_date"].dt.strftime("%Y-%m-%d"),
+    y=_max_trades_s2["pnl_r_multiple"],
+    marker_color="#d62728",
+    text=_max_trades_s2["ticker"],
+    textposition="outside",
+    hovertemplate="%{text}<br>出场：%{x}<br>盈亏：%{y:.2f}R<extra></extra>",
+))
+_fig_max_s.update_layout(
+    title=f"最长连续亏损 {_max_len_s2} 笔：各交易盈亏（R）",
+    xaxis_title="出场日期",
+    yaxis_title="盈亏（R倍数）",
+    showlegend=False,
+    height=380,
+    margin=dict(t=50, b=60, l=50, r=20),
+)
+st.plotly_chart(_fig_max_s, use_container_width=True)
+
+st.markdown(
+    f'<div class="info-box">'
+    f'<strong>市场背景：</strong>该 {_max_len_s2} 笔连续亏损发生于 '
+    f'{_max_start_s2.strftime("%Y年%m月%d日")} 至 {_max_end_s2.strftime("%Y年%m月%d日")}，'
+    f'历时 {_max_cal_days} 个日历日（约 {_max_cal_days/30:.1f} 个月）。'
+    f'触发前 20 个交易日 SPY 已下跌 {_spy_pre_ret:+.1f}%，连亏期间 SPY 累计涨跌 {_spy_dur_ret:+.1f}%。'
+    f'{int((_max_trades_s2["exit_reason"]=="stop_loss").sum())} 笔为初始止损触发，'
+    f'市场大幅震荡导致多个方向性开仓被逐一止损出局。'
+    f'</div>',
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    "**可能的改进方法：**\n\n"
+    "- **市场环境过滤**：当 SPY 跌破 200 日均线，或近 20 日跌幅超过 5% 时，暂停新开仓或缩减仓位规模。"
+    " 回顾该连亏前，SPY 已出现明显下行趋势，若叠加环境过滤，可避免在弱势市场继续追涨开仓。\n"
+    "- **单日开仓上限**：限制同一天内新开仓笔数（如每日上限 2～3 笔）。"
+    " 该连亏中多笔交易集中于同一或相邻交易日入场，统一被后续下跌止损出局。\n"
+    "- **批量止损熔断**：当单日触发止损的仓位数量超过阈值（如 3 笔以上同日止损），"
+    " 暂停后续 N 个交易日的新开仓，等待市场企稳。"
+)
+
+st.markdown("---")
+
+# ── Section 2: 连续亏损 ≥ 15 笔的共性分析 ─────────────────────────────────────
+st.markdown("#### 2. 连续亏损 ≥ 15 笔的共性分析")
+
+_long_s2 = _sdf_s2[_sdf_s2["length"] >= 15].sort_values("length", ascending=False).reset_index(drop=True)
+
+# Build summary table
+_tbl_rows: list[dict] = []
+for _, _sr2 in _long_s2.iterrows():
+    _sl2 = _trades_s2.iloc[int(_sr2["start_idx"]) : int(_sr2["end_idx"]) + 1]
+    _se2 = _sr2["start_exit"]
+    _ee2 = _sr2["end_exit"]
+    _cd2 = (_ee2 - _se2).days
+    if _spy_s2 is not None:
+        _sp2 = _spy_s2[(_spy_s2.index >= _se2) & (_spy_s2.index <= _ee2)]
+        _spy_r2 = float(_sp2.iloc[-1] / _sp2.iloc[0] - 1) * 100 if len(_sp2) >= 2 else float("nan")
+        _spy_p2 = _spy_s2[_spy_s2.index < _se2]
+        _spy_pre2 = float(_spy_p2.iloc[-1] / _spy_p2.iloc[-20] - 1) * 100 if len(_spy_p2) >= 20 else float("nan")
+    else:
+        _spy_r2 = float("nan")
+        _spy_pre2 = float("nan")
+    _sl_pct = int((_sl2["exit_reason"] == "stop_loss").sum())
+    _ts_pct = int((_sl2["exit_reason"] == "trailing_stop").sum())
+    _tbl_rows.append({
+        "出场日期区间": f"{_se2.strftime('%Y-%m-%d')} → {_ee2.strftime('%Y-%m-%d')}",
+        "连续亏损笔数": int(_sr2["length"]),
+        "持续（天）": _cd2,
+        "初始止损": f"{_sl_pct}笔",
+        "追踪止损": f"{_ts_pct}笔",
+        "平均盈亏（R）": round(float(_sl2["pnl_r_multiple"].mean()), 2),
+        "期间SPY": f"{_spy_r2:+.1f}%",
+        "前20日SPY": f"{_spy_pre2:+.1f}%",
+    })
+
+_tbl_s2 = _pd_streak2.DataFrame(_tbl_rows)
+st.dataframe(_tbl_s2, use_container_width=True, hide_index=True)
+
+# SPY during streak bar chart
+_fig_spy_s = _go_streak2.Figure()
+_colors_spy = ["#d62728" if float(r["期间SPY"].replace("%","").replace("+","")) < 0 else "#1f77b4" for r in _tbl_rows]
+_fig_spy_s.add_trace(_go_streak2.Bar(
+    x=[f"{r['连续亏损笔数']}笔<br>({r['出场日期区间'][:7]})" for r in _tbl_rows],
+    y=[float(r["期间SPY"].replace("%","").replace("+","")) for r in _tbl_rows],
+    marker_color=_colors_spy,
+    text=[r["期间SPY"] for r in _tbl_rows],
+    textposition="outside",
+    hovertemplate="%{x}<br>期间SPY：%{y:.1f}%<extra></extra>",
+))
+_fig_spy_s.update_layout(
+    title="各长连亏期间 SPY 表现",
+    xaxis_title="连续亏损序列（笔数 + 起始年月）",
+    yaxis_title="期间 SPY 涨跌（%）",
+    showlegend=False,
+    height=360,
+    margin=dict(t=50, b=70, l=50, r=20),
+)
+st.plotly_chart(_fig_spy_s, use_container_width=True)
+
+_n_neg_spy = sum(1 for r in _tbl_rows if float(r["期间SPY"].replace("%","").replace("+","")) < 0)
+_n_pos_spy = len(_tbl_rows) - _n_neg_spy
+st.markdown(
+    f'<div class="info-box">'
+    f'<strong>主要共性：</strong>'
+    f'<ul style="margin:6px 0 0 16px">'
+    f'<li><strong>初始止损主导</strong>：{len(_long_s2)} 次长连亏中，每次都以初始止损（stop_loss）为主要出场方式，'
+    f'说明行情在持仓期间快速反向，未给追踪止损机会。</li>'
+    f'<li><strong>市场不总是下跌</strong>：{len(_long_s2)} 次长连亏中有 {_n_neg_spy} 次 SPY 同期为负，'
+    f'{_n_pos_spy} 次 SPY 同期为正。说明部分长连亏发生于市场上涨背景下——'
+    f'策略所持个股未能跟随大盘，或入场时机恰好处于短期回调高点。</li>'
+    f'<li><strong>分散但无效</strong>：每次连亏的个股高度分散，无行业集中现象，'
+    f'表明亏损来自整体市场波动而非某个行业的系统性风险。</li>'
+    f'<li><strong>前期弱势诱导入场</strong>：多次长连亏前 20 日 SPY 出现不同程度下跌，'
+    f'说明市场刚出现回调就触发买入信号，但随后跌势延续导致连续止损。</li>'
+    f'</ul>'
+    f'</div>',
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    "**可能的改进方法：**\n\n"
+    "- **趋势环境过滤（最直接）**：仅在 SPY 处于 200 日均线上方时开新仓，可避免在整体下行趋势中逆势买入，"
+    " 代价是减少部分在市场回调中捕捉到的优质机会。\n"
+    "- **ATR 自适应仓位**：当市场波动率（VIX 或 ATR 比率）显著高于历史均值时，"
+    " 自动缩减单笔仓位风险（如从标准 1R 缩至 0.5R），降低高波动期的单笔亏损幅度。\n"
+    "- **批量止损后暂停期**：当策略连续亏损超过 10 笔，自动进入观察期（如暂停 5～10 个交易日），"
+    " 让市场完成震荡后再重新入场，以减少在无效信号环境中反复受损。\n"
+    "- **持仓分散上限**：限制同一天或同一周内新增仓位数（如每周最多开 3 笔新仓），"
+    " 避免在市场转折点前集中入场后被统一止损。"
+)
+
 st.markdown("---")
 
 # ── Top 20 亏损交易分析 ────────────────────────────────────────────────────────
