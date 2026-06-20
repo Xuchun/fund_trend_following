@@ -595,13 +595,16 @@ else:
 
 st.markdown(f"#### 1. 最长连续亏损：{_max_len_s2} 笔连续亏损")
 
-_mc1, _mc2, _mc3, _mc4, _mc5, _mc6 = st.columns(6)
-_mc1.metric("持续时间（日历日）", f"{_max_cal_days} 天")
+_mc1, _mc2, _mc3, _mc4, _mc5 = st.columns(5)
+with _mc1:
+    st.markdown("持续时间（日历日）")
+    st.markdown(f"**:red[{_max_cal_days} 天]**")
 _mc2.metric("初始止损触发占比", f"{int((_max_trades_s2['exit_reason']=='stop_loss').sum())}/{_max_len_s2} 笔")
 _mc3.metric("合计亏损（R）", f"{_max_trades_s2['pnl_r_multiple'].sum():.1f}R")
-_mc4.metric("合计策略回撤", f"{_streak_dd_pct:.1f}%")
-_mc5.metric("平均亏损（R）", f"{_max_trades_s2['pnl_r_multiple'].mean():.2f}R")
-_mc6.metric("同期 SPY 涨跌", f"{_spy_dur_ret:+.1f}%")
+with _mc4:
+    st.markdown("合计策略涨跌")
+    st.markdown(f"**:red[{_streak_dd_pct:.1f}%]**")
+_mc5.metric("同期 SPY 涨跌", f"{_spy_dur_ret:+.1f}%")
 
 # Bar chart: all 34 trades as individual bars, colored by exit reason
 _max_labels = [
