@@ -598,34 +598,51 @@ else:
     _spy_dur_ret = float("nan")
     _spy_pre_ret = float("nan")
 
+# Strategy drawdown during streak: peak before streak → trough during streak
+_nav_s2_path = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m_2000" / "nav.csv"
+if _nav_s2_path.exists():
+    _nav_s2 = _pd_streak2.read_csv(_nav_s2_path, parse_dates=["date"], index_col="date").iloc[:, 0]
+    _nav_pre_peak  = float(_nav_s2[_nav_s2.index <= _max_start_s2].max())
+    _nav_trough    = float(_nav_s2[(_nav_s2.index >= _max_start_s2) & (_nav_s2.index <= _max_end_s2)].min())
+    _streak_dd_pct = (_nav_trough - _nav_pre_peak) / _nav_pre_peak * 100
+else:
+    _streak_dd_pct = float("nan")
+
 st.markdown(f"#### 1. 最长连续亏损：{_max_len_s2} 笔连续亏损")
 
-_mc1, _mc2, _mc3, _mc4, _mc5 = st.columns(5)
+_mc1, _mc2, _mc3, _mc4, _mc5, _mc6 = st.columns(6)
 _mc1.metric("持续时间（日历日）", f"{_max_cal_days} 天")
 _mc2.metric("初始止损触发占比", f"{int((_max_trades_s2['exit_reason']=='stop_loss').sum())}/{_max_len_s2} 笔")
 _mc3.metric("合计亏损（R）", f"{_max_trades_s2['pnl_r_multiple'].sum():.1f}R")
-_mc4.metric("平均亏损（R）", f"{_max_trades_s2['pnl_r_multiple'].mean():.2f}R")
-_mc5.metric("同期 SPY 涨跌", f"{_spy_dur_ret:+.1f}%")
+_mc4.metric("合计策略回撤", f"{_streak_dd_pct:.1f}%")
+_mc5.metric("平均亏损（R）", f"{_max_trades_s2['pnl_r_multiple'].mean():.2f}R")
+_mc6.metric("同期 SPY 涨跌", f"{_spy_dur_ret:+.1f}%")
 
-# Bar chart: all 34 trades as individual bars, labeled by ticker+date
+# Bar chart: all 34 trades as individual bars, colored by exit reason
 _max_labels = [
     f"{t}<br>{d}" for t, d in zip(
         _max_trades_s2["ticker"],
         _max_trades_s2["exit_date"].dt.strftime("%m/%d"),
     )
 ]
+_bar_colors_max = [
+    "#2ca02c" if r == "trailing_stop" else "#d62728"
+    for r in _max_trades_s2["exit_reason"]
+]
 _fig_max_s = _go_streak2.Figure()
 _fig_max_s.add_trace(_go_streak2.Bar(
     x=_max_labels,
     y=_max_trades_s2["pnl_r_multiple"],
-    marker_color="#d62728",
+    marker_color=_bar_colors_max,
     text=[f"{v:.2f}R" for v in _max_trades_s2["pnl_r_multiple"]],
     textposition="outside",
-    hovertemplate="<b>%{x}</b><br>盈亏：%{y:.2f}R<extra></extra>",
-    customdata=_max_trades_s2["exit_date"].dt.strftime("%Y-%m-%d").values,
+    hovertemplate="<b>%{x}</b><br>出场方式：%{customdata}<br>盈亏：%{y:.2f}R<extra></extra>",
+    customdata=_max_trades_s2["exit_reason"].map(
+        {"stop_loss": "初始止损", "trailing_stop": "移动止盈"}
+    ).fillna(_max_trades_s2["exit_reason"]).values,
 ))
 _fig_max_s.update_layout(
-    title=f"最长连续亏损 {_max_len_s2} 笔：各交易盈亏（R）——每笔均单独显示",
+    title=f"最长连续亏损 {_max_len_s2} 笔：各交易盈亏（R）——红=初始止损，绿=移动止盈",
     xaxis_title="个股（出场月/日）",
     yaxis_title="盈亏（R倍数）",
     showlegend=False,
