@@ -51,16 +51,21 @@ _col_u_title, _col_u_right = st.columns([4, 2])
 with _col_u_title:
     st.title("数据与标的池")
 with _col_u_right:
-    _cv1_u.html(
-        '<div style="display:flex;justify-content:flex-end;align-items:center;padding-top:20px;">'
-        '<button onclick="window.parent.print()"'
-        ' title="打开打印对话框后选择「存储为 PDF」即可下载"'
-        ' style="background:#1565c0;color:#fff;border:none;padding:7px 16px;'
-        'border-radius:5px;cursor:pointer;font-size:13px;'
-        'font-family:sans-serif;white-space:nowrap;">📄 下载 PDF</button>'
-        '</div>',
-        height=60,
-    )
+    st.html("""
+    <div style="display:flex;justify-content:flex-end;align-items:center;padding-top:10px;">
+        <button id="univ-pdf-btn"
+            title="打开打印对话框后选择「存储为 PDF」即可下载"
+            style="background:#1565c0;color:#fff;border:none;padding:7px 16px;
+                   border-radius:5px;cursor:pointer;font-size:13px;
+                   font-family:sans-serif;white-space:nowrap;">📄 下载 PDF</button>
+    </div>
+    <script>
+    (function() {
+        var btn = document.getElementById('univ-pdf-btn');
+        if (btn) btn.onclick = function() { window.print(); };
+    })();
+    </script>
+    """, unsafe_allow_javascript=True)
 st.markdown("---")
 
 
