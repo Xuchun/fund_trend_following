@@ -531,6 +531,50 @@ with tab1:
 
     st.markdown("---")
 
+    # ── Trade history (open + closed) ────────────────────────────────────────
+    st.subheader("八、交易历史")
+    _all_trades = []
+    for p in sorted(_m1_positions, key=lambda x: x["entry_date"]):
+        _all_trades.append({
+            "状态": "🟢 持仓中",
+            "标的": p["ticker"],
+            "入场日": p["entry_date"],
+            "出场日": "—",
+            "入场价": f"${p['entry_price']:.2f}",
+            "出场价": "—",
+            "股数": p["shares"],
+            "持仓天数": "—",
+            "R": "—",
+            "净盈亏": "—",
+        })
+    for c in sorted(_m1_closed, key=lambda x: x.get("exit_date",""), reverse=True):
+        _all_trades.insert(0, {
+            "状态": "🔴 已平仓",
+            "标的": c["ticker"],
+            "入场日": c.get("entry_date", ""),
+            "出场日": c.get("exit_date", ""),
+            "入场价": f"${c.get('entry_price',0):.2f}",
+            "出场价": f"${c.get('exit_price',0):.2f}",
+            "股数": c.get("shares", ""),
+            "持仓天数": c.get("holding_days", ""),
+            "R": f"{c['pnl_r']:+.2f}R" if c.get("pnl_r") is not None else "—",
+            "净盈亏": f"${c['net_pnl']:+,.0f}" if c.get("net_pnl") is not None else "—",
+        })
+    if _all_trades:
+        _all_trades_df = pd.DataFrame(_all_trades)
+        st.dataframe(_all_trades_df, use_container_width=True, hide_index=True)
+        _csv_trades = _all_trades_df.to_csv(index=False).encode("utf-8-sig")
+        st.download_button(
+            "⬇️ 下载交易历史 CSV",
+            data=_csv_trades,
+            file_name="trade_history.csv",
+            mime="text/csv",
+        )
+    else:
+        st.info("暂无交易记录")
+
+    st.markdown("---")
+
     # ── Closed trades ─────────────────────────────────────────────────────────
     if _m1_closed:
         st.subheader(f"九、平仓记录（{len(_m1_closed)} 笔）")
