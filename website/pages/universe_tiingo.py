@@ -17,7 +17,22 @@ import streamlit as st
 # ── 数据路径 ──────────────────────────────────────────────────────────────────
 _EU_CSV = _project / "data" / "tiingo_eligible_universe.csv"
 
-st.title("数据与标的池")
+import streamlit.components.v1 as _cv1_u
+
+_col_u_title, _col_u_right = st.columns([4, 2])
+with _col_u_title:
+    st.title("数据与标的池")
+with _col_u_right:
+    _cv1_u.html(
+        '<div style="display:flex;justify-content:flex-end;align-items:center;padding-top:20px;">'
+        '<button onclick="window.parent.print()"'
+        ' title="打开打印对话框后选择「存储为 PDF」即可下载"'
+        ' style="background:#1565c0;color:#fff;border:none;padding:7px 16px;'
+        'border-radius:5px;cursor:pointer;font-size:13px;'
+        'font-family:sans-serif;white-space:nowrap;">📄 下载 PDF</button>'
+        '</div>',
+        height=60,
+    )
 st.markdown("---")
 
 
