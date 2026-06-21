@@ -246,8 +246,12 @@ with tab1:
         _ts_spy     = _m1_today_sig.get("spy_close")
         _ts_exits   = _m1_today_sig.get("exits", [])
         _ts_entries = _m1_today_sig.get("entries", [])
-        st.caption(f"信号日期：{_ts_date} ｜ Regime：{'🟢 BULL' if _ts_regime == 'BULL' else '🔴 BEAR'}" +
-                   (f" ｜ SPY：${_ts_spy:.2f}" if _ts_spy else ""))
+        _ts_regime_str = "🟢 BULL" if _ts_regime == "BULL" else "🔴 BEAR"
+        if _spy_close and _spy_sma:
+            _ts_gap = (_spy_close / _spy_sma - 1) * 100
+            _ts_op  = "＞" if _spy_close > _spy_sma else "＜"
+            _ts_regime_str += f"，SPY {_spy_close:.2f} {_ts_op} SMA200 {_spy_sma:.2f}（{_ts_gap:+.1f}%）"
+        st.caption(f"信号日期：{_ts_date} ｜ Regime：{_ts_regime_str}")
 
         _ts1, _ts2 = st.columns(2)
         with _ts1:
