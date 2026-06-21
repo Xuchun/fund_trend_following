@@ -17,7 +17,6 @@ import streamlit as st
 # ── 数据路径 ──────────────────────────────────────────────────────────────────
 _EU_CSV = _project / "data" / "tiingo_eligible_universe.csv"
 
-import streamlit.components.v1 as _cv1_u
 
 st.markdown("""
 <style>
