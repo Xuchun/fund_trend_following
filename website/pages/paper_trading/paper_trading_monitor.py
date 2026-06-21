@@ -290,6 +290,7 @@ with tab1:
             st.info("无入场信号")
 
     # ── Today's trades (combined) ─────────────────────────────────────────────
+    st.markdown("---")
     st.markdown("#### 今日交易")
     _trade_rows = []
     if _m1_today_sig:
