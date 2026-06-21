@@ -209,7 +209,8 @@ with tab1:
     st.caption(f"行情日期：{_m1_date} ｜ 上次更新：{_m1_last_upd} ｜ Yahoo Finance（1小时缓存）")
 
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("模拟 NAV（估算）", f"${_m1_nav/1e6:.2f}M",
+    _nav_label = "模拟 NAV（上次价估算）" if _m1_stale else "模拟 NAV（估算）"
+    c1.metric(_nav_label, f"${_m1_nav/1e6:.2f}M",
               delta=f"{(_m1_nav/_m1_init_nav-1)*100:+.2f}% vs 起始")
     c2.metric("持仓数量", f"{len(_m1_act)} 只",
               delta=f"触止损 {len(_m1_stop)} 只" if _m1_stop else None,
