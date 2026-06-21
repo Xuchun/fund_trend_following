@@ -238,49 +238,8 @@ with tab1:
 
     st.markdown("---")
 
-    # ── Live positions ───────────────────────────────────────────────────────
-    st.subheader("二、当前持仓实时状态")
-    if _m1_stop:
-        st.warning(f"⚠️ **{len(_m1_stop)} 只已触及止损** — 建议执行止损出场")
-
-    if _m1_ok:
-        _rows = [{
-            "标的": p["ticker"],
-            "状态": "🔴 触止损" if p["is_stopped"] else "🟢 持有",
-            "入场日": p["entry_date"],
-            "入场价": f"${p['entry_price']:.2f}",
-            "当前价": f"${p['current_price']:.2f}",
-            "移动止损": f"${p['current_stop']:.2f}",
-            "缓冲": f"{p['stop_buffer_pct']:.1f}%",
-            "R": f"{p['R']:+.2f}R",
-            "浮盈 $": f"${p['unreal_pnl']:+,.0f}",
-            "市值": f"${p['mkt_value']/1e3:.0f}K",
-        } for p in sorted(_m1_ok, key=lambda x: x.get("R", 0), reverse=True)]
-        st.dataframe(pd.DataFrame(_rows), use_container_width=True, hide_index=True)
-
-        _sorted = sorted(_m1_ok, key=lambda x: x.get("R", 0), reverse=True)
-        _fig = go.Figure(go.Bar(
-            y=[p["ticker"] for p in _sorted],
-            x=[p["R"] for p in _sorted],
-            orientation="h",
-            marker_color=["#d62728" if p["is_stopped"] else ("#2ca02c" if p["R"] >= 0 else "#ff7f0e")
-                          for p in _sorted],
-            text=[f"{p['R']:+.2f}R" for p in _sorted],
-            textposition="outside",
-            hovertemplate="<b>%{y}</b><br>R = %{x:+.2f}<extra></extra>",
-        ))
-        _fig.update_layout(
-            title="持仓浮盈（R 倍数，红色 = 触及止损）",
-            xaxis_title="R 倍数", height=max(380, len(_sorted) * 26),
-            margin=dict(l=70, r=100, t=50, b=40),
-            template="plotly_white", showlegend=False,
-        )
-        st.plotly_chart(_fig, use_container_width=True)
-
-    st.markdown("---")
-
     # ── Today's signals ───────────────────────────────────────────────────────
-    st.subheader("三、今日信号")
+    st.subheader("二、今日信号")
     if _m1_today_sig:
         _ts_date    = _m1_today_sig.get("date", "N/A")
         _ts_regime  = _m1_today_sig.get("regime", "N/A")
@@ -325,6 +284,47 @@ with tab1:
         with _ts2:
             st.markdown("**入场信号（0 笔）**")
             st.info("无入场信号")
+
+    st.markdown("---")
+
+    # ── Live positions ───────────────────────────────────────────────────────
+    st.subheader("三、当前持仓实时状态")
+    if _m1_stop:
+        st.warning(f"⚠️ **{len(_m1_stop)} 只已触及止损** — 建议执行止损出场")
+
+    if _m1_ok:
+        _rows = [{
+            "标的": p["ticker"],
+            "状态": "🔴 触止损" if p["is_stopped"] else "🟢 持有",
+            "入场日": p["entry_date"],
+            "入场价": f"${p['entry_price']:.2f}",
+            "当前价": f"${p['current_price']:.2f}",
+            "移动止损": f"${p['current_stop']:.2f}",
+            "缓冲": f"{p['stop_buffer_pct']:.1f}%",
+            "R": f"{p['R']:+.2f}R",
+            "浮盈 $": f"${p['unreal_pnl']:+,.0f}",
+            "市值": f"${p['mkt_value']/1e3:.0f}K",
+        } for p in sorted(_m1_ok, key=lambda x: x.get("R", 0), reverse=True)]
+        st.dataframe(pd.DataFrame(_rows), use_container_width=True, hide_index=True)
+
+        _sorted = sorted(_m1_ok, key=lambda x: x.get("R", 0), reverse=True)
+        _fig = go.Figure(go.Bar(
+            y=[p["ticker"] for p in _sorted],
+            x=[p["R"] for p in _sorted],
+            orientation="h",
+            marker_color=["#d62728" if p["is_stopped"] else ("#2ca02c" if p["R"] >= 0 else "#ff7f0e")
+                          for p in _sorted],
+            text=[f"{p['R']:+.2f}R" for p in _sorted],
+            textposition="outside",
+            hovertemplate="<b>%{y}</b><br>R = %{x:+.2f}<extra></extra>",
+        ))
+        _fig.update_layout(
+            title="持仓浮盈（R 倍数，红色 = 触及止损）",
+            xaxis_title="R 倍数", height=max(380, len(_sorted) * 26),
+            margin=dict(l=70, r=100, t=50, b=40),
+            template="plotly_white", showlegend=False,
+        )
+        st.plotly_chart(_fig, use_container_width=True)
 
     st.markdown("---")
 
