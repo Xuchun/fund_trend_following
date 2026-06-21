@@ -100,6 +100,13 @@ def _capture_all(base_url: str) -> list[bytes]:
         )
         page = ctx.new_page()
 
+        # Warm up the session with the root URL first to reduce cold-start modals
+        try:
+            page.goto(base_url.rstrip("/") + "/", wait_until="networkidle", timeout=60_000)
+            page.wait_for_timeout(3_000)
+        except Exception:
+            pass
+
         for _title, path in _PAGES:
             url = base_url.rstrip("/") + path
             try:
@@ -111,18 +118,21 @@ def _capture_all(base_url: str) -> list[bytes]:
                 )
                 # Give charts & spinners time to finish rendering
                 page.wait_for_timeout(4_000)
-                # Dismiss Streamlit's "Page not found" modal if it appeared
-                # (happens on the first cold navigation)
-                page.evaluate("""
-                () => {
-                    const modal = document.querySelector('[data-testid="stModal"]');
-                    if (modal) {
-                        const btn = modal.querySelector('button');
-                        if (btn) btn.click();
-                    }
-                }
-                """)
-                page.wait_for_timeout(500)
+                # Dismiss Streamlit's "Page not found" modal if it appeared,
+                # then wait until it is fully gone before capturing PDF.
+                modal_loc = page.locator('[data-testid="stModal"]')
+                try:
+                    if modal_loc.is_visible(timeout=1_000):
+                        close_btn = modal_loc.locator('button').first
+                        if close_btn.is_visible(timeout=500):
+                            close_btn.click()
+                        # Wait for modal to fully disappear
+                        modal_loc.wait_for(state="hidden", timeout=8_000)
+                        # Let the page re-render after dismissal
+                        page.wait_for_load_state("networkidle", timeout=10_000)
+                        page.wait_for_timeout(2_000)
+                except Exception:
+                    pass
                 # Inject print CSS (hides sidebar, header, iframes)
                 page.evaluate(_INJECT_CSS_JS)
                 page.wait_for_timeout(300)
