@@ -576,14 +576,16 @@ with tab1:
     st.markdown("---")
 
     # ── Closed trades ─────────────────────────────────────────────────────────
+    st.subheader(f"九、平仓记录（{len(_m1_closed)} 笔）")
     if _m1_closed:
-        st.subheader(f"九、平仓记录（{len(_m1_closed)} 笔）")
         _ct = pd.DataFrame(_m1_closed).sort_values("exit_date", ascending=False)
         _ct["R"] = _ct["pnl_r"].map(lambda v: f"{v:+.2f}R")
         _ct["净盈亏"] = _ct["net_pnl"].map(lambda v: f"${v:+,.0f}")
         st.dataframe(_ct[["ticker","entry_date","exit_date","holding_days","R","净盈亏","exit_reason"]].rename(
             columns={"ticker":"标的","entry_date":"入场日","exit_date":"出场日","holding_days":"天数","exit_reason":"原因"}
         ), use_container_width=True, hide_index=True)
+    else:
+        st.info("暂无平仓记录")
 
     st.markdown("---")
 
