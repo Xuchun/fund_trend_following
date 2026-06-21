@@ -2440,7 +2440,6 @@ if _es_path.exists():
             f"**{_tot_skp:,}** 次（占 **{_skip_rt:.1f}%**）被放弃，细分原因如下：\n\n"
             + _reason_text
             + _insight
-            + "\n\n放弃开仓率反映风控过滤器的「严格程度」——过高意味着牛市中错过较多机会，过低则风控执行不够充分。"
         )
     else:
         st.markdown(
