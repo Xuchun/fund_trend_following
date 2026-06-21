@@ -363,7 +363,7 @@ with tab1:
 
     # ── NAV history ──────────────────────────────────────────────────────────
     if _m1_history:
-        st.subheader("五、NAV 走势")
+        st.subheader("六、NAV 走势")
         _nh = pd.DataFrame(_m1_history)
         _nh["date"] = pd.to_datetime(_nh["date"])
         _nh = _nh.sort_values("date")
