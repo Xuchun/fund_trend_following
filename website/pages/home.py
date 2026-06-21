@@ -180,7 +180,7 @@ with _col_right:
 st.caption(
     f"回测期间 {meta.backtest_start} → {meta.backtest_end} ｜ "
     f"标的池：{meta.universe_total:,} 只（{meta.universe_stocks:,} 只股票含退市标的 + {meta.universe_etfs} 只 ETF）｜ "
-    f"数据：Tiingo EOD，ADV > $60M，无幸存者偏差"
+    f"数据：Tiingo"
 )
 st.markdown("---")
 
