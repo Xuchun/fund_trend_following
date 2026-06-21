@@ -389,6 +389,27 @@ def main() -> None:
     state["nav_history"]     = sorted(history, key=lambda x: x["date"])
     state["last_update_date"] = str(today)
 
+    # --- Step 6: save today's signals for website display ---
+    state["today_signals"] = {
+        "date":    str(today),
+        "regime":  "BULL" if regime_ok else "BEAR",
+        "spy_close": round(spy_close, 2) if spy_close else None,
+        "exits": [{
+            "ticker":     c["ticker"],
+            "shares":     c["shares"],
+            "stop_price": c["exit_price"],
+            "order_type": "MARKET",
+        } for c in new_closed],
+        "entries": [{
+            "ticker":       e["ticker"],
+            "shares":       e["shares"],
+            "signal_price": e["entry_price"],
+            "stop_price":   e["stop_loss"],
+            "trade_risk":   e["trade_risk"],
+            "order_type":   "MARKET",
+        } for e in entries_executed],
+    }
+
     save_state(state)
 
     # --- Summary ---
