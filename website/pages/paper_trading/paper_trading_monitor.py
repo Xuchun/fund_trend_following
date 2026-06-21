@@ -367,6 +367,7 @@ with tab1:
                     "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "",
                     "风险%": f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "",
                 } for e in _ts_entries]), use_container_width=True, hide_index=True)
+                st.caption(f"以上 {len(_ts_entries)} 个入场信号是脚本扫描整个标的池后，在满足 Regime（{_ts_regime}）、Heat limit（≤10%）、Position cap（≤5%）等所有条件下产生的全部开仓信号，不是抽样。")
             else:
                 st.info("无入场信号")
     else:
