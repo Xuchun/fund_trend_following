@@ -136,6 +136,7 @@ render_summary_cards(res.metrics, meta.color, meta.backtest_start, meta.backtest
 st.markdown("<br>", unsafe_allow_html=True)
 
 # ── 净值曲线 & 回撤曲线（双子图）────────────────────────────────────────────
+st.subheader("净值曲线 & 回撤曲线")
 _show_spy_h = st.checkbox("显示 SPY 基准曲线", value=True, key="home_show_spy")
 _nav_min_dt_h = res.nav.index[0].to_pydatetime()
 _nav_max_dt_h = res.nav.index[-1].to_pydatetime()
