@@ -9,8 +9,6 @@ if str(_root) not in sys.path:
 import json as _json
 import pandas as _pd
 import streamlit as st
-import streamlit.components.v1 as _components
-
 from website.shared import get_results
 from website.components.metric_cards import render_summary_cards
 from plotly.subplots import make_subplots as _make_subplots
