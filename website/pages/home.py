@@ -295,25 +295,26 @@ _perturb_tag = (
     else f"🔄 {_n_perturb}/{_N_PERTURB} 已完成（后台生成中）"
 )
 
+_n_regimes   = len(_regimes)
+_n_pos_rg    = sum(1 for d in _regimes.values() if d.get("strategy", {}).get("cagr", 0) > 0)
+_regime_tag  = f"✅ {_n_regimes} 种环境，{_n_pos_rg} 种绝对正收益" if _regimes else "✅ 全环境可存续"
+
 _rows = [
-    ("参数鲁棒性",     _perturb_tag,
-     f"已测参数在全部扰动值下均保持正 CAGR；"
-     f"注意：trail_multiplier_r1 = 3.0×（基准）为当前最优，stop_loss 2.0× 同样稳健。"
-     f"详见「参数敏感性分析」。"),
-    ("蒙特卡洛模拟",   "✅ 正期望极度确定",
-     f"1,000 条随机路径：CAGR 中位 {_mc_p50_cagr*100:.1f}%（5th pct {_mc_p5_cagr*100:.1f}%），"
+    ("参数鲁棒性",    _perturb_tag,
+     _build_perturb_insight()),
+    ("蒙特卡洛模拟",  "✅ 正期望极度确定",
+     f"{int(_mc_data.get('n_simulations', 1000)):,} 条随机路径："
+     f"CAGR 中位 {_mc_p50_cagr*100:.1f}%（5th pct {_mc_p5_cagr*100:.1f}%），"
      f"负收益概率 {_mc_neg_prob*100:.0f}%，归零概率 0%。"
      f"最大回撤中位 {abs(_mc_dd_p50)*100:.1f}%，极端情形（5th pct）{abs(_mc_dd_p5)*100:.1f}%。"
-     f"主要挑战：90% 路径出现超 24 个月连续水下期。"),
-    ("Walk-Forward",  f"✅ 无过拟合（{_wf_pos_win}/5 窗口正收益）",
-     f"5 个 OOS 窗口（每 5 年滚动训练 + 2 年 OOS）；"
+     + (f"主要挑战：{_mc_prob_gt24m*100:.0f}% 路径出现超 24 个月连续水下期，平均最长水下 {_mc_avg_uw_yrs:.1f} 年。"
+        if _mc_dd_dur else "")),
+    ("Walk-Forward",  f"✅ 无过拟合（{_wf_pos_win}/{len(_wf_windows)} 窗口正收益）",
+     f"{len(_wf_windows)} 个 OOS 窗口；"
      f"OOS 拼接 CAGR {_wf_oos_cagr*100:.1f}%，Sharpe {_wf_oos_sharpe:.3f}。"
-     f"唯一负收益窗口为 2022 年加息熊市（仍跑赢 SPY）。"),
-    ("市场环境分析",  "✅ 7 种环境均可存续",
-     "互联网泡沫（+5.2%，alpha+19.6%）、金融危机（-6.8%，alpha+28.1%）、"
-     "加息熊市（-6.9%，alpha+24.3%）；"
-     "QE 慢牛（+7.5%，落后 SPY 8.4%）、AI 牛市（+28.3%，超 SPY 4.7%）。"
-     "危机保护突出，牛市温和参与，符合趋势跟踪内在特征。"),
+     + _build_wf_neg_desc()),
+    ("市场环境分析",  _regime_tag,
+     _build_regime_summary() + "危机保护突出，牛市温和参与，符合趋势跟踪内在特征。"),
 ]
 
 for _dim, _verdict, _detail in _rows:
