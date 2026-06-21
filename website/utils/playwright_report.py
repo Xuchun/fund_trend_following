@@ -13,18 +13,19 @@ from pathlib import Path
 
 
 # ── Page list (title, URL-path) ───────────────────────────────────────────────
+# URL paths match the file stems used by st.Page / st.navigation
 _PAGES = [
-    ("总结",                  "/"),
-    ("策略逻辑",              "/strategy_logic"),
-    ("数据与标的池",          "/universe"),
-    ("回测方法论",            "/methodology"),
-    ("Baseline参数回测结果",  "/baseline_results"),
-    ("参数敏感性分析",        "/parameter_sensitivity"),
-    ("参数热力图分析",        "/parameter_heatmap"),
-    ("蒙特卡洛模拟",          "/monte_carlo"),
-    ("Walk-Forward 验证",     "/walk_forward"),
-    ("市场环境分析",          "/regime_analysis"),
-    ("局限性声明",            "/limitations"),
+    ("数据与标的池",            "/universe_tiingo"),
+    ("回测方法论",              "/methodology"),
+    ("策略描述",                "/strategy_logic"),
+    ("Baseline参数回测结果",    "/baseline_results_tiingo_2000"),
+    ("参数敏感性分析",          "/parameter_sensitivity_tiingo"),
+    ("参数热力图分析",          "/parameter_heatmap"),
+    ("蒙特卡洛模拟",            "/monte_carlo"),
+    ("Walk-Forward 验证",       "/walk_forward"),
+    ("市场环境分析",            "/regime_analysis"),
+    ("局限性声明",              "/limitations"),
+    ("总结",                    "/home"),
 ]
 
 
