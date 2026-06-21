@@ -161,7 +161,7 @@ _col_title, _col_right = st.columns([4, 2])
 with _col_title:
     st.title("总结")
 with _col_right:
-    _components.html(f"""
+    _components.html("""
     <div style="display:flex;justify-content:flex-end;align-items:center;
                 gap:10px;padding-top:20px;">
         <button onclick="window.parent.print()"
@@ -173,6 +173,23 @@ with _col_right:
         </button>
     </div>
     """, height=60)
+    if st.button("📥 下载全部策略1.0网页", key="full_report_btn",
+                 help="将数据与标的池、回测方法论及策略1.0所有页面合并为一个 PDF"):
+        with st.spinner("正在生成完整报告，请稍候（约 2–3 分钟）…"):
+            try:
+                from website.utils.playwright_report import generate_report as _gen_report
+                import datetime as _dt_rpt
+                _pdf_bytes = _gen_report()
+                _fname = f"策略1.0_完整回测报告_{_dt_rpt.date.today()}.pdf"
+                st.download_button(
+                    "⬇️ 点击下载完整 PDF",
+                    data=_pdf_bytes,
+                    file_name=_fname,
+                    mime="application/pdf",
+                    key="full_report_dl",
+                )
+            except Exception as _e:
+                st.error(f"生成失败：{_e}")
 
 st.caption(
     f"回测期间 {meta.backtest_start} → {meta.backtest_end} ｜ "
