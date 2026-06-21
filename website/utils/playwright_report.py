@@ -111,6 +111,18 @@ def _capture_all(base_url: str) -> list[bytes]:
                 )
                 # Give charts & spinners time to finish rendering
                 page.wait_for_timeout(4_000)
+                # Dismiss Streamlit's "Page not found" modal if it appeared
+                # (happens on the first cold navigation)
+                page.evaluate("""
+                () => {
+                    const modal = document.querySelector('[data-testid="stModal"]');
+                    if (modal) {
+                        const btn = modal.querySelector('button');
+                        if (btn) btn.click();
+                    }
+                }
+                """)
+                page.wait_for_timeout(500)
                 # Inject print CSS (hides sidebar, header, iframes)
                 page.evaluate(_INJECT_CSS_JS)
                 page.wait_for_timeout(300)
