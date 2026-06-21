@@ -222,8 +222,40 @@ with tab1:
 
     st.markdown("---")
 
+    # ── Today's trades (combined) ─────────────────────────────────────────────
+    st.subheader("二、今日交易")
+    _trade_rows = []
+    if _m1_today_sig:
+        _ts_trade_date = _m1_today_sig.get("date", "N/A")
+        for e in _m1_today_sig.get("exits", []):
+            _trade_rows.append({
+                "交易日期": _ts_trade_date,
+                "方向": "🔴 卖出",
+                "标的": e["ticker"],
+                "股数": e.get("shares", ""),
+                "成交价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "—",
+                "止损价": "—",
+                "风险%": "—",
+            })
+        for e in _m1_today_sig.get("entries", []):
+            _trade_rows.append({
+                "交易日期": _ts_trade_date,
+                "方向": "🟢 买入",
+                "标的": e["ticker"],
+                "股数": e.get("shares", ""),
+                "成交价": f"${e['signal_price']:.2f}" if e.get("signal_price") else "—",
+                "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "—",
+                "风险%": f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "—",
+            })
+    if _trade_rows:
+        st.dataframe(pd.DataFrame(_trade_rows), use_container_width=True, hide_index=True)
+    else:
+        st.info("今日无交易")
+
+    st.markdown("---")
+
     # ── Today's signals ───────────────────────────────────────────────────────
-    st.subheader("二、今日信号")
+    st.subheader("三、今日信号")
     if _m1_today_sig:
         _ts_date    = _m1_today_sig.get("date", "N/A")
         _ts_regime  = _m1_today_sig.get("regime", "N/A")
@@ -273,41 +305,10 @@ with tab1:
             st.markdown("**入场信号（0 笔）**")
             st.info("无入场信号")
 
-    # ── Today's trades (combined) ─────────────────────────────────────────────
-    st.markdown("---")
-    st.markdown("#### 今日交易")
-    _trade_rows = []
-    if _m1_today_sig:
-        _ts_trade_date = _m1_today_sig.get("date", "N/A")
-        for e in _m1_today_sig.get("exits", []):
-            _trade_rows.append({
-                "交易日期": _ts_trade_date,
-                "方向": "🔴 卖出",
-                "标的": e["ticker"],
-                "股数": e.get("shares", ""),
-                "成交价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "—",
-                "止损价": "—",
-                "风险%": "—",
-            })
-        for e in _m1_today_sig.get("entries", []):
-            _trade_rows.append({
-                "交易日期": _ts_trade_date,
-                "方向": "🟢 买入",
-                "标的": e["ticker"],
-                "股数": e.get("shares", ""),
-                "成交价": f"${e['signal_price']:.2f}" if e.get("signal_price") else "—",
-                "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "—",
-                "风险%": f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "—",
-            })
-    if _trade_rows:
-        st.dataframe(pd.DataFrame(_trade_rows), use_container_width=True, hide_index=True)
-    else:
-        st.info("今日无交易")
-
     st.markdown("---")
 
     # ── Live positions ───────────────────────────────────────────────────────
-    st.subheader("三、当前持仓实时状态")
+    st.subheader("四、当前持仓实时状态")
     if _m1_stop:
         st.warning(f"⚠️ **{len(_m1_stop)} 只已触及止损** — 建议执行止损出场")
 
