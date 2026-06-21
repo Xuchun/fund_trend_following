@@ -393,6 +393,8 @@ with tab1:
         )
         st.plotly_chart(_fig_nav, use_container_width=True)
 
+    st.markdown("---")
+
     # ── Closed trades ─────────────────────────────────────────────────────────
     if _m1_closed:
         st.subheader(f"六、平仓记录（{len(_m1_closed)} 笔）")
