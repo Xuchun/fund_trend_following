@@ -296,20 +296,26 @@ with tab1:
         _sig_entries = _m1_today_sig.get("entries", [])
         _order_rows  = []
         for e in _sig_exits:
+            _shares = e.get("shares", 0)
+            _price  = e.get("stop_price", 0)
             _order_rows.append({
                 "操作": "🔴 平仓卖出",
                 "标的": e["ticker"],
-                "股数": e.get("shares", ""),
-                "参考价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "—",
+                "股数": _shares,
+                "参考价": f"${_price:.2f}" if _price else "—",
+                "总金额": f"${_shares * _price:,.0f}" if _shares and _price else "—",
                 "订单类型": "市价单（开盘执行）",
                 "备注": "止损触发",
             })
         for e in _sig_entries:
+            _shares = e.get("shares", 0)
+            _price  = e.get("signal_price", 0)
             _order_rows.append({
                 "操作": "🟢 开仓买入",
                 "标的": e["ticker"],
-                "股数": e.get("shares", ""),
-                "参考价": f"${e['signal_price']:.2f}" if e.get("signal_price") else "—",
+                "股数": _shares,
+                "参考价": f"${_price:.2f}" if _price else "—",
+                "总金额": f"${_shares * _price:,.0f}" if _shares and _price else "—",
                 "订单类型": "市价单（开盘执行）",
                 "备注": f"止损设于 ${e['stop_price']:.2f}，风险 {e['trade_risk']*100:.2f}% NAV" if e.get("stop_price") else "—",
             })
