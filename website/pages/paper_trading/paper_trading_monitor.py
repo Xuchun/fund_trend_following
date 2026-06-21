@@ -425,7 +425,7 @@ with tab1:
     st.markdown("---")
 
     # ── Trade history (open + closed) ────────────────────────────────────────
-    st.subheader("六、交易历史")
+    st.subheader("七、交易历史")
     _all_trades = []
     for p in sorted(_m1_positions, key=lambda x: x["entry_date"]):
         _all_trades.append({
