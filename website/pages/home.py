@@ -171,9 +171,6 @@ with _col_right:
                    font-family:sans-serif;white-space:nowrap;">
             📄 下载 PDF
         </button>
-        <span style="background:{meta.color};color:white;padding:4px 12px;
-                     border-radius:14px;font-size:0.8rem;font-weight:700;
-                     letter-spacing:0.05em;">{meta.badge_text}</span>
     </div>
     """, height=60)
 
