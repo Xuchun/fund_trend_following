@@ -157,13 +157,12 @@ _n_full_years  = len(_full_years)
 _n_pos_years   = int((_full_years > 0).sum())
 
 # ── 页面标题 ──────────────────────────────────────────────────────────────────
-_col_title, _col_right = st.columns([4, 2])
+_col_title, _col_pdf, _col_full = st.columns([5, 1, 1.6])
 with _col_title:
     st.title("总结")
-with _col_right:
+with _col_pdf:
     _components.html("""
-    <div style="display:flex;justify-content:flex-end;align-items:center;
-                gap:10px;padding-top:20px;">
+    <div style="padding-top:18px;">
         <button onclick="window.parent.print()"
             title="打开打印对话框后选择「存储为 PDF」即可下载"
             style="background:#1565c0;color:#fff;border:none;padding:7px 16px;
@@ -173,6 +172,8 @@ with _col_right:
         </button>
     </div>
     """, height=60)
+with _col_full:
+    st.markdown("<div style='padding-top:8px'></div>", unsafe_allow_html=True)
     if st.button("📥 下载全部策略1.0网页", key="full_report_btn",
                  help="将数据与标的池、回测方法论及策略1.0所有页面合并为一个 PDF"):
         with st.spinner("正在生成完整报告，请稍候（约 2–3 分钟）…"):
