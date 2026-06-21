@@ -2582,22 +2582,25 @@ if _es_path.exists():
     _all_sigs_esy = (_esy_ann["signals"].tolist()  if "signals"  in _esy_ann.columns else [0] * len(_years_esy))
     _exe_sigs_esy = (_esy_ann["executed"].tolist() if "executed" in _esy_ann.columns else [0] * len(_years_esy))
 
+    _show_all_sigs = st.checkbox("显示「所有开仓信号（含未执行）」", value=True, key="esy_show_all")
+
     _fig_esy = _go_esy.Figure()
-    _fig_esy.add_trace(_go_esy.Bar(
-        x=_years_esy,
-        y=_all_sigs_esy,
-        name="所有开仓信号（含未执行）",
-        marker_color="#aaaaaa",
-        opacity=0.85,
-        offsetgroup="A",
-        hovertemplate="%{x}年<br>所有信号（含未执行）：%{y:,} 个<extra></extra>",
-    ))
+    if _show_all_sigs:
+        _fig_esy.add_trace(_go_esy.Bar(
+            x=_years_esy,
+            y=_all_sigs_esy,
+            name="所有开仓信号（含未执行）",
+            marker_color="#aaaaaa",
+            opacity=0.85,
+            offsetgroup="A",
+            hovertemplate="%{x}年<br>所有信号（含未执行）：%{y:,} 个<extra></extra>",
+        ))
     _fig_esy.add_trace(_go_esy.Bar(
         x=_years_esy,
         y=_exe_sigs_esy,
         name="实际执行的开仓信号",
         marker_color=meta.color,
-        offsetgroup="B",
+        offsetgroup="B" if _show_all_sigs else "A",
         hovertemplate="%{x}年<br>实际执行：%{y:,} 个<extra></extra>",
     ))
     _fig_esy.update_layout(
