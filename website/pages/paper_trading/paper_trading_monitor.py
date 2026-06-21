@@ -157,7 +157,7 @@ with tab1:
     """)
 
     # ── Load Method 1 state ──────────────────────────────────────────────────
-    @st.cache_data(ttl=86400)
+    @st.cache_data(ttl=3600)
     def _load_m1():
         if _m1_file.exists():
             return json.loads(_m1_file.read_text()), False
