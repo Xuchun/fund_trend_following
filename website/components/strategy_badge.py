@@ -40,14 +40,21 @@ def render_page_header(title: str, meta: StrategyMeta) -> None:
     with col1:
         st.title(title)
     with col2:
-        _cv1.html(
-            f'<div style="display:flex;justify-content:flex-end;align-items:center;'
-            f'gap:10px;padding-top:20px;">'
-            f'<button onclick="window.parent.print()"'
-            f' title="打开打印对话框后选择「存储为 PDF」即可下载"'
-            f' style="background:#1565c0;color:#fff;border:none;padding:7px 16px;'
-            f'border-radius:5px;cursor:pointer;font-size:13px;'
-            f'font-family:sans-serif;white-space:nowrap;">📄 下载 PDF</button>'
-            f'</div>',
-            height=60,
-        )
+        st.html("""
+        <div style="display:flex;justify-content:flex-end;align-items:center;
+                    gap:10px;padding-top:10px;">
+            <button id="badge-pdf-btn"
+                title="打开打印对话框后选择「存储为 PDF」即可下载"
+                style="background:#1565c0;color:#fff;border:none;padding:7px 16px;
+                       border-radius:5px;cursor:pointer;font-size:13px;
+                       font-family:sans-serif;white-space:nowrap;">
+                📄 下载 PDF
+            </button>
+        </div>
+        <script>
+        (function() {
+            var btn = document.getElementById('badge-pdf-btn');
+            if (btn) btn.onclick = function() { window.print(); };
+        })();
+        </script>
+        """, unsafe_allow_javascript=True)
