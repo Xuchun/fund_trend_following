@@ -220,22 +220,6 @@ with tab1:
               delta=f"{_m1_unrl/_m1_nav*100:+.1f}% NAV" if _m1_nav else None)
     c4.metric("现金", f"${_m1_cash/1e6:.2f}M")
 
-    # Regime badge
-    st.markdown("#### Regime Filter")
-    _rc1, _rc2 = st.columns([1, 3])
-    with _rc1:
-        if _bull:
-            st.markdown('<div style="background:#2ca02c;color:white;padding:14px 20px;border-radius:8px;text-align:center;font-weight:bold;">✅ 允许开仓</div>', unsafe_allow_html=True)
-        else:
-            st.markdown('<div style="background:#d62728;color:white;padding:14px 20px;border-radius:8px;text-align:center;font-weight:bold;">🚫 暂停开仓</div>', unsafe_allow_html=True)
-    with _rc2:
-        if _spy_close and _spy_sma:
-            gap = (_spy_close / _spy_sma - 1) * 100
-            msg = f"SPY ${_spy_close:.2f} {'＞' if _bull else '＜'} SMA200 ${_spy_sma:.2f}（{gap:+.1f}%）"
-            (st.success if _bull else st.error)(msg)
-        else:
-            st.warning("无法获取 SPY 数据")
-
     st.markdown("---")
 
     # ── Today's signals ───────────────────────────────────────────────────────
