@@ -201,17 +201,14 @@ with _col_right:
                    font-family:sans-serif;white-space:nowrap;">
             📄 下载 PDF
         </button>
-        <button onclick="(function(){
-                var u=new URL(window.parent.location.href);
-                u.searchParams.set('full_report','1');
-                window.parent.location.href=u.toString();
-            })()"
+        <a href="?full_report=1" target="_parent"
             title="将所有策略1.0网页合并为一个 PDF"
             style="border:1px solid #d0d0d0;background:#ffffff;color:#333;
                    padding:7px 14px;border-radius:5px;cursor:pointer;
-                   font-size:13px;font-family:sans-serif;white-space:nowrap;">
+                   font-size:13px;font-family:sans-serif;white-space:nowrap;
+                   text-decoration:none;display:inline-block;">
             📥 下载全部策略1.0网页
-        </button>
+        </a>
     </div>
     """, height=60)
 
