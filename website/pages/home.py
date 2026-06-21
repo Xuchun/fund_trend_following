@@ -178,29 +178,8 @@ for _dim, _verdict, _detail in _rows:
 
 st.markdown("---")
 
-# ── 四、实盘预期区间 ──────────────────────────────────────────────────────────
-st.subheader("四、实盘预期区间")
-
-_expect_df = _pd.DataFrame([
-    ("年化收益（CAGR）", "6% – 10%",
-     f"回测 {_cagr*100:.1f}%，MC 中位 {_mc_p50_cagr*100:.1f}%，OOS 拼接 {_wf_oos_cagr*100:.1f}%"),
-    ("最大回撤",         "−20% – −40%",
-     f"回测 {abs(_maxdd)*100:.1f}%，MC 中位 {abs(_mc_dd_p50)*100:.1f}%，MC 极端 {abs(_mc_dd_p5)*100:.1f}%"),
-    ("Sharpe 比率",      "0.45 – 0.70",
-     f"回测 {_sharpe:.3f}，OOS 拼接 {_wf_oos_sharpe:.3f}"),
-    ("最长水下期",       "2 – 5 年",
-     "MC 90% 路径出现 24 个月以上连续水下，需提前规划流动性"),
-    ("年正收益概率",     f"约 {_n_pos_years/_n_full_years*100:.0f}%",
-     f"回测 {_n_full_years} 个完整年度中 {_n_pos_years} 年正收益"),
-    ("vs SPY",           "熊市跑赢 / 牛市落后",
-     "危机 alpha +20%~+28%；QE 慢牛落后 8%，AI 牛市超 SPY 5%"),
-], columns=["指标", "实盘预期", "数据依据"])
-st.dataframe(_expect_df, use_container_width=True, hide_index=True)
-
-st.markdown("---")
-
-# ── 五、结论 ──────────────────────────────────────────────────────────────────
-st.subheader("五、结论")
+# ── 四、结论 ──────────────────────────────────────────────────────────────────
+st.subheader("四、结论")
 
 st.markdown(f"""
 <div style="background:#e8f5e9;border-left:5px solid #2e7d32;padding:16px 20px;
