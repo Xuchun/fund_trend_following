@@ -345,7 +345,7 @@ st.markdown(f"""
 <strong>⚠️ 主要风险提示</strong><br>
 ① <strong>ADV 过滤残留偏差</strong>：标的须 ADV > $60M 才进入回测，
 高流动性门槛仍可能偏向幸存优质标的，回测 CAGR {_cagr*100:.1f}% 存在一定高估；<br>
-② <strong>长水下期耐受</strong>：MC 显示平均最长水下 ~4 年，需提前安排好充裕的流动性预留；<br>
+② <strong>长水下期耐受</strong>：MC 显示平均最长水下 {_mc_avg_uw_yrs:.1f} 年，需提前安排好充裕的流动性预留；<br>
 ③ <strong>策略拥挤风险</strong>：趋势跟踪策略被广泛使用，关键转折点可能出现信号重叠和流动性冲击；<br>
 ④ <strong>参数扰动测试进行中</strong>：当前仅完成 {_n_perturb}/{_N_PERTURB} 个参数测试，
 实盘前建议等待全部结果后再做最终参数校准（详见「参数敏感性分析」）。
