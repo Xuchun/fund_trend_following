@@ -29,6 +29,8 @@ results/**/sanity.txt
 
 # PDF 报告（体积大，本地查看用）
 *.pdf
+# 例外：正式发布的回测报告
+!*策略1.0完整回测报告*.pdf
 
 # 环境变量 / API keys（不上传 git）
 .env
