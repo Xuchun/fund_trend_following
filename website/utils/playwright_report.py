@@ -118,17 +118,56 @@ def _capture_all(base_url: str) -> list[bytes]:
                 )
                 # Give charts & spinners time to finish rendering
                 page.wait_for_timeout(4_000)
-                # Dismiss Streamlit's "Page not found" modal if it appeared,
-                # then wait until it is fully gone before capturing PDF.
-                modal_loc = page.locator('[data-testid="stModal"]')
+                # Dismiss any "Page not found" dialog Streamlit shows on cold
+                # navigation.  Use multiple approaches in sequence because the
+                # test-id / button structure differs across Streamlit versions,
+                # and is_visible() does NOT accept a timeout argument.
                 try:
-                    if modal_loc.is_visible(timeout=1_000):
-                        close_btn = modal_loc.locator('button').first
-                        if close_btn.is_visible(timeout=500):
-                            close_btn.click()
-                        # Wait for modal to fully disappear
+                    # 1. Escape key closes most Streamlit modal/dialog components.
+                    page.keyboard.press("Escape")
+                    page.wait_for_timeout(500)
+                except Exception:
+                    pass
+                try:
+                    # 2. JS fallback: find any visible dialog that contains
+                    #    "Page not found" text and click its first button.
+                    page.evaluate("""
+                    () => {
+                        var bodyText = (document.body || {}).innerText || '';
+                        if (bodyText.indexOf('Page not found') === -1) return;
+                        var selectors = [
+                            '[data-testid="stModal"]',
+                            '[data-testid="stDialog"]',
+                            '[role="dialog"]'
+                        ];
+                        for (var i = 0; i < selectors.length; i++) {
+                            var el = document.querySelector(selectors[i]);
+                            if (el) {
+                                var btn = el.querySelector('button');
+                                if (btn) { btn.click(); return; }
+                            }
+                        }
+                        // Last resort: click any close-style button on the page.
+                        var buttons = document.querySelectorAll('button');
+                        for (var j = 0; j < buttons.length; j++) {
+                            var lbl = (buttons[j].getAttribute('aria-label') || '').toLowerCase();
+                            var txt = buttons[j].innerText.trim();
+                            if (lbl.indexOf('close') !== -1 || txt === '×' || txt === '✕' || txt === 'X') {
+                                buttons[j].click();
+                                return;
+                            }
+                        }
+                    }
+                    """)
+                    page.wait_for_timeout(800)
+                except Exception:
+                    pass
+                try:
+                    # 3. If the modal is still there, wait for it to hide.
+                    #    NOTE: is_visible() takes no timeout parameter.
+                    modal_loc = page.locator('[data-testid="stModal"]')
+                    if modal_loc.is_visible():
                         modal_loc.wait_for(state="hidden", timeout=8_000)
-                        # Let the page re-render after dismissal
                         page.wait_for_load_state("networkidle", timeout=10_000)
                         page.wait_for_timeout(2_000)
                 except Exception:
