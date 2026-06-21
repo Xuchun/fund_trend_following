@@ -199,9 +199,163 @@ st.markdown("""
 
 st.markdown("---")
 
+# ── 四、信号特征实证分析 ──────────────────────────────────────────────────────
+st.subheader("四、实证分析：k 强度与 ATR% 分层——哪类信号期望收益更高？")
+st.markdown(
+    "从全量 **18,124 个**候选信号（已执行 + 模拟）出发，"
+    "按 **k 强度**（突破力度）和 **ATR%**（入场时的相对波动率 = ATR÷价格）各分 5 组，"
+    "对比每组的平均 pnl_r、胜率和盈亏比，为建议 1「信号质量排序」提供实证基础。"
+)
+
+@st.cache_data
+def _load_sigs_strat():
+    _s = pd.read_csv(_results_path / "all_signals_simulated.csv",
+                     parse_dates=["signal_date", "entry_date", "exit_date"])
+    _s = _s.dropna(subset=["entry_price", "stop_loss", "pnl_r"])
+    _s = _s[_s["entry_price"] > 0]
+    _s["atr_pct"] = (_s["entry_price"] - _s["stop_loss"]) / (2 * _s["entry_price"]) * 100
+    return _s
+
+_sall = _load_sigs_strat()
+
+def _quintile_stats(df, factor_col, labels):
+    df = df.copy()
+    clip_hi = df[factor_col].quantile(0.99)
+    df["_q"] = pd.qcut(df[factor_col].clip(0, clip_hi), q=5, labels=labels)
+    def _pf(x):
+        w, l = x[x > 0], x[x < 0]
+        return w.mean() / abs(l.mean()) if len(w) > 0 and len(l) > 0 else np.nan
+    res = df.groupby("_q", observed=True)["pnl_r"].agg(
+        均值R="mean", 中位数R="median", 数量="count",
+    )
+    res["胜率%"]  = df.groupby("_q", observed=True)["pnl_r"].apply(lambda x: (x > 0).mean() * 100)
+    res["盈亏比"] = df.groupby("_q", observed=True)["pnl_r"].apply(_pf)
+    frange = df.groupby("_q", observed=True)[factor_col].agg(["min", "max", "mean"])
+    res["因子均值"] = frange["mean"]
+    return res.round(3)
+
+_k_labels   = ["Q1\n最弱", "Q2", "Q3", "Q4", "Q5\n最强"]
+_atr_labels = ["Q1\n低波动", "Q2", "Q3", "Q4", "Q5\n高波动"]
+_k_res   = _quintile_stats(_sall, "k_strength", _k_labels)
+_atr_res = _quintile_stats(_sall, "atr_pct",    _atr_labels)
+
+# ── 图表 ─────────────────────────────────────────────────────────────────────
+_strat_fig = make_subplots(
+    rows=2, cols=2,
+    subplot_titles=[
+        "k 强度分组 — 平均 pnl_r (R)",
+        "k 强度分组 — 胜率 (%)",
+        "ATR% 分组 — 平均 pnl_r (R)",
+        "ATR% 分组 — 胜率 (%)",
+    ],
+    vertical_spacing=0.14, horizontal_spacing=0.12,
+)
+
+_orange = "#e67e22"
+_blue   = "#3498db"
+
+for col_i, (res, color) in enumerate([(_k_res, _orange), (_atr_res, _blue)], start=1):
+    _r = col_i  # row index
+    _xlabels = [str(x) for x in res.index]
+
+    _bar_colors_r = ["#27ae60" if v >= 0 else "#e74c3c" for v in res["均值R"]]
+    _strat_fig.add_trace(go.Bar(
+        x=_xlabels, y=res["均值R"].tolist(),
+        marker_color=_bar_colors_r,
+        text=[f"{v:+.3f}" for v in res["均值R"]],
+        textposition="outside",
+        showlegend=False,
+    ), row=_r, col=1)
+
+    _bar_colors_w = ["#27ae60" if v >= 36 else ("#f39c12" if v >= 34 else "#e74c3c") for v in res["胜率%"]]
+    _strat_fig.add_trace(go.Bar(
+        x=_xlabels, y=res["胜率%"].tolist(),
+        marker_color=_bar_colors_w,
+        text=[f"{v:.1f}%" for v in res["胜率%"]],
+        textposition="outside",
+        showlegend=False,
+    ), row=_r, col=2)
+
+_strat_fig.update_layout(
+    height=560, template="plotly_white",
+    margin=dict(t=60, b=40),
+    title="全量信号（18,124 个）按 k 强度 / ATR% 分 5 组：平均收益与胜率",
+)
+for r in [1, 2]:
+    _strat_fig.update_yaxes(title_text="均值 pnl_r (R)", row=r, col=1)
+    _strat_fig.update_yaxes(title_text="胜率 %", row=r, col=2)
+
+st.plotly_chart(_strat_fig, use_container_width=True)
+
+# ── 数据表 ────────────────────────────────────────────────────────────────────
+_tc1, _tc2 = st.columns(2)
+with _tc1:
+    st.markdown("**k 强度分组明细**")
+    _k_show = _k_res.copy()
+    _k_show.index = ["Q1(最弱)", "Q2", "Q3", "Q4", "Q5(最强)"]
+    _k_show["均值R"]  = _k_show["均值R"].map(lambda v: f"{v:+.3f}R")
+    _k_show["中位数R"] = _k_show["中位数R"].map(lambda v: f"{v:+.3f}R")
+    _k_show["胜率%"]  = _k_show["胜率%"].map(lambda v: f"{v:.1f}%")
+    _k_show["盈亏比"] = _k_show["盈亏比"].map(lambda v: f"{v:.2f}x" if pd.notna(v) else "—")
+    _k_show["因子均值"] = _k_show["因子均值"].map(lambda v: f"{v:.2f}")
+    _k_show.rename(columns={"因子均值": "k 均值", "数量": "信号数"}, inplace=True)
+    st.dataframe(_k_show[["信号数", "k 均值", "均值R", "胜率%", "盈亏比"]], use_container_width=True)
+
+with _tc2:
+    st.markdown("**ATR% 分组明细**")
+    _a_show = _atr_res.copy()
+    _a_show.index = ["Q1(低波动)", "Q2", "Q3", "Q4", "Q5(高波动)"]
+    _a_show["均值R"]  = _a_show["均值R"].map(lambda v: f"{v:+.3f}R")
+    _a_show["中位数R"] = _a_show["中位数R"].map(lambda v: f"{v:+.3f}R")
+    _a_show["胜率%"]  = _a_show["胜率%"].map(lambda v: f"{v:.1f}%")
+    _a_show["盈亏比"] = _a_show["盈亏比"].map(lambda v: f"{v:.2f}x" if pd.notna(v) else "—")
+    _a_show["因子均值"] = _a_show["因子均值"].map(lambda v: f"{v:.2f}%")
+    _a_show.rename(columns={"因子均值": "ATR% 均值", "数量": "信号数"}, inplace=True)
+    st.dataframe(_a_show[["信号数", "ATR% 均值", "均值R", "胜率%", "盈亏比"]], use_container_width=True)
+
+# ── 解读 ──────────────────────────────────────────────────────────────────────
+_corr_k   = float(_sall["k_strength"].corr(_sall["pnl_r"]))
+_corr_atr = float(_sall["atr_pct"].corr(_sall["pnl_r"]))
+
+st.markdown(f"""
+**数据解读（重要）：**
+
+| 因子 | 与 pnl_r 相关系数 | 结论 |
+|------|-----------------|------|
+| k 强度 | **{_corr_k:.4f}** | 极弱正相关，非单调关系 |
+| ATR% | **{_corr_atr:.4f}** | 极弱正相关，非单调关系 |
+
+两个因子与未来收益的 Pearson 相关系数均约为 **0.02**，接近于零。
+
+**关键发现：**
+
+1. **k 强度的影响是非单调的**：不是"k 越高越好"的线性关系。
+   Q4（k=3.3–5.3）是所有组中表现最差的（均值 +0.056R），
+   而 Q5（k>5.3，极强突破）均值 +0.266R 是最高的，Q1（最弱突破）反而排第二（+0.160R）。
+   这说明"强到极致的突破"确实略有优势，但中间档并无单调递增关系。
+
+2. **ATR% 呈 U 形分布**：低波动（Q1，ATR%<1.46%）和高波动（Q5，ATR%>2.76%）
+   表现均好于中间档（Q2–Q4），但整体差距很小。
+
+3. **单独使用任一因子作为过滤器是不可靠的**：相关系数 0.02 意味着
+   这两个因子在统计上几乎无法预测单笔交易的结果。
+   "只做 RS Top 20%"或"只做高 k 强度"这类简单规则缺乏足够数据支撑。
+
+4. **实际意义**：在同一天多个信号竞争有限资金时，优先选择 **Q5 k 强度**的信号
+   （k>5.3，极强突破）在期望收益上略有优势——但这是微弱优势，不能依赖单一因子做重大决策。
+""")
+
+st.warning(
+    "**结论**：k 强度和 ATR% 均为极弱的单因子预测指标（相关系数 ~0.02）。"
+    "建议 1 中的信号质量评分应以**组合多个弱因子**为原则，而非寄望于某一个因子单独有效。"
+    "任何基于上述发现的过滤规则，都必须通过完整回测 + Walk-Forward 验证后才能使用。"
+)
+
+st.markdown("---")
+
 # ── 四个建议 ──────────────────────────────────────────────────────────────────
 
-st.subheader("四个改进建议")
+st.subheader("五、改进建议")
 
 # 建议 1
 st.markdown("#### 建议 1：信号质量排序（Signal Ranking）— 最高优先级")
