@@ -353,7 +353,7 @@ with tab1:
                     "标的": e["ticker"], "操作": "BUY",
                     "股数": e.get("shares", ""),
                     "信号价": f"${e['signal_price']:.2f}" if e.get("signal_price") else "",
-                    "止损价": f"${e['stop_price']:.2f}" if e.get("signal_price") else "",
+                    "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "",
                     "风险%": f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "",
                 } for e in _ts_entries]), use_container_width=True, hide_index=True)
             else:
