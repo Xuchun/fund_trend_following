@@ -278,8 +278,10 @@ with tab1:
     st.markdown("#### 今日交易")
     _trade_rows = []
     if _m1_today_sig:
+        _ts_trade_date = _m1_today_sig.get("date", "N/A")
         for e in _m1_today_sig.get("exits", []):
             _trade_rows.append({
+                "交易日期": _ts_trade_date,
                 "方向": "🔴 卖出",
                 "标的": e["ticker"],
                 "股数": e.get("shares", ""),
@@ -289,6 +291,7 @@ with tab1:
             })
         for e in _m1_today_sig.get("entries", []):
             _trade_rows.append({
+                "交易日期": _ts_trade_date,
                 "方向": "🟢 买入",
                 "标的": e["ticker"],
                 "股数": e.get("shares", ""),
