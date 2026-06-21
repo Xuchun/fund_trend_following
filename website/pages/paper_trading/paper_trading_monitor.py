@@ -162,7 +162,11 @@ def _load_bt():
     return m, nav, spy, trades
 
 
-_bm, _bt_nav, _bt_spy, _bt_trades = _load_bt()
+try:
+    _bm, _bt_nav, _bt_spy, _bt_trades = _load_bt()
+except FileNotFoundError:
+    st.error("⚠️ 回测结果文件缺失，无法加载基准数据。请确认 `results/v1_unbiased_60m_2000/` 目录已同步到 GitHub。")
+    st.stop()
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
