@@ -83,11 +83,19 @@ def setup_sidebar() -> StrategyResults:
 
 
 def get_results() -> "StrategyResults":
-    """Return current results from session state. Call at the top of every page."""
+    """Return current results, loading from disk if not already in session_state."""
     res = st.session_state.get("current_results")
     if res is None:
-        st.warning("⚠️ 请从主页进入此页面以加载策略1.0数据。")
-        st.stop()
+        strats = list_strategies()
+        if not strats:
+            st.error("⚠️ 未找到回测结果。请先运行回测脚本生成 results/ 目录。")
+            st.stop()
+        _sid = "v1_unbiased_60m_2000"
+        if _sid not in [s.id for s in strats]:
+            _sid = strats[0].id
+        with st.spinner("正在加载策略数据…"):
+            res = load_strategy(_sid)
+        st.session_state["current_results"] = res
     return res
 
 
