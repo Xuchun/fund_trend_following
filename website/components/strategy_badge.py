@@ -49,9 +49,6 @@ def render_page_header(title: str, meta: StrategyMeta) -> None:
             f' style="background:#1565c0;color:#fff;border:none;padding:7px 16px;'
             f'border-radius:5px;cursor:pointer;font-size:13px;'
             f'font-family:sans-serif;white-space:nowrap;">📄 下载 PDF</button>'
-            f'<span style="background:{meta.color};color:white;padding:4px 12px;'
-            f'border-radius:14px;font-size:0.8rem;font-weight:700;'
-            f'letter-spacing:0.05em;">{meta.badge_text}</span>'
             f'</div>',
             height=60,
         )
