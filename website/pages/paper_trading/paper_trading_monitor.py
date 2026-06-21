@@ -239,8 +239,7 @@ with tab1:
               delta_color="inverse" if _m1_stop else "normal")
     c3.metric("持仓浮盈", f"${_m1_unrl/1e6:+.2f}M",
               delta=f"{_m1_unrl/_m1_nav*100:+.1f}% NAV" if _m1_nav else None)
-    c4.metric("持仓市值", f"${_m1_mkt/1e6:.2f}M",
-              delta=f"{_m1_mkt/_m1_nav*100:.1f}% NAV" if _m1_nav else None)
+    c4.metric("持仓市值", f"${_m1_mkt/1e6:.2f}M（占 NAV {_m1_mkt/_m1_nav*100:.1f}%）" if _m1_nav else f"${_m1_mkt/1e6:.2f}M")
     c5.metric("现金", f"${_m1_cash/1e6:.2f}M")
 
     st.markdown("---")
