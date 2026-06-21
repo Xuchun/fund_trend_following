@@ -198,10 +198,11 @@ with tab1:
         _spy_sma   = float(_spy_df["Close"].rolling(_SMA_WINDOW).mean().iloc[-1])
         _bull      = _spy_close > _spy_sma
 
-    _m1_mkt  = sum(p["mkt_value"] for p in _m1_ok)
-    _m1_unrl = sum(p["unreal_pnl"] for p in _m1_ok)
-    _m1_nav  = _m1_mkt + _m1_cash
-    _m1_date = max((p.get("current_date", "") for p in _m1_ok), default="N/A")
+    _m1_mkt   = sum(p["mkt_value"] for p in _m1_ok)
+    _m1_unrl  = sum(p["unreal_pnl"] for p in _m1_ok)
+    _m1_nav   = _m1_mkt + _m1_cash
+    _m1_date  = max((p.get("current_date", "") for p in _m1_ok), default="N/A")
+    _m1_stale = any(p.get("_stale") for p in _m1_ok)
 
     # ── Overview ─────────────────────────────────────────────────────────────
     st.subheader("一、策略状态概览")
