@@ -119,7 +119,7 @@ st.markdown(f"""
 **策略1.0** 是一套基于趋势跟踪（Trend Following）原理的纯多头量化策略。
 入场：股价突破近 200 日最高价 + 成交量确认；
 仓位：1% NAV 风险定额，ATR 止损；
-出场：棘轮式移动止损（trailing stop）锁利；
+出场：移动止盈（trailing stop）；
 空仓资金投入短债 ETF（SHY）；
 市场过滤：SPY 200 日均线以下停止新建仓。
 
