@@ -137,18 +137,6 @@ st.plotly_chart(
     use_container_width=True,
 )
 
-_c1, _c2, _c3, _c4 = st.columns(4)
-_c1.metric("CAGR", f"{_cagr*100:.1f}%",   delta=f"vs SPY {_spy_cagr*100:.1f}%")
-_c2.metric("Sharpe", f"{_sharpe:.3f}",     delta=f"vs SPY {m.get('spy_sharpe',0):.3f}")
-_c3.metric("最大回撤", f"{abs(_maxdd)*100:.1f}%", delta=f"vs SPY {abs(_spy_maxdd)*100:.1f}%",  delta_color="inverse")
-_c4.metric("胜率 / Profit Factor", f"{_win_rate*100:.1f}% / {_pf:.2f}",
-           delta=f"均胜 {_avg_win:+.2f}R  均亏 {_avg_loss:.2f}R")
-
-st.caption(
-    f"{_n_full_years} 个完整年度中 {_n_pos_years} 年正收益（{_n_pos_years/_n_full_years*100:.0f}%）；"
-    f"平均持仓 {m.get('avg_holding_days',0):.0f} 天，约 {m.get('trades_per_year',0):.0f} 笔/年，"
-    f"含 10bps 滑点 + 3bps 佣金"
-)
 st.markdown("---")
 
 # ── 三、多维度验证 ────────────────────────────────────────────────────────────
