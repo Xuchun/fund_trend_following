@@ -269,9 +269,8 @@ with tab1:
             _ts_regime_str += f"，SPY {_spy_close:.2f} {_ts_op} SMA200 {_spy_sma:.2f}（{_ts_gap:+.1f}%）"
         st.caption(f"信号日期：{_ts_date} ｜ Regime：{_ts_regime_str}")
 
-        _ts1, _ts2 = st.columns(2)
-        with _ts1:
-            st.markdown(f"**退出信号（{len(_ts_exits)} 笔）**")
+        _tab_exit, _tab_entry = st.tabs([f"退出信号（{len(_ts_exits)} 笔）", f"入场信号（{len(_ts_entries)} 笔）"])
+        with _tab_exit:
             if _ts_exits:
                 st.dataframe(pd.DataFrame([{
                     "标的": e["ticker"], "操作": "SELL",
@@ -282,8 +281,7 @@ with tab1:
             else:
                 st.info("无退出信号")
 
-        with _ts2:
-            st.markdown(f"**入场信号（{len(_ts_entries)} 笔）**")
+        with _tab_entry:
             if _ts_entries:
                 st.dataframe(pd.DataFrame([{
                     "标的": e["ticker"], "操作": "BUY",
@@ -297,12 +295,10 @@ with tab1:
     else:
         _ts_regime_cap = "🟢 BULL" if _bull else "🔴 BEAR"
         st.caption(f"信号日期：N/A ｜ Regime：{_ts_regime_cap}")
-        _ts1, _ts2 = st.columns(2)
-        with _ts1:
-            st.markdown("**退出信号（0 笔）**")
+        _tab_exit, _tab_entry = st.tabs(["退出信号（0 笔）", "入场信号（0 笔）"])
+        with _tab_exit:
             st.info("无退出信号")
-        with _ts2:
-            st.markdown("**入场信号（0 笔）**")
+        with _tab_entry:
             st.info("无入场信号")
 
     st.markdown("---")
