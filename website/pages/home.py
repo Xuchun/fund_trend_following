@@ -134,10 +134,86 @@ st.markdown("---")
 st.subheader("二、核心回测指标")
 render_summary_cards(res.metrics, meta.color, meta.backtest_start, meta.backtest_end)
 st.markdown("<br>", unsafe_allow_html=True)
-st.plotly_chart(
-    nav_vs_spy(res.nav, res.spy_nav, meta.color, meta.display_name),
-    use_container_width=True,
+
+# ── 净值曲线 & 回撤曲线（双子图）────────────────────────────────────────────
+_show_spy_h = st.checkbox("显示 SPY 基准曲线", value=True, key="home_show_spy")
+_nav_min_dt_h = res.nav.index[0].to_pydatetime()
+_nav_max_dt_h = res.nav.index[-1].to_pydatetime()
+
+_periods_h = [("1年", 1), ("3年", 3), ("5年", 5), ("10年", 10), ("全程", None)]
+_p_cols_h = st.columns([1, 1, 1, 1, 1, 6])
+for _ci_h, (_lbl_h, _yrs_h) in enumerate(_periods_h):
+    with _p_cols_h[_ci_h]:
+        if st.button(_lbl_h, key=f"home_nd_btn_{_lbl_h}"):
+            _ps_h = (_nav_min_dt_h if _yrs_h is None else
+                     max(_nav_min_dt_h, _nav_max_dt_h - _dt.timedelta(days=round(365.25 * _yrs_h))))
+            st.session_state["home_nd_slider"] = (_ps_h, _nav_max_dt_h)
+
+_sel_s_h, _sel_e_h = st.slider(
+    "选择时间范围",
+    min_value=_nav_min_dt_h,
+    max_value=_nav_max_dt_h,
+    value=(_nav_min_dt_h, _nav_max_dt_h),
+    format="YYYY-MM-DD",
+    key="home_nd_slider",
+    label_visibility="collapsed",
 )
+
+_nav_sl_h = res.nav.loc[_sel_s_h:_sel_e_h]
+if len(_nav_sl_h) < 2:
+    _nav_sl_h = res.nav
+_nav_norm_h = _nav_sl_h / float(_nav_sl_h.iloc[0])
+_has_spy_h = _show_spy_h and res.spy_nav is not None
+
+if _has_spy_h:
+    _spy_sl_h = res.spy_nav.loc[_sel_s_h:_sel_e_h]
+    if len(_spy_sl_h) < 2:
+        _spy_sl_h = res.spy_nav
+    _spy_norm_h = _spy_sl_h / float(_spy_sl_h.iloc[0])
+
+_fig_h = _make_subplots(
+    rows=2, cols=1, shared_xaxes=True,
+    row_heights=[0.65, 0.35], vertical_spacing=0.05,
+    subplot_titles=["", ""],
+)
+_fig_h.add_trace(_go.Scatter(
+    x=_nav_norm_h.index, y=_nav_norm_h.values,
+    name="策略1.0", line=dict(color=meta.color, width=2),
+    hovertemplate="%{x|%Y-%m-%d}<br>NAV: %{y:.2f}x<extra></extra>",
+), row=1, col=1)
+if _has_spy_h:
+    _fig_h.add_trace(_go.Scatter(
+        x=_spy_norm_h.index, y=_spy_norm_h.values,
+        name="SPY", line=dict(color="#888888", width=1.2, dash="dash"),
+        hovertemplate="%{x|%Y-%m-%d}<br>SPY: %{y:.2f}x<extra></extra>",
+    ), row=1, col=1)
+
+_dd_sl_h = (_nav_sl_h - _nav_sl_h.cummax()) / _nav_sl_h.cummax() * 100
+_fig_h.add_trace(_go.Scatter(
+    x=_dd_sl_h.index, y=_dd_sl_h.values,
+    fill="tozeroy", fillcolor="rgba(214,39,40,0.25)",
+    line=dict(color="#d62728", width=1),
+    hovertemplate="%{x|%Y-%m-%d}<br>回撤: %{y:.1f}%<extra></extra>",
+    showlegend=False,
+), row=2, col=1)
+if _has_spy_h:
+    _spy_dd_h = (_spy_sl_h - _spy_sl_h.cummax()) / _spy_sl_h.cummax() * 100
+    _fig_h.add_trace(_go.Scatter(
+        x=_spy_dd_h.index, y=_spy_dd_h.values,
+        line=dict(color="#888888", width=1.2, dash="dash"),
+        hovertemplate="%{x|%Y-%m-%d}<br>SPY回撤: %{y:.1f}%<extra></extra>",
+        showlegend=False,
+    ), row=2, col=1)
+
+_fig_h.update_layout(
+    hovermode="x unified",
+    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+    margin=dict(l=60, r=20, t=60, b=40),
+    height=620,
+)
+_fig_h.update_yaxes(ticksuffix="x", title_text="净值（倍）", row=1, col=1)
+_fig_h.update_yaxes(ticksuffix="%", title_text="回撤 %", row=2, col=1)
+st.plotly_chart(_fig_h, use_container_width=True)
 
 st.markdown("---")
 
