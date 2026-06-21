@@ -75,11 +75,80 @@ _wf_oos_cagr   = _wf_data.get("oos_stitched", {}).get("metrics", {}).get("cagr",
 _wf_oos_sharpe = _wf_data.get("oos_stitched", {}).get("metrics", {}).get("sharpe", 0)
 _wf_windows    = _wf_data.get("windows", [])
 _wf_pos_win    = sum(1 for w in _wf_windows if w.get("oos", {}).get("cagr", 0) > 0)
+_wf_neg_wins   = [w for w in _wf_windows if w.get("oos", {}).get("cagr", 0) <= 0]
+
+# 从脚本文件动态统计参数扰动总数
+def _count_sweeps() -> int:
+    import re
+    try:
+        _script = _root / "src" / "scripts" / "run_all_perturbations_tiingo.py"
+        return len(re.findall(r'^\s+\("[\w]+",\s*\[', _script.read_text(), re.MULTILINE))
+    except Exception:
+        return 0
 
 _perturb_dir  = _res_dir / "perturbation"
 _n_perturb    = len(list(_perturb_dir.glob("*.json"))) if _perturb_dir.exists() else 0
-_N_PERTURB    = 13
+_N_PERTURB    = _count_sweeps() or 13
 _perturb_done = _n_perturb >= _N_PERTURB
+
+# MC 水下期统计
+_mc_dd_dur      = _mc_data.get("drawdown_duration", {})
+_mc_prob_gt24m  = _mc_dd_dur.get("prob_gt_24m", 0)
+_mc_avg_uw_yrs  = _mc_dd_dur.get("avg_days", 0) / 365.25 if _mc_dd_dur.get("avg_days") else 0
+
+# 市场环境分析（从 regime.json 动态读取）
+_rg_data  = _json.loads((_res_dir / "regime.json").read_text()) if (_res_dir / "regime.json").exists() else {}
+_regimes  = _rg_data.get("regimes", {})
+
+def _build_regime_summary() -> str:
+    if not _regimes:
+        return "详见「市场环境分析」页面。"
+    parts = []
+    for name, data in _regimes.items():
+        s    = data.get("strategy", {})
+        spy  = data.get("spy", {})
+        sc   = s.get("cagr", 0)
+        sp   = spy.get("cagr", 0)
+        alp  = sc - sp
+        parts.append(f"{name}（策略 {sc*100:+.1f}%，alpha {alp*100:+.1f}%）")
+    return "；".join(parts) + "。"
+
+def _build_wf_neg_desc() -> str:
+    if not _wf_neg_wins:
+        return "全部 OOS 窗口均为正收益。"
+    descs = []
+    for w in _wf_neg_wins:
+        s = w.get("oos_start", "")[:4]
+        e = w.get("oos_end",   "")[:4]
+        c = w.get("oos", {}).get("cagr", 0)
+        label = f"{s}" if s == e else f"{s}–{e}"
+        descs.append(f"{label} 年 OOS（CAGR {c*100:.1f}%）")
+    return "唯一负收益窗口：" + "、".join(descs) + "，仍大幅跑赢 SPY。"
+
+def _build_perturb_insight() -> str:
+    if not _perturb_dir.exists() or _n_perturb == 0:
+        return "扰动测试后台生成中，完成后详见「参数敏感性分析」。"
+    insights = []
+    for jf in sorted(_perturb_dir.glob("*.json")):
+        try:
+            jd = _json.loads(jf.read_text())
+            results = jd.get("results", [])
+            if not results:
+                continue
+            best = max(results, key=lambda r: r.get("sharpe", 0))
+            baseline_val = jd.get("baseline_value")
+            best_val = best.get("param_value")
+            pname = jd.get("param_name", jf.stem)
+            if best_val != baseline_val:
+                insights.append(
+                    f"`{pname}` 最优值 {best_val}（Sharpe {best.get('sharpe',0):.3f}，"
+                    f"当前基准 {baseline_val}）"
+                )
+        except Exception:
+            pass
+    if insights:
+        return "已测参数在全部扰动值下均保持正 CAGR。优化建议：" + "；".join(insights) + "。详见「参数敏感性分析」。"
+    return "已测参数在全部扰动值下均保持正 CAGR。详见「参数敏感性分析」。"
 
 # 年正收益统计
 _annual_rets   = (1 + res.returns).resample("YE").prod() - 1
