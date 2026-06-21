@@ -326,8 +326,52 @@ with tab1:
 
     st.markdown("---")
 
+    # ── Tomorrow's orders ────────────────────────────────────────────────────
+    st.subheader("四、明日要执行的交易")
+    # Compute next trading day (skip weekends)
+    import datetime as _dt
+    _today = _dt.date.today()
+    _next_td = _today + _dt.timedelta(days=1)
+    while _next_td.weekday() >= 5:  # 5=Sat, 6=Sun
+        _next_td += _dt.timedelta(days=1)
+    st.caption(f"下一交易日预计：{_next_td}（不含美股假日）｜ 以下订单在开盘后按市价执行")
+
+    if _m1_today_sig:
+        _sig_exits   = _m1_today_sig.get("exits", [])
+        _sig_entries = _m1_today_sig.get("entries", [])
+        _order_rows  = []
+        for e in _sig_exits:
+            _order_rows.append({
+                "操作": "🔴 平仓卖出",
+                "标的": e["ticker"],
+                "股数": e.get("shares", ""),
+                "参考价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "—",
+                "订单类型": "市价单（开盘执行）",
+                "备注": "止损触发",
+            })
+        for e in _sig_entries:
+            _order_rows.append({
+                "操作": "🟢 开仓买入",
+                "标的": e["ticker"],
+                "股数": e.get("shares", ""),
+                "参考价": f"${e['signal_price']:.2f}" if e.get("signal_price") else "—",
+                "订单类型": "市价单（开盘执行）",
+                "备注": f"止损设于 ${e['stop_price']:.2f}，风险 {e['trade_risk']*100:.2f}% NAV" if e.get("stop_price") else "—",
+            })
+        if _order_rows:
+            st.dataframe(pd.DataFrame(_order_rows), use_container_width=True, hide_index=True)
+            n_sell = len(_sig_exits)
+            n_buy  = len(_sig_entries)
+            st.caption(f"共 {n_sell} 笔平仓、{n_buy} 笔开仓，合计 {n_sell+n_buy} 笔订单")
+        else:
+            st.info("明日无需执行任何交易")
+    else:
+        st.info("尚无今日信号，明日交易计划待脚本运行后更新")
+
+    st.markdown("---")
+
     # ── Live positions ───────────────────────────────────────────────────────
-    st.subheader("四、当前持仓实时状态")
+    st.subheader("五、当前持仓实时状态")
     if _m1_stop:
         st.warning(f"⚠️ **{len(_m1_stop)} 只已触及止损** — 建议执行止损出场")
 
