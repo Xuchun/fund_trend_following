@@ -1707,7 +1707,7 @@ _m_e_path   = _etfs_dir   / "metrics.json"
 
 if _m_s_path.exists() and _m_e_path.exists():
     import pandas as _pd_cmp
-    _m_base   = res.compute_metrics()
+    _m_base   = dict(res.metrics)
     _m_stocks = _json_cmp.loads(_m_s_path.read_text())
     _m_etfs   = _json_cmp.loads(_m_e_path.read_text())
 
