@@ -173,12 +173,13 @@ with tab1:
     if _m1_fallback:
         st.info("ℹ️ positions.json 尚未生成，等待 GitHub Actions 首次运行后自动创建。")
 
-    _m1_positions = [p for p in _m1["positions"] if not p.get("closed")]
-    _m1_closed    = _m1.get("closed_trades", [])
-    _m1_history   = _m1.get("nav_history", [])
-    _m1_cash      = _m1.get("cash", 0.0)
-    _m1_init_nav  = _m1["initial_nav"]
-    _m1_last_upd  = _m1.get("last_update_date", "N/A")
+    _m1_positions  = [p for p in _m1["positions"] if not p.get("closed")]
+    _m1_closed     = _m1.get("closed_trades", [])
+    _m1_history    = _m1.get("nav_history", [])
+    _m1_cash       = _m1.get("cash", 0.0)
+    _m1_init_nav   = _m1["initial_nav"]
+    _m1_last_upd   = _m1.get("last_update_date", "N/A")
+    _m1_today_sig  = _m1.get("today_signals")
 
     # ── Fetch live prices ────────────────────────────────────────────────────
     _m1_tickers = tuple(sorted(set([p["ticker"] for p in _m1_positions] + ["SPY"])))
