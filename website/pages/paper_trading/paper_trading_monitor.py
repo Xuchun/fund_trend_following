@@ -245,7 +245,7 @@ with tab1:
     st.markdown("---")
 
     # ── Today's trades (combined) ─────────────────────────────────────────────
-    st.subheader("二、今日交易")
+    st.subheader("二、今日完成的交易")
     _trade_rows = []
     if _m1_today_sig:
         _ts_trade_date = _m1_today_sig.get("date", "N/A")
