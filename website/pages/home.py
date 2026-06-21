@@ -191,26 +191,35 @@ _col_title, _col_right = st.columns([4, 2])
 with _col_title:
     st.title("总结")
 with _col_right:
-    _components.html("""
+    st.html("""
     <div style="display:flex;justify-content:flex-end;align-items:center;
-                gap:8px;padding-top:18px;">
-        <button onclick="window.parent.print()"
+                gap:8px;padding-top:10px;">
+        <button id="home-pdf-btn"
             title="打开打印对话框后选择「存储为 PDF」即可下载"
             style="background:#1565c0;color:#fff;border:none;padding:7px 16px;
                    border-radius:5px;cursor:pointer;font-size:13px;
                    font-family:sans-serif;white-space:nowrap;">
             📄 下载 PDF
         </button>
-        <a href="?full_report=1" target="_parent"
+        <button id="home-full-btn"
             title="将所有策略1.0网页合并为一个 PDF"
             style="border:1px solid #d0d0d0;background:#ffffff;color:#333;
                    padding:7px 14px;border-radius:5px;cursor:pointer;
-                   font-size:13px;font-family:sans-serif;white-space:nowrap;
-                   text-decoration:none;display:inline-block;">
+                   font-size:13px;font-family:sans-serif;white-space:nowrap;">
             📥 下载全部策略1.0网页
-        </a>
+        </button>
     </div>
-    """, height=60)
+    <script>
+    (function() {
+        var pdf  = document.getElementById('home-pdf-btn');
+        var full = document.getElementById('home-full-btn');
+        if (pdf)  pdf.onclick  = function() { window.print(); };
+        if (full) full.onclick = function() {
+            window.location.href = window.location.pathname + '?full_report=1';
+        };
+    })();
+    </script>
+    """, unsafe_allow_javascript=True)
 
 st.caption(
     f"回测期间 {meta.backtest_start} → {meta.backtest_end} ｜ "
