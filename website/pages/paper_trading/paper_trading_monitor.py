@@ -230,7 +230,7 @@ with tab1:
     st.subheader("一、策略状态概览")
     st.caption(f"行情日期：{_m1_date} ｜ 上次更新：{_m1_last_upd} ｜ Yahoo Finance（1小时缓存）")
 
-    c1, c2, c3, c4 = st.columns(4)
+    c1, c2, c3, c4, c5 = st.columns(5)
     _nav_label = "模拟 NAV（上次价估算）" if _m1_stale else "模拟 NAV（估算）"
     c1.metric(_nav_label, f"${_m1_nav/1e6:.2f}M",
               delta=f"{(_m1_nav/_m1_init_nav-1)*100:+.2f}% vs 起始")
@@ -239,7 +239,9 @@ with tab1:
               delta_color="inverse" if _m1_stop else "normal")
     c3.metric("持仓浮盈", f"${_m1_unrl/1e6:+.2f}M",
               delta=f"{_m1_unrl/_m1_nav*100:+.1f}% NAV" if _m1_nav else None)
-    c4.metric("现金", f"${_m1_cash/1e6:.2f}M")
+    c4.metric("持仓市值", f"${_m1_mkt/1e6:.2f}M",
+              delta=f"{_m1_mkt/_m1_nav*100:.1f}% NAV" if _m1_nav else None)
+    c5.metric("现金", f"${_m1_cash/1e6:.2f}M")
 
     st.markdown("---")
 
