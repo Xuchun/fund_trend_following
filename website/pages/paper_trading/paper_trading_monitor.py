@@ -428,45 +428,9 @@ with tab1:
 
     st.markdown("---")
 
-    # ── Trade history (open + closed) ────────────────────────────────────────
-    st.subheader("七、交易历史")
-    _all_trades = []
-    for p in sorted(_m1_positions, key=lambda x: x["entry_date"]):
-        _all_trades.append({
-            "状态": "🟢 持仓中",
-            "标的": p["ticker"],
-            "入场日": p["entry_date"],
-            "出场日": "—",
-            "入场价": f"${p['entry_price']:.2f}",
-            "出场价": "—",
-            "股数": p["shares"],
-            "持仓天数": "—",
-            "R": "—",
-            "净盈亏": "—",
-        })
-    for c in sorted(_m1_closed, key=lambda x: x.get("exit_date",""), reverse=True):
-        _all_trades.insert(0, {
-            "状态": "🔴 已平仓",
-            "标的": c["ticker"],
-            "入场日": c.get("entry_date", ""),
-            "出场日": c.get("exit_date", ""),
-            "入场价": f"${c.get('entry_price',0):.2f}",
-            "出场价": f"${c.get('exit_price',0):.2f}",
-            "股数": c.get("shares", ""),
-            "持仓天数": c.get("holding_days", ""),
-            "R": f"{c['pnl_r']:+.2f}R" if c.get("pnl_r") is not None else "—",
-            "净盈亏": f"${c['net_pnl']:+,.0f}" if c.get("net_pnl") is not None else "—",
-        })
-    if _all_trades:
-        st.dataframe(pd.DataFrame(_all_trades), use_container_width=True, hide_index=True)
-    else:
-        st.info("暂无交易记录")
-
-    st.markdown("---")
-
     # ── NAV history ──────────────────────────────────────────────────────────
     if _m1_history:
-        st.subheader("八、NAV 走势")
+        st.subheader("七、NAV 走势")
         _nh = pd.DataFrame(_m1_history)
         _nh["date"] = pd.to_datetime(_nh["date"])
         _nh = _nh.sort_values("date").reset_index(drop=True)
