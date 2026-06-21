@@ -65,8 +65,30 @@ def _wilder_atr(high, low, close, period=20):
 def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
     """Add live price + computed trailing stop to a position dict."""
     df = _get_df(raw_yf, pos["ticker"])
+
+    # Fallback to last_known_price when YF fetch fails
     if df is None:
-        return {**pos, "_ok": False}
+        fallback = pos.get("last_known_price")
+        if not fallback:
+            return {**pos, "_ok": False}
+        risk = pos["entry_price"] - pos["initial_stop_loss"]
+        R    = (fallback - pos["entry_price"]) / risk if risk > 0 else 0.0
+        return {
+            **pos,
+            "_ok":            True,
+            "_stale":         True,
+            "current_price":  fallback,
+            "current_date":   pos.get("last_price_date", "N/A"),
+            "peak_price":     pos["peak_price"],
+            "current_atr":    pos["atr_at_entry"],
+            "current_stop":   pos["current_stop_loss"],
+            "trail_mult":     _TRAIL_R5 if R >= 3.0 else (_TRAIL_R3 if R >= 1.0 else _TRAIL_R1),
+            "R":              R,
+            "mkt_value":      fallback * pos["shares"],
+            "unreal_pnl":     (fallback - pos["entry_price"]) * pos["shares"],
+            "stop_buffer_pct": (fallback - pos["current_stop_loss"]) / fallback * 100,
+            "is_stopped":     fallback <= pos["current_stop_loss"],
+        }
 
     entry_dt    = pd.to_datetime(pos["entry_date"])
     since_entry = df[df.index >= entry_dt]
