@@ -75,8 +75,9 @@ st.info(
 st.subheader("1. 集中型牛市跑输大盘（最核心局限）")
 st.markdown("**问题：** 趋势跟踪策略在少数股票主导的集中型牛市中，收益率系统性低于买入持有 SPY；在多板块同步走强的宽基牛市中则具有竞争力。")
 
-_qe_gap = None
-_ai_gap = None
+_qe_gap  = None
+_ai_gap  = None
+_ai_cagr = None
 
 if _reg:
     _rows = []
@@ -90,7 +91,8 @@ if _reg:
             if name == "QE驱动慢牛":
                 _qe_gap = gap
             elif name == "AI驱动牛市":
-                _ai_gap = gap
+                _ai_gap  = gap
+                _ai_cagr = sc
     if _rows:
         st.markdown(
             "| 市场环境 | 区间 | 策略 CAGR | SPY CAGR | 差距 | 评估 |\n"
@@ -107,7 +109,7 @@ if _qe_gap is not None and _ai_gap is not None:
 
 **影响量级（基于最新数据）：**
 - **QE 驱动慢牛（2009–2020）**：策略每年跑输 SPY 约 **{abs(_qe_gap):.1f}%**，持续 11 年复利差距显著。市场几乎单调上涨，策略持有多元化仓位而非集中的市场 Beta，成本最高。
-- **AI 驱动牛市（2023–2026）**：策略 CAGR 高达 26.7%，{_ai_note} SPY **{_ai_str}**。与 QE 牛市不同，AI 牛市中许多非科技趋势（能源、工业、防御股）同步走强，策略捕捉到足够的趋势机会。
+- **AI 驱动牛市（2023–2026）**：策略 CAGR 高达 **{_ai_cagr:.1f}%**，{_ai_note} SPY **{_ai_str}**。与 QE 牛市不同，AI 牛市中许多非科技趋势（能源、工业、防御股）同步走强，策略捕捉到足够的趋势机会。
 
 这不是策略设计缺陷，而是趋势跟踪类策略的内在特征——在**集中型**牛市（少数股票拉动、其他板块停滞）中支付溢价；在**宽基**牛市或熊市中具有竞争力。
 """)
