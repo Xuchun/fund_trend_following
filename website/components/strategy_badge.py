@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 import streamlit as st
-import streamlit.components.v1 as _cv1
 from website.data_loader import StrategyMeta
 
 _PRINT_CSS = """
