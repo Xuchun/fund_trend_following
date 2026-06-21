@@ -19,8 +19,13 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-from website.style import GLOBAL_CSS
-from website.data_loader import list_strategies, load_strategy
+try:
+    from website.style import GLOBAL_CSS
+    from website.data_loader import list_strategies, load_strategy
+except Exception as _import_err:
+    import traceback as _tb
+    st.error(f"**Import error** (Streamlit {st.__version__}):\n\n```\n{_tb.format_exc()}\n```")
+    st.stop()
 
 st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
 
@@ -30,7 +35,8 @@ _v2    = _pages / "v2"
 _fw    = _pages / "future_work"
 _pt    = _pages / "paper_trading"
 
-pg = st.navigation(
+try:
+    pg = st.navigation(
     {
         "数据与方法论": [
             st.Page(_pages / "universe_tiingo.py", title="数据与标的池", icon="🗄️"),
