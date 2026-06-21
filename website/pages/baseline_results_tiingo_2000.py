@@ -2497,6 +2497,16 @@ st.dataframe(_pd_ta.DataFrame([
      "覆盖率": f"{_pct_all:.1f}%", "未触发": _n_pt - _n_ta},
 ]), use_container_width=True, hide_index=True)
 
+st.markdown(
+    f"**解读：** 标的池共 **{_n_pt:,}** 个历史标的（含已退市），回测期间实际触发开仓的有 **{_n_ta:,}** 个，"
+    f"覆盖率 **{_pct_all:.1f}%**。未触发的 {_n_pt - _n_ta:,} 个标的，要么在可交易期内始终未发出 200 日高点突破信号，"
+    f"要么突破发生时恰逢熊市阶段（Regime Filter 关闭新开仓，TLT / GLD / UUP 豁免）。"
+    f"ETF 覆盖率（{_pct_e:.1f}%）通常高于股票（{_pct_s:.1f}%），"
+    f"因为跨资产 ETF 趋势持续性更强、更易触发突破条件。"
+)
+
+st.markdown("---")
+
 # ── Delisted / acquired trades ────────────────────────────────────────────────
 _dl = res.trades[res.trades["exit_reason"] == "delisted"].copy() if "exit_reason" in res.trades.columns else res.trades.iloc[0:0].copy()
 _n_total   = len(res.trades)
