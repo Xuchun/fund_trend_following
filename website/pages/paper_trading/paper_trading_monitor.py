@@ -385,7 +385,7 @@ with tab1:
 
     # ── Closed trades ─────────────────────────────────────────────────────────
     if _m1_closed:
-        st.subheader(f"六、平仓记录（{len(_m1_closed)} 笔）")
+        st.subheader(f"七、平仓记录（{len(_m1_closed)} 笔）")
         _ct = pd.DataFrame(_m1_closed).sort_values("exit_date", ascending=False)
         _ct["R"] = _ct["pnl_r"].map(lambda v: f"{v:+.2f}R")
         _ct["净盈亏"] = _ct["net_pnl"].map(lambda v: f"${v:+,.0f}")
