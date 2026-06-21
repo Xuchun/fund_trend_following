@@ -1698,6 +1698,73 @@ st.markdown(f"""
 > 建议保留 ETF 池，若要提高股票敞口，可适当上调单笔风险比例（如 1% → 1.2% NAV），而非削减 ETF。
 """)
 
+# ── 独立回测对比：纯股票 vs 纯ETF vs 混合 ──────────────────────────────────────
+import json as _json_cmp
+_stocks_dir = res.meta.results_dir.parent / "v1_stocks_only_2000"
+_etfs_dir   = res.meta.results_dir.parent / "v1_etfs_only_2000"
+_m_s_path   = _stocks_dir / "metrics.json"
+_m_e_path   = _etfs_dir   / "metrics.json"
+
+if _m_s_path.exists() and _m_e_path.exists():
+    import pandas as _pd_cmp
+    _m_base   = res.compute_metrics()
+    _m_stocks = _json_cmp.loads(_m_s_path.read_text())
+    _m_etfs   = _json_cmp.loads(_m_e_path.read_text())
+
+    st.markdown("#### 对照实验：仅股票 / 仅ETF / 混合（基准）")
+    st.caption("其他条件完全相同（策略参数、回测区间），仅改变标的池组成。")
+
+    _cmp_rows = [
+        ("CAGR",           "cagr",               lambda v: f"{v*100:+.1f}%"),
+        ("总回报",          "total_return",        lambda v: f"{v*100:+.1f}%"),
+        ("最大回撤",        "max_drawdown",        lambda v: f"{v*100:.1f}%"),
+        ("最长回撤（交易日）", "max_dd_duration_days", lambda v: f"{int(v):,}"),
+        ("年化波动率",      "annual_vol",          lambda v: f"{v*100:.1f}%"),
+        ("Sharpe",          "sharpe",              lambda v: f"{v:.3f}"),
+        ("Calmar",          "calmar",              lambda v: f"{v:.3f}"),
+        ("Profit Factor",   "profit_factor",       lambda v: f"{v:.2f}"),
+        ("胜率",            "win_rate",            lambda v: f"{v*100:.1f}%"),
+        ("总交易笔数",      "n_trades",            lambda v: f"{int(v):,}"),
+        ("年均交易笔数",    "trades_per_year",     lambda v: f"{v:.0f}"),
+        ("平均持仓天数",    "avg_holding_days",    lambda v: f"{v:.0f}"),
+    ]
+    _cmp_df = _pd_cmp.DataFrame([
+        {
+            "指标": label,
+            "仅股票": (fmt(_m_stocks.get(key)) if _m_stocks.get(key) is not None else "—"),
+            "仅ETF":  (fmt(_m_etfs.get(key))   if _m_etfs.get(key)   is not None else "—"),
+            "混合（基准）": (fmt(_m_base.get(key)) if _m_base.get(key)    is not None else "—"),
+        }
+        for label, key, fmt in _cmp_rows
+    ])
+    st.dataframe(_cmp_df, use_container_width=True, hide_index=True)
+
+    _cagr_s = _m_stocks.get("cagr", 0)
+    _cagr_e = _m_etfs.get("cagr", 0)
+    _cagr_b = _m_base.get("cagr", 0)
+    _sharpe_s = _m_stocks.get("sharpe", 0)
+    _sharpe_e = _m_etfs.get("sharpe", 0)
+    _sharpe_b = _m_base.get("sharpe", 0)
+    _ntrades_e = _m_etfs.get("n_trades", 0)
+
+    st.markdown(f"""
+**三个关键结论：**
+
+1. **股票是绝对主力**：仅股票 CAGR {_cagr_s*100:.1f}% 与基准 {_cagr_b*100:.1f}% 接近，说明股票贡献了几乎全部 alpha。
+   基准中实际 ETF 交易仅 {_etf_traded} 笔（占 {_etf_traded/len(res.trades)*100:.1f}%），却带来了 **+{(_cagr_b-_cagr_s)*100:.1f}%** 的额外年化收益。
+
+2. **ETF 单独跑远不如股票**：仅 ETF 的 CAGR 仅 {_cagr_e*100:.1f}%、Sharpe {_sharpe_e:.2f}，
+   原因是 ETF 标的池以债券/商品类为主，趋势强度不足，年均仅 {_ntrades_e/26:.0f} 笔有效信号。
+   但混入股票组合后，TLT/GLD（熊市豁免）、SMH/SOXX/DBC（板块/大宗商品趋势）提供多样化收益，
+   将组合 Sharpe 从 {_sharpe_s:.3f} 提升至 **{_sharpe_b:.3f}**。
+
+3. **"低回撤"不等于"好策略"**：仅 ETF 最大回撤最小（{_m_etfs.get('max_drawdown',0)*100:.1f}%），
+   但最长回撤时间达 {int(_m_etfs.get('max_dd_duration_days',0)):,} 交易日，
+   说明低波动并不等于好的风险调整后收益——Calmar 仅 {_m_etfs.get('calmar',0):.3f}，远低于基准 {_m_base.get('calmar',0):.3f}。
+
+**结论：当前混合设计（股票为主 + ETF 为辅）是最优组合**，ETF 不是拖累，是提升多样化的有效工具。
+""")
+
 st.markdown("---")
 
 # ── 盈利集中度 ──────────────────────────────────────────────────────────────────
