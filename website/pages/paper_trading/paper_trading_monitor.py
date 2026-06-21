@@ -230,7 +230,7 @@ with tab1:
     st.subheader("一、策略状态概览")
     st.caption(f"上次更新：{_m1_last_upd} ｜ Yahoo Finance（1小时缓存）")
     if _m1_stale:
-        st.caption(f"⚠️ Yahoo Finance 暂无 {_m1_date} 之后的收盘数据（可能为假日或休市）；以上数值基于 {_m1_date} 最后记录价格估算，下一交易日自动更新。")
+        st.caption(f"⚠️ Yahoo Finance 暂无 {_m1_date} 之后的收盘数据（可能为假日或休市）；以下数值基于 {_m1_date} 最后记录价格估算，下一交易日自动更新。")
     else:
         st.caption(f"以上数值基于 {_m1_date} Yahoo Finance 收盘价实时估算（每小时自动刷新）。")
 
