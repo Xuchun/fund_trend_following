@@ -4,7 +4,7 @@ import json
 import math
 import sys
 from pathlib import Path
-_root = Path(__file__).resolve().parents[2]
+_root = Path(__file__).resolve().parents[3]
 if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 

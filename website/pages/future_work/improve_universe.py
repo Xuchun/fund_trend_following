@@ -13,7 +13,7 @@ import streamlit as st
 
 _pio.templates.default = "plotly_white"
 
-_project = Path(__file__).resolve().parents[2]
+_project = Path(__file__).resolve().parents[3]
 _EU_CSV    = _project / "data" / "tiingo_eligible_universe.csv"
 _META_PATH = _project / "results" / "v1_unbiased_60m_2000" / "strategy_meta.json"
 _TRADES_PATH = _project / "results" / "v1_unbiased_60m_2000" / "trades.csv"
