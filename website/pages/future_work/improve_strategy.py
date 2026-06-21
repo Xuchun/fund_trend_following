@@ -921,7 +921,7 @@ if _pc_d:
 st.markdown("---")
 
 # ── 十、Cluster Risk ──────────────────────────────────────────────────────────
-st.subheader("十一、Cluster Risk：相关性过滤的隐藏漏洞")
+st.subheader("十三、Cluster Risk：相关性过滤的隐藏漏洞")
 
 st.markdown("""
 当前仓位管理对相关性的处理：若新标的与任意已持仓标的相关系数 > 0.7，则将新仓位减半（0.5R 风险）。
