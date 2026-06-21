@@ -2496,10 +2496,6 @@ st.dataframe(_pd_ta.DataFrame([
     {"类别": "合计", "标的池": _n_pt, "实际开仓": _n_ta,
      "覆盖率": f"{_pct_all:.1f}%", "未触发": _n_pt - _n_ta},
 ]), use_container_width=True, hide_index=True)
-st.caption(
-    f"未触发开仓的 {_n_pt - _n_ta:,} 个标的：要么在可交易期内始终未发出 200 日高点突破信号，"
-    "要么突破发生时恰逢熊市阶段（Regime Filter 关闭大多数标的新开仓，TLT / GLD / UUP 豁免）。"
-)
 
 # ── Delisted / acquired trades ────────────────────────────────────────────────
 _dl = res.trades[res.trades["exit_reason"] == "delisted"].copy() if "exit_reason" in res.trades.columns else res.trades.iloc[0:0].copy()
