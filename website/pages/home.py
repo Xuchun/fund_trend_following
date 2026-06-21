@@ -13,7 +13,9 @@ import streamlit.components.v1 as _components
 
 from website.shared import get_results
 from website.components.metric_cards import render_summary_cards
-from website.components.charts import nav_vs_spy
+from plotly.subplots import make_subplots as _make_subplots
+import plotly.graph_objects as _go
+import datetime as _dt
 
 res  = get_results()
 meta = res.meta
