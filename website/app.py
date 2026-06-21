@@ -24,27 +24,7 @@ from website.data_loader import list_strategies, load_strategy
 
 st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
 
-# ── Load Strategy 1.0 results (shared across all v1 pages) ────────────────────
-strategies = list_strategies()
-if not strategies:
-    st.error("⚠️ 未找到回测结果。请先运行回测脚本生成 results/v1/ 目录。")
-    st.stop()
-
-strategy_ids = [m.id for m in strategies]
-try:
-    selected_idx = strategy_ids.index("v1_unbiased_60m_2000")
-except ValueError:
-    selected_idx = 0
-sel_meta = strategies[selected_idx]
-
-selected_id = strategy_ids[selected_idx]
-cache_key   = f"_results_{selected_id}"
-if cache_key not in st.session_state:
-    with st.spinner(f"正在加载 {sel_meta.display_name} 数据…"):
-        st.session_state[cache_key] = load_strategy(selected_id)
-st.session_state["current_results"] = st.session_state[cache_key]
-
-# ── Navigation ────────────────────────────────────────────────────────────────
+# ── Navigation (defined first so pg.run() always executes) ───────────────────
 _pages = Path(__file__).parent / "pages"
 _v2    = _pages / "v2"
 _fw    = _pages / "future_work"
