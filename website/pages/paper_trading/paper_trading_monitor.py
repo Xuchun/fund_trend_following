@@ -229,6 +229,10 @@ with tab1:
     # ── Overview ─────────────────────────────────────────────────────────────
     st.subheader("一、策略状态概览")
     st.caption(f"行情日期：{_m1_date} ｜ 上次更新：{_m1_last_upd} ｜ Yahoo Finance（1小时缓存）")
+    if _m1_stale:
+        st.caption(f"⚠️ 以上数值基于 {_m1_date} 开仓参考价（当日美股休市，Yahoo Finance 无收盘数据）；持仓浮盈 $0 属正常，下一交易日更新后将显示实际盈亏。")
+    else:
+        st.caption(f"以上数值基于 {_m1_date} 收盘价估算。")
 
     c1, c2, c3, c4, c5 = st.columns(5)
     _nav_label = "模拟 NAV（上次价估算）" if _m1_stale else "模拟 NAV（估算）"
@@ -239,7 +243,8 @@ with tab1:
               delta_color="inverse" if _m1_stop else "normal")
     c3.metric("持仓浮盈", f"${_m1_unrl/1e6:+.2f}M",
               delta=f"{_m1_unrl/_m1_nav*100:+.1f}% NAV" if _m1_nav else None)
-    c4.metric("持仓市值", f"${_m1_mkt/1e6:.2f}M（占 NAV {_m1_mkt/_m1_nav*100:.1f}%）" if _m1_nav else f"${_m1_mkt/1e6:.2f}M")
+    c4.metric("持仓市值", f"${_m1_mkt/1e6:.2f}M",
+              delta=f"占 NAV {_m1_mkt/_m1_nav*100:.1f}%" if _m1_nav else None)
     c5.metric("现金", f"${_m1_cash/1e6:.2f}M")
 
     st.markdown("---")
