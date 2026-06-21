@@ -61,6 +61,7 @@ try:
             st.Page(_fw / "improve_effectiveness.py",     title="如何改进策略有效性",      icon="📈"),
             st.Page(_fw / "better_signal_selection.py",   title="如何选中更优开仓信号",    icon="🎯"),
             st.Page(_fw / "improve_cagr.py",              title="如何提高年化收益",        icon="🚀"),
+            st.Page(_fw / "missed_winners.py",            title="如何买到错失的大赢家",    icon="🏆"),
             st.Page(_fw / "reduce_large_losses.py",       title="如何减少大R的亏损交易",  icon="🛡️"),
             st.Page(_fw / "reduce_consecutive_losses.py", title="如何降低连续亏损次数",    icon="📉"),
             st.Page(_fw / "breakeven_drawdown.py",        title="如何用平价保护改善最大回撤", icon="🛡️"),
