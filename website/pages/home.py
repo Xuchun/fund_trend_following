@@ -90,7 +90,7 @@ _n_pos_years   = int((_full_years > 0).sum())
 # ── 页面标题 ──────────────────────────────────────────────────────────────────
 _col_title, _col_right = st.columns([4, 2])
 with _col_title:
-    st.title("总结")
+    st.title("策略1.0 总结")
 with _col_right:
     _components.html(f"""
     <div style="display:flex;justify-content:flex-end;align-items:center;
