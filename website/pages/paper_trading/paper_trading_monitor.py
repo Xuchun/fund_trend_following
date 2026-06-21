@@ -469,19 +469,100 @@ with tab1:
         st.subheader("八、NAV 走势")
         _nh = pd.DataFrame(_m1_history)
         _nh["date"] = pd.to_datetime(_nh["date"])
-        _nh = _nh.sort_values("date")
+        _nh = _nh.sort_values("date").reset_index(drop=True)
         if _m1_date != "N/A" and not (_nh["date"] == pd.to_datetime(_m1_date)).any():
             _nh = pd.concat([_nh, pd.DataFrame([{"date": pd.to_datetime(_m1_date), "nav": _m1_nav}])], ignore_index=True)
-        _fig_nav = go.Figure(go.Scatter(
-            x=_nh["date"], y=_nh["nav"] / _m1_init_nav,
-            mode="lines+markers", line=dict(color="#1f77b4", width=2.5),
-            hovertemplate="%{x|%Y-%m-%d}<br>%{y:.3f}x<extra></extra>",
-        ))
-        _fig_nav.add_hline(y=1.0, line_dash="dash", line_color="gray", opacity=0.5)
-        _fig_nav.update_layout(
-            title="方法一 NAV（相对起始）", yaxis_title="倍数",
-            height=280, margin=dict(l=60, r=20, t=45, b=40), template="plotly_white",
+        _nh_s = _nh.set_index("date")["nav"]
+
+        _show_spy_m1 = st.checkbox("显示 SPY 基准曲线", value=True, key="m1_nav_show_spy")
+
+        _nav_min_dt_m1 = _nh_s.index[0].to_pydatetime()
+        _nav_max_dt_m1 = _nh_s.index[-1].to_pydatetime()
+        _has_range_m1  = _nav_min_dt_m1 != _nav_max_dt_m1
+
+        import datetime as _dt_m1nav
+        _periods_m1 = [("1年", 1), ("3年", 3), ("5年", 5), ("10年", 10), ("全程", None)]
+        _pc_m1 = st.columns([1, 1, 1, 1, 1, 6])
+        for _ci_m1, (_lbl_m1, _yrs_m1) in enumerate(_periods_m1):
+            with _pc_m1[_ci_m1]:
+                if st.button(_lbl_m1, key=f"m1_nav_btn_{_lbl_m1}") and _has_range_m1:
+                    _ps_m1 = (_nav_min_dt_m1 if _yrs_m1 is None else
+                              max(_nav_min_dt_m1, _nav_max_dt_m1 - _dt_m1nav.timedelta(days=round(365.25 * _yrs_m1))))
+                    st.session_state["m1_nav_slider"] = (_ps_m1, _nav_max_dt_m1)
+
+        if _has_range_m1:
+            _sel_s_m1, _sel_e_m1 = st.slider(
+                "选择时间范围",
+                min_value=_nav_min_dt_m1, max_value=_nav_max_dt_m1,
+                value=(_nav_min_dt_m1, _nav_max_dt_m1),
+                format="YYYY-MM-DD", key="m1_nav_slider",
+                label_visibility="collapsed",
+            )
+            _nav_sl_m1 = _nh_s.loc[_sel_s_m1:_sel_e_m1]
+            if len(_nav_sl_m1) < 2:
+                _nav_sl_m1 = _nh_s
+        else:
+            _nav_sl_m1 = _nh_s
+
+        _nav_norm_m1 = _nav_sl_m1 / float(_nav_sl_m1.iloc[0])
+        _dd_m1 = (_nav_sl_m1 - _nav_sl_m1.cummax()) / _nav_sl_m1.cummax() * 100
+
+        # SPY for comparison (strip timezone from YF index)
+        _has_spy_m1 = _show_spy_m1 and _spy_df is not None
+        if _has_spy_m1:
+            _spy_cmp = _spy_df["Close"].copy()
+            _spy_cmp.index = pd.to_datetime(_spy_cmp.index).tz_localize(None) if pd.to_datetime(_spy_cmp.index).tz is not None else pd.to_datetime(_spy_cmp.index)
+            if _has_range_m1:
+                _spy_sl_m1 = _spy_cmp.loc[_sel_s_m1:_sel_e_m1]
+                if len(_spy_sl_m1) < 2:
+                    _spy_sl_m1 = _spy_cmp
+            else:
+                _spy_sl_m1 = _spy_cmp
+            if not _spy_sl_m1.empty:
+                _spy_norm_m1 = _spy_sl_m1 / float(_spy_sl_m1.iloc[0])
+                _spy_dd_m1   = (_spy_sl_m1 - _spy_sl_m1.cummax()) / _spy_sl_m1.cummax() * 100
+            else:
+                _has_spy_m1 = False
+
+        _fig_nav = make_subplots(
+            rows=2, cols=1, shared_xaxes=True,
+            row_heights=[0.65, 0.35], vertical_spacing=0.05,
+            subplot_titles=["", ""],
         )
+        _fig_nav.add_trace(go.Scatter(
+            x=_nav_norm_m1.index, y=_nav_norm_m1.values,
+            name="策略1.0（模拟）", mode="lines+markers",
+            line=dict(color="#1f77b4", width=2),
+            hovertemplate="%{x|%Y-%m-%d}<br>NAV: %{y:.2f}x<extra></extra>",
+        ), row=1, col=1)
+        if _has_spy_m1:
+            _fig_nav.add_trace(go.Scatter(
+                x=_spy_norm_m1.index, y=_spy_norm_m1.values,
+                name="SPY", line=dict(color="#888888", width=1.2, dash="dash"),
+                hovertemplate="%{x|%Y-%m-%d}<br>SPY: %{y:.2f}x<extra></extra>",
+            ), row=1, col=1)
+        _fig_nav.add_trace(go.Scatter(
+            x=_dd_m1.index, y=_dd_m1.values,
+            fill="tozeroy", fillcolor="rgba(214,39,40,0.25)",
+            line=dict(color="#d62728", width=1),
+            hovertemplate="%{x|%Y-%m-%d}<br>回撤: %{y:.1f}%<extra></extra>",
+            showlegend=False,
+        ), row=2, col=1)
+        if _has_spy_m1:
+            _fig_nav.add_trace(go.Scatter(
+                x=_spy_dd_m1.index, y=_spy_dd_m1.values,
+                line=dict(color="#888888", width=1.2, dash="dash"),
+                hovertemplate="%{x|%Y-%m-%d}<br>SPY回撤: %{y:.1f}%<extra></extra>",
+                showlegend=False,
+            ), row=2, col=1)
+        _fig_nav.update_layout(
+            hovermode="x unified",
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+            margin=dict(l=60, r=20, t=60, b=40),
+            height=620,
+        )
+        _fig_nav.update_yaxes(ticksuffix="x", title_text="净值（倍）", row=1, col=1)
+        _fig_nav.update_yaxes(ticksuffix="%", title_text="回撤 %", row=2, col=1)
         st.plotly_chart(_fig_nav, use_container_width=True)
 
     st.markdown("---")
