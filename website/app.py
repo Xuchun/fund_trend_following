@@ -65,7 +65,7 @@ pg = st.navigation(
             st.Page(_pages / "walk_forward.py",               title="Walk-Forward 验证",    icon="🔄"),
             st.Page(_pages / "regime_analysis.py",            title="市场环境分析",         icon="🌦️"),
             st.Page(_pages / "limitations.py",                title="局限性声明",           icon="⚠️"),
-            st.Page(_pages / "home.py",                       title="总结（需要更新）",     icon="📋"),
+            st.Page(_pages / "home.py",                       title="总结",     icon="📋"),
         ],
         "策略1.0模拟交易（开发中）": [
             st.Page(_pt / "paper_trading_monitor.py", title="策略1.0模拟交易监控", icon="📡"),
