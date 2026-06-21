@@ -156,13 +156,44 @@ _full_years    = _annual_rets[_annual_rets.index.year < int(meta.backtest_end[:4
 _n_full_years  = len(_full_years)
 _n_pos_years   = int((_full_years > 0).sum())
 
-# ── 页面标题 ──────────────────────────────────────────────────────────────────
-_col_title, _col_pdf, _col_full = st.columns([5, 1, 1.6])
+# ── 全站PDF生成（由 URL query param 触发）──────────────────────────────────
+import datetime as _dt_rpt
+if "full_rpt_pdf" not in st.session_state:
+    st.session_state.full_rpt_pdf = None
+
+if st.query_params.get("full_report") == "1":
+    if st.session_state.full_rpt_pdf is None:
+        with st.spinner("正在生成完整报告，请稍候（约 2–3 分钟）…"):
+            try:
+                from website.utils.playwright_report import generate_report as _gen_report
+                st.session_state.full_rpt_pdf = _gen_report()
+            except Exception as _exc:
+                st.error(f"完整报告生成失败：{_exc}")
+    st.query_params.clear()   # 清除 URL 参数，触发一次 rerun
+
+if st.session_state.full_rpt_pdf is not None:
+    _c_dl, _c_cls = st.columns([3, 1])
+    with _c_dl:
+        st.download_button(
+            "⬇️ 点击下载完整 PDF",
+            data=st.session_state.full_rpt_pdf,
+            file_name=f"策略1.0_完整回测报告_{_dt_rpt.date.today()}.pdf",
+            mime="application/pdf",
+            key="full_report_dl",
+        )
+    with _c_cls:
+        if st.button("✕ 关闭", key="close_full_rpt"):
+            st.session_state.full_rpt_pdf = None
+            st.rerun()
+
+# ── 页面标题（两个按钮放在同一 HTML 组件内，保证同行对齐）────────────────
+_col_title, _col_right = st.columns([4, 2])
 with _col_title:
     st.title("总结")
-with _col_pdf:
+with _col_right:
     _components.html("""
-    <div style="padding-top:18px;">
+    <div style="display:flex;justify-content:flex-end;align-items:center;
+                gap:8px;padding-top:18px;">
         <button onclick="window.parent.print()"
             title="打开打印对话框后选择「存储为 PDF」即可下载"
             style="background:#1565c0;color:#fff;border:none;padding:7px 16px;
@@ -170,27 +201,19 @@ with _col_pdf:
                    font-family:sans-serif;white-space:nowrap;">
             📄 下载 PDF
         </button>
+        <button onclick="(function(){
+                var u=new URL(window.parent.location.href);
+                u.searchParams.set('full_report','1');
+                window.parent.location.href=u.toString();
+            })()"
+            title="将所有策略1.0网页合并为一个 PDF"
+            style="border:1px solid #d0d0d0;background:#ffffff;color:#333;
+                   padding:7px 14px;border-radius:5px;cursor:pointer;
+                   font-size:13px;font-family:sans-serif;white-space:nowrap;">
+            📥 下载全部策略1.0网页
+        </button>
     </div>
     """, height=60)
-with _col_full:
-    st.markdown("<div style='padding-top:8px'></div>", unsafe_allow_html=True)
-    if st.button("📥 下载全部策略1.0网页", key="full_report_btn",
-                 help="将数据与标的池、回测方法论及策略1.0所有页面合并为一个 PDF"):
-        with st.spinner("正在生成完整报告，请稍候（约 2–3 分钟）…"):
-            try:
-                from website.utils.playwright_report import generate_report as _gen_report
-                import datetime as _dt_rpt
-                _pdf_bytes = _gen_report()
-                _fname = f"策略1.0_完整回测报告_{_dt_rpt.date.today()}.pdf"
-                st.download_button(
-                    "⬇️ 点击下载完整 PDF",
-                    data=_pdf_bytes,
-                    file_name=_fname,
-                    mime="application/pdf",
-                    key="full_report_dl",
-                )
-            except Exception as _e:
-                st.error(f"生成失败：{_e}")
 
 st.caption(
     f"回测期间 {meta.backtest_start} → {meta.backtest_end} ｜ "
