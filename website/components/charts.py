@@ -496,10 +496,11 @@ def daily_entries_vs_skipped_chart(
         opacity=0.9,
         hovertemplate="%{x|%Y-%m}：已开仓 %{y} 次<extra></extra>",
     ))
+    total_executed = int(df["executed"].sum()) if "executed" in df.columns else 0
     fig.update_layout(
         title=(
             f"逐月开仓信号：已开仓 vs 放弃开仓"
-            f"（全程共 {total_signals:,} 个信号，放弃率 {skip_rate:.1f}%）"
+            f"（全程共 {total_signals:,} 个信号，{total_executed:,} 次开仓成功，放弃率 {skip_rate:.1f}%）"
         ),
         xaxis_title="月份",
         yaxis_title="信号数量（次）",
