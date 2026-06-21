@@ -230,12 +230,12 @@ with tab1:
     st.subheader("一、策略状态概览")
     st.caption(f"行情日期：{_m1_date} ｜ 上次更新：{_m1_last_upd} ｜ Yahoo Finance（1小时缓存）")
     if _m1_stale:
-        st.caption(f"⚠️ 以上数值基于 {_m1_date} 开仓参考价（当日美股休市，Yahoo Finance 无收盘数据）；持仓浮盈 $0 属正常，下一交易日更新后将显示实际盈亏。")
+        st.caption(f"⚠️ Yahoo Finance 暂无 {_m1_date} 之后的收盘数据（可能为假日或休市）；以上数值基于 {_m1_date} 最后记录价格估算，下一交易日自动更新。")
     else:
-        st.caption(f"以上数值基于 {_m1_date} 收盘价估算。")
+        st.caption(f"以上数值基于 {_m1_date} Yahoo Finance 收盘价实时估算（每小时自动刷新）。")
 
     c1, c2, c3, c4, c5 = st.columns(5)
-    _nav_label = "模拟 NAV（上次价估算）" if _m1_stale else "模拟 NAV（估算）"
+    _nav_label = f"模拟 NAV（{_m1_date} 最后记录价格）" if _m1_stale else "模拟 NAV（Yahoo Finance 最新收盘价）"
     c1.metric(_nav_label, f"${_m1_nav/1e6:.2f}M",
               delta=f"{(_m1_nav/_m1_init_nav-1)*100:+.2f}% vs 起始")
     c2.metric("持仓数量", f"{len(_m1_act)} 只",
