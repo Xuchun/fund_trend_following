@@ -405,6 +405,8 @@ with tab1:
             columns={"ticker":"标的","entry_date":"入场日","exit_date":"出场日","holding_days":"天数","exit_reason":"原因"}
         ), use_container_width=True, hide_index=True)
 
+    st.markdown("---")
+
     # ── Automation info ───────────────────────────────────────────────────────
     with st.expander("⚙️ 自动化配置说明"):
         st.markdown("""
