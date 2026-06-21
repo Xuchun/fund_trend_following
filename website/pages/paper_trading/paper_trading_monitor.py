@@ -279,8 +279,57 @@ with tab1:
 
     st.markdown("---")
 
+    # ── Today's signals ───────────────────────────────────────────────────────
+    st.subheader("三、今日信号")
+    if _m1_today_sig:
+        _ts_date    = _m1_today_sig.get("date", "N/A")
+        _ts_regime  = _m1_today_sig.get("regime", "N/A")
+        _ts_spy     = _m1_today_sig.get("spy_close")
+        _ts_exits   = _m1_today_sig.get("exits", [])
+        _ts_entries = _m1_today_sig.get("entries", [])
+        st.caption(f"信号日期：{_ts_date} ｜ Regime：{'🟢 BULL' if _ts_regime == 'BULL' else '🔴 BEAR'}" +
+                   (f" ｜ SPY：${_ts_spy:.2f}" if _ts_spy else ""))
+
+        _ts1, _ts2 = st.columns(2)
+        with _ts1:
+            st.markdown(f"**退出信号（{len(_ts_exits)} 笔）**")
+            if _ts_exits:
+                st.dataframe(pd.DataFrame([{
+                    "标的": e["ticker"], "操作": "SELL",
+                    "股数": e.get("shares", ""),
+                    "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "",
+                    "订单类型": e.get("order_type", ""),
+                } for e in _ts_exits]), use_container_width=True, hide_index=True)
+            else:
+                st.info("无退出信号")
+
+        with _ts2:
+            st.markdown(f"**入场信号（{len(_ts_entries)} 笔）**")
+            if _ts_entries:
+                st.dataframe(pd.DataFrame([{
+                    "标的": e["ticker"], "操作": "BUY",
+                    "股数": e.get("shares", ""),
+                    "信号价": f"${e['signal_price']:.2f}" if e.get("signal_price") else "",
+                    "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "",
+                    "风险%": f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "",
+                } for e in _ts_entries]), use_container_width=True, hide_index=True)
+            else:
+                st.info("无入场信号")
+    else:
+        _ts_regime_cap = "🟢 BULL" if _bull else "🔴 BEAR"
+        st.caption(f"信号日期：N/A ｜ Regime：{_ts_regime_cap}")
+        _ts1, _ts2 = st.columns(2)
+        with _ts1:
+            st.markdown("**退出信号（0 笔）**")
+            st.info("无退出信号")
+        with _ts2:
+            st.markdown("**入场信号（0 笔）**")
+            st.info("无入场信号")
+
+    st.markdown("---")
+
     # ── Stop detail ──────────────────────────────────────────────────────────
-    st.subheader("三、移动止损明细")
+    st.subheader("四、移动止损明细")
     if _m1_ok:
         _sd = pd.DataFrame([{
             "标的": p["ticker"], "状态": "🔴" if p["is_stopped"] else "✅",
