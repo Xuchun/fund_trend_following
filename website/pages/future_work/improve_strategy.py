@@ -434,22 +434,6 @@ else:
 - 提前出场的交易中约 74% 被改善（原亏 → 保本），26% 受损（提前截短盈利）
 """)
 
-st.markdown("""
-**实现方式（1 行代码）：**
-
-```python
-# 在 exit.py 的出场循环中，移动止盈更新后加：
-be_price = (entry_price * shares + entry_commission + 1) / (shares * (1 - slip_rate - comm_rate))
-if peak_r >= 1.0:
-    trail_stop = max(trail_stop, be_price)
-```
-
-**注意事项：**
-- 约有 {_n_hurt if _be_csv.exists() else "少量"} 笔原本盈利的交易会因平价保护提前出场而减少获利，这是不可避免的代价
-- 对最长连续亏损次数**无明显改善**，连亏问题需通过其他方式解决
-- 平价保护不替代止损逻辑，只是在浮盈归零之前增加一道"底线保护"
-- 详细分析与图表见专项页面：**如何用平价保护改善最大回撤**
-""")
 
 st.markdown("---")
 
