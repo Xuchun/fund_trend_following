@@ -19,6 +19,34 @@ _EU_CSV = _project / "data" / "tiingo_eligible_universe.csv"
 
 import streamlit.components.v1 as _cv1_u
 
+st.markdown("""
+<style>
+@media print {
+    [data-testid="stSidebar"],
+    [data-testid="stSidebarNav"],
+    [data-testid="stHeader"],
+    [data-testid="stDecoration"],
+    [data-testid="stToolbar"],
+    [data-testid="stStatusWidget"],
+    header, footer,
+    .stApp > header { display: none !important; }
+    iframe { display: none !important; }
+    .main .block-container,
+    [data-testid="stMainBlockContainer"] {
+        padding-top: 0.5cm !important;
+        padding-left: 1cm !important;
+        padding-right: 1cm !important;
+        max-width: 100% !important;
+    }
+    @page { margin: 1.5cm; }
+    .stPlotlyChart,
+    [data-testid="stDataFrame"],
+    [data-testid="stAlert"] { page-break-inside: avoid; }
+    h2, h3 { page-break-after: avoid; }
+}
+</style>
+""", unsafe_allow_html=True)
+
 _col_u_title, _col_u_right = st.columns([4, 2])
 with _col_u_title:
     st.title("数据与标的池")
