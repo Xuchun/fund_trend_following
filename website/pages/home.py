@@ -322,7 +322,7 @@ for _dim, _verdict, _detail in _rows:
     with _col_a:
         st.markdown(f"**{_dim}**  \n{_verdict}")
     with _col_b:
-        st.caption(_detail)
+        st.markdown(f"<span style='color:#000;font-size:0.9rem'>{_detail}</span>", unsafe_allow_html=True)
     st.markdown("<hr style='margin:6px 0;border-color:#eee'>", unsafe_allow_html=True)
 
 st.markdown("---")
