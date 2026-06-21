@@ -90,24 +90,32 @@ try:
     },
     position="sidebar",
 )
+except Exception as _nav_err:
+    import traceback as _tb
+    st.error(
+        f"**Navigation error** (Streamlit {st.__version__}):\n\n"
+        f"```\n{_tb.format_exc()}\n```"
+    )
+    pg = None
 
 # ── Load Strategy 1.0 results into session_state ─────────────────────────────
-try:
-    strategies = list_strategies()
-    if strategies:
-        strategy_ids = [m.id for m in strategies]
-        try:
-            selected_idx = strategy_ids.index("v1_unbiased_60m_2000")
-        except ValueError:
-            selected_idx = 0
-        sel_meta    = strategies[selected_idx]
-        selected_id = strategy_ids[selected_idx]
-        cache_key   = f"_results_{selected_id}"
-        if cache_key not in st.session_state:
-            with st.spinner(f"正在加载 {sel_meta.display_name} 数据…"):
-                st.session_state[cache_key] = load_strategy(selected_id)
-        st.session_state["current_results"] = st.session_state[cache_key]
-except Exception as _e:
-    st.warning(f"⚠️ 策略数据加载异常，各页面将自行加载：{_e}")
+if pg is not None:
+    try:
+        strategies = list_strategies()
+        if strategies:
+            strategy_ids = [m.id for m in strategies]
+            try:
+                selected_idx = strategy_ids.index("v1_unbiased_60m_2000")
+            except ValueError:
+                selected_idx = 0
+            sel_meta    = strategies[selected_idx]
+            selected_id = strategy_ids[selected_idx]
+            cache_key   = f"_results_{selected_id}"
+            if cache_key not in st.session_state:
+                with st.spinner(f"正在加载 {sel_meta.display_name} 数据…"):
+                    st.session_state[cache_key] = load_strategy(selected_id)
+            st.session_state["current_results"] = st.session_state[cache_key]
+    except Exception as _e:
+        st.warning(f"⚠️ 策略数据加载异常，各页面将自行加载：{_e}")
 
-pg.run()
+    pg.run()
