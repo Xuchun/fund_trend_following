@@ -634,8 +634,114 @@ st.markdown("""
 
 st.markdown("---")
 
-# ── 八、分段移动止盈 ─────────────────────────────────────────────────────────
-st.subheader("九、分段移动止盈")
+# ── 八b、平价保护 ─────────────────────────────────────────────────────────────
+st.subheader("九、平价保护（Breakeven Protection）")
+
+st.markdown(
+    "> 📊 本节数据来自专项页面「**如何用平价保护改善最大回撤**」的完整模拟分析。\n\n"
+    "**优先级定位：🔴 高** — 最大回撤改善约 **−1.1 pp**，CAGR 和胜率轻微提升，实施只需 1 行代码（★ 低难度）。"
+)
+
+st.markdown("""
+**核心思路：** 当持仓浮盈首次达到 1R 时，将止损价上移至略高于开仓价的位置，使得即便趋势反转、
+被止损触出时，净盈亏 ≈ +$1（扣除滑点和佣金后），将原本的亏损单转化为保本或微盈。
+
+**数学原理 — 为什么只有 1R 有效，1.5R 和 2R 几乎没用：**
+
+策略1.0 止损 = 2×ATR，移动止盈初始倍数 = 3×ATR。
+
+当浮盈恰好达到 1.5R 时，移动止盈 = 最高价 − 3×ATR = (开仓价 + 1.5R) − 3×ATR = 开仓价。
+即移动止盈已自然等于开仓价，额外施加"平价保护 1.5R"完全没有保护作用；
+2R 阈值时移动止盈已高于开仓价，同样无效。**只有平价保护 1R 值得考虑。**
+""")
+
+# 尝试从 breakeven_scenarios.csv 动态读取关键指标
+_be_csv = _results_path / "breakeven_scenarios.csv"
+if _be_csv.exists():
+    import pandas as _pd_be
+    _be_df = _pd_be.read_csv(_be_csv)
+    _total_be = len(_be_df)
+    _trig_1r  = int(_be_df["be1r_triggered"].sum())
+    _mask_ch  = (
+        _be_df["be1r_triggered"]
+        & _be_df["be1r_exit_date"].notna()
+        & (_be_df["be1r_exit_date"] < _be_df["orig_exit_date"])
+    )
+    _n_changed  = int(_mask_ch.sum())
+    _n_helped   = int((_be_df[_mask_ch]["be1r_net_pnl"] > _be_df[_mask_ch]["orig_net_pnl"]).sum())
+    _n_hurt     = _n_changed - _n_helped
+
+    _nav_orig_be = pd.read_csv(_results_path / "nav.csv", parse_dates=["date"], index_col="date").iloc[:, 0]
+
+    def _build_be1r_nav(nav_orig):
+        ch = _be_df[_mask_ch]
+        d = pd.Series(0.0, index=nav_orig.index, dtype=float)
+        for dt, v in ch.groupby("orig_exit_date")["orig_net_pnl"].sum().items():
+            t = pd.Timestamp(dt)
+            if t in d.index:
+                d[t] -= v
+        for dt, v in ch.groupby("be1r_exit_date")["be1r_net_pnl"].sum().items():
+            t = pd.Timestamp(dt)
+            if t in d.index:
+                d[t] += v
+        return nav_orig + d.cumsum()
+
+    _nav_be1r_is = _build_be1r_nav(_nav_orig_be)
+    _ny_be = (_nav_orig_be.index[-1] - _nav_orig_be.index[0]).days / 365.25
+    _cagr_orig_be = (_nav_orig_be.iloc[-1] / _nav_orig_be.iloc[0]) ** (1 / _ny_be) - 1
+    _cagr_be1r_is = (_nav_be1r_is.iloc[-1] / _nav_be1r_is.iloc[0]) ** (1 / _ny_be) - 1
+    _mdd_orig_be  = ((_nav_orig_be - _nav_orig_be.cummax()) / _nav_orig_be.cummax()).min()
+    _mdd_be1r_is  = ((_nav_be1r_is - _nav_be1r_is.cummax()) / _nav_be1r_is.cummax()).min()
+
+    _be_rows = [
+        {"方案": "原始策略",    "CAGR": f"{_cagr_orig_be*100:.2f}%", "CAGR 变化": "—",
+         "最大回撤": f"{_mdd_orig_be*100:.2f}%", "最大回撤变化": "—"},
+        {"方案": "平价保护 1R", "CAGR": f"{_cagr_be1r_is*100:.2f}%",
+         "CAGR 变化": f"{(_cagr_be1r_is-_cagr_orig_be)*100:+.2f} pp",
+         "最大回撤": f"{_mdd_be1r_is*100:.2f}%",
+         "最大回撤变化": f"{(_mdd_be1r_is-_mdd_orig_be)*100:+.2f} pp"},
+    ]
+    st.dataframe(pd.DataFrame(_be_rows), use_container_width=True, hide_index=True)
+
+    st.markdown(f"""
+**回测结果（{_total_be:,} 笔交易，2000–2026）：**
+
+- **{_trig_1r:,} 笔**（{_trig_1r/_total_be*100:.0f}%）交易的浮盈曾达到过 1R 阈值
+- 其中 **{_n_changed} 笔**因平价保护提前出场（其余在触发保护后继续上涨，移动止盈已自然高于开仓价）
+- 提前出场的 {_n_changed} 笔中：**{_n_helped} 笔改善**（{_n_helped/_n_changed*100:.0f}%，原本亏损 → 保本/微盈），
+  **{_n_hurt} 笔受损**（{_n_hurt/_n_changed*100:.0f}%，原本盈利 → 提前出场利润减少）
+- 净效果：最大回撤 **{_mdd_orig_be*100:.2f}% → {_mdd_be1r_is*100:.2f}%**（改善 {(_mdd_be1r_is-_mdd_orig_be)*100:.2f} pp），CAGR 变化 {(_cagr_be1r_is-_cagr_orig_be)*100:+.2f} pp
+""")
+else:
+    st.info("平价保护模拟数据（breakeven_scenarios.csv）暂未生成，关键结论如下：")
+    st.markdown("""
+- 最大回撤从 **−19.3%** 改善至约 **−18.2%**（改善约 **−1.1 pp**）
+- CAGR 几乎不变（+0.02 pp），胜率略微提升
+- 约 43% 的交易浮盈曾达到 1R，其中约 21% 最终因平价保护提前出场
+- 提前出场的交易中约 74% 被改善（原亏 → 保本），26% 受损（提前截短盈利）
+""")
+
+st.markdown("""
+**实现方式（1 行代码）：**
+
+```python
+# 在 exit.py 的出场循环中，移动止盈更新后加：
+be_price = (entry_price * shares + entry_commission + 1) / (shares * (1 - slip_rate - comm_rate))
+if peak_r >= 1.0:
+    trail_stop = max(trail_stop, be_price)
+```
+
+**注意事项：**
+- 约有 {_n_hurt if _be_csv.exists() else "少量"} 笔原本盈利的交易会因平价保护提前出场而减少获利，这是不可避免的代价
+- 对最长连续亏损次数**无明显改善**，连亏问题需通过其他方式解决
+- 平价保护不替代止损逻辑，只是在浮盈归零之前增加一道"底线保护"
+- 详细分析与图表见专项页面：**如何用平价保护改善最大回撤**
+""")
+
+st.markdown("---")
+
+# ── 九、分段移动止盈 ─────────────────────────────────────────────────────────
+st.subheader("十、分段移动止盈")
 
 st.markdown("#### 8.1 当前三档移动止盈的敏感性")
 
