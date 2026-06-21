@@ -186,8 +186,7 @@ st.markdown(f"""
             border-radius:6px;margin:8px 0 12px 0;">
 <strong>✅ 推荐实盘配置（建议仓位 20%–40%）</strong><br>
 策略具备正期望（零破产概率）、无过拟合证据、参数鲁棒性良好、规则透明可执行。<br>
-定位：<strong>防御性趋势配置</strong>——相对于 SPY 买入持有，用约 35% 的最大回撤
-换取接近的长期收益，并在系统性熊市中提供显著的下行保护。
+定位：<strong>防御性趋势配置</strong>——相对于 SPY 买入持有，在系统性熊市中提供显著的下行保护。
 </div>
 """, unsafe_allow_html=True)
 
