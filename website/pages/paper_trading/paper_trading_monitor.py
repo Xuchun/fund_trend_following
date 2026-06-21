@@ -349,7 +349,7 @@ with tab1:
     st.markdown("---")
 
     # ── Stop detail ──────────────────────────────────────────────────────────
-    st.subheader("四、移动止损明细")
+    st.subheader("五、移动止损明细")
     if _m1_ok:
         _sd = pd.DataFrame([{
             "标的": p["ticker"], "状态": "🔴" if p["is_stopped"] else "✅",
