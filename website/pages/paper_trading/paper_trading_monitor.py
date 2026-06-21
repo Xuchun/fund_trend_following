@@ -289,7 +289,7 @@ with tab1:
     _next_td = _today + _dt.timedelta(days=1)
     while _next_td.weekday() >= 5:  # 5=Sat, 6=Sun
         _next_td += _dt.timedelta(days=1)
-    st.caption(f"下一交易日预计：{_next_td}（不含美股假日）｜ 以下订单在开盘后按市价执行")
+    st.caption(f"下一交易日预计：{_next_td} ｜ 以下订单在开盘后按市价执行")
 
     if _m1_today_sig:
         _sig_exits   = _m1_today_sig.get("exits", [])
