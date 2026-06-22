@@ -374,7 +374,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _next_td = _today + _dt.timedelta(days=1)
     while _next_td.weekday() >= 5:  # 5=Sat, 6=Sun
         _next_td += _dt.timedelta(days=1)
-    st.markdown(f"<span style='color:#111111'>下一交易日预计：{_next_td} ｜ 以下订单在开盘后按市价执行</span>", unsafe_allow_html=True)
+    st.markdown(f"<span style='color:#111111'>执行日：{_next_td} 开盘 ｜ 以下订单在开盘后按市价执行</span>", unsafe_allow_html=True)
 
     _sig_exits   = _m1_today_sig.get("exits", []) if _m1_today_sig else []
     _sig_entries = _m1.get("pending_entries", [])  # signals from today → execute tomorrow at open
