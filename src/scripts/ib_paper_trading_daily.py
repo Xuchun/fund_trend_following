@@ -599,6 +599,29 @@ def main() -> None:
 
     save_state(state)
 
+    # --- Auto git push ib_state.json if changed ---
+    _ib_state_rel = "results/paper_trading/ib_state.json"
+    try:
+        _status = subprocess.run(
+            ["git", "status", "--porcelain", _ib_state_rel],
+            capture_output=True, text=True, cwd=str(_root),
+        )
+        if _status.stdout.strip():
+            subprocess.run(["git", "add", _ib_state_rel],
+                           check=True, cwd=str(_root))
+            subprocess.run(["git", "commit", "-m",
+                            f"auto: IB paper trading {today}"],
+                           check=True, cwd=str(_root))
+            subprocess.run(["git", "push"],
+                           check=True, cwd=str(_root))
+            log.info("  git: ib_state.json pushed to GitHub ✅")
+        else:
+            log.info("  git: ib_state.json unchanged, skip push")
+    except subprocess.CalledProcessError as e:
+        log.warning(f"  git push failed (non-fatal): {e}")
+    except Exception as e:
+        log.warning(f"  git push error (non-fatal): {e}")
+
     # --- Final summary ---
     log.info("=== Summary ===")
     log.info(f"  Exits:       {len(new_closed)}")
