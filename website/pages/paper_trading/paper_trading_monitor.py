@@ -532,7 +532,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             "当前价": f"${p['current_price']:.2f}", "历史最高": f"${p['peak_price']:.2f}",
             "ATR(20)": f"${p['current_atr']:.2f}", "乘数": f"{p['trail_mult']:.1f}×",
             "止损价": f"${p['current_stop']:.2f}", "价格距止损": f"{p['stop_buffer_pct']:.1f}%",
-        } for p in sorted(_m1_ok, key=lambda x: x.get("stop_buffer_pct", 999))])
+        } for p in sorted(_m1_ok, key=lambda x: x["ticker"])])
         st.dataframe(_sd, use_container_width=True, hide_index=True)
 
     st.markdown("---")
