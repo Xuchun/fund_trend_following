@@ -31,7 +31,7 @@ State file: results/paper_trading/ib_state.json
     - Commit + push after each run to update the Streamlit monitor page
 """
 
-import sys, json, argparse, logging, math
+import sys, json, argparse, logging, math, subprocess
 from pathlib import Path
 from datetime import date, datetime, timezone
 
