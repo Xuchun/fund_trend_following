@@ -348,6 +348,7 @@ def main() -> None:
     current_nav = mkt_value + state.get("cash", 0.0)
 
     # --- Step 4: new entries ---
+    candidates: list[dict] = []
     entries_executed: list[dict] = []
     if regime_ok and not args.no_entries:
         log.info("--- Scanning universe for new entries ---")
