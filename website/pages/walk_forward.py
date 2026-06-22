@@ -384,6 +384,8 @@ Sharpe **{_w5_sharpe:+.3f}**，是 5 个窗口中表现最强的一个。
         unsafe_allow_html=True,
     )
 
+    st.page_link("pages/overfitting_analysis.py", label="→ 策略是否过度拟合（深度分析）", icon="🔍")
+
     # 数据更新对比
     from website.utils.comparison import render_wf_comparison
     render_wf_comparison(meta, wf_data)
