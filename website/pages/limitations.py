@@ -161,8 +161,8 @@ st.markdown("---")
 # ── 3. Prolonged underwater ───────────────────────────────────────────────────
 st.subheader("3. 长期资金占用：水下时间可达数年")
 
-_avg_uw_yr = 4.2
-_p95_uw_yr = 8.4
+_avg_uw_yr = None
+_p95_uw_yr = None
 
 if _mc:
     _dd_dur  = _mc.get("drawdown_duration", {})
