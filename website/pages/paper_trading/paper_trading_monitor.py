@@ -448,11 +448,12 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
         with _tab_entry:
             if _ts_entries:
-                st.caption(f"以上 {len(_ts_entries)} 个入场信号是脚本扫描整个标的池后，在满足 Regime（{_ts_regime}）、Heat limit（≤10%）、Position cap（≤5%）等所有条件下产生的全部开仓信号，不是抽样。")
+                st.caption(f"以上 {len(_ts_entries)} 笔开仓已于今日开盘执行（前一交易日收盘信号，今日开盘价入场）。")
                 st.dataframe(pd.DataFrame([{
                     "标的": e["ticker"], "操作": "BUY",
                     "股数": e.get("shares", ""),
-                    "信号价": f"${e['signal_price']:.2f}" if e.get("signal_price") else "",
+                    "信号价（昨收）": f"${e['signal_price']:.2f}" if e.get("signal_price") else "",
+                    "入场价（今开）": f"${e['entry_price']:.2f}" if e.get("entry_price") else "",
                     "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "",
                     "风险%": f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "",
                 } for e in _ts_entries]), use_container_width=True, hide_index=True)
