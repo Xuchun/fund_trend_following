@@ -75,17 +75,11 @@ if regime_data and "regimes" in regime_data:
     # ── SPY 200SMA bull/bear overlay chart ────────────────────────────────
     @st.cache_data(ttl=86400)
     def _load_spy_sma():
-        _spy_p = Path(__file__).resolve().parents[2] / "data" / "cache" / "tiingo" / "SPY.parquet"
-        if not _spy_p.exists():
+        _csv_p = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m_2000" / "spy_sma200.csv"
+        if not _csv_p.exists():
             return None, None
-        _df = _pd_rg.read_parquet(_spy_p)
-        _df.index = _pd_rg.DatetimeIndex(_df.index)
-        _df = _df.sort_index()
-        _col = "adjClose" if "adjClose" in _df.columns else ("close" if "close" in _df.columns else None)
-        if _col is None:
-            return None, None
-        _c = _df[_col]
-        return _c, _c.rolling(200).mean()
+        _df = _pd_rg.read_csv(_csv_p, parse_dates=["date"]).set_index("date")
+        return _df["close_adj"], _df["sma200"]
 
     _spy_close, _spy_sma = _load_spy_sma()
 
