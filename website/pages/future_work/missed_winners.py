@@ -559,6 +559,88 @@ st.markdown(
 """
 )
 
+# ── 建议一：实证回测结果 ──────────────────────────────────────────────────────
+st.markdown("##### 🧪 实证回测验证：切换排序键的实际效果")
+st.markdown(
+    "理论分析之外，我们实际运行了一次完整回测（2000–2026，monkey-patch 方式，"
+    "不修改任何源文件），将排序键从 `breakout_strength` 改为 `k_strength`，"
+    "其余所有参数保持与 Baseline 完全相同，结果如下："
+)
+
+_bt_data = {
+    "指标": ["CAGR", "Sharpe", "最大回撤", "Calmar", "胜率", "盈亏比", "交易笔数"],
+    "breakout_strength（当前）": ["10.58%", "0.644", "−19.29%", "0.548", "39.07%", "1.739", "3,335"],
+    "k_strength（实验）":        [ "9.39%", "0.591", "−16.26%", "0.577", "38.45%", "1.575", "3,363"],
+    "变化":                      ["−1.19 pp ❌", "−0.053 ❌", "+3.03 pp ✅", "+0.029 ✅", "−0.62 pp", "−0.164 ❌", "+28"],
+}
+st.dataframe(
+    pd.DataFrame(_bt_data),
+    use_container_width=True, hide_index=True,
+)
+
+_c_bt1, _c_bt2 = st.columns(2)
+with _c_bt1:
+    _fig_bt = go.Figure()
+    _metrics_bt = ["CAGR (%)", "Sharpe×10", "Profit Factor"]
+    _bs_vals     = [10.58, 0.644 * 10, 1.739]
+    _ks_vals     = [ 9.39, 0.591 * 10, 1.575]
+    _fig_bt.add_trace(go.Bar(
+        name="breakout_strength（当前）",
+        x=_metrics_bt, y=_bs_vals,
+        marker_color="#e67e22",
+        text=[f"{v:.2f}" for v in _bs_vals], textposition="outside",
+    ))
+    _fig_bt.add_trace(go.Bar(
+        name="k_strength（实验）",
+        x=_metrics_bt, y=_ks_vals,
+        marker_color="#3498db",
+        text=[f"{v:.2f}" for v in _ks_vals], textposition="outside",
+    ))
+    _fig_bt.update_layout(
+        barmode="group",
+        title="CAGR / Sharpe / 盈亏比 对比",
+        height=320, margin=dict(t=50, b=40),
+        legend=dict(x=0.3, y=1.1, orientation="h"),
+    )
+    st.plotly_chart(_fig_bt, use_container_width=True)
+
+with _c_bt2:
+    _fig_bt2 = go.Figure()
+    _fig_bt2.add_trace(go.Bar(
+        name="breakout_strength（当前）",
+        x=["最大回撤（绝对值 %）"],
+        y=[19.29],
+        marker_color="#e67e22",
+        text=["19.29%"], textposition="outside",
+    ))
+    _fig_bt2.add_trace(go.Bar(
+        name="k_strength（实验）",
+        x=["最大回撤（绝对值 %）"],
+        y=[16.26],
+        marker_color="#3498db",
+        text=["16.26%"], textposition="outside",
+    ))
+    _fig_bt2.update_layout(
+        barmode="group",
+        title="最大回撤对比（越低越好）",
+        yaxis=dict(range=[0, 25]),
+        height=320, margin=dict(t=50, b=40),
+        legend=dict(x=0.1, y=1.1, orientation="h"),
+    )
+    st.plotly_chart(_fig_bt2, use_container_width=True)
+
+st.warning(
+    "**实证结论：不推荐切换到 k_strength 排序。**\n\n"
+    "切换后 **CAGR 下降 1.19pp、Sharpe 下降 0.053、盈亏比下降 0.164**，"
+    "虽然最大回撤改善了 3.03pp，但代价过高。\n\n"
+    "**原因分析**：ATR 标准化会压低高波动股的 k 值排名。"
+    "趋势跟踪的超额收益主要来自高波动爆发型股票（小盘成长股、突破型个股），"
+    "这类股票在 breakout_strength 排序下靠前，在 k_strength 排序下被相对压低，"
+    "结果是更多低波动稳健型标的被优先执行——MaxDD 因此改善，"
+    "但少了那些爆发型大赢家，CAGR 和盈亏比显著下降。\n\n"
+    "**维持现有 `breakout_strength` 排序**，无需任何修改。"
+)
+
 # ── 建议二 ───────────────────────────────────────────────────────────────────
 st.markdown("#### ✅ 建议二：降低单笔仓位上限，扩大并发容量（中等改动，需回测验证）")
 
