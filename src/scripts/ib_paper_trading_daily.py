@@ -573,6 +573,7 @@ def main() -> None:
     history.append({"date": str(today), "nav": round(current_nav, 2)})
     state["nav_history"]     = sorted(history, key=lambda x: x["date"])
     state["last_update_date"] = str(today)
+    state["last_update_utc"]  = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     state["today_signals"]   = {
         "exits":   exit_orders,
         "entries": entry_orders,
