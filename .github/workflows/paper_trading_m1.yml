@@ -2,9 +2,9 @@ name: Paper Trading M1 — Daily Update
 
 on:
   schedule:
-    # 21:30 UTC = 5:30 PM ET (summer/EDT) = 4:30 PM ET (winter/EST)
-    # Runs Mon–Fri after US market close
-    - cron: '30 21 * * 1-5'
+    # 23:00 UTC = 7:00 PM ET (summer/EDT) = 6:00 PM ET (winter/EST)
+    # 2+ hours after US market close (4:00 PM ET) — ensures Yahoo Finance EOD data is available
+    - cron: '0 23 * * 1-5'
   workflow_dispatch:   # allow manual trigger from GitHub Actions UI
 
 permissions:
