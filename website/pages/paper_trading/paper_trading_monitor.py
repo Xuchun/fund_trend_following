@@ -684,6 +684,61 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _fig_ref.update_yaxes(ticksuffix="%", row=2, col=1)
         st.plotly_chart(_fig_ref, use_container_width=True)
 
+    st.markdown("---")
+
+    # ── 数据下载（方法一）────────────────────────────────────────────────────
+    st.subheader("数据下载（用于未来 Layer 4 过拟合分析）")
+    st.caption("以下为方法一（Yahoo Finance）所有已记录数据的当前快照")
+
+    _dl1_nav = _m1.get("nav_history", [])
+    _dl1_sig = _m1.get("signals_history", [])
+    _dl1_ct  = _m1.get("closed_trades", [])
+    _dl1_op  = [p for p in _m1.get("positions", []) if not p.get("closed")]
+
+    with st.expander(f"NAV 历史（{len(_dl1_nav)} 条）"):
+        if _dl1_nav:
+            st.dataframe(
+                pd.DataFrame(_dl1_nav).sort_values("date", ascending=False),
+                use_container_width=True, hide_index=True)
+        else:
+            st.info("暂无数据")
+
+    with st.expander(f"信号历史（{len(_dl1_sig)} 条）"):
+        if _dl1_sig:
+            st.dataframe(pd.DataFrame([{
+                "日期":      s["date"],
+                "Regime":    s.get("regime", ""),
+                "SPY收盘":   s.get("spy_close", ""),
+                "候选信号数": s.get("n_candidates", ""),
+                "实际开仓":  s.get("n_entries", ""),
+                "平仓数":    s.get("n_exits", ""),
+            } for s in reversed(_dl1_sig)]), use_container_width=True, hide_index=True)
+        else:
+            st.info("暂无数据")
+
+    with st.expander(f"平仓记录（{len(_dl1_ct)} 笔）"):
+        if _dl1_ct:
+            st.dataframe(
+                pd.DataFrame(_dl1_ct).sort_values("exit_date", ascending=False),
+                use_container_width=True, hide_index=True)
+        else:
+            st.info("暂无平仓记录")
+
+    with st.expander(f"当前持仓（{len(_dl1_op)} 只）"):
+        if _dl1_op:
+            st.dataframe(pd.DataFrame(_dl1_op), use_container_width=True, hide_index=True)
+        else:
+            st.info("当前无持仓")
+
+    from datetime import date as _date_cls
+    st.download_button(
+        label="⬇️ 下载方法一全部数据（ZIP）",
+        data=_build_method_zip(_m1, "m1"),
+        file_name=f"m1_paper_trading_{_date_cls.today().isoformat()}.zip",
+        mime="application/zip",
+        help="包含：NAV历史CSV、信号历史CSV、平仓记录CSV、持仓CSV、完整JSON",
+    )
+
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # TAB 2 — 方法二：IB 自动交易
