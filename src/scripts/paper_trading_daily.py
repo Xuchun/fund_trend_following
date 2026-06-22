@@ -323,10 +323,11 @@ def main() -> None:
     state = load_state()
     log.info(f"  Open positions: {len(state['positions'])} | Cash: ${state.get('cash',0)/1e6:.2f}M")
 
-    # --- Step 1: fetch data for open positions + SPY ---
-    pos_tickers = [p["ticker"] for p in state["positions"]]
-    log.info("--- Fetching position + SPY data ---")
-    pos_data = fetch_price_data(list(set(pos_tickers + ["SPY"])), period="300d")
+    # --- Step 1: fetch data for open positions + pending entries + SPY ---
+    pos_tickers     = [p["ticker"] for p in state["positions"]]
+    pending_tickers = [p["ticker"] for p in state.get("pending_entries", [])]
+    log.info("--- Fetching position + pending + SPY data ---")
+    pos_data = fetch_price_data(list(set(pos_tickers + pending_tickers + ["SPY"])), period="300d")
 
     spy_df     = pos_data.get("SPY")
     regime_ok  = is_bull_regime(spy_df)
