@@ -1268,7 +1268,7 @@ if _vol_d:
 st.markdown("---")
 
 # ── 六、入场条件 ───────────────────────────────────────────────────────────────
-st.subheader("十五、综合实施路径")
+st.subheader("十六、综合实施路径")
 
 st.markdown(f"""
 **当前基线：CAGR {metrics['cagr']*100:.2f}%，MaxDD -{abs(metrics['max_drawdown'])*100:.2f}%，Sharpe {metrics['sharpe']:.3f}**
