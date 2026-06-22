@@ -51,7 +51,7 @@ def _build_method_zip(data: dict, method: str) -> bytes:
         nav_h = data.get("nav_history", [])
         if nav_h:
             zf.writestr(f"{method}_nav_history.csv",
-                _rows_to_csv(nav_h, ["date", "nav", "regime"]))
+                _rows_to_csv(nav_h, ["date", "nav", "regime", "spy_close"]))
 
         sh = data.get("signals_history", [])
         if sh:
