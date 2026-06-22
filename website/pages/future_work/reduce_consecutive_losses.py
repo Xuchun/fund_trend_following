@@ -21,7 +21,7 @@ _results_path = _root / "results" / "v1_unbiased_60m_2000"
 _perturb_path = _root / "results" / "v1_unbiased_60m_2000" / "perturbation"
 
 st.title("如何降低连续亏损次数")
-st.caption("基于连续亏损序列分析，识别长序列的根本成因并提出可落地的改进建议")
+st.markdown("基于连续亏损序列分析，识别长序列的根本成因并提出可落地的改进建议")
 
 st.markdown("---")
 
@@ -435,7 +435,7 @@ if _volf2.exists():
         legend=dict(x=0.6, y=0.05), height=360, margin=dict(t=50, b=40),
     )
     st.plotly_chart(_fig_v2, use_container_width=True)
-    st.caption(
+    st.markdown(
         f"成交量要求从 1.0× 升至当前值 {_baseline_v2}×，CAGR 从 {_vc2[0]:.2f}% 升至 {_vc2[_vv2.index(_baseline_v2)]:.2f}%，"
         f"交易笔数从 {_vn2[0]:.0f} 降至 {_vn2[_vv2.index(_baseline_v2)]:.0f}。"
         "过滤低量突破提升了每笔交易质量，减少了假突破比例。继续提高阈值至 2.0× 反而伤害绩效（过度过滤）。"
@@ -491,7 +491,7 @@ _fig_sig2.update_layout(
     yaxis=dict(range=[0, max(_sig_counts2) * 1.2]),
 )
 st.plotly_chart(_fig_sig2, use_container_width=True)
-st.caption(
+st.markdown(
     f"有 {_sig_counts2[3]+_sig_counts2[4]+_sig_counts2[5]:,} 天（{_sig_pcts2[3]+_sig_pcts2[4]+_sig_pcts2[5]:.1f}%）每日信号数 ≥ 6个，"
     "这类高拥挤日下集中开仓风险最大。"
     "限制单日开仓数可防止在同一市场环境下押注过多相关标的。"
@@ -667,7 +667,7 @@ if "exit_reason" in trades.columns and "exit_date" in trades.columns:
     )
     st.plotly_chart(_fig_sl, use_container_width=True)
     _n_batch = sum(_sl_counts[2:])
-    st.caption(
+    st.markdown(
         f"共有 {_n_batch} 天出现同日 ≥3 笔止损，若每次触发后暂停5个交易日，"
         "预计可避免相当数量的「震荡市继续盲目开仓」情形。"
         "建议阈值设为3笔（可回测比较2/3/4笔的最优参数）。"

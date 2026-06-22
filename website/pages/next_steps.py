@@ -14,7 +14,7 @@ res  = get_results()
 meta = res.meta
 
 render_page_header("下一步计划", meta)
-st.caption(f"{meta.display_name} → Strategy 2.0 及后续路线图")
+st.markdown(f"{meta.display_name} → Strategy 2.0 及后续路线图")
 st.markdown("---")
 
 st.subheader("Phase 6：深度分析（进行中）")

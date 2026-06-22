@@ -476,7 +476,7 @@ with tab_del:
                  column_config={"累计满足天数": st.column_config.NumberColumn(format="%d 天")})
 
 with tab_all:
-    st.caption(f"现役 {len(rec_active):,} + 已退市 {len(rec_del):,}，满足 ≥252 交易日条件")
+    st.markdown(f"现役 {len(rec_active):,} + 已退市 {len(rec_del):,}，满足 ≥252 交易日条件")
     st.dataframe(_df_all_combined, use_container_width=True, hide_index=True,
                  column_config={"累计满足天数": st.column_config.NumberColumn(format="%d 天")})
 

@@ -236,7 +236,7 @@ def _render_param_section(data: dict, section_title: str, background_text: str):
 
     df = _make_table(data)
     st.dataframe(df, use_container_width=True, hide_index=True)
-    st.caption(
+    st.markdown(
         f"来源：results/v1_unbiased_60m_2000/perturbation/{param_name}.json  "
         f"（Tiingo 无偏差宇宙，rf=2%，{data['start']} → {data['end']}）"
     )
@@ -265,7 +265,7 @@ def _render_param_section(data: dict, section_title: str, background_text: str):
     col3.metric("CAGR 鲁棒性",  _robustness_label(cv_cagr))
     col4.metric("Sharpe 鲁棒性", _robustness_label(cv_sharpe))
     if not _cv_formula_shown[0]:
-        st.caption(
+        st.markdown(
             "📐 **CV（变异系数）计算公式：** CV = σ / |μ|，"
             "其中 σ = 该指标在所有测试参数值下的**标准差**，μ = **均值**（取绝对值）。"
             "CV 衡量参数变化对指标的相对影响：**CV < 0.10** = 高鲁棒（参数景观平坦，结果不依赖精确参数值）；"
@@ -323,7 +323,7 @@ st.info(
     "届时才须严格限制在 IS 截止日之前的数据。"
 )
 
-st.caption(
+st.markdown(
     "⚠️ **注意：各参数扰动测试中「基准值」的回测结果，可能与「Baseline 参数回测结果(Tiingo)」页面的数值略有差异**"
     f"（约 ±0.1–0.3% CAGR）。"
     "原因：两者由独立的 Python 进程分批运行，Tiingo 历史数据（价格/成交量）可能在两次运行之间经历小幅修订，"
@@ -916,7 +916,7 @@ if _DIAG_PATH.exists():
         f'</div>',
         unsafe_allow_html=True,
     )
-    st.caption("数据来源：results/v1_unbiased_60m_2000/diagnostics.json | 仅统计 exit_reason == stop_loss 的交易")
+    st.markdown("数据来源：results/v1_unbiased_60m_2000/diagnostics.json | 仅统计 exit_reason == stop_loss 的交易")
 
     st.markdown("#### B. 连续亏损序列分析")
     sa = diag.get("streak_analysis", {})
@@ -1163,7 +1163,7 @@ if _prev_ps.exists():
     _prev_ps_data = _json_ps.loads(_prev_ps.read_text())
     _prev_end_ps = _prev_ps_data.get("_run_end", "上次运行")
     st.markdown("---")
-    st.caption(
+    st.markdown(
         f"📅 **数据更新说明**：本页扰动分析已使用最新市场数据重新运行（全部 13 个参数，"
         f"共 {sum(len(v[1]) for v in [('trail_multiplier_r1',[2.0,2.5,3.0,3.5,4.0],False),('breakout_window',[150,170,200,230,250,270,300],True),('stop_loss_multiplier',[1.5,2.0,2.5,3.0],False),('risk_per_trade',[0.005,0.010,0.015,0.020],False),('position_cap',[0.03,0.05,0.07,0.10],False),('heat_limit',[0.05,0.10,0.15,0.20],False),('correlation_threshold',[0.5,0.6,0.7,0.8,0.9],False),('volume_filter_multiplier',[1.0,1.2,1.5,1.7,2.0],False),('min_price',[8.0,10.0,12.0,15.0],False),('min_market_cap_b',[2.0,3.0,4.0],False),('min_adv_m',[30.0,40.0,50.0,60.0,70.0,80.0,90.0,100.0],False),('slippage_bps',[5.0,8.0,10.0,12.0,15.0],False),('commission_bps',[1.0,3.0,5.0],False)])} 次"
         f"），回测终止日从 **{_prev_end_ps}** 延伸至最新市场数据。结论的鲁棒性判断见上方各参数图表。"

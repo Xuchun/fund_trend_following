@@ -147,7 +147,7 @@ def render_data_update_comparison(current_meta, current_metrics: dict):
     else:
         summary = f"新增数据对策略表现有轻微影响：CAGR {'▲' if cagr_delta > 0 else '▼'} {abs(cagr_delta)*100:.2f}pp，Sharpe {'▲' if sharpe_delta > 0 else '▼'} {abs(sharpe_delta):.4f}。"
 
-    st.caption(f"📊 小结：{summary}")
+    st.markdown(f"📊 小结：{summary}")
 
 
 def render_mc_comparison(current_meta, mc_data: dict):

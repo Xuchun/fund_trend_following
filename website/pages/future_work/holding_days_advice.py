@@ -14,7 +14,7 @@ import plotly.graph_objects as go
 _results_path = _root / "results" / "v1_unbiased_60m_2000"
 
 st.title("有关持仓天数的建议")
-st.caption('分析"是否应该限制大持仓天数（如>365天）来提高资金使用率、CAGR，同时保持或降低最大回撤"')
+st.markdown('分析"是否应该限制大持仓天数（如>365天）来提高资金使用率、CAGR，同时保持或降低最大回撤"')
 
 st.markdown("---")
 

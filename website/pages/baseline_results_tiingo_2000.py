@@ -201,7 +201,7 @@ with _col_b:
 | 初始资金 | — | **\$10,000,000** |
 """)
 
-st.caption(
+st.markdown(
     "⚠ 参数说明：`min_market_cap_b`（最低市值）仅在数据预筛选阶段过滤初始标的池，"
     "回测引擎对已入池标的不再二次检验市值，敏感性分析显示该参数对结果无影响。"
     "`risk_per_trade` 为仓位公式的目标风险输入，但当计算出的持仓市值超过 `position_cap`（单标的上限）时，"
@@ -755,7 +755,7 @@ import plotly.graph_objects as _go_l20
 import numpy as _np_l20
 
 st.subheader("Top 20亏损交易分析")
-st.caption("已平仓交易中 R 倍数最差的 20 笔——寻找大亏家的共性规律")
+st.markdown("已平仓交易中 R 倍数最差的 20 笔——寻找大亏家的共性规律")
 
 _l20 = res.trades.nsmallest(20, "pnl_r_multiple").copy()
 _l20["类别"]     = _l20["ticker"].apply(lambda t: "ETF" if t in _ETF_SET else "股票")
@@ -1251,7 +1251,7 @@ import plotly.graph_objects as _go_t20
 import numpy as _np_t20
 
 st.subheader("Top 20盈利交易分析")
-st.caption("已平仓交易中 R 倍数最高的 20 笔——寻找大赢家的共性规律")
+st.markdown("已平仓交易中 R 倍数最高的 20 笔——寻找大赢家的共性规律")
 
 _t20 = res.trades.nlargest(20, "pnl_r_multiple").copy()
 _t20["类别"]     = _t20["ticker"].apply(lambda t: "ETF" if t in _ETF_SET else "股票")
@@ -1677,14 +1677,14 @@ with col3:
               help="股票每投入1元产生的回报是 ETF 的多少倍")
 _s_pct = stock_pnl / total_pnl * 100 if total_pnl != 0 else 0
 _s_cap_pct = _s["notional"] / (_s["notional"] + _e["notional"]) * 100
-st.caption(f"资本效率 = 净盈亏 ÷ 总买入金额。{_s_pct:.0f}% 利润来自股票，但也因为股票占用了更多资本（{_s_cap_pct:.0f}%）；关键在于每单位资本的回报率，股票是 ETF 的 {ratio:.1f}×。")
+st.markdown(f"资本效率 = 净盈亏 ÷ 总买入金额。{_s_pct:.0f}% 利润来自股票，但也因为股票占用了更多资本（{_s_cap_pct:.0f}%）；关键在于每单位资本的回报率，股票是 ETF 的 {ratio:.1f}×。")
 
 st.markdown("#### 分散化价值")
 _corr_label = "几乎零相关" if abs(_corr) < 0.2 else ("低相关" if abs(_corr) < 0.4 else "中等相关")
 col1, col2 = st.columns([1, 2])
 with col1:
     st.metric("月度盈亏相关性", f"{_corr:.3f}", help="股票 vs ETF 月度净盈亏的 Pearson 相关系数")
-    st.caption(f"→ {_corr_label}，ETF 提供真实的分散化价值")
+    st.markdown(f"→ {_corr_label}，ETF 提供真实的分散化价值")
 with col2:
     # 找ETF救场的关键年份
     _trades["_year"] = _trades["exit_date"].dt.year
@@ -1720,7 +1720,7 @@ if _m_s_path.exists() and _m_e_path.exists():
     _m_etfs   = _json_cmp.loads(_m_e_path.read_text())
 
     st.markdown("#### 对照实验：仅股票 / 仅ETF / 混合（基准）")
-    st.caption("其他条件完全相同（策略参数、回测区间），仅改变标的池组成。")
+    st.markdown("其他条件完全相同（策略参数、回测区间），仅改变标的池组成。")
 
     _cmp_rows = [
         ("CAGR",           "cagr",               lambda v: f"{v*100:+.1f}%"),

@@ -236,7 +236,7 @@ if _bw_data and _sl_data:
     _fig_plateau.update_yaxes(title_text="Sharpe", row=1, col=1)
     _fig_plateau.update_yaxes(title_text="Sharpe", row=1, col=2)
     st.plotly_chart(_fig_plateau, use_container_width=True)
-    st.caption("两个参数景观均呈现「高原形态」：基准值附近表现稳定，无对单一精确值的依赖。")
+    st.markdown("两个参数景观均呈现「高原形态」：基准值附近表现稳定，无对单一精确值的依赖。")
 
 st.markdown("---")
 

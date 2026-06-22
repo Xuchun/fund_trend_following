@@ -48,7 +48,7 @@ def setup_sidebar() -> StrategyResults:
                 f'📌 {strategies[0].display_name}</div>',
                 unsafe_allow_html=True,
             )
-            st.caption(strategies[0].subtitle)
+            st.markdown(strategies[0].subtitle)
         else:
             selected_label = st.selectbox(
                 "选择策略版本",
@@ -58,7 +58,7 @@ def setup_sidebar() -> StrategyResults:
             selected_idx = strategy_labels.index(selected_label)
 
         st.markdown("---")
-        st.caption(
+        st.markdown(
             f"回测期间：{strategies[selected_idx].backtest_start[:4]}–"
             f"{strategies[selected_idx].backtest_end[:4]}\n\n"
             f"标的：{strategies[selected_idx].universe_stocks} 只股票 + "

@@ -14,7 +14,7 @@ import streamlit as st
 _pio.templates.default = "plotly_white"
 
 st.title("是否购买第二家数据源？")
-st.caption("评估 Tiingo EOD 数据质量及是否需要第二数据源交叉验证回测结论")
+st.markdown("评估 Tiingo EOD 数据质量及是否需要第二数据源交叉验证回测结论")
 st.markdown("---")
 
 # ── Tiingo Data Quality Visualization ────────────────────────────────────────

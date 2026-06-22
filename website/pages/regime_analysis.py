@@ -133,7 +133,7 @@ if regime_data and "regimes" in regime_data:
         )
         _fig_rg.update_yaxes(tickformat=".2f")
         st.plotly_chart(_fig_rg, use_container_width=True)
-        st.caption(
+        st.markdown(
             "红色背景区域：SPY 收盘价低于 200 日均线，策略暂停开立新仓（已持仓继续按止损/移动止盈管理）。"
             " TLT、GLD、UUP 在熊市期间豁免此限制，仍可开仓。"
         )
@@ -233,7 +233,7 @@ if regime_data and "regimes" in regime_data:
         s   = data.get("strategy", {})
         spy = data.get("spy", {})
         with st.expander(f"{name}  ({data['start'][:7]} → {data['end'][:7]})"):
-            st.caption(REGIME_DESC.get(name, ""))
+            st.markdown(REGIME_DESC.get(name, ""))
             cols = st.columns(5)
             cols[0].metric("策略1.0 CAGR",    f"{s.get('cagr',0)*100:+.1f}%")
             cols[1].metric("策略1.0 Sharpe",   f"{s.get('sharpe',0):+.3f}")

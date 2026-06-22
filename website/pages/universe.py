@@ -19,7 +19,7 @@ _ticker_csv_path = Path(__file__).resolve().parents[2] / "results" / "v1" / "uni
 render_page_header("数据与标的池", meta)
 _cap_col, _btn_col = st.columns([5, 1])
 with _cap_col:
-    st.caption(f"回测期间：{meta.backtest_start} → {meta.backtest_end}")
+    st.markdown(f"回测期间：{meta.backtest_start} → {meta.backtest_end}")
 with _btn_col:
     if _ticker_csv_path.exists():
         st.download_button(
@@ -29,7 +29,7 @@ with _btn_col:
             mime="text/csv",
         )
     else:
-        st.caption("标的池文件未找到")
+        st.markdown("标的池文件未找到")
 st.markdown("---")
 
 # ── Overview ──────────────────────────────────────────────────────────────────

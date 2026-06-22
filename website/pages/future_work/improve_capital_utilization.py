@@ -31,7 +31,7 @@ def _fmt_delta(b: float, e: float) -> str:
     return f"{'+' if d>=0 else ''}{d:.3f}"
 
 st.title("如何提高熊市资金使用率")
-st.caption("通过熊市期间允许 TLT、GLD、UUP 三只避险 ETF 开仓，填补熊市现金空窗")
+st.markdown("通过熊市期间允许 TLT、GLD、UUP 三只避险 ETF 开仓，填补熊市现金空窗")
 st.markdown("---")
 
 # ── 问题背景 ──────────────────────────────────────────────────────────────────

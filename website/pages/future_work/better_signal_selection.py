@@ -17,7 +17,7 @@ _results_path = _root / "results" / "v1_unbiased_60m_2000"
 _perturb_path = _root / "results" / "v1_unbiased_60m_2000" / "perturbation"
 
 st.title("如何选中更优开仓信号")
-st.caption('基于"每日开仓信号：已开仓 vs 放弃开仓"分析，找到改进信号选择机制的方向，从而提高 CAGR 并保持甚至降低最大回撤')
+st.markdown('基于"每日开仓信号：已开仓 vs 放弃开仓"分析，找到改进信号选择机制的方向，从而提高 CAGR 并保持甚至降低最大回撤')
 
 st.markdown("---")
 
@@ -514,7 +514,7 @@ if _pcap_f.exists():
         legend=dict(x=0.4, y=0.05), height=380, margin=dict(t=50, b=40, r=80),
     )
     st.plotly_chart(_fig_pc, use_container_width=True)
-    st.caption(
+    st.markdown(
         f"当前 position_cap = {_baseline_pc:.0%}（绿色），CAGR = {_pcc[_pcv.index(_baseline_pc)]:.2f}%，{_pcn[_pcv.index(_baseline_pc)]:.0f} 笔交易。"
         f"降至 3% 时交易笔数大幅增加至 {_pcn[0]:.0f} 笔，但每笔规模缩小，CAGR 降至 {_pcc[0]:.2f}%。"
         "提高至 7% 时交易笔数减少、持仓集中度上升，MaxDD 增至 22.9%。当前 5% 是 CAGR 最优点。"

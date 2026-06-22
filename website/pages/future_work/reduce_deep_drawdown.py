@@ -47,7 +47,7 @@ _dd_dates = set(_dd[_dd < -10].index.date)
 _trd["during_deep_dd"] = _trd["entry_date"].dt.date.isin(_dd_dates)
 
 st.title("如何减少深度回撤幅度")
-st.caption(
+st.markdown(
     f"探讨三种可降低深度回撤持续时长的改进方向，"
     f"基于策略1.0深度回撤分析（共 {len(_edf)} 次 NAV 连续低于高水位 −10% 的回撤期）"
 )
@@ -259,7 +259,7 @@ if _heat_path.exists():
         margin=dict(t=50, b=40),
     )
     st.plotly_chart(fig_heat, use_container_width=True)
-    st.caption(
+    st.markdown(
         f"当前 baseline heat_limit = {heat_data['baseline_value']:.0%}。"
         f"降至 5% 时 MaxDD 降至约 {h_mdd[1]:.1f}%，但 CAGR 也下降至 {h_cagr[1]:.2f}%，"
         "说明静态热度上限降低会同时伤害收益。动态版本（仅在深度回撤时降低）可能更优，"
@@ -344,7 +344,7 @@ if _trail_path.exists():
     st.plotly_chart(fig_trail, use_container_width=True)
 
     best_idx = t_cagr.index(max(t_cagr))
-    st.caption(
+    st.markdown(
         f"CAGR 最高点在 trail = {tv[best_idx]}（当前值），"
         f"CAGR = {t_cagr[best_idx]:.2f}%，MaxDD = −{t_mdd[best_idx]:.1f}%。"
         f"trail = 3.5 时 MaxDD 降至最低（−{min(t_mdd):.1f}%），"

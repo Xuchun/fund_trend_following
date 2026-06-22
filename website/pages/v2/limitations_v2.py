@@ -10,7 +10,7 @@ import streamlit as st
 from website.shared import render_v2_page_header
 
 render_v2_page_header("局限性声明")
-st.caption("策略2.0 · 横盘收敛 + 箱体突破趋势跟踪")
+st.markdown("策略2.0 · 横盘收敛 + 箱体突破趋势跟踪")
 st.markdown("---")
 
 st.markdown("""

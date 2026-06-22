@@ -14,7 +14,7 @@ meta = res.meta
 p    = meta.params_anchor
 
 render_v2_page_header("策略描述")
-st.caption("策略2.0 · 横盘收敛 + 箱体突破趋势跟踪")
+st.markdown("策略2.0 · 横盘收敛 + 箱体突破趋势跟踪")
 st.markdown("---")
 
 # ── 策略概述 ──────────────────────────────────────────────────────────────────

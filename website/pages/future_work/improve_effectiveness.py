@@ -18,7 +18,7 @@ _pio.templates.default = "plotly_white"
 _results_path = _root / "results" / "v1_unbiased_60m_2000"
 
 st.title("如何改进策略有效性")
-st.caption(
+st.markdown(
     '基于26年回测的「策略有效性分析」，深入研究Alpha压缩的根本原因，并从数据出发提出两条可落地的改进路径'
 )
 

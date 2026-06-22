@@ -15,7 +15,7 @@ from plotly.subplots import make_subplots
 _results = _root / "results" / "v1_unbiased_60m_2000"
 
 st.title("如何降低最大回撤")
-st.caption("基于参数敏感性回测数据（2000–2026）和交易行为深度分析，提出三种降低最大回撤的具体方法")
+st.markdown("基于参数敏感性回测数据（2000–2026）和交易行为深度分析，提出三种降低最大回撤的具体方法")
 
 st.markdown("---")
 
@@ -56,7 +56,7 @@ st.markdown("---")
 
 # ══════════════════════════════════════════════════════════════════════════════
 st.subheader("方法一：将突破窗口调整为 breakout_window = 150")
-st.caption("唯一有完整26年回测数据直接验证的参数调整，效果最确定，实现难度最低")
+st.markdown("唯一有完整26年回测数据直接验证的参数调整，效果最确定，实现难度最低")
 
 if _bw:
     _bw_df = pd.DataFrame(_bw["results"])
@@ -116,7 +116,7 @@ if _bw:
     _fig_bw.update_xaxes(title_text="突破窗口（天），其余参数保持 baseline 不变")
     st.plotly_chart(_fig_bw, use_container_width=True)
 
-    st.caption("绿色 = MaxDD 优于 baseline（200日），灰色 = baseline，红色 = MaxDD 差于 baseline")
+    st.markdown("绿色 = MaxDD 优于 baseline（200日），灰色 = baseline，红色 = MaxDD 差于 baseline")
 
     # 完整数据表
     _tbl_bw = _bw_df[["param_value","max_drawdown","sharpe","cagr","calmar",
@@ -169,7 +169,7 @@ st.markdown("---")
 
 # ══════════════════════════════════════════════════════════════════════════════
 st.subheader("方法二：增加震荡市检测器（Choppiness Filter）")
-st.caption("解决现有 Regime Filter 的核心盲区：能识别熊市，但无法识别震荡牛市")
+st.markdown("解决现有 Regime Filter 的核心盲区：能识别熊市，但无法识别震荡牛市")
 
 # ── 连亏序列分析 ──────────────────────────────────────────────────────────────
 _st = trades.sort_values("exit_date").reset_index(drop=True)
@@ -305,7 +305,7 @@ st.markdown("---")
 
 # ══════════════════════════════════════════════════════════════════════════════
 st.subheader("方法三：假突破快速离场（Failed Breakout Rule）")
-st.caption("针对开仓后快速失败的交易：这批交易贡献了最大的绝对亏损，却对利润几乎没有贡献")
+st.markdown("针对开仓后快速失败的交易：这批交易贡献了最大的绝对亏损，却对利润几乎没有贡献")
 
 # ── 持仓天数分桶分析 ──────────────────────────────────────────────────────────
 _total_pnl = trades["net_pnl"].sum()

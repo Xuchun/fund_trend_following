@@ -80,7 +80,7 @@ if res.spy_nav is not None:
 
 
 render_page_header("Baseline参数回测结果", meta)
-st.caption(f"回测期间：{meta.backtest_start} → {meta.backtest_end}  ·  初始资金：$10,000,000")
+st.markdown(f"回测期间：{meta.backtest_start} → {meta.backtest_end}  ·  初始资金：$10,000,000")
 st.markdown("---")
 
 # ── Summary cards ─────────────────────────────────────────────────────────────
@@ -119,7 +119,7 @@ st.markdown("---")
 # ── Baseline parameter table ───────────────────────────────────────────────────
 _p = meta.params_anchor
 st.subheader("📋 Baseline 锚点参数（完整）")
-st.caption("以下参数值与设计方案 §1.2.1.1、代码 StrategyParams 及回测脚本三处完全一致。")
+st.markdown("以下参数值与设计方案 §1.2.1.1、代码 StrategyParams 及回测脚本三处完全一致。")
 
 _col_a, _col_b = st.columns(2)
 
@@ -143,7 +143,7 @@ with _col_a:
 | 最低市值 | `min_market_cap_b` | **\$2B**（注①）|
 | ADV 流动性 | `min_adv_m` | **\$20M**（60日均量）|
 """)
-    st.caption("注①：Yahoo Finance 不提供历史点位市值，该过滤在回测中实际未执行（见参数敏感性分析页）。")
+    st.markdown("注①：Yahoo Finance 不提供历史点位市值，该过滤在回测中实际未执行（见参数敏感性分析页）。")
 
     st.markdown("**止损 / 最小止损距离**")
     st.markdown(f"""
@@ -171,7 +171,7 @@ with _col_b:
 | 单标的仓位上限 | `position_cap` | **{_p['position_cap']*100:.0f}% NAV** |
 | 热度上限 | `heat_limit` | **{_p['heat_limit']*100:.0f}% NAV**（注②）|
 """)
-    st.caption("注②：由于 position_cap 架空效应，实际每笔风险约 0.24% NAV，heat_limit ≥ 10% 在回测中从未触发（见参数敏感性分析页）。")
+    st.markdown("注②：由于 position_cap 架空效应，实际每笔风险约 0.24% NAV，heat_limit ≥ 10% 在回测中从未触发（见参数敏感性分析页）。")
 
     st.markdown("**相关性过滤**")
     st.markdown(f"""
@@ -290,7 +290,7 @@ if len(_ep_df) > 0:
     st.dataframe(_ep_df_sorted, use_container_width=True, hide_index=True)
     _avg_rec = _ep_df[_ep_df["修复"] != "进行中"]["修复耗时（交易日）"].mean()
     _avg_trough = _ep_df["至低谷（交易日）"].mean()
-    st.caption(
+    st.markdown(
         f"共 {len(_ep_df)} 次回撤 ≥ 5% 的情节；"
         f"平均 {_avg_trough:.0f} 个交易日触底，"
         f"触底后平均 {_avg_rec:.0f} 个交易日修复（已修复情节）。"
@@ -586,14 +586,14 @@ with col3:
               help="股票每投入1元产生的回报是 ETF 的多少倍")
 _s_pct = stock_pnl / total_pnl * 100 if total_pnl != 0 else 0
 _s_cap_pct = _s["notional"] / (_s["notional"] + _e["notional"]) * 100
-st.caption(f"资本效率 = 净盈亏 ÷ 总买入金额。{_s_pct:.0f}% 利润来自股票，但也因为股票占用了更多资本（{_s_cap_pct:.0f}%）；关键在于每单位资本的回报率，股票是 ETF 的 {ratio:.1f}×。")
+st.markdown(f"资本效率 = 净盈亏 ÷ 总买入金额。{_s_pct:.0f}% 利润来自股票，但也因为股票占用了更多资本（{_s_cap_pct:.0f}%）；关键在于每单位资本的回报率，股票是 ETF 的 {ratio:.1f}×。")
 
 st.markdown("#### 分散化价值")
 _corr_label = "几乎零相关" if abs(_corr) < 0.2 else ("低相关" if abs(_corr) < 0.4 else "中等相关")
 col1, col2 = st.columns([1, 2])
 with col1:
     st.metric("月度盈亏相关性", f"{_corr:.3f}", help="股票 vs ETF 月度净盈亏的 Pearson 相关系数")
-    st.caption(f"→ {_corr_label}，ETF 提供真实的分散化价值")
+    st.markdown(f"→ {_corr_label}，ETF 提供真实的分散化价值")
 with col2:
     # 找ETF救场的关键年份
     _trades["_year"] = _trades["exit_date"].dt.year

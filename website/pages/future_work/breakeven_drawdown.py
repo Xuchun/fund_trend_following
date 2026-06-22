@@ -95,7 +95,7 @@ def _max_consec(lbl):
 
 # ── Page ──────────────────────────────────────────────────────────────────────
 st.title("如何用平价保护改善最大回撤")
-st.caption("分析平价保护（Breakeven Protection）对策略最大回撤的影响，并给出可落地的使用建议")
+st.markdown("分析平价保护（Breakeven Protection）对策略最大回撤的影响，并给出可落地的使用建议")
 
 st.markdown("---")
 

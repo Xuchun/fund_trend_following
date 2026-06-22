@@ -19,7 +19,7 @@ _res = get_results()
 _trd = _res.trades.copy()
 
 st.title("如何减少大 R 的亏损交易")
-st.caption("基于 Top 20 亏损交易分析，识别大 R 亏损的根本原因并提出可落地的改进建议")
+st.markdown("基于 Top 20 亏损交易分析，识别大 R 亏损的根本原因并提出可落地的改进建议")
 
 st.markdown("---")
 
@@ -140,7 +140,7 @@ fig_rdist.update_layout(
     margin=dict(t=50, b=40),
 )
 st.plotly_chart(fig_rdist, use_container_width=True)
-st.caption(
+st.markdown(
     f"大部分亏损集中在 −0.5R 至 −1.5R 区间（共 {sum(bucket_counts[:3]):,} 笔）；"
     f"极端亏损（< −2R）仅 {sum(bucket_counts[3:]):,} 笔，但每笔绝对金额更大。"
 )
@@ -188,7 +188,7 @@ fig_hold.update_layout(
 st.plotly_chart(fig_hold, use_container_width=True)
 
 pnl_early = sum(b_pnl[:2])
-st.caption(
+st.markdown(
     f"持仓 1−10 天即离场的亏损共 {b_counts[0]+b_counts[1]:,} 笔，累计亏损 ${abs(pnl_early):.1f}M，"
     f"平均 R ≈ {(b_avg_r[0]+b_avg_r[1])/2:.2f}。"
     "短期即止损的交易 R 倍数反而更大，说明这类「假突破」进场当日就开始反向。"
@@ -412,7 +412,7 @@ if "atr_pct" in _trd.columns:
     st.plotly_chart(fig_atr, use_container_width=True)
     big_atr  = group_atrs[0]
     all_atr  = _trd["atr_pct"].mean() * 100
-    st.caption(
+    st.markdown(
         f"大亏损交易（R < −2）入场时 ATR% 均值 = {big_atr:.2f}%，"
         f"全体平均 ATR% = {all_atr:.2f}%。"
         "高波动性入场对应更大的 R 亏损，支持波动率加权仓位压缩。"

@@ -17,7 +17,7 @@ _results_path = _root / "results" / "v1_unbiased_60m_2000"
 _perturb_path = _root / "results" / "v1_unbiased_60m_2000" / "perturbation"
 
 st.title("如何提高年化收益（CAGR）")
-st.caption("基于 Top 20 盈利交易分析，找到提升年化收益的核心杠杆点，同时保持甚至降低最大回撤")
+st.markdown("基于 Top 20 盈利交易分析，找到提升年化收益的核心杠杆点，同时保持甚至降低最大回撤")
 
 st.markdown("---")
 
@@ -170,7 +170,7 @@ _fig_pyra.update_layout(
     margin=dict(t=50, b=40),
 )
 st.plotly_chart(_fig_pyra, use_container_width=True)
-st.caption(
+st.markdown(
     f"R>3 的 {len(_big)} 笔交易当前利润共 ${_big['net_pnl'].sum()/1e6:.1f}M；"
     f"若在 3R 时追加 50% 仓位，额外利润约 ${_big['pyramid_gain'].sum()/1e6:.1f}M（+{_big['pyramid_gain'].sum()/_big['net_pnl'].sum()*100:.0f}%）。"
     "高 R 区间（>10R）是金字塔加仓的主要受益来源，因为剩余利润空间最大。"
@@ -250,7 +250,7 @@ if _trail_f.exists():
         legend=dict(x=0.6, y=0.05), height=360, margin=dict(t=50, b=40),
     )
     st.plotly_chart(_fig_trail, use_container_width=True)
-    st.caption(
+    st.markdown(
         "当前 trail_multiplier_r1 = 3.0（1R→3R 阶段）已是 CAGR 最优点（10.36%）。"
         "建议 2 针对的是 >10R 阶段新增第四档（trail_multiplier_r10 = 7.0×），"
         "现有敏感性分析未覆盖此参数，需单独回测验证。"
@@ -313,7 +313,7 @@ if _corr_f.exists():
         legend=dict(x=0.5, y=0.05), height=360, margin=dict(t=50, b=40),
     )
     st.plotly_chart(_fig_corr, use_container_width=True)
-    st.caption(
+    st.markdown(
         f"当前 correlation_threshold = {_baseline_corr}（绿色）。"
         f"更严格的阈值（0.5）大幅增加交易笔数（{_cn[0]:.0f}），MaxDD 升至 {_cm[0]:.1f}%，CAGR 反而降至 {_cc[0]:.2f}%。"
         "说明过度扩展信号数量会摊薄质量；维持当前阈值是合理的，但需保护好已有盈利仓位的规模。"
@@ -406,7 +406,7 @@ if _volf.exists():
     )
     st.plotly_chart(_fig_vol, use_container_width=True)
     best_vidx = _vc.index(max(_vc))
-    st.caption(
+    st.markdown(
         f"当前 volume_filter_multiplier = {_baseline_v}（绿色），CAGR = {_vc[_vv.index(_baseline_v)]:.2f}%。"
         f"成交量要求过高（2.0×）使交易笔数从 3,337 降至 {_vn[-1]:.0f}，CAGR 反降至 {_vc[-1]:.2f}%。"
         "说明成交量过滤存在最优点，过度过滤会遗漏真实突破。"
@@ -448,7 +448,7 @@ with col3b:
               delta_color="inverse",
               help="建议4（突破质量过滤）减少假突破亏损，部分抵消金字塔加仓对回撤的负面影响；净效果：最大回撤与当前大体相当或略有增加")
 
-st.caption("最大回撤预估说明：金字塔加仓在趋势反转时会使亏损规模同步扩大（加仓止损设在移动止盈线，但绝对金额更大）。突破质量过滤（建议4）能减少假突破引发的连续小亏损，部分抵消回撤扩大效果。以上均为粗估，需完整回测验证。")
+st.markdown("最大回撤预估说明：金字塔加仓在趋势反转时会使亏损规模同步扩大（加仓止损设在移动止盈线，但绝对金额更大）。突破质量过滤（建议4）能减少假突破引发的连续小亏损，部分抵消回撤扩大效果。以上均为粗估，需完整回测验证。")
 
 st.markdown("---")
 

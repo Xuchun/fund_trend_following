@@ -9,7 +9,7 @@ if str(_root) not in sys.path:
 import streamlit as st
 
 st.title("多策略开发 Plan")
-st.caption("从单 Breakout 系统升级为 Multi-Alpha 专业趋势组合")
+st.markdown("从单 Breakout 系统升级为 Multi-Alpha 专业趋势组合")
 st.markdown("---")
 
 # ── 核心思想 ──────────────────────────────────────────────────────────────────
