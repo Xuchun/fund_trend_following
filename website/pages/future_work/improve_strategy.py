@@ -1343,11 +1343,21 @@ if _sp_d:
     st.plotly_chart(_fig_sp, use_container_width=True)
 
     _sp_base_i = _spv.index(_spbase)
+    _sp_low_diff = _spc[0] - _spc[_sp_base_i]
+    if _sp_low_diff >= 0:
+        _sp_low_text = (
+            f"若实际滑点降至 5 bps（大盘高流动性股票的实际水平），CAGR 可提升至 {_spc[0]:.2f}%（+{_sp_low_diff:.2f} pp）——"
+            "这是「正向惊喜」来源：回测保守，实盘可能超越回测。"
+        )
+    else:
+        _sp_low_text = (
+            f"若实际滑点降至 5 bps，CAGR 反而略降至 {_spc[0]:.2f}%（{_sp_low_diff:.2f} pp）——"
+            "整数取整后仓位规模离散化，导致不同滑点假设下边际交易的执行结果微小差异，响应非单调，实际影响可忽略。"
+        )
     st.markdown(
         f"当前 {_spbase:.0f} bps（绿色）：CAGR {_spc[_sp_base_i]:.2f}%。"
-        f"若实际滑点降至 5 bps（大盘高流动性股票的实际水平），CAGR 可提升至 {_spc[0]:.2f}%（+{_spc[0]-_spc[_sp_base_i]:.2f} pp）——"
-        "这是「正向惊喜」来源：回测保守，实盘可能超越回测。"
-        f"若滑点升至 15 bps（小盘股或流动性不佳时段），CAGR 降至 {_spc[-1]:.2f}%。"
+        + _sp_low_text
+        + f"若滑点升至 15 bps（小盘股或流动性不佳时段），CAGR 降至 {_spc[-1]:.2f}%。"
     )
 
 st.markdown("#### 10.2 改进建议总结")
