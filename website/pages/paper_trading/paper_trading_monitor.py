@@ -220,6 +220,21 @@ with tab1:
     **初始资金：** $200,000 USD（全新独立账户，调试期 2026-06-19 起，正式启动 2026-07-01）
     """)
 
+    with st.expander("⚙️ 自动化配置说明"):
+        st.markdown("""
+**GitHub Actions 自动运行**（无需任何手动操作）
+
+- 工作流文件：`.github/workflows/paper_trading_m1.yml`
+- 触发时间：每个交易日 **美东 4:30 PM**（21:30 UTC）自动运行
+- 运行内容：下载 Yahoo Finance 数据 → 计算信号 → 更新 positions.json → 自动推送到 GitHub
+- 也可在 GitHub → Actions → "Paper Trading M1" 页面手动触发
+
+如需临时手动运行（调试用）：
+```bash
+python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
+```
+""")
+
     # ── Load Method 1 state ──────────────────────────────────────────────────
     @st.cache_data(ttl=3600)
     def _load_m1():
