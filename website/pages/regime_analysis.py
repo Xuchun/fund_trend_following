@@ -88,58 +88,56 @@ if regime_data and "regimes" in regime_data:
 
     if _spy_close is not None and _spy_sma is not None and _NAV_PATH.exists():
         st.subheader("策略 NAV 与 SPY 200日均线牛熊状态")
-        if True:
-            _nav_r = pd.read_csv(_NAV_PATH, parse_dates=["date"]).set_index("date")["nav"]
-            _nav_r_norm = _nav_r / _nav_r.iloc[0]
+        _nav_r = pd.read_csv(_NAV_PATH, parse_dates=["date"]).set_index("date")["nav"]
+        _nav_r_norm = _nav_r / _nav_r.iloc[0]
 
-            # Compute bear periods (SPY < SMA200), filter to >= 10 trading days
-            _is_bear = (_spy_close < _spy_sma).fillna(False)
-            _bear_periods_r = []
-            _in_bear_r, _bs_r = False, None
-            for _dt_r, _b_r in _is_bear.items():
-                if _b_r and not _in_bear_r:
-                    _in_bear_r, _bs_r = True, _dt_r
-                elif not _b_r and _in_bear_r:
-                    _in_bear_r = False
-                    if (_dt_r - _bs_r).days >= 14:
-                        _bear_periods_r.append((_bs_r, _dt_r))
-            if _in_bear_r and (_spy_close.index[-1] - _bs_r).days >= 14:
-                _bear_periods_r.append((_bs_r, _spy_close.index[-1]))
+        _is_bear = (_spy_close < _spy_sma).fillna(False)
+        _bear_periods_r = []
+        _in_bear_r, _bs_r = False, None
+        for _dt_r, _b_r in _is_bear.items():
+            if _b_r and not _in_bear_r:
+                _in_bear_r, _bs_r = True, _dt_r
+            elif not _b_r and _in_bear_r:
+                _in_bear_r = False
+                if (_dt_r - _bs_r).days >= 14:
+                    _bear_periods_r.append((_bs_r, _dt_r))
+        if _in_bear_r and _bs_r is not None and (_spy_close.index[-1] - _bs_r).days >= 14:
+            _bear_periods_r.append((_bs_r, _spy_close.index[-1]))
 
-            _fig_rg = go.Figure()
-            _fig_rg.add_trace(go.Scatter(
-                x=_nav_r_norm.index, y=_nav_r_norm.values,
-                mode="lines", line=dict(color="#1f77b4", width=2),
-                name="策略1.0 NAV（归一化）",
-            ))
-            for _bs_r2, _be_r2 in _bear_periods_r:
-                _fig_rg.add_vrect(
-                    x0=_bs_r2.strftime("%Y-%m-%d"),
-                    x1=_be_r2.strftime("%Y-%m-%d"),
-                    fillcolor="rgba(214,39,40,0.13)", line_width=0,
-                )
-            # Dummy trace for legend entry
-            _fig_rg.add_trace(go.Scatter(
-                x=[None], y=[None], mode="lines",
-                line=dict(color="rgba(214,39,40,0.5)", width=10),
-                name="熊市封仓期（SPY < SMA200，暂停开新仓）",
-            ))
-            _fig_rg.update_layout(
-                title="策略1.0 NAV vs SPY 200日均线牛熊状态（红色 = 暂停开新仓）",
-                xaxis_title="日期",
-                yaxis_title="净值（归一化，初始=1.0）",
-                height=420,
-                margin=dict(t=55, b=50, l=50, r=20),
-                hovermode="x unified",
-                legend=dict(orientation="h", yanchor="bottom", y=1.02),
+        _nav_dates = [d.strftime("%Y-%m-%d") for d in _nav_r_norm.index]
+        _fig_rg = go.Figure()
+        _fig_rg.add_trace(go.Scatter(
+            x=_nav_dates, y=_nav_r_norm.values,
+            mode="lines", line=dict(color="#1f77b4", width=2),
+            name="策略1.0 NAV（归一化）",
+        ))
+        for _bs_r2, _be_r2 in _bear_periods_r:
+            _fig_rg.add_vrect(
+                x0=_bs_r2.strftime("%Y-%m-%d"),
+                x1=_be_r2.strftime("%Y-%m-%d"),
+                fillcolor="rgba(214,39,40,0.13)", line_width=0,
             )
-            _fig_rg.update_yaxes(tickformat=".2f")
-            st.plotly_chart(_fig_rg, use_container_width=True)
-            st.caption(
-                "红色背景区域：SPY 收盘价低于 200 日均线，策略暂停开立新仓（已持仓继续按止损/移动止盈管理）。"
-                " TLT、GLD、UUP 在熊市期间豁免此限制，仍可开仓。"
-            )
-            st.markdown("---")
+        _fig_rg.add_trace(go.Scatter(
+            x=[None], y=[None], mode="lines",
+            line=dict(color="rgba(214,39,40,0.5)", width=10),
+            name="熊市封仓期（SPY < SMA200，暂停开新仓）",
+        ))
+        _fig_rg.update_layout(
+            title="策略1.0 NAV vs SPY 200日均线牛熊状态（红色 = 暂停开新仓）",
+            xaxis_title="日期",
+            yaxis_title="净值（归一化，初始=1.0）",
+            height=420,
+            margin=dict(t=55, b=50, l=50, r=20),
+            hovermode="x unified",
+            legend=dict(orientation="h", yanchor="bottom", y=1.02),
+        )
+        _fig_rg.update_yaxes(tickformat=".2f")
+        st.plotly_chart(_fig_rg, use_container_width=True)
+        st.caption(
+            "红色背景区域：SPY 收盘价低于 200 日均线，策略暂停开立新仓（已持仓继续按止损/移动止盈管理）。"
+            " TLT、GLD、UUP 在熊市期间豁免此限制，仍可开仓。"
+        )
+        st.markdown("---")
 
     # ── Summary metrics table ──────────────────────────────────────────────
     rows = []
