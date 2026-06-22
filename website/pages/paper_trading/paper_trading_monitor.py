@@ -258,7 +258,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 """)
 
     # ── Load Method 1 state ──────────────────────────────────────────────────
-    @st.cache_data(ttl=3600)
+    @st.cache_data(ttl=120)
     def _load_m1():
         if _m1_file.exists():
             return json.loads(_m1_file.read_text()), False
