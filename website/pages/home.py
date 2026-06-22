@@ -392,10 +392,20 @@ _rows = [
     ("过拟合风险",    _of_tag, _of_detail),
 ]
 
+_ROW_PAGES = {
+    "参数鲁棒性":   "pages/parameter_sensitivity_tiingo.py",
+    "蒙特卡洛模拟": "pages/monte_carlo.py",
+    "Walk-Forward": "pages/walk_forward.py",
+    "市场环境分析": "pages/regime_analysis.py",
+    "过拟合风险":   "pages/overfitting_analysis.py",
+}
+
 for _dim, _verdict, _detail in _rows:
     _col_a, _col_b = st.columns([1, 3])
     with _col_a:
         st.markdown(f"**{_dim}**  \n{_verdict}")
+        if _dim in _ROW_PAGES:
+            st.page_link(_ROW_PAGES[_dim], label="→ 详细分析")
     with _col_b:
         st.markdown(f"<span style='color:#000;font-size:0.9rem'>{_detail}</span>", unsafe_allow_html=True)
     st.markdown("<hr style='margin:6px 0;border-color:#eee'>", unsafe_allow_html=True)
