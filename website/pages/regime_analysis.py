@@ -23,6 +23,18 @@ st.markdown(f"**回测期间：{meta.backtest_start} → {meta.backtest_end}**")
 st.markdown("---")
 
 _REGIME_PATH = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m_2000" / "regime.json"
+_SPY_SMA_PATH = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m_2000" / "spy_sma200.csv"
+_NAV_PATH     = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m_2000" / "nav.csv"
+
+
+@st.cache_data(ttl=86400)
+def _load_spy_sma():
+    import pandas as _pd
+    if not _SPY_SMA_PATH.exists():
+        return None, None
+    _df = _pd.read_csv(_SPY_SMA_PATH, parse_dates=["date"]).set_index("date")
+    return _df["close_adj"], _df["sma200"]
+
 
 regime_data = None
 if _REGIME_PATH.exists():
