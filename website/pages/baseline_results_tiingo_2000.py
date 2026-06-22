@@ -201,6 +201,14 @@ with _col_b:
 | 初始资金 | — | **\$10,000,000** |
 """)
 
+st.caption(
+    "⚠ 参数说明：`min_market_cap_b`（最低市值）仅在数据预筛选阶段过滤初始标的池，"
+    "回测引擎对已入池标的不再二次检验市值，敏感性分析显示该参数对结果无影响。"
+    "`risk_per_trade` 为仓位公式的目标风险输入，但当计算出的持仓市值超过 `position_cap`（单标的上限）时，"
+    "头寸被强制截断，导致实际承担风险低于 1% NAV（历史平均约 0.24% NAV，详见下方「交易执行诊断」节）。"
+    "`heat_limit` 为极端情景安全阀，由于单笔风险被 `position_cap` 压缩，26 年回测中总热度从未接近上限（峰值 8.2%）。"
+)
+
 st.markdown("---")
 
 # ── Combined NAV + Drawdown chart (st.slider range → re-baselined) ───────────
