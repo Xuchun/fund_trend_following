@@ -1120,7 +1120,7 @@ st.markdown("""
 st.markdown("---")
 
 # ── 十三、综合实施路径 ─────────────────────────────────────────────────────────
-st.subheader("十三、仓位管理")
+st.subheader("十四、仓位管理")
 
 st.markdown("""
 当前仓位管理参数：risk_per_trade = 1%、position_cap = 5%、heat_limit = 10%、correlation_threshold = 0.7。
