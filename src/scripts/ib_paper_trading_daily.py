@@ -570,7 +570,7 @@ def main() -> None:
 
     # --- Update NAV history & metadata ---
     history = [h for h in state.get("nav_history", []) if h["date"] != str(today)]
-    history.append({"date": str(today), "nav": round(current_nav, 2)})
+    history.append({"date": str(today), "nav": round(current_nav, 2), "regime": "BULL" if regime_ok else "BEAR"})
     state["nav_history"]     = sorted(history, key=lambda x: x["date"])
     state["last_update_date"] = str(today)
     state["last_update_utc"]  = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
