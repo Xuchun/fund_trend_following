@@ -687,7 +687,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.markdown("---")
 
     # ── 数据下载（方法一）────────────────────────────────────────────────────
-    st.subheader("数据下载（用于未来 Layer 4 过拟合分析）")
+    st.subheader("数据下载（用于未来策略1.0的过拟合分析）")
     st.caption("以下为方法一（Yahoo Finance）所有已记录数据的当前快照")
 
     _dl1_nav = _m1.get("nav_history", [])
@@ -998,7 +998,7 @@ git push
     st.markdown("---")
 
     # ── 数据下载（方法二）────────────────────────────────────────────────────
-    st.subheader("数据下载（用于未来 Layer 4 过拟合分析）")
+    st.subheader("数据下载（用于未来策略1.0的过拟合分析）")
     st.caption("以下为方法二（IB 自动交易）所有已记录数据的当前快照")
 
     _dl2_nav = _m2.get("nav_history", [])
