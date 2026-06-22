@@ -177,6 +177,13 @@ if wf_data:
     rc4.metric("SPY OOS 拼接 MaxDD",
                f"{_spy_st_maxdd*100:.1f}%" if _spy_st_maxdd is not None else "—")
 
+    _sharpe_ret = ret.get("sharpe_retention", 0)
+    rcs1, rcs2, rcs3 = st.columns(3)
+    rcs1.metric("策略 OOS 拼接 Sharpe", f"{oos_m.get('sharpe', 0):+.3f}")
+    rcs2.metric("全样本 IS Sharpe",     f"{full_is.get('sharpe', 0):+.3f}")
+    rcs3.metric("OOS Sharpe 效率比",    f"{_sharpe_ret:.2f}×",
+                help="OOS 拼接 Sharpe ÷ 全样本 IS Sharpe；≥ 0.50 视为样本外性能保留良好")
+
     # Interpretation
     _oos_cagr_val = oos_m.get('cagr', 0)
     _pos_windows = sum(1 for w in windows if w.get("oos", {}).get("cagr", 0) > 0)
