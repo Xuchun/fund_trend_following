@@ -382,12 +382,22 @@ with kc2:
     )
     st.plotly_chart(fig_gap, use_container_width=True)
 
-st.markdown(
-    f"在 {n_miss50} 个错失的 Top {TOP_N} 信号中，"
-    f"**{n_pos_gap} 个（{n_pos_gap/max(n_miss50,1):.0%}）的 k 值高于当天已执行信号均值**——"
-    f"这些信号比当天被执行的信号更强，却因资金耗尽而被丢弃。"
-    f"仅 **{n_neg_gap} 个（{n_neg_gap/max(n_miss50,1):.0%}）**的 k 值弱于执行均值。"
-)
+if n_pos_gap <= n_neg_gap:
+    st.success(
+        f"**排序机制验证通过**：在 {n_miss50} 个错失的 Top {TOP_N} 信号中，"
+        f"**{n_neg_gap} 个（{n_neg_gap/max(n_miss50,1):.0%}）的 k 值低于当天已执行信号均值**——"
+        f"现有 `breakout_strength` 排序已将较弱信号排在后面，起到了过滤作用。"
+        f"仅 **{n_pos_gap} 个（{n_pos_gap/max(n_miss50,1):.0%}）**的 k 值高于执行均值（即排序若切换为 k_strength 可能改善的部分）。"
+        f"**结论：资金容量是错失大赢家的主因，排序问题极小。**"
+    )
+else:
+    st.warning(
+        f"**排序仍有改善空间**：在 {n_miss50} 个错失的 Top {TOP_N} 信号中，"
+        f"**{n_pos_gap} 个（{n_pos_gap/max(n_miss50,1):.0%}）的 k 值高于当天已执行信号均值**——"
+        f"说明现有 `breakout_strength` 排序未能完全识别最强信号，"
+        f"切换至 ATR 标准化的 k_strength 可能带来改善。"
+        f"（{n_neg_gap} 个 k 值弱于执行均值，占 {n_neg_gap/max(n_miss50,1):.0%}。）"
+    )
 
 # ── 角度四：竞争信号——当天执行的是什么？ ────────────────────────────────────
 st.markdown("#### 角度四：当天被执行的「竞争信号」事后表现如何？")
