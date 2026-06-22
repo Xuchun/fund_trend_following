@@ -317,7 +317,7 @@ steps = [
     ("Step 1", "目标风险", f"每笔交易风险 = NAV × {p['risk_per_trade']*100:.0f}%（目标值）\n股数 = 目标风险 ÷ (入场价 − 止损价)"),
     ("Step 2", "单标的上限", f"单标的持仓市值上限 = NAV × {p['position_cap']*100:.0f}%"),
     ("Step 3", "相关性调整", f"若持仓中已有<strong>正相关性</strong> > {p['correlation_threshold']:.2f} 的标的，\n新仓位减半（负相关不触发）"),
-    ("Step 4", "组合热度检查", f"组合总风险敞口 ≤ NAV × {p['heat_limit']*100:.0f}%，超限则拒绝开仓\n（安全阀：26 年回测历史峰值 8.2%，从未实际触发）"),
+    ("Step 4", "组合热度检查", f"组合总风险敞口 ≤ NAV × {p['heat_limit']*100:.0f}%\n超限则拒绝开仓"),
 ]
 for col, (step, title, body) in zip(cols, steps):
     with col:
