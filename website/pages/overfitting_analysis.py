@@ -73,6 +73,7 @@ st.info("""
 **判断框架来源**：「如何改进策略1.0 → 一、方法论」页面定义了四层验证体系（Research Pipeline）
 和五个维度的过拟合风险检查。本页直接应用该框架对策略1.0进行评分。
 """)
+st.page_link("pages/future_work/improve_strategy.py", label="→ 如何改进策略1.0（方法论与防过拟合框架详情）", icon="📐")
 
 st.markdown("---")
 
