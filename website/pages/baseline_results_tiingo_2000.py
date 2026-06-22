@@ -136,7 +136,7 @@ with _col_a:
 | 参数 | 代码名 | Baseline 值 |
 |---|---|---|
 | 最低股价 | `min_price` | **\$10**（原始收盘价）|
-| 最低市值 | `min_market_cap_b` | **\$2B** |
+| 最低市值 | `min_market_cap_b` | **\$2B**（仅数据筛选阶段，引擎内部未二次过滤）|
 | ADV 流动性 | `min_adv_m` | **\$60M**（60日均量）|
 """, unsafe_allow_html=True)
 
