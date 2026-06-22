@@ -665,12 +665,27 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     # ── 数据下载（方法一）────────────────────────────────────────────────────
     st.subheader("数据下载（用于未来策略1.0的过拟合分析）")
-    st.caption("包含所有模拟交易数据：NAV 历史、平仓记录、信号历史、当前持仓")
+    st.caption("包含所有模拟交易数据：NAV 历史、开仓记录、平仓记录、信号历史、当前持仓")
 
     _dl1_nav = _m1.get("nav_history", [])
     _dl1_sig = _m1.get("signals_history", [])
     _dl1_ct  = _m1.get("closed_trades", [])
     _dl1_op  = [p for p in _m1.get("positions", []) if not p.get("closed")]
+
+    # 开仓历史 = 所有已开仓交易（持仓中 + 已平仓），按开仓日期排序
+    _dl1_entries = sorted([
+        {"ticker": p["ticker"], "entry_date": p["entry_date"],
+         "entry_price": p["entry_price"], "shares": p["shares"],
+         "initial_stop": p["initial_stop_loss"], "atr_at_entry": p.get("atr_at_entry", ""),
+         "状态": "持仓中"}
+        for p in _dl1_op
+    ] + [
+        {"ticker": c["ticker"], "entry_date": c["entry_date"],
+         "entry_price": c["entry_price"], "shares": c["shares"],
+         "initial_stop": c.get("initial_stop", ""), "atr_at_entry": "",
+         "状态": "已平仓"}
+        for c in _dl1_ct
+    ], key=lambda x: x["entry_date"], reverse=True)
 
     with st.expander(f"NAV 历史（{len(_dl1_nav)} 条）"):
         if _dl1_nav:
@@ -679,6 +694,20 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 use_container_width=True, hide_index=True)
         else:
             st.info("暂无数据")
+
+    with st.expander(f"开仓记录（{len(_dl1_entries)} 笔，含持仓中 + 已平仓）"):
+        if _dl1_entries:
+            st.dataframe(pd.DataFrame(_dl1_entries), use_container_width=True, hide_index=True)
+        else:
+            st.info("暂无开仓记录")
+
+    with st.expander(f"平仓记录（{len(_dl1_ct)} 笔）"):
+        if _dl1_ct:
+            st.dataframe(
+                pd.DataFrame(_dl1_ct).sort_values("exit_date", ascending=False),
+                use_container_width=True, hide_index=True)
+        else:
+            st.info("暂无平仓记录")
 
     with st.expander(f"信号历史（{len(_dl1_sig)} 条）"):
         if _dl1_sig:
@@ -693,14 +722,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         else:
             st.info("暂无数据")
 
-    with st.expander(f"平仓记录（{len(_dl1_ct)} 笔）"):
-        if _dl1_ct:
-            st.dataframe(
-                pd.DataFrame(_dl1_ct).sort_values("exit_date", ascending=False),
-                use_container_width=True, hide_index=True)
-        else:
-            st.info("暂无平仓记录")
-
     with st.expander(f"当前持仓（{len(_dl1_op)} 只）"):
         if _dl1_op:
             st.dataframe(pd.DataFrame(_dl1_op), use_container_width=True, hide_index=True)
@@ -713,7 +734,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         data=_build_method_zip(_m1, "m1"),
         file_name=f"m1_paper_trading_{_date_cls.today().isoformat()}.zip",
         mime="application/zip",
-        help="包含：NAV历史CSV、信号历史CSV、平仓记录CSV、持仓CSV、完整JSON",
+        help="包含：NAV历史、开仓记录、平仓记录、信号历史、当前持仓（CSV + 完整JSON）",
     )
 
 
