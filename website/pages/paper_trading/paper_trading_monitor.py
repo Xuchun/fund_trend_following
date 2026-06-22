@@ -474,8 +474,8 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 st.info("无入场信号")
     else:
         _ts_regime_cap = "🟢 BULL" if _bull else "🔴 BEAR"
-        st.caption(f"信号日期：N/A ｜ Regime：{_ts_regime_cap}")
-        _tab_exit, _tab_entry = st.tabs(["退出信号（0 笔）", "入场信号（0 笔）"])
+        st.markdown(f"信号日期：N/A ｜ Regime：{_ts_regime_cap}")
+        _tab_exit, _tab_entry = st.tabs(["平仓信号（0 笔）", "开仓信号（0 笔）"])
         with _tab_exit:
             st.info("无退出信号")
         with _tab_entry:
