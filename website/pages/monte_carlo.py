@@ -404,6 +404,8 @@ baseline历史回测 Sharpe **{actual_sharpe:+.3f}** 与模拟中位数 **{sharp
         unsafe_allow_html=True,
     )
 
+    st.page_link("pages/limitations.py", label="→ 局限性声明（完整风险披露）", icon="⚠️")
+
     # 数据更新对比
     from website.utils.comparison import render_mc_comparison
     render_mc_comparison(meta, mc)
