@@ -137,6 +137,7 @@ if _wf:
         note   = " ⚠️（partial）" if label == "2026" else ""
         _wf_rows.append(f"| {label}{note} | {is_c:+.1f}% | {oos_c:+.1f}% | {oos_sh:+.3f} | −{oos_dd:.1f}% |")
     st.markdown(_wf_header + "\n".join(_wf_rows))
+    st.page_link("pages/walk_forward.py", label="→ Walk-Forward 逐窗口详细分析（含 IS/OOS NAV 图、逐年解读）", icon="📈")
 
 if _wf:
     _w1 = next((w for w in _wf.get("windows", []) if w.get("oos_start", "").startswith("2022")), None)
