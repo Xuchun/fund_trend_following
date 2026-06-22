@@ -574,13 +574,22 @@ def main() -> None:
     state["nav_history"]     = sorted(history, key=lambda x: x["date"])
     state["last_update_date"] = str(today)
     state["last_update_utc"]  = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    state["today_signals"]   = {
-        "exits":   exit_orders,
-        "entries": entry_orders,
-        "regime":  "BULL" if regime_ok else "BEAR",
-        "spy_close": spy_close,
-        "date":    str(today),
+    _today_sig = {
+        "date":         str(today),
+        "regime":       "BULL" if regime_ok else "BEAR",
+        "spy_close":    spy_close,
+        "n_candidates": len(entry_orders),
+        "n_entries":    len(new_positions),
+        "n_exits":      len(new_closed),
+        "exits":        exit_orders,
+        "entries":      entry_orders,
     }
+    state["today_signals"] = _today_sig
+
+    # Accumulate signals_history (never overwrites past days)
+    _sig_hist = [s for s in state.get("signals_history", []) if s["date"] != str(today)]
+    _sig_hist.append(_today_sig)
+    state["signals_history"] = sorted(_sig_hist, key=lambda x: x["date"])
 
     # Append order results to history
     order_log = state.get("orders_history", [])
