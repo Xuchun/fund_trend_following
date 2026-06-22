@@ -688,7 +688,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     # ── 数据下载（方法一）────────────────────────────────────────────────────
     st.subheader("数据下载（用于未来策略1.0的过拟合分析）")
-    st.caption("以下为方法一（Yahoo Finance）所有已记录数据的当前快照")
+    st.caption("包含所有模拟交易数据：NAV 历史、平仓记录、信号历史、当前持仓")
 
     _dl1_nav = _m1.get("nav_history", [])
     _dl1_sig = _m1.get("signals_history", [])
