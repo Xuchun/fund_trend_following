@@ -997,12 +997,26 @@ git push
 
     # ── 数据下载（方法二）────────────────────────────────────────────────────
     st.subheader("数据下载（用于未来策略1.0的过拟合分析）")
-    st.caption("包含所有模拟交易数据：NAV 历史、平仓记录、信号历史、当前持仓")
+    st.caption("包含所有模拟交易数据：NAV 历史、开仓记录、平仓记录、信号历史、当前持仓")
 
     _dl2_nav = _m2.get("nav_history", [])
     _dl2_sig = _m2.get("signals_history", [])
     _dl2_ct  = _m2.get("closed_trades", [])
     _dl2_op  = [p for p in _m2.get("positions", []) if not p.get("closed")]
+
+    _dl2_entries = sorted([
+        {"ticker": p["ticker"], "entry_date": p["entry_date"],
+         "entry_price": p["entry_price"], "shares": p["shares"],
+         "initial_stop": p.get("initial_stop_loss", ""), "atr_at_entry": p.get("atr_at_entry", ""),
+         "状态": "持仓中"}
+        for p in _dl2_op
+    ] + [
+        {"ticker": c["ticker"], "entry_date": c.get("entry_date", ""),
+         "entry_price": c.get("entry_price", ""), "shares": c.get("shares", ""),
+         "initial_stop": c.get("initial_stop", ""), "atr_at_entry": "",
+         "状态": "已平仓"}
+        for c in _dl2_ct
+    ], key=lambda x: x["entry_date"], reverse=True)
 
     with st.expander(f"NAV 历史（{len(_dl2_nav)} 条）"):
         if _dl2_nav:
@@ -1011,6 +1025,20 @@ git push
                 use_container_width=True, hide_index=True)
         else:
             st.info("暂无数据")
+
+    with st.expander(f"开仓记录（{len(_dl2_entries)} 笔，含持仓中 + 已平仓）"):
+        if _dl2_entries:
+            st.dataframe(pd.DataFrame(_dl2_entries), use_container_width=True, hide_index=True)
+        else:
+            st.info("暂无开仓记录")
+
+    with st.expander(f"平仓记录（{len(_dl2_ct)} 笔）"):
+        if _dl2_ct:
+            st.dataframe(
+                pd.DataFrame(_dl2_ct).sort_values("exit_date", ascending=False),
+                use_container_width=True, hide_index=True)
+        else:
+            st.info("暂无平仓记录")
 
     with st.expander(f"信号历史（{len(_dl2_sig)} 条）"):
         if _dl2_sig:
@@ -1025,14 +1053,6 @@ git push
         else:
             st.info("暂无数据")
 
-    with st.expander(f"平仓记录（{len(_dl2_ct)} 笔）"):
-        if _dl2_ct:
-            st.dataframe(
-                pd.DataFrame(_dl2_ct).sort_values("exit_date", ascending=False),
-                use_container_width=True, hide_index=True)
-        else:
-            st.info("暂无平仓记录")
-
     with st.expander(f"当前持仓（{len(_dl2_op)} 只）"):
         if _dl2_op:
             st.dataframe(pd.DataFrame(_dl2_op), use_container_width=True, hide_index=True)
@@ -1045,5 +1065,5 @@ git push
         data=_build_method_zip(_m2, "m2"),
         file_name=f"m2_paper_trading_{_date_cls.today().isoformat()}.zip",
         mime="application/zip",
-        help="包含：NAV历史CSV、信号历史CSV、平仓记录CSV、持仓CSV、完整JSON",
+        help="包含：NAV历史、开仓记录、平仓记录、信号历史、当前持仓（CSV + 完整JSON）",
     )
