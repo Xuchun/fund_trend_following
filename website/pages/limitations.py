@@ -57,7 +57,7 @@ try:
 except Exception:
     pass
 
-_n_trades = 3340
+_n_trades = 3335
 try:
     _n_trades = len(res.trades)
 except Exception:
