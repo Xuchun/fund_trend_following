@@ -360,7 +360,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "风险%": f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "—",
             })
     if _trade_rows:
-        st.dataframe(pd.DataFrame(_trade_rows), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(sorted(_trade_rows, key=lambda x: x["标的"])), use_container_width=True, hide_index=True)
     else:
         st.info("今日无交易")
 
