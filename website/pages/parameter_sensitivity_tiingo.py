@@ -741,10 +741,21 @@ Sharpe 稳定区间：**{stab_str}**。
 {"- 基准值即 Sharpe 最优点" if abs(base['param_value'] - best['param_value']) < 0.1 else f"- Sharpe 最高点：${best['param_value']:.0f}M（{best['cagr']*100:+.2f}%，Sharpe {best['sharpe']:+.3f}）"}
 - ADV 过滤在降低流动性风险的同时会收窄标的池；过严可能错失有效趋势
 """)
+    _adv50_rec = next((r for r in _info["recs"] if abs(r["param_value"] - 50.0) < 0.1), None)
+    if _adv50_rec:
+        _adv_cagr_diff   = (base["cagr"] - _adv50_rec["cagr"]) * 100
+        _adv_sharpe_diff = base["sharpe"] - _adv50_rec["sharpe"]
+        _vs50_text = (
+            f"相比 $50M 门槛，$60M 信噪比更高"
+            f"（CAGR {_adv_cagr_diff:+.2f}pp，Sharpe {_adv_sharpe_diff:+.3f}），"
+            f"标的池仍覆盖 {meta.universe_total:,} 只历史标的"
+        )
+    else:
+        _vs50_text = f"标的池仍覆盖 {meta.universe_total:,} 只历史标的"
     st.markdown(
         f"- **选择 ${base['param_value']:.0f}M ADV 的理由：** 对 $10M 初始资金，典型仓位约 $500K，"
         "$60M ADV 意味着占当日成交量约 0.8%，冲击成本极低，可轻松完成建仓退出；"
-        "相比 $50M 门槛，$60M 信噪比更高（CAGR +1.1pp，Sharpe +0.074），标的池仍覆盖 2,976 只历史标的"
+        + _vs50_text
     )
     _section_meta["min_adv_m"] = _info
 else:
