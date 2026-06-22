@@ -50,6 +50,7 @@ try:
             st.Page(_pages / "monte_carlo.py",                title="蒙特卡洛模拟",         icon="🎲"),
             st.Page(_pages / "walk_forward.py",               title="Walk-Forward 验证",    icon="🔄"),
             st.Page(_pages / "regime_analysis.py",            title="市场环境分析",         icon="🌦️"),
+            st.Page(_pages / "overfitting_analysis.py",       title="策略是否过度拟合",      icon="🔍"),
             st.Page(_pages / "limitations.py",                title="局限性声明",           icon="⚠️"),
             st.Page(_pages / "home.py",                       title="总结",     icon="📋"),
         ],
