@@ -448,8 +448,6 @@ Block Bootstrap 月度分块重采样（块长≈21交易日），生成 1,000 �
 """)
 
 _cagr_d = _mc["cagr_dist"]
-_sha_d  = _mc["sharpe_dist"]
-_dd_d   = _mc["max_drawdown_dist"]
 _actual_sharpe = _met["sharpe"]
 _actual_cagr   = _met["cagr"] * 100
 
