@@ -374,9 +374,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _next_td += _dt.timedelta(days=1)
     st.caption(f"下一交易日预计：{_next_td} ｜ 以下订单在开盘后按市价执行")
 
-    if _m1_today_sig:
-        _sig_exits   = _m1_today_sig.get("exits", [])
-        _sig_entries = _m1_today_sig.get("entries", [])
+    _sig_exits   = _m1_today_sig.get("exits", []) if _m1_today_sig else []
+    _sig_entries = _m1.get("pending_entries", [])  # signals from today → execute tomorrow at open
+    if True:
         _order_rows  = []
         for e in _sig_exits:
             _shares = e.get("shares", 0)
