@@ -355,7 +355,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "方向": "🟢 买入",
                 "标的": e["ticker"],
                 "股数": e.get("shares", ""),
-                "成交价": f"${e['signal_price']:.2f}" if e.get("signal_price") else "—",
+                "成交价（无滑点和手续费）": f"${e['signal_price']:.2f}" if e.get("signal_price") else "—",
                 "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "—",
                 "风险%": f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "—",
             })
