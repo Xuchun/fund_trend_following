@@ -374,7 +374,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _next_td = _today + _dt.timedelta(days=1)
     while _next_td.weekday() >= 5:  # 5=Sat, 6=Sun
         _next_td += _dt.timedelta(days=1)
-    st.caption(f"下一交易日预计：{_next_td} ｜ 以下订单在开盘后按市价执行")
+    st.markdown(f"<span style='color:#111111'>下一交易日预计：{_next_td} ｜ 以下订单在开盘后按市价执行</span>", unsafe_allow_html=True)
 
     _sig_exits   = _m1_today_sig.get("exits", []) if _m1_today_sig else []
     _sig_entries = _m1.get("pending_entries", [])  # signals from today → execute tomorrow at open
@@ -452,7 +452,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
         with _tab_entry:
             if _ts_entries:
-                st.caption(f"以上 {len(_ts_entries)} 笔开仓已于今日开盘执行（前一交易日收盘信号，今日开盘价入场）。")
+                st.markdown(f"以上 {len(_ts_entries)} 笔开仓已于今日开盘执行（前一交易日收盘信号，今日开盘价入场）。")
                 st.dataframe(pd.DataFrame([{
                     "标的": e["ticker"], "操作": "BUY",
                     "股数": e.get("shares", ""),
@@ -700,7 +700,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     # ── 数据下载（方法一）────────────────────────────────────────────────────
     st.subheader("数据下载（用于未来策略1.0的过拟合分析）")
-    st.caption("包含所有模拟交易数据：NAV 历史、开仓记录、平仓记录、信号历史、当前持仓")
+    st.markdown("包含所有模拟交易数据：NAV 历史、开仓记录、平仓记录、信号历史、当前持仓")
 
     _dl1_nav = _m1.get("nav_history", [])
     _dl1_sig = _m1.get("signals_history", [])
@@ -836,7 +836,7 @@ with tab2:
 
     # ── Overview metrics ─────────────────────────────────────────────────────
     st.subheader("一、账户状态概览")
-    st.caption(f"上次脚本运行：{_m2_last_upd} ｜ 初始资金：${_m2_init_cap:,.0f}")
+    st.markdown(f"上次脚本运行：{_m2_last_upd} ｜ 初始资金：${_m2_init_cap:,.0f}")
 
     _m2_pnl = _m2_nav - _m2_init_cap
     _m2_pnl_pct = (_m2_nav / _m2_init_cap - 1) * 100
@@ -869,7 +869,7 @@ with tab2:
         sig_spy     = _m2_today_sig.get("spy_close")
         sig_exits   = _m2_today_sig.get("exits", [])
         sig_entries = _m2_today_sig.get("entries", [])
-        st.caption(f"信号日期：{sig_date} ｜ Regime：{'🟢 BULL' if sig_regime == 'BULL' else '🔴 BEAR'}" +
+        st.markdown(f"信号日期：{sig_date} ｜ Regime：{'🟢 BULL' if sig_regime == 'BULL' else '🔴 BEAR'}" +
                    (f" ｜ SPY：${sig_spy:.2f}" if sig_spy else ""))
 
         _sc1, _sc2 = st.columns(2)
@@ -1035,7 +1035,7 @@ git push
 
     # ── 数据下载（方法二）────────────────────────────────────────────────────
     st.subheader("数据下载（用于未来策略1.0的过拟合分析）")
-    st.caption("包含所有模拟交易数据：NAV 历史、开仓记录、平仓记录、信号历史、当前持仓")
+    st.markdown("包含所有模拟交易数据：NAV 历史、开仓记录、平仓记录、信号历史、当前持仓")
 
     _dl2_nav = _m2.get("nav_history", [])
     _dl2_sig = _m2.get("signals_history", [])
