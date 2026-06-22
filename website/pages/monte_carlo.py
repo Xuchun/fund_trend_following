@@ -23,9 +23,7 @@ st.markdown(f"**回测期间：{meta.backtest_start} → {meta.backtest_end}**")
 # ── Baseline anchor parameter declaration ─────────────────────────────────────
 _p = meta.params_anchor
 st.warning(
-    "⚠️ **重要说明：本页所有蒙特卡洛模拟结果均基于 Baseline Anchor 锚点参数。**\n\n"
-    "模拟方法：对 Baseline 回测产生的**历史日收益率序列**进行 **Block Bootstrap 重采样**（月度分块随机重排，1,000 条路径），"
-    "保留趋势跟踪策略收益率序列的自相关结构，评估策略1.0在不同随机市场路径下的表现分布。"
+    "⚠️ **重要说明：本页所有蒙特卡洛模拟结果均基于 Baseline Anchor 锚点参数。**"
 )
 
 with st.expander("📋 点击展开：本次模拟使用的 Baseline Anchor 锚点参数", expanded=False):
