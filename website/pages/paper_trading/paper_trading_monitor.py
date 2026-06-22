@@ -406,7 +406,14 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             st.dataframe(pd.DataFrame(_order_rows), use_container_width=True, hide_index=True)
             n_sell = len(_sig_exits)
             n_buy  = len(_sig_entries)
-            st.caption(f"共 {n_sell} 笔平仓、{n_buy} 笔开仓，合计 {n_sell+n_buy} 笔订单")
+            _total_sell = sum(e.get("shares", 0) * e.get("stop_price", 0) for e in _sig_exits)
+            _total_buy  = sum(e.get("shares", 0) * e.get("signal_price", 0) for e in _sig_entries)
+            _net = _total_buy - _total_sell
+            st.caption(
+                f"共 {n_sell} 笔平仓、{n_buy} 笔开仓，合计 {n_sell+n_buy} 笔订单　｜　"
+                f"预计卖出回款 ${_total_sell:,.0f}　买入支出 ${_total_buy:,.0f}　"
+                f"净资金变动 {'−' if _net > 0 else '+'}${abs(_net):,.0f}"
+            )
         else:
             st.info("明日无需执行任何交易")
     else:
