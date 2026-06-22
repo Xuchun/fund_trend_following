@@ -869,7 +869,7 @@ with tab2:
         sig_spy     = _m2_today_sig.get("spy_close")
         sig_exits   = _m2_today_sig.get("exits", [])
         sig_entries = _m2_today_sig.get("entries", [])
-        st.markdown(f"信号日期：{sig_date} ｜ Regime：{'🟢 BULL' if sig_regime == 'BULL' else '🔴 BEAR'}" +
+        st.markdown(f"信号日期：{sig_date} 盘后 ｜ Regime：{'🟢 BULL' if sig_regime == 'BULL' else '🔴 BEAR'}" +
                    (f" ｜ SPY：${sig_spy:.2f}" if sig_spy else ""))
 
         _sc1, _sc2 = st.columns(2)
