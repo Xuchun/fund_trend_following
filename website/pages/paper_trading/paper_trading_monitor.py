@@ -500,7 +500,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             "R": f"{p['R']:+.2f}R",
             "浮盈 $": f"${p['unreal_pnl']:+,.0f}",
             "市值": f"${p['mkt_value']/1e3:.0f}K",
-        } for p in sorted(_m1_ok, key=lambda x: x.get("R", 0), reverse=True)]
+        } for p in sorted(_m1_ok, key=lambda x: x["ticker"])]
         st.dataframe(pd.DataFrame(_rows), use_container_width=True, hide_index=True)
 
         _sorted = sorted(_m1_ok, key=lambda x: x.get("R", 0), reverse=True)
