@@ -405,7 +405,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "备注": f"止损设于 ${e['stop_price']:.2f}，风险 {e['trade_risk']*100:.2f}% NAV" if e.get("stop_price") else "—",
             })
         if _order_rows:
-            st.dataframe(pd.DataFrame(_order_rows), use_container_width=True, hide_index=True)
+            st.dataframe(pd.DataFrame(sorted(_order_rows, key=lambda x: x["标的"])), use_container_width=True, hide_index=True)
             n_sell = len(_sig_exits)
             n_buy  = len(_sig_entries)
             _total_sell = sum(e.get("shares", 0) * e.get("stop_price", 0) for e in _sig_exits)
