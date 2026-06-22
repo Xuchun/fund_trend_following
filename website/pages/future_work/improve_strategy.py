@@ -560,9 +560,11 @@ if _sl_d:
     st.plotly_chart(_fig_sl, use_container_width=True)
 
     _sl_base_i = _slv.index(_slbase)
+    _sl_25_i   = _slv.index(2.5) if 2.5 in _slv else 2
+    _sl_25_mdd_word = "改善" if _slm[_sl_25_i] < _slm[_sl_base_i] else "恶化"
     st.markdown(
         f"当前 2× ATR（绿色）：CAGR {_slc[_sl_base_i]:.2f}%（最优），但 Sharpe {_sls[_sl_base_i]:.3f} 不是最优。"
-        f"扩大至 2.5× ATR 时 CAGR 降至 {_slc[2]:.2f}% 但 MaxDD 轻微改善（{_slm[2]:.2f}%）；"
+        f"扩大至 2.5× ATR 时 CAGR 降至 {_slc[_sl_25_i]:.2f}%，MaxDD 轻微{_sl_25_mdd_word}（{_slm[_sl_25_i]:.2f}%，基准 {_slm[_sl_base_i]:.2f}%）；"
         f"收紧至 1.5× ATR 时 CAGR 略降（{_slc[0]:.2f}%）但 MaxDD 最高（{_slm[0]:.2f}%）—— 频繁假止损反而扩大回撤。"
         "维持 2× ATR 是 CAGR 最优选择。"
     )
