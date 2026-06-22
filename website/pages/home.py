@@ -389,6 +389,7 @@ _rows = [
      + _build_wf_neg_desc()),
     ("市场环境分析",  _regime_tag,
      _build_regime_summary() + "危机保护突出，牛市温和参与，符合趋势跟踪内在特征。"),
+    ("过拟合风险",    _of_tag, _of_detail),
 ]
 
 for _dim, _verdict, _detail in _rows:
