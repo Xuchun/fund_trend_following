@@ -67,6 +67,8 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
+st.page_link("pages/universe_tiingo.py", label="→ 数据与标的池（过滤逻辑详情）", icon="🗄️")
+
 st.markdown("---")
 
 # ── Regime filter ─────────────────────────────────────────────────────────────
