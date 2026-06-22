@@ -460,53 +460,6 @@ _mc_cols[2].metric("蒙特卡洛 P95 CAGR（最好5%）", f"{_cagr_d['p95']*100:
 _mc_cols[3].metric("负收益路径概率", f"{_cagr_d['prob_negative_cagr']*100:.0f}%",
                    delta="零概率 ✅" if _cagr_d['prob_negative_cagr'] == 0.0 else None)
 
-# CAGR distribution histogram via percentile bars
-_cagr_pcts = [
-    (_cagr_d["p5"],  "P5"),
-    (_cagr_d["p25"], "P25"),
-    (_cagr_d["p50"], "P50"),
-    (_cagr_d["p75"], "P75"),
-    (_cagr_d["p95"], "P95"),
-]
-_all_cagr = [r[0] * 100 for r in _cagr_pcts]
-
-_fig_mc = make_subplots(rows=1, cols=2,
-                        subplot_titles=["CAGR 分布（1,000路径）", "Sharpe 分布（1,000路径）"])
-
-_fig_mc.add_trace(go.Bar(
-    x=[f"P5\n{_cagr_d['p5']*100:.1f}%",
-       f"P25\n{_cagr_d['p25']*100:.1f}%",
-       f"P50\n{_cagr_d['p50']*100:.1f}%",
-       f"P75\n{_cagr_d['p75']*100:.1f}%",
-       f"P95\n{_cagr_d['p95']*100:.1f}%"],
-    y=[_cagr_d["p5"]*100, _cagr_d["p25"]*100, _cagr_d["p50"]*100,
-       _cagr_d["p75"]*100, _cagr_d["p95"]*100],
-    marker_color=["#d62728","#ff7f0e","#1f77b4","#2ca02c","#17becf"],
-    showlegend=False,
-    hovertemplate="%{x}<br>CAGR=%{y:.2f}%<extra></extra>",
-), row=1, col=1)
-_fig_mc.add_hline(y=_actual_cagr, line_dash="dash", line_color="#1f77b4",
-                  annotation_text=f"实际 {_actual_cagr:.1f}%", row=1, col=1)
-
-_fig_mc.add_trace(go.Bar(
-    x=[f"P5\n{_sha_d['p5']:.3f}",
-       f"P25\n{_sha_d['p25']:.3f}",
-       f"P50\n{_sha_d['p50']:.3f}",
-       f"P75\n{_sha_d['p75']:.3f}",
-       f"P95\n{_sha_d['p95']:.3f}"],
-    y=[_sha_d["p5"], _sha_d["p25"], _sha_d["p50"], _sha_d["p75"], _sha_d["p95"]],
-    marker_color=["#d62728","#ff7f0e","#1f77b4","#2ca02c","#17becf"],
-    showlegend=False,
-    hovertemplate="%{x}<br>Sharpe=%{y:.3f}<extra></extra>",
-), row=1, col=2)
-_fig_mc.add_hline(y=_actual_sharpe, line_dash="dash", line_color="#1f77b4",
-                  annotation_text=f"实际 {_actual_sharpe:.3f}", row=1, col=2)
-
-_fig_mc.update_layout(height=350)
-_fig_mc.update_yaxes(title_text="CAGR (%)", row=1, col=1)
-_fig_mc.update_yaxes(title_text="Sharpe", row=1, col=2)
-st.plotly_chart(_fig_mc, use_container_width=True)
-
 st.markdown(f"""
 **解读：**
 - 实际 CAGR（{_actual_cagr:.1f}%）落在 MC 的 P50–P75 区间 → 不是极端幸运路径，属正常范围
