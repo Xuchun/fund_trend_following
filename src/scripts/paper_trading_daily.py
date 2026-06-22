@@ -334,7 +334,53 @@ def main() -> None:
     spy_close  = float(spy_df["Close"].iloc[-1]) if spy_df is not None and not spy_df.empty else None
     log.info(f"  Regime: {'BULL ✅' if regime_ok else 'BEAR 🚫'}  SPY close: {f'${spy_close:.2f}' if spy_close else 'N/A'}")
 
-    # --- Step 2: exits & stop updates ---
+    # --- Step 2: execute pending entries at today's OPEN price (T+1 entry logic) ---
+    entries_executed: list[dict] = []
+    _pending = state.get("pending_entries", [])
+    if _pending:
+        log.info(f"--- Executing {len(_pending)} pending entries at today's open ---")
+        _held = {p["ticker"] for p in state["positions"]}
+        for sig in _pending:
+            ticker = sig["ticker"]
+            if ticker in _held:
+                log.info(f"  SKIP {ticker}: already held")
+                continue
+            df = pos_data.get(ticker)
+            if df is None or df.empty:
+                log.warning(f"  SKIP {ticker}: no price data")
+                continue
+            _today_rows = df[df.index.date == today]
+            if _today_rows.empty:
+                log.warning(f"  SKIP {ticker}: no data for {today}")
+                continue
+            open_px = float(_today_rows["Open"].iloc[0])
+            _cash_needed = open_px * sig["shares"]
+            if state.get("cash", 0.0) < _cash_needed:
+                log.info(f"  SKIP {ticker}: insufficient cash (need ${_cash_needed:,.0f})")
+                continue
+            new_pos = {
+                "ticker":            ticker,
+                "signal_date":       sig.get("signal_date", ""),
+                "signal_price":      sig["signal_price"],
+                "entry_date":        str(today),
+                "entry_price":       round(open_px, 4),
+                "shares":            sig["shares"],
+                "initial_stop_loss": sig["stop_price"],
+                "current_stop_loss": sig["stop_price"],
+                "peak_price":        round(open_px, 4),
+                "atr_at_entry":      sig.get("atr", 0.0),
+                "R_at_backtest_end": 0.0,
+                "last_known_price":  round(open_px, 4),
+                "last_price_date":   str(today),
+            }
+            state["positions"].append(new_pos)
+            _held.add(ticker)
+            state["cash"] = state.get("cash", 0.0) - _cash_needed
+            entries_executed.append({**sig, "entry_price": round(open_px, 4)})
+            log.info(f"  EXECUTED {ticker} @ open ${open_px:.2f} (signal ${sig['signal_price']:.2f})")
+    state["pending_entries"] = []  # clear after processing
+
+    # --- Step 3: exits & stop updates ---
     log.info("--- Checking exits ---")
     updated_positions, new_closed = check_exits(state, pos_data, today)
     state["positions"]    = updated_positions
