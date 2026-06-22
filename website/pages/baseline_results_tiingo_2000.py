@@ -162,9 +162,9 @@ with _col_b:
     st.markdown(f"""
 | 参数 | 代码名 | Baseline 值 |
 |---|---|---|
-| 每笔风险比例 | `risk_per_trade` | **{_p['risk_per_trade']*100:.1f}% NAV** |
-| 单标的仓位上限 | `position_cap` | **{_p['position_cap']*100:.0f}% NAV** |
-| 热度上限 | `heat_limit` | **{_p['heat_limit']*100:.0f}% NAV** |
+| 每笔风险比例 | `risk_per_trade` | **{_p['risk_per_trade']*100:.1f}% NAV**（目标值；被 position_cap 压缩后实际均值约 0.24% NAV）|
+| 单标的仓位上限 | `position_cap` | **{_p['position_cap']*100:.0f}% NAV**（当计算股数超过此上限时截断，决定实际风险敞口）|
+| 热度上限 | `heat_limit` | **{_p['heat_limit']*100:.0f}% NAV**（安全阀：26 年回测历史峰值 8.2%，从未触发）|
 """)
 
     st.markdown("**相关性过滤**")
