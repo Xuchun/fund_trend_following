@@ -648,44 +648,6 @@ with tab1:
 
     st.markdown("---")
 
-    # ── Automation info ───────────────────────────────────────────────────────
-    with st.expander("⚙️ 自动化配置说明"):
-        st.markdown("""
-**GitHub Actions 自动运行**（无需任何手动操作）
-
-- 工作流文件：`.github/workflows/paper_trading_m1.yml`
-- 触发时间：每个交易日 **美东 4:30 PM**（21:30 UTC）自动运行
-- 运行内容：下载 Yahoo Finance 数据 → 计算信号 → 更新 positions.json → 自动推送到 GitHub
-- 也可在 GitHub → Actions → "Paper Trading M1" 页面手动触发
-
-如需临时手动运行（调试用）：
-```bash
-python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
-```
-""")
-
-    # ── Backtest reference ────────────────────────────────────────────────────
-    with st.expander("📊 回测基准（2000–2026）"):
-        bm1, bm2, bm3, bm4 = st.columns(4)
-        bm1.metric("CAGR",    f"{_bm.get('cagr',0)*100:.2f}%")
-        bm2.metric("最大回撤", f"{_bm.get('max_drawdown',0)*100:.2f}%")
-        bm3.metric("Sharpe",   f"{_bm.get('sharpe',0):.3f}")
-        bm4.metric("Calmar",   f"{_bm.get('calmar',0):.3f}")
-        _nn = _bt_nav["nav"]; _ss = _bt_spy["spy_nav"]
-        _fig_ref = make_subplots(rows=2, cols=1, shared_xaxes=True, row_heights=[0.65, 0.35], vertical_spacing=0.05)
-        _fig_ref.add_trace(go.Scatter(x=_nn.index, y=_nn/_nn.iloc[0], name="策略1.0", line=dict(color="#1f77b4", width=2)), row=1, col=1)
-        _fig_ref.add_trace(go.Scatter(x=_ss.index, y=_ss/_ss.iloc[0], name="SPY", line=dict(color="#888", width=1.2, dash="dash")), row=1, col=1)
-        _dd = (_nn - _nn.cummax()) / _nn.cummax() * 100
-        _fig_ref.add_trace(go.Scatter(x=_dd.index, y=_dd.values, fill="tozeroy", fillcolor="rgba(214,39,40,0.2)", line=dict(color="#d62728", width=1), showlegend=False), row=2, col=1)
-        _fig_ref.update_layout(height=440, template="plotly_white", hovermode="x unified",
-                               legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-                               margin=dict(l=60, r=20, t=40, b=40))
-        _fig_ref.update_yaxes(ticksuffix="x", row=1, col=1)
-        _fig_ref.update_yaxes(ticksuffix="%", row=2, col=1)
-        st.plotly_chart(_fig_ref, use_container_width=True)
-
-    st.markdown("---")
-
     # ── 数据下载（方法一）────────────────────────────────────────────────────
     st.subheader("数据下载（用于未来策略1.0的过拟合分析）")
     st.caption("包含所有模拟交易数据：NAV 历史、平仓记录、信号历史、当前持仓")
