@@ -69,6 +69,26 @@ def _build_method_zip(data: dict, method: str) -> bytes:
             zf.writestr(f"{method}_open_positions.csv",
                 _rows_to_csv(op, list(op[0].keys())))
 
+        # 开仓历史：持仓中 + 已平仓的开仓数据合并
+        _entry_hist = sorted([
+            {"ticker": p["ticker"], "entry_date": p["entry_date"],
+             "entry_price": p["entry_price"], "shares": p["shares"],
+             "initial_stop": p.get("initial_stop_loss", ""),
+             "atr_at_entry": p.get("atr_at_entry", ""), "status": "open"}
+            for p in op
+        ] + [
+            {"ticker": c["ticker"], "entry_date": c.get("entry_date", ""),
+             "entry_price": c.get("entry_price", ""), "shares": c.get("shares", ""),
+             "initial_stop": c.get("initial_stop", ""),
+             "atr_at_entry": "", "status": "closed"}
+            for c in ct
+        ], key=lambda x: x["entry_date"], reverse=True)
+        if _entry_hist:
+            zf.writestr(f"{method}_entry_history.csv",
+                _rows_to_csv(_entry_hist,
+                    ["ticker","entry_date","entry_price","shares",
+                     "initial_stop","atr_at_entry","status"]))
+
     return zbuf.getvalue()
 
 @st.cache_data(ttl=3600)
