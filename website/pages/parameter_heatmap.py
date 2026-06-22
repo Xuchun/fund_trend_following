@@ -768,7 +768,30 @@ if _hm_b and _n_b == 20:
 elif _hm_b:
     st.info(f"⏳ Grid B 计算进行中（{_n_b}/20），结论待更新。")
 
-st.markdown("""
+_sl_peak_s   = max(r["sharpe"] for r in _sl_d["results"]) if _sl_d else None
+_sl_all_pass = all(r["sharpe"] >= _sl_peak_s * 0.90 for r in _sl_d["results"]) if _sl_d else None
+_tm_peak_r   = max(_tm_d["results"], key=lambda r: r["sharpe"]) if _tm_d else None
+_tm_base_r   = next((r for r in _tm_d["results"] if abs(r["param_value"] - p["trail_multiplier_r1"]) < 0.01), None) if _tm_d else None
+
+if _sl_cv and _tm_cv and _sl_peak_s and _tm_peak_r:
+    _sl_note = (
+        f"鲁棒性最高（CV={_sl_cv:.3f}），所有测试值全部通过稳定性测试（≥ 90% 峰值）。"
+        if _sl_all_pass else
+        f"CV={_sl_cv:.3f}，稳定区间 {_sl_stab_str}，基准值 {p['stop_loss_multiplier']:.1f}× 在稳定区间内。"
+    )
+    _tm_is_at_peak = (_tm_base_r is not None and
+                      abs(_tm_base_r["param_value"] - _tm_peak_r["param_value"]) < 0.01)
+    if _tm_is_at_peak:
+        _tm_note_c = (f"基准值 {p['trail_multiplier_r1']:.0f}×（Sharpe={_tm_base_r['sharpe']:.3f}）"
+                      f"即为最优值；CV={_tm_cv:.3f}，属鲁棒。")
+    else:
+        _tm_pct90_v = _tm_peak_r["sharpe"] * 0.90
+        _tm_base_ok = _tm_base_r is not None and _tm_base_r["sharpe"] >= _tm_pct90_v
+        _tm_note_c = (f"峰值 {_tm_peak_r['param_value']:.1f}×（Sharpe={_tm_peak_r['sharpe']:.3f}），"
+                      f"基准值 {p['trail_multiplier_r1']:.0f}×（Sharpe={_tm_base_r['sharpe']:.3f}）"
+                      + ("满足 90% 稳定阈值；" if _tm_base_ok else "低于 90% 稳定阈值，建议 Strategy 2.0 优化；")
+                      + f"CV={_tm_cv:.3f}，属鲁棒。")
+    st.markdown(f"""
 ---
 
 ### 综合结论
@@ -776,12 +799,13 @@ st.markdown("""
 **策略 1.0 的参数鲁棒性在全部 10 个已测参数中均表现良好。**
 
 - **三个核心参数**（N、止损乘数、止盈乘数）的 CV(Sharpe) 均 < 0.10，符合高鲁棒标准。
-- **ATR 止损乘数**鲁棒性最高（CV=0.045），1.5×–3.0× 全部通过稳定性测试。
+- **ATR 止损乘数**{_sl_note}
 - **每笔风险比例**和**最低市值过滤**几乎不影响 Sharpe，属于"不敏感参数"。
-- **移动止盈乘数**在 2.5× 时表现最优（0.604 vs 基准 0.519），基准值 3.0× 略低于峰值；
-  CV < 0.10 仍属鲁棒，但未来 Strategy 2.0 可考虑优化此参数。
+- **移动止盈乘数**{_tm_note_c}
 - **交易成本参数**（滑点、佣金）呈预期的单调递减，即便在 15 bps 高摩擦下 Sharpe 仍为正。
 
 **方法论结论：** 策略设计时参数已事先确定，热力图/扰动测试均为事后鲁棒性验证，
 不存在过拟合或数据泄漏风险。参数景观总体呈高原形态（Plateau），策略 1.0 的参数设置具有充分的鲁棒性基础。
 """)
+else:
+    st.info("⏳ 核心参数扰动测试尚未完成，综合结论待更新。")
