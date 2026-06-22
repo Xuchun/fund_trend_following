@@ -32,6 +32,45 @@ tab1, tab2 = st.tabs(["📊 方法一：手动跟踪（Yahoo Finance）", "🤖 
 # ── Shared helpers ─────────────────────────────────────────────────────────
 # ═══════════════════════════════════════════════════════════════════════════════
 
+def _build_method_zip(data: dict, method: str) -> bytes:
+    import zipfile, io, csv
+    from datetime import date as _d
+
+    def _rows_to_csv(rows: list, fieldnames: list) -> bytes:
+        buf = io.StringIO()
+        w = csv.DictWriter(buf, fieldnames=fieldnames, extrasaction="ignore")
+        w.writeheader()
+        w.writerows(rows)
+        return buf.getvalue().encode("utf-8-sig")
+
+    zbuf = io.BytesIO()
+    with zipfile.ZipFile(zbuf, "w", zipfile.ZIP_DEFLATED) as zf:
+        zf.writestr(f"{method}_raw.json",
+                    json.dumps(data, ensure_ascii=False, indent=2))
+
+        nav_h = data.get("nav_history", [])
+        if nav_h:
+            zf.writestr(f"{method}_nav_history.csv",
+                _rows_to_csv(nav_h, ["date", "nav", "regime"]))
+
+        sh = data.get("signals_history", [])
+        if sh:
+            zf.writestr(f"{method}_signals_history.csv",
+                _rows_to_csv(sh, ["date", "regime", "spy_close",
+                                   "n_candidates", "n_entries", "n_exits"]))
+
+        ct = data.get("closed_trades", [])
+        if ct:
+            zf.writestr(f"{method}_closed_trades.csv",
+                _rows_to_csv(ct, list(ct[0].keys())))
+
+        op = [p for p in data.get("positions", []) if not p.get("closed")]
+        if op:
+            zf.writestr(f"{method}_open_positions.csv",
+                _rows_to_csv(op, list(op[0].keys())))
+
+    return zbuf.getvalue()
+
 @st.cache_data(ttl=3600)
 def _fetch_yf(tickers: tuple, period: str = "300d") -> pd.DataFrame:
     import yfinance as yf
