@@ -293,14 +293,14 @@ def scan_entries(
 
         strength = float(compute_breakout_strength(close, rolling_high).iloc[-1])
         signals.append({
-            "ticker":     ticker,
-            "entry_price": round(entry_px, 4),
-            "stop_loss":   round(stop_px, 4),
-            "shares":      shares,
-            "atr":         round(cur_atr, 4),
-            "strength":    round(strength, 4),
-            "trade_risk":  round(trade_risk, 4),
-            "notional":    round(notional, 2),
+            "ticker":       ticker,
+            "signal_price": round(entry_px, 4),  # T-day close; actual entry at T+1 open
+            "stop_loss":    round(stop_px, 4),
+            "shares":       shares,
+            "atr":          round(cur_atr, 4),
+            "strength":     round(strength, 4),
+            "trade_risk":   round(trade_risk, 4),
+            "notional":     round(notional, 2),
         })
         heat_used += trade_risk
 
