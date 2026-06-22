@@ -33,7 +33,7 @@ State file: results/paper_trading/ib_state.json
 
 import sys, json, argparse, logging, math
 from pathlib import Path
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 
 _root = Path(__file__).resolve().parents[2]
 if str(_root) not in sys.path:
