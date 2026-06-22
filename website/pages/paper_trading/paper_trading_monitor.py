@@ -736,12 +736,13 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     with st.expander(f"信号历史（{len(_dl1_sig)} 条）"):
         if _dl1_sig:
             st.dataframe(pd.DataFrame([{
-                "日期":      s["date"],
-                "Regime":    s.get("regime", ""),
-                "SPY收盘":   s.get("spy_close", ""),
-                "候选信号数": s.get("n_candidates", ""),
-                "实际开仓":  s.get("n_entries", ""),
-                "平仓数":    s.get("n_exits", ""),
+                "日期":         s["date"],
+                "Regime":       s.get("regime", ""),
+                "SPY收盘":      s.get("spy_close", ""),
+                "候选信号数":   s.get("n_candidates", ""),
+                "当日开仓信号": s.get("n_entries", ""),  # signals → pending for next day
+                "当日已执行":   s.get("n_executed", ""), # entries executed at T+1 open
+                "平仓数":       s.get("n_exits", ""),
             } for s in reversed(_dl1_sig)]), use_container_width=True, hide_index=True)
         else:
             st.info("暂无数据")
