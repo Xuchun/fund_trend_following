@@ -462,7 +462,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     "风险%": f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "",
                 } for e in _ts_entries]), use_container_width=True, hide_index=True)
             elif _ts_pending:
-                st.caption(f"以上 {len(_ts_pending)} 个入场信号已于本日收盘后检测，将于下一交易日开盘执行。")
+                st.markdown(f"以上 {len(_ts_pending)} 个开仓信号已于本日收盘后检测，将于下一交易日开盘执行。")
                 st.dataframe(pd.DataFrame([{
                     "标的": e["ticker"], "操作": "BUY（待执行）",
                     "股数": e.get("shares", ""),
