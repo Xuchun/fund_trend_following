@@ -518,6 +518,36 @@ def main() -> None:
     spy_close = float(spy_df["Close"].iloc[-1]) if spy_df is not None and not spy_df.empty else None
     log.info(f"  Regime: {'BULL ✅' if regime_ok else 'BEAR 🚫'} | SPY: {f'${spy_close:.2f}' if spy_close else 'N/A'}")
 
+    # --- Resolve pending_moo positions: update entry_price to T+1 open ---
+    # IB places MOO orders at T close; actual fill happens at T+1 open.
+    # On T+1 run, we update entry_price from signal price to actual open price.
+    _moo_updated = 0
+    for pos in state["positions"]:
+        if pos.get("order_status") != "pending_moo":
+            continue
+        _signal_date = pos.get("entry_date", "")
+        if not _signal_date or _signal_date >= str(today):
+            continue  # placed today, T+1 open not yet known
+        df = pos_data.get(pos["ticker"])
+        if df is None or df.empty:
+            continue
+        _today_rows = df[df.index.date == today]
+        if _today_rows.empty:
+            continue
+        open_px = float(_today_rows["Open"].iloc[0])
+        pos.setdefault("signal_date",  pos["entry_date"])
+        pos.setdefault("signal_price", pos["entry_price"])
+        pos["entry_date"]       = str(today)   # actual entry = T+1
+        pos["entry_price"]      = round(open_px, 4)
+        pos["peak_price"]       = round(open_px, 4)
+        pos["last_known_price"] = round(open_px, 4)
+        pos["last_price_date"]  = str(today)
+        pos["order_status"]     = "active"
+        log.info(f"  MOO resolved {pos['ticker']}: entry ${open_px:.2f} (signal ${pos['signal_price']:.2f})")
+        _moo_updated += 1
+    if _moo_updated:
+        log.info(f"  Updated {_moo_updated} pending_moo positions to T+1 open price")
+
     # --- Compute exits ---
     log.info("--- Computing exits ---")
     updated_positions, new_closed, exit_orders = check_exits(state, pos_data, today)
