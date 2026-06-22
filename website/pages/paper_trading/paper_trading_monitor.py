@@ -428,7 +428,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _ts_regime  = _m1_today_sig.get("regime", "N/A")
         _ts_spy     = _m1_today_sig.get("spy_close")
         _ts_exits   = _m1_today_sig.get("exits", [])
-        _ts_entries = _m1_today_sig.get("entries", [])
+        _ts_entries = _m1_today_sig.get("entries", [])   # executed at T+1 open
+        _ts_pending = _m1.get("pending_entries", [])      # detected today, execute tomorrow
+        _ts_entry_display = _ts_entries if _ts_entries else _ts_pending
         _ts_regime_str = "🟢 BULL" if _ts_regime == "BULL" else "🔴 BEAR"
         if _spy_close and _spy_sma:
             _ts_gap = (_spy_close / _spy_sma - 1) * 100
@@ -436,7 +438,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             _ts_regime_str += f"，SPY {_spy_close:.2f} {_ts_op} SMA200 {_spy_sma:.2f}（{_ts_gap:+.1f}%）"
         st.caption(f"信号日期：{_ts_date} ｜ Regime：{_ts_regime_str}")
 
-        _tab_exit, _tab_entry = st.tabs([f"退出信号（{len(_ts_exits)} 笔）", f"入场信号（{len(_ts_entries)} 笔）"])
+        _tab_exit, _tab_entry = st.tabs([f"退出信号（{len(_ts_exits)} 笔）", f"入场信号（{len(_ts_entry_display)} 笔）"])
         with _tab_exit:
             if _ts_exits:
                 st.dataframe(pd.DataFrame([{
@@ -459,6 +461,15 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "",
                     "风险%": f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "",
                 } for e in _ts_entries]), use_container_width=True, hide_index=True)
+            elif _ts_pending:
+                st.caption(f"以上 {len(_ts_pending)} 个入场信号已于本日收盘后检测，将于下一交易日开盘执行。")
+                st.dataframe(pd.DataFrame([{
+                    "标的": e["ticker"], "操作": "BUY（待执行）",
+                    "股数": e.get("shares", ""),
+                    "信号价（本日收盘）": f"${e['signal_price']:.2f}" if e.get("signal_price") else "",
+                    "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "",
+                    "风险%": f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "",
+                } for e in _ts_pending]), use_container_width=True, hide_index=True)
             else:
                 st.info("无入场信号")
     else:
