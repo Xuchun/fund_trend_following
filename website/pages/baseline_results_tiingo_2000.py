@@ -115,7 +115,7 @@ st.markdown("---")
 
 # ── Baseline parameter table ───────────────────────────────────────────────────
 _p = meta.params_anchor
-st.subheader("📋 Baseline 锚点参数")
+st.subheader("Baseline 锚点参数")
 
 _col_a, _col_b = st.columns(2)
 
