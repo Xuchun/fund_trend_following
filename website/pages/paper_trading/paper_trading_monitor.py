@@ -436,7 +436,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             _ts_gap = (_spy_close / _spy_sma - 1) * 100
             _ts_op  = "＞" if _spy_close > _spy_sma else "＜"
             _ts_regime_str += f"，SPY {_spy_close:.2f} {_ts_op} SMA200 {_spy_sma:.2f}（{_ts_gap:+.1f}%）"
-        st.markdown(f"信号日期：{_ts_date} ｜ Regime：{_ts_regime_str}")
+        st.markdown(f"信号日期：{_ts_date} 盘后 ｜ Regime：{_ts_regime_str}")
 
         _tab_exit, _tab_entry = st.tabs([f"平仓信号（{len(_ts_exits)} 笔）", f"开仓信号（{len(_ts_entry_display)} 笔）"])
         with _tab_exit:
