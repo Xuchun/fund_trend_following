@@ -167,6 +167,19 @@ if mc and "nav_percentiles" in mc:
         name="5th percentile",
     ))
 
+    # Actual historical NAV overlay
+    import pandas as _pd_mc
+    _nav_csv = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m_2000" / "nav.csv"
+    if _nav_csv.exists():
+        _nav_mc = _pd_mc.read_csv(_nav_csv, parse_dates=["date"]).set_index("date")["nav"]
+        _nav_mc_norm = (_nav_mc / _nav_mc.iloc[0]).tolist()
+        _nav_mc_dates = [d.strftime("%Y-%m-%d") for d in _nav_mc.index]
+        fig.add_trace(go.Scatter(
+            x=_nav_mc_dates, y=_nav_mc_norm, mode="lines",
+            line=dict(color="black", width=2),
+            name="实际历史路径",
+        ))
+
     fig.update_layout(
         title="模拟净值路径（归一化，初始=1.0）",
         xaxis_title="日期",
