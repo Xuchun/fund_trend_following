@@ -233,151 +233,169 @@
   "nav_history": [
     {
       "date": "2026-06-19",
-      "nav": 200000.0
+      "nav": 200000.0,
+      "regime": "BULL",
+      "spy_close": null
     }
   ],
   "today_signals": {
     "date": "2026-06-19",
     "regime": "BULL",
     "spy_close": null,
+    "n_candidates": 17,
+    "n_entries": 17,
+    "n_executed": 0,
+    "n_exits": 0,
     "exits": [],
-    "entries": [
-      {
-        "ticker": "ENTG",
-        "shares": 55,
-        "signal_price": 178.77,
-        "stop_price": 157.7971,
-        "trade_risk": 0.0058,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "MKSI",
-        "shares": 24,
-        "signal_price": 406.37,
-        "stop_price": 367.0922,
-        "trade_risk": 0.0047,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "ICHR",
-        "shares": 101,
-        "signal_price": 98.61,
-        "stop_price": 86.1465,
-        "trade_risk": 0.0063,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "ALAB",
-        "shares": 23,
-        "signal_price": 417.07,
-        "stop_price": 359.1378,
-        "trade_risk": 0.0067,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "ACMR",
-        "shares": 91,
-        "signal_price": 109.87,
-        "stop_price": 94.2195,
-        "trade_risk": 0.0071,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "LTH",
-        "shares": 270,
-        "signal_price": 36.92,
-        "stop_price": 34.3677,
-        "trade_risk": 0.0034,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "CIFR",
-        "shares": 342,
-        "signal_price": 29.18,
-        "stop_price": 24.66,
-        "trade_risk": 0.0077,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "BTSG",
-        "shares": 150,
-        "signal_price": 66.25,
-        "stop_price": 62.2145,
-        "trade_risk": 0.003,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "FRO",
-        "shares": 244,
-        "signal_price": 40.93,
-        "stop_price": 37.7943,
-        "trade_risk": 0.0038,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "BE",
-        "shares": 30,
-        "signal_price": 328.91,
-        "stop_price": 279.6773,
-        "trade_risk": 0.0074,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "ALGM",
-        "shares": 169,
-        "signal_price": 59.0,
-        "stop_price": 51.7933,
-        "trade_risk": 0.0061,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "GWW",
-        "shares": 7,
-        "signal_price": 1365.41,
-        "stop_price": 1309.0517,
-        "trade_risk": 0.002,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "CAT",
-        "shares": 10,
-        "signal_price": 985.82,
-        "stop_price": 921.0878,
-        "trade_risk": 0.0032,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "INTC",
-        "shares": 74,
-        "signal_price": 133.99,
-        "stop_price": 115.7296,
-        "trade_risk": 0.0068,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "AIT",
-        "shares": 29,
-        "signal_price": 337.96,
-        "stop_price": 322.1226,
-        "trade_risk": 0.0023,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "EEM",
-        "shares": 141,
-        "signal_price": 70.79,
-        "stop_price": 67.3679,
-        "trade_risk": 0.0024,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "CRS",
-        "shares": 17,
-        "signal_price": 586.47,
-        "stop_price": 546.3066,
-        "trade_risk": 0.0034,
-        "order_type": "MARKET"
-      }
-    ]
-  }
+    "entries": []
+  },
+  "signals_history": [
+    {
+      "date": "2026-06-19",
+      "regime": "BULL",
+      "spy_close": null,
+      "n_candidates": 17,
+      "n_entries": 17,
+      "n_exits": 0,
+      "exits": [],
+      "entries": [
+        {
+          "ticker": "ENTG",
+          "shares": 55,
+          "signal_price": 178.77,
+          "stop_price": 157.7971,
+          "trade_risk": 0.0058,
+          "order_type": "MARKET"
+        },
+        {
+          "ticker": "MKSI",
+          "shares": 24,
+          "signal_price": 406.37,
+          "stop_price": 367.0922,
+          "trade_risk": 0.0047,
+          "order_type": "MARKET"
+        },
+        {
+          "ticker": "ICHR",
+          "shares": 101,
+          "signal_price": 98.61,
+          "stop_price": 86.1465,
+          "trade_risk": 0.0063,
+          "order_type": "MARKET"
+        },
+        {
+          "ticker": "ALAB",
+          "shares": 23,
+          "signal_price": 417.07,
+          "stop_price": 359.1378,
+          "trade_risk": 0.0067,
+          "order_type": "MARKET"
+        },
+        {
+          "ticker": "ACMR",
+          "shares": 91,
+          "signal_price": 109.87,
+          "stop_price": 94.2195,
+          "trade_risk": 0.0071,
+          "order_type": "MARKET"
+        },
+        {
+          "ticker": "LTH",
+          "shares": 270,
+          "signal_price": 36.92,
+          "stop_price": 34.3677,
+          "trade_risk": 0.0034,
+          "order_type": "MARKET"
+        },
+        {
+          "ticker": "CIFR",
+          "shares": 342,
+          "signal_price": 29.18,
+          "stop_price": 24.66,
+          "trade_risk": 0.0077,
+          "order_type": "MARKET"
+        },
+        {
+          "ticker": "BTSG",
+          "shares": 150,
+          "signal_price": 66.25,
+          "stop_price": 62.2145,
+          "trade_risk": 0.003,
+          "order_type": "MARKET"
+        },
+        {
+          "ticker": "FRO",
+          "shares": 244,
+          "signal_price": 40.93,
+          "stop_price": 37.7943,
+          "trade_risk": 0.0038,
+          "order_type": "MARKET"
+        },
+        {
+          "ticker": "BE",
+          "shares": 30,
+          "signal_price": 328.91,
+          "stop_price": 279.6773,
+          "trade_risk": 0.0074,
+          "order_type": "MARKET"
+        },
+        {
+          "ticker": "ALGM",
+          "shares": 169,
+          "signal_price": 59.0,
+          "stop_price": 51.7933,
+          "trade_risk": 0.0061,
+          "order_type": "MARKET"
+        },
+        {
+          "ticker": "GWW",
+          "shares": 7,
+          "signal_price": 1365.41,
+          "stop_price": 1309.0517,
+          "trade_risk": 0.002,
+          "order_type": "MARKET"
+        },
+        {
+          "ticker": "CAT",
+          "shares": 10,
+          "signal_price": 985.82,
+          "stop_price": 921.0878,
+          "trade_risk": 0.0032,
+          "order_type": "MARKET"
+        },
+        {
+          "ticker": "INTC",
+          "shares": 74,
+          "signal_price": 133.99,
+          "stop_price": 115.7296,
+          "trade_risk": 0.0068,
+          "order_type": "MARKET"
+        },
+        {
+          "ticker": "AIT",
+          "shares": 29,
+          "signal_price": 337.96,
+          "stop_price": 322.1226,
+          "trade_risk": 0.0023,
+          "order_type": "MARKET"
+        },
+        {
+          "ticker": "EEM",
+          "shares": 141,
+          "signal_price": 70.79,
+          "stop_price": 67.3679,
+          "trade_risk": 0.0024,
+          "order_type": "MARKET"
+        },
+        {
+          "ticker": "CRS",
+          "shares": 17,
+          "signal_price": 586.47,
+          "stop_price": 546.3066,
+          "trade_risk": 0.0034,
+          "order_type": "MARKET"
+        }
+      ]
+    }
+  ]
 }
