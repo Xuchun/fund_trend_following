@@ -388,6 +388,7 @@ def main() -> None:
     history.append({"date": str(today), "nav": round(current_nav, 2)})
     state["nav_history"]     = sorted(history, key=lambda x: x["date"])
     state["last_update_date"] = str(today)
+    state["last_update_utc"]  = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     # --- Step 6: save today's signals for website display ---
     state["today_signals"] = {
