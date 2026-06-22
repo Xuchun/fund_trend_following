@@ -392,10 +392,13 @@ def main() -> None:
     state["last_update_utc"]  = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     # --- Step 6: save today's signals for website display ---
-    state["today_signals"] = {
-        "date":    str(today),
-        "regime":  "BULL" if regime_ok else "BEAR",
-        "spy_close": round(spy_close, 2) if spy_close else None,
+    _today_sig = {
+        "date":         str(today),
+        "regime":       "BULL" if regime_ok else "BEAR",
+        "spy_close":    round(spy_close, 2) if spy_close else None,
+        "n_candidates": len(candidates),
+        "n_entries":    len(entries_executed),
+        "n_exits":      len(new_closed),
         "exits": [{
             "ticker":     c["ticker"],
             "shares":     c["shares"],
@@ -411,6 +414,12 @@ def main() -> None:
             "order_type":   "MARKET",
         } for e in entries_executed],
     }
+    state["today_signals"] = _today_sig
+
+    # --- Step 6b: accumulate signals_history (never overwrites past days) ---
+    _sig_hist = [s for s in state.get("signals_history", []) if s["date"] != str(today)]
+    _sig_hist.append(_today_sig)
+    state["signals_history"] = sorted(_sig_hist, key=lambda x: x["date"])
 
     save_state(state)
 
