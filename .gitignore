@@ -31,6 +31,7 @@ results/**/sanity.txt
 *.pdf
 # 例外：正式发布的回测报告
 !*策略1.0完整回测报告*.pdf
+!*策略1.0_完整回测报告*.pdf
 
 # 环境变量 / API keys（不上传 git）
 .env
