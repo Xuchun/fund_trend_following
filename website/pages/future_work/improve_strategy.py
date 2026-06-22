@@ -347,7 +347,7 @@ st.markdown("""
 st.markdown("---")
 
 # ── 八b、平价保护 ─────────────────────────────────────────────────────────────
-st.subheader("五、平价保护（Breakeven Protection）")
+st.subheader("六、平价保护（Breakeven Protection）")
 
 st.markdown(
     "> 📊 本节数据来自专项页面「**如何用平价保护改善最大回撤**」的完整模拟分析。"
