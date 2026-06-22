@@ -387,49 +387,43 @@ def main() -> None:
     state["closed_trades"] = state.get("closed_trades", []) + new_closed
     log.info(f"  {len(new_closed)} exits | {len(updated_positions)} still open")
 
-    # --- Step 3: NAV estimate after exits ---
+    # --- Step 4: NAV estimate after exits ---
     mkt_value = sum(
         p.get("last_known_price", p["entry_price"]) * p["shares"]
         for p in state["positions"]
     )
     current_nav = mkt_value + state.get("cash", 0.0)
 
-    # --- Step 4: new entries ---
-    candidates: list[dict] = []
-    entries_executed: list[dict] = []
+    # --- Step 5: scan new entry signals → save as pending (execute tomorrow at T+1 open) ---
+    candidates:  list[dict] = []
+    new_pending: list[dict] = []
     if regime_ok and not args.no_entries:
-        log.info("--- Scanning universe for new entries ---")
-        universe   = pd.read_csv(_UNIVERSE)
-        active     = universe[universe["is_active"] == True]["ticker"].tolist()
-        univ_data  = fetch_price_data(active, period=args.universe_period)
+        log.info("--- Scanning universe for new entry signals ---")
+        universe  = pd.read_csv(_UNIVERSE)
+        active    = universe[universe["is_active"] == True]["ticker"].tolist()
+        univ_data = fetch_price_data(active, period=args.universe_period)
         candidates = scan_entries(state, univ_data, today, current_nav)
-        log.info(f"  Signals found: {len(candidates)}")
-
+        log.info(f"  Signals found: {len(candidates)} — saving as pending (execute tomorrow at open)")
         for sig in candidates:
             if state.get("cash", 0.0) < sig["notional"]:
                 log.info(f"  Skip {sig['ticker']}: insufficient cash")
                 continue
-            new_pos = {
-                "ticker":            sig["ticker"],
-                "entry_date":        str(today),
-                "entry_price":       sig["entry_price"],
-                "shares":            sig["shares"],
-                "initial_stop_loss": sig["stop_loss"],
-                "current_stop_loss": sig["stop_loss"],
-                "peak_price":        sig["entry_price"],
-                "atr_at_entry":      sig["atr"],
-                "R_at_backtest_end": 0.0,
-                "last_known_price":  sig["entry_price"],
-                "last_price_date":   str(today),
-            }
-            state["positions"].append(new_pos)
-            state["cash"] = state.get("cash", 0.0) - sig["notional"]
-            entries_executed.append(sig)
-            log.info(f"  ENTRY {sig['ticker']} @ ${sig['entry_price']:.2f}  "
+            new_pending.append({
+                "ticker":       sig["ticker"],
+                "signal_date":  str(today),
+                "signal_price": sig["signal_price"],
+                "stop_price":   sig["stop_loss"],
+                "shares":       sig["shares"],
+                "atr":          sig["atr"],
+                "trade_risk":   sig["trade_risk"],
+                "notional":     sig["notional"],
+            })
+            log.info(f"  PENDING {sig['ticker']} @ signal ${sig['signal_price']:.2f}  "
                      f"stop=${sig['stop_loss']:.2f}  shares={sig['shares']:,}  "
                      f"risk={sig['trade_risk']*100:.2f}%")
     elif not regime_ok:
-        log.info("  BEAR regime — no new entries")
+        log.info("  BEAR regime — no new entry signals")
+    state["pending_entries"] = new_pending
 
     # --- Step 5: update metadata & NAV history ---
     history = [h for h in state.get("nav_history", []) if h["date"] != str(today)]
