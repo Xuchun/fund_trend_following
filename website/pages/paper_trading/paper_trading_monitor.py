@@ -416,8 +416,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             )
         else:
             st.info("明日无需执行任何交易")
-    else:
-        st.info("尚无今日信号，明日交易计划待脚本运行后更新")
 
     st.markdown("---")
 
