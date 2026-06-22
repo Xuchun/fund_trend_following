@@ -1212,7 +1212,7 @@ if _pc_d:
 st.markdown("---")
 
 # ── 十、Cluster Risk ──────────────────────────────────────────────────────────
-st.subheader("十四、成交量过滤")
+st.subheader("十五、成交量过滤")
 
 st.markdown("""
 当前 volume_filter_multiplier = 1.5×，要求突破当日成交量 ≥ 60日均量的 1.5 倍。
