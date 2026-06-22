@@ -425,7 +425,7 @@ def main() -> None:
         log.info("  BEAR regime — no new entry signals")
     state["pending_entries"] = new_pending
 
-    # --- Step 5: update metadata & NAV history ---
+    # --- Step 6: update metadata & NAV history ---
     history = [h for h in state.get("nav_history", []) if h["date"] != str(today)]
     history.append({"date": str(today), "nav": round(current_nav, 2), "regime": "BULL" if regime_ok else "BEAR",
                     "spy_close": round(spy_close, 2) if spy_close else None})
@@ -433,13 +433,14 @@ def main() -> None:
     state["last_update_date"] = str(today)
     state["last_update_utc"]  = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-    # --- Step 6: save today's signals for website display ---
+    # --- Step 7: save today's record for website display ---
     _today_sig = {
         "date":         str(today),
         "regime":       "BULL" if regime_ok else "BEAR",
         "spy_close":    round(spy_close, 2) if spy_close else None,
         "n_candidates": len(candidates),
-        "n_entries":    len(entries_executed),
+        "n_entries":    len(new_pending),      # signals detected today → pending for tomorrow
+        "n_executed":   len(entries_executed), # entries actually executed today at T+1 open
         "n_exits":      len(new_closed),
         "exits": [{
             "ticker":     c["ticker"],
@@ -447,18 +448,20 @@ def main() -> None:
             "stop_price": c["exit_price"],
             "order_type": "MARKET",
         } for c in new_closed],
-        "entries": [{
+        "entries": [{                           # entries executed TODAY at T+1 open
             "ticker":       e["ticker"],
+            "signal_date":  e.get("signal_date", ""),
+            "signal_price": e["signal_price"],
+            "entry_price":  e["entry_price"],
             "shares":       e["shares"],
-            "signal_price": e["entry_price"],
-            "stop_price":   e["stop_loss"],
+            "stop_price":   e["stop_price"],
             "trade_risk":   e["trade_risk"],
             "order_type":   "MARKET",
         } for e in entries_executed],
     }
     state["today_signals"] = _today_sig
 
-    # --- Step 6b: accumulate signals_history (never overwrites past days) ---
+    # --- Step 7b: accumulate signals_history (never overwrites past days) ---
     _sig_hist = [s for s in state.get("signals_history", []) if s["date"] != str(today)]
     _sig_hist.append(_today_sig)
     state["signals_history"] = sorted(_sig_hist, key=lambda x: x["date"])
