@@ -203,7 +203,16 @@ with tab1:
     _m1_history    = _m1.get("nav_history", [])
     _m1_cash       = _m1.get("cash", 0.0)
     _m1_init_nav   = _m1["initial_nav"]
-    _m1_last_upd   = _m1.get("last_update_date", "N/A")
+    _m1_last_upd_raw = _m1.get("last_update_utc", "")
+    if _m1_last_upd_raw:
+        from datetime import datetime, timezone, timedelta
+        _sgt = timezone(timedelta(hours=8))
+        _m1_last_upd = (datetime.strptime(_m1_last_upd_raw, "%Y-%m-%dT%H:%M:%SZ")
+                        .replace(tzinfo=timezone.utc)
+                        .astimezone(_sgt)
+                        .strftime("%Y-%m-%d %H:%M SGT"))
+    else:
+        _m1_last_upd = _m1.get("last_update_date", "N/A")
     _m1_today_sig  = _m1.get("today_signals")
 
     # ── Fetch live prices ────────────────────────────────────────────────────
