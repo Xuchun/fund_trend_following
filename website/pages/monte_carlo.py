@@ -196,7 +196,6 @@ st.markdown("---")
 
 # ── Section 3: CAGR & MaxDD distribution ─────────────────────────────────────
 if mc and "cagr_dist" in mc:
-    import plotly.graph_objects as go
     from plotly.subplots import make_subplots
     import numpy as np
 
