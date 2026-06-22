@@ -900,3 +900,89 @@ git push
 | 股数取整 | **四舍五入**（小数≥0.5进一） |
 | 正式启动 | **{_m2_live_start}** |
 """)
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ── 数据下载（用于未来过拟合分析）────────────────────────────────────────────
+# ═══════════════════════════════════════════════════════════════════════════════
+
+st.markdown("---")
+st.subheader("数据下载（用于未来 Layer 4 过拟合分析）")
+st.caption("包含所有模拟交易数据：NAV 历史、平仓记录、信号历史、当前持仓（方法一 + 方法二）")
+
+def _build_download_zip() -> bytes:
+    import zipfile, io, csv
+
+    def _json_to_csv_bytes(rows: list, fieldnames: list) -> bytes:
+        buf = io.StringIO()
+        w = csv.DictWriter(buf, fieldnames=fieldnames, extrasaction="ignore")
+        w.writeheader()
+        w.writerows(rows)
+        return buf.getvalue().encode("utf-8-sig")
+
+    zbuf = io.BytesIO()
+    with zipfile.ZipFile(zbuf, "w", zipfile.ZIP_DEFLATED) as zf:
+        # ── Method 1 (positions.json) ──────────────────────────────────────
+        if _m1_file.exists():
+            m1 = json.loads(_m1_file.read_text())
+            zf.writestr("m1_raw/positions.json", _m1_file.read_text())
+
+            # nav_history
+            nav_h = m1.get("nav_history", [])
+            if nav_h:
+                zf.writestr("m1_csv/nav_history.csv",
+                    _json_to_csv_bytes(nav_h, ["date", "nav", "regime"]))
+
+            # closed_trades
+            ct = m1.get("closed_trades", [])
+            if ct:
+                fields = ["ticker","entry_date","exit_date","entry_price","exit_price",
+                          "shares","initial_stop","final_stop","pnl_r","net_pnl",
+                          "exit_reason","holding_days"]
+                zf.writestr("m1_csv/closed_trades.csv", _json_to_csv_bytes(ct, fields))
+
+            # signals_history
+            sh = m1.get("signals_history", [])
+            if sh:
+                fields = ["date","regime","spy_close","n_candidates","n_entries","n_exits"]
+                zf.writestr("m1_csv/signals_history.csv", _json_to_csv_bytes(sh, fields))
+
+            # open_positions
+            op = [p for p in m1.get("positions", []) if not p.get("closed")]
+            if op:
+                fields = ["ticker","entry_date","entry_price","shares",
+                          "initial_stop_loss","current_stop_loss","peak_price","atr_at_entry"]
+                zf.writestr("m1_csv/open_positions.csv", _json_to_csv_bytes(op, fields))
+
+        # ── Method 2 (ib_state.json) ──────────────────────────────────────
+        if _m2_file.exists():
+            zf.writestr("m2_raw/ib_state.json", _m2_file.read_text())
+            m2 = json.loads(_m2_file.read_text())
+
+            nav_h2 = m2.get("nav_history", [])
+            if nav_h2:
+                zf.writestr("m2_csv/nav_history.csv",
+                    _json_to_csv_bytes(nav_h2, ["date", "nav", "regime"]))
+
+            ct2 = m2.get("closed_trades", [])
+            if ct2:
+                fields2 = ["ticker","entry_date","exit_date","shares",
+                           "pnl_r_est","net_pnl_est","exit_reason","holding_days"]
+                zf.writestr("m2_csv/closed_trades.csv", _json_to_csv_bytes(ct2, fields2))
+
+            sh2 = m2.get("signals_history", [])
+            if sh2:
+                fields = ["date","regime","spy_close","n_candidates","n_entries","n_exits"]
+                zf.writestr("m2_csv/signals_history.csv", _json_to_csv_bytes(sh2, fields))
+
+    return zbuf.getvalue()
+
+
+from datetime import date as _date_cls
+_dl_filename = f"paper_trading_data_{_date_cls.today().isoformat()}.zip"
+st.download_button(
+    label="⬇️ 下载全部模拟交易数据（ZIP）",
+    data=_build_download_zip(),
+    file_name=_dl_filename,
+    mime="application/zip",
+    help="包含：NAV历史、平仓记录、信号历史、持仓明细（方法一JSON+CSV、方法二JSON+CSV）",
+)
