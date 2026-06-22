@@ -26,32 +26,7 @@ st.warning(
     "⚠️ **重要说明：本页所有蒙特卡洛模拟结果均基于 Baseline Anchor 锚点参数。**"
 )
 
-with st.expander("📋 点击展开：本次模拟使用的 Baseline Anchor 锚点参数", expanded=False):
-    _ca, _cb = st.columns(2)
-    with _ca:
-        st.markdown(f"""
-| 参数 | 值 |
-|------|-----|
-| 突破窗口 `breakout_window` | **{_p['breakout_window']} 日** |
-| ATR 止损乘数 `stop_loss_multiplier` | **{_p['stop_loss_multiplier']:.1f}×ATR** |
-| 移动止盈 早期 `trail_multiplier_r1` | **{_p['trail_multiplier_r1']:.1f}×ATR** |
-| 移动止盈 中期 `trail_multiplier_r3` | **{_p['trail_multiplier_r3']:.1f}×ATR** |
-| 移动止盈 大赢 `trail_multiplier_r5` | **{_p['trail_multiplier_r5']:.1f}×ATR** |
-| 成交量确认 `volume_filter_multiplier` | **{_p['volume_filter_multiplier']:.1f}×** |
-| Gap 过滤 `gap_filter` | **±{_p['gap_filter']*100:.1f}%** |
-""")
-    with _cb:
-        st.markdown(f"""
-| 参数 | 值 |
-|------|-----|
-| 每笔风险 `risk_per_trade` | **{_p['risk_per_trade']*100:.1f}% NAV** |
-| 仓位上限 `position_cap` | **{_p['position_cap']*100:.0f}% NAV** |
-| 热度上限 `heat_limit` | **{_p['heat_limit']*100:.0f}% NAV** |
-| Regime 过滤 `regime_filter_enabled` | **{'是' if _p['regime_filter_enabled'] else '否'}**（SPY SMA {_p['regime_sma_window']} 日）|
-| 滑点 `slippage_bps` | **{_p['slippage_bps']:.0f} bps**（单边）|
-| 佣金 `commission_bps` | **{_p['commission_bps']:.0f} bps**（单边）|
-| 空仓代理 `cash_proxy` | **{_p.get('cash_proxy', 'SHY')}** |
-""")
+st.page_link("pages/baseline_results_tiingo_2000.py", label="→ 查看 Baseline 锚点参数表（完整13项参数）", icon="📋")
 
 # ── Load montecarlo.json ──────────────────────────────────────────────────────
 _MC_PATH   = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m_2000" / "montecarlo.json"
