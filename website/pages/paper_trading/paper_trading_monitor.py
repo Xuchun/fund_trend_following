@@ -446,7 +446,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     "股数": e.get("shares", ""),
                     "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "",
                     "订单类型": e.get("order_type", ""),
-                } for e in _ts_exits]), use_container_width=True, hide_index=True)
+                } for e in sorted(_ts_exits, key=lambda x: x["ticker"])]), use_container_width=True, hide_index=True)
             else:
                 st.info("无退出信号")
 
