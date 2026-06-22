@@ -144,15 +144,27 @@ if _wf:
     _oos_stitched = _wf.get("oos_stitched", {}).get("metrics", {})
     _oos_cagr = _oos_stitched.get("cagr", 0) * 100
     _oos_sharpe = _oos_stitched.get("sharpe", 0)
-    _pos_windows = sum(1 for w in _wf.get("windows", [])
-                       if w.get("oos", {}).get("cagr", 0) > 0)
+    _pos_windows   = sum(1 for w in _wf.get("windows", [])
+                         if w.get("oos", {}).get("cagr", 0) > 0)
     _total_windows = len(_wf.get("windows", []))
+    _pos_oos_wins  = [w for w in _wf.get("windows", []) if w.get("oos", {}).get("cagr", 0) > 0]
+    _first_pos_yr  = _pos_oos_wins[0].get("oos_start", "")[:4] if _pos_oos_wins else ""
+    _last_pos_end  = _pos_oos_wins[-1].get("oos_end",   "")    if _pos_oos_wins else ""
+    _last_pos_yr   = _last_pos_end[:4]
+    _last_month    = int(_last_pos_end[5:7]) if len(_last_pos_end) >= 7 else 12
+    _last_label    = (f"{_last_pos_yr}年上半年" if _last_month <= 6
+                      else f"{_last_pos_yr}年前{_last_month}月" if _last_month < 11
+                      else _last_pos_yr)
+    _pos_oos_str   = (
+        f"**{_first_pos_yr}–{_last_label} 共 {_pos_windows} 个 OOS 窗口均为正收益**"
+        if _pos_windows > 1 else (f"**{_first_pos_yr} 年 OOS 为正收益**" if _first_pos_yr else "")
+    )
     st.markdown(f"""
 **关键发现：**
 - **2022 年（加息熊市）** 是策略1.0唯一出现负收益的 OOS 年份（**{_w1_oos_cagr:+.1f}%**）。
   美联储激进加息导致债券与股票同步下跌，现金代理 SHY 也受价格冲击，
   这是策略设计对"股债双杀"环境准备不足的体现。
-- **2023–2025 连续3年 OOS 均为正收益**，且逐年加速，显示策略在非加息环境中样本外表现稳健，但 2022 的单年深度亏损提醒：极端宏观环境下，策略无法完全脱离影响。
+- {_pos_oos_str}，显示策略在非加息环境中样本外表现稳健，但 2022 的单年深度亏损提醒：极端宏观环境下，策略无法完全脱离影响。
 - **OOS 拼接净值**（5个窗口合计）：CAGR **{_oos_cagr:+.1f}%**，Sharpe **{_oos_sharpe:+.3f}**，{_pos_windows}/{_total_windows} 个窗口实现正收益。
 - **统计样本量不足**：仅 {_total_windows} 个 OOS 窗口（各约 1 年），置信度有限。2026 年窗口为半年数据，年化指标波动较大，仅供参考。
 """)
