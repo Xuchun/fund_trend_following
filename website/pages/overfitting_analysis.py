@@ -584,10 +584,11 @@ _budget_data = {
     "状态": ["✅ 在预算内", "✅ 在预算内", "✅ 在预算内"],
 }
 st.dataframe(pd.DataFrame(_budget_data), use_container_width=True, hide_index=True)
+st.page_link("pages/future_work/improve_strategy.py", label="→ 如何改进策略1.0（E. 策略复杂度预算详情）", icon="📐")
 
 _n_trades = _met["n_trades"]
 _avg_hold = _met["avg_holding_days"]
-_years    = 26.5
+_years    = round((pd.Timestamp(meta.backtest_end) - pd.Timestamp(meta.backtest_start)).days / 365.25, 1)
 
 st.markdown(f"""
 **统计显著性检查**：
