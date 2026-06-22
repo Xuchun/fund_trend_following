@@ -469,7 +469,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     "信号价（本日收盘）": f"${e['signal_price']:.2f}" if e.get("signal_price") else "",
                     "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "",
                     "风险%": f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "",
-                } for e in _ts_pending]), use_container_width=True, hide_index=True)
+                } for e in sorted(_ts_pending, key=lambda x: x["ticker"])]), use_container_width=True, hide_index=True)
             else:
                 st.info("无入场信号")
     else:
