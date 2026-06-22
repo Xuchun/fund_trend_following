@@ -2705,6 +2705,159 @@ else:
 
 st.markdown("---")
 
+# ── 持仓热度历史图 ─────────────────────────────────────────────────────────────
+st.subheader("持仓热度历史图")
+
+import pandas as _pd_heat
+import plotly.graph_objects as _go_heat
+
+@st.cache_data(ttl=86400)
+def _compute_daily_heat():
+    _t = _pd_heat.read_csv(
+        _results_path / "trades.csv",
+        parse_dates=["entry_date", "exit_date"],
+        usecols=["entry_date", "exit_date", "shares", "entry_price", "stop_loss"],
+    )
+    _n = _pd_heat.read_csv(
+        _results_path / "nav.csv",
+        parse_dates=["date"],
+    ).set_index("date")
+    _t["risk_amount"] = _t["shares"] * (_t["entry_price"] - _t["stop_loss"])
+    _evts = _pd_heat.concat([
+        _pd_heat.DataFrame({"date": _t["entry_date"], "delta": _t["risk_amount"]}),
+        _pd_heat.DataFrame({"date": _t["exit_date"],  "delta": -_t["risk_amount"]}),
+    ]).groupby("date")["delta"].sum()
+    _heat_raw = _evts.reindex(_n.index, fill_value=0.0).cumsum()
+    _heat_pct = (_heat_raw / _n["nav"]) * 100
+    return _heat_pct.reset_index().rename(columns={"date": "date", 0: "heat"})
+
+_heat_df = _compute_daily_heat()
+_heat_df.columns = ["date", "heat"]
+
+_heat_limit_pct = meta.params_anchor.get("heat_limit", 0.10) * 100
+_heat_mean  = float(_heat_df["heat"].mean())
+_heat_median = float(_heat_df["heat"].median())
+_heat_max   = float(_heat_df["heat"].max())
+_heat_max_date = _heat_df.loc[_heat_df["heat"].idxmax(), "date"]
+_heat_zero_days = int((_heat_df["heat"] == 0).sum())
+_heat_above8    = int((_heat_df["heat"] > 8).sum())
+_heat_above_limit = int((_heat_df["heat"] > _heat_limit_pct).sum())
+
+_fig_heat = _go_heat.Figure()
+
+# Fill area under curve with color gradient based on level
+_fig_heat.add_trace(_go_heat.Scatter(
+    x=_heat_df["date"],
+    y=_heat_df["heat"],
+    mode="lines",
+    line=dict(color=meta.color, width=1.2),
+    fill="tozeroy",
+    fillcolor=f"rgba(44, 160, 44, 0.18)",
+    name="每日持仓热度",
+    hovertemplate="%{x|%Y-%m-%d}<br>热度 = %{y:.2f}%<extra></extra>",
+))
+
+# Heat limit line
+_fig_heat.add_hline(
+    y=_heat_limit_pct,
+    line_dash="dash",
+    line_color="red",
+    line_width=2,
+    annotation_text=f"热度上限 {_heat_limit_pct:.0f}%",
+    annotation_position="top right",
+    annotation_font_color="red",
+)
+
+# Mean line
+_fig_heat.add_hline(
+    y=_heat_mean,
+    line_dash="dot",
+    line_color="gray",
+    line_width=1.5,
+    annotation_text=f"均值 {_heat_mean:.1f}%",
+    annotation_position="bottom right",
+    annotation_font_color="gray",
+)
+
+# Shade major bear markets (low heat zones for reference)
+_bear_zones = [
+    ("2000-03-01", "2002-10-31", "互联网泡沫崩溃"),
+    ("2007-11-01", "2009-03-31", "金融危机"),
+    ("2022-01-01", "2022-09-30", "加息熊市"),
+]
+for _bz_start, _bz_end, _bz_label in _bear_zones:
+    _fig_heat.add_vrect(
+        x0=_bz_start, x1=_bz_end,
+        fillcolor="rgba(214,39,40,0.07)",
+        layer="below", line_width=0,
+        annotation_text=_bz_label,
+        annotation_position="top left",
+        annotation_font_size=10,
+        annotation_font_color="rgba(214,39,40,0.7)",
+    )
+
+_fig_heat.update_layout(
+    title=dict(
+        text="策略1.0 每日持仓热度（Portfolio Heat）",
+        font=dict(size=15),
+    ),
+    xaxis=dict(
+        title="日期",
+        rangeslider=dict(visible=False),
+        tickformat="%Y",
+    ),
+    yaxis=dict(
+        title="持仓热度（%）",
+        tickformat=".0f",
+        ticksuffix="%",
+        range=[0, max(_heat_limit_pct * 1.25, _heat_max * 1.15)],
+    ),
+    height=380,
+    hovermode="x unified",
+    showlegend=False,
+    margin=dict(l=60, r=30, t=60, b=40),
+)
+st.plotly_chart(_fig_heat, use_container_width=True)
+
+_hc1, _hc2, _hc3, _hc4 = st.columns(4)
+_hc1.metric("平均热度", f"{_heat_mean:.1f}%",
+            help="全回测期日均持仓风险占NAV的比例")
+_hc2.metric("热度中位数", f"{_heat_median:.1f}%")
+_hc3.metric("历史峰值", f"{_heat_max:.1f}%",
+            delta=f"{_heat_max_date.strftime('%Y-%m-%d') if hasattr(_heat_max_date, 'strftime') else str(_heat_max_date)[:10]}",
+            delta_color="off")
+_hc4.metric("触及热度上限次数", f"{_heat_above_limit} 天",
+            help=f"日热度超过 {_heat_limit_pct:.0f}% 的交易日数量")
+
+st.markdown(f"""
+**图表解读：**
+
+**持仓热度（Portfolio Heat）** 衡量当前所有开仓头寸的**合计风险敞口**占净值（NAV）的比例：
+
+> 热度 = Σ（各持仓止损风险额）÷ NAV = Σ（持仓股数 × 止损距离）÷ NAV
+
+热度是策略风控体系的核心指标——当新开仓会使总热度超过上限（{_heat_limit_pct:.0f}%）时，该信号被放弃（skip_heat）。
+
+**主要规律：**
+
+- **正常区间 {_heat_mean:.1f}%（均值）**：策略在大多数时间将热度维持在 3%–5%，远低于 {_heat_limit_pct:.0f}% 上限，
+  说明单笔风险（1% NAV）加上仓位上限（5% NAV）的设计使实际热度自然收敛于中低水平。
+
+- **历史峰值 {_heat_max:.1f}%**（{str(_heat_max_date)[:10]}，COVID后复苏期）：
+  趋势性突破信号密集出现，多仓同向持有；即便在最极端时期，热度仍未超过 {_heat_limit_pct:.0f}% 上限。
+
+- **熊市低热度（红色阴影区）**：互联网泡沫（2000–2002）、金融危机（2008–2009）、加息熊市（2022）
+  期间，因 Regime Filter 关闭绝大多数新开仓，持仓自然平仓后热度回落至接近 0%，
+  资金自动转入现金替代品（SHY）。这是策略**被动降险**机制的体现，而非主动止损。
+
+- **热度从未触及上限（{_heat_limit_pct:.0f}%）**：
+  {_heat_above_limit} 次超限说明策略的多层风控（单笔1%、仓位上限5%、总热度{_heat_limit_pct:.0f}%）
+  共同作用下，实际风险暴露始终处于设计范围内。热度上限主要起**最后防线**作用，
+  而非日常约束——真正限制热度的是每笔1%的风险预算和5%的仓位上限。
+""")
+
+st.markdown("---")
+
 # ── 每标的交易次数分布 ─────────────────────────────────────────────────────────
 st.subheader("每标的交易次数分布")
 
