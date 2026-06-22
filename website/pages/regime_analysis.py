@@ -79,28 +79,17 @@ REGIME_DESC = {
 if regime_data and "regimes" in regime_data:
     import plotly.graph_objects as go
     from plotly.subplots import make_subplots
-    import pandas as _pd_rg
 
     regimes = regime_data["regimes"]
     full_p  = regime_data.get("full_period", {})
 
     # ── SPY 200SMA bull/bear overlay chart ────────────────────────────────
-    @st.cache_data(ttl=86400)
-    def _load_spy_sma():
-        _csv_p = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m_2000" / "spy_sma200.csv"
-        if not _csv_p.exists():
-            return None, None
-        _df = _pd_rg.read_csv(_csv_p, parse_dates=["date"]).set_index("date")
-        return _df["close_adj"], _df["sma200"]
-
     _spy_close, _spy_sma = _load_spy_sma()
 
-    if _spy_close is not None and _spy_sma is not None:
-        _nav_csv_r = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m_2000" / "nav.csv"
-        if _nav_csv_r.exists():
-            st.subheader("策略 NAV 与 SPY 200日均线牛熊状态")
-
-            _nav_r = _pd_rg.read_csv(_nav_csv_r, parse_dates=["date"]).set_index("date")["nav"]
+    if _spy_close is not None and _spy_sma is not None and _NAV_PATH.exists():
+        st.subheader("策略 NAV 与 SPY 200日均线牛熊状态")
+        if True:
+            _nav_r = pd.read_csv(_NAV_PATH, parse_dates=["date"]).set_index("date")["nav"]
             _nav_r_norm = _nav_r / _nav_r.iloc[0]
 
             # Compute bear periods (SPY < SMA200), filter to >= 10 trading days
