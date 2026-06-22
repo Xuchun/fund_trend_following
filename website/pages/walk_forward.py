@@ -178,6 +178,7 @@ if wf_data:
                f"{_spy_st_maxdd*100:.1f}%" if _spy_st_maxdd is not None else "—")
 
     _sharpe_ret = ret.get("sharpe_retention", 0)
+    st.caption("Sharpe 效率评估")
     rcs1, rcs2, rcs3 = st.columns(3)
     rcs1.metric("策略 OOS 拼接 Sharpe", f"{oos_m.get('sharpe', 0):+.3f}")
     rcs2.metric("全样本 IS Sharpe",     f"{full_is.get('sharpe', 0):+.3f}")
