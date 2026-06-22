@@ -470,17 +470,24 @@ def main() -> None:
 
     # --- Summary ---
     log.info("=== Done ===")
-    log.info(f"  Exits:      {len(new_closed)}")
-    log.info(f"  Entries:    {len(entries_executed)}")
-    log.info(f"  Open:       {len(state['positions'])}")
-    log.info(f"  Cash:       ${state.get('cash',0)/1e6:.2f}M")
-    log.info(f"  NAV:        ${current_nav/1e6:.2f}M")
-    log.info(f"  vs Initial: {(current_nav / state['initial_nav'] - 1)*100:+.1f}%")
+    log.info(f"  Exits:       {len(new_closed)}")
+    log.info(f"  Executed:    {len(entries_executed)}  (from yesterday's pending, at today's open)")
+    log.info(f"  New pending: {len(new_pending)}  (will execute tomorrow at open)")
+    log.info(f"  Open:        {len(state['positions'])}")
+    log.info(f"  Cash:        ${state.get('cash',0)/1e6:.2f}M")
+    log.info(f"  NAV:         ${current_nav/1e6:.2f}M")
+    log.info(f"  vs Initial:  {(current_nav / state['initial_nav'] - 1)*100:+.1f}%")
 
     if entries_executed:
-        log.info("--- New entries ---")
+        log.info("--- Executed entries (T+1 open) ---")
         for sig in entries_executed:
-            log.info(f"  {sig['ticker']:6s}  entry=${sig['entry_price']:.2f}  stop=${sig['stop_loss']:.2f}  "
+            log.info(f"  {sig['ticker']:6s}  open=${sig['entry_price']:.2f}  signal=${sig['signal_price']:.2f}  "
+                     f"shares={sig['shares']:,}")
+
+    if new_pending:
+        log.info("--- New pending entries (execute tomorrow at open) ---")
+        for sig in new_pending:
+            log.info(f"  {sig['ticker']:6s}  signal=${sig['signal_price']:.2f}  stop=${sig['stop_price']:.2f}  "
                      f"shares={sig['shares']:,}  notional=${sig['notional']/1e3:.0f}K")
 
 
