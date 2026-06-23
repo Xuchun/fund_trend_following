@@ -13,7 +13,7 @@ Run after market close each trading day to:
 Requirements:  yfinance >= 1.0,  pandas,  src/ on PYTHONPATH
 """
 
-import sys, json, argparse, logging
+import sys, json, argparse, logging, math
 from pathlib import Path
 from datetime import date, datetime, timezone
 
