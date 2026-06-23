@@ -243,7 +243,7 @@ def scan_entries(
     """Scan universe for new breakout signals. Returns list of candidate signals."""
     held = {p["ticker"] for p in state["positions"]}
     heat_used = sum(
-        (p["entry_price"] - p["initial_stop_loss"]) * p["shares"] / nav
+        (p["entry_price"] - p["stop_loss"]) * p["shares"] / nav   # entry_price is slip-adjusted; R = 2×ATR
         for p in state["positions"]
     )
     cash = state.get("cash", 0.0)
