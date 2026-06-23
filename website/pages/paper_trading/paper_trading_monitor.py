@@ -578,55 +578,43 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             if sr == "trailing_stop":  return "🔴 触移动止盈"
             return "🟢 持有"
 
-        def _stop_cells(p: dict) -> tuple[str, str]:
-            """Return (止损 cell html, 移动止盈 cell html) with the active one in bold."""
-            hard  = p.get("stop_loss", p.get("current_stop", 0))
-            trail = p.get("trail_stop_live", p.get("current_stop", 0))
-            hard_str  = f"${hard:.2f}"
-            trail_str = f"${trail:.2f}"
-            if hard >= trail:   # hard stop is currently the binding constraint
-                return f"<b>{hard_str}</b>", trail_str
-            else:               # trailing stop has ratcheted above hard stop
-                return hard_str, f"<b>{trail_str}</b>"
+        # Default sort: 缓冲 ascending (highest-risk positions first); user can re-sort by clicking headers
+        _pos_sorted = sorted(_m1_ok, key=lambda p: p["stop_buffer_pct"])
+        _pos_df = pd.DataFrame([{
+            "标的":     p["ticker"],
+            "状态":     _status_label(p),
+            "当前价":   p["current_price"],
+            "止损":     p["stop_loss"],
+            "移动止盈": p["trail_stop_live"],
+            "缓冲":     p["stop_buffer_pct"],
+            "浮盈(R)":  p["R"],
+            "浮盈($)":  p["unreal_pnl"],
+            "当前市值": p["mkt_value"] / 1000,
+            "入场日":   p["entry_date"],
+            "入场价":   p["entry_price"],
+        } for p in _pos_sorted])
 
-        _sort_key_map = {
-            "缓冲":      lambda p: p["stop_buffer_pct"],
-            "标的":      lambda p: p["ticker"],
-            "当前价":    lambda p: p["current_price"],
-            "止损":      lambda p: p["stop_loss"],
-            "移动止盈":  lambda p: p["trail_stop_live"],
-            "浮盈（R）": lambda p: p["R"],
-            "浮盈（$）": lambda p: p["unreal_pnl"],
-            "当前市值":  lambda p: p["mkt_value"],
-            "入场日":    lambda p: p["entry_date"],
-            "入场价":    lambda p: p["entry_price"],
-        }
-        _sc1, _sc2 = st.columns([5, 2])
-        with _sc1:
-            _sort_col = st.selectbox("排序列", list(_sort_key_map.keys()), index=0, key="m1_pos_sort_col", label_visibility="collapsed")
-        with _sc2:
-            _sort_desc = st.toggle("降序排列", value=False, key="m1_pos_sort_desc")
-        _sorted_pos = sorted(_m1_ok, key=_sort_key_map[_sort_col], reverse=_sort_desc)
+        def _style_pos(df):
+            s = pd.DataFrame('', index=df.index, columns=df.columns)
+            for i, p in enumerate(_pos_sorted):
+                s.at[i, "止损" if p["stop_loss"] >= p["trail_stop_live"] else "移动止盈"] = "font-weight: bold"
+                if p["stop_buffer_pct"] <= 3.0:
+                    s.at[i, "缓冲"] = "color: #d62728; font-weight: bold"
+            return s
 
-        _rows = []
-        for p in _sorted_pos:
-            _hard_cell, _trail_cell = _stop_cells(p)
-            _rows.append({
-                "标的": p["ticker"],
-                "状态": _status_label(p),
-                "当前价": f"${p['current_price']:.2f}",
-                "止损": _hard_cell,
-                "移动止盈": _trail_cell,
-                "缓冲": (f"<b style='color:#d62728'>{p['stop_buffer_pct']:.1f}%</b>"
-                        if p['stop_buffer_pct'] <= 3.0
-                        else f"{p['stop_buffer_pct']:.1f}%"),
-                "浮盈（R）": f"{p['R']:+.2f}R",
-                "浮盈（$）": f"${p['unreal_pnl']:+,.0f}",
-                "当前市值": f"${p['mkt_value']/1e3:.0f}K",
-                "入场日": p["entry_date"],
-                "入场价": f"${p['entry_price']:.2f}",
-            })
-        show_df(pd.DataFrame(_rows), use_container_width=True, hide_index=True, escape=False)
+        show_df(
+            _pos_df.style.apply(_style_pos, axis=None),
+            column_config={
+                "当前价":   st.column_config.NumberColumn(format="$%.2f"),
+                "止损":     st.column_config.NumberColumn(format="$%.2f"),
+                "移动止盈": st.column_config.NumberColumn(format="$%.2f"),
+                "缓冲":     st.column_config.NumberColumn(format="%.1f%%"),
+                "浮盈(R)":  st.column_config.NumberColumn(label="浮盈（R）", format="%+.2fR"),
+                "浮盈($)":  st.column_config.NumberColumn(label="浮盈（$）", format="$%+.0f"),
+                "当前市值": st.column_config.NumberColumn(format="$%.0fK"),
+                "入场价":   st.column_config.NumberColumn(format="$%.2f"),
+            },
+        )
         st.markdown(
             "<span style='color:#111111'>**缓冲** = (当前价 − 有效止损) / 当前价 × 100%，其中有效止损 = max(止损, 移动止盈)（即粗体显示的那个）</span><br>"
             "<span style='color:#111111'>**浮盈（R）** = (当前价 − 入场价) / (入场价 − 止损价)，其中分母 = 2 × ATR = 初始每股风险</span>",
