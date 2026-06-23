@@ -1112,13 +1112,16 @@ with tab2:
     if _m2_closed:
         st.subheader(f"五、已平仓记录（{len(_m2_closed)} 笔）")
         _m2_ct = pd.DataFrame(_m2_closed).sort_values("exit_date", ascending=False)
+        _m2_rename = {"ticker":"标的","entry_date":"入场日","exit_date":"出场日","holding_days":"天数","exit_reason":"原因"}
+        _m2_cfg: dict = {}
         if "pnl_r_est" in _m2_ct.columns:
-            _m2_ct["R"] = _m2_ct["pnl_r_est"].map(lambda v: f"{v:+.2f}R")
+            _m2_rename["pnl_r_est"] = "R"
+            _m2_cfg["R"] = st.column_config.NumberColumn(format="%+.2fR")
         if "net_pnl_est" in _m2_ct.columns:
-            _m2_ct["净盈亏(估)"] = _m2_ct["net_pnl_est"].map(lambda v: f"${v:+,.0f}")
-        cols = [c for c in ["ticker","entry_date","exit_date","holding_days","R","净盈亏(估)","exit_reason"] if c in _m2_ct.columns]
-        show_df(_m2_ct[cols].rename(columns={"ticker":"标的","entry_date":"入场日","exit_date":"出场日","holding_days":"天数","exit_reason":"原因"}),
-                     use_container_width=True, hide_index=True)
+            _m2_rename["net_pnl_est"] = "净盈亏(估)"
+            _m2_cfg["净盈亏(估)"] = st.column_config.NumberColumn(format="$%+.0f")
+        _m2_cols = [c for c in ["ticker","entry_date","exit_date","holding_days","pnl_r_est","net_pnl_est","exit_reason"] if c in _m2_ct.columns]
+        show_df(_m2_ct[_m2_cols].rename(columns=_m2_rename), column_config=_m2_cfg or None)
         st.markdown("---")
 
     # ── Order history ─────────────────────────────────────────────────────────
