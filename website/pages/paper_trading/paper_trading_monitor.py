@@ -456,48 +456,31 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _next_td += _dt.timedelta(days=1)
     st.markdown(f"<span style='color:#111111'>执行日：{_next_td} 开盘 ｜ 以下订单在开盘后按市价执行</span>", unsafe_allow_html=True)
 
-    _sig_exits   = _m1_today_sig.get("exits", []) if _m1_today_sig else []
+    # Only pending_entries are truly "pending for tomorrow" — exits are executed same-day (max(stop, close))
     _sig_entries = _m1.get("pending_entries", [])  # signals from today → execute tomorrow at open
-    if True:
-        _order_rows  = []
-        for e in _sig_exits:
-            _shares = e.get("shares", 0)
-            _price  = e.get("stop_price", 0)
-            _order_rows.append({
-                "操作": "🔴 平仓卖出",
-                "标的": e["ticker"],
-                "股数": _shares,
-                "参考价": f"${_price:.2f}" if _price else "—",
-                "总金额": f"${_shares * _price:,.0f}" if _shares and _price else "—",
-                "订单类型": "市价单（开盘执行）",
-                "备注": "止损触发",
-            })
-        for e in _sig_entries:
-            _shares = e.get("shares", 0)
-            _price  = e.get("signal_price", 0)
-            _order_rows.append({
-                "操作": "🟢 开仓买入",
-                "标的": e["ticker"],
-                "股数": _shares,
-                "参考价": f"${_price:.2f}" if _price else "—",
-                "总金额": f"${_shares * _price:,.0f}" if _shares and _price else "—",
-                "订单类型": "市价单（开盘执行）",
-                "备注": f"止损设于 ${e['stop_price']:.2f}，风险 {e['trade_risk']*100:.2f}% NAV" if e.get("stop_price") else "—",
-            })
-        if _order_rows:
-            show_df(pd.DataFrame(sorted(_order_rows, key=lambda x: x["标的"])), use_container_width=True, hide_index=True)
-            n_sell = len(_sig_exits)
-            n_buy  = len(_sig_entries)
-            _total_sell = sum(e.get("shares", 0) * e.get("stop_price", 0) for e in _sig_exits)
-            _total_buy  = sum(e.get("shares", 0) * e.get("signal_price", 0) for e in _sig_entries)
-            _net = _total_buy - _total_sell
-            st.markdown(
-                f"共 {n_sell} 笔平仓、{n_buy} 笔开仓，合计 {n_sell+n_buy} 笔订单　｜　"
-                f"预计卖出回款 \\${_total_sell:,.0f}，买入支出 \\${_total_buy:,.0f}，"
-                f"净资金变动 {'−' if _net > 0 else '+'}\\${abs(_net):,.0f}"
-            )
-        else:
-            st.info("明日无需执行任何交易")
+    _order_rows  = []
+    for e in _sig_entries:
+        _shares = e.get("shares", 0)
+        _price  = e.get("signal_price", 0)
+        _order_rows.append({
+            "操作": "🟢 开仓买入",
+            "标的": e["ticker"],
+            "股数": _shares,
+            "参考价": f"${_price:.2f}" if _price else "—",
+            "总金额": f"${_shares * _price:,.0f}" if _shares and _price else "—",
+            "订单类型": "市价单（开盘执行）",
+            "备注": f"止损设于 ${e['stop_price']:.2f}，风险 {e['trade_risk']*100:.2f}% NAV" if e.get("stop_price") else "—",
+        })
+    if _order_rows:
+        show_df(pd.DataFrame(sorted(_order_rows, key=lambda x: x["标的"])), use_container_width=True, hide_index=True)
+        n_buy = len(_sig_entries)
+        _total_buy = sum(e.get("shares", 0) * e.get("signal_price", 0) for e in _sig_entries)
+        st.markdown(
+            f"共 {n_buy} 笔开仓，合计 {n_buy} 笔订单　｜　"
+            f"预计买入支出 \\${_total_buy:,.0f}"
+        )
+    else:
+        st.info("明日无需执行任何交易")
 
     st.markdown("---")
 
