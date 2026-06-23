@@ -231,7 +231,7 @@ def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
     cur_date     = str(since_entry.index[-1].date())
     highest_high = max(pos["highest_high"], float(since_entry["High"].max()))
 
-    atr_s   = _wilder_atr(df["High"], df["Low"], df["Close"], _ATR_PERIOD)
+    atr_s   = _compute_atr(df["High"], df["Low"], df["Close"], _ATR_PERIOD)
     cur_atr = float(atr_s.iloc[-1])
     if pd.isna(cur_atr):
         cur_atr = pos["atr_at_entry"]
