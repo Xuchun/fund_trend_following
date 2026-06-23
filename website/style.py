@@ -4,13 +4,18 @@ import pandas as _pd
 import streamlit as _st
 
 
-def show_df(df, **kwargs) -> None:
-    """Display a DataFrame with all cells center-aligned."""
-    if isinstance(df, _pd.DataFrame):
-        df = df.style.set_properties(**{"text-align": "center"}).set_table_styles(
-            [{"selector": "th", "props": [("text-align", "center")]}]
-        )
-    _st.dataframe(df, **kwargs)
+def show_df(df, use_container_width: bool = True, hide_index: bool = True, **kwargs) -> None:
+    """Display a DataFrame as a centered HTML table."""
+    if isinstance(df, _pd.io.formats.style.Styler):
+        df = df.data
+    if not isinstance(df, _pd.DataFrame):
+        _st.dataframe(df, use_container_width=use_container_width, hide_index=hide_index, **kwargs)
+        return
+    html = df.to_html(index=not hide_index, border=0, escape=True)
+    _st.markdown(
+        f'<div style="overflow-x:auto"><table class="sdf">{html[html.index("<thead>"):]}</div>',
+        unsafe_allow_html=True,
+    )
 
 
 SPY_COLOR      = "#aaaaaa"
