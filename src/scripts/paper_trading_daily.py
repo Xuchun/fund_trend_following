@@ -405,6 +405,11 @@ def main() -> None:
                 log.warning(f"  SKIP {ticker}: no data for {today}")
                 continue
             open_px = float(_today_rows["Open"].iloc[0])
+            # Gap filter: mirrors backtest execution.apply_gap_filter()
+            _gap_pct = abs(open_px - sig["signal_price"]) / sig["signal_price"]
+            if _gap_pct > PARAMS.gap_filter:
+                log.info(f"  SKIP {ticker}: gap {_gap_pct*100:.1f}% > {PARAMS.gap_filter*100:.1f}% filter")
+                continue
             # Match backtest exactly: entry_price = open * (1 + slip); stop = entry - 2×ATR; trail = entry - 3×ATR
             _slip_factor  = 1.0 + PARAMS.slippage_bps / 10_000
             entry_px_slip = open_px * _slip_factor                                            # backtest entry_price
