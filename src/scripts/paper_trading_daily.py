@@ -218,7 +218,7 @@ def execute_pending_exits(
         exits_executed.append(closed_record)
         log.info(
             f"  EXIT EXECUTED {ticker} @ open=${open_px:.2f} fill=${fill_price:.2f} "
-            f"R={pnl_r:+.2f} PnL=${net_pnl:+,.0f} [{sig['exit_reason']}]"
+            f"R={pnl_r:+.2f} PnL=${net_pnl:+,.0f} exit_comm=${exit_commission:.2f} [{sig['exit_reason']}]"
         )
 
     return exits_executed, remaining
