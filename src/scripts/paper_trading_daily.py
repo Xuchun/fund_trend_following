@@ -804,10 +804,14 @@ def main() -> None:
         "date":    str(today),
         "regime":  "BULL" if regime_ok else "BEAR",
         "spy_close": round(spy_close, 2) if spy_close else None,
-        "n_candidates": len(candidates),
-        "n_entries": len(new_pending),        # entry signals pending for tomorrow
-        "n_executed": len(entries_executed),  # entries executed today at open
-        "n_exits":   len(new_exit_signals),   # exit signals pending for tomorrow
+        "n_candidates":    len(candidates),
+        "n_entries":       len(new_pending),           # entry signals pending for tomorrow
+        "n_executed":      len(entries_executed),      # entries executed today at open
+        "n_exits":         len(new_exit_signals),      # exit signals pending for tomorrow
+        "n_raw_breakouts": scan_stats["n_raw_breakouts"],  # breakouts before portfolio constraints
+        "n_heat_blocked":  scan_stats["n_heat_blocked"],   # blocked by heat limit
+        "n_cash_blocked":  scan_stats["n_cash_blocked"],   # blocked by cash
+        "n_corr_reduced":  scan_stats["n_corr_reduced"],   # size reduced by correlation filter
 
         # ① OPEN executions (from yesterday's pending signals)
         "exits_executed": [{
