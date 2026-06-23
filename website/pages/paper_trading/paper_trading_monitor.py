@@ -900,12 +900,17 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     # ── 数据下载（方法一）────────────────────────────────────────────────────
     st.subheader("数据下载（用于未来策略1.0的过拟合分析）")
-    st.markdown("包含所有模拟交易数据：NAV 历史、开仓记录、平仓记录、信号历史、当前持仓")
+    st.markdown(
+        "包含所有模拟交易数据：NAV 历史、开仓记录、平仓记录、"
+        "信号历史（每日漏斗计数）、**今日突破候选明细**（含拒绝原因）、当前持仓、回测参考数据。"
+    )
 
-    _dl1_nav = _m1.get("nav_history", [])
-    _dl1_sig = _m1.get("signals_history", [])
-    _dl1_ct  = _m1.get("closed_trades", [])
-    _dl1_op  = [p for p in _m1.get("positions", []) if not p.get("closed")]
+    _dl1_nav   = _m1.get("nav_history", [])
+    _dl1_sig   = _m1.get("signals_history", [])
+    _dl1_ct    = _m1.get("closed_trades", [])
+    _dl1_op    = [p for p in _m1.get("positions", []) if not p.get("closed")]
+    _dl1_ts    = _m1.get("today_signals", {})
+    _dl1_cands = _dl1_ts.get("candidate_signals", [])   # full funnel for most recent run
 
     # 开仓历史 = 所有已开仓交易（持仓中 + 已平仓），按开仓日期排序
     _dl1_entries = sorted([
@@ -924,6 +929,13 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
          "atr_at_entry": "", "状态": "已平仓"}
         for c in _dl1_ct
     ], key=lambda x: x["entry_date"], reverse=True)
+
+    _dl1_rejection_label = {
+        None:           "✅ 已选入",
+        "corr_reduced": "⚠️ 已选入（相关性减仓）",
+        "heat_limit":   "🔴 未选（热度上限）",
+        "cash_limit":   "🔴 未选（现金不足）",
+    }
 
     with st.expander(f"NAV 历史（{len(_dl1_nav)} 条）"):
         if _dl1_nav:
@@ -947,7 +959,12 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         else:
             st.info("暂无平仓记录")
 
-    with st.expander(f"信号历史（{len(_dl1_sig)} 条）"):
+    with st.expander(f"信号历史（{len(_dl1_sig)} 条，每日漏斗计数）"):
+        st.caption(
+            "每行代表一个交易日的信号漏斗统计。"
+            "原始突破数 → 热度/现金拦截 → 通过约束数（候选）→ 实际执行数。"
+            "用于分析组合约束对策略执行率的影响。"
+        )
         if _dl1_sig:
             show_df(pd.DataFrame([{
                 "日期":           s["date"],
@@ -965,6 +982,32 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         else:
             st.info("暂无数据")
 
+    _dl1_cands_approved = sum(1 for c in _dl1_cands if c.get("rejection") in (None, "corr_reduced"))
+    _dl1_cands_rejected = len(_dl1_cands) - _dl1_cands_approved
+    with st.expander(
+        f"今日突破候选明细（{len(_dl1_cands)} 只突破，{_dl1_cands_approved} 只已选，{_dl1_cands_rejected} 只被拦截）"
+        + f"  ·  信号日期：{_dl1_ts.get('date', 'N/A')}"
+    ):
+        st.caption(
+            "所有通过**个股筛选**（价格、ADV、突破、ATR、成交量）的标的，"
+            "含被组合约束（热度上限/现金不足）拦截的个股及原因。"
+            "注：此处仅显示最近一次日脚本运行的候选明细；历史每日明细见"信号历史"表（汇总计数）。"
+        )
+        if _dl1_cands:
+            show_df(pd.DataFrame([{
+                "标的":         c["ticker"],
+                "信号价（今收）": f"${c.get('signal_price', 0):.2f}" if c.get("signal_price") else "",
+                "参考止损":      f"${c.get('stop_price', 0):.2f}"   if c.get("stop_price")   else "",
+                "股数":          c.get("shares", ""),
+                "风险% NAV":     f"{c['trade_risk']*100:.2f}%" if c.get("trade_risk") else "",
+                "状态":          _dl1_rejection_label.get(c.get("rejection"), c.get("rejection", "✅ 已选入")),
+            } for c in sorted(_dl1_cands, key=lambda x: x["ticker"])]),
+            use_container_width=True, hide_index=True)
+        else:
+            st.info(
+                "候选明细将在下次日脚本运行后自动填充（需运行更新后的 paper_trading_daily.py）。"
+            )
+
     with st.expander(f"当前持仓（{len(_dl1_op)} 只）"):
         if _dl1_op:
             show_df(pd.DataFrame(_dl1_op), use_container_width=True, hide_index=True)
@@ -977,7 +1020,16 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         data=_build_method_zip(_m1, "m1"),
         file_name=f"m1_paper_trading_{_date_cls.today().isoformat()}.zip",
         mime="application/zip",
-        help="包含：NAV历史、开仓记录、平仓记录、信号历史、当前持仓（CSV + 完整JSON）",
+        help=(
+            "包含（CSV + 完整JSON）：\n"
+            "• m1_nav_history.csv — 每日 NAV\n"
+            "• m1_entry_history.csv — 所有开仓记录（持仓中 + 已平仓）\n"
+            "• m1_closed_trades.csv — 已平仓记录（含 pnl_r、signal_strength 等）\n"
+            "• m1_signals_history.csv — 每日信号漏斗计数\n"
+            "• m1_today_candidate_signals.csv — 最近一次运行的突破候选明细（含拒绝原因）\n"
+            "• m1_open_positions.csv — 当前持仓\n"
+            "• backtest_reference_metrics.json / trades.csv / nav.csv — 回测基准数据"
+        ),
     )
 
 
