@@ -339,23 +339,28 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _trade_rows = []
     if _m1_today_sig:
         _ts_trade_date = _m1_today_sig.get("date", "N/A")
+        _SLIP = 10 / 10_000  # 10 bps，与回测引擎一致
         for e in _m1_today_sig.get("exits", []):
+            _px = e.get("stop_price")
             _trade_rows.append({
                 "交易日期": _ts_trade_date,
                 "方向": "🔴 卖出",
                 "标的": e["ticker"],
                 "股数": e.get("shares", ""),
-                "成交价（无滑点和手续费）": f"${e['stop_price']:.2f}" if e.get("stop_price") else "—",
+                "成交价（无滑点和手续费）": f"${_px:.2f}" if _px else "—",
+                "成交价（有滑点，无手续费）": f"${_px * (1 - _SLIP):.2f}" if _px else "—",
                 "止损价": "—",
                 "风险%": "—",
             })
         for e in _m1_today_sig.get("entries", []):
+            _px = e.get("entry_price")
             _trade_rows.append({
                 "交易日期": _ts_trade_date,
                 "方向": "🟢 买入",
                 "标的": e["ticker"],
                 "股数": e.get("shares", ""),
-                "成交价（无滑点和手续费）": f"${e['entry_price']:.2f}" if e.get("entry_price") else "—",
+                "成交价（无滑点和手续费）": f"${_px:.2f}" if _px else "—",
+                "成交价（有滑点，无手续费）": f"${_px * (1 + _SLIP):.2f}" if _px else "—",
                 "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "—",
                 "风险%": f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "—",
             })
