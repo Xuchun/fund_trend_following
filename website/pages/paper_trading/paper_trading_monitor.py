@@ -246,7 +246,13 @@ def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
     # Dual-trigger — matches strategy description and backtest exit.py exactly:
     #   Priority 1: hard stop  — intraday low[t] < stop_loss
     #   Priority 2: trail stop — close[t]         < trail_stop
-    is_stopped = (low_today < pos["stop_loss"]) or (cur_price < trail_live)
+    if low_today < pos["stop_loss"]:
+        stop_reason = "stop_loss"
+    elif cur_price < trail_live:
+        stop_reason = "trailing_stop"
+    else:
+        stop_reason = None
+    is_stopped = stop_reason is not None
 
     # Display R: unrealized gain in units of initial risk (uses current close, not peak)
     R = (cur_price - pos["entry_price"]) / R_base if R_base > 0 else 0.0
