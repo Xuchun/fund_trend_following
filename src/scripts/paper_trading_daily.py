@@ -610,34 +610,53 @@ def main() -> None:
     current_nav = mkt_value + state.get("cash", 0.0)
 
     # ── Step 6: ③ CLOSE — scan entry signals ─────────────────────────────────
+    # Mirrors backtest engine.py regime logic exactly:
+    #   Bull  → scan full universe
+    #   Bear  → scan only bear_exempt_tickers (e.g. GLD, TLT, UUP); empty list → no scan
     candidates:  list[dict] = []
     new_pending: list[dict] = []
-    if regime_ok and not args.no_entries:
-        log.info("--- Scanning universe for new entry signals ---")
-        universe  = pd.read_csv(_UNIVERSE)
-        active    = universe[universe["is_active"] == True]["ticker"].tolist()
-        univ_data = fetch_price_data(active, period=args.universe_period)
-        candidates = scan_entries(state, univ_data, today, current_nav, pos_data=pos_data)
-        log.info(f"  Signals found: {len(candidates)} — saving as pending (execute tomorrow at open)")
-        for sig in candidates:
-            if state.get("cash", 0.0) < sig["notional"]:
-                log.info(f"  Skip {sig['ticker']}: insufficient cash")
-                continue
-            new_pending.append({
-                "ticker":       sig["ticker"],
-                "signal_date":  str(today),
-                "signal_price": sig["signal_price"],
-                "stop_price":   sig["stop_loss"],
-                "shares":       sig["shares"],
-                "atr":          sig["atr"],
-                "trade_risk":   sig["trade_risk"],
-                "notional":     sig["notional"],
-            })
-            log.info(f"  PENDING {sig['ticker']} @ signal ${sig['signal_price']:.2f}  "
-                     f"stop=${sig['stop_loss']:.2f}  shares={sig['shares']:,}  "
-                     f"risk={sig['trade_risk']*100:.2f}%")
-    elif not regime_ok:
-        log.info("  BEAR regime — no new entry signals")
+    _bear_exempt = list(PARAMS.bear_exempt_tickers)  # e.g. ['GLD', 'TLT', 'UUP']
+
+    if not args.no_entries:
+        universe_df = pd.read_csv(_UNIVERSE)
+        active_set  = set(universe_df[universe_df["is_active"] == True]["ticker"].tolist())
+
+        if regime_ok:
+            scan_tickers = list(active_set)
+            log.info("--- Scanning full universe for new entry signals (BULL) ---")
+        elif _bear_exempt:
+            # Bear market: only scan exempt tickers that are active in the universe
+            # (mirrors backtest: [t for t in universe if t in bear_exempt])
+            scan_tickers = [t for t in _bear_exempt if t in active_set]
+            log.info(f"--- BEAR regime — scanning exempt tickers only: {scan_tickers} ---")
+        else:
+            scan_tickers = []
+            log.info("  BEAR regime — no new entry signals (no bear-exempt tickers configured)")
+
+        if scan_tickers:
+            univ_data  = fetch_price_data(scan_tickers, period=args.universe_period)
+            candidates = scan_entries(state, univ_data, today, current_nav, pos_data=pos_data)
+            log.info(f"  Signals found: {len(candidates)} — saving as pending (execute tomorrow at open)")
+            for sig in candidates:
+                if state.get("cash", 0.0) < sig["notional"]:
+                    log.info(f"  Skip {sig['ticker']}: insufficient cash")
+                    continue
+                new_pending.append({
+                    "ticker":       sig["ticker"],
+                    "signal_date":  str(today),
+                    "signal_price": sig["signal_price"],
+                    "stop_price":   sig["stop_loss"],
+                    "shares":       sig["shares"],
+                    "atr":          sig["atr"],
+                    "trade_risk":   sig["trade_risk"],
+                    "notional":     sig["notional"],
+                })
+                log.info(f"  PENDING {sig['ticker']} @ signal ${sig['signal_price']:.2f}  "
+                         f"stop=${sig['stop_loss']:.2f}  shares={sig['shares']:,}  "
+                         f"risk={sig['trade_risk']*100:.2f}%")
+    else:
+        log.info("  --no-entries flag set — skipping entry scan")
+
     state["pending_entries"] = new_pending
 
     # ── Step 7: update metadata & NAV history ────────────────────────────────
