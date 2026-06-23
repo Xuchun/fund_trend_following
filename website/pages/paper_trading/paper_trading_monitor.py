@@ -524,12 +524,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     if _m1_today_sig:
         _ts_date   = _m1_today_sig.get("date", "N/A")
         _ts_regime = _m1_today_sig.get("regime", "N/A")
-        # New schema: exit_signals / entry_signals (detected today, execute tomorrow)
-        # Old schema fallback: exits (executed same-day) / entries
-        _ts_exit_sigs  = _m1_today_sig.get("exit_signals")  or _m1_today_sig.get("exits",   [])
-        _ts_entry_sigs = _m1_today_sig.get("entry_signals") or _m1_today_sig.get("entries",  [])
-        if not _ts_entry_sigs:
-            _ts_entry_sigs = _m1.get("pending_entries", [])
+        # New schema: exit_signals / entry_signals (detected at today's close, execute tomorrow)
+        # Old schema "exits"/"entries" stored what was EXECUTED at today's open — not tomorrow's signals.
+        # Always fall back to pending_exits/pending_entries (the canonical pending-for-tomorrow source).
+        _ts_exit_sigs  = _m1_today_sig.get("exit_signals")  or _m1.get("pending_exits",   [])
+        _ts_entry_sigs = _m1_today_sig.get("entry_signals") or _m1.get("pending_entries", [])
 
         _ts_regime_str = "🟢 BULL" if _ts_regime == "BULL" else "🔴 BEAR"
         if _spy_close and _spy_sma:
