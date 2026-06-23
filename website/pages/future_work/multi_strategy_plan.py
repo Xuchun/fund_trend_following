@@ -179,4 +179,4 @@ show_df(pd.DataFrame({
         "提高资本效率",
         "提高 Sharpe，降低回撤",
     ],
-})
+}))
