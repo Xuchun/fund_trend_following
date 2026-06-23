@@ -566,10 +566,18 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     # ── Live positions ───────────────────────────────────────────────────────
     st.subheader("五、当前持仓实时状态")
+    if _m1_date and _m1_date != "N/A":
+        st.markdown(f"上次更新：{_m1_date} 盘后 ｜ Yahoo Finance")
     if _m1_stop:
         st.warning(f"⚠️ **{len(_m1_stop)} 只已触及止损** — 建议执行止损出场")
 
     if _m1_ok:
+        def _status_label(p: dict) -> str:
+            sr = p.get("stop_reason")
+            if sr == "stop_loss":      return "🔴 触止损"
+            if sr == "trailing_stop":  return "🔴 触移动止盈"
+            return "🟢 持有"
+
         def _stop_cells(p: dict) -> tuple[str, str]:
             """Return (止损 cell html, 移动止盈 cell html) with the active one in bold."""
             hard  = p.get("stop_loss", p.get("current_stop", 0))
