@@ -1087,7 +1087,7 @@ git push
     _dl2_entries = sorted([
         {"ticker": p["ticker"], "entry_date": p["entry_date"],
          "entry_price": p["entry_price"], "shares": p["shares"],
-         "initial_stop": p.get("initial_stop_loss", ""), "atr_at_entry": p.get("atr_at_entry", ""),
+         "stop_loss": p.get("stop_loss", p.get("initial_stop_loss", "")), "atr_at_entry": p.get("atr_at_entry", ""),
          "状态": "持仓中"}
         for p in _dl2_op
     ] + [
