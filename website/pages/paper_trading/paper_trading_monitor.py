@@ -133,31 +133,50 @@ def _wilder_atr(high, low, close, period=20):
 
 
 def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
-    """Add live price + computed trailing stop to a position dict."""
+    """Add live price + computed trailing/hard stop to a position dict.
+
+    Mirrors backtest dual-stop logic exactly:
+      - stop_loss:  fixed hard stop (intraday low trigger)
+      - trail_stop: trailing stop that ratchets up (close trigger)
+      - R-multiple for trail_mult selection uses highest_high (peak), not current close
+      - entry_price is slip-adjusted so R = entry_price - stop_loss = 2×ATR exactly
+    """
     df = _get_df(raw_yf, pos["ticker"])
 
-    # Fallback to last_known_price when YF fetch fails
+    R_base = pos["entry_price"] - pos["stop_loss"]   # = 2×ATR; both slip-adjusted
+
+    def _compute_stop(peak: float, atr: float, stored_trail: float) -> tuple[float, float, float]:
+        """Returns (effective_stop, trail_stop_live, trail_mult)."""
+        r_mult_peak = (peak - pos["entry_price"]) / R_base if R_base > 0 else 0.0
+        tm = _TRAIL_R5 if r_mult_peak >= 3.0 else (_TRAIL_R3 if r_mult_peak >= 1.0 else _TRAIL_R1)
+        trail_live = max(stored_trail, peak - tm * atr)
+        effective  = max(pos["stop_loss"], trail_live)   # hard stop may be binding early on
+        return effective, trail_live, tm
+
+    # Fallback when YF fetch fails
     if df is None:
         fallback = pos.get("last_known_price")
         if not fallback:
             return {**pos, "_ok": False}
-        risk = pos["entry_price"] - pos["initial_stop_loss"]
-        R    = (fallback - pos["entry_price"]) / risk if risk > 0 else 0.0
+        peak_hh = pos["highest_high"]
+        eff_stop, trail_live, tm = _compute_stop(peak_hh, pos["atr_at_entry"], pos["trail_stop"])
+        R = (fallback - pos["entry_price"]) / R_base if R_base > 0 else 0.0
         return {
             **pos,
-            "_ok":            True,
-            "_stale":         True,
-            "current_price":  fallback,
-            "current_date":   pos.get("last_price_date", "N/A"),
-            "peak_price":     pos["peak_price"],
-            "current_atr":    pos["atr_at_entry"],
-            "current_stop":   pos["current_stop_loss"],
-            "trail_mult":     _TRAIL_R5 if R >= 3.0 else (_TRAIL_R3 if R >= 1.0 else _TRAIL_R1),
-            "R":              R,
-            "mkt_value":      fallback * pos["shares"],
-            "unreal_pnl":     (fallback - pos["entry_price"]) * pos["shares"],
-            "stop_buffer_pct": (fallback - pos["current_stop_loss"]) / fallback * 100,
-            "is_stopped":     fallback <= pos["current_stop_loss"],
+            "_ok":             True,
+            "_stale":          True,
+            "current_price":   fallback,
+            "current_date":    pos.get("last_price_date", "N/A"),
+            "highest_high":    peak_hh,
+            "current_atr":     pos["atr_at_entry"],
+            "current_stop":    eff_stop,
+            "trail_stop_live": trail_live,
+            "trail_mult":      tm,
+            "R":               R,
+            "mkt_value":       fallback * pos["shares"],
+            "unreal_pnl":      (fallback - pos["entry_price"]) * pos["shares"],
+            "stop_buffer_pct": (fallback - eff_stop) / fallback * 100,
+            "is_stopped":      fallback <= eff_stop,
         }
 
     # Compare dates only to avoid timezone mismatch between yfinance (tz-aware) and entry_date (tz-naive)
@@ -167,58 +186,56 @@ def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
         fallback = pos.get("last_known_price")
         if not fallback:
             return {**pos, "_ok": False}
-        risk = pos["entry_price"] - pos["initial_stop_loss"]
-        R    = (fallback - pos["entry_price"]) / risk if risk > 0 else 0.0
+        peak_hh = pos["highest_high"]
+        eff_stop, trail_live, tm = _compute_stop(peak_hh, pos["atr_at_entry"], pos["trail_stop"])
+        R = (fallback - pos["entry_price"]) / R_base if R_base > 0 else 0.0
         return {
             **pos,
-            "_ok":            True,
-            "_stale":         True,
-            "current_price":  fallback,
-            "current_date":   pos.get("last_price_date", "N/A"),
-            "peak_price":     pos["peak_price"],
-            "current_atr":    pos["atr_at_entry"],
-            "current_stop":   pos["current_stop_loss"],
-            "trail_mult":     _TRAIL_R5 if R >= 3.0 else (_TRAIL_R3 if R >= 1.0 else _TRAIL_R1),
-            "R":              R,
-            "mkt_value":      fallback * pos["shares"],
-            "unreal_pnl":     (fallback - pos["entry_price"]) * pos["shares"],
-            "stop_buffer_pct": (fallback - pos["current_stop_loss"]) / fallback * 100,
-            "is_stopped":     fallback <= pos["current_stop_loss"],
+            "_ok":             True,
+            "_stale":          True,
+            "current_price":   fallback,
+            "current_date":    pos.get("last_price_date", "N/A"),
+            "highest_high":    peak_hh,
+            "current_atr":     pos["atr_at_entry"],
+            "current_stop":    eff_stop,
+            "trail_stop_live": trail_live,
+            "trail_mult":      tm,
+            "R":               R,
+            "mkt_value":       fallback * pos["shares"],
+            "unreal_pnl":      (fallback - pos["entry_price"]) * pos["shares"],
+            "stop_buffer_pct": (fallback - eff_stop) / fallback * 100,
+            "is_stopped":      fallback <= eff_stop,
         }
 
-    cur_price  = float(since_entry["Close"].iloc[-1])
-    cur_date   = str(since_entry.index[-1].date())
-    peak_price = max(pos["peak_price"], float(since_entry["High"].max()))
+    cur_price   = float(since_entry["Close"].iloc[-1])
+    cur_date    = str(since_entry.index[-1].date())
+    highest_high = max(pos["highest_high"], float(since_entry["High"].max()))
 
     atr_s   = _wilder_atr(df["High"], df["Low"], df["Close"], _ATR_PERIOD)
     cur_atr = float(atr_s.iloc[-1])
     if pd.isna(cur_atr):
         cur_atr = pos["atr_at_entry"]
 
-    risk = pos["entry_price"] - pos["initial_stop_loss"]
-    R    = (cur_price - pos["entry_price"]) / risk if risk > 0 else 0.0
-    tm   = _TRAIL_R5 if R >= 3.0 else (_TRAIL_R3 if R >= 1.0 else _TRAIL_R1)
-    stop = max(pos["current_stop_loss"], peak_price - tm * cur_atr)
+    eff_stop, trail_live, tm = _compute_stop(highest_high, cur_atr, pos["trail_stop"])
 
-    mkt_val    = cur_price * pos["shares"]
-    unreal     = (cur_price - pos["entry_price"]) * pos["shares"]
-    buf_pct    = (cur_price - stop) / cur_price * 100
-    is_stopped = cur_price <= stop
+    # Display R: unrealized gain in units of initial risk (uses current close, not peak)
+    R = (cur_price - pos["entry_price"]) / R_base if R_base > 0 else 0.0
 
     return {
         **pos,
-        "_ok":            True,
-        "current_price":  cur_price,
-        "current_date":   cur_date,
-        "peak_price":     peak_price,
-        "current_atr":    cur_atr,
-        "current_stop":   stop,
-        "trail_mult":     tm,
-        "R":              R,
-        "mkt_value":      mkt_val,
-        "unreal_pnl":     unreal,
-        "stop_buffer_pct": buf_pct,
-        "is_stopped":     is_stopped,
+        "_ok":             True,
+        "current_price":   cur_price,
+        "current_date":    cur_date,
+        "highest_high":    highest_high,
+        "current_atr":     cur_atr,
+        "current_stop":    eff_stop,
+        "trail_stop_live": trail_live,
+        "trail_mult":      tm,
+        "R":               R,
+        "mkt_value":       cur_price * pos["shares"],
+        "unreal_pnl":      (cur_price - pos["entry_price"]) * pos["shares"],
+        "stop_buffer_pct": (cur_price - eff_stop) / cur_price * 100,
+        "is_stopped":      cur_price <= eff_stop,
     }
 
 
