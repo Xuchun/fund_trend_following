@@ -380,19 +380,20 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "风险%": "—",
             })
         for e in _m1_today_sig.get("entries", []):
-            _px = e.get("entry_price")
-            _px_slip = _px * (1 + _SLIP) if _px else None
+            # open_price: raw T+1 open (no slip); entry_price: slip-adjusted (matches backtest)
+            _open_px = e.get("open_price") or e.get("entry_price")        # fallback for old schema
+            _entry_px = e.get("entry_price")                               # slip-adjusted
             _stop = e.get("stop_price")
             _shares = e.get("shares", 0)
-            _risk_pct = (_px_slip - _stop) * _shares / _m1_init_nav if (_px_slip and _stop and _shares) else None
+            _risk_pct = (_entry_px - _stop) * _shares / _m1_init_nav if (_entry_px and _stop and _shares) else None
             _trade_rows.append({
                 "交易日期": _ts_trade_date,
                 "方向": "🟢 买入",
                 "标的": e["ticker"],
                 "类型": _asset_type(e["ticker"]),
                 "成交量": _shares,
-                "成交价（无滑点和手续费）": f"${_px:.2f}" if _px else "—",
-                "成交价（有滑点，无手续费）": f"${_px_slip:.2f}" if _px_slip else "—",
+                "成交价（无滑点和手续费）": f"${_open_px:.2f}" if _open_px else "—",
+                "成交价（有滑点，无手续费）": f"${_entry_px:.2f}" if _entry_px else "—",
                 "止损价": f"${_stop:.2f}" if _stop else "—",
                 "风险%": f"{_risk_pct*100:.2f}%" if _risk_pct else "—",
             })
