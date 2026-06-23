@@ -11,6 +11,8 @@ from website.style import show_df
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from src.strategy.params import StrategyParams as _StrategyParams
+from src.indicators.atr import compute_atr as _compute_atr
 
 _results  = _root / "results" / "v1_unbiased_60m_2000"
 _pt_dir   = _root / "results" / "paper_trading"
@@ -25,11 +27,14 @@ if _meta_path.exists():
 def _asset_type(ticker: str) -> str:
     return "ETF" if ticker in _ETF_SET else "股票"
 
-_TRAIL_R1   = 3.0
-_TRAIL_R3   = 3.0
-_TRAIL_R5   = 5.0
-_ATR_PERIOD = 20
-_SMA_WINDOW = 200
+# Read all display-critical parameters from StrategyParams — the single source of truth
+# used by both the backtest engine and the paper trading daily script.
+_V1_PARAMS  = _StrategyParams()
+_TRAIL_R1   = _V1_PARAMS.trail_multiplier_r1   # 3.0
+_TRAIL_R3   = _V1_PARAMS.trail_multiplier_r3   # 3.0
+_TRAIL_R5   = _V1_PARAMS.trail_multiplier_r5   # 5.0
+_ATR_PERIOD = _V1_PARAMS.atr_period            # 20
+_SMA_WINDOW = _V1_PARAMS.regime_sma_window     # 200
 
 # ─────────────────────────────────────────────────────────────────────────────
 st.title("策略1.0 模拟交易监控")
