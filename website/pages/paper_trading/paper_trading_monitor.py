@@ -495,7 +495,8 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     "标的": e["ticker"], "操作": "BUY",
                     "成交量": e.get("shares", ""),
                     "信号价（昨收）": f"${e['signal_price']:.2f}" if e.get("signal_price") else "",
-                    "入场价（今开）": f"${e['entry_price']:.2f}" if e.get("entry_price") else "",
+                    "入场价（今开，无滑点）": f"${(e.get('open_price') or e.get('entry_price', 0)):.2f}",
+                    "入场价（今开，有滑点）": f"${e['entry_price']:.2f}" if e.get("entry_price") else "",
                     "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "",
                     "风险%": f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "",
                 } for e in sorted(_ts_entries, key=lambda x: x["ticker"])]), use_container_width=True, hide_index=True)
