@@ -430,10 +430,17 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             _open_px  = e.get("open_price")
             _entry_px = e.get("entry_price")
             _stop     = e.get("stop_price")
+            _sig_px   = e.get("signal_price")
             _shares   = e.get("shares", 0)
-            _atr_imp  = (_entry_px - _stop) / 2 if (_entry_px and _stop) else None
-            _trail    = _entry_px - 3 * _atr_imp if _atr_imp else None
             _risk_pct = e.get("trade_risk")
+            # "原因" reflects the actual entry trigger per strategy description Section 4:
+            # adj_close[t] > max(adj_high[t-200:t-1]) → 突破200日高点
+            if _sig_px and _stop:
+                _entry_reason = f"突破200日高点（信号收盘 ${_sig_px:.2f}，止损 ${_stop:.2f}）"
+            elif _stop:
+                _entry_reason = f"突破200日高点（止损 ${_stop:.2f}）"
+            else:
+                _entry_reason = "突破200日高点"
             _trade_rows.append({
                 "交易日期": _ts_trade_date,
                 "方向": "🟢 买入",
@@ -442,7 +449,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "成交量": _shares,
                 "开盘价（无滑点）": f"${_open_px:.2f}" if _open_px else "—",
                 "成交价（有滑点）": f"${_entry_px:.2f}" if _entry_px else "—",
-                "原因": f"止损 ${_stop:.2f}" if _stop else "—",
+                "原因": _entry_reason,
                 "盈亏（R）": "—",
                 "净盈亏（$）": f"风险 {_risk_pct*100:.2f}% NAV" if _risk_pct else "—",
             })
