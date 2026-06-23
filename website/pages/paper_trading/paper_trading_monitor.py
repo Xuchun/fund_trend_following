@@ -565,7 +565,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         if p['stop_buffer_pct'] <= 3.0
                         else f"{p['stop_buffer_pct']:.1f}%"),
                 "浮盈（R）": f"{p['R']:+.2f}R",
-                "浮盈 $": f"${p['unreal_pnl']:+,.0f}",
+                "浮盈（$）": f"${p['unreal_pnl']:+,.0f}",
                 "当前市值": f"${p['mkt_value']/1e3:.0f}K",
                 "入场日": p["entry_date"],
                 "入场价": f"${p['entry_price']:.2f}",
