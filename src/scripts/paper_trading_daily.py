@@ -768,6 +768,9 @@ def main() -> None:
         "regime":  "BULL" if regime_ok else "BEAR",
         "spy_close": round(spy_close, 2) if spy_close else None,
         "n_candidates": len(candidates),
+        "n_entries": len(new_pending),        # entry signals pending for tomorrow
+        "n_executed": len(entries_executed),  # entries executed today at open
+        "n_exits":   len(new_exit_signals),   # exit signals pending for tomorrow
 
         # ① OPEN executions (from yesterday's pending signals)
         "exits_executed": [{
