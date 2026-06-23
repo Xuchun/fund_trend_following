@@ -55,7 +55,8 @@ try:
             st.Page(_pages / "home.py",                       title="总结",     icon="📋"),
         ],
         "策略1.0模拟交易（开发中）": [
-            st.Page(_pt / "paper_trading_monitor.py", title="策略1.0模拟交易监控", icon="📡"),
+            st.Page(_pt / "paper_trading_monitor.py",    title="策略1.0模拟交易监控",         icon="📡"),
+            st.Page(_pt / "paper_trading_overfitting.py", title="策略过拟合分析（模拟交易数据）", icon="🔍"),
         ],
         "策略1.0改进方案（开发中）": [
             st.Page(_fw / "improve_strategy.py",          title="如何改进策略1.0",         icon="🔧"),
