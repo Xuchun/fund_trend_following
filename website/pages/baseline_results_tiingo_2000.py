@@ -3137,7 +3137,7 @@ st.markdown("---")
 # ── Trade summary ─────────────────────────────────────────────────────────────
 _trade_hdr_col, _trade_btn_col = st.columns([5, 1])
 with _trade_hdr_col:
-    st.subheader("交易样本")
+    st.subheader("交易明细")
 with _trade_btn_col:
     _dl_cols = ["ticker", "entry_date", "exit_date", "holding_days",
                 "entry_price", "exit_price", "shares", "net_pnl",
