@@ -524,11 +524,16 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     if _m1_today_sig:
         _ts_date   = _m1_today_sig.get("date", "N/A")
         _ts_regime = _m1_today_sig.get("regime", "N/A")
-        # New schema: exit_signals / entry_signals (detected at today's close, execute tomorrow)
-        # Old schema "exits"/"entries" stored what was EXECUTED at today's open — not tomorrow's signals.
-        # Always fall back to pending_exits/pending_entries (the canonical pending-for-tomorrow source).
-        _ts_exit_sigs  = _m1_today_sig.get("exit_signals")  or _m1.get("pending_exits",   [])
-        _ts_entry_sigs = _m1_today_sig.get("entry_signals") or _m1.get("pending_entries", [])
+        # exit_signals / candidate_signals / entry_signals: new schema (detected at close, pending tomorrow)
+        # Always fall back to pending_exits/pending_entries as canonical source.
+        _ts_exit_sigs    = _m1_today_sig.get("exit_signals")      or _m1.get("pending_exits",   [])
+        _ts_all_cands    = _m1_today_sig.get("candidate_signals",  [])   # ALL raw breakouts w/ rejection
+        _ts_entry_sigs   = _m1_today_sig.get("entry_signals")     or _m1.get("pending_entries", [])
+
+        # Build the approved-ticker set for marking selected candidates
+        _approved_tickers = {e["ticker"] for e in _ts_entry_sigs}
+        if not _approved_tickers:
+            _approved_tickers = {p["ticker"] for p in _m1.get("pending_entries", [])}
 
         _ts_regime_str = "🟢 BULL" if _ts_regime == "BULL" else "🔴 BEAR"
         if _spy_close and _spy_sma:
@@ -538,7 +543,13 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         st.markdown(f"信号日期：{_ts_date} 盘后 ｜ Regime：{_ts_regime_str}")
         st.caption("以下信号在今日收盘后生成，将于下一交易日开盘执行（与回测引擎相同：T日收盘信号 → T+1日开盘执行）")
 
-        _tab_exit, _tab_entry = st.tabs([f"平仓信号（{len(_ts_exit_sigs)} 笔）", f"开仓信号（{len(_ts_entry_sigs)} 笔）"])
+        # Tab title: show all-candidate count if available, else approved count
+        _entry_tab_label = (
+            f"开仓信号（{len(_ts_all_cands)} 笔突破，{len(_approved_tickers)} 笔已选）"
+            if _ts_all_cands else
+            f"开仓信号（{len(_ts_entry_sigs)} 笔）"
+        )
+        _tab_exit, _tab_entry = st.tabs([f"平仓信号（{len(_ts_exit_sigs)} 笔）", _entry_tab_label])
         with _tab_exit:
             if _ts_exit_sigs:
                 _exit_reason_map = {"stop_loss": "🔴 触止损", "trailing_stop": "🔴 触移动止盈"}
@@ -554,13 +565,38 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 st.info("今日无退出信号")
 
         with _tab_entry:
-            if _ts_entry_sigs:
+            _rejection_label = {
+                None:           "✅ 已选入（次日执行）",
+                "corr_reduced": "⚠️ 已选入（相关性减仓）",
+                "heat_limit":   "🔴 未选（热度上限）",
+                "cash_limit":   "🔴 未选（现金不足）",
+            }
+            if _ts_all_cands:
+                # Full funnel view: all raw breakout candidates with rejection reason
+                st.caption(
+                    f"共 **{len(_ts_all_cands)}** 只个股触发突破信号（通过全部个股筛选），"
+                    f"其中 **{len(_approved_tickers)}** 只通过组合约束被选入，"
+                    f"剩余因热度上限或现金不足被跳过。"
+                )
+                show_df(pd.DataFrame([{
+                    "标的":         c["ticker"],
+                    "信号价（今收）": f"${c.get('signal_price', 0):.2f}" if c.get("signal_price") else "",
+                    "参考止损":      f"${c.get('stop_price', 0):.2f}"   if c.get("stop_price")   else "",
+                    "股数":          c.get("shares", ""),
+                    "风险% NAV":     f"{c['trade_risk']*100:.2f}%" if c.get("trade_risk") else "",
+                    "状态":          _rejection_label.get(c.get("rejection"), c.get("rejection", "✅ 已选入")),
+                    "执行方式":      "市价单（次日开盘）" if c["ticker"] in _approved_tickers else "—",
+                } for c in sorted(_ts_all_cands, key=lambda x: x["ticker"])]), use_container_width=True, hide_index=True)
+            elif _ts_entry_sigs:
+                # Fallback: only approved signals available (old schema or first run)
+                st.caption("仅显示已选入信号（候选汇总数据将在下次日脚本运行后更新）")
                 show_df(pd.DataFrame([{
                     "标的":    e["ticker"],
                     "信号价（今收）": f"${e.get('signal_price', 0):.2f}" if e.get("signal_price") else "",
-                    "参考止损":      f"${e.get('stop_price', 0):.2f}" if e.get("stop_price") else "",
+                    "参考止损":      f"${e.get('stop_price', 0):.2f}"   if e.get("stop_price")   else "",
                     "股数":          e.get("shares", ""),
                     "风险% NAV":     f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "",
+                    "状态":          "✅ 已选入（次日执行）",
                     "执行方式":      "市价单（次日开盘）",
                 } for e in sorted(_ts_entry_sigs, key=lambda x: x["ticker"])]), use_container_width=True, hide_index=True)
             else:
