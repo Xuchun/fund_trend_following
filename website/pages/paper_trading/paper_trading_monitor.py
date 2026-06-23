@@ -655,18 +655,36 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.markdown("---")
 
     # ── Stop detail ──────────────────────────────────────────────────────────
-    st.subheader("六、移动止损明细")
+    st.subheader("六、止损/移动止盈明细")
     if _m1_ok:
+        _sd_sort_map = {
+            "标的":        lambda p: p["ticker"],
+            "当前价":      lambda p: p["current_price"],
+            "历史最高":    lambda p: p["highest_high"],
+            "ATR(20)":    lambda p: p["current_atr"],
+            "乘数":        lambda p: p["trail_mult"],
+            "止损":        lambda p: p["stop_loss"],
+            "移动止盈":    lambda p: p["trail_stop_live"],
+            "有效止损/止盈": lambda p: p["current_stop"],
+            "距止损/止盈": lambda p: p["stop_buffer_pct"],
+        }
+        _sd_c1, _sd_c2 = st.columns([5, 2])
+        with _sd_c1:
+            _sd_sort_col = st.selectbox("排序列", list(_sd_sort_map.keys()), index=0, key="m1_sd_sort_col", label_visibility="collapsed")
+        with _sd_c2:
+            _sd_sort_desc = st.toggle("降序排列", value=False, key="m1_sd_sort_desc")
+        _sd_sorted = sorted(_m1_ok, key=_sd_sort_map[_sd_sort_col], reverse=_sd_sort_desc)
+
         _sd = pd.DataFrame([{
             "标的": p["ticker"],
             "状态": ("🔴止损" if p.get("stop_reason") == "stop_loss"
-                     else ("🔴移动" if p.get("stop_reason") == "trailing_stop" else "✅")),
+                     else ("🔴移动止盈" if p.get("stop_reason") == "trailing_stop" else "✅")),
             "当前价": f"${p['current_price']:.2f}", "历史最高": f"${p['highest_high']:.2f}",
             "ATR(20)": f"${p['current_atr']:.2f}", "乘数": f"{p['trail_mult']:.1f}×",
-            "硬止损": f"${p['stop_loss']:.2f}",
-            "追踪止损": f"${p['trail_stop_live']:.2f}",
-            "有效止损": f"${p['current_stop']:.2f}", "距止损": f"{p['stop_buffer_pct']:.1f}%",
-        } for p in sorted(_m1_ok, key=lambda x: x["ticker"])])
+            "止损": f"${p['stop_loss']:.2f}",
+            "移动止盈": f"${p['trail_stop_live']:.2f}",
+            "有效止损/止盈": f"${p['current_stop']:.2f}", "距止损/止盈": f"{p['stop_buffer_pct']:.1f}%",
+        } for p in _sd_sorted])
         show_df(_sd, use_container_width=True, hide_index=True)
 
     st.markdown("---")
