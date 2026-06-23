@@ -493,5 +493,37 @@
         "order_type": "MARKET"
       }
     ]
-  }
+  },
+  "pending_entries": [
+    {
+      "ticker": "APGE",
+      "signal_date": "2026-06-22",
+      "signal_price": 132.55,
+      "stop_price": 119.492,
+      "shares": 75,
+      "atr": 6.529,
+      "trade_risk": 0.0049,
+      "notional": 9941.25
+    },
+    {
+      "ticker": "ESI",
+      "signal_date": "2026-06-22",
+      "signal_price": 49.09,
+      "stop_price": 45.4254,
+      "shares": 204,
+      "atr": 1.8323,
+      "trade_risk": 0.0037,
+      "notional": 10014.36
+    },
+    {
+      "ticker": "CWAN",
+      "signal_date": "2026-06-22",
+      "signal_price": 24.53,
+      "stop_price": 24.3532,
+      "shares": 408,
+      "atr": 0.0884,
+      "trade_risk": 0.0004,
+      "notional": 10008.24
+    }
+  ]
 }
