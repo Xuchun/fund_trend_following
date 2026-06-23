@@ -54,7 +54,7 @@ with col1:
             "抓波动爆发",
             "减少假 Breakout",
         ],
-    })
+    }))
 
 with col2:
     st.markdown("**推荐组合权重**")
