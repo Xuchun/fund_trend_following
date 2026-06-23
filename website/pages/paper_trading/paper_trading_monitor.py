@@ -171,7 +171,12 @@ def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
         eff_stop, trail_live, tm = _compute_stop(peak_hh, pos["atr_at_entry"], pos["trail_stop"])
         R = (fallback - pos["entry_price"]) / R_base if R_base > 0 else 0.0
         # Without intraday low, approximate: triggered if close < stop_loss OR close < trail_stop
-        is_stopped = (fallback < pos["stop_loss"]) or (fallback < trail_live)
+        if fallback < pos["stop_loss"]:
+            stop_reason = "stop_loss"
+        elif fallback < trail_live:
+            stop_reason = "trailing_stop"
+        else:
+            stop_reason = None
         return {
             **pos,
             "_ok":             True,
@@ -187,7 +192,8 @@ def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
             "mkt_value":       fallback * pos["shares"],
             "unreal_pnl":      (fallback - pos["entry_price"]) * pos["shares"],
             "stop_buffer_pct": (fallback - eff_stop) / fallback * 100,
-            "is_stopped":      is_stopped,
+            "is_stopped":      stop_reason is not None,
+            "stop_reason":     stop_reason,
         }
 
     # Compare dates only to avoid timezone mismatch between yfinance (tz-aware) and entry_date (tz-naive)
@@ -200,7 +206,12 @@ def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
         peak_hh = pos["highest_high"]
         eff_stop, trail_live, tm = _compute_stop(peak_hh, pos["atr_at_entry"], pos["trail_stop"])
         R = (fallback - pos["entry_price"]) / R_base if R_base > 0 else 0.0
-        is_stopped = (fallback < pos["stop_loss"]) or (fallback < trail_live)
+        if fallback < pos["stop_loss"]:
+            stop_reason = "stop_loss"
+        elif fallback < trail_live:
+            stop_reason = "trailing_stop"
+        else:
+            stop_reason = None
         return {
             **pos,
             "_ok":             True,
@@ -216,7 +227,8 @@ def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
             "mkt_value":       fallback * pos["shares"],
             "unreal_pnl":      (fallback - pos["entry_price"]) * pos["shares"],
             "stop_buffer_pct": (fallback - eff_stop) / fallback * 100,
-            "is_stopped":      is_stopped,
+            "is_stopped":      stop_reason is not None,
+            "stop_reason":     stop_reason,
         }
 
     cur_price    = float(since_entry["Close"].iloc[-1])
