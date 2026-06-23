@@ -527,8 +527,15 @@ def scan_entries(
     today: date,
     nav: float,
     pos_data: dict[str, pd.DataFrame] | None = None,
-) -> list[dict]:
-    """Scan universe for new breakout signals. Returns list of candidate signals."""
+) -> tuple[list[dict], dict]:
+    """Scan universe for new breakout signals.
+
+    Returns:
+        (signals, scan_stats) where scan_stats contains rejection counters for
+        overfitting analysis: how many raw breakouts existed vs. how many were
+        blocked by portfolio-level constraints (heat, cash) or had size reduced
+        by the correlation filter.
+    """
     held         = {p["ticker"] for p in state["positions"]}
     held_tickers = [p["ticker"] for p in state["positions"]]
     heat_used    = sum(
@@ -537,6 +544,12 @@ def scan_entries(
     )
     cash    = state.get("cash", 0.0)
     signals: list[dict] = []
+
+    # Rejection counters — stored in today_signals for future overfitting analysis
+    n_raw_breakouts = 0   # passed all per-stock filters; before portfolio constraints
+    n_corr_reduced  = 0   # correlation triggered size reduction (signal still accepted)
+    n_heat_blocked  = 0   # blocked by portfolio heat limit
+    n_cash_blocked  = 0   # blocked by insufficient cash
 
     # Pre-compute log returns for held positions (for Step 3 correlation check)
     held_log_returns: dict[str, pd.Series] = {}
@@ -595,6 +608,9 @@ def scan_entries(
             if not pd.isna(vol_ma) and float(volume.iloc[-1]) < PARAMS.volume_filter_multiplier * float(vol_ma):
                 continue
 
+        # ── All per-stock filters passed — count as a raw breakout candidate ──
+        n_raw_breakouts += 1
+
         # Position sizing — mirrors backtest sizing.py compute_position_size():
 
         # Step 1: raw shares from risk budget (keep float until final rounding)
@@ -605,6 +621,7 @@ def scan_entries(
         final_shares_f = min(raw_shares_f, cap_shares_f)
 
         # Step 3: correlation adjustment
+        _corr_triggered = False
         if held_log_returns:
             _cand_lr = compute_log_returns(close)
             _all_lr  = {**held_log_returns, ticker: _cand_lr}
@@ -618,6 +635,7 @@ def scan_entries(
             )
             if max_corr > PARAMS.correlation_threshold:
                 final_shares_f *= PARAMS.correlation_reduction
+                _corr_triggered = True
 
         # Round once with round-half-up — mirrors math.floor(final_shares + 0.5) in backtest
         shares = math.floor(final_shares_f + 0.5)
@@ -629,9 +647,14 @@ def scan_entries(
         # Step 4: portfolio heat check
         trade_risk = stop_dist * shares / nav
         if heat_used + trade_risk > PARAMS.heat_limit:
+            n_heat_blocked += 1
             continue
         if notional > cash:
+            n_cash_blocked += 1
             continue
+
+        if _corr_triggered:
+            n_corr_reduced += 1
 
         strength = float(compute_breakout_strength(close, rolling_high).iloc[-1])
         signals.append({
@@ -647,7 +670,13 @@ def scan_entries(
         heat_used += trade_risk
 
     signals.sort(key=lambda x: x["strength"], reverse=True)
-    return signals
+    scan_stats = {
+        "n_raw_breakouts": n_raw_breakouts,
+        "n_heat_blocked":  n_heat_blocked,
+        "n_cash_blocked":  n_cash_blocked,
+        "n_corr_reduced":  n_corr_reduced,
+    }
+    return signals, scan_stats
 
 
 # ── Main ─────────────────────────────────────────────────────────────────────
