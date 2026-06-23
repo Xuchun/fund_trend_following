@@ -13,7 +13,7 @@ if str(_root) not in sys.path:
 
 import plotly.graph_objects as go
 import streamlit as st
-
+from website.style import show_df
 from website.shared import get_results
 from website.components.strategy_badge import render_page_header
 
@@ -265,7 +265,7 @@ if _bw_data:
             "Sortino": f"{r['sortino']:+.3f}",
             "胜率": f"{r['win_rate']*100:.1f}%",
         })
-    st.dataframe(pd.DataFrame(_bw_rows), use_container_width=True, hide_index=True)
+    show_df(pd.DataFrame(_bw_rows), use_container_width=True, hide_index=True)
 else:
     st.warning("breakout_window 扰动数据未找到")
 
@@ -297,7 +297,7 @@ if _sl_data:
             "Sortino": f"{r['sortino']:+.3f}",
             "胜率": f"{r['win_rate']*100:.1f}%",
         })
-    st.dataframe(pd.DataFrame(_sl_rows), use_container_width=True, hide_index=True)
+    show_df(pd.DataFrame(_sl_rows), use_container_width=True, hide_index=True)
 else:
     st.warning("stop_loss_multiplier 扰动数据未找到")
 
@@ -329,7 +329,7 @@ if _tm_data:
             "Sortino": f"{r['sortino']:+.3f}",
             "胜率": f"{r['win_rate']*100:.1f}%",
         })
-    st.dataframe(pd.DataFrame(_tm_rows), use_container_width=True, hide_index=True)
+    show_df(pd.DataFrame(_tm_rows), use_container_width=True, hide_index=True)
 else:
     st.warning("trail_multiplier_r1 扰动数据未找到")
 
@@ -376,7 +376,7 @@ for _pname, _plabel, _pbase, _pfmt in _SLICE_PARAMS:
 
 if _slice_summary_rows:
     st.markdown("**Slice Tests 汇总（点击展开各参数详细图表）：**")
-    st.dataframe(pd.DataFrame(_slice_summary_rows), use_container_width=True, hide_index=True)
+    show_df(pd.DataFrame(_slice_summary_rows), use_container_width=True, hide_index=True)
 
 st.markdown("")
 

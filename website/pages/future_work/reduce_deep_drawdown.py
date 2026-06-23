@@ -12,7 +12,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.io as _pio
 import streamlit as st
-from website.shared import get_results
+from website.style import show_dffrom website.shared import get_results
 
 _pio.templates.default = "plotly_white"
 
@@ -113,7 +113,7 @@ worst["end"] = worst["end"].dt.strftime("%Y-%m-%d")
 worst["min_dd"] = worst["min_dd"].map(lambda x: f"{x:.1f}%")
 worst.columns = ["开始日期", "结束日期", "最大回撤深度", "持续天数"]
 st.markdown("**最深的 8 段回撤（>10% 阈值）：**")
-st.dataframe(worst, use_container_width=True, hide_index=True)
+show_df(worst, use_container_width=True, hide_index=True)
 
 st.markdown("---")
 

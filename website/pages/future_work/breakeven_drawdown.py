@@ -7,6 +7,7 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
+from website.style import show_df
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
@@ -146,7 +147,7 @@ for (_nm, _nav), _lbl_wr in zip(_navs_all.items(), ["orig", "be1r", "be15r", "be
         _row["最长连续亏损次数"] = str(_mc)
     _m_rows.append(_row)
 
-st.dataframe(pd.DataFrame(_m_rows), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(_m_rows), use_container_width=True, hide_index=True)
 
 st.markdown("""
 **核心结论**：在 {total:,} 笔已执行交易中，平价保护 1R（浮盈达到 1R 时将止损移至略高于开仓价的位置，使出场净盈利 ≈ +$1）可使最大回撤

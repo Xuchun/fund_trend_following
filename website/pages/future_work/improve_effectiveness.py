@@ -7,6 +7,7 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
+from website.style import show_df
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
@@ -197,7 +198,7 @@ for label, lo, hi in [
         "5R+占比": f"{(g['pnl_r_multiple']>=5).mean()*100:.0f}%",
     })
 reg_df = pd.DataFrame(_reg_rows)
-st.dataframe(reg_df, use_container_width=True, hide_index=True)
+show_df(reg_df, use_container_width=True, hide_index=True)
 
 # Bar chart: win rate by regime
 fig_reg = go.Figure()
@@ -251,7 +252,7 @@ st.markdown(
     "平均Alpha = "
     f"**{_bull_drag['alpha'].mean():+.1f} pp**："
 )
-st.dataframe(_bull_drag_show, use_container_width=True, hide_index=True)
+show_df(_bull_drag_show, use_container_width=True, hide_index=True)
 st.markdown(
     "在这些年份，SPY 以 15-31% 的年化速度复利增长，而趋势跟踪策略受制于 ~39% 的胜率，"
     "累计收益被大幅拉开差距。**提高胜率或让盈利单跑得更远**是应对的两条核心路径。"
@@ -294,7 +295,7 @@ _stat_rows = [
     {"指标": "Sharpe 比率", "当前策略": f"{_s_sh:.2f}", "加入熊市对冲后": f"{_bl_sh:.2f}"},
     {"指标": "vs SPY Alpha", "当前策略": f"{_s_cagr - _b_cagr:+.2f} pp", "加入熊市对冲后": f"{_bl_cagr - _b_cagr:+.2f} pp"},
 ]
-st.dataframe(pd.DataFrame(_stat_rows), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(_stat_rows), use_container_width=True, hide_index=True)
 
 # Annual year-by-year for key bear years
 _yr_rows = []
@@ -416,7 +417,7 @@ for ename, y1, y2 in _era_defs:
         "3R+盈利单平均持仓（天）": round(w_3r, 1),
         "5R+盈利单平均持仓（天）": round(w_5r, 1) if not np.isnan(w_5r) else "—",
     })
-st.dataframe(pd.DataFrame(_hold_rows), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(_hold_rows), use_container_width=True, hide_index=True)
 
 # Scatter: pnl_r_multiple vs holding_days for winning trades
 _wins_plot = trades[trades["net_pnl"] > 0].copy()
@@ -517,7 +518,7 @@ _summary_rows = [
         "数据支持": "3R+盈利单平均持仓155-170天，与持仓天数/R倍数正相关",
     },
 ]
-st.dataframe(pd.DataFrame(_summary_rows), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(_summary_rows), use_container_width=True, hide_index=True)
 
 st.markdown(
     "**实施优先建议：**\n\n"

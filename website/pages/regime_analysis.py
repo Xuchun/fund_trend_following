@@ -12,7 +12,7 @@ if str(_root) not in sys.path:
 
 import pandas as pd
 import streamlit as st
-from website.shared import get_results
+from website.style import show_dffrom website.shared import get_results
 from website.components.strategy_badge import render_page_header
 
 res  = get_results()
@@ -157,7 +157,7 @@ if regime_data and "regimes" in regime_data:
             "胜率":          f"{s.get('win_rate',0)*100:.1f}%",
         })
 
-    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+    show_df(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
     # ── CAGR comparison bar chart ──────────────────────────────────────────
     st.subheader("策略1.0 vs SPY：各环境 CAGR 对比")

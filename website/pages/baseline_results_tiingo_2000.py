@@ -8,7 +8,7 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
-from website.data_loader import load_strategy
+from website.style import show_dffrom website.data_loader import load_strategy
 from website.components.strategy_badge import render_page_header
 
 _etf_csv = Path(__file__).resolve().parents[2] / "data" / "ETFs.csv"
@@ -704,7 +704,7 @@ for _, _sr2 in _long_s2.iterrows():
     })
 
 _tbl_s2 = _pd_streak2.DataFrame(_tbl_rows)
-st.dataframe(_tbl_s2, use_container_width=True, hide_index=True)
+show_df(_tbl_s2, use_container_width=True, hide_index=True)
 
 # SPY during streak bar chart
 _fig_spy_s = _go_streak2.Figure()
@@ -971,7 +971,7 @@ with _col_bar_l:
 _sec_grp_l_show = _sec_grp_l20.copy()
 _sec_grp_l_show.columns = ["行业 / 类别", "笔数", "合计 R", "包含标的"]
 _sec_grp_l_show["合计 R"] = _sec_grp_l_show["合计 R"].map(lambda v: f"{v:.1f}R")
-st.dataframe(_sec_grp_l_show, use_container_width=True, hide_index=True)
+show_df(_sec_grp_l_show, use_container_width=True, hide_index=True)
 
 # ── 买入股价分布（还原拆股后的真实市场价）────────────────────────────────────────────
 st.markdown("#### 买入原始股价分布")
@@ -1070,7 +1070,7 @@ _l20_show["实际R(含跳空)"] = _l20_show["实际R(含跳空)"].map(
 )
 
 with st.expander("📋 Top 20 大亏家明细", expanded=True):
-    st.dataframe(_l20_show, use_container_width=True, hide_index=True)
+    show_df(_l20_show, use_container_width=True, hide_index=True)
 
 # ── 共性总结 ──────────────────────────────────────────────────────────────────
 _l20_yr_top3 = _l20["入场年份"].value_counts().nlargest(3)
@@ -1242,7 +1242,7 @@ _big_r_show["R 倍数"]  = _big_r_show["R 倍数"].map(lambda x: f"{x:.2f}R")
 _big_r_show = _big_r_show.sort_values("R 倍数", ascending=False).reset_index(drop=True)
 
 with st.expander(f"📋 R > 3 的大盈利交易明细（共 {len(_big_r_show)} 笔）", expanded=False):
-    st.dataframe(_big_r_show, use_container_width=True, hide_index=True, height=500)
+    show_df(_big_r_show, use_container_width=True, hide_index=True, height=500)
 
 st.markdown("---")
 
@@ -1466,7 +1466,7 @@ with _col_bar:
 _sec_grp_show = _sec_grp.copy()
 _sec_grp_show.columns = ["行业 / 类别", "笔数", "合计 R", "包含标的"]
 _sec_grp_show["合计 R"] = _sec_grp_show["合计 R"].map(lambda v: f"{v:.1f}R")
-st.dataframe(_sec_grp_show, use_container_width=True, hide_index=True)
+show_df(_sec_grp_show, use_container_width=True, hide_index=True)
 
 # ── 买入股价分布（还原拆股后的真实市场价）────────────────────────────────────────────
 st.markdown("#### 买入原始股价分布")
@@ -1564,7 +1564,7 @@ _t20_show["真实买入价($)"] = _t20_show["真实买入价($)"].map(
 )
 
 with st.expander("📋 Top 20 大赢家明细", expanded=True):
-    st.dataframe(_t20_show, use_container_width=True, hide_index=True)
+    show_df(_t20_show, use_container_width=True, hide_index=True)
 
 # ── 共性总结 ──────────────────────────────────────────────────────────────────
 _t20_yr_top3 = _t20["入场年份"].value_counts().nlargest(3)
@@ -1661,7 +1661,7 @@ _quality_df = _pd2.DataFrame({
     "结论":      [f"ETF 仅占 {_e['n']/(_s['n']+_e['n'])*100:.0f}%", "ETF 胜率更高" if _e['win_rate'] > _s['win_rate'] else "股票胜率更高", "股票赢时赢更多" if _s['avg_win_r'] > _e['avg_win_r'] else "ETF赢时赢更多", "股票输时输更少" if abs(_s['avg_loss_r']) < abs(_e['avg_loss_r']) else "ETF输时输更少",
                   "几乎相同", "股票趋势更持久" if _s['avg_hold'] > _e['avg_hold'] else "ETF趋势更持久", "股票趋势更持久" if _s['med_hold'] > _e['med_hold'] else "ETF趋势更持久"],
 })
-st.dataframe(_quality_df, use_container_width=True, hide_index=True)
+show_df(_quality_df, use_container_width=True, hide_index=True)
 
 st.markdown("#### 资本效率")
 col1, col2, col3 = st.columns(3)
@@ -1745,7 +1745,7 @@ if _m_s_path.exists() and _m_e_path.exists():
         }
         for label, key, fmt in _cmp_rows
     ])
-    st.dataframe(_cmp_df, use_container_width=True, hide_index=True)
+    show_df(_cmp_df, use_container_width=True, hide_index=True)
 
     _cagr_s = _m_stocks.get("cagr", 0)
     _cagr_e = _m_etfs.get("cagr", 0)
@@ -1834,7 +1834,7 @@ with st.expander("📋 亏损最大的 10 个标的", expanded=False):
     _bot10_c2["总盈亏"] = _bot10_c2["总盈亏"].map(lambda v: f"${v:+,.0f}")
     _bot10_c2["胜率"]   = _bot10_c2["胜率"].map(lambda v: f"{v*100:.0f}%")
     _bot10_c2["平均R"]  = _bot10_c2["平均R"].map(lambda v: f"{v:.2f}R")
-    st.dataframe(_bot10_c2, use_container_width=True, hide_index=True)
+    show_df(_bot10_c2, use_container_width=True, hide_index=True)
 
 st.markdown("---")
 
@@ -2010,7 +2010,7 @@ else:
             "SPY最大回撤":  f"{_bdd*100:.1f}%",
             "跑赢SPY年数":  f"{_nb}/{len(_ann_m)} 年",
         })
-    st.dataframe(_pd_eff.DataFrame(_era_rows), use_container_width=True, hide_index=True)
+    show_df(_pd_eff.DataFrame(_era_rows), use_container_width=True, hide_index=True)
 
     # ── Conclusion ────────────────────────────────────────────────────────────
     _a1, _a2, _a3 = (_era_alphas + [0, 0, 0])[:3]
@@ -2157,7 +2157,7 @@ def _render_breakeven():
         _m_rows.append(_row)
 
     st.markdown("**各方案指标对比**")
-    st.dataframe(_pd_be.DataFrame(_m_rows), use_container_width=True, hide_index=True)
+    show_df(_pd_be.DataFrame(_m_rows), use_container_width=True, hide_index=True)
 
     # ── Trade impact breakdown ────────────────────────────────────────────────
     _total = len(_be)
@@ -2173,7 +2173,7 @@ def _render_breakeven():
             "曾触发": f"{_n_trig} 笔 ({_n_trig/_total*100:.0f}%)",
             "实际提前出场": f"{_n_early} 笔 ({_n_early/_total*100:.1f}%)",
         })
-    st.dataframe(_pd_be.DataFrame(_imp), use_container_width=True, hide_index=True)
+    show_df(_pd_be.DataFrame(_imp), use_container_width=True, hide_index=True)
 
     st.markdown(
         "注：「曾触发」= 该交易浮盈曾达到阈值（止损已上移至略高于开仓价格的位置）。"
@@ -2416,7 +2416,7 @@ if len(_lh200) > 0:
     _lh200_show["R 倍数"]    = _lh200_show["R 倍数"].map(lambda v: f"{v:.2f}R")
     _lh200_show = _lh200_show.sort_values("持仓天数", ascending=False).reset_index(drop=True)
     with st.expander(f"📋 持仓天数 > 200 天的交易（共 {len(_lh200_show)} 笔）", expanded=True):
-        st.dataframe(_lh200_show, use_container_width=True, hide_index=True)
+        show_df(_lh200_show, use_container_width=True, hide_index=True)
 
 # ── Capital utilization ───────────────────────────────────────────────────────
 st.subheader("资金使用率")
@@ -2563,7 +2563,7 @@ _tc2.metric("其中：股票", f"{_n_ts:,}",
 _tc3.metric("其中：ETF", f"{_n_te:,}",
             help=f"ETF 池 {_n_pe:,} 个，覆盖率 {_pct_e:.1f}%")
 
-st.dataframe(_pd_ta.DataFrame([
+show_df(_pd_ta.DataFrame([
     {"类别": "股票", "标的池": _n_ps, "实际开仓": _n_ts,
      "覆盖率": f"{_pct_s:.1f}%", "未触发": _n_ps - _n_ts},
     {"类别": "ETF",  "标的池": _n_pe, "实际开仓": _n_te,
@@ -2631,7 +2631,7 @@ else:
         _dl_show.columns = ["代码", "入场日", "退市平仓日", "持仓天数", "R 倍数", "净盈亏 ($)"]
         _dl_show["R 倍数"]    = _dl_show["R 倍数"].map(lambda x: f"{x:.2f}R")
         _dl_show["净盈亏 ($)"] = _dl_show["净盈亏 ($)"].map(lambda x: f"${x:,.0f}")
-        st.dataframe(_dl_show, use_container_width=True, hide_index=True)
+        show_df(_dl_show, use_container_width=True, hide_index=True)
 
     st.markdown(f"""
 **解读：** 回测期间共有 **{_n_dl}** 笔交易（占总交易的 {_dl_pct:.1f}%）因标的退市或被收购而平仓。
@@ -2913,7 +2913,7 @@ with st.expander("📋 交易次数最多的 TOP 10 标的", expanded=False):
     _topfreq_df["总净盈亏($)"] = _topfreq_df["标的"].map(_tk_pnl_map).map(
         lambda v: f"${v:+,.0f}"
     )
-    st.dataframe(_topfreq_df, use_container_width=True, hide_index=True)
+    show_df(_topfreq_df, use_container_width=True, hide_index=True)
 
 st.markdown("---")
 
@@ -2998,7 +2998,7 @@ if "净盈亏($)" in trades_display.columns:
     trades_display["净盈亏($)"] = trades_display["净盈亏($)"].apply(
         lambda v: f"${v:+,.0f}"
     )
-st.dataframe(trades_display, use_container_width=True, hide_index=True)
+show_df(trades_display, use_container_width=True, hide_index=True)
 
 # ── Assessment ─────────────────────────────────────────────────────────────────
 st.markdown("---")

@@ -14,7 +14,7 @@ import plotly.graph_objects as go
 import streamlit as st
 from plotly.subplots import make_subplots
 
-from website.style import GLOBAL_CSS
+from website.style import GLOBAL_CSS, show_df
 
 st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
 
@@ -120,7 +120,7 @@ for col, label, series in [
         st.markdown(f"**{label}**")
         d = series.describe().round(3).to_frame("R 值")
         d.index = ["数量", "均值", "标准差", "最小", "25%", "中位数", "75%", "最大"]
-        st.dataframe(d, use_container_width=True)
+        show_df(d, use_container_width=True)
 
 st.markdown(
     f"**关键发现**：未开仓信号均值（**{missed_r.mean():.3f}R**）与已开仓（**{exec_r.mean():.3f}R**）非常接近，"
@@ -160,7 +160,7 @@ with tbl_col:
     tbl["k 强度"] = tbl["k_strength"].round(2)
     tbl["持仓天数"] = (tbl["exit_date"] - tbl["entry_date"]).dt.days.fillna(0).astype(int)
     st.markdown(f"**Top {TOP_N} 大赢家完整列表**")
-    st.dataframe(
+    show_df(
         tbl[["ticker", "信号日", "pnl_r", "k 强度", "持仓天数", "exit_reason", "状态"]].rename(
             columns={"ticker": "标的", "exit_reason": "退出原因"}
         ).reset_index(drop=True),
@@ -192,7 +192,7 @@ compare = pd.DataFrame({
         f"{top50_missed.gap_filtered.mean():.0%}",
     ],
 })
-st.dataframe(compare, use_container_width=True, hide_index=True)
+show_df(compare, use_container_width=True, hide_index=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # 三、多角度分析：为何错失这些大赢家？
@@ -516,7 +516,7 @@ k_perf = sig_copy.groupby("k_bucket", observed=True)["pnl_r"].agg(
 
 st.markdown(f"k_strength 与 pnl_r 的 Pearson 相关系数：全量 **{corr_all:.3f}**，Top {TOP_N} 中 **{corr_top:.3f}**")
 st.markdown("**不同 k 档位的平均收益（全量信号）**")
-st.dataframe(k_perf, use_container_width=True)
+show_df(k_perf, use_container_width=True)
 
 st.markdown(
     "高 k 值信号在均值和胜率上均优于低 k 值信号，与现有 `breakout_strength` 降序排列的方向一致。"
@@ -573,7 +573,7 @@ _bt_data = {
     "k_strength（实验）":        [ "9.39%", "0.591", "−16.26%", "0.577", "38.45%", "1.575", "3,363"],
     "变化":                      ["−1.19 pp ❌", "−0.053 ❌", "+3.03 pp ✅", "+0.029 ✅", "−0.62 pp", "−0.164 ❌", "+28"],
 }
-st.dataframe(
+show_df(
     pd.DataFrame(_bt_data),
     use_container_width=True, hide_index=True,
 )
@@ -712,7 +712,7 @@ k_exec_perf = exec_sig.groupby("k_bucket", observed=True)["pnl_r_multiple" if "p
 col_k3a, col_k3b = st.columns([1, 2])
 with col_k3a:
     st.markdown("**已开仓信号：k 档位 vs 平均 pnl_r**")
-    st.dataframe(k_exec_perf, use_container_width=True)
+    show_df(k_exec_perf, use_container_width=True)
 with col_k3b:
     if len(k_exec_perf) > 0:
         fig_k3 = go.Figure()
@@ -790,7 +790,7 @@ summary = pd.DataFrame({
     "最大回撤影响": ["应持平或降低", "需谨慎控制", "改善 3pp，但 CAGR 代价过高"],
     "当前状态": ["⏳ 待回测验证", "🔬 需严格 Walk-Forward 后引入", "🚫 回测显示净效果为负，维持原排序"],
 })
-st.dataframe(summary, use_container_width=True, hide_index=True)
+show_df(summary, use_container_width=True, hide_index=True)
 
 st.success(
     "**推荐行动**：唯一值得推进的改动是将 `position_cap` 从 0.05 改为 0.03，"

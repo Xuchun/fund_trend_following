@@ -7,6 +7,7 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
+from website.style import show_df
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
@@ -128,7 +129,7 @@ if _bw:
     _tbl_bw["Calmar"]  = _tbl_bw["Calmar"].map(lambda v: f"{v:.4f}")
     _tbl_bw["最长回撤(天)"] = _tbl_bw["最长回撤(天)"].map(int)
     _tbl_bw["交易笔数"] = _tbl_bw["交易笔数"].map(int)
-    st.dataframe(_tbl_bw, use_container_width=True, hide_index=True)
+    show_df(_tbl_bw, use_container_width=True, hide_index=True)
 
     _r150 = _bw_df[_bw_df["param_value"] == 150].iloc[0]
     _r200 = _bw_df[_bw_df["param_value"] == 200].iloc[0]
@@ -375,7 +376,7 @@ _tbl_bkt["胜率"]  = _tbl_bkt["胜率"].map(lambda v: f"{v:.1f}%")
 _tbl_bkt["平均R"] = _tbl_bkt["平均R"].map(lambda v: f"{v:+.2f}R")
 _tbl_bkt["净盈亏"] = _tbl_bkt["净盈亏M"].map(lambda v: f"${v:+.1f}M")
 _tbl_bkt["占总利润"] = _tbl_bkt["占总利润"].map(lambda v: f"{v:+.1f}%")
-st.dataframe(
+show_df(
     _tbl_bkt[["持仓区间","笔数（占比）","胜率","平均R","净盈亏","占总利润"]],
     use_container_width=True, hide_index=True,
 )

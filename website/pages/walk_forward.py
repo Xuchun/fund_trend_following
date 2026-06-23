@@ -12,7 +12,7 @@ if str(_root) not in sys.path:
 
 import pandas as pd
 import streamlit as st
-from website.shared import get_results
+from website.style import show_dffrom website.shared import get_results
 from website.components.strategy_badge import render_page_header
 
 res  = get_results()
@@ -154,7 +154,7 @@ if wf_data:
             "SPY OOS MaxDD":  f"{spy_oos.get('max_drawdown',0)*100:.1f}%" if spy_oos else "—",
         })
 
-    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+    show_df(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
     # ── Compute SPY stitched metrics from nav data ────────────────────────
     import numpy as _np_wf
@@ -275,7 +275,7 @@ if stress_data:
     sens_rows = stress_data.get("sensitivity_table", [])
     if sens_rows:
         st.subheader("执行敏感性汇总表")
-        st.dataframe(pd.DataFrame(sens_rows), use_container_width=True, hide_index=True)
+        show_df(pd.DataFrame(sens_rows), use_container_width=True, hide_index=True)
 
 else:
     st.info(

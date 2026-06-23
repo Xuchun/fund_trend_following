@@ -2,7 +2,7 @@
 # v2
 from __future__ import annotations
 import streamlit as st
-
+from website.style import show_df
 
 def _card_html(label: str, value: str, sub: str, color: str) -> str:
     return f"""
@@ -194,4 +194,4 @@ def render_full_metrics_table(metrics: dict, spy_metrics: dict | None = None) ->
     ]
 
     df = pd.DataFrame(rows, columns=["指标", "策略1.0", "SPY 基准"])
-    st.dataframe(df, use_container_width=True, hide_index=True)
+    show_df(df, use_container_width=True, hide_index=True)

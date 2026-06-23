@@ -15,7 +15,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.io as _pio
 import streamlit as st
-from plotly.subplots import make_subplots
+from website.style import show_dffrom plotly.subplots import make_subplots
 
 from website.shared import get_results
 from website.components.strategy_badge import render_page_header
@@ -103,7 +103,7 @@ _param_origin = [
     ("现金替代 SHY",           "熊市空仓持有短期国债而非现金，获取无风险收益",                                                             "资金管理直觉"),
 ]
 
-st.dataframe(
+show_df(
     pd.DataFrame(_param_origin, columns=["参数", "选择依据", "来源类型"]),
     use_container_width=True, hide_index=True,
 )
@@ -423,7 +423,7 @@ for name in _regime_names:
         "SPY Sharpe": f"{ps:+.3f}",
         "结论": ("✅ 绝对正收益" if sc >= 0 else "⚠️ 绝对亏损，但跑赢SPY" if sc > pc else "❌ 绝对亏损且跑输SPY"),
     })
-st.dataframe(pd.DataFrame(_reg_table), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(_reg_table), use_container_width=True, hide_index=True)
 
 _neg_explain = "、".join(_neg_regimes) if _neg_regimes else "无"
 if _n_pos_strat >= 4:
@@ -506,7 +506,7 @@ _budget_def = {
         "退出逻辑对策略行为影响最大，且最难在OOS中单独验证；保持简单是优先原则",
     ],
 }
-st.dataframe(pd.DataFrame(_budget_def), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(_budget_def), use_container_width=True, hide_index=True)
 
 st.markdown("""
 **② 「换入换出」规则**：
@@ -533,7 +533,7 @@ _budget_data = {
     "预算上限": ["≤ 18 个", "≤ 5 层", "≤ 4 种"],
     "状态": ["✅ 在预算内", "✅ 在预算内", "✅ 在预算内"],
 }
-st.dataframe(pd.DataFrame(_budget_data), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(_budget_data), use_container_width=True, hide_index=True)
 st.page_link("pages/future_work/improve_strategy.py", label="→ 如何改进策略1.0（E. 策略复杂度预算详情）", icon="📐")
 
 _n_trades = _met["n_trades"]
@@ -579,7 +579,7 @@ _verdict_rows = [
     ("历史全量数据使用", "所有参数的「经济学直觉」均形成于回测之后",        "⚠️ 残余风险", "中"),
 ]
 
-st.dataframe(
+show_df(
     pd.DataFrame(_verdict_rows, columns=["评估维度", "证据", "结论", "过拟合风险等级"]),
     use_container_width=True, hide_index=True,
 )

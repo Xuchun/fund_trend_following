@@ -7,7 +7,7 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
-from website.shared import render_v2_page_header, get_results
+from website.style import show_dffrom website.shared import render_v2_page_header, get_results
 
 res  = get_results()
 meta = res.meta
@@ -473,7 +473,7 @@ _param_rows = [
     ("Sizing", "相关性阈值", "0.7", "0.5 / 0.6 / 0.7 / 0.8", "过滤相关性的松紧"),
     ("Regime", "市场环境 SMA 窗口", "200 日", "100 / 150 / 200 日", "牛熊判断时间周期"),
 ]
-st.dataframe(
+show_df(
     _pd.DataFrame(_param_rows, columns=["模块", "参数", "Baseline值", "测试值", "经济含义"]),
     use_container_width=True, hide_index=True,
 )
@@ -494,7 +494,7 @@ _diff_rows = [
     ("入场", "市场环境过滤", "SPY 200 日均线", "SPY 200 日均线", "相同"),
     ("组合", "Heat Limit", "10% NAV", "10% NAV", "相同"),
 ]
-st.dataframe(
+show_df(
     _pd.DataFrame(_diff_rows,
                   columns=["模块", "维度", "策略1.0", "策略2.0", "说明"]),
     use_container_width=True, hide_index=True,

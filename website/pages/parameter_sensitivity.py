@@ -10,7 +10,7 @@ if str(_root) not in sys.path:
 
 import pandas as pd
 import streamlit as st
-from website.shared import get_results, placeholder
+from website.style import show_dffrom website.shared import get_results, placeholder
 from website.components.strategy_badge import render_page_header
 
 res  = get_results()
@@ -205,7 +205,7 @@ def _render_param_section(data: dict, section_title: str, background_text: str):
         st.markdown(background_text)
 
     df = _make_table(data)
-    st.dataframe(df, use_container_width=True, hide_index=True)
+    show_df(df, use_container_width=True, hide_index=True)
     st.markdown(
         f"来源：results/v1/perturbation/{param_name}.json  "
         f"（全宇宙，rf=2%，{data['start']} → {data['end']}）"
@@ -905,7 +905,7 @@ if _DIAG_PATH.exists():
             "出现次数": cnt_10plus,
             "累计占比": f"{cumulative / total_streaks * 100:.1f}%",
         })
-        st.dataframe(pd.DataFrame(table_rows), use_container_width=False, hide_index=True)
+        show_df(pd.DataFrame(table_rows), use_container_width=False, hide_index=True)
 
     max_cl = sa.get("max_consecutive_losses", 0)
     st.markdown(
@@ -930,7 +930,7 @@ if _DIAG_PATH.exists():
                 "最差交易R": f"{row['worst_r']:+.3f}",
                 "平均持仓天数": f"{row['avg_hold_days']:.0f}",
             })
-        st.dataframe(pd.DataFrame(yearly_rows), use_container_width=True, hide_index=True)
+        show_df(pd.DataFrame(yearly_rows), use_container_width=True, hide_index=True)
 else:
     st.info("诊断数据尚未生成。运行：python src/scripts/04_run_diagnostics.py")
 
@@ -1012,7 +1012,7 @@ else:
             "全正 CAGR": "✅" if pinfo["all_pos"] else "⚠️",
         })
     if _landscape_rows:
-        st.dataframe(pd.DataFrame(_landscape_rows), use_container_width=True, hide_index=True)
+        show_df(pd.DataFrame(_landscape_rows), use_container_width=True, hide_index=True)
 
     # Key findings
     concerns = []

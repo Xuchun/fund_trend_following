@@ -13,7 +13,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
-
+from website.style import show_df
 # ── 数据路径 ──────────────────────────────────────────────────────────────────
 _EU_CSV = _project / "data" / "tiingo_eligible_universe.csv"
 
@@ -467,17 +467,17 @@ tab_act, tab_del, tab_all = st.tabs([
 
 with tab_act:
     _df = _fmt_df(rec_active, "累计满足天数")
-    st.dataframe(_df, use_container_width=True, hide_index=True,
+    show_df(_df, use_container_width=True, hide_index=True,
                  column_config={"累计满足天数": st.column_config.NumberColumn(format="%d 天")})
 
 with tab_del:
     _df = _fmt_df(rec_del, "最近满足条件")
-    st.dataframe(_df, use_container_width=True, hide_index=True,
+    show_df(_df, use_container_width=True, hide_index=True,
                  column_config={"累计满足天数": st.column_config.NumberColumn(format="%d 天")})
 
 with tab_all:
     st.markdown(f"现役 {len(rec_active):,} + 已退市 {len(rec_del):,}，满足 ≥252 交易日条件")
-    st.dataframe(_df_all_combined, use_container_width=True, hide_index=True,
+    show_df(_df_all_combined, use_container_width=True, hide_index=True,
                  column_config={"累计满足天数": st.column_config.NumberColumn(format="%d 天")})
 
 st.markdown("---")
@@ -513,7 +513,7 @@ if _META_PATH.exists():
         with _etf_tab:
             _grp = _etf_df[_etf_df["category"] == _etf_cat][["ticker", "name"]]
             _grp = _grp.rename(columns={"ticker": "Ticker", "name": "名称 / Full Name"})
-            st.dataframe(_grp, use_container_width=True, hide_index=True)
+            show_df(_grp, use_container_width=True, hide_index=True)
 
     st.markdown(f"**合计：{len(_etf_df)} 只 ETF**（候选池共 {len(_ETF_SET)} 只；排除原因：7 只结构性不适合 ETF 已排除；JGLO 仅 206 交易日数据不足 252 天；CPER 流动性不足 ADV 最高 \$53M 未达 \$60M 门槛；SPY 为市场环境过滤标的、SHY 为现金代理，均不参与趋势跟踪信号）")
 else:

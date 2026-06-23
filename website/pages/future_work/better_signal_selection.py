@@ -8,6 +8,7 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
+from website.style import show_df
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
@@ -131,7 +132,7 @@ q_grp_show["均值R"]  = q_grp_show["均值R"].map(lambda v: f"{v:+.3f}R")
 q_grp_show["胜率"]   = q_grp_show["胜率"].map(lambda v: f"{v:.1f}%")
 q_grp_show["中位R"]  = q_grp_show["中位R"].map(lambda v: f"{v:+.3f}R")
 q_grp_show["总盈亏"] = q_grp_show["总盈亏"].map(lambda v: f"${v/1e6:.1f}M")
-st.dataframe(q_grp_show.rename(columns={"signal_bin": "入场当天信号数"}),
+show_df(q_grp_show.rename(columns={"signal_bin": "入场当天信号数"}),
              use_container_width=True, hide_index=True)
 
 st.markdown("""
@@ -299,7 +300,7 @@ with _tc1:
     _k_show["盈亏比"] = _k_show["盈亏比"].map(lambda v: f"{v:.2f}x" if pd.notna(v) else "—")
     _k_show["因子均值"] = _k_show["因子均值"].map(lambda v: f"{v:.2f}")
     _k_show.rename(columns={"因子均值": "k 均值", "数量": "信号数"}, inplace=True)
-    st.dataframe(_k_show[["信号数", "k 均值", "均值R", "胜率%", "盈亏比"]], use_container_width=True)
+    show_df(_k_show[["信号数", "k 均值", "均值R", "胜率%", "盈亏比"]], use_container_width=True)
 
 with _tc2:
     st.markdown("**ATR% 分组明细**")
@@ -311,7 +312,7 @@ with _tc2:
     _a_show["盈亏比"] = _a_show["盈亏比"].map(lambda v: f"{v:.2f}x" if pd.notna(v) else "—")
     _a_show["因子均值"] = _a_show["因子均值"].map(lambda v: f"{v:.2f}%")
     _a_show.rename(columns={"因子均值": "ATR% 均值", "数量": "信号数"}, inplace=True)
-    st.dataframe(_a_show[["信号数", "ATR% 均值", "均值R", "胜率%", "盈亏比"]], use_container_width=True)
+    show_df(_a_show[["信号数", "ATR% 均值", "均值R", "胜率%", "盈亏比"]], use_container_width=True)
 
 # ── 解读 ──────────────────────────────────────────────────────────────────────
 _corr_k   = float(_sall["k_strength"].corr(_sall["pnl_r"]))
@@ -469,7 +470,7 @@ _cap_df = _pd_cap.DataFrame({
     "每笔仓位（$136M NAV）": ["~$6.8M", "~$5.4M", "~$4.1M"],
     "信号执行率（预估）": ["~13%", "~17%", "~23%"],
 })
-st.dataframe(_cap_df, use_container_width=True, hide_index=True)
+show_df(_cap_df, use_container_width=True, hide_index=True)
 
 st.markdown("""
 **权衡：** 单笔仓位缩小会减少每笔绝对盈利，但同时执行更多好信号可弥补。

@@ -9,6 +9,7 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
+from website.style import show_df
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
@@ -90,7 +91,7 @@ _priority_rows = [
     },
 ]
 
-st.dataframe(
+show_df(
     pd.DataFrame(_priority_rows),
     use_container_width=True,
     hide_index=True,
@@ -309,7 +310,7 @@ with st.expander("📋 全部 ≥10 笔连亏序列明细", expanded=False):
     show["止损%"] = show["止损%"].map(lambda v: f"{v*100:.0f}%")
     show["净亏损($)"] = show["净亏损($)"].map(lambda v: f"${v:,.0f}")
     show = show.sort_values("长度(笔)", ascending=False).reset_index(drop=True)
-    st.dataframe(show, use_container_width=True, hide_index=True)
+    show_df(show, use_container_width=True, hide_index=True)
 
 st.markdown("---")
 

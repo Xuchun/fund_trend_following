@@ -7,6 +7,7 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
+from website.style import show_df
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -375,7 +376,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "风险%": f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "—",
             })
     if _trade_rows:
-        st.dataframe(pd.DataFrame(sorted(_trade_rows, key=lambda x: x["标的"])), use_container_width=True, hide_index=True)
+        show_df(pd.DataFrame(sorted(_trade_rows, key=lambda x: x["标的"])), use_container_width=True, hide_index=True)
     else:
         st.info("今日无交易")
 
@@ -420,7 +421,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "备注": f"止损设于 ${e['stop_price']:.2f}，风险 {e['trade_risk']*100:.2f}% NAV" if e.get("stop_price") else "—",
             })
         if _order_rows:
-            st.dataframe(pd.DataFrame(sorted(_order_rows, key=lambda x: x["标的"])), use_container_width=True, hide_index=True)
+            show_df(pd.DataFrame(sorted(_order_rows, key=lambda x: x["标的"])), use_container_width=True, hide_index=True)
             n_sell = len(_sig_exits)
             n_buy  = len(_sig_entries)
             _total_sell = sum(e.get("shares", 0) * e.get("stop_price", 0) for e in _sig_exits)
@@ -456,7 +457,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _tab_exit, _tab_entry = st.tabs([f"平仓信号（{len(_ts_exits)} 笔）", f"开仓信号（{len(_ts_entry_display)} 笔）"])
         with _tab_exit:
             if _ts_exits:
-                st.dataframe(pd.DataFrame([{
+                show_df(pd.DataFrame([{
                     "标的": e["ticker"], "操作": "SELL",
                     "成交量": e.get("shares", ""),
                     "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "",
@@ -468,7 +469,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         with _tab_entry:
             if _ts_entries:
                 st.markdown(f"以上 {len(_ts_entries)} 笔开仓已于今日开盘执行（前一交易日收盘信号，今日开盘价入场）。")
-                st.dataframe(pd.DataFrame([{
+                show_df(pd.DataFrame([{
                     "标的": e["ticker"], "操作": "BUY",
                     "成交量": e.get("shares", ""),
                     "信号价（昨收）": f"${e['signal_price']:.2f}" if e.get("signal_price") else "",
@@ -478,7 +479,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 } for e in sorted(_ts_entries, key=lambda x: x["ticker"])]), use_container_width=True, hide_index=True)
             elif _ts_pending:
                 st.markdown(f"以上 {len(_ts_pending)} 个开仓信号已于本日收盘后检测，将于下一交易日开盘执行。")
-                st.dataframe(pd.DataFrame([{
+                show_df(pd.DataFrame([{
                     "标的": e["ticker"], "操作": "BUY（待执行）",
                     "成交量": e.get("shares", ""),
                     "信号价（本日收盘）": f"${e['signal_price']:.2f}" if e.get("signal_price") else "",
@@ -516,7 +517,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             "浮盈 $": f"${p['unreal_pnl']:+,.0f}",
             "市值": f"${p['mkt_value']/1e3:.0f}K",
         } for p in sorted(_m1_ok, key=lambda x: x["ticker"])]
-        st.dataframe(pd.DataFrame(_rows), use_container_width=True, hide_index=True)
+        show_df(pd.DataFrame(_rows), use_container_width=True, hide_index=True)
 
         _sorted = sorted(_m1_ok, key=lambda x: x.get("R", 0), reverse=True)
         _fig = go.Figure(go.Bar(
@@ -548,7 +549,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             "ATR(20)": f"${p['current_atr']:.2f}", "乘数": f"{p['trail_mult']:.1f}×",
             "止损价": f"${p['current_stop']:.2f}", "价格距止损": f"{p['stop_buffer_pct']:.1f}%",
         } for p in sorted(_m1_ok, key=lambda x: x["ticker"])])
-        st.dataframe(_sd, use_container_width=True, hide_index=True)
+        show_df(_sd, use_container_width=True, hide_index=True)
 
     st.markdown("---")
 
@@ -686,7 +687,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         })
     if _all_trades:
         _all_trades_df = pd.DataFrame(_all_trades)
-        st.dataframe(_all_trades_df, use_container_width=True, hide_index=True)
+        show_df(_all_trades_df, use_container_width=True, hide_index=True)
         _csv_trades = _all_trades_df.to_csv(index=False).encode("utf-8-sig")
         st.download_button(
             "⬇️ 下载交易历史 CSV",
@@ -705,7 +706,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _ct = pd.DataFrame(_m1_closed).sort_values("exit_date", ascending=False)
         _ct["R"] = _ct["pnl_r"].map(lambda v: f"{v:+.2f}R")
         _ct["净盈亏"] = _ct["net_pnl"].map(lambda v: f"${v:+,.0f}")
-        st.dataframe(_ct[["ticker","entry_date","exit_date","holding_days","R","净盈亏","exit_reason"]].rename(
+        show_df(_ct[["ticker","entry_date","exit_date","holding_days","R","净盈亏","exit_reason"]].rename(
             columns={"ticker":"标的","entry_date":"入场日","exit_date":"出场日","holding_days":"天数","exit_reason":"原因"}
         ), use_container_width=True, hide_index=True)
     else:
@@ -741,7 +742,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     with st.expander(f"NAV 历史（{len(_dl1_nav)} 条）"):
         if _dl1_nav:
-            st.dataframe(
+            show_df(
                 pd.DataFrame(_dl1_nav).sort_values("date", ascending=False),
                 use_container_width=True, hide_index=True)
         else:
@@ -749,13 +750,13 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     with st.expander(f"开仓记录（{len(_dl1_entries)} 笔，含持仓中 + 已平仓）"):
         if _dl1_entries:
-            st.dataframe(pd.DataFrame(_dl1_entries), use_container_width=True, hide_index=True)
+            show_df(pd.DataFrame(_dl1_entries), use_container_width=True, hide_index=True)
         else:
             st.info("暂无开仓记录")
 
     with st.expander(f"平仓记录（{len(_dl1_ct)} 笔）"):
         if _dl1_ct:
-            st.dataframe(
+            show_df(
                 pd.DataFrame(_dl1_ct).sort_values("exit_date", ascending=False),
                 use_container_width=True, hide_index=True)
         else:
@@ -763,7 +764,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     with st.expander(f"信号历史（{len(_dl1_sig)} 条）"):
         if _dl1_sig:
-            st.dataframe(pd.DataFrame([{
+            show_df(pd.DataFrame([{
                 "日期":         s["date"],
                 "Regime":       s.get("regime", ""),
                 "SPY收盘":      s.get("spy_close", ""),
@@ -777,7 +778,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     with st.expander(f"当前持仓（{len(_dl1_op)} 只）"):
         if _dl1_op:
-            st.dataframe(pd.DataFrame(_dl1_op), use_container_width=True, hide_index=True)
+            show_df(pd.DataFrame(_dl1_op), use_container_width=True, hide_index=True)
         else:
             st.info("当前无持仓")
 
@@ -898,7 +899,7 @@ with tab2:
                     "止损价": f"${e['stop_price']:.2f}",
                     "订单类型": e["order_type"],
                 } for e in sig_exits])
-                st.dataframe(_ex_df, use_container_width=True, hide_index=True)
+                show_df(_ex_df, use_container_width=True, hide_index=True)
             else:
                 st.info("无退出信号")
 
@@ -914,7 +915,7 @@ with tab2:
                     "风险%": f"{e['trade_risk']*100:.2f}%",
                     "订单类型": e["order_type"],
                 } for e in sig_entries])
-                st.dataframe(_en_df, use_container_width=True, hide_index=True)
+                show_df(_en_df, use_container_width=True, hide_index=True)
             else:
                 st.info("无入场信号")
     else:
@@ -950,7 +951,7 @@ with tab2:
         } for p in sorted(_m2_ok, key=lambda x: x.get("R", 0), reverse=True)]
 
         if _m2_rows:
-            st.dataframe(pd.DataFrame(_m2_rows), use_container_width=True, hide_index=True)
+            show_df(pd.DataFrame(_m2_rows), use_container_width=True, hide_index=True)
     else:
         st.info("当前无持仓。Regime 允许时，下次运行脚本将扫描开仓信号。")
 
@@ -984,7 +985,7 @@ with tab2:
         if "net_pnl_est" in _m2_ct.columns:
             _m2_ct["净盈亏(估)"] = _m2_ct["net_pnl_est"].map(lambda v: f"${v:+,.0f}")
         cols = [c for c in ["ticker","entry_date","exit_date","holding_days","R","净盈亏(估)","exit_reason"] if c in _m2_ct.columns]
-        st.dataframe(_m2_ct[cols].rename(columns={"ticker":"标的","entry_date":"入场日","exit_date":"出场日","holding_days":"天数","exit_reason":"原因"}),
+        show_df(_m2_ct[cols].rename(columns={"ticker":"标的","entry_date":"入场日","exit_date":"出场日","holding_days":"天数","exit_reason":"原因"}),
                      use_container_width=True, hide_index=True)
         st.markdown("---")
 
@@ -993,7 +994,7 @@ with tab2:
         with st.expander(f"📋 订单历史（最近 {min(50, len(_m2_orders_hist))} 条）"):
             _ord_df = pd.DataFrame(_m2_orders_hist[-50:][::-1])
             _show_cols = [c for c in ["ticker","action","shares","order_type","reason","signal_price","stop_price","ib_status","submitted_at","dry_run"] if c in _ord_df.columns]
-            st.dataframe(_ord_df[_show_cols], use_container_width=True, hide_index=True)
+            show_df(_ord_df[_show_cols], use_container_width=True, hide_index=True)
 
     # ── Setup guide ───────────────────────────────────────────────────────────
     with st.expander("⚙️ IB Paper Trading 配置与使用指南"):
@@ -1073,7 +1074,7 @@ git push
 
     with st.expander(f"NAV 历史（{len(_dl2_nav)} 条）"):
         if _dl2_nav:
-            st.dataframe(
+            show_df(
                 pd.DataFrame(_dl2_nav).sort_values("date", ascending=False),
                 use_container_width=True, hide_index=True)
         else:
@@ -1081,13 +1082,13 @@ git push
 
     with st.expander(f"开仓记录（{len(_dl2_entries)} 笔，含持仓中 + 已平仓）"):
         if _dl2_entries:
-            st.dataframe(pd.DataFrame(_dl2_entries), use_container_width=True, hide_index=True)
+            show_df(pd.DataFrame(_dl2_entries), use_container_width=True, hide_index=True)
         else:
             st.info("暂无开仓记录")
 
     with st.expander(f"平仓记录（{len(_dl2_ct)} 笔）"):
         if _dl2_ct:
-            st.dataframe(
+            show_df(
                 pd.DataFrame(_dl2_ct).sort_values("exit_date", ascending=False),
                 use_container_width=True, hide_index=True)
         else:
@@ -1095,7 +1096,7 @@ git push
 
     with st.expander(f"信号历史（{len(_dl2_sig)} 条）"):
         if _dl2_sig:
-            st.dataframe(pd.DataFrame([{
+            show_df(pd.DataFrame([{
                 "日期":      s["date"],
                 "Regime":    s.get("regime", ""),
                 "SPY收盘":   s.get("spy_close", ""),
@@ -1108,7 +1109,7 @@ git push
 
     with st.expander(f"当前持仓（{len(_dl2_op)} 只）"):
         if _dl2_op:
-            st.dataframe(pd.DataFrame(_dl2_op), use_container_width=True, hide_index=True)
+            show_df(pd.DataFrame(_dl2_op), use_container_width=True, hide_index=True)
         else:
             st.info("当前无持仓")
 

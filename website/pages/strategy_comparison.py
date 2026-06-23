@@ -7,7 +7,7 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
-from website.shared import GLOBAL_CSS
+from website.style import show_dffrom website.shared import GLOBAL_CSS
 
 st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
 
@@ -118,7 +118,7 @@ _param_rows = [
     ("组合", "热度上限", "10% NAV", "10% NAV"),
     ("现金", "闲置资金", "SHY（1-3 年期国债）", "BIL / SGOV（超短期国债）"),
 ]
-st.dataframe(
+show_df(
     _pd.DataFrame(_param_rows, columns=["模块", "维度", "策略1.0", "策略2.0"]),
     use_container_width=True, hide_index=True,
 )
@@ -185,7 +185,7 @@ _placeholder_metrics = [
     ("年均信号数", "TBD", "TBD", "—"),
     ("OOS Sharpe", "TBD", "TBD", "—"),
 ]
-st.dataframe(
+show_df(
     _pd.DataFrame(_placeholder_metrics,
                   columns=["指标", "策略1.0（实际）", "策略2.0（待填充）", "SPY 参考"]),
     use_container_width=True, hide_index=True,

@@ -8,6 +8,7 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
+from website.style import show_df
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
@@ -213,7 +214,7 @@ _val_data = {
         "🔄 进行中（模拟交易监控页）",
     ],
 }
-st.dataframe(
+show_df(
     pd.DataFrame(_val_data),
     use_container_width=True, hide_index=True,
 )
@@ -265,7 +266,7 @@ _gate_data = {
         "效率比下降说明改动提升了 IS 拟合但损害了泛化能力",
     ],
 }
-st.dataframe(
+show_df(
     pd.DataFrame(_gate_data),
     use_container_width=True, hide_index=True,
 )
@@ -801,7 +802,7 @@ if _be_csv.exists():
          "最大回撤": f"{_mdd_be1r_is*100:.2f}%",
          "最大回撤变化": f"{(_mdd_be1r_is-_mdd_orig_be)*100:+.2f} pp"},
     ]
-    st.dataframe(pd.DataFrame(_be_rows), use_container_width=True, hide_index=True)
+    show_df(pd.DataFrame(_be_rows), use_container_width=True, hide_index=True)
 
     st.markdown(f"""
 **回测结果（{_total_be:,} 笔交易，2000–2026）：**
@@ -896,7 +897,7 @@ st.markdown(f"""
 
 **前 15 笔 R ≥ 10R 的大赢家（均为移动止盈出场或回测结束）：**
 """)
-st.dataframe(
+show_df(
     _very_big.rename(columns={
         "ticker": "标的", "entry_date": "入场日", "exit_date": "出场日",
         "pnl_r_multiple": "R倍数", "net_pnl": "净盈亏",
@@ -965,7 +966,7 @@ _stat_rows_is = [
     {"指标": "Sharpe 比率",   "当前策略": f"{_s_sh_is:.2f}",                 "加入熊市对冲后": f"{_bl_sh_is:.2f}"},
     {"指标": "vs SPY Alpha",  "当前策略": f"{_s_cagr_is - _b_cagr_is:+.2f} pp", "加入熊市对冲后": f"{_bl_cagr_is - _b_cagr_is:+.2f} pp"},
 ]
-st.dataframe(pd.DataFrame(_stat_rows_is), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(_stat_rows_is), use_container_width=True, hide_index=True)
 
 _fig_nav_is = go.Figure()
 _fig_nav_is.add_trace(go.Scatter(

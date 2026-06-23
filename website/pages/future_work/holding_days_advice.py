@@ -7,6 +7,7 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
+from website.style import show_df
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
@@ -65,7 +66,7 @@ for label, lo, hi in buckets:
         "占总利润": f"{pnl/total_pnl*100:.1f}%",
     })
 
-st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
 st.markdown("""
 规律一目了然：**持仓越长，胜率越高、R 倍数越高、利润越大。**
@@ -118,7 +119,7 @@ long["净盈亏"] = long["net_pnl"].map(lambda v: f"${v/1e3:.0f}K")
 long["入场日期"] = long["entry_date"].dt.strftime("%Y-%m-%d")
 long["平仓日期"] = long["exit_date"].dt.strftime("%Y-%m-%d")
 
-st.dataframe(long[["ticker","入场日期","平仓日期","持仓天数","持仓年数","R 倍数","净盈亏","退出方式"]].reset_index(drop=True),
+show_df(long[["ticker","入场日期","平仓日期","持仓天数","持仓年数","R 倍数","净盈亏","退出方式"]].reset_index(drop=True),
              use_container_width=True, hide_index=True)
 
 st.markdown("""
@@ -152,7 +153,7 @@ for label, lo, hi in buckets:
         "全部交易年化资本效率（含亏损）": f"{all_mean:.1f}%",
     })
 
-st.dataframe(pd.DataFrame(eff_rows), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(eff_rows), use_container_width=True, hide_index=True)
 
 st.markdown("""
 **结论：**

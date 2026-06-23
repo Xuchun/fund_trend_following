@@ -11,7 +11,7 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
-from website.shared import get_results, placeholder
+from website.style import show_dffrom website.shared import get_results, placeholder
 from website.components.strategy_badge import render_page_header
 
 res  = get_results()
@@ -276,7 +276,7 @@ if mc and "cagr_dist" in mc:
         ("最长水下 > 24 个月（504 交易日）",f"{dur['prob_gt_24m']*100:.1f}%"),
     ]
     import pandas as pd
-    st.dataframe(
+    show_df(
         pd.DataFrame(dur_rows, columns=["指标", "概率（1,000 条路径）"]),
         use_container_width=True, hide_index=True,
     )

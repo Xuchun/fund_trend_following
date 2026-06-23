@@ -7,7 +7,7 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
-from website.shared import get_results
+from website.style import show_dffrom website.shared import get_results
 from website.components.strategy_badge import render_page_header
 
 _etf_csv = Path(__file__).resolve().parents[2] / "data" / "ETFs.csv"
@@ -287,7 +287,7 @@ if len(_ep_df) > 0:
     _ep_df_sorted  = _ep_df.sort_values("最大回撤").head(10).copy()
     _ep_df_sorted["最大回撤"] = _ep_df_sorted["最大回撤"].apply(lambda v: f"{v*100:.1f}%")
     st.markdown("##### 主要回撤情节（按深度排序，前 10 次，仅含回撤 ≥ 5% 的情节）")
-    st.dataframe(_ep_df_sorted, use_container_width=True, hide_index=True)
+    show_df(_ep_df_sorted, use_container_width=True, hide_index=True)
     _avg_rec = _ep_df[_ep_df["修复"] != "进行中"]["修复耗时（交易日）"].mean()
     _avg_trough = _ep_df["至低谷（交易日）"].mean()
     st.markdown(
@@ -570,7 +570,7 @@ _quality_df = _pd2.DataFrame({
     "结论":      [f"ETF 仅占 {_e['n']/(_s['n']+_e['n'])*100:.0f}%", "ETF 胜率更高" if _e['win_rate'] > _s['win_rate'] else "股票胜率更高", "股票赢时赢更多" if _s['avg_win_r'] > _e['avg_win_r'] else "ETF赢时赢更多", "股票输时输更少" if abs(_s['avg_loss_r']) < abs(_e['avg_loss_r']) else "ETF输时输更少",
                   "几乎相同", "股票趋势更持久" if _s['avg_hold'] > _e['avg_hold'] else "ETF趋势更持久", "股票趋势更持久" if _s['med_hold'] > _e['med_hold'] else "ETF趋势更持久"],
 })
-st.dataframe(_quality_df, use_container_width=True, hide_index=True)
+show_df(_quality_df, use_container_width=True, hide_index=True)
 
 st.markdown("#### 资本效率")
 col1, col2, col3 = st.columns(3)
@@ -675,7 +675,7 @@ if "净盈亏($)" in trades_display.columns:
     trades_display["净盈亏($)"] = trades_display["净盈亏($)"].apply(
         lambda v: f"${v:+,.0f}"
     )
-st.dataframe(trades_display, use_container_width=True, hide_index=True)
+show_df(trades_display, use_container_width=True, hide_index=True)
 
 # ── Streak analysis ───────────────────────────────────────────────────────────
 import json as _json_br
