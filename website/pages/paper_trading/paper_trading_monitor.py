@@ -563,7 +563,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "当前价": f"${p['current_price']:.2f}",
                 "止损": _hard_cell,
                 "移动止盈": _trail_cell,
-                "缓冲": f"{p['stop_buffer_pct']:.1f}%",
+                "缓冲": (f"<b style='color:#d62728'>{p['stop_buffer_pct']:.1f}%</b>"
+                        if p['stop_buffer_pct'] <= 3.0
+                        else f"{p['stop_buffer_pct']:.1f}%"),
                 "R": f"{p['R']:+.2f}R",
                 "浮盈 $": f"${p['unreal_pnl']:+,.0f}",
                 "市值": f"${p['mkt_value']/1e3:.0f}K",
