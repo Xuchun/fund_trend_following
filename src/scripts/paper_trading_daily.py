@@ -872,6 +872,10 @@ def main() -> None:
             "stop_used":   s["stop_used"],
             "shares":      s["shares"],
         } for s in new_exit_signals],
+        # All raw breakout candidates (passed per-stock filters) with rejection reason.
+        # Superset of entry_signals — displayed in 四 so the user sees the full funnel.
+        "candidate_signals": scan_stats.get("all_raw_candidates", []),
+        # Approved subset (passed portfolio heat/cash constraints): same as pending_entries.
         "entry_signals": [{
             "ticker":       p["ticker"],
             "signal_price": p["signal_price"],
