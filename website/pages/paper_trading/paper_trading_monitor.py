@@ -639,7 +639,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.subheader("六、移动止损明细")
     if _m1_ok:
         _sd = pd.DataFrame([{
-            "标的": p["ticker"], "状态": "🔴" if p["is_stopped"] else "✅",
+            "标的": p["ticker"],
+            "状态": ("🔴止损" if p.get("stop_reason") == "stop_loss"
+                     else ("🔴移动" if p.get("stop_reason") == "trailing_stop" else "✅")),
             "当前价": f"${p['current_price']:.2f}", "历史最高": f"${p['highest_high']:.2f}",
             "ATR(20)": f"${p['current_atr']:.2f}", "乘数": f"{p['trail_mult']:.1f}×",
             "硬止损": f"${p['stop_loss']:.2f}",
