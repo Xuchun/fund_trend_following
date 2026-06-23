@@ -553,13 +553,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 return hard_str, f"<b>{trail_str}</b>"
 
         _rows = []
-        for p in sorted(_m1_ok, key=lambda x: x["ticker"]):
+        for p in sorted(_m1_ok, key=lambda x: x["stop_buffer_pct"]):   # 缓冲小的排前面
             _hard_cell, _trail_cell = _stop_cells(p)
             _rows.append({
                 "标的": p["ticker"],
                 "状态": "🔴 触止损" if p["is_stopped"] else "🟢 持有",
-                "入场日": p["entry_date"],
-                "入场价": f"${p['entry_price']:.2f}",
                 "当前价": f"${p['current_price']:.2f}",
                 "止损": _hard_cell,
                 "移动止盈": _trail_cell,
@@ -569,6 +567,8 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "R": f"{p['R']:+.2f}R",
                 "浮盈 $": f"${p['unreal_pnl']:+,.0f}",
                 "市值": f"${p['mkt_value']/1e3:.0f}K",
+                "入场日": p["entry_date"],
+                "入场价": f"${p['entry_price']:.2f}",
             })
         show_df(pd.DataFrame(_rows), use_container_width=True, hide_index=True, escape=False)
         st.markdown("<span style='color:#111111'>**缓冲** = (当前价 − 有效止损) / 当前价 × 100%，其中有效止损 = max(止损, 移动止盈)（即粗体显示的那个）</span>", unsafe_allow_html=True)
