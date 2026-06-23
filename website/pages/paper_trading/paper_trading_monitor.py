@@ -272,6 +272,7 @@ def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
         "unreal_pnl":      (cur_price - pos["entry_price"]) * pos["shares"],
         "stop_buffer_pct": (cur_price - eff_stop) / cur_price * 100,
         "is_stopped":      is_stopped,
+        "stop_reason":     stop_reason,
     }
 
 
