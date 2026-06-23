@@ -15,7 +15,8 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.io as _pio
 import streamlit as st
-from website.style import show_dffrom plotly.subplots import make_subplots
+from website.style import show_df
+from plotly.subplots import make_subplots
 
 from website.shared import get_results
 from website.components.strategy_badge import render_page_header

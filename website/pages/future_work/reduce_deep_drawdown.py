@@ -12,7 +12,8 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.io as _pio
 import streamlit as st
-from website.style import show_dffrom website.shared import get_results
+from website.style import show_df
+from website.shared import get_results
 
 _pio.templates.default = "plotly_white"
 

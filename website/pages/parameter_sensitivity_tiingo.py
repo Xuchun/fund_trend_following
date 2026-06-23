@@ -10,7 +10,8 @@ if str(_root) not in sys.path:
 
 import pandas as pd
 import streamlit as st
-from website.style import show_dffrom website.data_loader import load_strategy
+from website.style import show_df
+from website.data_loader import load_strategy
 from website.shared import placeholder
 from website.components.strategy_badge import render_page_header
 

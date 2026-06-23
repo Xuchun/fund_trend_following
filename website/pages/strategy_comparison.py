@@ -7,7 +7,8 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
-from website.style import show_dffrom website.shared import GLOBAL_CSS
+from website.style import show_df
+from website.shared import GLOBAL_CSS
 
 st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
 

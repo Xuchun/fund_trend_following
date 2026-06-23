@@ -8,7 +8,8 @@ if str(_root) not in sys.path:
 
 import pandas as pd
 import streamlit as st
-from website.style import show_dffrom website.shared import get_results
+from website.style import show_df
+from website.shared import get_results
 from website.components.strategy_badge import render_page_header
 
 res  = get_results()

@@ -7,7 +7,8 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
-from website.style import show_dffrom website.shared import render_v2_page_header, get_results
+from website.style import show_df
+from website.shared import render_v2_page_header, get_results
 
 res  = get_results()
 meta = res.meta

@@ -8,7 +8,8 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
-from website.style import show_dffrom website.data_loader import load_strategy
+from website.style import show_df
+from website.data_loader import load_strategy
 from website.components.strategy_badge import render_page_header
 
 _etf_csv = Path(__file__).resolve().parents[2] / "data" / "ETFs.csv"
