@@ -96,40 +96,35 @@ def fetch_price_data(tickers: list[str], period: str = "300d", batch_size: int =
 
 # ── Trailing stop ─────────────────────────────────────────────────────────────
 
-def _trail_mult(R: float) -> float:
-    if R >= 3.0:
+def _trail_mult(r_multiple: float) -> float:
+    """Select trail multiplier from R-multiple. Mirrors backtest exit.py."""
+    if r_multiple >= 3.0:
         return PARAMS.trail_multiplier_r5
-    if R >= 1.0:
+    if r_multiple >= 1.0:
         return PARAMS.trail_multiplier_r3
     return PARAMS.trail_multiplier_r1
 
 
-def update_trailing_stop(pos: dict, df: pd.DataFrame) -> tuple[float, float, float]:
+def update_trail_stop(pos: dict, high: float, cur_atr: float) -> tuple[float, float]:
     """
-    Returns (new_current_stop, new_peak_price, current_atr).
-    Stop can only ratchet up, never down.
+    Update highest_high and trail_stop. Returns (new_trail_stop, new_highest_high).
+    Exact mirror of backtest src/strategy/v1/exit.py update_trail_stop_v1:
+      - R-multiple uses highest_high (peak), NOT current close
+      - entry_price is slip-adjusted so R = entry_price - stop_loss = 2×ATR exactly
+      - trail_stop ratchets up only (never decreases)
     """
-    entry_date = pd.to_datetime(pos["entry_date"])
-    since_entry = df[df.index >= entry_date]
+    highest_high = max(pos["highest_high"], high)
 
-    if since_entry.empty:
-        return pos["current_stop_loss"], pos["peak_price"], pos["atr_at_entry"]
+    R = pos["entry_price"] - pos["stop_loss"]   # slip-adjusted; R = 2×ATR at entry
+    if R <= 0 or pd.isna(cur_atr) or cur_atr <= 0:
+        return pos["trail_stop"], highest_high
 
-    peak_price = max(pos["peak_price"], float(since_entry["High"].max()))
+    r_multiple = (highest_high - pos["entry_price"]) / R
 
-    atr_s = compute_atr(df["High"], df["Low"], df["Close"], PARAMS.atr_period)
-    cur_atr = float(atr_s.iloc[-1])
-    if pd.isna(cur_atr):
-        cur_atr = pos["atr_at_entry"]
+    new_trail  = highest_high - _trail_mult(r_multiple) * cur_atr
+    trail_stop = max(pos["trail_stop"], new_trail)
 
-    cur_price = float(since_entry["Close"].iloc[-1])
-    risk = pos["entry_price"] - pos["initial_stop_loss"]
-    R = (cur_price - pos["entry_price"]) / risk if risk > 0 else 0.0
-
-    new_stop = peak_price - _trail_mult(R) * cur_atr
-    current_stop = max(pos["current_stop_loss"], new_stop)
-
-    return current_stop, peak_price, cur_atr
+    return trail_stop, highest_high
 
 
 # ── Exit check ────────────────────────────────────────────────────────────────
@@ -141,8 +136,12 @@ def check_exits(
 ) -> tuple[list[dict], list[dict]]:
     """
     Returns (updated_open_positions, new_closed_trades).
-    A position exits if today's low <= current trailing stop.
-    Exit price = max(stop, close) to handle gap-downs.
+
+    Mirrors backtest src/strategy/v1/exit.py check_exit_signals_v1:
+      Priority 1: stop_loss  — triggered if low[t] < position.stop_loss  (intraday low)
+      Priority 2: trail_stop — triggered if close[t] < position.trail_stop (end-of-day close)
+
+    Exit price = max(stop_used, close) for gap-down protection.
     """
     updated: list[dict] = []
     closed:  list[dict] = []
@@ -160,42 +159,65 @@ def check_exits(
             updated.append(pos)
             continue
 
-        bar_date  = today_rows.index[0].date()
-        close_px  = float(today_rows["Close"].iloc[0])
-        low_px    = float(today_rows["Low"].iloc[0])
+        bar_date = today_rows.index[0].date()
+        high_px  = float(today_rows["High"].iloc[0])
+        low_px   = float(today_rows["Low"].iloc[0])
+        close_px = float(today_rows["Close"].iloc[0])
 
-        current_stop, peak_price, cur_atr = update_trailing_stop(pos, df)
+        atr_s   = compute_atr(df["High"], df["Low"], df["Close"], PARAMS.atr_period)
+        cur_atr = float(atr_s.iloc[-1])
+        if pd.isna(cur_atr):
+            cur_atr = pos["atr_at_entry"]
 
-        if low_px <= current_stop:
-            # Stop breached — exit at stop or close (gap-down protection)
-            exit_px     = max(current_stop, close_px)
-            risk        = pos["entry_price"] - pos["initial_stop_loss"]
-            R           = (exit_px - pos["entry_price"]) / risk if risk > 0 else 0.0
-            net_pnl     = (exit_px - pos["entry_price"]) * pos["shares"]
+        # Always update trail stop state first (mirrors backtest)
+        trail_stop, highest_high = update_trail_stop(pos, high_px, cur_atr)
+
+        # Priority 1: hard stop loss — intraday low (backtest: low < position.stop_loss)
+        exit_reason: str | None = None
+        stop_used: float = 0.0
+        if low_px < pos["stop_loss"]:
+            exit_reason = "stop_loss"
+            stop_used   = pos["stop_loss"]
+        # Priority 2: trailing stop — end-of-day close (backtest: close < position.trail_stop)
+        elif close_px < trail_stop:
+            exit_reason = "trailing_stop"
+            stop_used   = trail_stop
+
+        if exit_reason:
+            exit_px = max(stop_used, close_px)
+            R       = pos["entry_price"] - pos["stop_loss"]   # = 2×ATR (exact)
+            pnl_r   = (exit_px - pos["entry_price"]) / R if R > 0 else 0.0
+            net_pnl = (exit_px - pos["entry_price"]) * pos["shares"]
 
             closed.append({
-                "ticker":        ticker,
-                "entry_date":    pos["entry_date"],
-                "exit_date":     str(bar_date),
-                "entry_price":   pos["entry_price"],
-                "exit_price":    round(exit_px, 4),
-                "shares":        pos["shares"],
-                "initial_stop":  pos["initial_stop_loss"],
-                "final_stop":    round(current_stop, 4),
-                "pnl_r":         round(R, 4),
-                "net_pnl":       round(net_pnl, 2),
-                "exit_reason":   "trailing_stop",
-                "holding_days":  (bar_date - pd.to_datetime(pos["entry_date"]).date()).days,
+                "ticker":       ticker,
+                "entry_date":   pos["entry_date"],
+                "exit_date":    str(bar_date),
+                "open_price":   pos.get("open_price", pos["entry_price"]),
+                "entry_price":  pos["entry_price"],
+                "exit_price":   round(exit_px, 4),
+                "shares":       pos["shares"],
+                "stop_loss":    pos["stop_loss"],
+                "final_stop":   round(stop_used, 4),
+                "pnl_r":        round(pnl_r, 4),
+                "net_pnl":      round(net_pnl, 2),
+                "exit_reason":  exit_reason,
+                "holding_days": (bar_date - pd.to_datetime(pos["entry_date"]).date()).days,
             })
-            state["cash"] = state.get("cash", 0.0) + pos["entry_price"] * pos["shares"] + net_pnl
-            log.info(f"  EXIT  {ticker} @ ${exit_px:.2f}  R={R:+.2f}  PnL=${net_pnl:+,.0f}")
+            # Cash recovery: cost basis (open_price × shares) + P&L
+            state["cash"] = (
+                state.get("cash", 0.0)
+                + pos.get("open_price", pos["entry_price"]) * pos["shares"]
+                + net_pnl
+            )
+            log.info(f"  EXIT  {ticker} @ ${exit_px:.2f}  R={pnl_r:+.2f}  [{exit_reason}]  PnL=${net_pnl:+,.0f}")
         else:
             updated.append({
                 **pos,
-                "current_stop_loss": round(current_stop, 6),
-                "peak_price":        round(peak_price, 4),
-                "last_known_price":  round(close_px, 4),
-                "last_price_date":   str(bar_date),
+                "trail_stop":       round(trail_stop, 6),
+                "highest_high":     round(highest_high, 4),
+                "last_known_price": round(close_px, 4),
+                "last_price_date":  str(bar_date),
             })
 
     return updated, closed
