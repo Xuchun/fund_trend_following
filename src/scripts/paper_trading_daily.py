@@ -27,6 +27,7 @@ import yfinance as yf
 from src.strategy.params import StrategyParams
 from src.indicators.atr import compute_atr
 from src.indicators.breakout import compute_rolling_high, compute_breakout_signal, compute_breakout_strength
+from src.indicators.correlation import compute_log_returns, compute_max_correlation
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger(__name__)
