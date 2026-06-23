@@ -3045,6 +3045,61 @@ if _uni_path.exists():
         f"</p>",
         unsafe_allow_html=True,
     )
+
+    # ── Per-year ticker list download ─────────────────────────────────────────
+    st.markdown("#### 查看并下载指定年份的标的池名单")
+
+    _uni_col1, _uni_col2 = st.columns([1, 3])
+    with _uni_col1:
+        _sel_yr = st.selectbox(
+            "选择年份",
+            options=list(reversed(_years)),
+            index=0,
+            key="uni_year_select",
+        )
+
+    _y0_sel  = _pd_uni.Timestamp(f"{_sel_yr}-01-01")
+    _y1_sel  = _pd_uni.Timestamp(f"{_sel_yr}-12-31")
+    _mask_sel = (_uni_df["first_eligible"] <= _y1_sel) & (_uni_df["last_eligible"] >= _y0_sel)
+    _yr_list  = _uni_df[_mask_sel].copy()
+    _yr_list["类别"] = _yr_list["ticker"].apply(lambda t: "ETF" if t in _ETF_SET else "股票")
+    _yr_list["状态"] = _yr_list["is_active"].map({True: "现役", False: "已退市/并购"})
+    _yr_list = _yr_list.sort_values(["类别", "ticker"]).reset_index(drop=True)
+
+    _n_sel_s = int((_yr_list["类别"] == "股票").sum())
+    _n_sel_e = int((_yr_list["类别"] == "ETF").sum())
+    with _uni_col2:
+        st.markdown(
+            f"<p style='color:#111111; margin-top:32px;'>"
+            f"{_sel_yr} 年标的池共 <b>{len(_yr_list):,}</b> 个"
+            f"（股票 {_n_sel_s:,} + ETF {_n_sel_e:,}）</p>",
+            unsafe_allow_html=True,
+        )
+
+    _display_cols = {
+        "ticker":          "标的",
+        "类别":            "类别",
+        "状态":            "状态",
+        "first_eligible":  "首次进入标的池",
+        "last_eligible":   "最后在标的池",
+        "eligible_days":   "累计在池天数",
+    }
+    _yr_display = (_yr_list[list(_display_cols.keys())]
+                   .rename(columns=_display_cols))
+    show_df(_yr_display, use_container_width=True, hide_index=True)
+
+    _dl_cols = ["ticker", "类别", "状态", "first_eligible", "last_eligible", "eligible_days"]
+    _csv_uni = (_yr_list[_dl_cols]
+                .rename(columns={"ticker": "标的", "first_eligible": "首次进入标的池",
+                                 "last_eligible": "最后在标的池", "eligible_days": "累计在池天数"})
+                .to_csv(index=False).encode("utf-8-sig"))
+    st.download_button(
+        label=f"⬇️ 下载 {_sel_yr} 年标的池名单（CSV，{len(_yr_list):,} 个标的）",
+        data=_csv_uni,
+        file_name=f"universe_{_sel_yr}.csv",
+        mime="text/csv",
+    )
+
 else:
     st.info("标的池历史数据文件（data/tiingo_eligible_universe.csv）不可用")
 
