@@ -541,19 +541,34 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         st.warning(f"⚠️ **{len(_m1_stop)} 只已触及止损** — 建议执行止损出场")
 
     if _m1_ok:
-        _rows = [{
-            "标的": p["ticker"],
-            "状态": "🔴 触止损" if p["is_stopped"] else "🟢 持有",
-            "入场日": p["entry_date"],
-            "入场价": f"${p['entry_price']:.2f}",
-            "当前价": f"${p['current_price']:.2f}",
-            "移动止损": f"${p['current_stop']:.2f}",
-            "缓冲": f"{p['stop_buffer_pct']:.1f}%",
-            "R": f"{p['R']:+.2f}R",
-            "浮盈 $": f"${p['unreal_pnl']:+,.0f}",
-            "市值": f"${p['mkt_value']/1e3:.0f}K",
-        } for p in sorted(_m1_ok, key=lambda x: x["ticker"])]
-        show_df(pd.DataFrame(_rows), use_container_width=True, hide_index=True)
+        def _stop_cells(p: dict) -> tuple[str, str]:
+            """Return (止损 cell html, 移动止盈 cell html) with the active one in bold."""
+            hard  = p.get("stop_loss", p.get("current_stop", 0))
+            trail = p.get("trail_stop_live", p.get("current_stop", 0))
+            hard_str  = f"${hard:.2f}"
+            trail_str = f"${trail:.2f}"
+            if hard >= trail:   # hard stop is currently the binding constraint
+                return f"<b>{hard_str}</b>", trail_str
+            else:               # trailing stop has ratcheted above hard stop
+                return hard_str, f"<b>{trail_str}</b>"
+
+        _rows = []
+        for p in sorted(_m1_ok, key=lambda x: x["ticker"]):
+            _hard_cell, _trail_cell = _stop_cells(p)
+            _rows.append({
+                "标的": p["ticker"],
+                "状态": "🔴 触止损" if p["is_stopped"] else "🟢 持有",
+                "入场日": p["entry_date"],
+                "入场价": f"${p['entry_price']:.2f}",
+                "当前价": f"${p['current_price']:.2f}",
+                "止损": _hard_cell,
+                "移动止盈": _trail_cell,
+                "缓冲": f"{p['stop_buffer_pct']:.1f}%",
+                "R": f"{p['R']:+.2f}R",
+                "浮盈 $": f"${p['unreal_pnl']:+,.0f}",
+                "市值": f"${p['mkt_value']/1e3:.0f}K",
+            })
+        show_df(pd.DataFrame(_rows), use_container_width=True, hide_index=True, escape=False)
 
         _sorted = sorted(_m1_ok, key=lambda x: x.get("R", 0), reverse=True)
         _fig = go.Figure(go.Bar(
