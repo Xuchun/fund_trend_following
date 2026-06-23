@@ -2918,6 +2918,89 @@ with st.expander("📋 交易次数最多的 TOP 10 标的", expanded=False):
 
 st.markdown("---")
 
+# ── Per-year universe size ────────────────────────────────────────────────────
+st.subheader("每年标的池里面的标的数量")
+
+import pandas as _pd_uni
+import plotly.graph_objects as _go_uni
+
+_uni_path = Path(__file__).resolve().parents[2] / "data" / "tiingo_eligible_universe.csv"
+if _uni_path.exists():
+    _uni_df = _pd_uni.read_csv(_uni_path,
+                               parse_dates=["first_eligible", "last_eligible"])
+
+    # For each calendar year, count tickers present in the universe at any point.
+    # A ticker is "in the universe" in year Y if:
+    #   first_eligible <= Dec 31 of Y  AND  last_eligible >= Jan 1 of Y
+    _bt_start_yr = int(meta.backtest_start[:4])
+    _bt_end_yr   = int(meta.backtest_end[:4])
+    _years        = list(range(_bt_start_yr, _bt_end_yr + 1))
+
+    _yr_stocks, _yr_etfs, _yr_totals = [], [], []
+    for _yr in _years:
+        _y0 = _pd_uni.Timestamp(f"{_yr}-01-01")
+        _y1 = _pd_uni.Timestamp(f"{_yr}-12-31")
+        _mask  = (_uni_df["first_eligible"] <= _y1) & (_uni_df["last_eligible"] >= _y0)
+        _ticks = _uni_df.loc[_mask, "ticker"]
+        _n_etf   = int(_ticks.isin(_ETF_SET).sum())
+        _n_stock = len(_ticks) - _n_etf
+        _yr_stocks.append(_n_stock)
+        _yr_etfs.append(_n_etf)
+        _yr_totals.append(len(_ticks))
+
+    _fig_uni = _go_uni.Figure()
+    _fig_uni.add_trace(_go_uni.Bar(
+        x=_years, y=_yr_stocks,
+        name="股票",
+        marker_color="rgba(31,119,180,0.8)",
+        text=_yr_stocks,
+        textposition="inside",
+        textfont=dict(size=9),
+    ))
+    _fig_uni.add_trace(_go_uni.Bar(
+        x=_years, y=_yr_etfs,
+        name="ETF",
+        marker_color="rgba(255,127,14,0.85)",
+        text=[v if v > 0 else "" for v in _yr_etfs],
+        textposition="inside",
+        textfont=dict(size=9),
+    ))
+    # Total annotation on top of each bar
+    for _i, (_yr, _tot) in enumerate(zip(_years, _yr_totals)):
+        _fig_uni.add_annotation(
+            x=_yr, y=_tot,
+            text=str(_tot),
+            showarrow=False,
+            yanchor="bottom",
+            font=dict(size=9, color="#333"),
+            yshift=3,
+        )
+    _fig_uni.update_layout(
+        barmode="stack",
+        xaxis=dict(title="年份", tickmode="linear", dtick=1, tickangle=-45),
+        yaxis=dict(title="标的数量"),
+        height=440, template="plotly_white",
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        margin=dict(l=50, r=20, t=50, b=70),
+    )
+    st.plotly_chart(_fig_uni, use_container_width=True)
+
+    _peak_yr  = _years[_yr_totals.index(max(_yr_totals))]
+    _peak_n   = max(_yr_totals)
+    _cur_n    = _yr_totals[-1]
+    _cur_s    = _yr_stocks[-1]
+    _cur_e    = _yr_etfs[-1]
+    st.caption(
+        f"**解读：** 标的池随历史动态扩张，峰值为 **{_peak_n:,}** 个（{_peak_yr} 年）。"
+        f"当前（{_bt_end_yr} 年）：**{_cur_n:,}** 个（股票 {_cur_s:,} + ETF {_cur_e:,}）。"
+        f"早年标的数少是因为大量股票尚未上市或尚未满足 ADV / 价格过滤条件，"
+        f"并非回测数据缺失。动态标的池消除了幸存者偏差。"
+    )
+else:
+    st.info("标的池历史数据文件（data/tiingo_eligible_universe.csv）不可用")
+
+st.markdown("---")
+
 # ── Monthly return heatmap ────────────────────────────────────────────────────
 st.subheader("月度收益热力图")
 st.plotly_chart(monthly_return_heatmap(res.nav), use_container_width=True)
