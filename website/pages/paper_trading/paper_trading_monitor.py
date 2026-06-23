@@ -594,7 +594,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             _hard_cell, _trail_cell = _stop_cells(p)
             _rows.append({
                 "标的": p["ticker"],
-                "状态": "🔴 触止损" if p["is_stopped"] else "🟢 持有",
+                "状态": _status_label(p),
                 "当前价": f"${p['current_price']:.2f}",
                 "止损": _hard_cell,
                 "移动止盈": _trail_cell,
