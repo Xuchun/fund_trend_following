@@ -97,8 +97,8 @@ def _build_method_zip(data: dict, method: str) -> bytes:
         if _entry_hist:
             zf.writestr(f"{method}_entry_history.csv",
                 _rows_to_csv(_entry_hist,
-                    ["ticker","signal_date","signal_price","entry_date","entry_price",
-                     "shares","initial_stop","atr_at_entry","status"]))
+                    ["ticker","signal_date","signal_price","entry_date","open_price","entry_price",
+                     "shares","stop_loss","atr_at_entry","status"]))
 
     return zbuf.getvalue()
 
