@@ -66,7 +66,7 @@ with col2:
             "Volatility Expansion",
         ],
         "权重": ["40%", "30%", "20%", "10%"],
-    })
+    }))
 
 st.markdown("---")
 
