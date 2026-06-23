@@ -106,5 +106,24 @@ GLOBAL_CSS = """
         justify-content: space-between;
         margin-bottom: 4px;
     }
+    /* Centered data table (show_df) */
+    table.sdf {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+    }
+    table.sdf th, table.sdf td {
+        text-align: center !important;
+        padding: 6px 12px;
+        border-bottom: 1px solid #e8e8e8;
+        white-space: nowrap;
+    }
+    table.sdf thead tr {
+        background: #f0f2f6;
+        font-weight: 600;
+    }
+    table.sdf tbody tr:hover {
+        background: #f8f9fa;
+    }
 </style>
 """
