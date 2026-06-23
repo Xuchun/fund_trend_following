@@ -476,7 +476,7 @@ def main() -> None:
         universe  = pd.read_csv(_UNIVERSE)
         active    = universe[universe["is_active"] == True]["ticker"].tolist()
         univ_data = fetch_price_data(active, period=args.universe_period)
-        candidates = scan_entries(state, univ_data, today, current_nav)
+        candidates = scan_entries(state, univ_data, today, current_nav, pos_data=pos_data)
         log.info(f"  Signals found: {len(candidates)} — saving as pending (execute tomorrow at open)")
         for sig in candidates:
             if state.get("cash", 0.0) < sig["notional"]:
