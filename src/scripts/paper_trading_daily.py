@@ -403,15 +403,16 @@ def detect_exit_signals(
 
         if exit_reason:
             exit_signals.append({
-                "ticker":        ticker,
-                "exit_reason":   exit_reason,
-                "stop_used":     round(stop_used, 4),
-                "shares":        pos["shares"],
-                "open_price":    pos.get("open_price", pos["entry_price"]),
-                "entry_price":   pos["entry_price"],
-                "entry_date":    pos.get("entry_date", ""),
-                "stop_loss":     pos["stop_loss"],
-                "detected_date": str(bar_date),
+                "ticker":           ticker,
+                "exit_reason":      exit_reason,
+                "stop_used":        round(stop_used, 4),
+                "shares":           pos["shares"],
+                "open_price":       pos.get("open_price", pos["entry_price"]),
+                "entry_price":      pos["entry_price"],
+                "entry_date":       pos.get("entry_date", ""),
+                "stop_loss":        pos["stop_loss"],
+                "detected_date":    str(bar_date),
+                "entry_commission": pos.get("entry_commission", 0.0),  # for net_pnl at exit
             })
             log.info(f"  EXIT SIGNAL {ticker}  [{exit_reason}]  stop_used=${stop_used:.2f}")
 
