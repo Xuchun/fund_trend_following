@@ -342,16 +342,17 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _m1_history    = _m1.get("nav_history", [])
     _m1_cash       = _m1.get("cash", 0.0)
     _m1_init_nav   = _m1["initial_nav"]
-    _m1_last_upd_raw = _m1.get("last_update_utc", "")
+    _m1_last_upd_raw = _m1.get("last_update_utc") or ""   # guard against JSON null
     if _m1_last_upd_raw:
         from datetime import datetime, timezone, timedelta
         _sgt = timezone(timedelta(hours=8))
         _m1_last_upd = (datetime.strptime(_m1_last_upd_raw, "%Y-%m-%dT%H:%M:%SZ")
                         .replace(tzinfo=timezone.utc)
                         .astimezone(_sgt)
-                        .strftime("%Y-%m-%d %H:%M SGT"))
+                        .strftime("%Y-%m-%d %H:%M 新加坡时间（SGT，UTC+8）"))
     else:
-        _m1_last_upd = _m1.get("last_update_date", "N/A")
+        # last_update_utc not yet written by this run; fall back to date-only field
+        _m1_last_upd = _m1.get("last_update_date", "N/A") + "（仅限日期，时间不详）"
     _m1_today_sig  = _m1.get("today_signals")
 
     # ── Fetch live prices ────────────────────────────────────────────────────
