@@ -1,4 +1,17 @@
-"""Global style constants."""
+"""Global style constants and display helpers."""
+
+import pandas as _pd
+import streamlit as _st
+
+
+def show_df(df, **kwargs) -> None:
+    """Display a DataFrame with all cells center-aligned."""
+    if isinstance(df, _pd.DataFrame):
+        df = df.style.set_properties(**{"text-align": "center"}).set_table_styles(
+            [{"selector": "th", "props": [("text-align", "center")]}]
+        )
+    _st.dataframe(df, **kwargs)
+
 
 SPY_COLOR      = "#aaaaaa"
 POSITIVE_COLOR = "#2ca02c"
