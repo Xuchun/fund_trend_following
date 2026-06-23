@@ -364,16 +364,20 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             })
         for e in _m1_today_sig.get("entries", []):
             _px = e.get("entry_price")
+            _px_slip = _px * (1 + _SLIP) if _px else None
+            _stop = e.get("stop_price")
+            _shares = e.get("shares", 0)
+            _risk_pct = (_px_slip - _stop) * _shares / _m1_init_nav if (_px_slip and _stop and _shares) else None
             _trade_rows.append({
                 "交易日期": _ts_trade_date,
                 "方向": "🟢 买入",
                 "标的": e["ticker"],
                 "类型": _asset_type(e["ticker"]),
-                "成交量": e.get("shares", ""),
+                "成交量": _shares,
                 "成交价（无滑点和手续费）": f"${_px:.2f}" if _px else "—",
-                "成交价（有滑点，无手续费）": f"${_px * (1 + _SLIP):.2f}" if _px else "—",
-                "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "—",
-                "风险%": f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "—",
+                "成交价（有滑点，无手续费）": f"${_px_slip:.2f}" if _px_slip else "—",
+                "止损价": f"${_stop:.2f}" if _stop else "—",
+                "风险%": f"{_risk_pct*100:.2f}%" if _risk_pct else "—",
             })
     if _trade_rows:
         show_df(pd.DataFrame(sorted(_trade_rows, key=lambda x: x["标的"])), use_container_width=True, hide_index=True)
