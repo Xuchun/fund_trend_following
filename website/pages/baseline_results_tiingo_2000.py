@@ -2921,6 +2921,52 @@ st.markdown("---")
 # ── Per-year universe size ────────────────────────────────────────────────────
 st.subheader("每年标的池里面的标的数量")
 
+# ── Entry criteria explanation ────────────────────────────────────────────────
+with st.expander("📋 进入标的池的条件（点击展开）", expanded=True):
+    st.markdown("标的池筛选分为**两层**，柱状图中的数字对应第一层（粗筛）。")
+
+    _p = meta.params_anchor   # live params from strategy_meta.json
+
+    st.markdown("#### 第一层：粗筛（决定图表数字）")
+    st.markdown(
+        "以下条件决定一只股票/ETF **是否出现在标的池年度统计中**。"
+        "采用逐日点对时间（point-in-time）判断，某年内只要有任意一天满足条件即计入该年。"
+    )
+    st.markdown(f"""
+| 条件 | 具体要求 | 说明 |
+|------|---------|------|
+| **价格** | 当日收盘价（未复权）> **$10** | 过滤低价股（penny stock） |
+| **流动性** | 60日平均成交额（ADV₆₀）> **$20M** | 保证基本可交易性；ADV₆₀ 移位1天，不含当日（无前视偏差） |
+| **数据质量** | 历史数据中无严重价格跳空或异常 | 来自 Tiingo 数据质量报告的自动筛查 |
+""")
+    st.caption(
+        "⚠️ **注意**：$20M ADV 是粗筛下限。"
+        "回测引擎每日执行时会用更严格的 $60M 门槛，"
+        "因此实际参与每日扫描的标的数量 **少于** 图中显示的标的池规模。"
+    )
+
+    st.markdown(f"#### 第二层：每日执行扫描（决定是否产生开仓信号）")
+    st.markdown(
+        "标的通过第一层进入标的池后，回测引擎在**每个交易日收盘时**还要通过以下全部条件，才会产生开仓候选信号。"
+    )
+    st.markdown(f"""
+| 步骤 | 条件 | 参数值 | 说明 |
+|------|------|--------|------|
+| ① | 未持有该标的 | — | 不重复建仓 |
+| ② | 当日可交易（is_tradable） | — | Tiingo 标记非正常交易日自动跳过 |
+| ③ | **收盘价** ≥ **${_p.get('min_price', 10):.0f}** | `min_price` | 与粗筛一致 |
+| ④ | **ADV₆₀** ≥ **${_p.get('min_adv_m', 60):.0f}M** | `min_adv_m` | 比粗筛严格 3× |
+| ⑤ | **{_p.get('breakout_window', 200)} 日突破信号** | `breakout_window` | 当日收盘价 > 过去 {_p.get('breakout_window', 200)} 个交易日最高价 |
+| ⑥ | ATR({_p.get('atr_period', 20)}) 有效 | `atr_period` | 用于计算止损距离和仓位 |
+| ⑦ | **止损距离** ≥ {_p.get('min_stop_distance_pct', 0.005)*100:.1f}% | `min_stop_distance_pct` | (收盘价 − 初步止损) / 收盘价，初步止损 = 收盘价 − {_p.get('stop_loss_multiplier', 2):.0f}×ATR |
+| ⑧ | **成交量确认** ≥ {_p.get('volume_filter_multiplier', 1.5):.1f}× 均量 | `volume_filter_multiplier` | 当日成交量 ≥ 60日均量 × {_p.get('volume_filter_multiplier', 1.5):.1f}，过滤低成交量假突破 |
+| ⑨ | **牛市环境** | `regime_filter` | SPY 收盘价 > SMA {_p.get('regime_sma_window', 200)}（熊市暂停开仓，仅保留 GLD/TLT/UUP） |
+""")
+    st.caption(
+        f"通过以上 ① ~ ⑨ 全部条件后，信号按突破强度（close / {_p.get('breakout_window',200)}日高点）排序，"
+        f"再经过组合层约束（热度上限 {_p.get('heat_limit',0.1)*100:.0f}%、现金余额、相关性减仓）筛选，最终决定是否实际下单。"
+    )
+
 import pandas as _pd_uni
 import plotly.graph_objects as _go_uni
 
