@@ -824,11 +824,16 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.subheader(f"九、平仓记录（{len(_m1_closed)} 笔）")
     if _m1_closed:
         _ct = pd.DataFrame(_m1_closed).sort_values("exit_date", ascending=False)
-        _ct["R"] = _ct["pnl_r"].map(lambda v: f"{v:+.2f}R")
-        _ct["净盈亏"] = _ct["net_pnl"].map(lambda v: f"${v:+,.0f}")
-        show_df(_ct[["ticker","entry_date","exit_date","holding_days","R","净盈亏","exit_reason"]].rename(
-            columns={"ticker":"标的","entry_date":"入场日","exit_date":"出场日","holding_days":"天数","exit_reason":"原因"}
-        ), use_container_width=True, hide_index=True)
+        show_df(
+            _ct[["ticker","entry_date","exit_date","holding_days","pnl_r","net_pnl","exit_reason"]].rename(
+                columns={"ticker":"标的","entry_date":"入场日","exit_date":"出场日",
+                         "holding_days":"天数","pnl_r":"R","net_pnl":"净盈亏","exit_reason":"原因"}
+            ),
+            column_config={
+                "R":    st.column_config.NumberColumn(format="%+.2fR"),
+                "净盈亏": st.column_config.NumberColumn(format="$%+.0f"),
+            },
+        )
     else:
         st.info("暂无平仓记录")
 
