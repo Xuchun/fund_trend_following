@@ -4,8 +4,8 @@
   "start_date": "2026-06-19",
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
-  "last_update_date": "2026-06-22",
-  "cash": 30275.744876861572,
+  "last_update_date": "2026-06-23",
+  "cash": 10140.74691866228,
   "positions": [
     {
       "ticker": "ENTG",
@@ -20,8 +20,8 @@
       "highest_high": 186.94,
       "atr_at_entry": 10.4864,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 184.0,
-      "last_price_date": "2026-06-22"
+      "last_known_price": 168.22,
+      "last_price_date": "2026-06-23"
     },
     {
       "ticker": "MKSI",
@@ -36,8 +36,8 @@
       "highest_high": 421.58,
       "atr_at_entry": 19.6389,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 420.56,
-      "last_price_date": "2026-06-22"
+      "last_known_price": 389.17,
+      "last_price_date": "2026-06-23"
     },
     {
       "ticker": "ICHR",
@@ -52,8 +52,8 @@
       "highest_high": 101.65,
       "atr_at_entry": 6.2318,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 99.61,
-      "last_price_date": "2026-06-22"
+      "last_known_price": 92.2,
+      "last_price_date": "2026-06-23"
     },
     {
       "ticker": "ALAB",
@@ -68,8 +68,8 @@
       "highest_high": 440.99,
       "atr_at_entry": 28.9661,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 439.66,
-      "last_price_date": "2026-06-22"
+      "last_known_price": 397.02,
+      "last_price_date": "2026-06-23"
     },
     {
       "ticker": "ACMR",
@@ -84,8 +84,8 @@
       "highest_high": 111.41,
       "atr_at_entry": 7.8253,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 103.17,
-      "last_price_date": "2026-06-22"
+      "last_known_price": 99.12,
+      "last_price_date": "2026-06-23"
     },
     {
       "ticker": "LTH",
@@ -96,12 +96,12 @@
       "entry_price": 36.5866,
       "shares": 270,
       "stop_loss": 34.0341,
-      "trail_stop": 33.8214,
-      "highest_high": 37.65,
+      "trail_stop": 33.984583,
+      "highest_high": 37.85,
       "atr_at_entry": 1.2762,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 37.33,
-      "last_price_date": "2026-06-22"
+      "last_known_price": 37.83,
+      "last_price_date": "2026-06-23"
     },
     {
       "ticker": "CIFR",
@@ -116,8 +116,8 @@
       "highest_high": 30.14,
       "atr_at_entry": 2.26,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 28.14,
-      "last_price_date": "2026-06-22"
+      "last_known_price": 27.64,
+      "last_price_date": "2026-06-23"
     },
     {
       "ticker": "BTSG",
@@ -128,12 +128,12 @@
       "entry_price": 67.2872,
       "shares": 150,
       "stop_loss": 63.2518,
-      "trail_stop": 61.6869,
-      "highest_high": 67.74,
+      "trail_stop": 61.826117,
+      "highest_high": 67.855,
       "atr_at_entry": 2.0177,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 67.2,
-      "last_price_date": "2026-06-22"
+      "last_known_price": 66.84,
+      "last_price_date": "2026-06-23"
     },
     {
       "ticker": "FRO",
@@ -144,12 +144,12 @@
       "entry_price": 39.9499,
       "shares": 244,
       "stop_loss": 36.8143,
-      "trail_stop": 37.1666,
-      "highest_high": 41.87,
+      "trail_stop": 38.082805,
+      "highest_high": 42.88,
       "atr_at_entry": 1.5678,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 41.58,
-      "last_price_date": "2026-06-22"
+      "last_known_price": 42.88,
+      "last_price_date": "2026-06-23"
     },
     {
       "ticker": "BE",
@@ -164,8 +164,8 @@
       "highest_high": 349.91,
       "atr_at_entry": 24.6164,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 345.85,
-      "last_price_date": "2026-06-22"
+      "last_known_price": 321.98,
+      "last_price_date": "2026-06-23"
     },
     {
       "ticker": "ALGM",
@@ -180,8 +180,8 @@
       "highest_high": 61.7367,
       "atr_at_entry": 3.6033,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 61.58,
-      "last_price_date": "2026-06-22"
+      "last_known_price": 55.52,
+      "last_price_date": "2026-06-23"
     },
     {
       "ticker": "GWW",
@@ -196,8 +196,8 @@
       "highest_high": 1375.17,
       "atr_at_entry": 28.1791,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 1341.42,
-      "last_price_date": "2026-06-22"
+      "last_known_price": 1320.48,
+      "last_price_date": "2026-06-23"
     },
     {
       "ticker": "CAT",
@@ -212,8 +212,8 @@
       "highest_high": 1023.25,
       "atr_at_entry": 32.3661,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 1022.28,
-      "last_price_date": "2026-06-22"
+      "last_known_price": 984.24,
+      "last_price_date": "2026-06-23"
     },
     {
       "ticker": "INTC",
@@ -228,8 +228,8 @@
       "highest_high": 141.45,
       "atr_at_entry": 9.1302,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 140.94,
-      "last_price_date": "2026-06-22"
+      "last_known_price": 132.28,
+      "last_price_date": "2026-06-23"
     },
     {
       "ticker": "AIT",
@@ -240,12 +240,12 @@
       "entry_price": 337.2669,
       "shares": 29,
       "stop_loss": 321.4295,
-      "trail_stop": 316.2339,
+      "trail_stop": 316.517143,
       "highest_high": 339.99,
       "atr_at_entry": 7.9187,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 338.07,
-      "last_price_date": "2026-06-22"
+      "last_known_price": 330.9,
+      "last_price_date": "2026-06-23"
     },
     {
       "ticker": "EEM",
@@ -260,8 +260,8 @@
       "highest_high": 71.57,
       "atr_at_entry": 1.7111,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 71.21,
-      "last_price_date": "2026-06-22"
+      "last_known_price": 67.17,
+      "last_price_date": "2026-06-23"
     },
     {
       "ticker": "CRS",
@@ -276,8 +276,44 @@
       "highest_high": 597.52,
       "atr_at_entry": 20.0817,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 587.77,
-      "last_price_date": "2026-06-22"
+      "last_known_price": 578.12,
+      "last_price_date": "2026-06-23"
+    },
+    {
+      "ticker": "APGE",
+      "signal_date": "2026-06-22",
+      "signal_price": 132.55,
+      "signal_strength": 0.0,
+      "entry_date": "2026-06-23",
+      "open_price": 132.58,
+      "entry_price": 132.7126,
+      "shares": 76,
+      "stop_loss": 119.6546,
+      "trail_stop": 114.459401,
+      "highest_high": 133.16,
+      "atr_at_entry": 6.529,
+      "R_at_backtest_end": 0.0,
+      "last_known_price": 132.88,
+      "last_price_date": "2026-06-23",
+      "entry_commission": 3.03
+    },
+    {
+      "ticker": "CWAN",
+      "signal_date": "2026-06-22",
+      "signal_price": 24.53,
+      "signal_strength": 0.0,
+      "entry_date": "2026-06-23",
+      "open_price": 24.53,
+      "entry_price": 24.5545,
+      "shares": 409,
+      "stop_loss": 24.3777,
+      "trail_stop": 24.299614,
+      "highest_high": 24.5545,
+      "atr_at_entry": 0.0884,
+      "R_at_backtest_end": 0.0,
+      "last_known_price": 24.55,
+      "last_price_date": "2026-06-23",
+      "entry_commission": 3.01
     }
   ],
   "closed_trades": [],
@@ -293,237 +329,278 @@
       "nav": 200640.49,
       "regime": "BULL",
       "spy_close": 744.39
+    },
+    {
+      "date": "2026-06-23",
+      "nav": 193303.91,
+      "regime": "BULL",
+      "spy_close": 733.58
     }
   ],
   "today_signals": {
-    "date": "2026-06-22",
+    "date": "2026-06-23",
     "regime": "BULL",
-    "spy_close": 744.39,
-    "n_candidates": 3,
-    "n_entries": 3,
-    "n_executed": 17,
-    "n_exits": 0,
-    "exits": [],
-    "entries": [
+    "spy_close": 733.58,
+    "n_candidates": 2,
+    "n_entries": 2,
+    "n_executed": 2,
+    "n_exits": 3,
+    "n_raw_breakouts": 2,
+    "n_heat_blocked": 0,
+    "n_cash_blocked": 0,
+    "n_corr_reduced": 0,
+    "exits_executed": [],
+    "entries_executed": [
       {
-        "ticker": "ENTG",
-        "signal_date": "2026-06-19",
-        "signal_price": 178.77,
-        "open_price": 182.28,
-        "entry_price": 182.4623,
-        "shares": 55,
-        "stop_price": 161.4895,
-        "trade_risk": 0.005768,
-        "order_type": "MARKET"
+        "ticker": "APGE",
+        "signal_date": "2026-06-22",
+        "signal_price": 132.55,
+        "open_price": 132.58,
+        "entry_price": 132.7126,
+        "shares": 76,
+        "stop_price": 119.6546,
+        "trade_risk": 0.0049
       },
       {
-        "ticker": "MKSI",
-        "signal_date": "2026-06-19",
-        "signal_price": 406.37,
-        "open_price": 413.5,
-        "entry_price": 413.9135,
-        "shares": 24,
-        "stop_price": 374.6357,
-        "trade_risk": 0.004713,
-        "order_type": "MARKET"
-      },
+        "ticker": "CWAN",
+        "signal_date": "2026-06-22",
+        "signal_price": 24.53,
+        "open_price": 24.53,
+        "entry_price": 24.5545,
+        "shares": 409,
+        "stop_price": 24.3777,
+        "trade_risk": 0.0004
+      }
+    ],
+    "exit_signals": [
       {
         "ticker": "ICHR",
-        "signal_date": "2026-06-19",
-        "signal_price": 98.61,
-        "open_price": 101.16,
-        "entry_price": 101.2612,
-        "shares": 101,
-        "stop_price": 88.7976,
-        "trade_risk": 0.006294,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "ALAB",
-        "signal_date": "2026-06-19",
-        "signal_price": 417.07,
-        "open_price": 425.61,
-        "entry_price": 426.0361,
-        "shares": 23,
-        "stop_price": 368.1034,
-        "trade_risk": 0.006662,
-        "order_type": "MARKET"
+        "exit_reason": "stop_loss",
+        "stop_used": 88.7976,
+        "shares": 101
       },
       {
         "ticker": "ACMR",
-        "signal_date": "2026-06-19",
-        "signal_price": 109.87,
-        "open_price": 110.54,
-        "entry_price": 110.6505,
-        "shares": 91,
-        "stop_price": 94.9999,
-        "trade_risk": 0.007121,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "LTH",
-        "signal_date": "2026-06-19",
-        "signal_price": 36.92,
-        "open_price": 36.55,
-        "entry_price": 36.5866,
-        "shares": 270,
-        "stop_price": 34.0341,
-        "trade_risk": 0.003446,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "CIFR",
-        "signal_date": "2026-06-19",
-        "signal_price": 29.18,
-        "open_price": 29.215,
-        "entry_price": 29.2442,
-        "shares": 342,
-        "stop_price": 24.7242,
-        "trade_risk": 0.007729,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "BTSG",
-        "signal_date": "2026-06-19",
-        "signal_price": 66.25,
-        "open_price": 67.22,
-        "entry_price": 67.2872,
-        "shares": 150,
-        "stop_price": 63.2518,
-        "trade_risk": 0.003015,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "FRO",
-        "signal_date": "2026-06-19",
-        "signal_price": 40.93,
-        "open_price": 39.91,
-        "entry_price": 39.9499,
-        "shares": 244,
-        "stop_price": 36.8143,
-        "trade_risk": 0.003831,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "BE",
-        "signal_date": "2026-06-19",
-        "signal_price": 328.91,
-        "open_price": 332.0,
-        "entry_price": 332.332,
-        "shares": 30,
-        "stop_price": 283.0992,
-        "trade_risk": 0.007389,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "ALGM",
-        "signal_date": "2026-06-19",
-        "signal_price": 59.0,
-        "open_price": 61.675,
-        "entry_price": 61.7367,
-        "shares": 169,
-        "stop_price": 54.5301,
-        "trade_risk": 0.006107,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "GWW",
-        "signal_date": "2026-06-19",
-        "signal_price": 1365.41,
-        "open_price": 1356.45,
-        "entry_price": 1357.8065,
-        "shares": 7,
-        "stop_price": 1301.4482,
-        "trade_risk": 0.001975,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "CAT",
-        "signal_date": "2026-06-19",
-        "signal_price": 985.82,
-        "open_price": 999.28,
-        "entry_price": 1000.2798,
-        "shares": 10,
-        "stop_price": 935.5471,
-        "trade_risk": 0.003237,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "INTC",
-        "signal_date": "2026-06-19",
-        "signal_price": 133.99,
-        "open_price": 139.205,
-        "entry_price": 139.3443,
-        "shares": 74,
-        "stop_price": 121.0838,
-        "trade_risk": 0.006759,
-        "order_type": "MARKET"
-      },
-      {
-        "ticker": "AIT",
-        "signal_date": "2026-06-19",
-        "signal_price": 337.96,
-        "open_price": 336.93,
-        "entry_price": 337.2669,
-        "shares": 29,
-        "stop_price": 321.4295,
-        "trade_risk": 0.002297,
-        "order_type": "MARKET"
+        "exit_reason": "stop_loss",
+        "stop_used": 94.9999,
+        "shares": 91
       },
       {
         "ticker": "EEM",
-        "signal_date": "2026-06-19",
-        "signal_price": 70.79,
-        "open_price": 71.29,
-        "entry_price": 71.3613,
+        "exit_reason": "stop_loss",
+        "stop_used": 67.9391,
+        "shares": 141
+      }
+    ],
+    "candidate_signals": [
+      {
+        "ticker": "ZION",
+        "signal_price": 68.49,
+        "stop_price": 65.5265,
         "shares": 141,
-        "stop_price": 67.9391,
-        "trade_risk": 0.002409,
-        "order_type": "MARKET"
+        "trade_risk": 0.0022,
+        "rejection": null
       },
       {
-        "ticker": "CRS",
-        "signal_date": "2026-06-19",
-        "signal_price": 586.47,
-        "open_price": 590.2,
-        "entry_price": 590.7902,
-        "shares": 17,
-        "stop_price": 550.6268,
-        "trade_risk": 0.003413,
-        "order_type": "MARKET"
+        "ticker": "TRV",
+        "signal_price": 316.96,
+        "stop_price": 304.2961,
+        "shares": 30,
+        "trade_risk": 0.002,
+        "rejection": null
+      }
+    ],
+    "entry_signals": [
+      {
+        "ticker": "TRV",
+        "signal_price": 316.96,
+        "stop_price": 304.2961,
+        "shares": 30,
+        "trade_risk": 0.002
+      },
+      {
+        "ticker": "ZION",
+        "signal_price": 68.49,
+        "stop_price": 65.5265,
+        "shares": 141,
+        "trade_risk": 0.0022
       }
     ]
   },
   "pending_entries": [
     {
-      "ticker": "APGE",
-      "signal_date": "2026-06-22",
-      "signal_price": 132.55,
-      "stop_price": 119.492,
-      "shares": 75,
-      "atr": 6.529,
-      "trade_risk": 0.0049,
-      "notional": 9941.25
+      "ticker": "TRV",
+      "signal_date": "2026-06-23",
+      "signal_price": 316.96,
+      "stop_price": 304.2961,
+      "shares": 30,
+      "atr": 6.3319,
+      "strength": 1.0105,
+      "trade_risk": 0.002,
+      "notional": 9508.8
     },
     {
-      "ticker": "ESI",
-      "signal_date": "2026-06-22",
-      "signal_price": 49.09,
-      "stop_price": 45.4254,
-      "shares": 204,
-      "atr": 1.8323,
-      "trade_risk": 0.0037,
-      "notional": 10014.36
+      "ticker": "ZION",
+      "signal_date": "2026-06-23",
+      "signal_price": 68.49,
+      "stop_price": 65.5265,
+      "shares": 141,
+      "atr": 1.4817,
+      "strength": 1.0074,
+      "trade_risk": 0.0022,
+      "notional": 9657.09
+    }
+  ],
+  "pending_exits": [
+    {
+      "ticker": "ICHR",
+      "exit_reason": "stop_loss",
+      "stop_used": 88.7976,
+      "shares": 101,
+      "open_price": 101.16,
+      "entry_price": 101.2612,
+      "entry_date": "2026-06-22",
+      "signal_date": "2026-06-19",
+      "signal_price": 98.61,
+      "signal_strength": 0.0,
+      "stop_loss": 88.7976,
+      "atr_at_entry": 6.2318,
+      "highest_high": 101.65,
+      "trail_stop_at_exit": 82.9546,
+      "atr_at_exit": 6.5313,
+      "detected_date": "2026-06-23",
+      "entry_commission": 0.0
     },
     {
-      "ticker": "CWAN",
-      "signal_date": "2026-06-22",
-      "signal_price": 24.53,
-      "stop_price": 24.3532,
-      "shares": 408,
-      "atr": 0.0884,
-      "trade_risk": 0.0004,
-      "notional": 10008.24
+      "ticker": "ACMR",
+      "exit_reason": "stop_loss",
+      "stop_used": 94.9999,
+      "shares": 91,
+      "open_price": 110.54,
+      "entry_price": 110.6505,
+      "entry_date": "2026-06-22",
+      "signal_date": "2026-06-19",
+      "signal_price": 109.87,
+      "signal_strength": 0.0,
+      "stop_loss": 94.9999,
+      "atr_at_entry": 7.8253,
+      "highest_high": 111.41,
+      "trail_stop_at_exit": 87.9341,
+      "atr_at_exit": 8.0245,
+      "detected_date": "2026-06-23",
+      "entry_commission": 0.0
+    },
+    {
+      "ticker": "EEM",
+      "exit_reason": "stop_loss",
+      "stop_used": 67.9391,
+      "shares": 141,
+      "open_price": 71.29,
+      "entry_price": 71.3613,
+      "entry_date": "2026-06-22",
+      "signal_date": "2026-06-19",
+      "signal_price": 70.79,
+      "signal_strength": 0.0,
+      "stop_loss": 67.9391,
+      "atr_at_entry": 1.7111,
+      "highest_high": 71.57,
+      "trail_stop_at_exit": 66.4367,
+      "atr_at_exit": 1.7885,
+      "detected_date": "2026-06-23",
+      "entry_commission": 0.0
+    }
+  ],
+  "last_update_utc": "2026-06-23T23:30:28Z",
+  "signals_history": [
+    {
+      "date": "2026-06-23",
+      "regime": "BULL",
+      "spy_close": 733.58,
+      "n_candidates": 2,
+      "n_entries": 2,
+      "n_executed": 2,
+      "n_exits": 3,
+      "n_raw_breakouts": 2,
+      "n_heat_blocked": 0,
+      "n_cash_blocked": 0,
+      "n_corr_reduced": 0,
+      "exits_executed": [],
+      "entries_executed": [
+        {
+          "ticker": "APGE",
+          "signal_date": "2026-06-22",
+          "signal_price": 132.55,
+          "open_price": 132.58,
+          "entry_price": 132.7126,
+          "shares": 76,
+          "stop_price": 119.6546,
+          "trade_risk": 0.0049
+        },
+        {
+          "ticker": "CWAN",
+          "signal_date": "2026-06-22",
+          "signal_price": 24.53,
+          "open_price": 24.53,
+          "entry_price": 24.5545,
+          "shares": 409,
+          "stop_price": 24.3777,
+          "trade_risk": 0.0004
+        }
+      ],
+      "exit_signals": [
+        {
+          "ticker": "ICHR",
+          "exit_reason": "stop_loss",
+          "stop_used": 88.7976,
+          "shares": 101
+        },
+        {
+          "ticker": "ACMR",
+          "exit_reason": "stop_loss",
+          "stop_used": 94.9999,
+          "shares": 91
+        },
+        {
+          "ticker": "EEM",
+          "exit_reason": "stop_loss",
+          "stop_used": 67.9391,
+          "shares": 141
+        }
+      ],
+      "candidate_signals": [
+        {
+          "ticker": "ZION",
+          "signal_price": 68.49,
+          "stop_price": 65.5265,
+          "shares": 141,
+          "trade_risk": 0.0022,
+          "rejection": null
+        },
+        {
+          "ticker": "TRV",
+          "signal_price": 316.96,
+          "stop_price": 304.2961,
+          "shares": 30,
+          "trade_risk": 0.002,
+          "rejection": null
+        }
+      ],
+      "entry_signals": [
+        {
+          "ticker": "TRV",
+          "signal_price": 316.96,
+          "stop_price": 304.2961,
+          "shares": 30,
+          "trade_risk": 0.002
+        },
+        {
+          "ticker": "ZION",
+          "signal_price": 68.49,
+          "stop_price": 65.5265,
+          "shares": 141,
+          "trade_risk": 0.0022
+        }
+      ]
     }
   ]
 }
