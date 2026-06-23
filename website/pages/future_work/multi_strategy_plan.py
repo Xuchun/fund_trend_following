@@ -37,7 +37,7 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.markdown("**推荐 Alpha 层**")
-    st.table({
+    show_df(pd.DataFrame({
         "Alpha 类型": [
             "短周期 Breakout",
             "长周期 Breakout",
@@ -58,7 +58,7 @@ with col1:
 
 with col2:
     st.markdown("**推荐组合权重**")
-    st.table({
+    show_df(pd.DataFrame({
         "模块": [
             "Long Breakout（现有系统）",
             "Relative Strength Momentum",
@@ -128,7 +128,7 @@ st.markdown("""
 """)
 
 st.markdown("**推荐修复方案：**")
-st.table({
+show_df(pd.DataFrame({
     "参数": ["risk_per_trade", "position_cap"],
     "当前值": ["1%", "5%"],
     "建议值": ["0.20%", "15%–20%"],
@@ -166,7 +166,7 @@ st.markdown("---")
 # ── 最终目标 ──────────────────────────────────────────────────────────────────
 st.subheader("六、最终目标")
 st.markdown('从"单 Breakout 系统"升级为**多 Alpha 专业趋势组合**：')
-st.table({
+show_df(pd.DataFrame({
     "目标": [
         "Alpha Diversification",
         "Multi-Timeframe Trend",
