@@ -734,6 +734,8 @@ def main() -> None:
     #   Bear  → scan only bear_exempt_tickers (e.g. GLD, TLT, UUP); empty list → no scan
     candidates:  list[dict] = []
     new_pending: list[dict] = []
+    scan_stats:  dict       = {"n_raw_breakouts": 0, "n_heat_blocked": 0,
+                               "n_cash_blocked": 0,  "n_corr_reduced": 0}
     _bear_exempt = list(PARAMS.bear_exempt_tickers)  # e.g. ['GLD', 'TLT', 'UUP']
 
     if not args.no_entries:
@@ -753,9 +755,15 @@ def main() -> None:
             log.info("  BEAR regime — no new entry signals (no bear-exempt tickers configured)")
 
         if scan_tickers:
-            univ_data  = fetch_price_data(scan_tickers, period=args.universe_period)
-            candidates = scan_entries(state, univ_data, today, current_nav, pos_data=pos_data)
-            log.info(f"  Signals found: {len(candidates)} — saving as pending (execute tomorrow at open)")
+            univ_data           = fetch_price_data(scan_tickers, period=args.universe_period)
+            candidates, scan_stats = scan_entries(state, univ_data, today, current_nav, pos_data=pos_data)
+            log.info(
+                f"  Raw breakouts: {scan_stats['n_raw_breakouts']} | "
+                f"Heat-blocked: {scan_stats['n_heat_blocked']} | "
+                f"Cash-blocked: {scan_stats['n_cash_blocked']} | "
+                f"Corr-reduced: {scan_stats['n_corr_reduced']} | "
+                f"Accepted: {len(candidates)}"
+            )
             for sig in candidates:
                 if state.get("cash", 0.0) < sig["notional"]:
                     log.info(f"  Skip {sig['ticker']}: insufficient cash")
