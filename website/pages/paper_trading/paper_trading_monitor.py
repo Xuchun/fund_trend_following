@@ -568,9 +568,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     if _m1_ok:
         _sd = pd.DataFrame([{
             "标的": p["ticker"], "状态": "🔴" if p["is_stopped"] else "✅",
-            "当前价": f"${p['current_price']:.2f}", "历史最高": f"${p['peak_price']:.2f}",
+            "当前价": f"${p['current_price']:.2f}", "历史最高": f"${p['highest_high']:.2f}",
             "ATR(20)": f"${p['current_atr']:.2f}", "乘数": f"{p['trail_mult']:.1f}×",
-            "止损价": f"${p['current_stop']:.2f}", "价格距止损": f"{p['stop_buffer_pct']:.1f}%",
+            "硬止损": f"${p['stop_loss']:.2f}",
+            "追踪止损": f"${p['trail_stop_live']:.2f}",
+            "有效止损": f"${p['current_stop']:.2f}", "距止损": f"{p['stop_buffer_pct']:.1f}%",
         } for p in sorted(_m1_ok, key=lambda x: x["ticker"])])
         show_df(_sd, use_container_width=True, hide_index=True)
 
