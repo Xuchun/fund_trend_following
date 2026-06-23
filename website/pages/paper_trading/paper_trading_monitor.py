@@ -1037,9 +1037,15 @@ with tab2:
         if _m2_stp:
             st.warning(f"⚠️ **{len(_m2_stp)} 只已触及止损** — IB 脚本运行后将自动生成退出订单")
 
+        def _m2_status(p: dict) -> str:
+            sr = p.get("stop_reason")
+            if sr == "stop_loss":      return "🔴 触止损"
+            if sr == "trailing_stop":  return "🔴 触移动止盈"
+            return "🟢 持有"
+
         _m2_rows = [{
             "标的": p["ticker"],
-            "状态": "🔴 触止损" if p["is_stopped"] else "🟢 持有",
+            "状态": _m2_status(p),
             "入场日": p["entry_date"],
             "入场价": f"${p['entry_price']:.2f}",
             "当前价": f"${p['current_price']:.2f}",
