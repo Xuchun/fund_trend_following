@@ -161,7 +161,8 @@ def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
         effective  = max(pos["stop_loss"], trail_live)   # hard stop may be binding early on
         return effective, trail_live, tm
 
-    # Fallback when YF fetch fails
+    # Fallback when YF fetch fails — only close price available, no intraday low
+    # Hard stop approximated with close (same as trailing stop check); mark stale
     if df is None:
         fallback = pos.get("last_known_price")
         if not fallback:
@@ -169,6 +170,8 @@ def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
         peak_hh = pos["highest_high"]
         eff_stop, trail_live, tm = _compute_stop(peak_hh, pos["atr_at_entry"], pos["trail_stop"])
         R = (fallback - pos["entry_price"]) / R_base if R_base > 0 else 0.0
+        # Without intraday low, approximate: triggered if close < stop_loss OR close < trail_stop
+        is_stopped = (fallback < pos["stop_loss"]) or (fallback < trail_live)
         return {
             **pos,
             "_ok":             True,
@@ -184,7 +187,7 @@ def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
             "mkt_value":       fallback * pos["shares"],
             "unreal_pnl":      (fallback - pos["entry_price"]) * pos["shares"],
             "stop_buffer_pct": (fallback - eff_stop) / fallback * 100,
-            "is_stopped":      fallback <= eff_stop,
+            "is_stopped":      is_stopped,
         }
 
     # Compare dates only to avoid timezone mismatch between yfinance (tz-aware) and entry_date (tz-naive)
@@ -197,6 +200,7 @@ def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
         peak_hh = pos["highest_high"]
         eff_stop, trail_live, tm = _compute_stop(peak_hh, pos["atr_at_entry"], pos["trail_stop"])
         R = (fallback - pos["entry_price"]) / R_base if R_base > 0 else 0.0
+        is_stopped = (fallback < pos["stop_loss"]) or (fallback < trail_live)
         return {
             **pos,
             "_ok":             True,
@@ -212,11 +216,12 @@ def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
             "mkt_value":       fallback * pos["shares"],
             "unreal_pnl":      (fallback - pos["entry_price"]) * pos["shares"],
             "stop_buffer_pct": (fallback - eff_stop) / fallback * 100,
-            "is_stopped":      fallback <= eff_stop,
+            "is_stopped":      is_stopped,
         }
 
-    cur_price   = float(since_entry["Close"].iloc[-1])
-    cur_date    = str(since_entry.index[-1].date())
+    cur_price    = float(since_entry["Close"].iloc[-1])
+    low_today    = float(since_entry["Low"].iloc[-1])
+    cur_date     = str(since_entry.index[-1].date())
     highest_high = max(pos["highest_high"], float(since_entry["High"].max()))
 
     atr_s   = _wilder_atr(df["High"], df["Low"], df["Close"], _ATR_PERIOD)
@@ -225,6 +230,11 @@ def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
         cur_atr = pos["atr_at_entry"]
 
     eff_stop, trail_live, tm = _compute_stop(highest_high, cur_atr, pos["trail_stop"])
+
+    # Dual-trigger — matches strategy description and backtest exit.py exactly:
+    #   Priority 1: hard stop  — intraday low[t] < stop_loss
+    #   Priority 2: trail stop — close[t]         < trail_stop
+    is_stopped = (low_today < pos["stop_loss"]) or (cur_price < trail_live)
 
     # Display R: unrealized gain in units of initial risk (uses current close, not peak)
     R = (cur_price - pos["entry_price"]) / R_base if R_base > 0 else 0.0
@@ -243,7 +253,7 @@ def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
         "mkt_value":       cur_price * pos["shares"],
         "unreal_pnl":      (cur_price - pos["entry_price"]) * pos["shares"],
         "stop_buffer_pct": (cur_price - eff_stop) / cur_price * 100,
-        "is_stopped":      cur_price <= eff_stop,
+        "is_stopped":      is_stopped,
     }
 
 
