@@ -174,39 +174,45 @@ def execute_pending_exits(
             remaining.append(sig)
             continue
 
-        bar_date   = today_rows.index[0].date()
-        open_px    = float(today_rows["Open"].iloc[0])
-        fill_price = open_px * (1.0 - PARAMS.slippage_bps / 10_000)    # sell slippage
-        commission = fill_price * sig["shares"] * PARAMS.commission_bps / 10_000
+        bar_date         = today_rows.index[0].date()
+        open_px          = float(today_rows["Open"].iloc[0])
+        fill_price       = open_px * (1.0 - PARAMS.slippage_bps / 10_000)    # sell slippage
+        exit_commission  = fill_price * sig["shares"] * PARAMS.commission_bps / 10_000
+        entry_commission = sig.get("entry_commission", 0.0)  # stored when position was opened
 
-        net_pnl = (fill_price - sig["entry_price"]) * sig["shares"] - commission
-        R       = sig["entry_price"] - sig["stop_loss"]
-        pnl_r   = net_pnl / (R * sig["shares"]) if R > 0 else 0.0
+        # net_pnl: mirrors backtest TradeRecord.net_pnl = gross_pnl - entry_commission - exit_commission
+        gross_pnl = (fill_price - sig["entry_price"]) * sig["shares"]
+        net_pnl   = gross_pnl - entry_commission - exit_commission
 
-        # Cash recovery: proceeds minus commission
-        state["cash"] = state.get("cash", 0.0) + fill_price * sig["shares"] - commission
+        # pnl_r: mirrors backtest TradeRecord.pnl_r_multiple = (exit_price - entry_price) / R  (gross, no commissions)
+        R     = sig["entry_price"] - sig["stop_loss"]
+        pnl_r = (fill_price - sig["entry_price"]) / R if R > 0 else 0.0
+
+        # Cash recovery: proceeds minus exit commission (mirrors backtest portfolio.close_position)
+        state["cash"] = state.get("cash", 0.0) + fill_price * sig["shares"] - exit_commission
 
         # Remove from open positions
         state["positions"] = [p for p in state["positions"] if p["ticker"] != ticker]
         held_tickers.discard(ticker)
 
         closed_record = {
-            "ticker":        ticker,
-            "entry_date":    sig.get("entry_date", ""),
-            "exit_date":     str(bar_date),
-            "open_price":    sig.get("open_price", sig["entry_price"]),
-            "entry_price":   sig["entry_price"],
-            "exit_open":     round(open_px, 4),        # raw T+1 open (reference)
-            "exit_price":    round(fill_price, 4),     # fill after sell slippage
-            "shares":        sig["shares"],
-            "stop_loss":     sig["stop_loss"],
-            "stop_used":     sig.get("stop_used", 0.0),
-            "commission":    round(commission, 2),
-            "pnl_r":         round(pnl_r, 4),
-            "net_pnl":       round(net_pnl, 2),
-            "exit_reason":   sig["exit_reason"],
-            "detected_date": sig.get("detected_date", ""),
-            "holding_days":  (bar_date - pd.to_datetime(sig.get("entry_date", str(bar_date))).date()).days,
+            "ticker":           ticker,
+            "entry_date":       sig.get("entry_date", ""),
+            "exit_date":        str(bar_date),
+            "open_price":       sig.get("open_price", sig["entry_price"]),
+            "entry_price":      sig["entry_price"],
+            "exit_open":        round(open_px, 4),           # raw T+1 open (reference)
+            "exit_price":       round(fill_price, 4),        # fill after sell slippage
+            "shares":           sig["shares"],
+            "stop_loss":        sig["stop_loss"],
+            "stop_used":        sig.get("stop_used", 0.0),
+            "exit_commission":  round(exit_commission, 2),
+            "entry_commission": round(entry_commission, 2),
+            "pnl_r":            round(pnl_r, 4),
+            "net_pnl":          round(net_pnl, 2),
+            "exit_reason":      sig["exit_reason"],
+            "detected_date":    sig.get("detected_date", ""),
+            "holding_days":     (bar_date - pd.to_datetime(sig.get("entry_date", str(bar_date))).date()).days,
         }
         state["closed_trades"] = state.get("closed_trades", []) + [closed_record]
         exits_executed.append(closed_record)
