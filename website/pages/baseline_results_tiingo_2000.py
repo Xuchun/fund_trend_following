@@ -3036,11 +3036,14 @@ if _uni_path.exists():
     _cur_n    = _yr_totals[-1]
     _cur_s    = _yr_stocks[-1]
     _cur_e    = _yr_etfs[-1]
-    st.caption(
-        f"**解读：** 标的池随历史动态扩张，峰值为 **{_peak_n:,}** 个（{_peak_yr} 年）。"
-        f"当前（{_bt_end_yr} 年）：**{_cur_n:,}** 个（股票 {_cur_s:,} + ETF {_cur_e:,}）。"
+    st.markdown(
+        f"<p style='color:#111111;'>"
+        f"<b>解读：</b> 标的池随历史动态扩张，峰值为 <b>{_peak_n:,}</b> 个（{_peak_yr} 年）。"
+        f"当前（{_bt_end_yr} 年）：<b>{_cur_n:,}</b> 个（股票 {_cur_s:,} + ETF {_cur_e:,}）。"
         f"早年标的数少是因为大量股票尚未上市或尚未满足 ADV / 价格过滤条件，"
         f"并非回测数据缺失。动态标的池消除了幸存者偏差。"
+        f"</p>",
+        unsafe_allow_html=True,
     )
 else:
     st.info("标的池历史数据文件（data/tiingo_eligible_universe.csv）不可用")
