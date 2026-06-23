@@ -569,6 +569,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "市值": f"${p['mkt_value']/1e3:.0f}K",
             })
         show_df(pd.DataFrame(_rows), use_container_width=True, hide_index=True, escape=False)
+        st.markdown("<span style='color:#111111'>**缓冲** = (当前价 − 有效止损) / 当前价 × 100%，其中有效止损 = max(止损, 移动止盈)（即粗体显示的那个）</span>", unsafe_allow_html=True)
 
         _sorted = sorted(_m1_ok, key=lambda x: x.get("R", 0), reverse=True)
         _fig = go.Figure(go.Bar(
