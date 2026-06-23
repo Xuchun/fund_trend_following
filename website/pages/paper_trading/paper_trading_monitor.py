@@ -386,6 +386,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "成交价（有滑点，无手续费）": f"${_px * (1 - _SLIP):.2f}" if _px else "—",
                 "止损价": "—",
                 "风险%": "—",
+                "移动止盈价": "—",
             })
         for e in _m1_today_sig.get("entries", []):
             # open_price: raw T+1 open (no slip); entry_price: slip-adjusted (matches backtest)
@@ -394,6 +395,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             _stop = e.get("stop_price")
             _shares = e.get("shares", 0)
             _risk_pct = (_entry_px - _stop) * _shares / _m1_init_nav if (_entry_px and _stop and _shares) else None
+            # 初始移动止盈价 = entry_slip − 3×ATR；ATR = (entry_slip − stop) / 2（因硬止损 = entry_slip − 2×ATR）
+            _atr_implied = (_entry_px - _stop) / 2 if (_entry_px and _stop) else None
+            _trail_init = _entry_px - 3 * _atr_implied if _atr_implied else None
             _trade_rows.append({
                 "交易日期": _ts_trade_date,
                 "方向": "🟢 买入",
@@ -404,6 +408,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "成交价（有滑点，无手续费）": f"${_entry_px:.2f}" if _entry_px else "—",
                 "止损价": f"${_stop:.2f}" if _stop else "—",
                 "风险%": f"{_risk_pct*100:.2f}%" if _risk_pct else "—",
+                "移动止盈价": f"${_trail_init:.2f}" if _trail_init else "—",
             })
     if _trade_rows:
         show_df(pd.DataFrame(sorted(_trade_rows, key=lambda x: x["标的"])), use_container_width=True, hide_index=True)
