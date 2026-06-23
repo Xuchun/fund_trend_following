@@ -1301,12 +1301,17 @@ git push
 
     # ── 数据下载（方法二）────────────────────────────────────────────────────
     st.subheader("数据下载（用于未来策略1.0的过拟合分析）")
-    st.markdown("包含所有模拟交易数据：NAV 历史、开仓记录、平仓记录、信号历史、当前持仓")
+    st.markdown(
+        "包含所有模拟交易数据：NAV 历史、开仓记录、平仓记录、"
+        "信号历史（每日漏斗计数）、**今日突破候选明细**（含拒绝原因）、当前持仓、回测参考数据。"
+    )
 
-    _dl2_nav = _m2.get("nav_history", [])
-    _dl2_sig = _m2.get("signals_history", [])
-    _dl2_ct  = _m2.get("closed_trades", [])
-    _dl2_op  = [p for p in _m2.get("positions", []) if not p.get("closed")]
+    _dl2_nav   = _m2.get("nav_history", [])
+    _dl2_sig   = _m2.get("signals_history", [])
+    _dl2_ct    = _m2.get("closed_trades", [])
+    _dl2_op    = [p for p in _m2.get("positions", []) if not p.get("closed")]
+    _dl2_ts    = _m2.get("today_signals", {})
+    _dl2_cands = _dl2_ts.get("candidate_signals", [])
 
     _dl2_entries = sorted([
         {"ticker": p["ticker"], "entry_date": p["entry_date"],
@@ -1321,6 +1326,13 @@ git push
          "状态": "已平仓"}
         for c in _dl2_ct
     ], key=lambda x: x["entry_date"], reverse=True)
+
+    _dl2_rejection_label = {
+        None:           "✅ 已选入",
+        "corr_reduced": "⚠️ 已选入（相关性减仓）",
+        "heat_limit":   "🔴 未选（热度上限）",
+        "cash_limit":   "🔴 未选（现金不足）",
+    }
 
     with st.expander(f"NAV 历史（{len(_dl2_nav)} 条）"):
         if _dl2_nav:
@@ -1344,18 +1356,50 @@ git push
         else:
             st.info("暂无平仓记录")
 
-    with st.expander(f"信号历史（{len(_dl2_sig)} 条）"):
+    with st.expander(f"信号历史（{len(_dl2_sig)} 条，每日漏斗计数）"):
+        st.caption(
+            "每行代表一个交易日的信号漏斗统计。"
+            "原始突破数 → 热度/现金拦截 → 通过约束数（候选）→ 实际执行数。"
+        )
         if _dl2_sig:
             show_df(pd.DataFrame([{
-                "日期":      s["date"],
-                "Regime":    s.get("regime", ""),
-                "SPY收盘":   s.get("spy_close", ""),
-                "候选信号数": s.get("n_candidates", ""),
-                "实际开仓":  s.get("n_entries", ""),
-                "平仓数":    s.get("n_exits", ""),
+                "日期":           s["date"],
+                "Regime":         s.get("regime", ""),
+                "SPY收盘":        s.get("spy_close", ""),
+                "原始突破数":     s.get("n_raw_breakouts", ""),
+                "热度拦截":       s.get("n_heat_blocked",  ""),
+                "现金拦截":       s.get("n_cash_blocked",  ""),
+                "相关性减仓":     s.get("n_corr_reduced",  ""),
+                "候选信号数":     s.get("n_candidates",    ""),
+                "当日开仓信号":   s.get("n_entries",       ""),
+                "当日已执行":     s.get("n_executed",      ""),
+                "平仓数":         s.get("n_exits",         ""),
             } for s in reversed(_dl2_sig)]), use_container_width=True, hide_index=True)
         else:
             st.info("暂无数据")
+
+    _dl2_cands_approved = sum(1 for c in _dl2_cands if c.get("rejection") in (None, "corr_reduced"))
+    _dl2_cands_rejected = len(_dl2_cands) - _dl2_cands_approved
+    with st.expander(
+        f"今日突破候选明细（{len(_dl2_cands)} 只突破，{_dl2_cands_approved} 只已选，{_dl2_cands_rejected} 只被拦截）"
+        + f"  ·  信号日期：{_dl2_ts.get('date', 'N/A')}"
+    ):
+        st.caption(
+            "所有通过**个股筛选**的标的（含被组合约束拦截的个股及原因）。"
+            "注：仅显示最近一次日脚本运行的候选明细；历史每日明细见"信号历史"表（汇总计数）。"
+        )
+        if _dl2_cands:
+            show_df(pd.DataFrame([{
+                "标的":         c["ticker"],
+                "信号价（今收）": f"${c.get('signal_price', 0):.2f}" if c.get("signal_price") else "",
+                "参考止损":      f"${c.get('stop_price', 0):.2f}"   if c.get("stop_price")   else "",
+                "股数":          c.get("shares", ""),
+                "风险% NAV":     f"{c['trade_risk']*100:.2f}%" if c.get("trade_risk") else "",
+                "状态":          _dl2_rejection_label.get(c.get("rejection"), c.get("rejection", "✅ 已选入")),
+            } for c in sorted(_dl2_cands, key=lambda x: x["ticker"])]),
+            use_container_width=True, hide_index=True)
+        else:
+            st.info("候选明细将在方法二日脚本运行后自动填充。")
 
     with st.expander(f"当前持仓（{len(_dl2_op)} 只）"):
         if _dl2_op:
@@ -1369,5 +1413,14 @@ git push
         data=_build_method_zip(_m2, "m2"),
         file_name=f"m2_paper_trading_{_date_cls.today().isoformat()}.zip",
         mime="application/zip",
-        help="包含：NAV历史、开仓记录、平仓记录、信号历史、当前持仓（CSV + 完整JSON）",
+        help=(
+            "包含（CSV + 完整JSON）：\n"
+            "• m2_nav_history.csv — 每日 NAV\n"
+            "• m2_entry_history.csv — 所有开仓记录（持仓中 + 已平仓）\n"
+            "• m2_closed_trades.csv — 已平仓记录\n"
+            "• m2_signals_history.csv — 每日信号漏斗计数\n"
+            "• m2_today_candidate_signals.csv — 最近一次运行的突破候选明细（含拒绝原因）\n"
+            "• m2_open_positions.csv — 当前持仓\n"
+            "• backtest_reference_metrics.json / trades.csv / nav.csv — 回测基准数据"
+        ),
     )
