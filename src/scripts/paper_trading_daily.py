@@ -318,6 +318,24 @@ def scan_entries(
             shares   = int(nav * PARAMS.position_cap / entry_px)
             notional = entry_px * shares
 
+        # Step 3: correlation adjustment — mirrors backtest sizing.py
+        if held_log_returns:
+            _cand_lr = compute_log_returns(close)
+            _all_lr  = {**held_log_returns, ticker: _cand_lr}
+            max_corr = compute_max_correlation(
+                new_ticker=ticker,
+                current_positions=held_tickers,
+                log_returns=_all_lr,
+                as_of_date=pd.Timestamp(today),
+                window=PARAMS.correlation_window,
+                min_samples=40,
+            )
+            if max_corr > PARAMS.correlation_threshold:
+                shares   = int(shares * PARAMS.correlation_reduction)
+                notional = entry_px * shares
+                if shares <= 0:
+                    continue
+
         trade_risk = stop_dist * shares / nav
         if heat_used + trade_risk > PARAMS.heat_limit:
             continue
