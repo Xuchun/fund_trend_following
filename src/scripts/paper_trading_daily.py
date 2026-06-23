@@ -654,9 +654,25 @@ def scan_entries(
         trade_risk = stop_dist * shares / nav
         if heat_used + trade_risk > PARAMS.heat_limit:
             n_heat_blocked += 1
+            all_raw_candidates.append({
+                "ticker":       ticker,
+                "signal_price": round(entry_px, 4),
+                "stop_price":   round(stop_px, 4),
+                "shares":       shares,
+                "trade_risk":   round(trade_risk, 4),
+                "rejection":    "heat_limit",
+            })
             continue
         if notional > cash:
             n_cash_blocked += 1
+            all_raw_candidates.append({
+                "ticker":       ticker,
+                "signal_price": round(entry_px, 4),
+                "stop_price":   round(stop_px, 4),
+                "shares":       shares,
+                "trade_risk":   round(trade_risk, 4),
+                "rejection":    "cash_limit",
+            })
             continue
 
         if _corr_triggered:
@@ -672,6 +688,14 @@ def scan_entries(
             "strength":     round(strength, 4),
             "trade_risk":   round(trade_risk, 4),
             "notional":     round(notional, 2),
+        })
+        all_raw_candidates.append({
+            "ticker":       ticker,
+            "signal_price": round(entry_px, 4),
+            "stop_price":   round(stop_px, 4),
+            "shares":       shares,
+            "trade_risk":   round(trade_risk, 4),
+            "rejection":    "corr_reduced" if _corr_triggered else None,
         })
         heat_used += trade_risk
 
