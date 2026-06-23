@@ -235,8 +235,15 @@ def execute_pending_entries(
     Execute pending entry signals at today's open price.
 
     Mirrors backtest engine.py step ① OPEN (_execute_entry):
-      Gap filter, buy slippage, stop/trail recomputed from actual fill,
-      commission charged on entry.
+      - Gap filter
+      - Fill price = open × (1 + slippage_bps / 10_000)            [buy slippage]
+      - Stop/trail recomputed from actual fill price (not signal price)
+      - Position sizing RECOMPUTED at execution time with actual fill price,
+        previous-day close NAV, and live portfolio heat — matches backtest
+        compute_position_size() call inside _execute_entry()
+      - commission = fill_price × shares × commission_bps / 10_000
+      - cash deducted = fill_price × shares + commission             [matches backtest]
+      - entry_commission stored in position dict for correct net_pnl at exit
 
     Returns:
         entries_executed
@@ -249,6 +256,19 @@ def execute_pending_entries(
 
     log.info(f"--- Executing {len(_pending)} pending entries at today's open ---")
     _held = {p["ticker"] for p in state["positions"]}
+
+    # NAV for sizing = previous day's close NAV (mirrors backtest: last_nav = T-1 close NAV)
+    _nav_hist   = state.get("nav_history", [])
+    _sizing_nav = float(_nav_hist[-1]["nav"]) if _nav_hist else float(state.get("initial_nav", 200_000))
+    if _sizing_nav <= 0:
+        _sizing_nav = float(state.get("initial_nav", 200_000))
+
+    # Pre-compute log returns for currently held positions (Step 3 correlation check)
+    _held_log_returns: dict[str, pd.Series] = {}
+    for ht in list(_held):
+        hdf = data.get(ht)
+        if hdf is not None and not hdf.empty:
+            _held_log_returns[ht] = compute_log_returns(hdf["Close"])
 
     for sig in _pending:
         ticker = sig["ticker"]
@@ -275,41 +295,95 @@ def execute_pending_entries(
         # Fill price: buy slippage — mirrors backtest compute_fill_price(open, 'buy', slip)
         entry_px_slip = open_px * (1.0 + PARAMS.slippage_bps / 10_000)
 
+        # Recompute stop/trail from actual fill price — mirrors backtest _execute_entry()
         _atr     = sig.get("atr", 0.0)
         stop_px  = round(entry_px_slip - PARAMS.stop_loss_multiplier * _atr, 4)
         trail_px = round(entry_px_slip - PARAMS.trail_multiplier_r1  * _atr, 4)
 
-        # Commission on entry — mirrors backtest compute_commission(entry_price, shares, bps)
-        commission    = entry_px_slip * sig["shares"] * PARAMS.commission_bps / 10_000
-        _cash_needed  = open_px * sig["shares"] + commission
+        # Guard: degenerate stop — mirrors backtest _execute_entry() guard
+        if stop_px >= entry_px_slip:
+            log.info(f"  SKIP {ticker}: stop >= entry (degenerate ATR)")
+            continue
+        stop_dist_pct = (entry_px_slip - stop_px) / entry_px_slip
+        if stop_dist_pct < PARAMS.min_stop_distance_pct:
+            log.info(f"  SKIP {ticker}: stop dist {stop_dist_pct*100:.2f}% < min")
+            continue
 
+        # Recompute position sizing at execution time with actual fill price.
+        # Mirrors backtest compute_position_size() called inside _execute_entry().
+        stop_dist = entry_px_slip - stop_px
+
+        # Step 1: raw shares from risk budget
+        raw_shares_f   = (_sizing_nav * PARAMS.risk_per_trade) / stop_dist
+        # Step 2: single-name cap (uses fill price, not signal price)
+        cap_shares_f   = (_sizing_nav * PARAMS.position_cap) / entry_px_slip
+        final_shares_f = min(raw_shares_f, cap_shares_f)
+
+        # Step 3: correlation adjustment — use live held positions (updated each iteration)
+        _held_list = list(_held)
+        if _held_list:
+            _cand_lr = compute_log_returns(df["Close"])
+            _all_lr  = {**_held_log_returns, ticker: _cand_lr}
+            max_corr = compute_max_correlation(
+                new_ticker=ticker,
+                current_positions=_held_list,
+                log_returns=_all_lr,
+                as_of_date=pd.Timestamp(today),
+                window=PARAMS.correlation_window,
+                min_samples=40,
+            )
+            if max_corr > PARAMS.correlation_threshold:
+                final_shares_f *= PARAMS.correlation_reduction
+
+        shares = math.floor(final_shares_f + 0.5)
+        if shares <= 0:
+            log.info(f"  SKIP {ticker}: 0 shares after sizing")
+            continue
+
+        # Step 4: heat check against live portfolio state (post-exits + prior entries today).
+        # Mirrors backtest: existing_risk = portfolio.existing_risk (updated after each execution).
+        _existing_risk = sum(
+            (p["entry_price"] - p["stop_loss"]) * p["shares"]
+            for p in state["positions"]
+        )
+        _trade_risk = shares * stop_dist
+        if (_existing_risk + _trade_risk) / _sizing_nav > PARAMS.heat_limit:
+            log.info(f"  SKIP {ticker}: heat limit exceeded")
+            continue
+
+        # Commission — mirrors backtest compute_commission(entry_price, shares, bps)
+        commission = entry_px_slip * shares * PARAMS.commission_bps / 10_000
+
+        # Cash check — mirrors backtest: total_cost = shares × entry_price + commission
+        _cash_needed = entry_px_slip * shares + commission
         if state.get("cash", 0.0) < _cash_needed:
             log.info(f"  SKIP {ticker}: insufficient cash (need ${_cash_needed:,.0f})")
             continue
 
-        _state_nav = (
-            sum(p.get("open_price", p["entry_price"]) * p["shares"] for p in state["positions"])
-            + state.get("cash", 0.0)
-        ) or state.get("initial_nav", 200_000)
+        _trade_risk_pct = _trade_risk / _sizing_nav
 
         new_pos = {
             "ticker":            ticker,
             "signal_date":       sig.get("signal_date", ""),
             "signal_price":      sig["signal_price"],
             "entry_date":        str(today),
-            "open_price":        round(open_px, 4),        # raw T+1 open (cash basis + display)
-            "entry_price":       round(entry_px_slip, 4),  # slip-adjusted (matches backtest)
-            "shares":            sig["shares"],
+            "open_price":        round(open_px, 4),          # raw T+1 open (reference)
+            "entry_price":       round(entry_px_slip, 4),    # slip-adjusted fill (matches backtest)
+            "shares":            shares,                      # recomputed at execution time
             "stop_loss":         stop_px,
             "trail_stop":        trail_px,
-            "highest_high":      round(entry_px_slip, 4),  # init to entry_price (backtest convention)
+            "highest_high":      round(entry_px_slip, 4),    # init to entry_price (backtest convention)
             "atr_at_entry":      _atr,
             "R_at_backtest_end": 0.0,
             "last_known_price":  round(open_px, 4),
             "last_price_date":   str(today),
+            "entry_commission":  round(commission, 2),        # stored for correct net_pnl at exit
         }
         state["positions"].append(new_pos)
         _held.add(ticker)
+        # Update held log returns so subsequent entries' correlation check reflects this new position
+        _held_log_returns[ticker] = compute_log_returns(df["Close"])
+        # Deduct cash: fill_price × shares + commission (mirrors backtest open_position cost)
         state["cash"] = state.get("cash", 0.0) - _cash_needed
 
         entries_executed.append({
@@ -317,12 +391,13 @@ def execute_pending_entries(
             "open_price":  round(open_px, 4),
             "entry_price": round(entry_px_slip, 4),
             "stop_price":  stop_px,
+            "shares":      shares,
             "commission":  round(commission, 2),
-            "trade_risk":  round((entry_px_slip - stop_px) * sig["shares"] / _state_nav, 4),
+            "trade_risk":  round(_trade_risk_pct, 4),
         })
         log.info(
             f"  ENTRY EXECUTED {ticker} @ open=${open_px:.2f} fill=${entry_px_slip:.2f} "
-            f"stop=${stop_px:.2f} trail=${trail_px:.2f} comm=${commission:.2f}"
+            f"stop=${stop_px:.2f} trail=${trail_px:.2f} shares={shares} comm=${commission:.2f}"
         )
 
     state["pending_entries"] = []
