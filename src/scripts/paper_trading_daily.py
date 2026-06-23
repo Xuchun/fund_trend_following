@@ -736,6 +736,7 @@ def main() -> None:
                     "stop_price":   sig["stop_loss"],
                     "shares":       sig["shares"],
                     "atr":          sig["atr"],
+                    "strength":     sig["strength"],   # breakout strength for signal quality analysis
                     "trade_risk":   sig["trade_risk"],
                     "notional":     sig["notional"],
                 })
