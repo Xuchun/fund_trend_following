@@ -90,8 +90,8 @@ def _build_method_zip(data: dict, method: str) -> bytes:
             {"ticker": c["ticker"],
              "signal_date": c.get("signal_date", ""), "signal_price": c.get("signal_price", ""),
              "entry_date": c.get("entry_date", ""), "entry_price": c.get("entry_price", ""),
-             "shares": c.get("shares", ""), "initial_stop": c.get("initial_stop", ""),
-             "atr_at_entry": "", "status": "closed"}
+             "shares": c.get("shares", ""), "stop_loss": c.get("stop_loss", c.get("initial_stop", "")),
+             "open_price": c.get("open_price", ""), "atr_at_entry": "", "status": "closed"}
             for c in ct
         ], key=lambda x: x["entry_date"], reverse=True)
         if _entry_hist:
