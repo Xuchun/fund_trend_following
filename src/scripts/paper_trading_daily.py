@@ -376,35 +376,48 @@ def main() -> None:
                 log.warning(f"  SKIP {ticker}: no data for {today}")
                 continue
             open_px = float(_today_rows["Open"].iloc[0])
-            # Match backtest: entry_price includes slippage; stop = entry_price_with_slip - mult*ATR
-            _slip_factor = 1.0 + PARAMS.slippage_bps / 10_000
-            entry_px_slip = open_px * _slip_factor
-            _atr = sig.get("atr", 0.0)
-            stop_px = round(entry_px_slip - PARAMS.stop_loss_multiplier * _atr, 4)
-            _cash_needed = open_px * sig["shares"]
+            # Match backtest exactly: entry_price = open * (1 + slip); stop = entry - 2×ATR; trail = entry - 3×ATR
+            _slip_factor  = 1.0 + PARAMS.slippage_bps / 10_000
+            entry_px_slip = open_px * _slip_factor                                            # backtest entry_price
+            _atr          = sig.get("atr", 0.0)
+            stop_px  = round(entry_px_slip - PARAMS.stop_loss_multiplier  * _atr, 4)         # fixed hard stop
+            trail_px = round(entry_px_slip - PARAMS.trail_multiplier_r1   * _atr, 4)         # initial trail stop
+            _cash_needed  = open_px * sig["shares"]
             if state.get("cash", 0.0) < _cash_needed:
                 log.info(f"  SKIP {ticker}: insufficient cash (need ${_cash_needed:,.0f})")
                 continue
+            _state_nav = (
+                sum(p.get("open_price", p["entry_price"]) * p["shares"] for p in state["positions"])
+                + state.get("cash", 0.0)
+            ) or state.get("initial_nav", 200_000)
             new_pos = {
-                "ticker":            ticker,
-                "signal_date":       sig.get("signal_date", ""),
-                "signal_price":      sig["signal_price"],
-                "entry_date":        str(today),
-                "entry_price":       round(open_px, 4),
-                "shares":            sig["shares"],
-                "initial_stop_loss": stop_px,
-                "current_stop_loss": stop_px,
-                "peak_price":        round(open_px, 4),
-                "atr_at_entry":      _atr,
+                "ticker":           ticker,
+                "signal_date":      sig.get("signal_date", ""),
+                "signal_price":     sig["signal_price"],
+                "entry_date":       str(today),
+                "open_price":       round(open_px, 4),        # raw T+1 open (cash basis + display)
+                "entry_price":      round(entry_px_slip, 4),  # slip-adjusted (matches backtest)
+                "shares":           sig["shares"],
+                "stop_loss":        stop_px,                   # fixed hard stop (never moves down)
+                "trail_stop":       trail_px,                  # trailing stop (ratchets up only)
+                "highest_high":     round(entry_px_slip, 4),  # peak since entry; init to entry_price
+                "atr_at_entry":     _atr,
                 "R_at_backtest_end": 0.0,
-                "last_known_price":  round(open_px, 4),
-                "last_price_date":   str(today),
+                "last_known_price": round(open_px, 4),
+                "last_price_date":  str(today),
             }
             state["positions"].append(new_pos)
             _held.add(ticker)
             state["cash"] = state.get("cash", 0.0) - _cash_needed
-            entries_executed.append({**sig, "entry_price": round(open_px, 4), "stop_price": stop_px})
-            log.info(f"  EXECUTED {ticker} @ open ${open_px:.2f} (slip-adj ${entry_px_slip:.2f}) stop=${stop_px:.2f}")
+            entries_executed.append({
+                **sig,
+                "open_price":  round(open_px, 4),
+                "entry_price": round(entry_px_slip, 4),
+                "stop_price":  stop_px,
+                "trade_risk":  round((entry_px_slip - stop_px) * sig["shares"] / _state_nav, 4),
+            })
+            log.info(f"  EXECUTED {ticker} @ open ${open_px:.2f} (slip-adj ${entry_px_slip:.2f}) "
+                     f"stop=${stop_px:.2f} trail=${trail_px:.2f}")
     state["pending_entries"] = []  # clear after processing
 
     # --- Step 3: exits & stop updates ---
