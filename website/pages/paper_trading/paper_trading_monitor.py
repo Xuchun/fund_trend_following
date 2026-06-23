@@ -16,6 +16,14 @@ _pt_dir   = _root / "results" / "paper_trading"
 _m1_file  = _pt_dir / "positions.json"
 _m2_file  = _pt_dir / "ib_state.json"
 
+_meta_path = _results / "strategy_meta.json"
+_ETF_SET: set = set()
+if _meta_path.exists():
+    _ETF_SET = {e["ticker"] for e in json.loads(_meta_path.read_text()).get("etf_universe", [])}
+
+def _asset_type(ticker: str) -> str:
+    return "ETF" if ticker in _ETF_SET else "股票"
+
 _TRAIL_R1   = 3.0
 _TRAIL_R3   = 3.0
 _TRAIL_R5   = 5.0
