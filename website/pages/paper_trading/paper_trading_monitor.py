@@ -397,145 +397,160 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     st.markdown("---")
 
-    # ── Today's trades (combined) ─────────────────────────────────────────────
+    # ── Today's trades (executions at today's open) ───────────────────────────
     st.subheader("二、今日完成的交易")
     _trade_rows = []
     if _m1_today_sig:
         _ts_trade_date = _m1_today_sig.get("date", "N/A")
-        _SLIP = 10 / 10_000  # 10 bps，与回测引擎一致
-        for e in _m1_today_sig.get("exits", []):
-            _px = e.get("stop_price")
+        # New schema: exits_executed / entries_executed (executed at T+1 open with slippage+commission)
+        # Old schema fallback: exits (same-day, no slip/comm) / entries (executed at open)
+        _exits_exec   = _m1_today_sig.get("exits_executed") or []
+        _entries_exec = _m1_today_sig.get("entries_executed") or _m1_today_sig.get("entries", [])
+        for e in _exits_exec:
+            _open_px  = e.get("exit_open")
+            _fill_px  = e.get("exit_price")
+            _reason   = e.get("exit_reason", "")
+            _reason_label = {"stop_loss": "🔴 触止损", "trailing_stop": "🔴 触移动止盈"}.get(_reason, _reason)
+            _pnl_r    = e.get("pnl_r")
+            _net_pnl  = e.get("net_pnl")
             _trade_rows.append({
                 "交易日期": _ts_trade_date,
                 "方向": "🔴 卖出",
                 "标的": e["ticker"],
                 "类型": _asset_type(e["ticker"]),
                 "成交量": e.get("shares", ""),
-                "成交价（无滑点和手续费）": f"${_px:.2f}" if _px else "—",
-                "成交价（有滑点，无手续费）": f"${_px * (1 - _SLIP):.2f}" if _px else "—",
-                "止损价": "—",
-                "风险%": "—",
-                "移动止盈价": "—",
+                "开盘价（无滑点）": f"${_open_px:.2f}" if _open_px else "—",
+                "成交价（有滑点）": f"${_fill_px:.2f}" if _fill_px else "—",
+                "原因": _reason_label,
+                "盈亏（R）": f"{_pnl_r:+.2f}R" if _pnl_r is not None else "—",
+                "净盈亏（$）": f"${_net_pnl:+,.0f}" if _net_pnl is not None else "—",
             })
-        for e in _m1_today_sig.get("entries", []):
-            # open_price: raw T+1 open (no slip); entry_price: slip-adjusted (matches backtest)
-            _open_px = e.get("open_price") or e.get("entry_price")        # fallback for old schema
-            _entry_px = e.get("entry_price")                               # slip-adjusted
-            _stop = e.get("stop_price")
-            _shares = e.get("shares", 0)
-            _risk_pct = (_entry_px - _stop) * _shares / _m1_init_nav if (_entry_px and _stop and _shares) else None
-            # 初始移动止盈价 = entry_slip − 3×ATR；ATR = (entry_slip − stop) / 2（因硬止损 = entry_slip − 2×ATR）
-            _atr_implied = (_entry_px - _stop) / 2 if (_entry_px and _stop) else None
-            _trail_init = _entry_px - 3 * _atr_implied if _atr_implied else None
+        for e in _entries_exec:
+            _open_px  = e.get("open_price")
+            _entry_px = e.get("entry_price")
+            _stop     = e.get("stop_price")
+            _shares   = e.get("shares", 0)
+            _atr_imp  = (_entry_px - _stop) / 2 if (_entry_px and _stop) else None
+            _trail    = _entry_px - 3 * _atr_imp if _atr_imp else None
+            _risk_pct = e.get("trade_risk")
             _trade_rows.append({
                 "交易日期": _ts_trade_date,
                 "方向": "🟢 买入",
                 "标的": e["ticker"],
                 "类型": _asset_type(e["ticker"]),
                 "成交量": _shares,
-                "成交价（无滑点和手续费）": f"${_open_px:.2f}" if _open_px else "—",
-                "成交价（有滑点，无手续费）": f"${_entry_px:.2f}" if _entry_px else "—",
-                "止损价": f"${_stop:.2f}" if _stop else "—",
-                "风险%": f"{_risk_pct*100:.2f}%" if _risk_pct else "—",
-                "移动止盈价": f"${_trail_init:.2f}" if _trail_init else "—",
+                "开盘价（无滑点）": f"${_open_px:.2f}" if _open_px else "—",
+                "成交价（有滑点）": f"${_entry_px:.2f}" if _entry_px else "—",
+                "原因": f"止损 ${_stop:.2f}" if _stop else "—",
+                "盈亏（R）": "—",
+                "净盈亏（$）": f"风险 {_risk_pct*100:.2f}% NAV" if _risk_pct else "—",
             })
     if _trade_rows:
         show_df(pd.DataFrame(sorted(_trade_rows, key=lambda x: x["标的"])), use_container_width=True, hide_index=True)
     else:
-        st.info("今日无交易")
+        st.info("今日无交易（今日开盘时无来自昨日的挂单）")
 
     st.markdown("---")
 
     # ── Tomorrow's orders ────────────────────────────────────────────────────
     st.subheader("三、明日要执行的交易")
-    # Compute next trading day (skip weekends)
     import datetime as _dt
-    _today = _dt.date.today()
-    _next_td = _today + _dt.timedelta(days=1)
-    while _next_td.weekday() >= 5:  # 5=Sat, 6=Sun
+    _today_dt = _dt.date.today()
+    _next_td  = _today_dt + _dt.timedelta(days=1)
+    while _next_td.weekday() >= 5:
         _next_td += _dt.timedelta(days=1)
     st.markdown(f"<span style='color:#111111'>执行日：{_next_td} 开盘 ｜ 以下订单在开盘后按市价执行</span>", unsafe_allow_html=True)
 
-    # Only pending_entries are truly "pending for tomorrow" — exits are executed same-day (max(stop, close))
-    _sig_entries = _m1.get("pending_entries", [])  # signals from today → execute tomorrow at open
-    _order_rows  = []
-    for e in _sig_entries:
-        _shares = e.get("shares", 0)
-        _price  = e.get("signal_price", 0)
+    # New schema: pending_exits + pending_entries (both from today's close detections)
+    _pend_exits   = _m1.get("pending_exits", [])
+    _pend_entries = _m1.get("pending_entries", [])
+    _order_rows   = []
+    for s in _pend_exits:
+        _reason = s.get("exit_reason", "")
+        _reason_label = {"stop_loss": "止损触发", "trailing_stop": "移动止盈触发"}.get(_reason, _reason)
+        _order_rows.append({
+            "操作": "🔴 平仓卖出",
+            "标的": s["ticker"],
+            "股数": s.get("shares", ""),
+            "参考价": f"${s['stop_used']:.2f}" if s.get("stop_used") else "—",
+            "总金额": f"${s.get('shares', 0) * s.get('stop_used', 0):,.0f}" if s.get("stop_used") else "—",
+            "订单类型": "市价单（开盘执行）",
+            "备注": _reason_label,
+        })
+    for e in _pend_entries:
         _order_rows.append({
             "操作": "🟢 开仓买入",
             "标的": e["ticker"],
-            "股数": _shares,
-            "参考价": f"${_price:.2f}" if _price else "—",
-            "总金额": f"${_shares * _price:,.0f}" if _shares and _price else "—",
+            "股数": e.get("shares", ""),
+            "参考价": f"${e['signal_price']:.2f}" if e.get("signal_price") else "—",
+            "总金额": f"${e.get('shares', 0) * e.get('signal_price', 0):,.0f}" if e.get("signal_price") else "—",
             "订单类型": "市价单（开盘执行）",
-            "备注": f"止损设于 ${e['stop_price']:.2f}，风险 {e['trade_risk']*100:.2f}% NAV" if e.get("stop_price") else "—",
+            "备注": f"止损 ${e['stop_price']:.2f}，风险 {e['trade_risk']*100:.2f}% NAV" if e.get("stop_price") else "—",
         })
     if _order_rows:
         show_df(pd.DataFrame(sorted(_order_rows, key=lambda x: x["标的"])), use_container_width=True, hide_index=True)
-        n_buy = len(_sig_entries)
-        _total_buy = sum(e.get("shares", 0) * e.get("signal_price", 0) for e in _sig_entries)
+        n_sell = len(_pend_exits)
+        n_buy  = len(_pend_entries)
+        _total_sell = sum(s.get("shares", 0) * s.get("stop_used", 0) for s in _pend_exits)
+        _total_buy  = sum(e.get("shares", 0) * e.get("signal_price", 0) for e in _pend_entries)
+        _net        = _total_buy - _total_sell
         st.markdown(
-            f"共 {n_buy} 笔开仓，合计 {n_buy} 笔订单　｜　"
-            f"预计买入支出 \\${_total_buy:,.0f}"
+            f"共 {n_sell} 笔平仓、{n_buy} 笔开仓，合计 {n_sell+n_buy} 笔订单　｜　"
+            f"预计卖出回款 \\${_total_sell:,.0f}，买入支出 \\${_total_buy:,.0f}，"
+            f"净资金变动 {'−' if _net > 0 else '+'}\\${abs(_net):,.0f}"
         )
     else:
         st.info("明日无需执行任何交易")
 
     st.markdown("---")
 
-    # ── Today's signals ───────────────────────────────────────────────────────
+    # ── Today's signals (detected at close, pending for tomorrow) ────────────
     st.subheader("四、今日开平仓信号")
     if _m1_today_sig:
-        _ts_date    = _m1_today_sig.get("date", "N/A")
-        _ts_regime  = _m1_today_sig.get("regime", "N/A")
-        _ts_spy     = _m1_today_sig.get("spy_close")
-        _ts_exits   = _m1_today_sig.get("exits", [])
-        _ts_entries = _m1_today_sig.get("entries", [])   # executed at T+1 open
-        _ts_pending = _m1.get("pending_entries", [])      # detected today, execute tomorrow
-        _ts_entry_display = _ts_entries if _ts_entries else _ts_pending
+        _ts_date   = _m1_today_sig.get("date", "N/A")
+        _ts_regime = _m1_today_sig.get("regime", "N/A")
+        # New schema: exit_signals / entry_signals (detected today, execute tomorrow)
+        # Old schema fallback: exits (executed same-day) / entries
+        _ts_exit_sigs  = _m1_today_sig.get("exit_signals")  or _m1_today_sig.get("exits",   [])
+        _ts_entry_sigs = _m1_today_sig.get("entry_signals") or _m1_today_sig.get("entries",  [])
+        if not _ts_entry_sigs:
+            _ts_entry_sigs = _m1.get("pending_entries", [])
+
         _ts_regime_str = "🟢 BULL" if _ts_regime == "BULL" else "🔴 BEAR"
         if _spy_close and _spy_sma:
             _ts_gap = (_spy_close / _spy_sma - 1) * 100
             _ts_op  = "＞" if _spy_close > _spy_sma else "＜"
             _ts_regime_str += f"，SPY {_spy_close:.2f} {_ts_op} SMA200 {_spy_sma:.2f}（{_ts_gap:+.1f}%）"
         st.markdown(f"信号日期：{_ts_date} 盘后 ｜ Regime：{_ts_regime_str}")
+        st.caption("以下信号在今日收盘后生成，将于下一交易日开盘执行（与回测引擎相同：T日收盘信号 → T+1日开盘执行）")
 
-        _tab_exit, _tab_entry = st.tabs([f"平仓信号（{len(_ts_exits)} 笔）", f"开仓信号（{len(_ts_entry_display)} 笔）"])
+        _tab_exit, _tab_entry = st.tabs([f"平仓信号（{len(_ts_exit_sigs)} 笔）", f"开仓信号（{len(_ts_entry_sigs)} 笔）"])
         with _tab_exit:
-            if _ts_exits:
+            if _ts_exit_sigs:
+                _exit_reason_map = {"stop_loss": "🔴 触止损", "trailing_stop": "🔴 触移动止盈"}
                 show_df(pd.DataFrame([{
-                    "标的": e["ticker"], "操作": "SELL",
-                    "成交量": e.get("shares", ""),
-                    "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "",
-                    "订单类型": e.get("order_type", ""),
-                } for e in sorted(_ts_exits, key=lambda x: x["ticker"])]), use_container_width=True, hide_index=True)
+                    "标的":    s["ticker"],
+                    "触发类型": _exit_reason_map.get(s.get("exit_reason", ""), s.get("exit_reason", "")),
+                    "参考价":  f"${s['stop_used']:.2f}" if s.get("stop_used") else (
+                               f"${s.get('stop_price', 0):.2f}" if s.get("stop_price") else ""),
+                    "股数":    s.get("shares", ""),
+                    "执行方式": "市价单（次日开盘）",
+                } for s in sorted(_ts_exit_sigs, key=lambda x: x["ticker"])]), use_container_width=True, hide_index=True)
             else:
-                st.info("无退出信号")
+                st.info("今日无退出信号")
 
         with _tab_entry:
-            if _ts_entries:
-                st.markdown(f"以上 {len(_ts_entries)} 笔开仓已于今日开盘执行（前一交易日收盘信号，今日开盘价入场）。")
+            if _ts_entry_sigs:
                 show_df(pd.DataFrame([{
-                    "标的": e["ticker"], "操作": "BUY",
-                    "成交量": e.get("shares", ""),
-                    "信号价（昨收）": f"${e['signal_price']:.2f}" if e.get("signal_price") else "",
-                    "入场价（今开，无滑点）": f"${(e.get('open_price') or e.get('entry_price', 0)):.2f}",
-                    "入场价（今开，有滑点）": f"${e['entry_price']:.2f}" if e.get("entry_price") else "",
-                    "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "",
-                    "风险%": f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "",
-                } for e in sorted(_ts_entries, key=lambda x: x["ticker"])]), use_container_width=True, hide_index=True)
-            elif _ts_pending:
-                st.markdown(f"以上 {len(_ts_pending)} 个开仓信号已于本日收盘后检测，将于下一交易日开盘执行。")
-                show_df(pd.DataFrame([{
-                    "标的": e["ticker"], "操作": "BUY（待执行）",
-                    "成交量": e.get("shares", ""),
-                    "信号价（本日收盘）": f"${e['signal_price']:.2f}" if e.get("signal_price") else "",
-                    "止损价": f"${e['stop_price']:.2f}" if e.get("stop_price") else "",
-                    "风险%": f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "",
-                } for e in sorted(_ts_pending, key=lambda x: x["ticker"])]), use_container_width=True, hide_index=True)
+                    "标的":    e["ticker"],
+                    "信号价（今收）": f"${e.get('signal_price', 0):.2f}" if e.get("signal_price") else "",
+                    "参考止损":      f"${e.get('stop_price', 0):.2f}" if e.get("stop_price") else "",
+                    "股数":          e.get("shares", ""),
+                    "风险% NAV":     f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "",
+                    "执行方式":      "市价单（次日开盘）",
+                } for e in sorted(_ts_entry_sigs, key=lambda x: x["ticker"])]), use_container_width=True, hide_index=True)
             else:
-                st.info("无入场信号")
+                st.info("今日无入场信号")
     else:
         _ts_regime_cap = "🟢 BULL" if _bull else "🔴 BEAR"
         st.markdown(f"信号日期：N/A ｜ Regime：{_ts_regime_cap}")
