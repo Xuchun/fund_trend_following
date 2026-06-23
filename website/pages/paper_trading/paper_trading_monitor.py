@@ -127,16 +127,6 @@ def _get_df(raw: pd.DataFrame, ticker: str):
     return df if not df.empty else None
 
 
-def _wilder_atr(high, low, close, period=20):
-    tr = pd.concat(
-        [high - low,
-         (high - close.shift(1)).abs(),
-         (low  - close.shift(1)).abs()],
-        axis=1,
-    ).max(axis=1)
-    return tr.ewm(alpha=1 / period, adjust=False, min_periods=period).mean()
-
-
 def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
     """Add live price + computed trailing/hard stop to a position dict.
 
