@@ -366,6 +366,7 @@ def execute_pending_entries(
             "ticker":            ticker,
             "signal_date":       sig.get("signal_date", ""),
             "signal_price":      sig["signal_price"],
+            "signal_strength":   sig.get("strength", 0.0),   # breakout strength; flows to closed_trades
             "entry_date":        str(today),
             "open_price":        round(open_px, 4),          # raw T+1 open (reference)
             "entry_price":       round(entry_px_slip, 4),    # slip-adjusted fill (matches backtest)
