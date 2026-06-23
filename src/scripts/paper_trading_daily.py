@@ -496,6 +496,7 @@ def detect_exit_signals(
                 "entry_date":       pos.get("entry_date", ""),
                 "signal_date":      pos.get("signal_date", ""),
                 "signal_price":     pos.get("signal_price", 0.0),
+                "signal_strength":  pos.get("signal_strength", 0.0),  # breakout strength at entry
                 "stop_loss":        pos["stop_loss"],
                 "atr_at_entry":     pos.get("atr_at_entry", 0.0),
                 "highest_high":     round(highest_high, 4),  # MFE proxy at detection
