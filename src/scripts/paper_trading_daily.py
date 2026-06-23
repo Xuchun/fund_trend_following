@@ -278,8 +278,9 @@ def scan_entries(
         if float(close.iloc[-1]) < PARAMS.min_price:
             continue
 
-        # ADV filter (60-day average dollar volume)
-        adv = (close * volume).rolling(60).mean().iloc[-1]
+        # ADV filter — shift(1) mirrors backtest indicators/adv.py compute_adv_from_ohlcv:
+        # ADV[t] = mean(dollar_vol[t-60:t-1]), excludes today to avoid look-ahead bias
+        adv = (close * volume).shift(1).rolling(60).mean().iloc[-1]
         if pd.isna(adv) or adv < PARAMS.min_adv_m * 1e6:
             continue
 
@@ -301,22 +302,20 @@ def scan_entries(
         if stop_dist / entry_px < PARAMS.min_stop_distance_pct:
             continue
 
-        # Volume confirmation
+        # Volume confirmation — shift(1) mirrors backtest indicators/adv.py compute_volume_ma:
+        # volume_ma[t] = mean(volume[t-60:t-1]), excludes today
         if PARAMS.volume_filter_multiplier > 0:
-            vol_ma = volume.rolling(60).mean().iloc[-1]
+            vol_ma = volume.shift(1).rolling(60).mean().iloc[-1]
             if not pd.isna(vol_ma) and float(volume.iloc[-1]) < PARAMS.volume_filter_multiplier * float(vol_ma):
                 continue
 
-        # Position sizing
-        risk_dollars = nav * PARAMS.risk_per_trade
-        shares = int(risk_dollars / stop_dist)
-        if shares <= 0:
-            continue
+        # Position sizing — mirrors backtest sizing.py compute_position_size():
+        # Step 1: raw shares from risk budget (keep as float until final rounding)
+        raw_shares_f = (nav * PARAMS.risk_per_trade) / stop_dist
 
-        notional = entry_px * shares
-        if notional / nav > PARAMS.position_cap:
-            shares   = int(nav * PARAMS.position_cap / entry_px)
-            notional = entry_px * shares
+        # Step 2: single-name cap
+        cap_shares_f = (nav * PARAMS.position_cap) / entry_px
+        final_shares_f = min(raw_shares_f, cap_shares_f)
 
         # Step 3: correlation adjustment — mirrors backtest sizing.py
         if held_log_returns:
@@ -331,11 +330,16 @@ def scan_entries(
                 min_samples=40,
             )
             if max_corr > PARAMS.correlation_threshold:
-                shares   = int(shares * PARAMS.correlation_reduction)
-                notional = entry_px * shares
-                if shares <= 0:
-                    continue
+                final_shares_f *= PARAMS.correlation_reduction
 
+        # Round once with round-half-up — mirrors math.floor(final_shares + 0.5) in backtest
+        shares = math.floor(final_shares_f + 0.5)
+        if shares <= 0:
+            continue
+
+        notional = entry_px * shares
+
+        # Step 4: portfolio heat check
         trade_risk = stop_dist * shares / nav
         if heat_used + trade_risk > PARAMS.heat_limit:
             continue
