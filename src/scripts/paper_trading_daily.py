@@ -492,7 +492,8 @@ def main() -> None:
             "ticker":       e["ticker"],
             "signal_date":  e.get("signal_date", ""),
             "signal_price": e["signal_price"],
-            "entry_price":  e["entry_price"],
+            "open_price":   e["open_price"],    # raw T+1 open (for display without slip)
+            "entry_price":  e["entry_price"],   # slip-adjusted (matches backtest entry_price)
             "shares":       e["shares"],
             "stop_price":   e["stop_price"],
             "trade_risk":   e["trade_risk"],
