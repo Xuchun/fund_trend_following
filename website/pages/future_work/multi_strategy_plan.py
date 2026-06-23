@@ -6,7 +6,9 @@ _root = Path(__file__).resolve().parents[4]
 if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
+import pandas as pd
 import streamlit as st
+from website.style import show_df
 
 st.title("多策略开发 Plan")
 st.markdown("从单 Breakout 系统升级为 Multi-Alpha 专业趋势组合")
