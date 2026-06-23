@@ -82,8 +82,8 @@ def _build_method_zip(data: dict, method: str) -> bytes:
         _entry_hist = sorted([
             {"ticker": p["ticker"],
              "signal_date": p.get("signal_date", ""), "signal_price": p.get("signal_price", ""),
-             "entry_date": p["entry_date"], "entry_price": p["entry_price"],
-             "shares": p["shares"], "initial_stop": p.get("initial_stop_loss", ""),
+             "entry_date": p["entry_date"], "open_price": p.get("open_price", ""), "entry_price": p["entry_price"],
+             "shares": p["shares"], "stop_loss": p.get("stop_loss", ""),
              "atr_at_entry": p.get("atr_at_entry", ""), "status": "open"}
             for p in op
         ] + [
