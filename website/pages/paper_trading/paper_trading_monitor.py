@@ -589,8 +589,27 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             else:               # trailing stop has ratcheted above hard stop
                 return hard_str, f"<b>{trail_str}</b>"
 
+        _sort_key_map = {
+            "缓冲":      lambda p: p["stop_buffer_pct"],
+            "标的":      lambda p: p["ticker"],
+            "当前价":    lambda p: p["current_price"],
+            "止损":      lambda p: p["stop_loss"],
+            "移动止盈":  lambda p: p["trail_stop_live"],
+            "浮盈（R）": lambda p: p["R"],
+            "浮盈（$）": lambda p: p["unreal_pnl"],
+            "当前市值":  lambda p: p["mkt_value"],
+            "入场日":    lambda p: p["entry_date"],
+            "入场价":    lambda p: p["entry_price"],
+        }
+        _sc1, _sc2 = st.columns([5, 2])
+        with _sc1:
+            _sort_col = st.selectbox("排序列", list(_sort_key_map.keys()), index=0, key="m1_pos_sort_col", label_visibility="collapsed")
+        with _sc2:
+            _sort_desc = st.toggle("降序排列", value=False, key="m1_pos_sort_desc")
+        _sorted_pos = sorted(_m1_ok, key=_sort_key_map[_sort_col], reverse=_sort_desc)
+
         _rows = []
-        for p in sorted(_m1_ok, key=lambda x: x["stop_buffer_pct"]):   # 缓冲小的排前面
+        for p in _sorted_pos:
             _hard_cell, _trail_cell = _stop_cells(p)
             _rows.append({
                 "标的": p["ticker"],
