@@ -421,6 +421,8 @@ def detect_exit_signals(
 # ── Regime filter ─────────────────────────────────────────────────────────────
 
 def is_bull_regime(spy_df: pd.DataFrame | None) -> bool:
+    if not PARAMS.regime_filter_enabled:
+        return True  # Regime filter disabled → always treat as bull (mirrors backtest engine)
     if spy_df is None or len(spy_df) < PARAMS.regime_sma_window:
         return False
     sma = spy_df["Close"].rolling(PARAMS.regime_sma_window).mean().iloc[-1]
