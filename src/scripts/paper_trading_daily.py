@@ -701,10 +701,11 @@ def scan_entries(
 
     signals.sort(key=lambda x: x["strength"], reverse=True)
     scan_stats = {
-        "n_raw_breakouts": n_raw_breakouts,
-        "n_heat_blocked":  n_heat_blocked,
-        "n_cash_blocked":  n_cash_blocked,
-        "n_corr_reduced":  n_corr_reduced,
+        "n_raw_breakouts":    n_raw_breakouts,
+        "n_heat_blocked":     n_heat_blocked,
+        "n_cash_blocked":     n_cash_blocked,
+        "n_corr_reduced":     n_corr_reduced,
+        "all_raw_candidates": all_raw_candidates,   # full funnel; displayed in 四
     }
     return signals, scan_stats
 
