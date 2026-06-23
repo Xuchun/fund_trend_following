@@ -294,8 +294,8 @@
         "signal_price": 178.77,
         "entry_price": 182.28,
         "shares": 55,
-        "stop_price": 157.7971,
-        "trade_risk": 0.0058,
+        "stop_price": 161.4895,
+        "trade_risk": 0.005768,
         "order_type": "MARKET"
       },
       {
@@ -304,8 +304,8 @@
         "signal_price": 406.37,
         "entry_price": 413.5,
         "shares": 24,
-        "stop_price": 367.0922,
-        "trade_risk": 0.0047,
+        "stop_price": 374.6357,
+        "trade_risk": 0.004713,
         "order_type": "MARKET"
       },
       {
@@ -314,8 +314,8 @@
         "signal_price": 98.61,
         "entry_price": 101.16,
         "shares": 101,
-        "stop_price": 86.1465,
-        "trade_risk": 0.0063,
+        "stop_price": 88.7976,
+        "trade_risk": 0.006294,
         "order_type": "MARKET"
       },
       {
@@ -324,8 +324,8 @@
         "signal_price": 417.07,
         "entry_price": 425.61,
         "shares": 23,
-        "stop_price": 359.1378,
-        "trade_risk": 0.0067,
+        "stop_price": 368.1034,
+        "trade_risk": 0.006662,
         "order_type": "MARKET"
       },
       {
@@ -334,8 +334,8 @@
         "signal_price": 109.87,
         "entry_price": 110.54,
         "shares": 91,
-        "stop_price": 94.2195,
-        "trade_risk": 0.0071,
+        "stop_price": 94.9999,
+        "trade_risk": 0.007121,
         "order_type": "MARKET"
       },
       {
@@ -344,8 +344,8 @@
         "signal_price": 36.92,
         "entry_price": 36.55,
         "shares": 270,
-        "stop_price": 34.3677,
-        "trade_risk": 0.0034,
+        "stop_price": 34.0341,
+        "trade_risk": 0.003446,
         "order_type": "MARKET"
       },
       {
@@ -354,8 +354,8 @@
         "signal_price": 29.18,
         "entry_price": 29.215,
         "shares": 342,
-        "stop_price": 24.66,
-        "trade_risk": 0.0077,
+        "stop_price": 24.7242,
+        "trade_risk": 0.007729,
         "order_type": "MARKET"
       },
       {
@@ -364,8 +364,8 @@
         "signal_price": 66.25,
         "entry_price": 67.22,
         "shares": 150,
-        "stop_price": 62.2145,
-        "trade_risk": 0.003,
+        "stop_price": 63.2518,
+        "trade_risk": 0.003027,
         "order_type": "MARKET"
       },
       {
@@ -374,8 +374,8 @@
         "signal_price": 40.93,
         "entry_price": 39.91,
         "shares": 244,
-        "stop_price": 37.7943,
-        "trade_risk": 0.0038,
+        "stop_price": 36.8143,
+        "trade_risk": 0.003825,
         "order_type": "MARKET"
       },
       {
@@ -384,8 +384,8 @@
         "signal_price": 328.91,
         "entry_price": 332.0,
         "shares": 30,
-        "stop_price": 279.6773,
-        "trade_risk": 0.0074,
+        "stop_price": 283.0992,
+        "trade_risk": 0.007385,
         "order_type": "MARKET"
       },
       {
@@ -394,8 +394,8 @@
         "signal_price": 59.0,
         "entry_price": 61.675,
         "shares": 169,
-        "stop_price": 51.7933,
-        "trade_risk": 0.0061,
+        "stop_price": 54.5301,
+        "trade_risk": 0.00609,
         "order_type": "MARKET"
       },
       {
@@ -404,8 +404,8 @@
         "signal_price": 1365.41,
         "entry_price": 1356.45,
         "shares": 7,
-        "stop_price": 1309.0517,
-        "trade_risk": 0.002,
+        "stop_price": 1301.4482,
+        "trade_risk": 0.001973,
         "order_type": "MARKET"
       },
       {
@@ -414,8 +414,8 @@
         "signal_price": 985.82,
         "entry_price": 999.28,
         "shares": 10,
-        "stop_price": 921.0878,
-        "trade_risk": 0.0032,
+        "stop_price": 935.5471,
+        "trade_risk": 0.003237,
         "order_type": "MARKET"
       },
       {
@@ -424,8 +424,8 @@
         "signal_price": 133.99,
         "entry_price": 139.205,
         "shares": 74,
-        "stop_price": 115.7296,
-        "trade_risk": 0.0068,
+        "stop_price": 121.0838,
+        "trade_risk": 0.006756,
         "order_type": "MARKET"
       },
       {
@@ -434,8 +434,8 @@
         "signal_price": 337.96,
         "entry_price": 336.93,
         "shares": 29,
-        "stop_price": 322.1226,
-        "trade_risk": 0.0023,
+        "stop_price": 321.4295,
+        "trade_risk": 0.002296,
         "order_type": "MARKET"
       },
       {
@@ -444,8 +444,8 @@
         "signal_price": 70.79,
         "entry_price": 71.29,
         "shares": 141,
-        "stop_price": 67.3679,
-        "trade_risk": 0.0024,
+        "stop_price": 67.9391,
+        "trade_risk": 0.002413,
         "order_type": "MARKET"
       },
       {
@@ -454,8 +454,8 @@
         "signal_price": 586.47,
         "entry_price": 590.2,
         "shares": 17,
-        "stop_price": 546.3066,
-        "trade_risk": 0.0034,
+        "stop_price": 550.6268,
+        "trade_risk": 0.003414,
         "order_type": "MARKET"
       }
     ]
