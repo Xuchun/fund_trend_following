@@ -571,7 +571,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "入场价": f"${p['entry_price']:.2f}",
             })
         show_df(pd.DataFrame(_rows), use_container_width=True, hide_index=True, escape=False)
-        st.markdown("<span style='color:#111111'>**缓冲** = (当前价 − 有效止损) / 当前价 × 100%，其中有效止损 = max(止损, 移动止盈)（即粗体显示的那个）</span>", unsafe_allow_html=True)
+        st.markdown(
+            "<span style='color:#111111'>**缓冲** = (当前价 − 有效止损) / 当前价 × 100%，其中有效止损 = max(止损, 移动止盈)（即粗体显示的那个）</span><br>"
+            "<span style='color:#111111'>**浮盈（R）** = (当前价 − 入场价) / (入场价 − 止损价)，其中分母 = 2 × ATR = 初始每股风险</span>",
+            unsafe_allow_html=True,
+        )
 
         _sorted = sorted(_m1_ok, key=lambda x: x.get("R", 0), reverse=True)
         _fig = go.Figure(go.Bar(
