@@ -553,6 +553,10 @@ def scan_entries(
     n_heat_blocked  = 0   # blocked by portfolio heat limit
     n_cash_blocked  = 0   # blocked by insufficient cash
 
+    # Full candidate list (all raw breakouts with per-candidate rejection reason)
+    # "四、今日开平仓信号" displays this so the user sees the full funnel, not just approved ones.
+    all_raw_candidates: list[dict] = []
+
     # Pre-compute log returns for held positions (for Step 3 correlation check)
     held_log_returns: dict[str, pd.Series] = {}
     if pos_data and held_tickers:
