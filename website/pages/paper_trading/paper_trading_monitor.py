@@ -143,6 +143,14 @@ def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
     """
     df = _get_df(raw_yf, pos["ticker"])
 
+    # Backward-compatibility: migrate old schema fields on the fly
+    if "stop_loss" not in pos:
+        pos = {**pos, "stop_loss": pos.get("initial_stop_loss", 0.0)}
+    if "trail_stop" not in pos:
+        pos = {**pos, "trail_stop": pos.get("current_stop_loss", pos["stop_loss"])}
+    if "highest_high" not in pos:
+        pos = {**pos, "highest_high": pos.get("peak_price", pos["entry_price"])}
+
     R_base = pos["entry_price"] - pos["stop_loss"]   # = 2×ATR; both slip-adjusted
 
     def _compute_stop(peak: float, atr: float, stored_trail: float) -> tuple[float, float, float]:
