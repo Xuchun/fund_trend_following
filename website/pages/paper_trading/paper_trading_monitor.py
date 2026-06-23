@@ -70,8 +70,13 @@ def _build_method_zip(data: dict, method: str) -> bytes:
         sh = data.get("signals_history", [])
         if sh:
             zf.writestr(f"{method}_signals_history.csv",
-                _rows_to_csv(sh, ["date", "regime", "spy_close",
-                                   "n_candidates", "n_entries", "n_exits"]))
+                _rows_to_csv(sh, [
+                    "date", "regime", "spy_close",
+                    "n_raw_breakouts",              # raw breakouts before portfolio constraints
+                    "n_candidates",                 # passed all filters incl. heat/cash
+                    "n_heat_blocked", "n_cash_blocked", "n_corr_reduced",
+                    "n_entries", "n_executed", "n_exits",
+                ]))
 
         ct = data.get("closed_trades", [])
         if ct:
@@ -83,7 +88,7 @@ def _build_method_zip(data: dict, method: str) -> bytes:
             zf.writestr(f"{method}_open_positions.csv",
                 _rows_to_csv(op, list(op[0].keys())))
 
-        # 开仓历史：持仓中 + 已平仓的开仓数据合并
+        # 开仓历史：持仓中 + 已平仓的开仓数据合并（closed trades now carry signal_price & atr_at_entry）
         _entry_hist = sorted([
             {"ticker": p["ticker"],
              "signal_date": p.get("signal_date", ""), "signal_price": p.get("signal_price", ""),
@@ -96,7 +101,8 @@ def _build_method_zip(data: dict, method: str) -> bytes:
              "signal_date": c.get("signal_date", ""), "signal_price": c.get("signal_price", ""),
              "entry_date": c.get("entry_date", ""), "entry_price": c.get("entry_price", ""),
              "shares": c.get("shares", ""), "stop_loss": c.get("stop_loss", c.get("initial_stop", "")),
-             "open_price": c.get("open_price", ""), "atr_at_entry": "", "status": "closed"}
+             "open_price": c.get("open_price", ""), "atr_at_entry": c.get("atr_at_entry", ""),
+             "status": "closed"}
             for c in ct
         ], key=lambda x: x["entry_date"], reverse=True)
         if _entry_hist:
@@ -104,6 +110,12 @@ def _build_method_zip(data: dict, method: str) -> bytes:
                 _rows_to_csv(_entry_hist,
                     ["ticker","signal_date","signal_price","entry_date","open_price","entry_price",
                      "shares","stop_loss","atr_at_entry","status"]))
+
+        # ── 回测参考数据（用于过拟合分析：以回测分布为基准，比较模拟交易表现）──────────
+        for _bt_fname in ("metrics.json", "trades.csv", "nav.csv"):
+            _bt_path = _results / _bt_fname
+            if _bt_path.exists():
+                zf.writestr(f"backtest_reference_{_bt_fname}", _bt_path.read_bytes())
 
     return zbuf.getvalue()
 
