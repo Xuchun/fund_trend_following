@@ -240,15 +240,25 @@ def scan_entries(
     universe_data: dict[str, pd.DataFrame],
     today: date,
     nav: float,
+    pos_data: dict[str, pd.DataFrame] | None = None,
 ) -> list[dict]:
     """Scan universe for new breakout signals. Returns list of candidate signals."""
     held = {p["ticker"] for p in state["positions"]}
+    held_tickers = [p["ticker"] for p in state["positions"]]
     heat_used = sum(
         (p["entry_price"] - p["stop_loss"]) * p["shares"] / nav   # entry_price is slip-adjusted; R = 2×ATR
         for p in state["positions"]
     )
     cash = state.get("cash", 0.0)
     signals: list[dict] = []
+
+    # Pre-compute log returns for held positions (for Step 3 correlation check)
+    held_log_returns: dict[str, pd.Series] = {}
+    if pos_data and held_tickers:
+        for ht in held_tickers:
+            hdf = pos_data.get(ht)
+            if hdf is not None and not hdf.empty:
+                held_log_returns[ht] = compute_log_returns(hdf["Close"])
 
     for ticker, df in universe_data.items():
         if ticker in held:
