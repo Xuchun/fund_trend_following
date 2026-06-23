@@ -73,9 +73,20 @@ def _build_method_zip(data: dict, method: str) -> bytes:
                 _rows_to_csv(sh, [
                     "date", "regime", "spy_close",
                     "n_raw_breakouts",              # raw breakouts before portfolio constraints
-                    "n_candidates",                 # passed all filters incl. heat/cash
+                    "n_candidates",                 # passed all portfolio constraints (approved)
                     "n_heat_blocked", "n_cash_blocked", "n_corr_reduced",
                     "n_entries", "n_executed", "n_exits",
+                ]))
+
+        # Today's full breakout candidate list: all tickers that passed per-stock filters,
+        # with per-ticker rejection reason (None = approved, heat_limit, cash_limit, corr_reduced).
+        # This is the detailed view of the most recent day's signal funnel.
+        _ts = data.get("today_signals", {})
+        _cands = _ts.get("candidate_signals", [])
+        if _cands:
+            zf.writestr(f"{method}_today_candidate_signals.csv",
+                _rows_to_csv(_cands, [
+                    "ticker", "signal_price", "stop_price", "shares", "trade_risk", "rejection",
                 ]))
 
         ct = data.get("closed_trades", [])
