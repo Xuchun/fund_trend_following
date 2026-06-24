@@ -709,6 +709,8 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "缓冲":     st.column_config.NumberColumn(format="%.1f%%"),
                 "浮盈(R)":  st.column_config.NumberColumn(label="浮盈（R）", format="%+.2fR"),
                 "浮盈($)":  st.column_config.NumberColumn(label="浮盈（$）", format="$%+.0f"),
+                "风险%NAV": st.column_config.NumberColumn(label="风险% NAV", format="%.3f%%"),
+                "持仓天数": st.column_config.NumberColumn(format="%d 天"),
                 "当前市值": st.column_config.NumberColumn(format="$%.0fK"),
                 "入场价":   st.column_config.NumberColumn(format="$%.2f"),
             },
