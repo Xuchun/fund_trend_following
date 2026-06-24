@@ -405,8 +405,8 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _nav_label = f"净值（{_m1_date} 最后记录价格）" if _m1_stale else "净值"
     c1.metric(_nav_label, f"${_m1_nav/1e6:.2f}M",
               delta=f"{(_m1_nav/_m1_init_nav-1)*100:+.2f}% vs 起始")
-    c2.metric("持仓数量", f"{len(_m1_act)} 只",
-              delta=f"触止损 {len(_m1_stop)} 只" if _m1_stop else None,
+    c2.metric("持仓数量", f"{len(_m1_ok)} 只",
+              delta=f"其中 {len(_m1_stop)} 只触止损" if _m1_stop else None,
               delta_color="inverse" if _m1_stop else "normal")
     c3.metric("持仓浮盈", f"${_m1_unrl/1e6:+.2f}M",
               delta=f"{_m1_unrl/_m1_nav*100:+.1f}% NAV" if _m1_nav else None)
