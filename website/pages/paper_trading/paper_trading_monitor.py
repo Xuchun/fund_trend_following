@@ -673,19 +673,23 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             return "🟢 持有"
 
         # Default sort: 缓冲 ascending (highest-risk positions first); user can re-sort by clicking headers
+        import datetime as _dt_pos
+        _today_pos = _dt_pos.date.today()
         _pos_sorted = sorted(_m1_ok, key=lambda p: p["stop_buffer_pct"])
         _pos_df = pd.DataFrame([{
-            "标的":     p["ticker"],
-            "状态":     _status_label(p),
-            "当前价":   p["current_price"],
-            "止损":     p["stop_loss"],
-            "移动止盈": p["trail_stop_live"],
-            "缓冲":     p["stop_buffer_pct"],
-            "浮盈(R)":  p["R"],
-            "浮盈($)":  p["unreal_pnl"],
-            "当前市值": p["mkt_value"] / 1000,
-            "入场日":   p["entry_date"],
-            "入场价":   p["entry_price"],
+            "标的":      p["ticker"],
+            "状态":      _status_label(p),
+            "当前价":    p["current_price"],
+            "止损":      p["stop_loss"],
+            "移动止盈":  p["trail_stop_live"],
+            "缓冲":      p["stop_buffer_pct"],
+            "浮盈(R)":   p["R"],
+            "浮盈($)":   p["unreal_pnl"],
+            "风险%NAV":  round((p["entry_price"] - p["stop_loss"]) * p["shares"] / _m1_nav * 100, 3) if _m1_nav else 0,
+            "持仓天数":  (_today_pos - _dt_pos.date.fromisoformat(p["entry_date"])).days,
+            "当前市值":  p["mkt_value"] / 1000,
+            "入场日":    p["entry_date"],
+            "入场价":    p["entry_price"],
         } for p in _pos_sorted])
 
         def _style_pos(df):
