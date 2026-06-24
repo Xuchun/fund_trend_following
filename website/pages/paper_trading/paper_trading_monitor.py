@@ -923,9 +923,30 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     # ── Closed trades ─────────────────────────────────────────────────────────
     st.subheader(f"九、平仓记录（{len(_m1_closed)} 笔）")
     if _m1_closed:
-        _ct = pd.DataFrame(_m1_closed).sort_values("exit_date", ascending=False)
+        _ct = pd.DataFrame(_m1_closed)
+        _n_cl     = len(_ct)
+        _wins     = _ct[_ct["pnl_r"] > 0] if "pnl_r" in _ct else pd.DataFrame()
+        _win_rate = len(_wins) / _n_cl * 100 if _n_cl > 0 else 0.0
+        _avg_r    = float(_ct["pnl_r"].mean()) if "pnl_r" in _ct.columns else 0.0
+        _tot_pnl  = float(_ct["net_pnl"].sum()) if "net_pnl" in _ct.columns else 0.0
+        _avg_days = float(_ct["holding_days"].mean()) if "holding_days" in _ct.columns else 0.0
+        _avg_win_r = float(_wins["pnl_r"].mean()) if len(_wins) > 0 else 0.0
+        _losses   = _ct[_ct["pnl_r"] <= 0] if "pnl_r" in _ct else pd.DataFrame()
+        _avg_loss_r = float(_losses["pnl_r"].mean()) if len(_losses) > 0 else 0.0
+
+        sc1, sc2, sc3, sc4, sc5, sc6 = st.columns(6)
+        sc1.metric("已平仓笔数", f"{_n_cl} 笔")
+        sc2.metric("胜率", f"{_win_rate:.1f}%")
+        sc3.metric("平均持仓", f"{_avg_days:.0f} 天")
+        sc4.metric("平均R", f"{_avg_r:+.2f}R")
+        sc5.metric("盈亏比", f"{abs(_avg_win_r/(_avg_loss_r or 1)):.2f}x",
+                   delta=f"赢 {_avg_win_r:+.2f}R / 亏 {_avg_loss_r:+.2f}R")
+        sc6.metric("总净盈亏", f"${_tot_pnl:+,.0f}")
+
+        st.markdown("---")
+        _ct_sorted = _ct.sort_values("exit_date", ascending=False)
         show_df(
-            _ct[["ticker","entry_date","exit_date","holding_days","pnl_r","net_pnl","exit_reason"]].rename(
+            _ct_sorted[["ticker","entry_date","exit_date","holding_days","pnl_r","net_pnl","exit_reason"]].rename(
                 columns={"ticker":"标的","entry_date":"入场日","exit_date":"出场日",
                          "holding_days":"天数","pnl_r":"R","net_pnl":"净盈亏","exit_reason":"原因"}
             ),
