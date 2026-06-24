@@ -402,7 +402,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.markdown(f"上次更新：{_m1_last_upd} ｜ Yahoo Finance")
 
     c1, c2, c3, c4, c5 = st.columns(5)
-    _nav_label = f"模拟 NAV（{_m1_date} 最后记录价格）" if _m1_stale else "模拟 NAV（Yahoo Finance 最新收盘价）"
+    _nav_label = f"净值（{_m1_date} 最后记录价格）" if _m1_stale else "净值"
     c1.metric(_nav_label, f"${_m1_nav/1e6:.2f}M",
               delta=f"{(_m1_nav/_m1_init_nav-1)*100:+.2f}% vs 起始")
     c2.metric("持仓数量", f"{len(_m1_act)} 只",
