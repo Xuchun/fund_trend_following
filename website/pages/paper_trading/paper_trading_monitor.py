@@ -405,20 +405,49 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.subheader("一、策略状态概览")
     st.markdown(f"上次更新：{_sgt_now} ｜ Yahoo Finance")
 
-    c1, c2, c3, c4, c5, c6 = st.columns(6)
+    # Current drawdown from all-time peak (nav_history + live nav)
+    _all_nav_vals = [float(h["nav"]) for h in _m1_history] + [_m1_nav]
+    _peak_nav     = max(_all_nav_vals) if _all_nav_vals else _m1_nav
+    _cur_dd       = (_m1_nav / _peak_nav - 1) * 100 if _peak_nav > 0 else 0.0
+
+    # Portfolio heat = total dollar risk across positions / nav
+    _heat_used_abs  = sum((p["entry_price"] - p["stop_loss"]) * p["shares"] for p in _m1_ok)
+    _heat_pct       = _heat_used_abs / _m1_nav * 100 if _m1_nav > 0 else 0.0
+    _heat_limit_pct = _V1_PARAMS.heat_limit * 100        # e.g. 10%
+    _heat_rem_pct   = _heat_limit_pct - _heat_pct
+    _risk_per_trade_pct = _V1_PARAMS.risk_per_trade * 100  # e.g. 1%
+    _slots_left     = int(_heat_rem_pct / _risk_per_trade_pct) if _risk_per_trade_pct > 0 else 0
+
     _nav_pnl_pct = (_m1_nav / _m1_init_nav - 1) * 100
     _nav_pnl_usd = _m1_nav - _m1_init_nav
     _nav_label = f"净值（{_m1_date} 最后记录价格）" if _m1_stale else "净值"
+
+    c1, c2, c3, c4, c5, c6, c7 = st.columns(7)
     c1.metric(_nav_label, f"${_m1_nav/1e6:.2f}M")
-    c2.metric("净值浮盈（%）", f"{_nav_pnl_pct:+.2f}%",
-              delta="vs 起始资金")
+    c2.metric("净值浮盈（%）", f"{_nav_pnl_pct:+.2f}%", delta="vs 起始资金")
     c3.metric("净值浮盈（$）", f"${_nav_pnl_usd:+,.0f}")
-    c4.metric("持仓数量", f"{len(_m1_ok)} 只",
+    c4.metric("距历史峰值", f"{_cur_dd:.2f}%",
+              delta="当前在历史高点" if _cur_dd >= -0.01 else f"峰值 ${_peak_nav/1e6:.3f}M")
+    c5.metric("持仓数量", f"{len(_m1_ok)} 只",
               delta=f"其中 {len(_m1_stop)} 只触止损" if _m1_stop else None,
               delta_color="inverse" if _m1_stop else "normal")
-    c5.metric("持仓市值", f"${_m1_mkt/1e6:.2f}M",
+    c6.metric("持仓市值", f"${_m1_mkt/1e6:.2f}M",
               delta=f"占 NAV {_m1_mkt/_m1_nav*100:.1f}%" if _m1_nav else None)
-    c6.metric("现金", f"${_m1_cash/1e6:.2f}M")
+    c7.metric("现金", f"${_m1_cash/1e6:.2f}M")
+
+    # Portfolio heat progress bar
+    _hfill   = min(_heat_pct / _heat_limit_pct, 1.0) * 100
+    _hcolor  = "#d62728" if _heat_pct > _heat_limit_pct * 0.85 else ("#ff7f0e" if _heat_pct > _heat_limit_pct * 0.6 else "#2ca02c")
+    st.markdown(
+        f"<div style='margin:10px 0 4px'>"
+        f"<span style='color:#111;font-size:0.88em'><b>组合热度（风险预算）</b>："
+        f"已用 <b>{_heat_pct:.1f}%</b> / 上限 {_heat_limit_pct:.0f}%，"
+        f"剩余 <b>{_heat_rem_pct:.1f}%</b>（约可新开 <b>{_slots_left}</b> 笔）</span>"
+        f"<div style='background:#e0e0e0;border-radius:4px;height:8px;margin-top:5px'>"
+        f"<div style='background:{_hcolor};width:{_hfill:.0f}%;height:8px;border-radius:4px'></div>"
+        f"</div></div>",
+        unsafe_allow_html=True,
+    )
 
     st.markdown("---")
 
