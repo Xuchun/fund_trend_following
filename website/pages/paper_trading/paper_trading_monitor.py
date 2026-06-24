@@ -415,8 +415,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     c3.metric("持仓浮盈", f"${_m1_unrl/1e6:+.2f}M",
               delta=f"{_m1_unrl/_m1_nav*100:+.1f}% NAV" if _m1_nav else None)
     _unrl_pct = _m1_unrl / _m1_cost * 100 if _m1_cost else 0.0
-    c4.metric("持仓浮盈（%）", f"{_unrl_pct:+.2f}%",
-              delta="占成本比")
+    c4.metric("持仓浮盈（%）", f"{_unrl_pct:+.2f}%")
     c5.metric("持仓市值", f"${_m1_mkt/1e6:.2f}M",
               delta=f"占 NAV {_m1_mkt/_m1_nav*100:.1f}%" if _m1_nav else None)
     c6.metric("现金", f"${_m1_cash/1e6:.2f}M")
