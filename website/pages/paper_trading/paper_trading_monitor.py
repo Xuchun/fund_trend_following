@@ -393,15 +393,19 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     _m1_mkt   = sum(p["mkt_value"] for p in _m1_ok)
     _m1_unrl  = sum(p["unreal_pnl"] for p in _m1_ok)
+    _m1_cost  = sum(p["entry_price"] * p["shares"] for p in _m1_ok)
     _m1_nav   = _m1_mkt + _m1_cash
     _m1_date  = max((p.get("current_date", "") for p in _m1_ok), default="N/A")
     _m1_stale = any(p.get("_stale") for p in _m1_ok)
 
     # ── Overview ─────────────────────────────────────────────────────────────
-    st.subheader("一、策略状态概览")
-    st.markdown(f"上次更新：{_m1_last_upd} ｜ Yahoo Finance")
+    from datetime import datetime, timezone, timedelta as _td
+    _sgt_now = datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%d %H:%M 新加坡时间（SGT，UTC+8）")
 
-    c1, c2, c3, c4, c5 = st.columns(5)
+    st.subheader("一、策略状态概览")
+    st.markdown(f"上次更新：{_sgt_now} ｜ Yahoo Finance")
+
+    c1, c2, c3, c4, c5, c6 = st.columns(6)
     _nav_label = f"净值（{_m1_date} 最后记录价格）" if _m1_stale else "净值"
     c1.metric(_nav_label, f"${_m1_nav/1e6:.2f}M",
               delta=f"{(_m1_nav/_m1_init_nav-1)*100:+.2f}% vs 起始")
@@ -410,9 +414,12 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
               delta_color="inverse" if _m1_stop else "normal")
     c3.metric("持仓浮盈", f"${_m1_unrl/1e6:+.2f}M",
               delta=f"{_m1_unrl/_m1_nav*100:+.1f}% NAV" if _m1_nav else None)
-    c4.metric("持仓市值", f"${_m1_mkt/1e6:.2f}M",
+    _unrl_pct = _m1_unrl / _m1_cost * 100 if _m1_cost else 0.0
+    c4.metric("持仓浮盈（%）", f"{_unrl_pct:+.2f}%",
+              delta="占成本比")
+    c5.metric("持仓市值", f"${_m1_mkt/1e6:.2f}M",
               delta=f"占 NAV {_m1_mkt/_m1_nav*100:.1f}%" if _m1_nav else None)
-    c5.metric("现金", f"${_m1_cash/1e6:.2f}M")
+    c6.metric("现金", f"${_m1_cash/1e6:.2f}M")
 
     st.markdown("---")
 
