@@ -196,23 +196,30 @@ def execute_pending_exits(
         held_tickers.discard(ticker)
 
         closed_record = {
-            "ticker":           ticker,
-            "entry_date":       sig.get("entry_date", ""),
-            "exit_date":        str(bar_date),
-            "open_price":       sig.get("open_price", sig["entry_price"]),
-            "entry_price":      sig["entry_price"],
-            "exit_open":        round(open_px, 4),           # raw T+1 open (reference)
-            "exit_price":       round(fill_price, 4),        # fill after sell slippage
-            "shares":           sig["shares"],
-            "stop_loss":        sig["stop_loss"],
-            "stop_used":        sig.get("stop_used", 0.0),
-            "exit_commission":  round(exit_commission, 2),
-            "entry_commission": round(entry_commission, 2),
-            "pnl_r":            round(pnl_r, 4),
-            "net_pnl":          round(net_pnl, 2),
-            "exit_reason":      sig["exit_reason"],
-            "detected_date":    sig.get("detected_date", ""),
-            "holding_days":     (bar_date - pd.to_datetime(sig.get("entry_date", str(bar_date))).date()).days,
+            "ticker":             ticker,
+            "signal_date":        sig.get("signal_date", ""),
+            "signal_price":       sig.get("signal_price", 0.0),
+            "signal_strength":    sig.get("signal_strength", 0.0),  # breakout strength; needed for overfitting Section 七
+            "entry_date":         sig.get("entry_date", ""),
+            "exit_date":          str(bar_date),
+            "open_price":         sig.get("open_price", sig["entry_price"]),
+            "entry_price":        sig["entry_price"],
+            "exit_open":          round(open_px, 4),            # raw T+1 open (reference)
+            "exit_price":         round(fill_price, 4),         # fill after sell slippage
+            "shares":             sig["shares"],
+            "stop_loss":          sig["stop_loss"],
+            "stop_used":          sig.get("stop_used", 0.0),
+            "highest_high":       sig.get("highest_high", sig["entry_price"]),  # MFE proxy; needed for overfitting Section 八
+            "atr_at_entry":       sig.get("atr_at_entry", 0.0),
+            "trail_stop_at_exit": sig.get("trail_stop_at_exit", 0.0),
+            "atr_at_exit":        sig.get("atr_at_exit", 0.0),
+            "exit_commission":    round(exit_commission, 2),
+            "entry_commission":   round(entry_commission, 2),
+            "pnl_r":              round(pnl_r, 4),
+            "net_pnl":            round(net_pnl, 2),
+            "exit_reason":        sig["exit_reason"],
+            "detected_date":      sig.get("detected_date", ""),
+            "holding_days":       (bar_date - pd.to_datetime(sig.get("entry_date", str(bar_date))).date()).days,
         }
         state["closed_trades"] = state.get("closed_trades", []) + [closed_record]
         exits_executed.append(closed_record)
