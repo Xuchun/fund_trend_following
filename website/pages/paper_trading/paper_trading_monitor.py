@@ -406,16 +406,16 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.markdown(f"上次更新：{_sgt_now} ｜ Yahoo Finance")
 
     c1, c2, c3, c4, c5, c6 = st.columns(6)
+    _nav_pnl_pct = (_m1_nav / _m1_init_nav - 1) * 100
+    _nav_pnl_usd = _m1_nav - _m1_init_nav
     _nav_label = f"净值（{_m1_date} 最后记录价格）" if _m1_stale else "净值"
-    c1.metric(_nav_label, f"${_m1_nav/1e6:.2f}M",
-              delta=f"{(_m1_nav/_m1_init_nav-1)*100:+.2f}% vs 起始")
-    c2.metric("持仓数量", f"{len(_m1_ok)} 只",
+    c1.metric(_nav_label, f"${_m1_nav/1e6:.2f}M")
+    c2.metric("净值浮盈（%）", f"{_nav_pnl_pct:+.2f}%",
+              delta="vs 起始资金")
+    c3.metric("净值浮盈（$）", f"${_nav_pnl_usd:+,.0f}")
+    c4.metric("持仓数量", f"{len(_m1_ok)} 只",
               delta=f"其中 {len(_m1_stop)} 只触止损" if _m1_stop else None,
               delta_color="inverse" if _m1_stop else "normal")
-    c3.metric("持仓浮盈", f"${_m1_unrl/1e6:+.2f}M",
-              delta=f"{_m1_unrl/_m1_nav*100:+.1f}% NAV" if _m1_nav else None)
-    _unrl_pct = _m1_unrl / _m1_cost * 100 if _m1_cost else 0.0
-    c4.metric("持仓浮盈（%）", f"{_unrl_pct:+.2f}%")
     c5.metric("持仓市值", f"${_m1_mkt/1e6:.2f}M",
               delta=f"占 NAV {_m1_mkt/_m1_nav*100:.1f}%" if _m1_nav else None)
     c6.metric("现金", f"${_m1_cash/1e6:.2f}M")
