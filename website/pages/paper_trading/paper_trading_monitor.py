@@ -970,7 +970,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.markdown("---")
 
     # ── Closed trades ─────────────────────────────────────────────────────────
-    st.subheader(f"九、平仓记录（{len(_m1_closed)} 笔）")
+    st.subheader(f"十、平仓记录（{len(_m1_closed)} 笔）")
     if _m1_closed:
         _ct = pd.DataFrame(_m1_closed)
         _n_cl     = len(_ct)
