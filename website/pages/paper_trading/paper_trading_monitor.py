@@ -991,7 +991,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         st.caption(
             "所有通过**个股筛选**（价格、ADV、突破、ATR、成交量）的标的，"
             "含被组合约束（热度上限/现金不足）拦截的个股及原因。"
-            "注：此处仅显示最近一次日脚本运行的候选明细；历史每日明细见"信号历史"表（汇总计数）。"
+            "注：此处仅显示最近一次日脚本运行的候选明细；历史每日明细见『信号历史』表（汇总计数）。"
         )
         if _dl1_cands:
             show_df(pd.DataFrame([{
