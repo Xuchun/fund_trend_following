@@ -941,6 +941,15 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _sh_df["date"] = pd.to_datetime(_sh_df["date"])
         _sh_df = _sh_df.sort_values("date").reset_index(drop=True)
 
+        # 对最新一条记录做现金约束修正：旧脚本 n_cash_blocked=0，实际被现金拦截的笔数由 _blocked_entries 提供
+        _sh_df = _sh_df.copy()
+        if _blocked_entries and len(_sh_df) > 0:
+            _last = _sh_df.index[-1]
+            _n_cash_fix = len(_blocked_entries)
+            _sh_df.at[_last, "n_candidates"]  = max(0, _sh_df.at[_last, "n_candidates"] - _n_cash_fix)
+            _sh_df.at[_last, "n_cash_blocked"] = _sh_df.at[_last, "n_cash_blocked"] + _n_cash_fix \
+                                                   if "n_cash_blocked" in _sh_df.columns else _n_cash_fix
+
         _fig_sh = go.Figure()
         _fig_sh.add_trace(go.Bar(
             x=_sh_df["date"],
