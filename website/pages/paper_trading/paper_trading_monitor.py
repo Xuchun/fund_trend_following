@@ -526,7 +526,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _pend_exits   = _m1.get("pending_exits", [])
     _pend_entries = _m1.get("pending_entries", [])
     _order_rows   = []
-    for s in _pend_exits:
+
+    # ① 平仓优先（策略描述：T+1 开盘先执行平仓，再执行开仓）
+    for s in sorted(_pend_exits, key=lambda x: x["ticker"]):
         _reason = s.get("exit_reason", "")
         _reason_label = {"stop_loss": "止损触发", "trailing_stop": "移动止盈触发"}.get(_reason, _reason)
         _order_rows.append({
@@ -538,7 +540,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             "订单类型": "市价单（开盘执行）",
             "备注": _reason_label,
         })
-    for e in _pend_entries:
+
+    # ② 开仓按突破强度（strength = 信号收盘 ÷ 200日最高价）从高到低排序
+    for e in sorted(_pend_entries, key=lambda x: x.get("strength", 0), reverse=True):
+        _strength = e.get("strength", 0)
+        _strength_str = f"突破强度 {_strength:.4f}，" if _strength else ""
         _order_rows.append({
             "操作": "🟢 开仓买入",
             "标的": e["ticker"],
@@ -546,10 +552,16 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             "参考价": f"${e['signal_price']:.2f}" if e.get("signal_price") else "—",
             "总金额": f"${e.get('shares', 0) * e.get('signal_price', 0):,.0f}" if e.get("signal_price") else "—",
             "订单类型": "市价单（开盘执行）",
-            "备注": f"止损 ${e['stop_price']:.2f}，风险 {e['trade_risk']*100:.2f}% NAV" if e.get("stop_price") else "—",
+            "备注": f"{_strength_str}止损 ${e['stop_price']:.2f}，风险 {e['trade_risk']*100:.2f}% NAV" if e.get("stop_price") else "—",
         })
+
+    # 加入执行顺序列（第一列）
+    for _i, _row in enumerate(_order_rows):
+        _row["执行顺序"] = _i + 1
+
     if _order_rows:
-        show_df(pd.DataFrame(sorted(_order_rows, key=lambda x: x["标的"])), use_container_width=True, hide_index=True)
+        _ord_cols = ["执行顺序", "操作", "标的", "股数", "参考价", "总金额", "订单类型", "备注"]
+        show_df(pd.DataFrame(_order_rows)[_ord_cols], use_container_width=True, hide_index=True)
         n_sell = len(_pend_exits)
         n_buy  = len(_pend_entries)
         _total_sell = sum(s.get("shares", 0) * s.get("stop_used", 0) for s in _pend_exits)
