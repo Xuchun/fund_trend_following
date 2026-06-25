@@ -659,11 +659,17 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     f"其中 **{len(_approved_tickers)}** 只通过全部约束被选入（含现金约束），"
                     f"剩余因热度上限或现金不足被跳过。"
                 )
+                _status_order = {
+                    "✅ 已选入（次日执行）":    0,
+                    "⚠️ 已选入（相关性减仓）": 1,
+                    "🔴 未选（现金不足）":      2,
+                    "🔴 未选（热度上限）":      3,
+                }
                 def _get_status(c):
                     if c["ticker"] in _blocked_entries:
                         return "🔴 未选（现金不足）"
                     return _rejection_label.get(c.get("rejection"), c.get("rejection", "✅ 已选入"))
-                show_df(pd.DataFrame([{
+                _cand_rows = [{
                     "标的":         c["ticker"],
                     "信号价（今收）": f"${c.get('signal_price', 0):.2f}" if c.get("signal_price") else "",
                     "参考止损":      f"${c.get('stop_price', 0):.2f}"   if c.get("stop_price")   else "",
@@ -671,7 +677,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     "风险% NAV":     f"{c['trade_risk']*100:.2f}%" if c.get("trade_risk") else "",
                     "状态":          _get_status(c),
                     "执行方式":      "市价单（次日开盘）" if c["ticker"] in _approved_tickers else "—",
-                } for c in sorted(_ts_all_cands, key=lambda x: x["ticker"])]), use_container_width=True, hide_index=True)
+                } for c in _ts_all_cands]
+                _cand_rows.sort(key=lambda r: (_status_order.get(r["状态"], 9), r["标的"]))
+                show_df(pd.DataFrame(_cand_rows), use_container_width=True, hide_index=True)
             elif _ts_entry_sigs:
                 # Fallback: only approved signals available (old schema or first run)
                 st.caption("仅显示已选入信号（候选汇总数据将在下次日脚本运行后更新）")
