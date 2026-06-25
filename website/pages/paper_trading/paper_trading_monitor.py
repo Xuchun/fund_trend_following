@@ -611,9 +611,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _ts_entry_sigs   = _m1_today_sig.get("entry_signals")     or _m1.get("pending_entries", [])
 
         # Build the approved-ticker set for marking selected candidates
-        _approved_tickers = {e["ticker"] for e in _ts_entry_sigs}
+        # Exclude entries blocked by cash constraint (computed in Section 三)
+        _approved_tickers = {e["ticker"] for e in _ts_entry_sigs} - set(_blocked_entries)
         if not _approved_tickers:
-            _approved_tickers = {p["ticker"] for p in _m1.get("pending_entries", [])}
+            _approved_tickers = {p["ticker"] for p in _m1.get("pending_entries", [])} - set(_blocked_entries)
 
         _ts_regime_str = "🟢 BULL" if _ts_regime == "BULL" else "🔴 BEAR"
         if _spy_close and _spy_sma:
