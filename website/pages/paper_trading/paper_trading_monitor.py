@@ -172,6 +172,25 @@ def _us_open_to_sgt(date_str: str) -> str:
         return date_str  # 无法转换时退回纯日期
 
 
+def _us_close_to_sgt(date_str: str) -> str:
+    """把信号日（美股收盘 4:00 PM 美东时间）转换为新加坡时间字符串，自动处理夏/冬令时。
+    夏令时：4:00 PM EDT = 次日 04:00 SGT；冬令时：4:00 PM EST = 次日 05:00 SGT。"""
+    from datetime import datetime
+    try:
+        from zoneinfo import ZoneInfo
+    except ImportError:
+        from backports.zoneinfo import ZoneInfo
+    try:
+        _et  = ZoneInfo("America/New_York")
+        _sgt = ZoneInfo("Asia/Singapore")
+        _dt_sgt = datetime.strptime(date_str, "%Y-%m-%d") \
+                           .replace(hour=16, minute=0, tzinfo=_et) \
+                           .astimezone(_sgt)
+        return _dt_sgt.strftime("%Y-%m-%d %H:%M SGT")
+    except Exception:
+        return date_str
+
+
 def _get_df(raw: pd.DataFrame, ticker: str):
     if raw.empty:
         return None
