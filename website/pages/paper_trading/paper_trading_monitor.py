@@ -580,10 +580,12 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _exec_entries = [e for e in _pend_entries if e["ticker"] not in _blocked_entries]
         _total_buy  = sum(e.get("shares", 0) * e.get("signal_price", 0) for e in _exec_entries)
         _net        = _total_buy - _total_sell
+        _cash_after = _m1_cash + _total_sell - _total_buy
         st.markdown(
             f"共 {n_sell} 笔平仓、{n_buy} 笔开仓，合计 {n_sell+n_buy} 笔订单　｜　"
             f"预计卖出回款 \\${_total_sell:,.0f}，买入支出 \\${_total_buy:,.0f}，"
-            f"净资金变动 {'−' if _net > 0 else '+'}\\${abs(_net):,.0f}"
+            f"净资金变动 {'−' if _net > 0 else '+'}\\${abs(_net):,.0f}，"
+            f"执行后剩余现金 \\${_cash_after:,.0f}"
         )
         if _blocked_entries:
             st.warning(
