@@ -810,7 +810,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             "移动止盈":      p["trail_stop_live"],
             "有效止损/止盈": p["current_stop"],
             "距止损/止盈":   p["stop_buffer_pct"],
-        } for p in sorted(_m1_ok, key=lambda x: x["ticker"])])
+        } for p in sorted(_m1_ok, key=lambda x: (
+            0 if x.get("stop_reason") == "stop_loss" else
+            1 if x.get("stop_reason") == "trailing_stop" else 2,
+            x["ticker"]
+        ))])
         show_df(_sd_df,
             column_config={
                 "当前价":        st.column_config.NumberColumn(format="$%.2f"),
