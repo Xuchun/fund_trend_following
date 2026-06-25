@@ -969,9 +969,14 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             title="每日信号漏斗（原始突破 = 已选入 + 被拦截）",
             xaxis_title="日期",
             yaxis_title="信号数量",
+            xaxis=dict(
+                tickformat="%Y-%m-%d",
+                dtick="D1",
+                tickangle=-30,
+            ),
             hovermode="x unified",
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-            margin=dict(l=60, r=20, t=60, b=40),
+            margin=dict(l=60, r=20, t=60, b=60),
             height=350,
             template="plotly_white",
         )
