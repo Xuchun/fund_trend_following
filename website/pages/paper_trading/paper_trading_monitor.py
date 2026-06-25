@@ -656,16 +656,20 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 # Full funnel view: all raw breakout candidates with rejection reason
                 st.caption(
                     f"共 **{len(_ts_all_cands)}** 只个股触发突破信号（通过全部个股筛选），"
-                    f"其中 **{len(_approved_tickers)}** 只通过组合约束被选入，"
+                    f"其中 **{len(_approved_tickers)}** 只通过全部约束被选入（含现金约束），"
                     f"剩余因热度上限或现金不足被跳过。"
                 )
+                def _get_status(c):
+                    if c["ticker"] in _blocked_entries:
+                        return "🔴 未选（现金不足）"
+                    return _rejection_label.get(c.get("rejection"), c.get("rejection", "✅ 已选入"))
                 show_df(pd.DataFrame([{
                     "标的":         c["ticker"],
                     "信号价（今收）": f"${c.get('signal_price', 0):.2f}" if c.get("signal_price") else "",
                     "参考止损":      f"${c.get('stop_price', 0):.2f}"   if c.get("stop_price")   else "",
                     "股数":          c.get("shares", ""),
                     "风险% NAV":     f"{c['trade_risk']*100:.2f}%" if c.get("trade_risk") else "",
-                    "状态":          _rejection_label.get(c.get("rejection"), c.get("rejection", "✅ 已选入")),
+                    "状态":          _get_status(c),
                     "执行方式":      "市价单（次日开盘）" if c["ticker"] in _approved_tickers else "—",
                 } for c in sorted(_ts_all_cands, key=lambda x: x["ticker"])]), use_container_width=True, hide_index=True)
             elif _ts_entry_sigs:
@@ -677,8 +681,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     "参考止损":      f"${e.get('stop_price', 0):.2f}"   if e.get("stop_price")   else "",
                     "股数":          e.get("shares", ""),
                     "风险% NAV":     f"{e['trade_risk']*100:.2f}%" if e.get("trade_risk") else "",
-                    "状态":          "✅ 已选入（次日执行）",
-                    "执行方式":      "市价单（次日开盘）",
+                    "状态":          ("🔴 未选（现金不足）" if e["ticker"] in _blocked_entries
+                                      else "✅ 已选入（次日执行）"),
+                    "执行方式":      "—" if e["ticker"] in _blocked_entries else "市价单（次日开盘）",
                 } for e in sorted(_ts_entry_sigs, key=lambda x: x["ticker"])]), use_container_width=True, hide_index=True)
             else:
                 st.info("今日无入场信号")
