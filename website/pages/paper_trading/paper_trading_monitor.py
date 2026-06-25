@@ -532,7 +532,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             else:
                 _entry_reason = "突破200日高点"
             _trade_rows.append({
-                "交易日期": _ts_trade_date,
+                "交易日期/时间": _ts_trade_datetime,
                 "方向": "🟢 买入",
                 "标的": e["ticker"],
                 "类型": _asset_type(e["ticker"]),
