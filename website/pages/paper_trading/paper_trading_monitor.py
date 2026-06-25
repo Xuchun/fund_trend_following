@@ -557,7 +557,8 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _next_td  = _today_dt + _dt.timedelta(days=1)
     while _next_td.weekday() >= 5:
         _next_td += _dt.timedelta(days=1)
-    st.markdown(f"<span style='color:#111111'>执行日：{_next_td} 开盘 ｜ 以下订单在开盘后按市价执行</span>", unsafe_allow_html=True)
+    _next_td_sgt = _us_open_to_sgt(str(_next_td))
+    st.markdown(f"<span style='color:#111111'>执行日/时间：{_next_td_sgt} 开盘 ｜ 以下订单在开盘后按市价执行</span>", unsafe_allow_html=True)
 
     # New schema: pending_exits + pending_entries (both from today's close detections)
     _pend_exits   = _m1.get("pending_exits", [])
