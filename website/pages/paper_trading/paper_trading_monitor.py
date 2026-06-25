@@ -154,6 +154,24 @@ def _fetch_yf(tickers: tuple, period: str = "300d"):
     return _df, _fetch_time
 
 
+def _us_open_to_sgt(date_str: str) -> str:
+    """把交易日（美股开盘 9:30 AM 美东时间）转换为新加坡时间字符串，自动处理夏/冬令时。"""
+    from datetime import datetime
+    try:
+        from zoneinfo import ZoneInfo
+    except ImportError:
+        from backports.zoneinfo import ZoneInfo
+    try:
+        _et  = ZoneInfo("America/New_York")
+        _sgt = ZoneInfo("Asia/Singapore")
+        _dt_sgt = datetime.strptime(date_str, "%Y-%m-%d") \
+                           .replace(hour=9, minute=30, tzinfo=_et) \
+                           .astimezone(_sgt)
+        return _dt_sgt.strftime("%Y-%m-%d %H:%M SGT")
+    except Exception:
+        return date_str  # 无法转换时退回纯日期
+
+
 def _get_df(raw: pd.DataFrame, ticker: str):
     if raw.empty:
         return None
