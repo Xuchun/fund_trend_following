@@ -131,11 +131,16 @@ def _build_method_zip(data: dict, method: str) -> bytes:
     return zbuf.getvalue()
 
 @st.cache_data(ttl=3600)
-def _fetch_yf(tickers: tuple, period: str = "300d") -> pd.DataFrame:
+def _fetch_yf(tickers: tuple, period: str = "300d"):
+    """Returns (DataFrame, fetch_time_sgt_str). Both are cached together for 1 hour."""
+    from datetime import datetime, timezone, timedelta
     import yfinance as yf
+    _sgt = timezone(timedelta(hours=8))
+    _fetch_time = datetime.now(_sgt).strftime("%Y-%m-%d %H:%M 新加坡时间（SGT，UTC+8）")
     if not tickers:
-        return pd.DataFrame()
-    return yf.download(list(tickers), period=period, auto_adjust=True, progress=False)
+        return pd.DataFrame(), _fetch_time
+    _df = yf.download(list(tickers), period=period, auto_adjust=True, progress=False)
+    return _df, _fetch_time
 
 
 def _get_df(raw: pd.DataFrame, ticker: str):
