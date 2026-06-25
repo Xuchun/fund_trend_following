@@ -381,7 +381,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     # ── Fetch live prices ────────────────────────────────────────────────────
     _m1_tickers = tuple(sorted(set([p["ticker"] for p in _m1_positions] + ["SPY"])))
     with st.spinner("从 Yahoo Finance 加载行情…"):
-        _m1_raw = _fetch_yf(_m1_tickers, "300d")
+        _m1_raw, _m1_fetch_time = _fetch_yf(_m1_tickers, "300d")
 
     _m1_live = [_enrich_position(p, _m1_raw) for p in _m1_positions]
     _m1_ok   = [p for p in _m1_live if p.get("_ok")]
