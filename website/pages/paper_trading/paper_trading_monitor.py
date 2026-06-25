@@ -130,9 +130,12 @@ def _build_method_zip(data: dict, method: str) -> bytes:
 
     return zbuf.getvalue()
 
+_YF_FETCH_FILE = Path(__file__).resolve().parents[3] / "results" / "paper_trading" / "last_yf_fetch.json"
+
 @st.cache_data(ttl=3600)
 def _fetch_yf(tickers: tuple, period: str = "300d"):
-    """Returns (DataFrame, fetch_time_sgt_str). Both are cached together for 1 hour."""
+    """Returns (DataFrame, fetch_time_sgt_str). Both are cached together for 1 hour.
+    Also persists the fetch timestamp to last_yf_fetch.json so it survives page reloads."""
     from datetime import datetime, timezone, timedelta
     import yfinance as yf
     _sgt = timezone(timedelta(hours=8))
@@ -140,6 +143,14 @@ def _fetch_yf(tickers: tuple, period: str = "300d"):
     if not tickers:
         return pd.DataFrame(), _fetch_time
     _df = yf.download(list(tickers), period=period, auto_adjust=True, progress=False)
+    # Persist timestamp — this block only runs on a real download (cache miss), not on cache hits
+    try:
+        _YF_FETCH_FILE.parent.mkdir(parents=True, exist_ok=True)
+        _YF_FETCH_FILE.write_text(
+            json.dumps({"last_fetch_sgt": _fetch_time}, ensure_ascii=False)
+        )
+    except Exception:
+        pass
     return _df, _fetch_time
 
 
