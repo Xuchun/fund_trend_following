@@ -553,16 +553,31 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     # ── Tomorrow's orders ────────────────────────────────────────────────────
     st.subheader("三、明日要执行的交易")
     import datetime as _dt
-    _today_dt = _dt.date.today()
-    _next_td  = _today_dt + _dt.timedelta(days=1)
-    while _next_td.weekday() >= 5:
-        _next_td += _dt.timedelta(days=1)
-    _next_td_sgt = _us_open_to_sgt(str(_next_td))
-    st.markdown(f"<span style='color:#111111'>执行日/时间：{_next_td_sgt} 开盘 ｜ 以下订单在开盘后按市价执行</span>", unsafe_allow_html=True)
 
     # New schema: pending_exits + pending_entries (both from today's close detections)
     _pend_exits   = _m1.get("pending_exits", [])
     _pend_entries = _m1.get("pending_entries", [])
+
+    # 执行日 = signal_date 后的下一个交易日（不是 date.today()+1）
+    # 优先从 pending 订单的 signal_date 推算，确保跨天查看时日期正确
+    _sig_date_str = None
+    if _pend_entries:
+        _sig_date_str = _pend_entries[0].get("signal_date")
+    elif _pend_exits:
+        _sig_date_str = _pend_exits[0].get("detected_date") or _pend_exits[0].get("signal_date")
+    if _sig_date_str:
+        _sig_d = _dt.date.fromisoformat(_sig_date_str)
+        _next_td = _sig_d + _dt.timedelta(days=1)
+        while _next_td.weekday() >= 5:
+            _next_td += _dt.timedelta(days=1)
+    else:
+        _today_dt = _dt.date.today()
+        _next_td  = _today_dt + _dt.timedelta(days=1)
+        while _next_td.weekday() >= 5:
+            _next_td += _dt.timedelta(days=1)
+
+    _next_td_sgt = _us_open_to_sgt(str(_next_td))
+    st.markdown(f"<span style='color:#111111'>执行日/时间：{_next_td_sgt} 开盘 ｜ 以下订单在开盘后按市价执行</span>", unsafe_allow_html=True)
     _order_rows   = []
 
     # ① 平仓优先（策略描述：T+1 开盘先执行平仓，再执行开仓）
