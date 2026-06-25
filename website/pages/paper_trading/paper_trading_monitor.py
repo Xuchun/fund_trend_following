@@ -1356,7 +1356,7 @@ with tab2:
     if _m2_positions:
         _m2_tickers = tuple(sorted(set([p["ticker"] for p in _m2_positions] + ["SPY"])))
         with st.spinner("从 Yahoo Finance 加载持仓行情…"):
-            _m2_raw = _fetch_yf(_m2_tickers, "300d")
+            _m2_raw, _ = _fetch_yf(_m2_tickers, "300d")
 
         _m2_live = [_enrich_position(p, _m2_raw) for p in _m2_positions]
         _m2_ok   = [p for p in _m2_live if p.get("_ok")]
