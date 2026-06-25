@@ -414,8 +414,14 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _m1_date  = max((p.get("current_date", "") for p in _m1_ok), default="N/A")
     _m1_stale = any(p.get("_stale") for p in _m1_ok)
 
+    # 优先从持久化文件读取上次下载时间；文件不存在时回退到本次会话的缓存时间戳
+    try:
+        _last_fetch_sgt = json.loads(_YF_FETCH_FILE.read_text())["last_fetch_sgt"]
+    except Exception:
+        _last_fetch_sgt = _m1_fetch_time
+
     st.subheader("一、策略状态概览")
-    st.markdown(f"上次更新：{_m1_fetch_time} ｜ Yahoo Finance")
+    st.markdown(f"上次更新：{_last_fetch_sgt} ｜ Yahoo Finance")
 
     # Current drawdown from all-time peak (nav_history + live nav)
     _all_nav_vals = [float(h["nav"]) for h in _m1_history] + [_m1_nav]
