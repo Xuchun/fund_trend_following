@@ -703,7 +703,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             _ts_regime_str += f"，SPY {_spy_close:.2f} {_ts_op} SMA200 {_spy_sma:.2f}（{_ts_gap:+.1f}%）"
         _ts_datetime_sgt = _us_close_to_sgt(_ts_date) if _ts_date != "N/A" else "N/A"
         st.markdown(f"信号日期/时间：{_ts_datetime_sgt} 盘后 ｜ Regime：{_ts_regime_str}")
-        st.caption("以下信号在今日收盘后生成，将于下一交易日开盘执行（与回测引擎相同：T日收盘信号 → T+1日开盘执行）")
 
         # Tab title: show all-candidate count if available, else approved count
         _entry_tab_label = (
