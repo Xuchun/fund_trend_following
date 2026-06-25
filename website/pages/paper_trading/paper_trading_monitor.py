@@ -542,7 +542,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         })
 
     # ② 开仓按突破强度（strength = 信号收盘 ÷ 200日最高价）从高到低排序，模拟现金流逐笔判断
-    # 预计T+1可用现金 = 当前现金 + 所有平仓回款（以止损价估算）
+    # 预计T+1可用现金 = 当前现金 + 所有平仓回款（以止损价估算），只显示现金够用的开仓
     _exit_proceeds_proj = sum(s.get("shares", 0) * s.get("stop_used", 0) for s in _pend_exits)
     _proj_cash = _m1_cash + _exit_proceeds_proj
     _blocked_entries = []
@@ -552,21 +552,18 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _cost        = e.get("shares", 0) * e.get("signal_price", 0)
         if _proj_cash >= _cost:
             _proj_cash -= _cost
-            _can_buy = True
+            _order_rows.append({
+                "操作":     "🟢 开仓买入",
+                "标的":     e["ticker"],
+                "股数":     e.get("shares", ""),
+                "参考价":   f"${e['signal_price']:.2f}" if e.get("signal_price") else "—",
+                "总金额":   f"${_cost:,.0f}",
+                "订单类型": "市价单（开盘执行）",
+                "备注":     (f"{_strength_str}止损 ${e['stop_price']:.2f}，风险 {e['trade_risk']*100:.2f}% NAV"
+                             if e.get("stop_price") else "—"),
+            })
         else:
-            _can_buy = False
             _blocked_entries.append(e["ticker"])
-        _order_rows.append({
-            "操作":   "🟢 开仓买入" if _can_buy else "⚠️ 现金不足（不执行）",
-            "标的":   e["ticker"],
-            "股数":   e.get("shares", "") if _can_buy else "—",
-            "参考价": f"${e['signal_price']:.2f}" if (e.get("signal_price") and _can_buy) else "—",
-            "总金额": f"${_cost:,.0f}" if _can_buy else "—",
-            "订单类型": "市价单（开盘执行）" if _can_buy else "跳过",
-            "备注":   (f"{_strength_str}止损 ${e['stop_price']:.2f}，风险 {e['trade_risk']*100:.2f}% NAV"
-                       if (e.get("stop_price") and _can_buy)
-                       else f"{_strength_str}现金不足，预计可用现金不够支付此笔开仓"),
-        })
 
     # 加入执行顺序列（第一列）
     for _i, _row in enumerate(_order_rows):
@@ -576,23 +573,21 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _ord_cols = ["执行顺序", "操作", "标的", "股数", "参考价", "总金额", "订单类型", "备注"]
         show_df(pd.DataFrame(_order_rows)[_ord_cols], use_container_width=True, hide_index=True)
 
-        # 只统计实际执行的开仓
-        _exec_entries = [e for e in _pend_entries
-                         if e["ticker"] not in _blocked_entries]
-        n_sell       = len(_pend_exits)
-        n_buy        = len(_exec_entries)
-        n_blocked    = len(_blocked_entries)
-        _total_sell  = sum(s.get("shares", 0) * s.get("stop_used", 0) for s in _pend_exits)
-        _total_buy   = sum(e.get("shares", 0) * e.get("signal_price", 0) for e in _exec_entries)
-        _net         = _total_buy - _total_sell
+        n_sell      = len(_pend_exits)
+        n_buy       = len(_pend_entries) - len(_blocked_entries)
+        n_blocked   = len(_blocked_entries)
+        _total_sell = sum(s.get("shares", 0) * s.get("stop_used", 0) for s in _pend_exits)
+        _exec_entries = [e for e in _pend_entries if e["ticker"] not in _blocked_entries]
+        _total_buy  = sum(e.get("shares", 0) * e.get("signal_price", 0) for e in _exec_entries)
+        _net        = _total_buy - _total_sell
         st.markdown(
-            f"共 {n_sell} 笔平仓、{n_buy} 笔开仓（实际执行），合计 {n_sell+n_buy} 笔订单　｜　"
+            f"共 {n_sell} 笔平仓、{n_buy} 笔开仓，合计 {n_sell+n_buy} 笔订单　｜　"
             f"预计卖出回款 \\${_total_sell:,.0f}，买入支出 \\${_total_buy:,.0f}，"
             f"净资金变动 {'−' if _net > 0 else '+'}\\${abs(_net):,.0f}"
         )
         if _blocked_entries:
             st.warning(
-                f"⚠️ 以下 {n_blocked} 笔开仓因现金不足**不执行**：{', '.join(_blocked_entries)}。\n\n"
+                f"⚠️ 以下 {n_blocked} 笔开仓因现金不足**不执行**（已从表格中移除）：{', '.join(_blocked_entries)}。\n\n"
                 f"预计T+1可用现金（当前现金 \\${_m1_cash:,.0f} + 平仓回款 \\${_exit_proceeds_proj:,.0f}"
                 f" = \\${_m1_cash + _exit_proceeds_proj:,.0f}）不够支付全部开仓，"
                 f"已按突破强度由高到低优先执行前 {n_buy} 笔。"
