@@ -491,7 +491,8 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.subheader("二、今日完成的交易")
     _trade_rows = []
     if _m1_today_sig:
-        _ts_trade_date = _m1_today_sig.get("date", "N/A")
+        _ts_trade_date     = _m1_today_sig.get("date", "N/A")
+        _ts_trade_datetime = _us_open_to_sgt(_ts_trade_date)
         # New schema: exits_executed / entries_executed (executed at T+1 open with slippage+commission)
         # Old schema fallback: exits (same-day, no slip/comm) / entries (executed at open)
         _exits_exec   = _m1_today_sig.get("exits_executed") or []
@@ -504,7 +505,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             _pnl_r    = e.get("pnl_r")
             _net_pnl  = e.get("net_pnl")
             _trade_rows.append({
-                "交易日期": _ts_trade_date,
+                "交易日期/时间": _ts_trade_datetime,
                 "方向": "🔴 卖出",
                 "标的": e["ticker"],
                 "类型": _asset_type(e["ticker"]),
