@@ -403,12 +403,8 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _m1_date  = max((p.get("current_date", "") for p in _m1_ok), default="N/A")
     _m1_stale = any(p.get("_stale") for p in _m1_ok)
 
-    # ── Overview ─────────────────────────────────────────────────────────────
-    from datetime import datetime, timezone, timedelta
-    _sgt_now = datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%d %H:%M 新加坡时间（SGT，UTC+8）")
-
     st.subheader("一、策略状态概览")
-    st.markdown(f"上次更新：{_sgt_now} ｜ Yahoo Finance")
+    st.markdown(f"上次更新：{_m1_fetch_time} ｜ Yahoo Finance")
 
     # Current drawdown from all-time peak (nav_history + live nav)
     _all_nav_vals = [float(h["nav"]) for h in _m1_history] + [_m1_nav]
