@@ -802,9 +802,20 @@ def main() -> None:
                 f"Corr-reduced: {scan_stats['n_corr_reduced']} | "
                 f"Accepted: {len(candidates)}"
             )
+            # Project available cash at T+1 open:
+            #   current cash + expected proceeds from pending exits (stop_used × shares)
+            # Then deduct each approved entry sequentially to avoid over-committing cash.
+            _exit_proceeds = sum(
+                s.get("shares", 0) * s.get("stop_used", 0)
+                for s in state.get("pending_exits", [])
+            )
+            _running_cash = state.get("cash", 0.0) + _exit_proceeds
+            log.info(f"  Projected cash for entry sizing: ${_running_cash:,.0f} "
+                     f"(current ${state.get('cash',0):,.0f} + exit proceeds ${_exit_proceeds:,.0f})")
             for sig in candidates:
-                if state.get("cash", 0.0) < sig["notional"]:
-                    log.info(f"  Skip {sig['ticker']}: insufficient cash")
+                if _running_cash < sig["notional"]:
+                    log.info(f"  Skip {sig['ticker']}: insufficient projected cash "
+                             f"(need ${sig['notional']:,.0f}, available ${_running_cash:,.0f})")
                     continue
                 new_pending.append({
                     "ticker":       sig["ticker"],
@@ -817,9 +828,10 @@ def main() -> None:
                     "trade_risk":   sig["trade_risk"],
                     "notional":     sig["notional"],
                 })
+                _running_cash -= sig["notional"]   # deduct sequentially to prevent over-commitment
                 log.info(f"  PENDING {sig['ticker']} @ signal ${sig['signal_price']:.2f}  "
                          f"stop=${sig['stop_loss']:.2f}  shares={sig['shares']:,}  "
-                         f"risk={sig['trade_risk']*100:.2f}%")
+                         f"risk={sig['trade_risk']*100:.2f}%  remaining_cash=${_running_cash:,.0f}")
     else:
         log.info("  --no-entries flag set — skipping entry scan")
 
