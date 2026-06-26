@@ -79,7 +79,8 @@ def compute_max_correlation(
     as_of_date: pd.Timestamp,
     window: int = 60,
     min_samples: int = 40,
-) -> float:
+    return_ticker: bool = False,
+):
     """
     Maximum positive Pearson correlation between a candidate and all open positions.
 
@@ -96,18 +97,21 @@ def compute_max_correlation(
         as_of_date:        Signal date; only data on or before this date is used.
         window:            Rolling look-back (default 60).
         min_samples:       Minimum valid observations (default 40).
+        return_ticker:     If True, return (max_corr, triggering_ticker | None).
 
     Returns:
-        max(corr, 0) across all current positions.
-        Returns 0.0 if no valid correlation can be computed (treat as uncorrelated).
+        If return_ticker=False (default): max(corr, 0) as float.
+        If return_ticker=True: (max(corr, 0), ticker_with_max_corr | None).
+        Returns 0.0 / (0.0, None) if no valid correlation can be computed.
     """
     if not current_positions or new_ticker not in log_returns:
-        return 0.0
+        return (0.0, None) if return_ticker else 0.0
 
     returns_new = log_returns[new_ticker]
     returns_new = returns_new[returns_new.index <= as_of_date]
 
     max_pos_corr = 0.0
+    max_corr_ticker = None
     for pos_ticker in current_positions:
         if pos_ticker not in log_returns or pos_ticker == new_ticker:
             continue
@@ -117,7 +121,8 @@ def compute_max_correlation(
         corr = compute_pairwise_correlation(
             returns_new, returns_pos, window=window, min_samples=min_samples
         )
-        if corr is not None:
-            max_pos_corr = max(max_pos_corr, corr)
+        if corr is not None and corr > max_pos_corr:
+            max_pos_corr = corr
+            max_corr_ticker = pos_ticker
 
-    return max_pos_corr
+    return (max_pos_corr, max_corr_ticker) if return_ticker else max_pos_corr
