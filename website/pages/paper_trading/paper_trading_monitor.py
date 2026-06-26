@@ -807,8 +807,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     # ── Live positions ───────────────────────────────────────────────────────
     st.subheader("五、当前持仓实时状态")
     if _m1_date and _m1_date != "N/A":
-        _m1_date_sgt = _us_close_to_sgt(_m1_date) if _m1_date and _m1_date != "N/A" else _m1_date
-        st.markdown(f"上次更新：{_m1_date_sgt} 盘后 ｜ Yahoo Finance")
+        st.markdown(f"上次更新：{_last_fetch_sgt} ｜ Yahoo Finance（数据截至 {_m1_date} 收盘）")
     if _m1_stop:
         st.warning(f"⚠️ **{len(_m1_stop)} 只已触及止损** — 建议执行止损出场")
 
