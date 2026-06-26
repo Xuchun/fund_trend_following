@@ -618,16 +618,21 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _exit_proceeds_proj = sum(s.get("shares", 0) * s.get("stop_used", 0) for s in _pend_exits)
     _proj_cash = _m1_cash + _exit_proceeds_proj
     _blocked_entries = []
-    # 从 candidate_signals 建立 ticker → rejection 映射，用于备注说明
-    _cand_rejection = {
-        c["ticker"]: c.get("rejection")
+    # 从 candidate_signals 建立 ticker → {rejection, corr_with} 映射，用于备注说明
+    _cand_meta = {
+        c["ticker"]: {"rejection": c.get("rejection"), "corr_with": c.get("corr_with")}
         for c in (_m1_today_sig or {}).get("candidate_signals", [])
     }
     for e in sorted(_pend_entries, key=lambda x: x.get("strength", 0), reverse=True):
         _strength    = e.get("strength", 0)
         _strength_str = f"突破强度 {_strength:.4f}，" if _strength else ""
         _cost        = e.get("shares", 0) * e.get("signal_price", 0)
-        _corr_note   = "⚠️ 相关性减仓（×0.5），" if _cand_rejection.get(e["ticker"]) == "corr_reduced" else ""
+        _meta        = _cand_meta.get(e["ticker"], {})
+        if _meta.get("rejection") == "corr_reduced":
+            _corr_with = _meta.get("corr_with")
+            _corr_note = f"⚠️ 相关性减仓（×0.5，与 {_corr_with} 相关），" if _corr_with else "⚠️ 相关性减仓（×0.5），"
+        else:
+            _corr_note = ""
         if _proj_cash >= _cost:
             _proj_cash -= _cost
             _order_rows.append({
