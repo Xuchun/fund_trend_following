@@ -6,6 +6,7 @@ Usage:  python src/scripts/paper_trading_daily.py [--date YYYY-MM-DD] [--no-entr
 Run after market close each trading day. Mirrors the backtest engine loop exactly:
 
   ① Open  — execute yesterday's pending exits and entries at today's open price.
+  ② Cash  — apply SGOV return to uninvested cash (mirrors backtest engine step ②).
   ③ Close — generate new exit/entry signals from today's close.
   ④ NAV   — record NAV after marking positions to close.
 
