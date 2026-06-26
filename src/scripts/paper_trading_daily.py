@@ -553,7 +553,15 @@ def scan_entries(
         (p["entry_price"] - p["stop_loss"]) * p["shares"] / nav
         for p in state["positions"]
     )
-    cash    = state.get("cash", 0.0)
+    # Use projected cash (current + pending exit proceeds) — mirrors backtest which
+    # only checks cash at OPEN time, AFTER all pending exits have already executed.
+    # Using current cash alone would wrongly block signals when cash is low but exits
+    # are about to free up significant capital.
+    _proj_exit_cash = sum(
+        s.get("shares", 0) * s.get("stop_used", 0)
+        for s in state.get("pending_exits", [])
+    )
+    cash    = state.get("cash", 0.0) + _proj_exit_cash
     signals: list[dict] = []
 
     # Rejection counters — stored in today_signals for future overfitting analysis
