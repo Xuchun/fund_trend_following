@@ -4,8 +4,8 @@
   "start_date": "2026-06-19",
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
-  "last_update_date": "2026-06-25",
-  "cash": 9571.80258287265,
+  "last_update_date": "2026-06-26",
+  "cash": 13233.269280283315,
   "positions": [
     {
       "ticker": "ENTG",
@@ -20,8 +20,8 @@
       "highest_high": 186.94,
       "atr_at_entry": 10.4864,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 176.28,
-      "last_price_date": "2026-06-25"
+      "last_known_price": 161.43,
+      "last_price_date": "2026-06-26"
     },
     {
       "ticker": "MKSI",
@@ -36,8 +36,8 @@
       "highest_high": 421.58,
       "atr_at_entry": 19.6389,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 410.31,
-      "last_price_date": "2026-06-25"
+      "last_known_price": 388.61,
+      "last_price_date": "2026-06-26"
     },
     {
       "ticker": "ALAB",
@@ -52,8 +52,8 @@
       "highest_high": 440.99,
       "atr_at_entry": 28.9661,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 398.0,
-      "last_price_date": "2026-06-25"
+      "last_known_price": 391.74,
+      "last_price_date": "2026-06-26"
     },
     {
       "ticker": "LTH",
@@ -64,28 +64,12 @@
       "entry_price": 36.5866,
       "shares": 270,
       "stop_loss": 34.0341,
-      "trail_stop": 36.613887,
-      "highest_high": 40.62,
+      "trail_stop": 37.665557,
+      "highest_high": 41.79,
       "atr_at_entry": 1.2762,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 39.86,
-      "last_price_date": "2026-06-25"
-    },
-    {
-      "ticker": "CIFR",
-      "signal_date": "2026-06-19",
-      "signal_price": 29.18,
-      "entry_date": "2026-06-22",
-      "open_price": 29.215,
-      "entry_price": 29.2442,
-      "shares": 342,
-      "stop_loss": 24.7242,
-      "trail_stop": 23.36,
-      "highest_high": 30.14,
-      "atr_at_entry": 2.26,
-      "R_at_backtest_end": 0.0,
-      "last_known_price": 25.68,
-      "last_price_date": "2026-06-25"
+      "last_known_price": 41.01,
+      "last_price_date": "2026-06-26"
     },
     {
       "ticker": "BTSG",
@@ -96,12 +80,12 @@
       "entry_price": 67.2872,
       "shares": 150,
       "stop_loss": 63.2518,
-      "trail_stop": 63.683856,
-      "highest_high": 69.86,
+      "trail_stop": 64.459888,
+      "highest_high": 70.72,
       "atr_at_entry": 2.0177,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 69.7,
-      "last_price_date": "2026-06-25"
+      "last_known_price": 68.98,
+      "last_price_date": "2026-06-26"
     },
     {
       "ticker": "FRO",
@@ -116,8 +100,8 @@
       "highest_high": 43.1,
       "atr_at_entry": 1.5678,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 38.47,
-      "last_price_date": "2026-06-25"
+      "last_known_price": 35.52,
+      "last_price_date": "2026-06-26"
     },
     {
       "ticker": "BE",
@@ -132,8 +116,8 @@
       "highest_high": 351.28,
       "atr_at_entry": 24.6164,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 309.18,
-      "last_price_date": "2026-06-25"
+      "last_known_price": 252.02,
+      "last_price_date": "2026-06-26"
     },
     {
       "ticker": "GWW",
@@ -148,8 +132,8 @@
       "highest_high": 1390.725,
       "atr_at_entry": 28.1791,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 1374.78,
-      "last_price_date": "2026-06-25"
+      "last_known_price": 1353.61,
+      "last_price_date": "2026-06-26"
     },
     {
       "ticker": "CAT",
@@ -164,8 +148,8 @@
       "highest_high": 1057.0699,
       "atr_at_entry": 32.3661,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 1057.01,
-      "last_price_date": "2026-06-25"
+      "last_known_price": 997.47,
+      "last_price_date": "2026-06-26"
     },
     {
       "ticker": "INTC",
@@ -180,8 +164,8 @@
       "highest_high": 141.45,
       "atr_at_entry": 9.1302,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 132.87,
-      "last_price_date": "2026-06-25"
+      "last_known_price": 128.32,
+      "last_price_date": "2026-06-26"
     },
     {
       "ticker": "AIT",
@@ -196,8 +180,8 @@
       "highest_high": 345.48,
       "atr_at_entry": 7.9187,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 343.54,
-      "last_price_date": "2026-06-25"
+      "last_known_price": 337.08,
+      "last_price_date": "2026-06-26"
     },
     {
       "ticker": "CRS",
@@ -212,8 +196,8 @@
       "highest_high": 605.11,
       "atr_at_entry": 20.0817,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 599.24,
-      "last_price_date": "2026-06-25"
+      "last_known_price": 591.78,
+      "last_price_date": "2026-06-26"
     },
     {
       "ticker": "APGE",
@@ -225,12 +209,12 @@
       "entry_price": 132.7126,
       "shares": 76,
       "stop_loss": 119.6546,
-      "trail_stop": 116.188656,
+      "trail_stop": 117.001224,
       "highest_high": 133.16,
       "atr_at_entry": 6.529,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 132.68,
-      "last_price_date": "2026-06-25",
+      "last_known_price": 132.55,
+      "last_price_date": "2026-06-26",
       "entry_commission": 3.03
     },
     {
@@ -243,12 +227,12 @@
       "entry_price": 24.5545,
       "shares": 409,
       "stop_loss": 24.3777,
-      "trail_stop": 24.314858,
+      "trail_stop": 24.327116,
       "highest_high": 24.56,
       "atr_at_entry": 0.0884,
       "R_at_backtest_end": 0.0,
       "last_known_price": 24.56,
-      "last_price_date": "2026-06-24",
+      "last_price_date": "2026-06-25",
       "entry_commission": 3.01
     },
     {
@@ -261,12 +245,12 @@
       "entry_price": 317.9076,
       "shares": 30,
       "stop_loss": 305.2438,
-      "trail_stop": 306.645199,
-      "highest_high": 325.89,
+      "trail_stop": 307.8345,
+      "highest_high": 327.5,
       "atr_at_entry": 6.3319,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 318.29,
-      "last_price_date": "2026-06-25",
+      "last_known_price": 327.37,
+      "last_price_date": "2026-06-26",
       "entry_commission": 2.86
     },
     {
@@ -279,12 +263,12 @@
       "entry_price": 68.5585,
       "shares": 141,
       "stop_loss": 65.5951,
-      "trail_stop": 65.440625,
+      "trail_stop": 65.465091,
       "highest_high": 69.8,
       "atr_at_entry": 1.4817,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 69.33,
-      "last_price_date": "2026-06-25",
+      "last_known_price": 69.14,
+      "last_price_date": "2026-06-26",
       "entry_commission": 2.9
     },
     {
@@ -297,12 +281,12 @@
       "entry_price": 17.4875,
       "shares": 554,
       "stop_loss": 16.1349,
-      "trail_stop": 16.002233,
+      "trail_stop": 16.027582,
       "highest_high": 18.04,
       "atr_at_entry": 0.6763,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 17.57,
-      "last_price_date": "2026-06-25",
+      "last_known_price": 17.87,
+      "last_price_date": "2026-06-26",
       "entry_commission": 2.91
     },
     {
@@ -315,13 +299,31 @@
       "entry_price": 73.3633,
       "shares": 132,
       "stop_loss": 68.5329,
-      "trail_stop": 68.045158,
+      "trail_stop": 68.086396,
       "highest_high": 75.41,
       "atr_at_entry": 2.4152,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 73.54,
-      "last_price_date": "2026-06-25",
+      "last_known_price": 72.17,
+      "last_price_date": "2026-06-26",
       "entry_commission": 2.91
+    },
+    {
+      "ticker": "DFTX",
+      "signal_date": "2026-06-25",
+      "signal_price": 44.79,
+      "signal_strength": 1.0057,
+      "entry_date": "2026-06-26",
+      "open_price": 44.73,
+      "entry_price": 44.7747,
+      "shares": 109,
+      "stop_loss": 39.6027,
+      "trail_stop": 37.943171,
+      "highest_high": 45.75,
+      "atr_at_entry": 2.586,
+      "R_at_backtest_end": 0.0,
+      "last_known_price": 44.95,
+      "last_price_date": "2026-06-26",
+      "entry_commission": 1.46
     }
   ],
   "closed_trades": [
@@ -428,6 +430,32 @@
       "exit_reason": "stop_loss",
       "detected_date": "2026-06-24",
       "holding_days": 3
+    },
+    {
+      "ticker": "CIFR",
+      "signal_date": "2026-06-19",
+      "signal_price": 29.18,
+      "signal_strength": 0.0,
+      "entry_date": "2026-06-22",
+      "exit_date": "2026-06-26",
+      "open_price": 29.215,
+      "entry_price": 29.2442,
+      "exit_open": 24.966,
+      "exit_price": 24.941,
+      "shares": 342,
+      "stop_loss": 24.7242,
+      "stop_used": 24.7242,
+      "highest_high": 30.14,
+      "atr_at_entry": 2.26,
+      "trail_stop_at_exit": 23.36,
+      "atr_at_exit": 2.3983,
+      "exit_commission": 2.56,
+      "entry_commission": 0.0,
+      "pnl_r": -0.952,
+      "net_pnl": -1474.24,
+      "exit_reason": "stop_loss",
+      "detected_date": "2026-06-25",
+      "holding_days": 4
     }
   ],
   "nav_history": [
@@ -460,206 +488,425 @@
       "nav": 196000.17,
       "regime": "BULL",
       "spy_close": 734.3
+    },
+    {
+      "date": "2026-06-26",
+      "nav": 190891.64,
+      "regime": "BULL",
+      "spy_close": 728.99
     }
   ],
   "today_signals": {
-    "date": "2026-06-25",
+    "date": "2026-06-26",
     "regime": "BULL",
-    "spy_close": 734.3,
-    "n_candidates": 2,
-    "n_entries": 2,
-    "n_executed": 2,
-    "n_exits": 1,
-    "n_raw_breakouts": 10,
-    "n_heat_blocked": 0,
-    "n_cash_blocked": 8,
-    "n_corr_reduced": 2,
+    "spy_close": 728.99,
+    "n_candidates": 9,
+    "n_entries": 4,
+    "n_executed": 1,
+    "n_exits": 3,
+    "n_raw_breakouts": 26,
+    "n_heat_blocked": 17,
+    "n_cash_blocked": 0,
+    "n_corr_reduced": 1,
     "exits_executed": [
       {
-        "ticker": "ALGM",
-        "shares": 169,
-        "exit_open": 58.43,
-        "exit_price": 58.3716,
-        "net_pnl": -571.67,
-        "pnl_r": -0.467,
+        "ticker": "CIFR",
+        "shares": 342,
+        "exit_open": 24.966,
+        "exit_price": 24.941,
+        "net_pnl": -1474.24,
+        "pnl_r": -0.952,
         "exit_reason": "stop_loss"
       }
     ],
     "entries_executed": [
       {
-        "ticker": "AAL",
-        "signal_date": "2026-06-24",
-        "signal_price": 17.44,
-        "open_price": 17.47,
-        "entry_price": 17.4875,
-        "shares": 554,
-        "stop_price": 16.1349,
-        "trade_risk": 0.0039
-      },
-      {
-        "ticker": "RAL",
-        "signal_date": "2026-06-24",
-        "signal_price": 72.2,
-        "open_price": 73.29,
-        "entry_price": 73.3633,
-        "shares": 132,
-        "stop_price": 68.5329,
-        "trade_risk": 0.0033
+        "ticker": "DFTX",
+        "signal_date": "2026-06-25",
+        "signal_price": 44.79,
+        "open_price": 44.73,
+        "entry_price": 44.7747,
+        "shares": 109,
+        "stop_price": 39.6027,
+        "trade_risk": 0.0029
       }
     ],
     "exit_signals": [
       {
-        "ticker": "CIFR",
+        "ticker": "ENTG",
         "exit_reason": "stop_loss",
-        "stop_used": 24.7242,
-        "shares": 342
+        "stop_used": 161.4895,
+        "shares": 55
+      },
+      {
+        "ticker": "FRO",
+        "exit_reason": "stop_loss",
+        "stop_used": 36.8143,
+        "shares": 244
+      },
+      {
+        "ticker": "BE",
+        "exit_reason": "stop_loss",
+        "stop_used": 283.0992,
+        "shares": 30
       }
     ],
     "candidate_signals": [
       {
-        "ticker": "LGND",
-        "signal_price": 295.92,
-        "stop_price": 274.2759,
-        "shares": 33,
-        "trade_risk": 0.0036,
-        "rejection": "cash_limit"
+        "ticker": "ABBV",
+        "signal_price": 253.35,
+        "stop_price": 240.7687,
+        "shares": 38,
+        "trade_risk": 0.0025,
+        "rejection": null,
+        "corr_with": null
       },
       {
-        "ticker": "AROC",
-        "signal_price": 41.4,
-        "stop_price": 38.7483,
-        "shares": 237,
+        "ticker": "MOG-A",
+        "signal_price": 425.36,
+        "stop_price": 396.9447,
+        "shares": 22,
+        "trade_risk": 0.0033,
+        "rejection": null,
+        "corr_with": null
+      },
+      {
+        "ticker": "GH",
+        "signal_price": 149.22,
+        "stop_price": 135.9446,
+        "shares": 64,
+        "trade_risk": 0.0045,
+        "rejection": null,
+        "corr_with": null
+      },
+      {
+        "ticker": "CAKE",
+        "signal_price": 80.38,
+        "stop_price": 75.2664,
+        "shares": 119,
         "trade_risk": 0.0032,
-        "rejection": "cash_limit"
-      },
-      {
-        "ticker": "TWST",
-        "signal_price": 96.65,
-        "stop_price": 86.3088,
-        "shares": 101,
-        "trade_risk": 0.0053,
-        "rejection": "cash_limit"
-      },
-      {
-        "ticker": "ASND",
-        "signal_price": 261.58,
-        "stop_price": 240.5633,
-        "shares": 37,
-        "trade_risk": 0.004,
-        "rejection": "cash_limit"
+        "rejection": null,
+        "corr_with": null
       },
       {
         "ticker": "HNGE",
-        "signal_price": 75.14,
-        "stop_price": 68.7892,
-        "shares": 130,
-        "trade_risk": 0.0042,
-        "rejection": "cash_limit"
+        "signal_price": 78.97,
+        "stop_price": 72.4348,
+        "shares": 121,
+        "trade_risk": 0.0041,
+        "rejection": null,
+        "corr_with": null
       },
       {
-        "ticker": "ABBV",
-        "signal_price": 243.14,
-        "stop_price": 230.9742,
-        "shares": 40,
+        "ticker": "MO",
+        "signal_price": 73.79,
+        "stop_price": 70.6591,
+        "shares": 129,
+        "trade_risk": 0.0021,
+        "rejection": null,
+        "corr_with": null
+      },
+      {
+        "ticker": "AEE",
+        "signal_price": 118.32,
+        "stop_price": 114.0767,
+        "shares": 81,
+        "trade_risk": 0.0018,
+        "rejection": null,
+        "corr_with": null
+      },
+      {
+        "ticker": "JNJ",
+        "signal_price": 254.66,
+        "stop_price": 244.3295,
+        "shares": 37,
+        "trade_risk": 0.002,
+        "rejection": null,
+        "corr_with": null
+      },
+      {
+        "ticker": "AEP",
+        "signal_price": 138.69,
+        "stop_price": 133.6651,
+        "shares": 69,
+        "trade_risk": 0.0018,
+        "rejection": "heat_limit"
+      },
+      {
+        "ticker": "MRK",
+        "signal_price": 128.66,
+        "stop_price": 122.2746,
+        "shares": 74,
         "trade_risk": 0.0025,
-        "rejection": "cash_limit"
+        "rejection": "heat_limit"
       },
       {
-        "ticker": "KDP",
-        "signal_price": 32.52,
-        "stop_price": 30.9471,
-        "shares": 301,
-        "trade_risk": 0.0024,
-        "rejection": "cash_limit"
+        "ticker": "MOH",
+        "signal_price": 229.74,
+        "stop_price": 213.188,
+        "shares": 42,
+        "trade_risk": 0.0036,
+        "rejection": "heat_limit"
+      },
+      {
+        "ticker": "MAC",
+        "signal_price": 25.83,
+        "stop_price": 24.4374,
+        "shares": 370,
+        "trade_risk": 0.0027,
+        "rejection": "heat_limit"
+      },
+      {
+        "ticker": "DAVE",
+        "signal_price": 348.71,
+        "stop_price": 304.1126,
+        "shares": 27,
+        "trade_risk": 0.0063,
+        "rejection": "heat_limit"
+      },
+      {
+        "ticker": "MNST",
+        "signal_price": 96.38,
+        "stop_price": 92.5527,
+        "shares": 99,
+        "trade_risk": 0.002,
+        "rejection": "heat_limit"
+      },
+      {
+        "ticker": "BB",
+        "signal_price": 11.4,
+        "stop_price": 9.8942,
+        "shares": 837,
+        "trade_risk": 0.0066,
+        "rejection": "heat_limit"
+      },
+      {
+        "ticker": "REG",
+        "signal_price": 81.81,
+        "stop_price": 79.259,
+        "shares": 117,
+        "trade_risk": 0.0016,
+        "rejection": "heat_limit"
       },
       {
         "ticker": "MIRM",
-        "signal_price": 117.28,
-        "stop_price": 107.4871,
-        "shares": 84,
+        "signal_price": 123.77,
+        "stop_price": 113.3648,
+        "shares": 77,
         "trade_risk": 0.0042,
-        "rejection": "cash_limit"
+        "rejection": "heat_limit"
       },
       {
-        "ticker": "DFTX",
-        "signal_price": 44.79,
-        "stop_price": 39.618,
-        "shares": 109,
+        "ticker": "LGND",
+        "signal_price": 303.59,
+        "stop_price": 281.0571,
+        "shares": 31,
+        "trade_risk": 0.0037,
+        "rejection": "heat_limit"
+      },
+      {
+        "ticker": "XLV",
+        "signal_price": 160.34,
+        "stop_price": 155.3917,
+        "shares": 60,
+        "trade_risk": 0.0016,
+        "rejection": "heat_limit"
+      },
+      {
+        "ticker": "GVA",
+        "signal_price": 160.39,
+        "stop_price": 151.0399,
+        "shares": 60,
         "trade_risk": 0.0029,
-        "rejection": "corr_reduced"
+        "rejection": "heat_limit"
       },
       {
-        "ticker": "AMAT",
-        "signal_price": 668.0,
-        "stop_price": 601.5295,
-        "shares": 7,
+        "ticker": "BIIB",
+        "signal_price": 216.03,
+        "stop_price": 203.208,
+        "shares": 44,
+        "trade_risk": 0.003,
+        "rejection": "heat_limit"
+      },
+      {
+        "ticker": "KRYS",
+        "signal_price": 372.25,
+        "stop_price": 347.1333,
+        "shares": 26,
+        "trade_risk": 0.0034,
+        "rejection": "heat_limit"
+      },
+      {
+        "ticker": "MTRN",
+        "signal_price": 287.02,
+        "stop_price": 264.5964,
+        "shares": 33,
+        "trade_risk": 0.0039,
+        "rejection": "heat_limit"
+      },
+      {
+        "ticker": "KDP",
+        "signal_price": 33.4,
+        "stop_price": 31.7917,
+        "shares": 286,
         "trade_risk": 0.0024,
-        "rejection": "corr_reduced"
+        "rejection": "heat_limit"
+      },
+      {
+        "ticker": "UMBF",
+        "signal_price": 144.91,
+        "stop_price": 137.332,
+        "shares": 33,
+        "trade_risk": 0.0013,
+        "rejection": "corr_reduced",
+        "corr_with": "ZION"
+      },
+      {
+        "ticker": "SRRK",
+        "signal_price": 54.76,
+        "stop_price": 50.3254,
+        "shares": 174,
+        "trade_risk": 0.004,
+        "rejection": "heat_limit"
       }
     ],
     "entry_signals": [
       {
-        "ticker": "AMAT",
-        "signal_price": 668.0,
-        "stop_price": 601.5295,
-        "shares": 7,
-        "trade_risk": 0.0024
+        "ticker": "HNGE",
+        "signal_price": 78.97,
+        "stop_price": 72.4348,
+        "shares": 121,
+        "trade_risk": 0.0041
       },
       {
-        "ticker": "DFTX",
-        "signal_price": 44.79,
-        "stop_price": 39.618,
-        "shares": 109,
-        "trade_risk": 0.0029
+        "ticker": "ABBV",
+        "signal_price": 253.35,
+        "stop_price": 240.7687,
+        "shares": 38,
+        "trade_risk": 0.0025
+      },
+      {
+        "ticker": "AEE",
+        "signal_price": 118.32,
+        "stop_price": 114.0767,
+        "shares": 81,
+        "trade_risk": 0.0018
+      },
+      {
+        "ticker": "GH",
+        "signal_price": 149.22,
+        "stop_price": 135.9446,
+        "shares": 64,
+        "trade_risk": 0.0045
       }
     ]
   },
   "pending_entries": [
     {
-      "ticker": "AMAT",
-      "signal_date": "2026-06-25",
-      "signal_price": 668.0,
-      "stop_price": 601.5295,
-      "shares": 7,
-      "atr": 33.2352,
-      "strength": 1.0418,
-      "trade_risk": 0.0024,
-      "notional": 4676.0
+      "ticker": "HNGE",
+      "signal_date": "2026-06-26",
+      "signal_price": 78.97,
+      "stop_price": 72.4348,
+      "shares": 121,
+      "atr": 3.2676,
+      "strength": 1.0506,
+      "trade_risk": 0.0041,
+      "notional": 9555.37
     },
     {
-      "ticker": "DFTX",
-      "signal_date": "2026-06-25",
-      "signal_price": 44.79,
-      "stop_price": 39.618,
-      "shares": 109,
-      "atr": 2.586,
-      "strength": 1.0057,
-      "trade_risk": 0.0029,
-      "notional": 4882.11
+      "ticker": "ABBV",
+      "signal_date": "2026-06-26",
+      "signal_price": 253.35,
+      "stop_price": 240.7687,
+      "shares": 38,
+      "atr": 6.2907,
+      "strength": 1.0357,
+      "trade_risk": 0.0025,
+      "notional": 9627.3
+    },
+    {
+      "ticker": "AEE",
+      "signal_date": "2026-06-26",
+      "signal_price": 118.32,
+      "stop_price": 114.0767,
+      "shares": 81,
+      "atr": 2.1216,
+      "strength": 1.0307,
+      "trade_risk": 0.0018,
+      "notional": 9583.92
+    },
+    {
+      "ticker": "GH",
+      "signal_date": "2026-06-26",
+      "signal_price": 149.22,
+      "stop_price": 135.9446,
+      "shares": 64,
+      "atr": 6.6377,
+      "strength": 1.0232,
+      "trade_risk": 0.0045,
+      "notional": 9550.08
     }
   ],
   "pending_exits": [
     {
-      "ticker": "CIFR",
+      "ticker": "ENTG",
       "exit_reason": "stop_loss",
-      "stop_used": 24.7242,
-      "shares": 342,
-      "open_price": 29.215,
-      "entry_price": 29.2442,
+      "stop_used": 161.4895,
+      "shares": 55,
+      "open_price": 182.28,
+      "entry_price": 182.4623,
       "entry_date": "2026-06-22",
       "signal_date": "2026-06-19",
-      "signal_price": 29.18,
+      "signal_price": 178.77,
       "signal_strength": 0.0,
-      "stop_loss": 24.7242,
-      "atr_at_entry": 2.26,
-      "highest_high": 30.14,
-      "trail_stop_at_exit": 23.36,
-      "atr_at_exit": 2.3983,
-      "detected_date": "2026-06-25",
+      "stop_loss": 161.4895,
+      "atr_at_entry": 10.4864,
+      "highest_high": 186.94,
+      "trail_stop_at_exit": 155.4808,
+      "atr_at_exit": 11.3175,
+      "detected_date": "2026-06-26",
+      "entry_commission": 0.0
+    },
+    {
+      "ticker": "FRO",
+      "exit_reason": "stop_loss",
+      "stop_used": 36.8143,
+      "shares": 244,
+      "open_price": 39.91,
+      "entry_price": 39.9499,
+      "entry_date": "2026-06-22",
+      "signal_date": "2026-06-19",
+      "signal_price": 40.93,
+      "signal_strength": 0.0,
+      "stop_loss": 36.8143,
+      "atr_at_entry": 1.5678,
+      "highest_high": 43.1,
+      "trail_stop_at_exit": 38.126712,
+      "atr_at_exit": 1.8034,
+      "detected_date": "2026-06-26",
+      "entry_commission": 0.0
+    },
+    {
+      "ticker": "BE",
+      "exit_reason": "stop_loss",
+      "stop_used": 283.0992,
+      "shares": 30,
+      "open_price": 332.0,
+      "entry_price": 332.332,
+      "entry_date": "2026-06-22",
+      "signal_date": "2026-06-19",
+      "signal_price": 328.91,
+      "signal_strength": 0.0,
+      "stop_loss": 283.0992,
+      "atr_at_entry": 24.6164,
+      "highest_high": 351.28,
+      "trail_stop_at_exit": 276.0608,
+      "atr_at_exit": 28.8385,
+      "detected_date": "2026-06-26",
       "entry_commission": 0.0
     }
   ],
-  "last_update_utc": "2026-06-25T23:37:32Z",
+  "last_update_utc": "2026-06-26T23:35:10Z",
   "signals_history": [
     {
       "date": "2026-06-23",
@@ -1114,6 +1361,311 @@
           "stop_price": 39.618,
           "shares": 109,
           "trade_risk": 0.0029
+        }
+      ]
+    },
+    {
+      "date": "2026-06-26",
+      "regime": "BULL",
+      "spy_close": 728.99,
+      "n_candidates": 9,
+      "n_entries": 4,
+      "n_executed": 1,
+      "n_exits": 3,
+      "n_raw_breakouts": 26,
+      "n_heat_blocked": 17,
+      "n_cash_blocked": 0,
+      "n_corr_reduced": 1,
+      "exits_executed": [
+        {
+          "ticker": "CIFR",
+          "shares": 342,
+          "exit_open": 24.966,
+          "exit_price": 24.941,
+          "net_pnl": -1474.24,
+          "pnl_r": -0.952,
+          "exit_reason": "stop_loss"
+        }
+      ],
+      "entries_executed": [
+        {
+          "ticker": "DFTX",
+          "signal_date": "2026-06-25",
+          "signal_price": 44.79,
+          "open_price": 44.73,
+          "entry_price": 44.7747,
+          "shares": 109,
+          "stop_price": 39.6027,
+          "trade_risk": 0.0029
+        }
+      ],
+      "exit_signals": [
+        {
+          "ticker": "ENTG",
+          "exit_reason": "stop_loss",
+          "stop_used": 161.4895,
+          "shares": 55
+        },
+        {
+          "ticker": "FRO",
+          "exit_reason": "stop_loss",
+          "stop_used": 36.8143,
+          "shares": 244
+        },
+        {
+          "ticker": "BE",
+          "exit_reason": "stop_loss",
+          "stop_used": 283.0992,
+          "shares": 30
+        }
+      ],
+      "candidate_signals": [
+        {
+          "ticker": "ABBV",
+          "signal_price": 253.35,
+          "stop_price": 240.7687,
+          "shares": 38,
+          "trade_risk": 0.0025,
+          "rejection": null,
+          "corr_with": null
+        },
+        {
+          "ticker": "MOG-A",
+          "signal_price": 425.36,
+          "stop_price": 396.9447,
+          "shares": 22,
+          "trade_risk": 0.0033,
+          "rejection": null,
+          "corr_with": null
+        },
+        {
+          "ticker": "GH",
+          "signal_price": 149.22,
+          "stop_price": 135.9446,
+          "shares": 64,
+          "trade_risk": 0.0045,
+          "rejection": null,
+          "corr_with": null
+        },
+        {
+          "ticker": "CAKE",
+          "signal_price": 80.38,
+          "stop_price": 75.2664,
+          "shares": 119,
+          "trade_risk": 0.0032,
+          "rejection": null,
+          "corr_with": null
+        },
+        {
+          "ticker": "HNGE",
+          "signal_price": 78.97,
+          "stop_price": 72.4348,
+          "shares": 121,
+          "trade_risk": 0.0041,
+          "rejection": null,
+          "corr_with": null
+        },
+        {
+          "ticker": "MO",
+          "signal_price": 73.79,
+          "stop_price": 70.6591,
+          "shares": 129,
+          "trade_risk": 0.0021,
+          "rejection": null,
+          "corr_with": null
+        },
+        {
+          "ticker": "AEE",
+          "signal_price": 118.32,
+          "stop_price": 114.0767,
+          "shares": 81,
+          "trade_risk": 0.0018,
+          "rejection": null,
+          "corr_with": null
+        },
+        {
+          "ticker": "JNJ",
+          "signal_price": 254.66,
+          "stop_price": 244.3295,
+          "shares": 37,
+          "trade_risk": 0.002,
+          "rejection": null,
+          "corr_with": null
+        },
+        {
+          "ticker": "AEP",
+          "signal_price": 138.69,
+          "stop_price": 133.6651,
+          "shares": 69,
+          "trade_risk": 0.0018,
+          "rejection": "heat_limit"
+        },
+        {
+          "ticker": "MRK",
+          "signal_price": 128.66,
+          "stop_price": 122.2746,
+          "shares": 74,
+          "trade_risk": 0.0025,
+          "rejection": "heat_limit"
+        },
+        {
+          "ticker": "MOH",
+          "signal_price": 229.74,
+          "stop_price": 213.188,
+          "shares": 42,
+          "trade_risk": 0.0036,
+          "rejection": "heat_limit"
+        },
+        {
+          "ticker": "MAC",
+          "signal_price": 25.83,
+          "stop_price": 24.4374,
+          "shares": 370,
+          "trade_risk": 0.0027,
+          "rejection": "heat_limit"
+        },
+        {
+          "ticker": "DAVE",
+          "signal_price": 348.71,
+          "stop_price": 304.1126,
+          "shares": 27,
+          "trade_risk": 0.0063,
+          "rejection": "heat_limit"
+        },
+        {
+          "ticker": "MNST",
+          "signal_price": 96.38,
+          "stop_price": 92.5527,
+          "shares": 99,
+          "trade_risk": 0.002,
+          "rejection": "heat_limit"
+        },
+        {
+          "ticker": "BB",
+          "signal_price": 11.4,
+          "stop_price": 9.8942,
+          "shares": 837,
+          "trade_risk": 0.0066,
+          "rejection": "heat_limit"
+        },
+        {
+          "ticker": "REG",
+          "signal_price": 81.81,
+          "stop_price": 79.259,
+          "shares": 117,
+          "trade_risk": 0.0016,
+          "rejection": "heat_limit"
+        },
+        {
+          "ticker": "MIRM",
+          "signal_price": 123.77,
+          "stop_price": 113.3648,
+          "shares": 77,
+          "trade_risk": 0.0042,
+          "rejection": "heat_limit"
+        },
+        {
+          "ticker": "LGND",
+          "signal_price": 303.59,
+          "stop_price": 281.0571,
+          "shares": 31,
+          "trade_risk": 0.0037,
+          "rejection": "heat_limit"
+        },
+        {
+          "ticker": "XLV",
+          "signal_price": 160.34,
+          "stop_price": 155.3917,
+          "shares": 60,
+          "trade_risk": 0.0016,
+          "rejection": "heat_limit"
+        },
+        {
+          "ticker": "GVA",
+          "signal_price": 160.39,
+          "stop_price": 151.0399,
+          "shares": 60,
+          "trade_risk": 0.0029,
+          "rejection": "heat_limit"
+        },
+        {
+          "ticker": "BIIB",
+          "signal_price": 216.03,
+          "stop_price": 203.208,
+          "shares": 44,
+          "trade_risk": 0.003,
+          "rejection": "heat_limit"
+        },
+        {
+          "ticker": "KRYS",
+          "signal_price": 372.25,
+          "stop_price": 347.1333,
+          "shares": 26,
+          "trade_risk": 0.0034,
+          "rejection": "heat_limit"
+        },
+        {
+          "ticker": "MTRN",
+          "signal_price": 287.02,
+          "stop_price": 264.5964,
+          "shares": 33,
+          "trade_risk": 0.0039,
+          "rejection": "heat_limit"
+        },
+        {
+          "ticker": "KDP",
+          "signal_price": 33.4,
+          "stop_price": 31.7917,
+          "shares": 286,
+          "trade_risk": 0.0024,
+          "rejection": "heat_limit"
+        },
+        {
+          "ticker": "UMBF",
+          "signal_price": 144.91,
+          "stop_price": 137.332,
+          "shares": 33,
+          "trade_risk": 0.0013,
+          "rejection": "corr_reduced",
+          "corr_with": "ZION"
+        },
+        {
+          "ticker": "SRRK",
+          "signal_price": 54.76,
+          "stop_price": 50.3254,
+          "shares": 174,
+          "trade_risk": 0.004,
+          "rejection": "heat_limit"
+        }
+      ],
+      "entry_signals": [
+        {
+          "ticker": "HNGE",
+          "signal_price": 78.97,
+          "stop_price": 72.4348,
+          "shares": 121,
+          "trade_risk": 0.0041
+        },
+        {
+          "ticker": "ABBV",
+          "signal_price": 253.35,
+          "stop_price": 240.7687,
+          "shares": 38,
+          "trade_risk": 0.0025
+        },
+        {
+          "ticker": "AEE",
+          "signal_price": 118.32,
+          "stop_price": 114.0767,
+          "shares": 81,
+          "trade_risk": 0.0018
+        },
+        {
+          "ticker": "GH",
+          "signal_price": 149.22,
+          "stop_price": 135.9446,
+          "shares": 64,
+          "trade_risk": 0.0045
         }
       ]
     }
