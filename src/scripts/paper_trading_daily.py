@@ -331,13 +331,14 @@ def execute_pending_entries(
         if _held_list:
             _cand_lr = compute_log_returns(df["Close"])
             _all_lr  = {**_held_log_returns, ticker: _cand_lr}
-            max_corr = compute_max_correlation(
+            max_corr, _corr_ticker = compute_max_correlation(
                 new_ticker=ticker,
                 current_positions=_held_list,
                 log_returns=_all_lr,
                 as_of_date=pd.Timestamp(today),
                 window=PARAMS.correlation_window,
                 min_samples=40,
+                return_ticker=True,
             )
             if max_corr > PARAMS.correlation_threshold:
                 final_shares_f *= PARAMS.correlation_reduction
