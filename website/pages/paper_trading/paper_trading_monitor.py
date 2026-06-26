@@ -24,6 +24,14 @@ _ETF_SET: set = set()
 if _meta_path.exists():
     _ETF_SET = {e["ticker"] for e in json.loads(_meta_path.read_text()).get("etf_universe", [])}
 
+_bt_metrics: dict = {}
+_bt_metrics_path = _results / "metrics.json"
+if _bt_metrics_path.exists():
+    try:
+        _bt_metrics = json.loads(_bt_metrics_path.read_text())
+    except Exception:
+        pass
+
 def _asset_type(ticker: str) -> str:
     return "ETF" if ticker in _ETF_SET else "股票"
 
