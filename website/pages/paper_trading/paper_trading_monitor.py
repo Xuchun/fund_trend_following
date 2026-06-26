@@ -570,7 +570,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "净盈亏（$）": f"风险 {_risk_pct*100:.2f}% NAV" if _risk_pct else "—",
             })
     if _trade_rows:
-        show_df(pd.DataFrame(sorted(_trade_rows, key=lambda x: x["标的"])), use_container_width=True, hide_index=True)
+        show_df(pd.DataFrame(sorted(_trade_rows, key=lambda x: (0 if "卖出" in x["方向"] else 1, x["标的"]))), use_container_width=True, hide_index=True)
     else:
         st.info("今日无交易（今日开盘时无来自昨日的挂单）")
 
