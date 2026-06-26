@@ -1176,21 +1176,33 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     st.markdown("---")
 
-    # ── Closed trades ─────────────────────────────────────────────────────────
+    # ── Closed trades + 平仓深度分析 ──────────────────────────────────────────
     st.subheader(f"十、平仓记录（{len(_m1_closed)} 笔）")
-    if _m1_closed:
-        _ct = pd.DataFrame(_m1_closed)
-        _n_cl     = len(_ct)
-        _wins     = _ct[_ct["pnl_r"] > 0] if "pnl_r" in _ct else pd.DataFrame()
-        _win_rate = len(_wins) / _n_cl * 100 if _n_cl > 0 else 0.0
-        _avg_r    = float(_ct["pnl_r"].mean()) if "pnl_r" in _ct.columns else 0.0
-        _tot_pnl  = float(_ct["net_pnl"].sum()) if "net_pnl" in _ct.columns else 0.0
-        _avg_days = float(_ct["holding_days"].mean()) if "holding_days" in _ct.columns else 0.0
-        _avg_win_r = float(_wins["pnl_r"].mean()) if len(_wins) > 0 else 0.0
-        _losses   = _ct[_ct["pnl_r"] <= 0] if "pnl_r" in _ct else pd.DataFrame()
-        _avg_loss_r = float(_losses["pnl_r"].mean()) if len(_losses) > 0 else 0.0
 
-        sc1, sc2, sc3, sc4, sc5, sc6 = st.columns(6)
+    # 统一在此计算平仓指标（供本节 + 后续对比面板复用）
+    _n_cl = len(_m1_closed)
+    if _m1_closed:
+        _ct       = pd.DataFrame(_m1_closed)
+        _wins     = _ct[_ct["pnl_r"] > 0]  if "pnl_r" in _ct.columns else pd.DataFrame()
+        _losses   = _ct[_ct["pnl_r"] <= 0] if "pnl_r" in _ct.columns else pd.DataFrame()
+        _win_rate   = len(_wins) / _n_cl * 100
+        _avg_r      = float(_ct["pnl_r"].mean())        if "pnl_r"        in _ct.columns else 0.0
+        _tot_pnl    = float(_ct["net_pnl"].sum())       if "net_pnl"      in _ct.columns else 0.0
+        _avg_days   = float(_ct["holding_days"].mean()) if "holding_days" in _ct.columns else 0.0
+        _avg_win_r  = float(_wins["pnl_r"].mean())     if len(_wins)   > 0 else 0.0
+        _avg_loss_r = float(_losses["pnl_r"].mean())   if len(_losses) > 0 else 0.0
+        # 连续盈亏 Streak
+        _ct_by_date = sorted(_m1_closed, key=lambda x: (x.get("exit_date", ""), x.get("ticker", "")))
+        _cur_ws = _cur_ls = _max_ws = _max_ls = 0
+        for _tr in _ct_by_date:
+            if _tr.get("pnl_r", 0) > 0:
+                _cur_ws += 1; _cur_ls = 0; _max_ws = max(_max_ws, _cur_ws)
+            else:
+                _cur_ls += 1; _cur_ws = 0; _max_ls = max(_max_ls, _cur_ls)
+        _streak_str = f"连赢 {_cur_ws} 笔" if _cur_ws > 0 else f"连亏 {_cur_ls} 笔"
+        _bt_max_cl  = int(_bt_metrics.get("max_consecutive_losses", 0)) if _bt_metrics else 0
+
+        sc1, sc2, sc3, sc4, sc5, sc6, sc7 = st.columns(7)
         sc1.metric("已平仓笔数", f"{_n_cl} 笔")
         sc2.metric("胜率", f"{_win_rate:.1f}%")
         sc3.metric("平均持仓", f"{_avg_days:.0f} 天")
@@ -1198,6 +1210,15 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         sc5.metric("盈亏比", f"{abs(_avg_win_r/(_avg_loss_r or 1)):.2f}x",
                    delta=f"赢 {_avg_win_r:+.2f}R / 亏 {_avg_loss_r:+.2f}R")
         sc6.metric("总净盈亏", f"${_tot_pnl:+,.0f}")
+        sc7.metric("当前连续盈亏", _streak_str,
+                   delta=f"本轮最长：连赢 {_max_ws} / 连亏 {_max_ls}（回测最大连亏 {_bt_max_cl} 笔）",
+                   delta_color="off")
+        if _n_cl < 30:
+            _bt_n = int(_bt_metrics.get("n_trades", 0)) if _bt_metrics else 0
+            st.caption(
+                f"⚠️ 当前仅 {_n_cl} 笔平仓，样本量小，以下统计仅供参考"
+                + (f"（回测基于 {_bt_n} 笔 / 24 年数据）" if _bt_n else "")
+            )
 
         st.markdown("---")
         _ct_sorted = _ct.sort_values("exit_date", ascending=False)
@@ -1211,10 +1232,207 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "净盈亏": st.column_config.NumberColumn(format="$%+.0f"),
             },
         )
+
+        # ── R 值分布直方图 ─────────────────────────────────────────────────────
+        if "pnl_r" in _ct.columns and _n_cl > 0:
+            _r_neg = _ct.loc[_ct["pnl_r"] <= 0, "pnl_r"].dropna().tolist()
+            _r_pos = _ct.loc[_ct["pnl_r"] >  0, "pnl_r"].dropna().tolist()
+            _fig_r = go.Figure()
+            if _r_neg:
+                _fig_r.add_trace(go.Histogram(
+                    x=_r_neg, name="亏损", marker_color="#d62728",
+                    nbinsx=max(5, min(len(_r_neg) * 3, 25)),
+                    marker_line_width=1, marker_line_color="white",
+                ))
+            if _r_pos:
+                _fig_r.add_trace(go.Histogram(
+                    x=_r_pos, name="盈利", marker_color="#2ca02c",
+                    nbinsx=max(5, min(len(_r_pos) * 3, 25)),
+                    marker_line_width=1, marker_line_color="white",
+                ))
+            _fig_r.add_vline(x=0, line_dash="dash", line_color="#888888")
+            if _avg_r:
+                _fig_r.add_vline(x=_avg_r, line_dash="dot", line_color="#1f77b4",
+                                 annotation_text=f"实盘均值 {_avg_r:+.2f}R",
+                                 annotation_position="top right")
+            if _bt_metrics:
+                _bt_ev = (_bt_metrics.get("avg_win_r", 0) * _bt_metrics.get("win_rate", 0)
+                          + _bt_metrics.get("avg_loss_r", 0) * (1 - _bt_metrics.get("win_rate", 0)))
+                _fig_r.add_vline(x=_bt_ev, line_dash="dashdot", line_color="#ff7f0e",
+                                 annotation_text=f"回测期望值 {_bt_ev:+.2f}R",
+                                 annotation_position="top left")
+            _fig_r.update_layout(
+                barmode="overlay",
+                title=f"已平仓 R 值分布（{_n_cl} 笔，红=亏损，绿=盈利）",
+                xaxis_title="R 倍数", yaxis_title="笔数",
+                height=300, template="plotly_white",
+                legend=dict(orientation="h", y=1.02, x=1, xanchor="right"),
+                margin=dict(l=60, r=20, t=60, b=40),
+            )
+            st.plotly_chart(_fig_r, use_container_width=True)
+
+        # ── 入场滑点（隔夜跳空）分析 ───────────────────────────────────────────
+        _slip_rows = [
+            {
+                "标的":            c["ticker"],
+                "入场日":          c.get("entry_date", ""),
+                "信号价（T收盘）":  c.get("signal_price"),
+                "开盘价（T+1）":    c.get("open_price"),
+                "入场价（含滑点）": c.get("entry_price"),
+                "隔夜跳空(bps)":   round(
+                    (c["open_price"] - c["signal_price"]) / c["signal_price"] * 10000, 1
+                ) if c.get("open_price") and c.get("signal_price") else None,
+                "应用滑点(bps)":   round(
+                    (c["entry_price"] - c["open_price"]) / c["open_price"] * 10000, 1
+                ) if c.get("entry_price") and c.get("open_price") else None,
+            }
+            for c in sorted(_m1_closed, key=lambda x: x.get("entry_date", ""))
+            if c.get("signal_price") and c.get("open_price") and c.get("entry_price")
+        ]
+        if _slip_rows:
+            _slip_df     = pd.DataFrame(_slip_rows)
+            _avg_gap_bps = _slip_df["隔夜跳空(bps)"].dropna().mean()
+            _avg_slp_bps = _slip_df["应用滑点(bps)"].dropna().mean()
+            st.markdown(
+                f"**入场滑点分析** — 隔夜跳空均值 **{_avg_gap_bps:+.0f} bps**"
+                f"（正=高开，买入成本高于信号收盘价；负=低开，实际成本更低）"
+                f"，策略固定应用滑点 **{_avg_slp_bps:.1f} bps**（回测假设 {int(_V1_PARAMS.slippage_bps)} bps）"
+            )
+            show_df(
+                _slip_df,
+                column_config={
+                    "信号价（T收盘）":  st.column_config.NumberColumn(format="$%.2f"),
+                    "开盘价（T+1）":    st.column_config.NumberColumn(format="$%.2f"),
+                    "入场价（含滑点）": st.column_config.NumberColumn(format="$%.4f"),
+                    "隔夜跳空(bps)":   st.column_config.NumberColumn(format="%+.1f"),
+                    "应用滑点(bps)":   st.column_config.NumberColumn(format="%.1f"),
+                },
+                use_container_width=True, hide_index=True,
+            )
+
     else:
+        _win_rate = _avg_r = _avg_days = _avg_win_r = _avg_loss_r = _tot_pnl = 0.0
+        _max_ws = _max_ls = 0
         st.info("暂无平仓记录")
 
     st.markdown("---")
+
+    # ── 十一、回测 vs 实盘对比面板 ─────────────────────────────────────────────
+    if _bt_metrics:
+        st.subheader("十一、回测 vs 实盘对比")
+        # 实盘最大回撤：覆盖 nav_history + 当前实时 NAV
+        _nh_nav_vals_cmp = pd.Series(
+            [float(h["nav"]) for h in _m1_history] + [_m1_nav]
+        ) if _m1_history else pd.Series([_m1_nav])
+        _live_dd_series  = (_nh_nav_vals_cmp - _nh_nav_vals_cmp.cummax()) / _nh_nav_vals_cmp.cummax() * 100
+        _live_max_dd_pct = float(_live_dd_series.min()) if len(_nh_nav_vals_cmp) > 1 else 0.0
+
+        _bt_pf = _bt_metrics["avg_win_r"] / abs(_bt_metrics["avg_loss_r"])
+        _live_pf = abs(_avg_win_r / (_avg_loss_r or 1)) if _n_cl else None
+
+        _cmp_data = [
+            {"指标": "胜率",         "回测预期": f"{_bt_metrics['win_rate']*100:.1f}%",
+             "实盘至今": f"{_win_rate:.1f}%" if _n_cl else "—（无平仓）",
+             "差值": f"{_win_rate - _bt_metrics['win_rate']*100:+.1f}%" if _n_cl else "—",
+             "说明": "盈利交易占全部平仓笔数的比例"},
+            {"指标": "平均盈利（R）", "回测预期": f"{_bt_metrics['avg_win_r']:+.2f}R",
+             "实盘至今": f"{_avg_win_r:+.2f}R" if _n_cl else "—",
+             "差值": f"{_avg_win_r - _bt_metrics['avg_win_r']:+.2f}R" if _n_cl else "—",
+             "说明": "盈利交易的平均 R 倍数"},
+            {"指标": "平均亏损（R）", "回测预期": f"{_bt_metrics['avg_loss_r']:+.2f}R",
+             "实盘至今": f"{_avg_loss_r:+.2f}R" if _n_cl else "—",
+             "差值": f"{_avg_loss_r - _bt_metrics['avg_loss_r']:+.2f}R" if _n_cl else "—",
+             "说明": "亏损交易的平均 R 倍数（越接近 -1 越好）"},
+            {"指标": "盈亏比",        "回测预期": f"{_bt_pf:.2f}x",
+             "实盘至今": f"{_live_pf:.2f}x" if _live_pf else "—",
+             "差值": f"{_live_pf - _bt_pf:+.2f}x" if _live_pf else "—",
+             "说明": "平均盈利 R / |平均亏损 R|"},
+            {"指标": "平均持仓天数",  "回测预期": f"{_bt_metrics['avg_holding_days']:.0f} 天",
+             "实盘至今": f"{_avg_days:.0f} 天" if _n_cl else "—",
+             "差值": f"{_avg_days - _bt_metrics['avg_holding_days']:+.0f} 天" if _n_cl else "—",
+             "说明": "从开仓到平仓的持有天数均值"},
+            {"指标": "最大回撤",      "回测预期": f"{_bt_metrics['max_drawdown']*100:.1f}%",
+             "实盘至今": f"{_live_max_dd_pct:.1f}%",
+             "差值": f"{_live_max_dd_pct - _bt_metrics['max_drawdown']*100:+.1f}%",
+             "说明": "NAV 从历史峰值的最大跌幅"},
+            {"指标": "最大连续亏损",  "回测预期": f"{int(_bt_metrics.get('max_consecutive_losses',0))} 笔",
+             "实盘至今": f"{_max_ls} 笔",
+             "差值": f"{_max_ls - int(_bt_metrics.get('max_consecutive_losses',0)):+d} 笔",
+             "说明": "连续亏损交易的最多笔数（回测为 24 年统计）"},
+        ]
+        if _n_cl < 30:
+            _bt_n = int(_bt_metrics.get("n_trades", 0))
+            st.caption(
+                f"⚠️ 实盘仅 {_n_cl} 笔平仓，样本量不足，差值无统计意义，"
+                f"仅供趋势观察（回测基于 {_bt_n} 笔 / 24 年数据）。"
+            )
+        show_df(pd.DataFrame(_cmp_data), use_container_width=True, hide_index=True)
+        st.markdown("---")
+
+    # ── 十二、月度 P&L 汇总 ───────────────────────────────────────────────────
+    if _m1_history and len(_m1_history) >= 2:
+        st.subheader("十二、月度 P&L 汇总")
+        _nh_mon = pd.DataFrame(_m1_history)
+        _nh_mon["date"] = pd.to_datetime(_nh_mon["date"])
+        _nh_mon = _nh_mon.sort_values("date").reset_index(drop=True)
+        _nh_mon["ym"] = _nh_mon["date"].dt.to_period("M")
+
+        _monthly_rows = []
+        for _ym, _grp in _nh_mon.groupby("ym"):
+            _nav_s = float(_grp["nav"].iloc[0])
+            _nav_e = float(_grp["nav"].iloc[-1])
+            _strat = (_nav_e / _nav_s - 1) * 100 if _nav_s else 0.0
+            _spy_v = pd.to_numeric(_grp.get("spy_close", pd.Series(dtype=float)), errors="coerce").dropna()
+            _spy_r = (float(_spy_v.iloc[-1]) / float(_spy_v.iloc[0]) - 1) * 100 if len(_spy_v) >= 2 else None
+            _rel   = (_strat - _spy_r) if _spy_r is not None else None
+            _regime_vals = _grp["regime"].dropna().values if "regime" in _grp.columns else []
+            _regime_mon  = str(_regime_vals[-1]) if len(_regime_vals) > 0 else ""
+            _monthly_rows.append({
+                "月份":        str(_ym),
+                "月初NAV":     f"${_nav_s:,.0f}",
+                "月末NAV":     f"${_nav_e:,.0f}",
+                "策略月收益率": _strat,
+                "SPY月收益率":  _spy_r,
+                "超额收益（α）": _rel,
+                "Regime":      _regime_mon,
+            })
+
+        show_df(
+            pd.DataFrame(_monthly_rows),
+            column_config={
+                "策略月收益率":  st.column_config.NumberColumn(format="%+.2f%%"),
+                "SPY月收益率":   st.column_config.NumberColumn(format="%+.2f%%"),
+                "超额收益（α）": st.column_config.NumberColumn(format="%+.2f%%"),
+            },
+            use_container_width=True, hide_index=True,
+        )
+        if len(_monthly_rows) >= 2:
+            _fig_mon = go.Figure()
+            _fig_mon.add_trace(go.Bar(
+                x=[r["月份"] for r in _monthly_rows],
+                y=[r["策略月收益率"] for r in _monthly_rows],
+                name="策略",
+                marker_color=["#2ca02c" if r["策略月收益率"] >= 0 else "#d62728"
+                              for r in _monthly_rows],
+            ))
+            _spy_mon_pairs = [(r["月份"], r["SPY月收益率"]) for r in _monthly_rows
+                             if r["SPY月收益率"] is not None]
+            if _spy_mon_pairs:
+                _fig_mon.add_trace(go.Scatter(
+                    x=[v[0] for v in _spy_mon_pairs], y=[v[1] for v in _spy_mon_pairs],
+                    name="SPY", mode="lines+markers",
+                    line=dict(color="#888888", dash="dash", width=1.5),
+                ))
+            _fig_mon.update_layout(
+                title="月度收益率（绿=正收益，红=负收益）",
+                xaxis_title="月份", yaxis_title="月收益率 (%)",
+                yaxis=dict(ticksuffix="%"),
+                height=320, template="plotly_white",
+                legend=dict(orientation="h", y=1.02, x=1, xanchor="right"),
+                margin=dict(l=60, r=20, t=60, b=40),
+            )
+            st.plotly_chart(_fig_mon, use_container_width=True)
+        st.markdown("---")
 
     # ── 数据下载（方法一）────────────────────────────────────────────────────
     st.subheader("数据下载（用于未来策略1.0的过拟合分析）")
