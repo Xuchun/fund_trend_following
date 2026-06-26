@@ -618,10 +618,16 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _exit_proceeds_proj = sum(s.get("shares", 0) * s.get("stop_used", 0) for s in _pend_exits)
     _proj_cash = _m1_cash + _exit_proceeds_proj
     _blocked_entries = []
+    # 从 candidate_signals 建立 ticker → rejection 映射，用于备注说明
+    _cand_rejection = {
+        c["ticker"]: c.get("rejection")
+        for c in (_m1_today_sig or {}).get("candidate_signals", [])
+    }
     for e in sorted(_pend_entries, key=lambda x: x.get("strength", 0), reverse=True):
         _strength    = e.get("strength", 0)
         _strength_str = f"突破强度 {_strength:.4f}，" if _strength else ""
         _cost        = e.get("shares", 0) * e.get("signal_price", 0)
+        _corr_note   = "⚠️ 相关性减仓（×0.5），" if _cand_rejection.get(e["ticker"]) == "corr_reduced" else ""
         if _proj_cash >= _cost:
             _proj_cash -= _cost
             _order_rows.append({
@@ -631,7 +637,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "参考价":   f"${e['signal_price']:.2f}" if e.get("signal_price") else "—",
                 "总金额":   f"${_cost:,.0f}",
                 "订单类型": "市价单（开盘执行）",
-                "备注":     (f"{_strength_str}止损 ${e['stop_price']:.2f}，风险 {e['trade_risk']*100:.2f}% NAV"
+                "备注":     (f"{_corr_note}{_strength_str}止损 ${e['stop_price']:.2f}，风险 {e['trade_risk']*100:.2f}% NAV"
                              if e.get("stop_price") else "—"),
             })
         else:
