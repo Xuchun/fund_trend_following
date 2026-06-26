@@ -636,16 +636,18 @@ def scan_entries(
 
         # Step 3: correlation adjustment
         _corr_triggered = False
+        _corr_with_ticker = None
         if held_log_returns:
             _cand_lr = compute_log_returns(close)
             _all_lr  = {**held_log_returns, ticker: _cand_lr}
-            max_corr = compute_max_correlation(
+            max_corr, _corr_with_ticker = compute_max_correlation(
                 new_ticker=ticker,
                 current_positions=held_tickers,
                 log_returns=_all_lr,
                 as_of_date=pd.Timestamp(today),
                 window=PARAMS.correlation_window,
                 min_samples=40,
+                return_ticker=True,
             )
             if max_corr > PARAMS.correlation_threshold:
                 final_shares_f *= PARAMS.correlation_reduction
