@@ -706,6 +706,7 @@ def scan_entries(
             "shares":       shares,
             "trade_risk":   round(trade_risk, 4),
             "rejection":    "corr_reduced" if _corr_triggered else None,
+            "corr_with":    _corr_with_ticker if _corr_triggered else None,
         })
         heat_used += trade_risk
 
