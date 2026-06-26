@@ -327,6 +327,9 @@ def execute_pending_entries(
         final_shares_f = min(raw_shares_f, cap_shares_f)
 
         # Step 3: correlation adjustment — use live held positions (updated each iteration)
+        # as_of_date = signal_date (T-1, day of signal generation) — mirrors backtest which
+        # passes signal.get("signal_date", date) to compute_position_size. Using the execution
+        # date (T) would include T's close return, which isn't known at T's open.
         _held_list = list(_held)
         if _held_list:
             _cand_lr = compute_log_returns(df["Close"])
@@ -335,7 +338,7 @@ def execute_pending_entries(
                 new_ticker=ticker,
                 current_positions=_held_list,
                 log_returns=_all_lr,
-                as_of_date=pd.Timestamp(today),
+                as_of_date=pd.Timestamp(sig.get("signal_date", str(today))),
                 window=PARAMS.correlation_window,
                 min_samples=40,
                 return_ticker=True,
