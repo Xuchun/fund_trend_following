@@ -468,8 +468,9 @@ def detect_exit_signals(
 
         atr_s   = compute_atr(df["High"], df["Low"], df["Close"], PARAMS.atr_period)
         cur_atr = float(atr_s.iloc[-1])
-        if pd.isna(cur_atr):
-            cur_atr = pos["atr_at_entry"]
+        # Do NOT fall back to atr_at_entry when ATR is NaN — mirrors backtest
+        # update_trail_stop_v1 which does `if isnan(atr): return` (skips update entirely).
+        # update_trail_stop's own guard (pd.isna(cur_atr) → return) handles this correctly.
 
         # Always update trail stop first — mirrors backtest update_trail_stop_v1
         trail_stop, highest_high = update_trail_stop(pos, high_px, cur_atr)
