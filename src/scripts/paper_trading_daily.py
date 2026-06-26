@@ -753,8 +753,8 @@ def main() -> None:
     pos_tickers          = [p["ticker"] for p in state["positions"]]
     pending_exit_tickers = [s["ticker"] for s in state.get("pending_exits", [])]
     pending_entr_tickers = [s["ticker"] for s in state.get("pending_entries", [])]
-    all_needed = list(set(pos_tickers + pending_exit_tickers + pending_entr_tickers + ["SPY"]))
-    log.info("--- Fetching position + pending + SPY data ---")
+    all_needed = list(set(pos_tickers + pending_exit_tickers + pending_entr_tickers + ["SPY", "SGOV"]))
+    log.info("--- Fetching position + pending + SPY + SGOV data ---")
     pos_data = fetch_price_data(all_needed, period="300d")
 
     spy_df    = pos_data.get("SPY")
