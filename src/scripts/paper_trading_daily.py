@@ -774,22 +774,22 @@ def main() -> None:
     # Mirrors backtest engine step ②: portfolio.cash *= (1 + sgov_ret)
     # Applied AFTER open executions (cash reflects today's buys/sells) and
     # BEFORE NAV snapshot, so NAV correctly captures interest earned today.
-    sgov_df  = pos_data.get("SGOV")
-    sgov_ret = 0.0
-    if sgov_df is not None and not sgov_df.empty and len(sgov_df) >= 2:
+    shy_df   = pos_data.get("SHY")
+    shy_ret  = 0.0
+    if shy_df is not None and not shy_df.empty and len(shy_df) >= 2:
         today_ts = pd.Timestamp(today)
-        close_s  = sgov_df["Close"]
+        close_s  = shy_df["Close"]
         if today_ts in close_s.index:
             idx = close_s.index.get_loc(today_ts)
             if idx > 0:
-                sgov_ret = float(close_s.iloc[idx] / close_s.iloc[idx - 1] - 1)
+                shy_ret = float(close_s.iloc[idx] / close_s.iloc[idx - 1] - 1)
     _cash_before = state.get("cash", 0.0)
-    state["cash"] = _cash_before * (1.0 + sgov_ret)
-    if sgov_ret != 0.0:
-        log.info(f"  SGOV return: {sgov_ret*100:+.4f}%  "
+    state["cash"] = _cash_before * (1.0 + shy_ret)
+    if shy_ret != 0.0:
+        log.info(f"  SHY return: {shy_ret*100:+.4f}%  "
                  f"cash ${_cash_before:,.0f} → ${state['cash']:,.0f}")
     else:
-        log.warning("  SGOV data unavailable for today — cash earns 0%")
+        log.warning("  SHY data unavailable for today — cash earns 0%")
 
     # ── Step 4: ③ CLOSE — update trail stops, detect new exit signals ─────────
     log.info("--- Updating trail stops and detecting exit signals ---")
