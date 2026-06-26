@@ -968,9 +968,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         else:
             _nav_sl_m1 = _nh_s
 
-        _nav_norm_m1 = _nav_sl_m1 / float(_nav_sl_m1.iloc[0])
-        _dd_m1 = (_nav_sl_m1 - _nav_sl_m1.cummax()) / _nav_sl_m1.cummax() * 100
-
         # SPY for comparison (strip timezone from YF index)
         _has_spy_m1 = _show_spy_m1 and _spy_df is not None
         if _has_spy_m1:
@@ -983,10 +980,17 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             else:
                 _spy_sl_m1 = _spy_cmp
             if not _spy_sl_m1.empty:
-                _spy_norm_m1 = _spy_sl_m1 / float(_spy_sl_m1.iloc[0])
-                _spy_dd_m1   = (_spy_sl_m1 - _spy_sl_m1.cummax()) / _spy_sl_m1.cummax() * 100
+                # 找到策略和 SPY 共同的最早日期，确保两条曲线从同一日期归一化到 1
+                _common_start = max(_nav_sl_m1.index[0], _spy_sl_m1.index[0])
+                _nav_sl_m1    = _nav_sl_m1[_nav_sl_m1.index >= _common_start]
+                _spy_sl_m1    = _spy_sl_m1[_spy_sl_m1.index >= _common_start]
+                _spy_norm_m1  = _spy_sl_m1 / float(_spy_sl_m1.iloc[0])
+                _spy_dd_m1    = (_spy_sl_m1 - _spy_sl_m1.cummax()) / _spy_sl_m1.cummax() * 100
             else:
                 _has_spy_m1 = False
+
+        _nav_norm_m1 = _nav_sl_m1 / float(_nav_sl_m1.iloc[0])
+        _dd_m1 = (_nav_sl_m1 - _nav_sl_m1.cummax()) / _nav_sl_m1.cummax() * 100
 
         _fig_nav = make_subplots(
             rows=2, cols=1, shared_xaxes=True,
