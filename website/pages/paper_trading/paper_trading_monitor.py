@@ -487,15 +487,15 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
               delta=f"vs {_prev_date} 收盘")
     c2.metric(_nav_label, f"${_m1_nav/1e6:.2f}M")
     c3.metric("净值浮盈（%）", f"{_nav_pnl_pct:+.2f}%", delta="vs 起始资金")
-    c3.metric("净值浮盈（$）", f"${_nav_pnl_usd:+,.0f}")
-    c4.metric("距历史峰值", f"{_cur_dd:.2f}%",
+    c4.metric("净值浮盈（$）", f"${_nav_pnl_usd:+,.0f}")
+    c5.metric("距历史峰值", f"{_cur_dd:.2f}%",
               delta="当前在历史高点" if _cur_dd >= -0.01 else f"峰值 ${_peak_nav/1e6:.3f}M")
-    c5.metric("持仓数量", f"{len(_m1_ok)} 只",
+    c6.metric("持仓数量", f"{len(_m1_ok)} 只",
               delta=f"其中 {len(_m1_stop)} 只触止损" if _m1_stop else None,
               delta_color="inverse" if _m1_stop else "normal")
-    c6.metric("持仓市值", f"${_m1_mkt/1e6:.2f}M",
+    c7.metric("持仓市值", f"${_m1_mkt/1e6:.2f}M",
               delta=f"占 NAV {_m1_mkt/_m1_nav*100:.1f}%" if _m1_nav else None)
-    c7.metric("现金", f"${_m1_cash/1e6:.2f}M")
+    c8.metric("现金", f"${_m1_cash/1e6:.2f}M")
 
     # Portfolio heat progress bar
     _hfill   = min(_heat_pct / _heat_limit_pct, 1.0) * 100
