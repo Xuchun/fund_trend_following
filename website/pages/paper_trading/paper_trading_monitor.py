@@ -504,36 +504,34 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _latest_date      = "—"
     _daily_chg_pct = (_latest_close_nav / _prev_nav - 1) * 100 if _prev_nav > 0 else 0.0
 
+    # 去掉 st.metric() 数值的粗体，与自定义指标保持一致
+    st.markdown(
+        "<style>[data-testid='stMetricValue']{font-weight:400!important;}</style>",
+        unsafe_allow_html=True,
+    )
+
     c1, c2, c3, c4, c5, c6, c7, c8 = st.columns(8)
 
     def _colored_metric(col, label, value_str, is_positive, sub=None):
         if is_positive is None:
-            clr = "#262730"   # 中性色：与 st.metric() 默认值颜色一致
+            clr = "inherit"
         else:
             clr = "#2ca02c" if is_positive else "#d62728"
-        sub_html = f"<div style='font-size:0.8em;color:#2ca02c;margin-top:2px'>↑ {sub}</div>" if sub else ""
+        sub_clr = clr if is_positive is not None else "rgba(49,51,63,0.4)"
+        sub_html = f"<div style='font-size:0.8em;color:{sub_clr};margin-top:2px'>{sub}</div>" if sub else ""
         col.markdown(
-            f"<div style='font-size:0.85em;color:#555;margin-bottom:2px'>{label}</div>"
-            f"<div style='font-size:2.1em;font-weight:700;color:{clr};line-height:1.2'>{value_str}</div>"
+            f"<div style='font-size:0.875rem;color:rgba(49,51,63,0.6);margin-bottom:4px'>{label}</div>"
+            f"<div style='font-size:2.25rem;font-weight:400;color:{clr};line-height:1.2'>{value_str}</div>"
             + sub_html,
             unsafe_allow_html=True,
         )
 
-    _colored_metric(c1, "每日净值变化（%）", f"{_daily_chg_pct:+.2f}%",
-                    _daily_chg_pct >= 0)
+    _colored_metric(c1, "每日净值变化（%）", f"{_daily_chg_pct:+.2f}%", _daily_chg_pct >= 0)
     _colored_metric(c2, "最新净值", f"${_m1_nav/1e3:,.0f}K", None)
-    _colored_metric(c3, "净值浮盈/亏（%）", f"{_nav_pnl_pct:+.2f}%",
-                    _nav_pnl_pct >= 0)
-    _colored_metric(c4, "净值浮盈/亏（$）", f"${_nav_pnl_usd:+,.0f}",
-                    _nav_pnl_usd >= 0)
-    _dd_color = "#d62728" if _cur_dd < -0.01 else "#2ca02c"
-    _dd_sub   = "当前在历史高点" if _cur_dd >= -0.01 else f"峰值 ${_peak_nav/1e3:,.0f}K"
-    c5.markdown(
-        f"<div style='font-size:0.85em;color:#555;margin-bottom:2px'>净值回撤</div>"
-        f"<div style='font-size:2.1em;font-weight:700;color:{_dd_color};line-height:1.2'>{_cur_dd:.2f}%</div>"
-        f"<div style='font-size:0.8em;color:{_dd_color};margin-top:2px'>{_dd_sub}</div>",
-        unsafe_allow_html=True,
-    )
+    _colored_metric(c3, "净值浮盈/亏（%）", f"{_nav_pnl_pct:+.2f}%", _nav_pnl_pct >= 0)
+    _colored_metric(c4, "净值浮盈/亏（$）", f"${_nav_pnl_usd:+,.0f}", _nav_pnl_usd >= 0)
+    _dd_sub = "当前在历史高点" if _cur_dd >= -0.01 else f"峰值 ${_peak_nav/1e3:,.0f}K"
+    _colored_metric(c5, "净值回撤", f"{_cur_dd:.2f}%", _cur_dd >= -0.01, sub=_dd_sub)
     c6.metric("持仓数量", f"{len(_m1_ok)} 只",
               delta=f"其中 {len(_m1_stop)} 只触止损" if _m1_stop else None,
               delta_color="inverse" if _m1_stop else "normal")
