@@ -165,6 +165,7 @@ st.markdown("---")
 
 # ── Baseline parameter table ───────────────────────────────────────────────────
 _p = meta.params_anchor
+st.markdown('<div id="sec-params"></div>', unsafe_allow_html=True)
 st.subheader("Baseline 锚点参数")
 
 _col_a, _col_b = st.columns(2)
