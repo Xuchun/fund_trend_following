@@ -3457,8 +3457,15 @@ _bt_kl_opts = []
 for _, _btr in _bt_kl_filtered.iterrows():
     _ed_s = _btr["entry_date"].strftime("%Y-%m-%d") if hasattr(_btr["entry_date"], "strftime") else str(_btr["entry_date"])[:10]
     _xd_s = _btr["exit_date"].strftime("%Y-%m-%d")  if hasattr(_btr["exit_date"],  "strftime") else str(_btr["exit_date"])[:10]
+    _btr_r = _btr["pnl_r_multiple"]
+    if _btr.get("exit_reason") == "end_of_backtest":
+        _btr_icon = "🟡"
+    elif _btr_r > 0:
+        _btr_icon = "🟢"
+    else:
+        _btr_icon = "🔴"
     _bt_kl_opts.append(
-        f"🔴  {_btr['ticker']}  入场 {_ed_s}  出场 {_xd_s}  R{_btr['pnl_r_multiple']:+.2f}"
+        f"{_btr_icon}  {_btr['ticker']}  入场 {_ed_s}  出场 {_xd_s}  R{_btr_r:+.2f}"
     )
 
 _bt_kl_sel = st.selectbox(
