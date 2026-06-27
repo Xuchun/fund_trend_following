@@ -1237,6 +1237,17 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _streak_str = f"连赢 {_cur_ws} 笔" if _cur_ws > 0 else f"连亏 {_cur_ls} 笔"
         _bt_max_cl  = int(_bt_metrics.get("max_consecutive_losses", 0)) if _bt_metrics else 0
 
+        _n_total_trades  = len(_m1_positions) + _n_cl
+        _bt_per_year     = _bt_metrics.get("trades_per_year", 0) if _bt_metrics else 0
+        _bt_per_month    = _bt_per_year / 12 if _bt_per_year else 0
+        sa1, sa2, sa3 = st.columns(3)
+        sa1.metric("累计开仓笔数（含当前持仓）", f"{_n_total_trades} 笔",
+                   delta=f"已平仓 {_n_cl} 笔 / 持仓中 {len(_m1_positions)} 笔", delta_color="off")
+        sa2.metric("回测平均每年平仓笔数", f"{_bt_per_year:.0f} 笔/年",
+                   delta=f"回测共 {int(_bt_metrics.get('n_trades',0))} 笔 / 24 年" if _bt_metrics else None,
+                   delta_color="off")
+        sa3.metric("回测平均每月平仓笔数", f"{_bt_per_month:.1f} 笔/月")
+
         sc1, sc2, sc3, sc4 = st.columns(4)
         sc1.metric("已平仓笔数", f"{_n_cl} 笔")
         sc2.metric("胜率", f"{_win_rate:.1f}%")
