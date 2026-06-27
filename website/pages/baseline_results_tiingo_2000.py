@@ -808,6 +808,7 @@ st.markdown("---")
 import plotly.graph_objects as _go_l20
 import numpy as _np_l20
 
+st.markdown('<div id="sec-top20loss"></div>', unsafe_allow_html=True)
 st.subheader("Top 20亏损交易分析")
 st.markdown("已平仓交易中 R 倍数最差的 20 笔——寻找大亏家的共性规律")
 
