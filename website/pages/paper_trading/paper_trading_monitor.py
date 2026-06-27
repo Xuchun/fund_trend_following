@@ -163,51 +163,45 @@ def _fetch_yf(tickers: tuple, period: str = "300d", day: str = ""):
 
 
 def _fetch_yf_chart_single(ticker: str, period: str = "600d") -> pd.DataFrame:
-    """单股K线图数据拉取，yfinance + 直接 HTTP 补充最新日K线数据。"""
+    """单股K线图数据拉取。历史数据用 history(period='2y')，
+    如果历史数据不含最近交易日，用 fast_info 实时报价补最后一根K线。"""
     import yfinance as yf
-    import requests, time
     if not ticker:
         return pd.DataFrame()
     tk = yf.Ticker(ticker)
+
+    # 主数据：2年历史
     df = tk.history(period="2y", auto_adjust=True)
     if df.index.tz is not None:
         df.index = df.index.tz_localize(None)
     df = df.sort_index()
 
-    # 直接调用 Yahoo Finance query2 API 补充最近 15 天数据
-    # 绕过 yfinance 的内部缓存和 CDN 地域差异
-    try:
-        _now = int(time.time())
-        _url = f"https://query2.finance.yahoo.com/v8/finance/chart/{ticker}"
-        _params = {
-            "period1": _now - 15 * 86400,
-            "period2": _now + 86400,
-            "interval": "1d",
-            "events": "",
-        }
-        _headers = {"User-Agent": "Mozilla/5.0"}
-        _resp = requests.get(_url, params=_params, headers=_headers, timeout=8)
-        _data = _resp.json()
-        _res  = _data["chart"]["result"][0]
-        _ts   = _res["timestamp"]
-        _q    = _res["indicators"]["quote"][0]
-        _ac   = (_res["indicators"].get("adjclose", [{}])[0].get("adjclose")
-                 or _q["close"])
-        _df2 = pd.DataFrame({
-            "Open": _q["open"], "High": _q["high"],
-            "Low": _q["low"],  "Close": _ac,
-            "Volume": _q["volume"],
-        }, index=pd.to_datetime(_ts, unit="s", utc=True))
-        _df2.index = (_df2.index
-                      .tz_convert("America/New_York")
-                      .normalize()
-                      .tz_localize(None))
-        _df2 = _df2.dropna(subset=["Close"])
-        if not _df2.empty:
-            df = pd.concat([df, _df2])
-            df = df[~df.index.duplicated(keep="last")].sort_index()
-    except Exception:
-        pass
+    # 判断最近交易日（周末取上周五，工作日取今日）
+    _today = pd.Timestamp.today().normalize()
+    if _today.weekday() >= 5:          # 周六=5, 周日=6
+        _last_bday = _today - pd.offsets.BDay(1)
+    else:
+        _last_bday = _today
+
+    # 如果历史数据落后最近交易日，用 fast_info 实时报价补一根
+    if not df.empty and df.index[-1].normalize() < _last_bday:
+        try:
+            fi = tk.fast_info
+            _close = fi.last_price
+            _open  = getattr(fi, "open",      None) or _close
+            _high  = getattr(fi, "day_high",  None) or _close
+            _low   = getattr(fi, "day_low",   None) or _close
+            _vol   = getattr(fi, "last_volume", 0)  or 0
+            if _close:
+                _bar = pd.DataFrame(
+                    {"Open": [_open], "High": [_high], "Low": [_low],
+                     "Close": [_close], "Volume": [int(_vol)]},
+                    index=pd.DatetimeIndex([_last_bday]),
+                )
+                df = pd.concat([df, _bar])
+                df = df[~df.index.duplicated(keep="last")].sort_index()
+        except Exception:
+            pass
 
     return df.dropna(subset=["Close"]) if not df.empty else pd.DataFrame()
 
