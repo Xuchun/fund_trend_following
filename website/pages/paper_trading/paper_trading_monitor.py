@@ -1623,7 +1623,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 [p["ticker"] for p in _m1_positions] +
                 [c["ticker"] for c in _m1_closed]
             )))
-            _s9_raw, _ = _fetch_yf(_s9_all_history_tks, "600d")
+            _s9_raw, _ = _fetch_yf(_s9_all_history_tks, "600d", str(pd.Timestamp.today().date()))
             _s9_kdf = _get_df(_s9_raw, _s9_tk)
 
             if _s9_kdf is not None and not _s9_kdf.empty:
