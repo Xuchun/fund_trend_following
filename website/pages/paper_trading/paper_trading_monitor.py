@@ -1627,13 +1627,25 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 import matplotlib.pyplot as _plt
                 import matplotlib.patches as _mpatch
                 import mplfinance as _mpf
-                from pathlib import Path as _Path
-                _cn_font_path = _Path(__file__).resolve().parents[2] / "fonts" / "NotoSansSC-Regular.ttf"
-                if _cn_font_path.exists():
-                    _fm_batch.fontManager.addfont(str(_cn_font_path))
-                    _cn_font_name = _fm_batch.FontProperties(fname=str(_cn_font_path)).get_name()
-                    matplotlib.rcParams["font.family"] = _cn_font_name
-                    matplotlib.rcParams["axes.unicode_minus"] = False
+                # 尝试加载系统中文字体（Streamlit Cloud 通过 packages.txt 安装了 fonts-wqy-zenhei）
+                try:
+                    _wqy_candidates = [
+                        "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
+                        "/usr/share/fonts/wqy-zenhei/wqy-zenhei.ttc",
+                        "/usr/share/fonts/truetype/wqy-zenhei/wqy-zenhei.ttc",
+                    ]
+                    _cn_font_loaded = False
+                    for _wqy_p in _wqy_candidates:
+                        import os as _os
+                        if _os.path.exists(_wqy_p):
+                            _fm_batch.fontManager.addfont(_wqy_p)
+                            _cn_fn = _fm_batch.FontProperties(fname=_wqy_p).get_name()
+                            matplotlib.rcParams["font.family"] = _cn_fn
+                            matplotlib.rcParams["axes.unicode_minus"] = False
+                            _cn_font_loaded = True
+                            break
+                except Exception:
+                    pass
 
                 _batch_tks = tuple(sorted(set(
                     [p["ticker"] for p in _m1_positions] +
