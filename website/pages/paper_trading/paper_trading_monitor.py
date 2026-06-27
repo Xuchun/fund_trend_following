@@ -1670,10 +1670,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         line_color="#ff7f0e", line_dash="dash", line_width=2)
                     _s9_fig.add_annotation(
                         x=_s9_exit_dt.isoformat(), xref="x",
-                        y=0.28, yref="paper",
+                        y=0.36, yref="paper",
                         text="出场日", showarrow=False,
                         font=dict(color="#ff7f0e", size=11),
-                        xanchor="left", yanchor="bottom")
+                        xanchor="right", yanchor="bottom")
 
                 # x轴范围
                 _s9_x_end = (
