@@ -1692,7 +1692,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                             type="candle",
                             volume=True,
                             style=_mpf_style,
-                            title=f"{_btk}  {_b_lbl}  (最近 {_b_n} 根日K线)",
+                            title=f"{_btk}  {_b_lbl}  (Last {_b_n} Daily Candles)",
                             figsize=(16, 7),
                             returnfig=True,
                             warn_too_much_data=9999,
