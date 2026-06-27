@@ -950,6 +950,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             "状态":          ("🔴 触止损（待次日清仓）" if p.get("stop_reason") == "stop_loss"
                              else ("🔴 触移动止盈（待次日清仓）" if p.get("stop_reason") == "trailing_stop" else "✅ 持仓中")),
             "当前价":        p["current_price"],
+            "买入价":        p["entry_price"],
             "历史最高":      p["highest_high"],
             "ATR(20)":      p["current_atr"],
             "止盈ATR倍":     p["trail_mult"],
