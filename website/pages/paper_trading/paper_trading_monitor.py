@@ -507,7 +507,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     c1, c2, c3, c4, c5, c6, c7, c8 = st.columns(8)
 
     def _colored_metric(col, label, value_str, is_positive, sub=None):
-        clr = "#2ca02c" if is_positive else "#d62728"
+        if is_positive is None:
+            clr = "#262730"   # 中性色：与 st.metric() 默认值颜色一致
+        else:
+            clr = "#2ca02c" if is_positive else "#d62728"
         sub_html = f"<div style='font-size:0.8em;color:#2ca02c;margin-top:2px'>↑ {sub}</div>" if sub else ""
         col.markdown(
             f"<div style='font-size:0.85em;color:#555;margin-bottom:2px'>{label}</div>"
@@ -518,7 +521,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     _colored_metric(c1, "每日净值变化（%）", f"{_daily_chg_pct:+.2f}%",
                     _daily_chg_pct >= 0)
-    c2.metric("最新净值", f"${_m1_nav/1e3:,.0f}K")
+    _colored_metric(c2, "最新净值", f"${_m1_nav/1e3:,.0f}K", None)
     _colored_metric(c3, "净值浮盈/亏（%）", f"{_nav_pnl_pct:+.2f}%",
                     _nav_pnl_pct >= 0)
     _colored_metric(c4, "净值浮盈/亏（$）", f"${_nav_pnl_usd:+,.0f}",
