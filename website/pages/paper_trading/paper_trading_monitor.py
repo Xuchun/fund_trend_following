@@ -167,15 +167,19 @@ def _fetch_yf_chart_single(ticker: str, period: str = "600d") -> pd.DataFrame:
     import yfinance as yf
     if not ticker:
         return pd.DataFrame()
-    _days  = int(period.rstrip("d"))
-    _end   = pd.Timestamp.today() + pd.Timedelta(days=2)
-    _start = pd.Timestamp.today() - pd.Timedelta(days=_days)
-    df = yf.Ticker(ticker).history(start=_start, end=_end, auto_adjust=True)
+    tk = yf.Ticker(ticker)
+    # 用 period="2y" 确保包含最新数据（不依赖 start/end 日期计算）
+    df = tk.history(period="2y", auto_adjust=True)
+    # 补充最近 10 天防止 period 参数也有延迟
+    df_recent = tk.history(period="10d", auto_adjust=True)
+    if not df_recent.empty:
+        df = pd.concat([df, df_recent])
+        df = df[~df.index.duplicated(keep="last")].sort_index()
     if df.empty:
         return pd.DataFrame()
     if df.index.tz is not None:
         df.index = df.index.tz_localize(None)
-    return df.dropna(subset=["Close"])
+    return df.sort_index().dropna(subset=["Close"])
 
 
 def _us_open_to_sgt(date_str: str) -> str:
