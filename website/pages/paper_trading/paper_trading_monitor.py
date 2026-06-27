@@ -666,6 +666,8 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             _s2_kline_n  = 300
             _s2_entry_dt = None
             _s2_ep = _s2_sp = None
+            _s2_cl   = None
+            _s2_esig = None
 
             if _s2_is_sell:
                 _s2_cl = next(
