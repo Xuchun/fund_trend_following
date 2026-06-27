@@ -1024,7 +1024,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
             if _kdf is not None and not _kdf.empty:
                 import yfinance as _yf_ver
-                st.caption(f"[debug] yf={_yf_ver.__version__}  last={_kdf.index[-1].date()}  rows={len(_kdf)}  kline={_kline_n}")
+                st.caption(f"[debug] yf={_yf_ver.__version__}  last={_kdf.index[-1].date()}  rows={len(_kdf)}  kline={_kline_n}  today={pd.Timestamp.today().date()}")
                 # 精确计算开仓后的交易日数
                 if _is_sell_chart and _entry_dt_chart is not None:
                     _holding_tds = int((_kdf.index >= _entry_dt_chart).sum())
