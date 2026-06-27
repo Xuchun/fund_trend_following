@@ -605,6 +605,151 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             })
     if _trade_rows:
         show_df(pd.DataFrame(sorted(_trade_rows, key=lambda x: (0 if "卖出" in x["方向"] else 1, x["标的"]))), use_container_width=True, hide_index=True)
+
+        # ── K线图（今日已执行交易）────────────────────────────────────────────
+        _s2_sell_tks = [e["ticker"] for e in _exits_exec]
+        _s2_buy_tks  = [e["ticker"] for e in _entries_exec]
+        _s2_all_tks  = _s2_sell_tks + _s2_buy_tks
+        if _s2_all_tks:
+            _s2_exec_dt = pd.Timestamp(_ts_trade_date)
+            _s2_opts = (
+                [f"🔴 已平仓  {t}" for t in _s2_sell_tks]
+                + [f"🟢 已开仓  {t}" for t in _s2_buy_tks]
+            )
+            _s2_opt_to_tk = {
+                **{f"🔴 已平仓  {t}": t for t in _s2_sell_tks},
+                **{f"🟢 已开仓  {t}": t for t in _s2_buy_tks},
+            }
+            _s2_sel_opt = st.selectbox(
+                "选择标的查看K线图（日本蜡烛图 + 成交量）",
+                _s2_opts,
+                key="s2_kline_sel",
+            )
+            _s2_sel_tk   = _s2_opt_to_tk[_s2_sel_opt]
+            _s2_is_sell  = _s2_sel_tk in _s2_sell_tks
+            _s2_kline_n  = 300
+            _s2_entry_dt = None
+            _s2_ep = _s2_sp = None
+
+            if _s2_is_sell:
+                _s2_cl = next(
+                    (c for c in _m1_closed
+                     if c["ticker"] == _s2_sel_tk and c.get("exit_date") == _ts_trade_date),
+                    None,
+                )
+                if _s2_cl:
+                    _s2_entry_dt = pd.Timestamp(_s2_cl["entry_date"])
+                    _s2_ep       = _s2_cl.get("entry_price")
+                    _s2_sp       = _s2_cl.get("stop_used") or _s2_cl.get("stop_loss")
+                    _s2_kline_n  = 300 + max(0, (_s2_exec_dt - _s2_entry_dt).days * 5 // 7)
+
+            _s2_raw, _ = _fetch_yf(tuple(sorted(set(_s2_all_tks))), "600d")
+            _s2_kdf    = _get_df(_s2_raw, _s2_sel_tk)
+
+            if _s2_kdf is not None and not _s2_kdf.empty:
+                if _s2_is_sell and _s2_entry_dt is not None:
+                    _s2_kline_n = 300 + int((_s2_kdf.index >= _s2_entry_dt).sum())
+                _s2_kdf = _s2_kdf.tail(_s2_kline_n).copy()
+
+                _s2_vol_colors = [
+                    "#2ca02c" if float(_s2_kdf["Close"].iloc[i]) >= float(_s2_kdf["Open"].iloc[i])
+                    else "#d62728"
+                    for i in range(len(_s2_kdf))
+                ]
+
+                from plotly.subplots import make_subplots as _mk_sub2
+                _s2_fig = _mk_sub2(
+                    rows=2, cols=1, shared_xaxes=True,
+                    vertical_spacing=0.03, row_heights=[0.75, 0.25],
+                )
+                _s2_fig.add_trace(go.Candlestick(
+                    x=_s2_kdf.index,
+                    open=_s2_kdf["Open"].values, high=_s2_kdf["High"].values,
+                    low=_s2_kdf["Low"].values,   close=_s2_kdf["Close"].values,
+                    increasing_line_color="#2ca02c", decreasing_line_color="#d62728",
+                    increasing_fillcolor="#2ca02c", decreasing_fillcolor="#d62728",
+                    name="K线", showlegend=False,
+                ), row=1, col=1)
+                _s2_fig.add_trace(go.Bar(
+                    x=_s2_kdf.index, y=_s2_kdf["Volume"].values,
+                    marker_color=_s2_vol_colors, showlegend=False,
+                ), row=2, col=1)
+
+                if _s2_is_sell:
+                    if _s2_ep:
+                        _s2_fig.add_hline(y=_s2_ep, row=1, col=1,
+                            line_color="#1f77b4", line_dash="dash", line_width=1.5,
+                            annotation_text=f"买入价 ${_s2_ep:.2f}",
+                            annotation_position="top left",
+                            annotation_font_color="#1f77b4")
+                    if _s2_sp:
+                        _s2_fig.add_hline(y=_s2_sp, row=1, col=1,
+                            line_color="#d62728", line_dash="dash", line_width=1.5,
+                            annotation_text=f"止损价 ${_s2_sp:.2f}",
+                            annotation_position="top left",
+                            annotation_font_color="#d62728")
+                    if _s2_entry_dt is not None:
+                        _s2_fig.add_vline(x=_s2_entry_dt.isoformat(),
+                            line_color="#1f77b4", line_dash="dot", line_width=1.5,
+                            annotation_text="开仓日",
+                            annotation_position="bottom left",
+                            annotation_font_color="#1f77b4")
+                    _s2_fig.add_vline(x=_s2_exec_dt.isoformat(),
+                        line_color="#ff7f0e", line_dash="dash", line_width=2)
+                    _s2_fig.add_annotation(
+                        x=_s2_exec_dt.isoformat(), xref="x",
+                        y=0.22, yref="paper",
+                        text="今日平仓", showarrow=False,
+                        font=dict(color="#ff7f0e", size=11),
+                        xanchor="right", yanchor="top")
+                else:
+                    _s2_esig = next((e for e in _entries_exec if e["ticker"] == _s2_sel_tk), None)
+                    if _s2_esig:
+                        _s2_sig_p  = _s2_esig.get("signal_price")
+                        _s2_stop_p = _s2_esig.get("stop_price")
+                        if _s2_sig_p:
+                            _s2_fig.add_hline(y=_s2_sig_p, row=1, col=1,
+                                line_color="#2ca02c", line_dash="dash", line_width=1.5,
+                                annotation_text=f"信号价 ${_s2_sig_p:.2f}",
+                                annotation_position="top left",
+                                annotation_font_color="#2ca02c")
+                        if _s2_stop_p:
+                            _s2_fig.add_hline(y=_s2_stop_p, row=1, col=1,
+                                line_color="#d62728", line_dash="dash", line_width=1.5,
+                                annotation_text=f"止损价 ${_s2_stop_p:.2f}",
+                                annotation_position="top left",
+                                annotation_font_color="#d62728")
+                    _s2_fig.add_vline(x=_s2_exec_dt.isoformat(),
+                        line_color="#2ca02c", line_dash="dash", line_width=2)
+                    _s2_fig.add_annotation(
+                        x=_s2_exec_dt.isoformat(), xref="x",
+                        y=0.22, yref="paper",
+                        text="今日开仓", showarrow=False,
+                        font=dict(color="#2ca02c", size=11),
+                        xanchor="right", yanchor="top")
+
+                _s2_x_end   = _s2_exec_dt + pd.Timedelta(days=4)
+                _s2_x_start = _s2_kdf.index[0]
+                _s2_action  = "今日已平仓" if _s2_is_sell else "今日已开仓"
+                _s2_fig.update_layout(
+                    title=f"{_s2_sel_tk}　{_s2_action}　（最近 {_s2_kline_n} 根日K线）",
+                    height=520, template="plotly_white",
+                    margin=dict(l=60, r=20, t=50, b=20),
+                    legend=dict(orientation="h", y=1.02, x=0, xanchor="left"),
+                )
+                _s2_fig.update_layout(xaxis_rangeslider_visible=False)
+                _s2_fig.update_yaxes(title_text="价格 ($)", row=1, col=1,
+                                     showgrid=True, gridcolor="#eeeeee")
+                _s2_fig.update_yaxes(title_text="成交量", row=2, col=1,
+                                     showgrid=True, gridcolor="#eeeeee")
+                _s2_fig.update_xaxes(
+                    showgrid=True, gridcolor="#eeeeee",
+                    range=[_s2_x_start.isoformat(), _s2_x_end.isoformat()],
+                )
+                st.plotly_chart(_s2_fig, use_container_width=True)
+            else:
+                st.warning(f"无法获取 {_s2_sel_tk} 的K线数据，请稍后刷新重试。")
+
     else:
         st.info("今日无交易（今日开盘时无来自昨日的挂单）")
 
