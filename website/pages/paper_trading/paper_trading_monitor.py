@@ -800,7 +800,12 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 def _get_status(c):
                     if c["ticker"] in _blocked_entries:
                         return "🔴 未选（现金不足）"
-                    return _rejection_label.get(c.get("rejection"), c.get("rejection", "✅ 已选入"))
+                    rejection = c.get("rejection")
+                    # scan_entries approved it (rejection=None/corr_reduced), but main()'s
+                    # sequential cash deduction may have dropped it from entry_signals.
+                    if rejection in (None, "corr_reduced") and c["ticker"] not in _approved_tickers:
+                        return "🔴 未选（现金不足）"
+                    return _rejection_label.get(rejection, rejection or "✅ 已选入")
                 _cand_rows = [{
                     "标的":         c["ticker"],
                     "信号价（今收）": f"${c.get('signal_price', 0):.2f}" if c.get("signal_price") else "",
