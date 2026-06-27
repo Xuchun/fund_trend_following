@@ -1627,7 +1627,8 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 import matplotlib.pyplot as _plt
                 import matplotlib.patches as _mpatch
                 import mplfinance as _mpf
-                # 用 fc-list 动态查找系统中文字体（最可靠）
+                # 用 fc-list 查找系统中文字体路径，直接传给 FontProperties 绕过 cache
+                _zh_font_path = None
                 try:
                     import subprocess as _sp
                     _fc = _sp.run(
@@ -1637,16 +1638,12 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     _zh_font_files = [f.strip() for f in _fc.stdout.splitlines() if f.strip()]
                     if _zh_font_files:
                         _zh_font_path = _zh_font_files[0]
-                        _fm_batch.fontManager.addfont(_zh_font_path)
-                        _cn_fn = _fm_batch.FontProperties(fname=_zh_font_path).get_name()
-                        matplotlib.rcParams["font.family"] = _cn_fn
-                        matplotlib.rcParams["axes.unicode_minus"] = False
-                    else:
-                        matplotlib.rcParams["font.sans-serif"] = [
-                            "WenQuanYi Zen Hei", "WenQuanYi Micro Hei", "DejaVu Sans"]
-                        matplotlib.rcParams["axes.unicode_minus"] = False
                 except Exception:
                     pass
+                matplotlib.rcParams["axes.unicode_minus"] = False
+                # FontProperties 对象：直接指定字体文件，完全不依赖 font cache
+                _cn_fp  = _fm_batch.FontProperties(fname=_zh_font_path) if _zh_font_path else None
+                _cn_fp8 = _fm_batch.FontProperties(fname=_zh_font_path, size=8) if _zh_font_path else None
 
                 _batch_tks = tuple(sorted(set(
                     [p["ticker"] for p in _m1_positions] +
