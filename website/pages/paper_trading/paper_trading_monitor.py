@@ -1101,8 +1101,22 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 _x_start = _kdf.index[0]
 
                 _action_str = "明日平仓" if _is_sell_chart else "明日开仓"
+
+                _title_info_3 = ""
+                if _is_sell_chart and _pos_info_chart:
+                    _t3_ent_d = _pos_info_chart.get("entry_date", "")
+                    _t3_ent_p = _pos_info_chart.get("entry_price")
+                    _title_info_3 = f"　｜　开仓 {_t3_ent_d}" + (f"  ${_t3_ent_p:.2f}" if _t3_ent_p else "")
+                elif not _is_sell_chart and _entry_sig_chart:
+                    _t3_sig_p = _entry_sig_chart.get("signal_price")
+                    _t3_stp   = _entry_sig_chart.get("stop_price") or _entry_sig_chart.get("stop_loss")
+                    _title_info_3 = (
+                        (f"　｜　信号价 ${_t3_sig_p:.2f}" if _t3_sig_p else "")
+                        + (f"　止损 ${_t3_stp:.2f}" if _t3_stp else "")
+                    )
+
                 _fig_k.update_layout(
-                    title=f"{_sel_tk}　{_action_str}　（最近 {_kline_n} 根日K线）",
+                    title=f"{_sel_tk}　{_action_str}{_title_info_3}　（最近 {_kline_n} 根日K线）",
                     height=520,
                     template="plotly_white",
                     margin=dict(l=60, r=20, t=50, b=20),
