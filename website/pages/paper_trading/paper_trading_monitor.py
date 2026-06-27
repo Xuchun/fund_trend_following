@@ -164,11 +164,14 @@ def _fetch_yf(tickers: tuple, period: str = "300d", day: str = ""):
 
 @st.cache_data(ttl=300)
 def _fetch_yf_chart(tickers: tuple, period: str = "600d"):
-    """K线图专用拉取，5分钟缓存，确保当天最新日K线及时可见。"""
+    """K线图专用拉取，5分钟缓存。用显式 start/end 而非 period，避免云端时区差异漏掉当日K线。"""
     import yfinance as yf
     if not tickers:
         return pd.DataFrame()
-    return yf.download(list(tickers), period=period, auto_adjust=True, progress=False)
+    _days    = int(period.rstrip("d"))
+    _end_dt  = (pd.Timestamp.today() + pd.Timedelta(days=1)).strftime("%Y-%m-%d")
+    _start_dt = (pd.Timestamp.today() - pd.Timedelta(days=_days)).strftime("%Y-%m-%d")
+    return yf.download(list(tickers), start=_start_dt, end=_end_dt, auto_adjust=True, progress=False)
 
 
 def _us_open_to_sgt(date_str: str) -> str:
