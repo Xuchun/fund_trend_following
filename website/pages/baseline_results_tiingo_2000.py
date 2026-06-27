@@ -3202,6 +3202,7 @@ st.markdown(
 st.markdown("---")
 
 # ── Full metrics table ────────────────────────────────────────────────────────
+st.markdown('<div id="sec-fulltable"></div>', unsafe_allow_html=True)
 st.subheader("完整指标对比表")
 render_full_metrics_table(m, _spy_metrics)
 
