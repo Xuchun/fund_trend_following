@@ -729,11 +729,10 @@ def main() -> None:
     log.info(f"  Open positions: {len(state['positions'])} | Cash: ${state.get('cash',0)/1e6:.2f}M")
 
     # ── Step 1: fetch data for all tickers needed today ───────────────────────
-    pos_tickers           = [p["ticker"] for p in state["positions"]]
-    pending_exit_tickers  = [s["ticker"] for s in state.get("pending_exits", [])]
-    pending_entr_tickers  = [s["ticker"] for s in state.get("pending_entries", [])]
-    pending_backup_tickers = [s["ticker"] for s in state.get("backup_pending_entries", [])]
-    all_needed = list(set(pos_tickers + pending_exit_tickers + pending_entr_tickers + pending_backup_tickers + ["SPY", "SHY"]))
+    pos_tickers          = [p["ticker"] for p in state["positions"]]
+    pending_exit_tickers = [s["ticker"] for s in state.get("pending_exits", [])]
+    pending_entr_tickers = [s["ticker"] for s in state.get("pending_entries", [])]
+    all_needed = list(set(pos_tickers + pending_exit_tickers + pending_entr_tickers + ["SPY", "SHY"]))
     log.info("--- Fetching position + pending + SPY + SHY data ---")
     pos_data = fetch_price_data(all_needed, period="300d")
 
