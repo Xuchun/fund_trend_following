@@ -1543,6 +1543,140 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             file_name="trade_history.csv",
             mime="text/csv",
         )
+
+        # ── K线图（交易历史）──────────────────────────────────────────────────
+        # 下拉选项：持仓中 + 已平仓（同一标的多笔用出场日区分）
+        _s9_open_opts   = [f"🟢 持仓中  {p['ticker']}" for p in sorted(_m1_positions, key=lambda x: x["entry_date"])]
+        _s9_closed_opts = [
+            f"🔴 已平仓  {c['ticker']}  (出场 {c.get('exit_date','')})"
+            for c in sorted(_m1_closed, key=lambda x: x.get("exit_date", ""), reverse=True)
+        ]
+        _s9_all_opts = _s9_open_opts + _s9_closed_opts
+        if _s9_all_opts:
+            _s9_sel_opt = st.selectbox(
+                "选择标的查看K线图（日本蜡烛图 + 成交量）",
+                _s9_all_opts,
+                key="s9_kline_sel",
+            )
+            _s9_is_open = _s9_sel_opt.startswith("🟢")
+
+            if _s9_is_open:
+                # 从 _m1_positions 取对应记录（按下拉选项顺序匹配）
+                _s9_idx   = _s9_open_opts.index(_s9_sel_opt)
+                _s9_pos   = sorted(_m1_positions, key=lambda x: x["entry_date"])[_s9_idx]
+                _s9_tk    = _s9_pos["ticker"]
+                _s9_ep    = _s9_pos.get("entry_price")
+                # 当前有效止损：从 _m1_live 取
+                _s9_live  = next((lp for lp in _m1_live if lp["ticker"] == _s9_tk), None)
+                _s9_sp    = _s9_live.get("current_stop") if _s9_live else _s9_pos.get("stop_loss")
+                _s9_entry_dt = pd.Timestamp(_s9_pos["entry_date"])
+                _s9_exit_dt  = None
+                _s9_holding_approx = max(0, (pd.Timestamp.today() - _s9_entry_dt).days * 5 // 7)
+                _s9_kline_n  = 300 + _s9_holding_approx
+            else:
+                _s9_cl_idx = _s9_closed_opts.index(_s9_sel_opt)
+                _s9_cl     = sorted(_m1_closed, key=lambda x: x.get("exit_date", ""), reverse=True)[_s9_cl_idx]
+                _s9_tk     = _s9_cl["ticker"]
+                _s9_ep     = _s9_cl.get("entry_price")
+                _s9_sp     = _s9_cl.get("stop_used") or _s9_cl.get("stop_loss")
+                _s9_entry_dt = pd.Timestamp(_s9_cl["entry_date"])
+                _s9_exit_dt  = pd.Timestamp(_s9_cl["exit_date"]) if _s9_cl.get("exit_date") else None
+                _s9_holding_approx = max(0, int(_s9_cl.get("holding_days", 0)))
+                _s9_kline_n  = 300 + _s9_holding_approx
+
+            _s9_raw, _ = _fetch_yf((tuple(sorted(set([_s9_tk]))),), "600d") if False else \
+                         _fetch_yf(tuple(sorted(set(
+                             [p["ticker"] for p in _m1_positions] +
+                             [c["ticker"] for c in _m1_closed]
+                         ))), "600d")
+            _s9_kdf = _get_df(_s9_raw, _s9_tk)
+
+            if _s9_kdf is not None and not _s9_kdf.empty:
+                # 精确计算
+                _s9_kline_n = 300 + int((_s9_kdf.index >= _s9_entry_dt).sum())
+                _s9_kdf = _s9_kdf.tail(_s9_kline_n).copy()
+
+                _s9_vol_colors = [
+                    "#2ca02c" if float(_s9_kdf["Close"].iloc[i]) >= float(_s9_kdf["Open"].iloc[i])
+                    else "#d62728"
+                    for i in range(len(_s9_kdf))
+                ]
+
+                from plotly.subplots import make_subplots as _mk_sub9
+                _s9_fig = _mk_sub9(
+                    rows=2, cols=1, shared_xaxes=True,
+                    vertical_spacing=0.03, row_heights=[0.75, 0.25],
+                )
+                _s9_fig.add_trace(go.Candlestick(
+                    x=_s9_kdf.index,
+                    open=_s9_kdf["Open"].values, high=_s9_kdf["High"].values,
+                    low=_s9_kdf["Low"].values,   close=_s9_kdf["Close"].values,
+                    increasing_line_color="#2ca02c", decreasing_line_color="#d62728",
+                    increasing_fillcolor="#2ca02c", decreasing_fillcolor="#d62728",
+                    name="K线", showlegend=False,
+                ), row=1, col=1)
+                _s9_fig.add_trace(go.Bar(
+                    x=_s9_kdf.index, y=_s9_kdf["Volume"].values,
+                    marker_color=_s9_vol_colors, showlegend=False,
+                ), row=2, col=1)
+
+                # 水平参考线
+                if _s9_ep:
+                    _s9_fig.add_hline(y=_s9_ep, row=1, col=1,
+                        line_color="#1f77b4", line_dash="dash", line_width=1.5,
+                        annotation_text=f"买入价 ${_s9_ep:.2f}",
+                        annotation_position="top left",
+                        annotation_font_color="#1f77b4")
+                if _s9_sp:
+                    _s9_fig.add_hline(y=_s9_sp, row=1, col=1,
+                        line_color="#d62728", line_dash="dash", line_width=1.5,
+                        annotation_text=f"止损价 ${_s9_sp:.2f}",
+                        annotation_position="top left",
+                        annotation_font_color="#d62728")
+
+                # 开仓日竖线（蓝色点状）
+                _s9_fig.add_vline(x=_s9_entry_dt.isoformat(),
+                    line_color="#1f77b4", line_dash="dot", line_width=1.5,
+                    annotation_text="开仓日",
+                    annotation_position="bottom left",
+                    annotation_font_color="#1f77b4")
+
+                # 出场日竖线（橙色虚线，仅已平仓）
+                if _s9_exit_dt is not None:
+                    _s9_fig.add_vline(x=_s9_exit_dt.isoformat(),
+                        line_color="#ff7f0e", line_dash="dash", line_width=2)
+                    _s9_fig.add_annotation(
+                        x=_s9_exit_dt.isoformat(), xref="x",
+                        y=0.22, yref="paper",
+                        text="出场日", showarrow=False,
+                        font=dict(color="#ff7f0e", size=11),
+                        xanchor="right", yanchor="top")
+
+                # x轴范围
+                _s9_x_end = (
+                    _s9_exit_dt + pd.Timedelta(days=4) if _s9_exit_dt is not None
+                    else pd.Timestamp.today() + pd.Timedelta(days=4)
+                )
+                _s9_action = "持仓中" if _s9_is_open else f"已平仓（R={_s9_cl.get('pnl_r', 0):+.2f}）"
+                _s9_fig.update_layout(
+                    title=f"{_s9_tk}　{_s9_action}　（最近 {_s9_kline_n} 根日K线）",
+                    height=520, template="plotly_white",
+                    margin=dict(l=60, r=20, t=50, b=20),
+                    legend=dict(orientation="h", y=1.02, x=0, xanchor="left"),
+                )
+                _s9_fig.update_layout(xaxis_rangeslider_visible=False)
+                _s9_fig.update_yaxes(title_text="价格 ($)", row=1, col=1,
+                                     showgrid=True, gridcolor="#eeeeee")
+                _s9_fig.update_yaxes(title_text="成交量", row=2, col=1,
+                                     showgrid=True, gridcolor="#eeeeee")
+                _s9_fig.update_xaxes(
+                    showgrid=True, gridcolor="#eeeeee",
+                    range=[_s9_kdf.index[0].isoformat(), _s9_x_end.isoformat()],
+                )
+                st.plotly_chart(_s9_fig, use_container_width=True)
+            else:
+                st.warning(f"无法获取 {_s9_tk} 的K线数据，请稍后刷新重试。")
+
     else:
         st.info("暂无交易记录")
 
