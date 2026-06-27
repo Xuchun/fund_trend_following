@@ -423,6 +423,7 @@ _ep_df = _pd_ep.DataFrame(_ep_rows)
 import plotly.graph_objects as _go_ddd
 
 st.markdown("---")
+st.markdown('<div id="sec-deepdd"></div>', unsafe_allow_html=True)
 st.subheader("深度回撤分析（回撤 > 10%）")
 
 _deep_eps_ddd = _ep_df[_ep_df["最大回撤"] < -0.10].copy() if len(_ep_df) > 0 else _pd_ep.DataFrame()
