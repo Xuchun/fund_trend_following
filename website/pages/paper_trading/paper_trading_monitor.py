@@ -503,10 +503,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         )
 
     _colored_metric(c1, "每日净值变化（%）", f"{_daily_chg_pct:+.2f}%",
-                    _daily_chg_pct >= 0, sub=f"vs {_prev_date} 收盘")
-    _colored_metric(c2, _nav_label, f"${_m1_nav/1e3:,.0f}K", True)
+                    _daily_chg_pct >= 0)
+    _colored_metric(c2, "最新净值", f"${_m1_nav/1e3:,.0f}K", True)
     _colored_metric(c3, "净值浮盈（%）", f"{_nav_pnl_pct:+.2f}%",
-                    _nav_pnl_pct >= 0, sub="vs 起始资金")
+                    _nav_pnl_pct >= 0)
     _colored_metric(c4, "净值浮盈（$）", f"${_nav_pnl_usd:+,.0f}",
                     _nav_pnl_usd >= 0)
     _dd_color = "#d62728" if _cur_dd < -0.01 else "#2ca02c"
