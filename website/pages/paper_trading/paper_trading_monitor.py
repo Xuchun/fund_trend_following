@@ -1703,29 +1703,29 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         _bfig_mpf, _baxes_mpf = _mpf.plot(_bkdf2, **_mpf_kwargs)
                         _ax_price = _baxes_mpf[0]
 
-                        # 竖线：开仓日
+                        # Entry date vline (blue dotted)
                         if _b_edt in _bkdf2.index:
                             _b_edt_pos = _bkdf2.index.get_loc(_b_edt)
                             _ax_price.axvline(x=_b_edt_pos, color="#1f77b4",
                                               linestyle=":", linewidth=1.5)
                             _ax_price.text(_b_edt_pos, _ax_price.get_ylim()[0],
-                                           " 开仓日", color="#1f77b4", fontsize=8,
+                                           " Entry", color="#1f77b4", fontsize=8,
                                            va="bottom", ha="left")
-                        # 竖线：出场日
+                        # Exit date vline (orange dashed)
                         if _b_xdt is not None and _b_xdt in _bkdf2.index:
                             _b_xdt_pos = _bkdf2.index.get_loc(_b_xdt)
                             _ax_price.axvline(x=_b_xdt_pos, color="#ff7f0e",
                                               linestyle="--", linewidth=2)
                             _ax_price.text(_b_xdt_pos, _ax_price.get_ylim()[1],
-                                           " 出场日", color="#ff7f0e", fontsize=8,
+                                           " Exit", color="#ff7f0e", fontsize=8,
                                            va="top", ha="left")
-                        # 买入价/止损价标注
+                        # Entry price / stop price labels
                         if _b_ep:
-                            _ax_price.text(0, _b_ep, f" 买入价 ${_b_ep:.2f}",
+                            _ax_price.text(0, _b_ep, f" Entry ${_b_ep:.2f}",
                                            color="#1f77b4", fontsize=8,
                                            va="bottom", transform=_ax_price.get_yaxis_transform())
                         if _b_sp:
-                            _ax_price.text(0, _b_sp, f" 止损价 ${_b_sp:.2f}",
+                            _ax_price.text(0, _b_sp, f" Stop ${_b_sp:.2f}",
                                            color="#d62728", fontsize=8,
                                            va="top", transform=_ax_price.get_yaxis_transform())
 
