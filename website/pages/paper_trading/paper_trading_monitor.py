@@ -822,7 +822,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                             y=_ep, row=1, col=1,
                             line_color="#1f77b4", line_dash="dash", line_width=1.5,
                             annotation_text=f"买入价 ${_ep:.2f}",
-                            annotation_position="bottom left",
+                            annotation_position="top left",
                             annotation_font_color="#1f77b4",
                         )
                     if _sp:
