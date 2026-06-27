@@ -812,12 +812,13 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     _sp = next(
                         (s.get("stop_used") for s in _pend_exits if s["ticker"] == _sel_tk), None
                     )
+                    # 水平参考线：标注放左侧，避免与右侧图例遮挡
                     if _ep:
                         _fig_k.add_hline(
                             y=_ep, row=1, col=1,
                             line_color="#1f77b4", line_dash="dash", line_width=1.5,
                             annotation_text=f"买入价 ${_ep:.2f}",
-                            annotation_position="bottom right",
+                            annotation_position="bottom left",
                             annotation_font_color="#1f77b4",
                         )
                     if _sp:
@@ -825,17 +826,28 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                             y=_sp, row=1, col=1,
                             line_color="#d62728", line_dash="dash", line_width=1.5,
                             annotation_text=f"止损价 ${_sp:.2f}",
-                            annotation_position="top right",
+                            annotation_position="top left",
                             annotation_font_color="#d62728",
                         )
+                    # 开仓点：用上三角标记在入场K线下方
                     if _entry_dt_chart is not None:
-                        _fig_k.add_vline(
-                            x=_entry_dt_chart.isoformat(),
-                            line_color="#1f77b4", line_dash="dot", line_width=1,
-                            annotation_text="买入日",
-                            annotation_position="top left",
-                            annotation_font_color="#1f77b4",
-                        )
+                        _tri_dt = _entry_dt_chart
+                        if _tri_dt not in _kdf.index:
+                            _after = _kdf.index[_kdf.index >= _tri_dt]
+                            _tri_dt = _after[0] if len(_after) > 0 else _kdf.index[-1]
+                        _tri_low = float(_kdf.loc[_tri_dt, "Low"])
+                        _tri_y   = _tri_low * 0.984
+                        _fig_k.add_trace(go.Scatter(
+                            x=[_tri_dt],
+                            y=[_tri_y],
+                            mode="markers+text",
+                            marker=dict(symbol="triangle-up", size=14, color="#1f77b4"),
+                            text=["买入"],
+                            textposition="bottom center",
+                            textfont=dict(color="#1f77b4", size=10),
+                            name="买入点",
+                            showlegend=True,
+                        ), row=1, col=1)
                 else:
                     _entry_sig_chart = next(
                         (e for e in _exec_entries if e["ticker"] == _sel_tk), None
@@ -848,7 +860,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                                 y=_sig_p, row=1, col=1,
                                 line_color="#2ca02c", line_dash="dash", line_width=1.5,
                                 annotation_text=f"信号价 ${_sig_p:.2f}",
-                                annotation_position="bottom right",
+                                annotation_position="bottom left",
                                 annotation_font_color="#2ca02c",
                             )
                         if _stop_p:
@@ -856,7 +868,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                                 y=_stop_p, row=1, col=1,
                                 line_color="#d62728", line_dash="dash", line_width=1.5,
                                 annotation_text=f"止损价 ${_stop_p:.2f}",
-                                annotation_position="bottom right",
+                                annotation_position="top left",
                                 annotation_font_color="#d62728",
                             )
 
@@ -866,7 +878,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     height=520,
                     template="plotly_white",
                     margin=dict(l=60, r=20, t=50, b=20),
-                    legend=dict(orientation="h", y=1.02, x=1, xanchor="right"),
+                    legend=dict(orientation="h", y=1.02, x=0, xanchor="left"),
                 )
                 _fig_k.update_layout(xaxis_rangeslider_visible=False)
                 _fig_k.update_yaxes(title_text="价格 ($)", row=1, col=1,
