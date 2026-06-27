@@ -3250,6 +3250,8 @@ with _flt_d1:
         _flt_edt_val = st.date_input(
             "开仓最早日期（该日期及之后开仓的交易才显示）",
             value=_bt_kl_all["entry_date"].min().date(),
+            min_value=_bt_kl_all["entry_date"].min().date(),
+            max_value=_bt_kl_all["entry_date"].max().date(),
             key="flt_edt_val",
         )
     else:
@@ -3260,6 +3262,8 @@ with _flt_d2:
         _flt_xdt_val = st.date_input(
             "平仓最晚日期（该日期及之前出场的交易才显示）",
             value=_bt_kl_all["exit_date"].max().date(),
+            min_value=_bt_kl_all["exit_date"].min().date(),
+            max_value=_bt_kl_all["exit_date"].max().date(),
             key="flt_xdt_val",
         )
     else:
