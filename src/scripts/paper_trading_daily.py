@@ -563,30 +563,18 @@ def scan_entries(
         (p["entry_price"] - p["stop_loss"]) * p["shares"] / nav
         for p in state["positions"]
     )
-    # Use projected cash (current + pending exit proceeds) — mirrors backtest which
-    # only checks cash at OPEN time, AFTER all pending exits have already executed.
-    # Using current cash alone would wrongly block signals when cash is low but exits
-    # are about to free up significant capital.
-    _proj_exit_cash = sum(
-        s.get("shares", 0) * s.get("stop_used", 0)
-        for s in state.get("pending_exits", [])
-    )
-    cash    = state.get("cash", 0.0) + _proj_exit_cash
     signals: list[dict] = []
 
     # Rejection counters — stored in today_signals for future overfitting analysis
     n_raw_breakouts = 0   # passed all per-stock filters; before portfolio constraints
     n_corr_reduced  = 0   # correlation triggered size reduction (signal still accepted)
     n_heat_blocked  = 0   # blocked by portfolio heat limit
-    n_cash_blocked  = 0   # blocked by insufficient cash
+    # Note: no cash pre-filtering at signal time (mirrors backtest). Cash is checked
+    # at T+1 execution so gap-filter failures free cash for the next signal in line.
 
     # Full candidate list (all raw breakouts with per-candidate rejection reason)
     # "四、今日开平仓信号" displays this so the user sees the full funnel, not just approved ones.
     all_raw_candidates: list[dict] = []
-
-    # Backup candidates: passed heat check but blocked by cash; tried at execution if a
-    # primary pending entry fails the gap filter and cash becomes available.
-    backup_candidates: list[dict] = []
 
     # Pre-compute log returns for held positions (for Step 3 correlation check)
     held_log_returns: dict[str, pd.Series] = {}
