@@ -496,8 +496,14 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     c2.metric(_nav_label, f"${_m1_nav/1e3:,.0f}K")
     c3.metric("净值浮盈（%）", f"{_nav_pnl_pct:+.2f}%", delta="vs 起始资金")
     c4.metric("净值浮盈（$）", f"${_nav_pnl_usd:+,.0f}")
-    c5.metric("距历史峰值", f"{_cur_dd:.2f}%",
-              delta="当前在历史高点" if _cur_dd >= -0.01 else f"峰值 ${_peak_nav/1e3:,.0f}K")
+    _dd_color = "#d62728" if _cur_dd < -0.01 else "#2ca02c"
+    _dd_sub   = "当前在历史高点" if _cur_dd >= -0.01 else f"峰值 ${_peak_nav/1e3:,.0f}K"
+    c5.markdown(
+        f"<div style='font-size:0.85em;color:#555;margin-bottom:2px'>净值回撤</div>"
+        f"<div style='font-size:2.1em;font-weight:700;color:{_dd_color};line-height:1.2'>{_cur_dd:.2f}%</div>"
+        f"<div style='font-size:0.8em;color:{_dd_color};margin-top:2px'>{_dd_sub}</div>",
+        unsafe_allow_html=True,
+    )
     c6.metric("持仓数量", f"{len(_m1_ok)} 只",
               delta=f"其中 {len(_m1_stop)} 只触止损" if _m1_stop else None,
               delta_color="inverse" if _m1_stop else "normal")
