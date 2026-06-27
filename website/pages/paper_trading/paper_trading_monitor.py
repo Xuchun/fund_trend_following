@@ -947,7 +947,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             "当前价":        p["current_price"],
             "历史最高":      p["highest_high"],
             "ATR(20)":      p["current_atr"],
-            "乘数":          p["trail_mult"],
+            "止盈ATR倍":     p["trail_mult"],
             "止损":          p["stop_loss"],
             "移动止盈":      p["trail_stop_live"],
             "有效止损/止盈": p["current_stop"],
