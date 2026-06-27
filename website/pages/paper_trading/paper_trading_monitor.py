@@ -743,7 +743,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         y=0.28, yref="paper",
                         text="今日平仓", showarrow=False,
                         font=dict(color="#ff7f0e", size=11),
-                        xanchor="right", yanchor="bottom")
+                        xanchor="left", yanchor="bottom")
                 else:
                     _s2_esig = next((e for e in _entries_exec if e["ticker"] == _s2_sel_tk), None)
                     if _s2_esig:
