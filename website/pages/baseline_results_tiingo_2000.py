@@ -3178,6 +3178,7 @@ else:
 st.markdown("---")
 
 # ── Monthly return heatmap ────────────────────────────────────────────────────
+st.markdown('<div id="sec-monthly"></div>', unsafe_allow_html=True)
 st.subheader("月度收益热力图")
 st.plotly_chart(monthly_return_heatmap(res.nav), use_container_width=True)
 
