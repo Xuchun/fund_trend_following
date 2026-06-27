@@ -978,7 +978,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
             # 拉取数据：600d ≈ 420 交易日，足够 300 + 任意典型持仓天数
             _chart_fetch_tks  = tuple(sorted(set(_chart_all_tks)))
-            _chart_raw, _     = _fetch_yf(_chart_fetch_tks, "600d")
+            _chart_raw, _     = _fetch_yf(_chart_fetch_tks, "600d", str(pd.Timestamp.today().date()))
             _kdf = _get_df(_chart_raw, _sel_tk)
 
             if _kdf is not None and not _kdf.empty:
