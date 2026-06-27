@@ -3193,25 +3193,33 @@ import pandas as _pd_bt_kl
 import plotly.graph_objects as _go_bt_kl
 from plotly.subplots import make_subplots as _msp_bt_kl
 
-@st.cache_data(ttl=3600, show_spinner=False)
-def _bt_kl_fetch(ticker: str, start_str: str, end_str: str) -> "_pd_bt_kl.DataFrame":
-    import yfinance as _yf_bt
+@st.cache_data(ttl=86400, show_spinner=False)
+def _bt_tiingo_get(ticker: str, start_str: str, end_str: str) -> "_pd_bt_kl.DataFrame":
+    """从本地 Tiingo parquet 缓存读取复权日K线数据。"""
+    from pathlib import Path as _P2
+    _tdir = _P2(__file__).resolve().parents[2] / "data" / "cache" / "tiingo"
+    _fpath = _tdir / f"{ticker.upper()}.parquet"
+    if not _fpath.exists():
+        return _pd_bt_kl.DataFrame()
     try:
-        return _yf_bt.download(ticker, start=start_str, end=end_str,
-                               auto_adjust=True, progress=False)
+        _df = _pd_bt_kl.read_parquet(_fpath)
+        _df.index = _pd_bt_kl.DatetimeIndex(_df.index)
+        # 应用复权因子得到复权价格
+        for _c in ("open", "high", "low", "close"):
+            _df[_c] = _df[_c] * _df["adj_factor"]
+        # 按日期范围截取
+        if start_str:
+            _df = _df[_df.index >= start_str]
+        if end_str:
+            _df = _df[_df.index <= end_str]
+        # 重命名为首字母大写（与 Plotly / mplfinance 兼容）
+        _df = _df.rename(columns={
+            "open": "Open", "high": "High",
+            "low": "Low", "close": "Close", "volume": "Volume",
+        })
+        return _df[["Open", "High", "Low", "Close", "Volume"]].dropna(subset=["Close"])
     except Exception:
         return _pd_bt_kl.DataFrame()
-
-def _bt_kl_get(raw, ticker: str):
-    if raw is None or raw.empty:
-        return None
-    if isinstance(raw.columns, _pd_bt_kl.MultiIndex):
-        if ticker not in raw.columns.get_level_values(1):
-            return None
-        df = raw.xs(ticker, level=1, axis=1).dropna(subset=["Close"])
-    else:
-        df = raw.dropna(subset=["Close"])
-    return df if not df.empty else None
 
 # 所有回测交易（按出场日倒序）
 _bt_kl_all = res.trades.sort_values("exit_date", ascending=False).reset_index(drop=True)
