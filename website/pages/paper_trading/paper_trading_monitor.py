@@ -1668,9 +1668,20 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     _s9_exit_dt + pd.Timedelta(days=4) if _s9_exit_dt is not None
                     else pd.Timestamp.today() + pd.Timedelta(days=4)
                 )
-                _s9_action = "持仓中" if _s9_is_open else f"已平仓（R={_s9_cl.get('pnl_r', 0):+.2f}）"
+                if _s9_is_open:
+                    _s9_action     = "持仓中"
+                    _s9_title_info = f"　｜　开仓 {_s9_pos.get('entry_date', '')}" + (f"  ${_s9_ep:.2f}" if _s9_ep else "")
+                else:
+                    _s9_action = "已平仓"
+                    _s9_t_r    = _s9_cl.get("pnl_r")
+                    _s9_title_info = (
+                        f"　｜　开仓 {_s9_cl.get('entry_date', '')}  ${_s9_cl.get('entry_price', 0):.2f}"
+                        f"　→　平仓 {_s9_cl.get('exit_date', '')}  ${_s9_cl.get('exit_price', 0):.2f}"
+                        + (f"　R={_s9_t_r:+.2f}" if _s9_t_r is not None else "")
+                    )
+
                 _s9_fig.update_layout(
-                    title=f"{_s9_tk}　{_s9_action}　（最近 {_s9_kline_n} 根日K线）",
+                    title=f"{_s9_tk}　{_s9_action}{_s9_title_info}　（最近 {_s9_kline_n} 根日K线）",
                     height=520, template="plotly_white",
                     margin=dict(l=60, r=20, t=50, b=20),
                     legend=dict(orientation="h", y=1.02, x=0, xanchor="left"),
