@@ -920,7 +920,6 @@ def main() -> None:
     log.info(f"  Entries executed:   {len(entries_executed)}  (from yesterday's pending, at today's open)")
     log.info(f"  New exit signals:   {len(new_exit_signals)}  (pending for tomorrow's open)")
     log.info(f"  New entry signals:  {len(new_pending)}  (pending for tomorrow's open)")
-    log.info(f"  Backup entries:     {len(_backup_pending)}  (cash_blocked fallback, tried if primary gaps out)")
     log.info(f"  Open positions:     {len(state['positions'])}")
     log.info(f"  Cash:               ${state.get('cash',0)/1e6:.2f}M")
     log.info(f"  NAV:                ${current_nav/1e6:.2f}M")
