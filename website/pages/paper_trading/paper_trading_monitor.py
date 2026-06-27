@@ -1026,10 +1026,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 _exec_dt = pd.Timestamp(str(_next_td))
 
                 if _is_sell_chart and _pos_info_chart:
-                    _ep = _pos_info_chart.get("entry_price")
-                    _sp = next(
+                    _ep      = _pos_info_chart.get("entry_price")
+                    _sp      = next(
                         (s.get("stop_used") for s in _pend_exits if s["ticker"] == _sel_tk), None
                     )
+                    _trail_p = _pos_info_chart.get("trail_stop")
                     # 水平参考线：标注放左侧，避免与右侧图例遮挡
                     if _ep:
                         _fig_k.add_hline(
@@ -1046,6 +1047,14 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                             annotation_text=f"止损价 ${_sp:.2f}",
                             annotation_position="top left",
                             annotation_font_color="#d62728",
+                        )
+                    if _trail_p and _sp and abs(_trail_p - _sp) > 0.01:
+                        _fig_k.add_hline(
+                            y=_trail_p, row=1, col=1,
+                            line_color="#ff7f0e", line_dash="dot", line_width=1.5,
+                            annotation_text=f"移动止损 ${_trail_p:.2f}",
+                            annotation_position="top left",
+                            annotation_font_color="#ff7f0e",
                         )
                     # 蓝色虚线：开仓日
                     if _entry_dt_chart is not None:
