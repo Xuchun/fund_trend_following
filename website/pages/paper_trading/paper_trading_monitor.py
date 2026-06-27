@@ -485,10 +485,24 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _nav_pnl_usd = _m1_nav - _m1_init_nav
     _nav_label = f"净值（{_m1_date} 最后记录价格）" if _m1_stale else "净值"
 
-    # 每日净值变化：当前净值 vs nav_history 最新一条（上一个交易日收盘净值）
-    _prev_nav = float(_m1_history[-1]["nav"]) if _m1_history else _m1_init_nav
-    _daily_chg_pct = (_m1_nav / _prev_nav - 1) * 100 if _prev_nav > 0 else 0.0
-    _prev_date = _m1_history[-1]["date"] if _m1_history else "—"
+    # 每日净值变化：最后一个交易日收盘后 NAV vs 之前一个交易日收盘后 NAV
+    # 两者均取 nav_history（由每日脚本在收盘后用 Yahoo Finance 计算并写入）
+    if len(_m1_history) >= 2:
+        _latest_close_nav = float(_m1_history[-1]["nav"])
+        _prev_nav         = float(_m1_history[-2]["nav"])
+        _prev_date        = _m1_history[-2]["date"]
+        _latest_date      = _m1_history[-1]["date"]
+    elif len(_m1_history) == 1:
+        _latest_close_nav = float(_m1_history[-1]["nav"])
+        _prev_nav         = _m1_init_nav
+        _prev_date        = "起始"
+        _latest_date      = _m1_history[-1]["date"]
+    else:
+        _latest_close_nav = _m1_nav
+        _prev_nav         = _m1_init_nav
+        _prev_date        = "起始"
+        _latest_date      = "—"
+    _daily_chg_pct = (_latest_close_nav / _prev_nav - 1) * 100 if _prev_nav > 0 else 0.0
 
     c1, c2, c3, c4, c5, c6, c7, c8 = st.columns(8)
 
