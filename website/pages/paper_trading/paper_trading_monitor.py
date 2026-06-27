@@ -1045,23 +1045,27 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         _fig_k.add_vline(
                             x=_entry_dt_chart.isoformat(),
                             line_color="#1f77b4", line_dash="dot", line_width=1.5,
-                            annotation_text="开仓日",
-                            annotation_position="bottom left",
-                            annotation_font_color="#1f77b4",
+                        )
+                        _fig_k.add_annotation(
+                            x=_entry_dt_chart.isoformat(), xref="x",
+                            y=0, yref="y domain",
+                            text="开仓日", showarrow=False,
+                            font=dict(color="#1f77b4", size=11),
+                            xanchor="right", yanchor="bottom",
+                            row=1, col=1,
                         )
                     # 橙色虚线：明日平仓（尚无K线，x轴向右延伸一格显示）
-                    # 用 add_vline 不带 annotation，再手动 add_annotation 只显示一次
                     _fig_k.add_vline(
                         x=_exec_dt.isoformat(),
                         line_color="#ff7f0e", line_dash="dash", line_width=2,
                     )
                     _fig_k.add_annotation(
                         x=_exec_dt.isoformat(), xref="x",
-                        y=0.22, yref="paper",
+                        y=0.28, yref="paper",
                         text="明日平仓",
                         showarrow=False,
                         font=dict(color="#ff7f0e", size=11),
-                        xanchor="right", yanchor="top",
+                        xanchor="right", yanchor="bottom",
                     )
                 else:
                     _entry_sig_chart = next(
