@@ -3748,7 +3748,7 @@ def _gen_kline_charts_zip(trades_df) -> bytes:
     return _buf_zip.read()
 
 # ── 批量下载筛选条件（与上方K线图筛选独立，key前缀 dl_）────────────────────
-st.markdown("**🔍 批量下载筛选条件**（勾选后生效，不勾选则忽略该条件）")
+st.markdown("**🔍 批量下载K线图筛选条件**（勾选后生效，不勾选则忽略该条件）")
 
 # DL Filter 1: Ticker
 _dl_tk_en = st.checkbox("限定标的（Ticker）", key="dl_flt_tk_en")
