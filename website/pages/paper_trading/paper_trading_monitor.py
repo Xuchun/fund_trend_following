@@ -519,32 +519,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         unsafe_allow_html=True,
     )
 
-    # ── 每日脚本运行状态 + 持仓集中度 ────────────────────────────────────────────
-    import datetime as _dt_s1
-    _script_run_date = (_m1_today_sig or {}).get("date")
-    if _script_run_date:
-        _srd       = _dt_s1.date.fromisoformat(_script_run_date)
-        _days_ago  = (_dt_s1.date.today() - _srd).days
-        _sc_icon   = "✅" if _days_ago == 0 else ("⚠️" if _days_ago == 1 else "🔴")
-        _sc_txt    = "今天" if _days_ago == 0 else ("昨天" if _days_ago == 1 else f"{_days_ago} 天前")
-    else:
-        _sc_icon, _sc_txt, _script_run_date = "❓", "未知", "N/A"
-    _n_stk  = sum(1 for p in _m1_ok if _asset_type(p["ticker"]) == "股票")
-    _n_etf  = sum(1 for p in _m1_ok if _asset_type(p["ticker"]) == "ETF")
-    _v_stk  = sum(p.get("mkt_value", 0) for p in _m1_ok if _asset_type(p["ticker"]) == "股票")
-    _v_etf  = sum(p.get("mkt_value", 0) for p in _m1_ok if _asset_type(p["ticker"]) == "ETF")
-    _etf_seg = (f" / ETF {_n_etf} 只（{_v_etf/_m1_nav*100:.1f}% NAV）"
-                if _n_etf > 0 and _m1_nav else "")
-    _stk_seg = (f"股票 {_n_stk} 只（{_v_stk/_m1_nav*100:.1f}% NAV）"
-                if _m1_nav else f"股票 {_n_stk} 只")
-    st.markdown(
-        f"<div style='color:#555;font-size:0.85em;margin:4px 0 10px'>"
-        f"每日脚本：{_sc_icon} {_sc_txt}运行（信号日 {_us_close_to_sgt(_script_run_date) if _script_run_date != 'N/A' else 'N/A'}）"
-        f"　｜　持仓构成：{_stk_seg}{_etf_seg}"
-        f"</div>",
-        unsafe_allow_html=True,
-    )
-
     st.markdown("---")
 
     # ── Today's trades (executions at today's open) ───────────────────────────
