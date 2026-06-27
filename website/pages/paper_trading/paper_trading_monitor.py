@@ -898,7 +898,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                                     showgrid=True, gridcolor="#eeeeee")
                 _fig_k.update_yaxes(title_text="成交量", row=2, col=1,
                                     showgrid=True, gridcolor="#eeeeee")
-                _fig_k.update_xaxes(showgrid=True, gridcolor="#eeeeee")
+                _fig_k.update_xaxes(
+                    showgrid=True, gridcolor="#eeeeee",
+                    range=[_x_start.isoformat(), _x_end.isoformat()],
+                )
                 st.plotly_chart(_fig_k, use_container_width=True)
             else:
                 st.warning(f"无法获取 {_sel_tk} 的K线数据，请稍后刷新重试。")
