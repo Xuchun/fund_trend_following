@@ -769,8 +769,27 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 _s2_x_end   = _s2_exec_dt + pd.Timedelta(days=4)
                 _s2_x_start = _s2_kdf.index[0]
                 _s2_action  = "今日已平仓" if _s2_is_sell else "今日已开仓"
+
+                # Build extra info for chart title
+                _s2_title_info = ""
+                if _s2_is_sell and _s2_cl:
+                    _s2_t_ent = f"{_s2_cl.get('entry_date','')}  ${_s2_cl['entry_price']:.2f}"
+                    _s2_t_ext = f"{_s2_cl.get('exit_date', _ts_trade_date)}  ${_s2_cl.get('exit_price', 0):.2f}"
+                    _s2_t_r   = _s2_cl.get("pnl_r")
+                    _s2_title_info = (
+                        f"　｜　开仓 {_s2_t_ent}"
+                        f"　→　平仓 {_s2_t_ext}"
+                        + (f"　R={_s2_t_r:+.2f}" if _s2_t_r is not None else "")
+                    )
+                elif not _s2_is_sell and _s2_esig:
+                    _s2_t_px = _s2_esig.get("entry_price")
+                    _s2_title_info = (
+                        f"　｜　开仓 {_ts_trade_date}"
+                        + (f"  ${_s2_t_px:.2f}" if _s2_t_px else "")
+                    )
+
                 _s2_fig.update_layout(
-                    title=f"{_s2_sel_tk}　{_s2_action}　（最近 {_s2_kline_n} 根日K线）",
+                    title=f"{_s2_sel_tk}　{_s2_action}{_s2_title_info}　（最近 {_s2_kline_n} 根日K线）",
                     height=520, template="plotly_white",
                     margin=dict(l=60, r=20, t=50, b=20),
                     legend=dict(orientation="h", y=1.02, x=0, xanchor="left"),
