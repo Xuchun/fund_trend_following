@@ -971,6 +971,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         show_df(_sd_df.style.apply(_style_sd, axis=None),
             column_config={
                 "当前价":        st.column_config.NumberColumn(format="$%.2f"),
+                "买入价":        st.column_config.NumberColumn(format="$%.2f"),
                 "历史最高":      st.column_config.NumberColumn(format="$%.2f"),
                 "ATR(20)":      st.column_config.NumberColumn(format="$%.2f"),
                 "止盈ATR倍":     st.column_config.NumberColumn(format="%.1fx"),
