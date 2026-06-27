@@ -1623,9 +1623,17 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 import io as _io, zipfile as _zf_mod
                 import matplotlib
                 matplotlib.use("Agg")
+                import matplotlib.font_manager as _fm_batch
                 import matplotlib.pyplot as _plt
                 import matplotlib.patches as _mpatch
                 import mplfinance as _mpf
+                from pathlib import Path as _Path
+                _cn_font_path = _Path(__file__).resolve().parents[2] / "fonts" / "NotoSansSC-Regular.ttf"
+                if _cn_font_path.exists():
+                    _fm_batch.fontManager.addfont(str(_cn_font_path))
+                    _cn_font_name = _fm_batch.FontProperties(fname=str(_cn_font_path)).get_name()
+                    matplotlib.rcParams["font.family"] = _cn_font_name
+                    matplotlib.rcParams["axes.unicode_minus"] = False
 
                 _batch_tks = tuple(sorted(set(
                     [p["ticker"] for p in _m1_positions] +
