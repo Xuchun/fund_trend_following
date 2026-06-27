@@ -727,6 +727,12 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                             annotation_text=f"止损价 ${_s2_sp:.2f}",
                             annotation_position="top left",
                             annotation_font_color="#d62728")
+                    if _s2_trail and _s2_sp and abs(_s2_trail - _s2_sp) > 0.01:
+                        _s2_fig.add_hline(y=_s2_trail, row=1, col=1,
+                            line_color="#ff7f0e", line_dash="dot", line_width=1.5,
+                            annotation_text=f"移动止损 ${_s2_trail:.2f}",
+                            annotation_position="top left",
+                            annotation_font_color="#ff7f0e")
                     if _s2_entry_dt is not None:
                         _s2_fig.add_vline(x=_s2_entry_dt.isoformat(),
                             line_color="#1f77b4", line_dash="dot", line_width=1.5)
