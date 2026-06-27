@@ -141,7 +141,7 @@ def _build_method_zip(data: dict, method: str) -> bytes:
 _YF_FETCH_FILE = Path(__file__).resolve().parents[3] / "results" / "paper_trading" / "last_yf_fetch.json"
 
 @st.cache_data(ttl=3600)
-def _fetch_yf(tickers: tuple, period: str = "300d"):
+def _fetch_yf(tickers: tuple, period: str = "300d", _day: str = ""):
     """Returns (DataFrame, fetch_time_sgt_str). Both are cached together for 1 hour.
     Also persists the fetch timestamp to last_yf_fetch.json so it survives page reloads."""
     from datetime import datetime, timezone, timedelta
