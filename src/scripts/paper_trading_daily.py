@@ -421,6 +421,7 @@ def execute_pending_entries(
         )
 
     state["pending_entries"] = []
+    state["backup_pending_entries"] = []
     return entries_executed
 
 
