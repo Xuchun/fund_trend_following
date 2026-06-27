@@ -969,6 +969,15 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "距止损/止盈":   st.column_config.NumberColumn(format="%.1f%%"),
             },
         )
+        st.markdown(
+            "<span style='color:#555555;font-size:0.85em'>"
+            "**有效止损/止盈** = max(止损, 移动止盈)，即当前实际生效的离场触发价。"
+            "建仓初期移动止盈尚未超过初始止损时，以「止损」为准；"
+            "随着持仓盈利移动止盈上移超过初始止损后，以「移动止盈」为准。"
+            "**距止损/止盈** = (当前价 − 有效止损/止盈) / 当前价 × 100%。"
+            "</span>",
+            unsafe_allow_html=True,
+        )
 
     st.markdown("---")
 
