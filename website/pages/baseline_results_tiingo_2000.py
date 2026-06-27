@@ -1307,6 +1307,7 @@ st.markdown("---")
 import plotly.graph_objects as _go_t20
 import numpy as _np_t20
 
+st.markdown('<div id="sec-top20win"></div>', unsafe_allow_html=True)
 st.subheader("Top 20盈利交易分析")
 st.markdown("已平仓交易中 R 倍数最高的 20 笔——寻找大赢家的共性规律")
 
