@@ -187,15 +187,29 @@ def _fetch_yf_chart_single(ticker: str, period: str = "600d") -> pd.DataFrame:
     if not df.empty and df.index[-1].normalize() < _last_bday:
         try:
             fi = tk.fast_info
-            _close = fi.last_price
-            _open  = getattr(fi, "open",      None) or _close
-            _high  = getattr(fi, "day_high",  None) or _close
-            _low   = getattr(fi, "day_low",   None) or _close
-            _vol   = getattr(fi, "last_volume", 0)  or 0
+
+            def _clean(v, fallback=None):
+                """把 NaN/None 替换为 fallback。"""
+                if v is None:
+                    return fallback
+                try:
+                    import math
+                    if math.isnan(float(v)):
+                        return fallback
+                except (TypeError, ValueError):
+                    pass
+                return v
+
+            _close = _clean(fi.last_price)
             if _close:
+                _open = _clean(getattr(fi, "open",        None), _close)
+                _high = _clean(getattr(fi, "day_high",    None), _close)
+                _low  = _clean(getattr(fi, "day_low",     None), _close)
+                _vol  = _clean(getattr(fi, "last_volume", None), 0)
                 _bar = pd.DataFrame(
-                    {"Open": [_open], "High": [_high], "Low": [_low],
-                     "Close": [_close], "Volume": [int(_vol)]},
+                    {"Open": [float(_open)], "High": [float(_high)],
+                     "Low": [float(_low)],   "Close": [float(_close)],
+                     "Volume": [int(float(_vol))]},
                     index=pd.DatetimeIndex([_last_bday]),
                 )
                 df = pd.concat([df, _bar])
