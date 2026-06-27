@@ -1237,11 +1237,12 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _streak_str = f"连赢 {_cur_ws} 笔" if _cur_ws > 0 else f"连亏 {_cur_ls} 笔"
         _bt_max_cl  = int(_bt_metrics.get("max_consecutive_losses", 0)) if _bt_metrics else 0
 
-        sc1, sc2, sc3, sc4, sc5, sc6, sc7 = st.columns(7)
+        sc1, sc2, sc3, sc4 = st.columns(4)
         sc1.metric("已平仓笔数", f"{_n_cl} 笔")
         sc2.metric("胜率", f"{_win_rate:.1f}%")
         sc3.metric("平均持仓", f"{_avg_days:.0f} 天")
         sc4.metric("平均R", f"{_avg_r:+.2f}R")
+        sc5, sc6, sc7 = st.columns(3)
         sc5.metric("盈亏比", f"{abs(_avg_win_r/(_avg_loss_r or 1)):.2f}x",
                    delta=f"赢 {_avg_win_r:+.2f}R / 亏 {_avg_loss_r:+.2f}R")
         sc6.metric("总净盈亏", f"${_tot_pnl:+,.0f}")
