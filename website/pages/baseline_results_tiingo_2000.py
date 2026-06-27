@@ -2536,6 +2536,7 @@ import pandas as _pd_es
 _es_path = res.meta.results_dir / "daily_entry_stats.csv"
 if _es_path.exists():
     _entry_stats = _pd_es.read_csv(_es_path, index_col="date", parse_dates=True)
+    st.markdown('<div id="sec-signals"></div>', unsafe_allow_html=True)
     st.subheader("每日开仓信号：已开仓 vs 放弃开仓")
     st.plotly_chart(
         daily_entries_vs_skipped_chart(_entry_stats, meta.color),
