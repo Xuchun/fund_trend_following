@@ -2507,6 +2507,7 @@ st.markdown(f"""
 st.markdown("---")
 
 # ── Daily position count ──────────────────────────────────────────────────────
+st.markdown('<div id="sec-dailypos"></div>', unsafe_allow_html=True)
 st.subheader("每日持仓标的数目")
 st.plotly_chart(
     daily_position_count_chart(res.trades, res.nav.index, meta.color),
