@@ -100,7 +100,56 @@ render_summary_cards(m, meta.color, meta.backtest_start, meta.backtest_end, _spy
 
 st.markdown("---")
 
+# ── Table of Contents ─────────────────────────────────────────────────────────
+st.markdown("### 📋 目录")
+st.markdown("""
+<style>
+.toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 32px;
+    font-size: 15px;
+    line-height: 1.9;
+}
+.toc-grid a { text-decoration: none; color: #1f77b4; }
+.toc-grid a:hover { text-decoration: underline; }
+</style>
+<div class="toc-grid">
+<div>1. <a href="#sec-datasource">回测的数据来源</a></div>
+<div>2. <a href="#sec-params">Baseline 锚点参数</a></div>
+<div>3. <a href="#sec-nav">净值曲线 &amp; 回撤曲线</a></div>
+<div>4. <a href="#sec-deepdd">深度回撤分析</a></div>
+<div>5. <a href="#sec-streak">连续亏损分析</a></div>
+<div>6. <a href="#sec-top20loss">Top 20 亏损交易分析</a></div>
+<div>7. <a href="#sec-annual">逐年回报对比 &amp; 逐年交易笔数</a></div>
+<div>8. <a href="#sec-rdist">交易盈亏分布（R 倍数）</a></div>
+<div>9. <a href="#sec-top20win">Top 20 盈利交易分析</a></div>
+<div>10. <a href="#sec-stocketf">盈利来源：股票 vs ETF</a></div>
+<div>11. <a href="#sec-validity">策略有效性分析</a></div>
+<div>12. <a href="#sec-parity">平价保护分析</a></div>
+<div>13. <a href="#sec-klinestrength">开仓K线强度分析</a></div>
+<div>14. <a href="#sec-turnover">组合换手率</a></div>
+<div>15. <a href="#sec-holdingdays">持仓天数分布</a></div>
+<div>16. <a href="#sec-capitaluse">资金使用率</a></div>
+<div>17. <a href="#sec-dailypos">每日持仓标的数目</a></div>
+<div>18. <a href="#sec-signals">每日开仓信号</a></div>
+<div>19. <a href="#sec-coverage">实际开仓标的覆盖率</a></div>
+<div>20. <a href="#sec-delisted">退市 / 被收购标的的交易</a></div>
+<div>21. <a href="#sec-annualsig">每年开仓信号数量</a></div>
+<div>22. <a href="#sec-heatmap">持仓热度历史图</a></div>
+<div>23. <a href="#sec-perticker">每标的交易次数分布</a></div>
+<div>24. <a href="#sec-universe">每年标的池里面的标的数量</a></div>
+<div>25. <a href="#sec-monthly">月度收益热力图</a></div>
+<div>26. <a href="#sec-fulltable">完整指标对比表</a></div>
+<div>27. <a href="#sec-trades">交易明细 &amp; K线图</a></div>
+<div>28. <a href="#sec-assessment">评估</a></div>
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown("---")
+
 # ── Data source section ───────────────────────────────────────────────────────
+st.markdown('<div id="sec-datasource"></div>', unsafe_allow_html=True)
 st.subheader("回测的数据来源")
 st.markdown(f"""
 | 项目 | 详情 |
