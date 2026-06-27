@@ -679,6 +679,7 @@ def scan_entries(
 
         # Step 4: portfolio heat check
         trade_risk = stop_dist * shares / nav
+        strength   = float(compute_breakout_strength(close, rolling_high).iloc[-1])
         if heat_used + trade_risk > PARAMS.heat_limit:
             n_heat_blocked += 1
             all_raw_candidates.append({
@@ -700,12 +701,23 @@ def scan_entries(
                 "trade_risk":   round(trade_risk, 4),
                 "rejection":    "cash_limit",
             })
+            # Save as backup: passed heat, blocked only by cash.
+            # Will be tried at T+1 execution if a primary pending entry fails gap filter.
+            backup_candidates.append({
+                "ticker":       ticker,
+                "signal_price": round(entry_px, 4),
+                "stop_loss":    round(stop_px, 4),
+                "shares":       shares,
+                "atr":          round(cur_atr, 4),
+                "strength":     round(strength, 4),
+                "trade_risk":   round(trade_risk, 4),
+                "notional":     round(notional, 2),
+            })
             continue
 
         if _corr_triggered:
             n_corr_reduced += 1
 
-        strength = float(compute_breakout_strength(close, rolling_high).iloc[-1])
         signals.append({
             "ticker":       ticker,
             "signal_price": round(entry_px, 4),
