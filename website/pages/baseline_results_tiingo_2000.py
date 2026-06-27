@@ -1156,6 +1156,7 @@ st.markdown(f"""
 
 st.markdown("---")
 
+st.markdown('<div id="sec-annual"></div>', unsafe_allow_html=True)
 st.subheader("逐年回报对比 & 逐年交易笔数")
 
 # ── Annual returns + Trades per year (shared x-axis) ─────────────────────────
