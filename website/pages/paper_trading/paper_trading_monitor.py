@@ -1485,9 +1485,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
         # ── K线图（交易历史）──────────────────────────────────────────────────
         # 下拉选项：持仓中 + 已平仓（同一标的多笔用出场日区分）
-        _s9_open_opts   = [f"🟢 持仓中  {p['ticker']}" for p in sorted(_m1_positions, key=lambda x: x["entry_date"])]
+        _s9_open_opts   = [f"🟡 持仓中  {p['ticker']}" for p in sorted(_m1_positions, key=lambda x: x["entry_date"])]
         _s9_closed_opts = [
-            f"🔴 已平仓  {c['ticker']}  (出场 {c.get('exit_date','')})"
+            f"{'🟢' if c.get('pnl_r', 0) > 0 else '🔴'} 已平仓  {c['ticker']}  (出场 {c.get('exit_date','')})"
             for c in sorted(_m1_closed, key=lambda x: x.get("exit_date", ""), reverse=True)
         ]
         _s9_all_opts = _s9_open_opts + _s9_closed_opts
@@ -1497,7 +1497,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 _s9_all_opts,
                 key="s9_kline_sel",
             )
-            _s9_is_open = _s9_sel_opt.startswith("🟢")
+            _s9_is_open = _s9_sel_opt.startswith("🟡")
 
             if _s9_is_open:
                 # 从 _m1_positions 取对应记录（按下拉选项顺序匹配）
