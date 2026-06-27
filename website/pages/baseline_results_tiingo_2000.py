@@ -2443,6 +2443,7 @@ st.markdown(f"""
 st.markdown("---")
 
 # ── Holding days distribution ─────────────────────────────────────────────────
+st.markdown('<div id="sec-holdingdays"></div>', unsafe_allow_html=True)
 st.subheader("持仓天数分布")
 st.plotly_chart(holding_days_distribution(res.trades), use_container_width=True)
 
