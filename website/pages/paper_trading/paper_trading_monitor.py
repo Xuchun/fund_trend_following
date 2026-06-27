@@ -839,7 +839,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                             x=_entry_dt_chart.isoformat(),
                             line_color="#1f77b4", line_dash="dot", line_width=1.5,
                             annotation_text="开仓日",
-                            annotation_position="top left",
+                            annotation_position="bottom left",
                             annotation_font_color="#1f77b4",
                         )
                     # 橙色虚线：明日平仓（尚无K线，x轴向右延伸一格显示）
