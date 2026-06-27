@@ -1804,7 +1804,16 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         _ax_price = _baxes_mpf[0]
 
                         # 标题（直接指定字体文件，绕过 font cache）
-                        _b_title = f"{_btk}  {_b_lbl}  （最近 {_b_n} 根日K线）"
+                        _b_title_info = f"  |  开仓 {_b_edt.date()}" + (f"  ${_b_ep:.2f}" if _b_ep else "")
+                        if _bstat == "closed" and _b_xdt is not None:
+                            _b_exit_px = _bt.get("exit_price")
+                            _b_r       = _bt.get("pnl_r")
+                            _b_title_info += (
+                                f"  →  平仓 {_b_xdt.date()}"
+                                + (f"  ${_b_exit_px:.2f}" if _b_exit_px else "")
+                                + (f"  R={_b_r:+.2f}" if _b_r is not None else "")
+                            )
+                        _b_title = f"{_btk}  {_b_lbl}{_b_title_info}  （最近 {_b_n} 根日K线）"
                         if _cn_fp:
                             _bfig_mpf.suptitle(_b_title, fontproperties=_cn_fp, fontsize=12)
                         else:
