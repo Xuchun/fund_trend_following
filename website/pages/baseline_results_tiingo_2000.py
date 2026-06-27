@@ -3194,13 +3194,13 @@ import plotly.graph_objects as _go_bt_kl
 from plotly.subplots import make_subplots as _msp_bt_kl
 
 @st.cache_data(ttl=86400, show_spinner=False)
-def _bt_tiingo_get(ticker: str, start_str: str, end_str: str):
+def _bt_tiingo_get(ticker: str, start_str: str, end_str: str) -> "_pd_bt_kl.DataFrame":
     """从 data/tiingo_bt/ 读取 Tiingo 复权日K线数据（仅使用 Tiingo，不使用 yfinance）。"""
     from pathlib import Path as _P2
     _tdir = _P2(__file__).resolve().parents[2] / "data" / "tiingo_bt"
     _fpath = _tdir / f"{ticker.upper()}.parquet"
     if not _fpath.exists():
-        return _pd_bt_kl.DataFrame(), f"文件不存在: {_fpath}"
+        return _pd_bt_kl.DataFrame()
     try:
         _df = _pd_bt_kl.read_parquet(_fpath)
         _df.index = _pd_bt_kl.DatetimeIndex(_df.index)
@@ -3214,10 +3214,9 @@ def _bt_tiingo_get(ticker: str, start_str: str, end_str: str):
             "open": "Open", "high": "High",
             "low": "Low", "close": "Close", "volume": "Volume",
         })
-        _res = _df[["Open", "High", "Low", "Close", "Volume"]].dropna(subset=["Close"])
-        return _res, f"OK: {len(_res)} 行"
-    except Exception as _e:
-        return _pd_bt_kl.DataFrame(), f"读取异常: {_e}"
+        return _df[["Open", "High", "Low", "Close", "Volume"]].dropna(subset=["Close"])
+    except Exception:
+        return _pd_bt_kl.DataFrame()
 
 # 所有回测交易（按出场日倒序）
 _bt_kl_all = res.trades.sort_values("exit_date", ascending=False).reset_index(drop=True)
