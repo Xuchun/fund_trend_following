@@ -1065,7 +1065,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         text="明日平仓",
                         showarrow=False,
                         font=dict(color="#ff7f0e", size=11),
-                        xanchor="right", yanchor="bottom",
+                        xanchor="left", yanchor="bottom",
                     )
                 else:
                     _entry_sig_chart = next(
