@@ -1249,12 +1249,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         sc7.metric("当前连续盈亏", _streak_str,
                    delta=f"本轮最长：连赢 {_max_ws} / 连亏 {_max_ls}（回测最大连亏 {_bt_max_cl} 笔）",
                    delta_color="off")
-        if _n_cl < 30:
-            _bt_n = int(_bt_metrics.get("n_trades", 0)) if _bt_metrics else 0
-            st.caption(
-                f"⚠️ 当前仅 {_n_cl} 笔平仓，样本量小，以下统计仅供参考"
-                + (f"（回测基于 {_bt_n} 笔 / 24 年数据）" if _bt_n else "")
-            )
+
 
         st.markdown("---")
         _ct_sorted = _ct.sort_values("exit_date", ascending=False)
