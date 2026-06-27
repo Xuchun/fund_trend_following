@@ -3428,8 +3428,7 @@ if _bt_kl_df is not None and not _bt_kl_df.empty:
     st.plotly_chart(_bt_kl_fig, use_container_width=True)
 else:
     st.warning(
-        f"无法获取 {_bt_kl_tk} 的K线数据（本地 Tiingo 缓存和 yfinance 均无数据，"
-        "该标的可能已退市且历史数据不可用）。"
+        f"无法获取 {_bt_kl_tk} 的K线数据（Tiingo 数据不可用，该标的可能已退市）。"
     )
 
 # ── 批量下载K线图 ─────────────────────────────────────────────────────────────
