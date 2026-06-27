@@ -1655,10 +1655,14 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
                 # 开仓日竖线（蓝色点状）
                 _s9_fig.add_vline(x=_s9_entry_dt.isoformat(),
-                    line_color="#1f77b4", line_dash="dot", line_width=1.5,
-                    annotation_text="开仓日",
-                    annotation_position="bottom left",
-                    annotation_font_color="#1f77b4")
+                    line_color="#1f77b4", line_dash="dot", line_width=1.5)
+                _s9_fig.add_annotation(
+                    x=_s9_entry_dt.isoformat(), xref="x",
+                    y=0, yref="y domain",
+                    text="开仓日", showarrow=False,
+                    font=dict(color="#1f77b4", size=11),
+                    xanchor="right", yanchor="bottom",
+                    row=1, col=1)
 
                 # 出场日竖线（橙色虚线，仅已平仓）
                 if _s9_exit_dt is not None:
@@ -1666,10 +1670,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         line_color="#ff7f0e", line_dash="dash", line_width=2)
                     _s9_fig.add_annotation(
                         x=_s9_exit_dt.isoformat(), xref="x",
-                        y=0.22, yref="paper",
+                        y=0.28, yref="paper",
                         text="出场日", showarrow=False,
                         font=dict(color="#ff7f0e", size=11),
-                        xanchor="right", yanchor="top")
+                        xanchor="right", yanchor="bottom")
 
                 # x轴范围
                 _s9_x_end = (
