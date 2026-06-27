@@ -1008,18 +1008,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
             if _kdf is not None and not _kdf.empty:
                 import yfinance as _yf_ver
-                # 额外诊断：period="1d" 返回什么？fast_info.last_price 是什么？
-                try:
-                    _tk_dbg = _yf_ver.Ticker(_sel_tk)
-                    _df1d   = _tk_dbg.history(period="1d")
-                    _fi     = _tk_dbg.fast_info
-                    _dbg2   = (f"1d={_df1d.index[-1].date() if not _df1d.empty else 'empty'}"
-                               f"  fi.last={_fi.last_price}  fi.hi={_fi.day_high}"
-                               f"  fi.lo={_fi.day_low}  fi.vol={_fi.last_volume}")
-                except Exception as _e2:
-                    _dbg2 = f"err={_e2}"
                 st.caption(f"[debug] yf={_yf_ver.__version__}  last={_kdf.index[-1].date()}  rows={len(_kdf)}  kline={_kline_n}  today={pd.Timestamp.today().date()}")
-                st.caption(f"[debug2] {_dbg2}")
                 # 精确计算开仓后的交易日数
                 if _is_sell_chart and _entry_dt_chart is not None:
                     _holding_tds = int((_kdf.index >= _entry_dt_chart).sum())
