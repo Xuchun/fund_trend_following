@@ -878,7 +878,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         x=_exec_dt.isoformat(),
                         line_color="#2ca02c", line_dash="dash", line_width=2,
                         annotation_text="明日开仓",
-                        annotation_position="top right",
+                        annotation_position="top left",
                         annotation_font_color="#2ca02c",
                     )
 
