@@ -3188,6 +3188,245 @@ if "净盈亏($)" in trades_display.columns:
     )
 show_df(trades_display, use_container_width=True, hide_index=True)
 
+# ── K线图（历史回测交易）──────────────────────────────────────────────────────
+import pandas as _pd_bt_kl
+import plotly.graph_objects as _go_bt_kl
+from plotly.subplots import make_subplots as _msp_bt_kl
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def _bt_kl_fetch(ticker: str, start_str: str, end_str: str) -> "_pd_bt_kl.DataFrame":
+    import yfinance as _yf_bt
+    try:
+        return _yf_bt.download(ticker, start=start_str, end=end_str,
+                               auto_adjust=True, progress=False)
+    except Exception:
+        return _pd_bt_kl.DataFrame()
+
+def _bt_kl_get(raw, ticker: str):
+    if raw is None or raw.empty:
+        return None
+    if isinstance(raw.columns, _pd_bt_kl.MultiIndex):
+        if ticker not in raw.columns.get_level_values(1):
+            return None
+        df = raw.xs(ticker, level=1, axis=1).dropna(subset=["Close"])
+    else:
+        df = raw.dropna(subset=["Close"])
+    return df if not df.empty else None
+
+# 下拉选项：所有回测交易，按出场日倒序
+_bt_kl_all = res.trades.sort_values("exit_date", ascending=False).reset_index(drop=True)
+_bt_kl_opts = []
+for _, _btr in _bt_kl_all.iterrows():
+    _ed_s = _btr["entry_date"].strftime("%Y-%m-%d") if hasattr(_btr["entry_date"], "strftime") else str(_btr["entry_date"])[:10]
+    _xd_s = _btr["exit_date"].strftime("%Y-%m-%d")  if hasattr(_btr["exit_date"],  "strftime") else str(_btr["exit_date"])[:10]
+    _bt_kl_opts.append(
+        f"🔴  {_btr['ticker']}  入场 {_ed_s}  出场 {_xd_s}  R{_btr['pnl_r_multiple']:+.2f}"
+    )
+
+_bt_kl_sel = st.selectbox(
+    "选择回测交易查看K线图（日本蜡烛图 + 成交量，可搜索）",
+    _bt_kl_opts,
+    key="bt_kline_sel",
+)
+_bt_kl_idx  = _bt_kl_opts.index(_bt_kl_sel)
+_bt_kl_row  = _bt_kl_all.iloc[_bt_kl_idx]
+_bt_kl_tk   = _bt_kl_row["ticker"]
+_bt_kl_edt  = _pd_bt_kl.Timestamp(_bt_kl_row["entry_date"])
+_bt_kl_xdt  = _pd_bt_kl.Timestamp(_bt_kl_row["exit_date"])
+_bt_kl_ep   = float(_bt_kl_row["entry_price"])
+_bt_kl_sp   = float(_bt_kl_row["stop_loss"])
+_bt_kl_r    = float(_bt_kl_row["pnl_r_multiple"])
+_bt_kl_n    = 300 + int(_bt_kl_row["holding_days"])
+
+_bt_kl_start_s = (_bt_kl_edt - _pd_bt_kl.Timedelta(days=450)).strftime("%Y-%m-%d")
+_bt_kl_end_s   = (_bt_kl_xdt + _pd_bt_kl.Timedelta(days=10)).strftime("%Y-%m-%d")
+with st.spinner(f"正在获取 {_bt_kl_tk} K线数据…"):
+    _bt_kl_raw = _bt_kl_fetch(_bt_kl_tk, _bt_kl_start_s, _bt_kl_end_s)
+_bt_kl_df = _bt_kl_get(_bt_kl_raw, _bt_kl_tk)
+
+if _bt_kl_df is not None and not _bt_kl_df.empty:
+    _bt_kl_df = _bt_kl_df.tail(min(_bt_kl_n, len(_bt_kl_df))).copy()
+    _bt_kl_n_actual = len(_bt_kl_df)
+
+    _bt_vol_colors = [
+        "#2ca02c" if float(_bt_kl_df["Close"].iloc[i]) >= float(_bt_kl_df["Open"].iloc[i])
+        else "#d62728"
+        for i in range(len(_bt_kl_df))
+    ]
+    _bt_kl_fig = _msp_bt_kl(rows=2, cols=1, shared_xaxes=True,
+                              vertical_spacing=0.03, row_heights=[0.75, 0.25])
+    _bt_kl_fig.add_trace(_go_bt_kl.Candlestick(
+        x=_bt_kl_df.index,
+        open=_bt_kl_df["Open"].values, high=_bt_kl_df["High"].values,
+        low=_bt_kl_df["Low"].values,   close=_bt_kl_df["Close"].values,
+        increasing_line_color="#2ca02c", decreasing_line_color="#d62728",
+        increasing_fillcolor="#2ca02c", decreasing_fillcolor="#d62728",
+        name="K线", showlegend=False,
+    ), row=1, col=1)
+    _bt_kl_fig.add_trace(_go_bt_kl.Bar(
+        x=_bt_kl_df.index, y=_bt_kl_df["Volume"].values,
+        marker_color=_bt_vol_colors, showlegend=False,
+    ), row=2, col=1)
+
+    _bt_kl_fig.add_hline(y=_bt_kl_ep, row=1, col=1,
+        line_color="#1f77b4", line_dash="dash", line_width=1.5,
+        annotation_text=f"买入价 ${_bt_kl_ep:.2f}",
+        annotation_position="top left", annotation_font_color="#1f77b4")
+    _bt_kl_fig.add_hline(y=_bt_kl_sp, row=1, col=1,
+        line_color="#d62728", line_dash="dash", line_width=1.5,
+        annotation_text=f"止损价 ${_bt_kl_sp:.2f}",
+        annotation_position="bottom left", annotation_font_color="#d62728")
+    _bt_kl_fig.add_vline(x=_bt_kl_edt.isoformat(),
+        line_color="#1f77b4", line_dash="dot", line_width=1.5,
+        annotation_text="开仓日", annotation_position="bottom left",
+        annotation_font_color="#1f77b4")
+    _bt_kl_fig.add_vline(x=_bt_kl_xdt.isoformat(),
+        line_color="#ff7f0e", line_dash="dash", line_width=2)
+    _bt_kl_fig.add_annotation(
+        x=_bt_kl_xdt.isoformat(), xref="x", y=0.22, yref="paper",
+        text="出场日", showarrow=False,
+        font=dict(color="#ff7f0e", size=11), xanchor="right", yanchor="top")
+
+    _bt_kl_x_end = _bt_kl_xdt + _pd_bt_kl.Timedelta(days=4)
+    _bt_kl_fig.update_layout(
+        title=f"{_bt_kl_tk}　已平仓（R={_bt_kl_r:+.2f}）　（共 {_bt_kl_n_actual} 根日K线）",
+        height=520, template="plotly_white",
+        margin=dict(l=60, r=20, t=50, b=20),
+    )
+    _bt_kl_fig.update_layout(xaxis_rangeslider_visible=False)
+    _bt_kl_fig.update_yaxes(title_text="价格 ($)", row=1, col=1, showgrid=True, gridcolor="#eeeeee")
+    _bt_kl_fig.update_yaxes(title_text="成交量",   row=2, col=1, showgrid=True, gridcolor="#eeeeee")
+    _bt_kl_fig.update_xaxes(showgrid=True, gridcolor="#eeeeee",
+        range=[_bt_kl_df.index[0].isoformat(), _bt_kl_x_end.isoformat()])
+    st.plotly_chart(_bt_kl_fig, use_container_width=True)
+else:
+    st.warning(
+        f"无法获取 {_bt_kl_tk} 的K线数据（该交易发生于 {_bt_kl_edt.date()}，"
+        "可能超出 yfinance 可获取的历史范围）。请选择近几年内的交易。"
+    )
+
+# ── 批量下载K线图 ─────────────────────────────────────────────────────────────
+_bt_kl_zip_key = "bt_kl_zip"
+_bt_kl_n_dl = st.slider(
+    "批量下载：选择最近 N 笔交易（按出场日倒序）",
+    10, 200, 50, 10, key="bt_kl_n_dl",
+)
+if st.button(f"📊 生成最近 {_bt_kl_n_dl} 笔交易K线图（准备下载）", key="bt_kl_gen_zip"):
+    with st.spinner(f"正在生成 {_bt_kl_n_dl} 笔交易的K线图，请稍候…"):
+        import io as _bt_io, zipfile as _bt_zf_mod
+        import matplotlib as _bt_mpl
+        _bt_mpl.use("Agg")
+        import matplotlib.font_manager as _bt_fm
+        import matplotlib.pyplot as _bt_plt
+        import mplfinance as _bt_mpf_mod
+
+        # 查找系统中文字体
+        _bt_zh_fp = None
+        try:
+            import subprocess as _bt_sp2
+            _bt_fc2 = _bt_sp2.run(
+                ["fc-list", ":lang=zh", "--format=%{file}\n"],
+                capture_output=True, text=True, timeout=5
+            )
+            _bt_zh_files = [f.strip() for f in _bt_fc2.stdout.splitlines() if f.strip()]
+            if _bt_zh_files:
+                _bt_zh_fp = _bt_zh_files[0]
+        except Exception:
+            pass
+        _bt_mpl.rcParams["axes.unicode_minus"] = False
+        _bt_cn_fp  = _bt_fm.FontProperties(fname=_bt_zh_fp) if _bt_zh_fp else None
+        _bt_cn_fp8 = _bt_fm.FontProperties(fname=_bt_zh_fp, size=8) if _bt_zh_fp else None
+
+        _bt_mpf_mc = _bt_mpf_mod.make_marketcolors(
+            up="#2ca02c", down="#d62728", edge="inherit",
+            wick={"up": "#2ca02c", "down": "#d62728"},
+            volume={"up": "#2ca02c", "down": "#d62728"},
+        )
+        _bt_mpf_style2 = _bt_mpf_mod.make_mpf_style(
+            base_mpf_style="charles", marketcolors=_bt_mpf_mc,
+            gridstyle="--", gridcolor="#eeeeee",
+            facecolor="white", edgecolor="white",
+        )
+
+        _bt_dl_trades = _bt_kl_all.head(_bt_kl_n_dl)
+        _bt_zip_buf = _bt_io.BytesIO()
+        with _bt_zf_mod.ZipFile(_bt_zip_buf, "w", _bt_zf_mod.ZIP_DEFLATED) as _bt_zf:
+            for _, _brow in _bt_dl_trades.iterrows():
+                _btk2   = _brow["ticker"]
+                _b2_edt = _pd_bt_kl.Timestamp(_brow["entry_date"])
+                _b2_xdt = _pd_bt_kl.Timestamp(_brow["exit_date"])
+                _b2_ep  = float(_brow["entry_price"])
+                _b2_sp  = float(_brow["stop_loss"])
+                _b2_r   = float(_brow["pnl_r_multiple"])
+                _b2_n   = 300 + int(_brow["holding_days"])
+
+                _b2_start = (_b2_edt - _pd_bt_kl.Timedelta(days=450)).strftime("%Y-%m-%d")
+                _b2_end   = (_b2_xdt + _pd_bt_kl.Timedelta(days=10)).strftime("%Y-%m-%d")
+                _b2_raw   = _bt_kl_fetch(_btk2, _b2_start, _b2_end)
+                _b2_df    = _bt_kl_get(_b2_raw, _btk2)
+                if _b2_df is None or _b2_df.empty:
+                    continue
+
+                _b2_df = _b2_df.tail(min(_b2_n, len(_b2_df))).copy()
+                _b2_df.index = _pd_bt_kl.DatetimeIndex(_b2_df.index)
+                _b2_df = _b2_df[["Open", "High", "Low", "Close", "Volume"]].dropna()
+
+                _b2_add = [
+                    _bt_mpf_mod.make_addplot([_b2_ep] * len(_b2_df), type="line",
+                        color="#1f77b4", linestyle="--", width=1.5, panel=0),
+                    _bt_mpf_mod.make_addplot([_b2_sp] * len(_b2_df), type="line",
+                        color="#d62728", linestyle="--", width=1.5, panel=0),
+                ]
+                _b2fig, _b2axes = _bt_mpf_mod.plot(_b2_df,
+                    type="candle", volume=True, style=_bt_mpf_style2,
+                    figsize=(16, 7), returnfig=True,
+                    warn_too_much_data=9999, addplot=_b2_add)
+                _b2ax = _b2axes[0]
+
+                _b2_title = f"{_btk2}  已平仓 R{_b2_r:+.2f}  （共 {len(_b2_df)} 根日K线）"
+                if _bt_cn_fp:
+                    _b2fig.suptitle(_b2_title, fontproperties=_bt_cn_fp, fontsize=12)
+                else:
+                    _b2fig.suptitle(_b2_title, fontsize=12)
+
+                if _b2_edt in _b2_df.index:
+                    _ep2 = _b2_df.index.get_loc(_b2_edt)
+                    _b2ax.axvline(x=_ep2, color="#1f77b4", linestyle=":", linewidth=1.5)
+                    _b2ax.text(_ep2, _b2ax.get_ylim()[0], " 开仓日",
+                               color="#1f77b4", fontsize=8, va="bottom", ha="left",
+                               fontproperties=_bt_cn_fp8)
+                if _b2_xdt in _b2_df.index:
+                    _xp2 = _b2_df.index.get_loc(_b2_xdt)
+                    _b2ax.axvline(x=_xp2, color="#ff7f0e", linestyle="--", linewidth=2)
+                    _b2ax.text(_xp2, _b2ax.get_ylim()[1], " 出场日",
+                               color="#ff7f0e", fontsize=8, va="top", ha="left",
+                               fontproperties=_bt_cn_fp8)
+                _b2ax.text(0, _b2_ep, f" 买入价 ${_b2_ep:.2f}",
+                           color="#1f77b4", fontsize=8, va="bottom",
+                           transform=_b2ax.get_yaxis_transform(), fontproperties=_bt_cn_fp8)
+                _b2ax.text(0, _b2_sp, f" 止损价 ${_b2_sp:.2f}",
+                           color="#d62728", fontsize=8, va="top",
+                           transform=_b2ax.get_yaxis_transform(), fontproperties=_bt_cn_fp8)
+
+                _b2_buf = _bt_io.BytesIO()
+                _b2fig.savefig(_b2_buf, format="png", dpi=150, bbox_inches="tight")
+                _bt_plt.close(_b2fig)
+                _b2_buf.seek(0)
+                _b2_fname = f"已平仓_{_btk2}_{_b2_edt.strftime('%Y-%m-%d')}.png"
+                _bt_zf.writestr(_b2_fname, _b2_buf.read())
+
+        _bt_zip_buf.seek(0)
+        st.session_state[_bt_kl_zip_key] = _bt_zip_buf.read()
+
+if st.session_state.get(_bt_kl_zip_key):
+    st.download_button(
+        f"⬇️ 下载K线图 ZIP（最近 {_bt_kl_n_dl} 笔交易）",
+        data=st.session_state[_bt_kl_zip_key],
+        file_name=f"backtest_klines_{_bt_kl_n_dl}trades.zip",
+        mime="application/zip",
+        key="bt_kl_dl_btn",
+    )
+
 # ── Assessment ─────────────────────────────────────────────────────────────────
 st.markdown("---")
 st.subheader("评估")
