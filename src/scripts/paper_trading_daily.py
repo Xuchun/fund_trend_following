@@ -257,17 +257,12 @@ def execute_pending_entries(
         entries_executed
     """
     entries_executed: list[dict] = []
-    _primary = state.get("pending_entries", [])
-    _backup  = state.get("backup_pending_entries", [])
-    _pending = _primary + _backup
+    _pending = state.get("pending_entries", [])
     if not _pending:
         state["pending_entries"] = []
-        state["backup_pending_entries"] = []
         return []
 
-    log.info(
-        f"--- Executing {len(_primary)} pending + {len(_backup)} backup entries at today's open ---"
-    )
+    log.info(f"--- Executing {len(_pending)} pending entries at today's open ---")
     _held = {p["ticker"] for p in state["positions"]}
 
     # NAV for sizing = previous day's close NAV (mirrors backtest: last_nav = T-1 close NAV)
