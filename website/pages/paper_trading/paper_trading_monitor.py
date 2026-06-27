@@ -962,7 +962,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "当前价":        st.column_config.NumberColumn(format="$%.2f"),
                 "历史最高":      st.column_config.NumberColumn(format="$%.2f"),
                 "ATR(20)":      st.column_config.NumberColumn(format="$%.2f"),
-                "乘数":          st.column_config.NumberColumn(format="%.1fx"),
+                "止盈ATR倍":     st.column_config.NumberColumn(format="%.1fx"),
                 "止损":          st.column_config.NumberColumn(format="$%.2f"),
                 "移动止盈":      st.column_config.NumberColumn(format="$%.2f"),
                 "有效止损/止盈": st.column_config.NumberColumn(format="$%.2f"),
