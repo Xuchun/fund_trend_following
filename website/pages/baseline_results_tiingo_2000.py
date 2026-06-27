@@ -3369,7 +3369,8 @@ _bt_kl_n    = 300 + int(_bt_kl_row["holding_days"])
 
 _bt_kl_start_s = (_bt_kl_edt - _pd_bt_kl.Timedelta(days=450)).strftime("%Y-%m-%d")
 _bt_kl_end_s   = (_bt_kl_xdt + _pd_bt_kl.Timedelta(days=10)).strftime("%Y-%m-%d")
-_bt_kl_df_raw  = _bt_tiingo_get(_bt_kl_tk, _bt_kl_start_s, _bt_kl_end_s)
+_bt_kl_df_raw, _bt_kl_dbg = _bt_tiingo_get(_bt_kl_tk, _bt_kl_start_s, _bt_kl_end_s)
+st.caption(f"🔧 调试: {_bt_kl_dbg}")
 _bt_kl_df      = _bt_kl_df_raw if not _bt_kl_df_raw.empty else None
 
 if _bt_kl_df is not None and not _bt_kl_df.empty:
