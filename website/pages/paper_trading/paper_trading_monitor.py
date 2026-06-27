@@ -1718,7 +1718,8 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                             range=[_bkdf.index[0].isoformat(), _b_x_end.isoformat()])
 
                         _b_img = _pio.to_image(_bfig, format="png", width=1400, height=520, scale=2)
-                        _b_fname = f"{_btk}_{_bt.get('entry_date', 'unknown')}_{_b_lbl}.png"
+                        _b_status_str = "已开仓" if _bstat == "open" else "已平仓"
+                        _b_fname = f"{_b_status_str}_{_btk}_{_bt.get('entry_date', 'unknown')}.png"
                         _zf.writestr(_b_fname, _b_img)
 
                 _zip_buf.seek(0)
