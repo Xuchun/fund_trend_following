@@ -1838,6 +1838,63 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     st.markdown("---")
 
+    # ── 十、信号漏斗历史趋势 ───────────────────────────────────────────────────
+    _sig_hist = _m1.get("signals_history", [])
+    if _sig_hist:
+        st.subheader("十、信号漏斗历史趋势")
+        _sh_df = pd.DataFrame(_sig_hist)
+        _sh_df["date"] = pd.to_datetime(_sh_df["date"])
+        _sh_df = _sh_df.sort_values("date").reset_index(drop=True)
+
+        _sh_df = _sh_df.copy()
+        _n_entries  = _sh_df.get("n_entries",      pd.Series([0]*len(_sh_df)))
+        _n_raw      = _sh_df.get("n_raw_breakouts", pd.Series([0]*len(_sh_df)))
+        _blocked    = (_n_raw - _n_entries).clip(lower=0)
+
+        _fig_sh = go.Figure()
+        _fig_sh.add_trace(go.Bar(
+            x=_sh_df["date"],
+            y=_n_entries,
+            name="已选入（通过全部约束）",
+            marker_color="#2ca02c",
+        ))
+        _fig_sh.add_trace(go.Bar(
+            x=_sh_df["date"],
+            y=_blocked,
+            name="被拦截（热度/现金）",
+            marker_color="#d62728",
+        ))
+        _fig_sh.add_trace(go.Scatter(
+            x=_sh_df["date"],
+            y=_sh_df.get("n_raw_breakouts", _sh_df.get("n_candidates", pd.Series([0]*len(_sh_df)))),
+            name="原始突破数（通过个股筛选）",
+            mode="lines+markers",
+            line=dict(color="#1f77b4", width=2),
+            yaxis="y",
+        ))
+        _fig_sh.update_layout(
+            barmode="stack",
+            title="每日信号漏斗（原始突破 = 已选入 + 被拦截）",
+            xaxis_title="日期",
+            yaxis_title="信号数量",
+            xaxis=dict(
+                tickformat="%Y-%m-%d",
+                dtick="D1",
+                tickangle=-30,
+            ),
+            hovermode="x unified",
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+            margin=dict(l=60, r=20, t=60, b=60),
+            height=350,
+            template="plotly_white",
+        )
+        st.plotly_chart(_fig_sh, use_container_width=True)
+        st.markdown(
+            "<span style='color:#111111'>蓝线 = 每日通过个股筛选的突破总数；绿色 = 被组合约束选入；红色 = 被热度/现金上限拦截。</span>",
+            unsafe_allow_html=True,
+        )
+        st.markdown("---")
+
     # ── 十一、回测 vs 实盘对比面板 ─────────────────────────────────────────────
     if _bt_metrics:
         st.subheader("十一、回测 vs 实盘对比")
