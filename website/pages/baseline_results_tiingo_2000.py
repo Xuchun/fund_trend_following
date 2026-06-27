@@ -1646,6 +1646,7 @@ st.markdown(f"""
 st.markdown("---")
 
 # ── Profit by type: stock vs ETF ──────────────────────────────────────────────
+st.markdown('<div id="sec-stocketf"></div>', unsafe_allow_html=True)
 st.subheader("盈利来源：股票 vs ETF")
 st.plotly_chart(profit_by_type_chart(res.trades, _ETF_SET), use_container_width=True)
 
