@@ -3547,7 +3547,7 @@ if _bt_kl_df is not None and not _bt_kl_df.empty:
     _bt_kl_fig.add_annotation(
         xref="paper", yref="paper", x=0.01, y=0.975,
         text=(f"买入 {_bt_kl_edt.strftime('%Y-%m-%d')} @ ${_bt_kl_ep:.2f}  |  "
-              f"卖出 {_bt_kl_xdt.strftime('%Y-%m-%d')} @ ${_bt_kl_xp:.2f}  |  "
+              f"出场 {_bt_kl_xdt.strftime('%Y-%m-%d')} @ ${_bt_kl_xp:.2f}  |  "
               f"R={_bt_kl_r:+.2f}  |  持仓 {_bt_kl_hd} 天"),
         showarrow=False, align="left", xanchor="left", yanchor="top",
         font=dict(size=11, color="#333333"),
