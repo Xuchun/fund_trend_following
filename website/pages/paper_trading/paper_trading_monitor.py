@@ -539,7 +539,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 if _m1_nav else f"股票 {_n_stk} 只")
     st.markdown(
         f"<div style='color:#555;font-size:0.85em;margin:4px 0 10px'>"
-        f"每日脚本：{_sc_icon} {_sc_txt}运行（信号日 {_script_run_date}）"
+        f"每日脚本：{_sc_icon} {_sc_txt}运行（信号日 {_us_close_to_sgt(_script_run_date) if _script_run_date != 'N/A' else 'N/A'}）"
         f"　｜　持仓构成：{_stk_seg}{_etf_seg}"
         f"</div>",
         unsafe_allow_html=True,
