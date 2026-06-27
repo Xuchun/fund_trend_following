@@ -3484,9 +3484,8 @@ def _gen_kline_charts_zip(trades_df) -> bytes:
 
             _st_z = (_edtz - _pd_bt_kl.Timedelta(days=450)).strftime("%Y-%m-%d")
             _en_z = (_xdtz + _pd_bt_kl.Timedelta(days=10)).strftime("%Y-%m-%d")
-            _raw_z = _bt_kl_fetch(_tkz, _st_z, _en_z)
-            _dfz   = _bt_kl_get(_raw_z, _tkz)
-            if _dfz is None or _dfz.empty:
+            _dfz  = _bt_tiingo_get(_tkz, _st_z, _en_z)
+            if _dfz.empty:
                 continue
 
             _dfz = _dfz.tail(min(_nz, len(_dfz))).copy()
