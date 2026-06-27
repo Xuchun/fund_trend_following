@@ -1632,12 +1632,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 _s9_holding_approx = max(0, int(_s9_cl.get("holding_days", 0)))
                 _s9_kline_n  = 300 + _s9_holding_approx
 
-            _s9_all_history_tks = tuple(sorted(set(
-                [p["ticker"] for p in _m1_positions] +
-                [c["ticker"] for c in _m1_closed]
-            )))
-            _s9_raw    = _fetch_yf_chart(_s9_all_history_tks, "600d")
-            _s9_kdf = _get_df(_s9_raw, _s9_tk)
+            _s9_kdf = _fetch_yf_chart_single(_s9_tk, "600d")
 
             if _s9_kdf is not None and not _s9_kdf.empty:
                 # 精确计算
