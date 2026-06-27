@@ -491,11 +491,24 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _prev_date = _m1_history[-1]["date"] if _m1_history else "—"
 
     c1, c2, c3, c4, c5, c6, c7, c8 = st.columns(8)
-    c1.metric("每日净值变化（%）", f"{_daily_chg_pct:+.2f}%",
-              delta=f"vs {_prev_date} 收盘")
-    c2.metric(_nav_label, f"${_m1_nav/1e3:,.0f}K")
-    c3.metric("净值浮盈（%）", f"{_nav_pnl_pct:+.2f}%", delta="vs 起始资金")
-    c4.metric("净值浮盈（$）", f"${_nav_pnl_usd:+,.0f}")
+
+    def _colored_metric(col, label, value_str, is_positive, sub=None):
+        clr = "#2ca02c" if is_positive else "#d62728"
+        sub_html = f"<div style='font-size:0.8em;color:#2ca02c;margin-top:2px'>↑ {sub}</div>" if sub else ""
+        col.markdown(
+            f"<div style='font-size:0.85em;color:#555;margin-bottom:2px'>{label}</div>"
+            f"<div style='font-size:2.1em;font-weight:700;color:{clr};line-height:1.2'>{value_str}</div>"
+            + sub_html,
+            unsafe_allow_html=True,
+        )
+
+    _colored_metric(c1, "每日净值变化（%）", f"{_daily_chg_pct:+.2f}%",
+                    _daily_chg_pct >= 0, sub=f"vs {_prev_date} 收盘")
+    _colored_metric(c2, _nav_label, f"${_m1_nav/1e3:,.0f}K", True)
+    _colored_metric(c3, "净值浮盈（%）", f"{_nav_pnl_pct:+.2f}%",
+                    _nav_pnl_pct >= 0, sub="vs 起始资金")
+    _colored_metric(c4, "净值浮盈（$）", f"${_nav_pnl_usd:+,.0f}",
+                    _nav_pnl_usd >= 0)
     _dd_color = "#d62728" if _cur_dd < -0.01 else "#2ca02c"
     _dd_sub   = "当前在历史高点" if _cur_dd >= -0.01 else f"峰值 ${_peak_nav/1e3:,.0f}K"
     c5.markdown(
