@@ -999,7 +999,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 if _is_sell_chart and _entry_dt_chart is not None:
                     _holding_tds = int((_kdf.index >= _entry_dt_chart).sum())
                     _kline_n = 300 + _holding_tds
-                st.caption(f"[debug] kdf最后日期={_kdf.index[-1].date()}  holding_tds={_holding_tds if _is_sell_chart and _entry_dt_chart is not None else 'N/A'}  kline_n={_kline_n}")
                 _kdf = _kdf.tail(_kline_n).copy()
 
                 _vol_colors = [
