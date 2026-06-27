@@ -2483,6 +2483,7 @@ if len(_lh200) > 0:
         show_df(_lh200_show, use_container_width=True, hide_index=True)
 
 # ── Capital utilization ───────────────────────────────────────────────────────
+st.markdown('<div id="sec-capitaluse"></div>', unsafe_allow_html=True)
 st.subheader("资金使用率")
 
 st.plotly_chart(
