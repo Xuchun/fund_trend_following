@@ -2784,6 +2784,7 @@ else:
 st.markdown("---")
 
 # ── 持仓热度历史图 ─────────────────────────────────────────────────────────────
+st.markdown('<div id="sec-heatmap"></div>', unsafe_allow_html=True)
 st.subheader("持仓热度历史图")
 
 import pandas as _pd_heat
