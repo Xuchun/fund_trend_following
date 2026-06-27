@@ -162,6 +162,15 @@ def _fetch_yf(tickers: tuple, period: str = "300d", day: str = ""):
     return _df, _fetch_time
 
 
+@st.cache_data(ttl=300)
+def _fetch_yf_chart(tickers: tuple, period: str = "600d"):
+    """K线图专用拉取，5分钟缓存，确保当天最新日K线及时可见。"""
+    import yfinance as yf
+    if not tickers:
+        return pd.DataFrame()
+    return yf.download(list(tickers), period=period, auto_adjust=True, progress=False)
+
+
 def _us_open_to_sgt(date_str: str) -> str:
     """把交易日（美股开盘 9:30 AM 美东时间）转换为新加坡时间字符串，自动处理夏/冬令时。"""
     from datetime import datetime
