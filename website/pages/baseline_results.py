@@ -216,12 +216,12 @@ st.subheader("净值曲线 vs SPY")
 _show_spy = st.checkbox("显示 SPY 基准曲线", value=True, key="nav_show_spy")
 st.plotly_chart(
     nav_vs_spy(res.nav, res.spy_nav if _show_spy else None, meta.color, meta.display_name),
-    use_container_width=True,
+    width="stretch",
 )
 
 # ── Drawdown chart ────────────────────────────────────────────────────────────
 st.subheader("回撤曲线")
-st.plotly_chart(drawdown_chart(res.nav, meta.color), use_container_width=True)
+st.plotly_chart(drawdown_chart(res.nav, meta.color), width="stretch")
 
 # ── Drawdown recovery analysis table ─────────────────────────────────────────
 import numpy as _np_ep
@@ -288,7 +288,7 @@ if len(_ep_df) > 0:
     _ep_df_sorted  = _ep_df.sort_values("最大回撤").head(10).copy()
     _ep_df_sorted["最大回撤"] = _ep_df_sorted["最大回撤"].apply(lambda v: f"{v*100:.1f}%")
     st.markdown("##### 主要回撤情节（按深度排序，前 10 次，仅含回撤 ≥ 5% 的情节）")
-    show_df(_ep_df_sorted, use_container_width=True, hide_index=True)
+    show_df(_ep_df_sorted, width="stretch", hide_index=True)
     _avg_rec = _ep_df[_ep_df["修复"] != "进行中"]["修复耗时（交易日）"].mean()
     _avg_trough = _ep_df["至低谷（交易日）"].mean()
     st.markdown(
@@ -304,11 +304,11 @@ col1, col2 = st.columns(2)
 with col1:
     st.subheader("逐年回报对比")
     st.plotly_chart(annual_returns_chart(res.nav, res.spy_nav, meta.color, meta.display_name),
-                    use_container_width=True)
+                    width="stretch")
 with col2:
     st.subheader("滚动 Sharpe 比率")
     st.plotly_chart(rolling_sharpe_chart(res.returns, res.spy_nav, meta.color, meta.display_name),
-                    use_container_width=True)
+                    width="stretch")
 
 import pandas as _pd_ar
 _nav_ar = res.nav.copy()
@@ -340,7 +340,7 @@ st.markdown("---")
 
 # ── Monthly return heatmap ────────────────────────────────────────────────────
 st.subheader("月度收益热力图")
-st.plotly_chart(monthly_return_heatmap(res.nav), use_container_width=True)
+st.plotly_chart(monthly_return_heatmap(res.nav), width="stretch")
 
 _nav_mh = res.nav.copy()
 if not isinstance(_nav_mh.index, _pd_ar.DatetimeIndex):
@@ -363,7 +363,7 @@ st.markdown("---")
 
 # ── R-multiple distribution ───────────────────────────────────────────────────
 st.subheader("交易盈亏分布（R 倍数）")
-st.plotly_chart(r_multiple_distribution(res.trades), use_container_width=True)
+st.plotly_chart(r_multiple_distribution(res.trades), width="stretch")
 
 win_rate = m.get("win_rate", 0)
 avg_win  = m.get("avg_win_r", 0)
@@ -419,10 +419,10 @@ st.markdown("---")
 col1, col2 = st.columns(2)
 with col1:
     st.subheader("逐年交易笔数")
-    st.plotly_chart(trades_per_year_chart(res.trades), use_container_width=True)
+    st.plotly_chart(trades_per_year_chart(res.trades), width="stretch")
 with col2:
     st.subheader("持仓天数分布")
-    st.plotly_chart(holding_days_distribution(res.trades), use_container_width=True)
+    st.plotly_chart(holding_days_distribution(res.trades), width="stretch")
 
 _trades_per_yr = m.get("trades_per_year", 0)
 _avg_hold      = m.get("avg_holding_days", 0)
@@ -450,7 +450,7 @@ with _col2_t:
 st.subheader("每日持仓标的数目")
 st.plotly_chart(
     daily_position_count_chart(res.trades, res.nav.index, meta.color),
-    use_container_width=True,
+    width="stretch",
 )
 _dc = res.trades.copy()
 _dc["entry_date"] = _pd_ar.to_datetime(_dc["entry_date"])
@@ -478,7 +478,7 @@ if _es_path.exists():
     st.subheader("每日开仓信号：已开仓 vs 放弃开仓")
     st.plotly_chart(
         daily_entries_vs_skipped_chart(_entry_stats, meta.color),
-        use_container_width=True,
+        width="stretch",
     )
     _tot_sig = int(_entry_stats["signals"].sum())
     _tot_exe = int(_entry_stats["executed"].sum())
@@ -499,7 +499,7 @@ st.markdown("---")
 
 # ── Profit by type: stock vs ETF ──────────────────────────────────────────────
 st.subheader("策略1.0盈利来源：股票 vs ETF")
-st.plotly_chart(profit_by_type_chart(res.trades, _ETF_SET), use_container_width=True)
+st.plotly_chart(profit_by_type_chart(res.trades, _ETF_SET), width="stretch")
 
 etf_pnl   = res.trades[res.trades["ticker"].isin(_ETF_SET)]["net_pnl"].sum()
 stock_pnl = res.trades[~res.trades["ticker"].isin(_ETF_SET)]["net_pnl"].sum()
@@ -571,7 +571,7 @@ _quality_df = _pd2.DataFrame({
     "结论":      [f"ETF 仅占 {_e['n']/(_s['n']+_e['n'])*100:.0f}%", "ETF 胜率更高" if _e['win_rate'] > _s['win_rate'] else "股票胜率更高", "股票赢时赢更多" if _s['avg_win_r'] > _e['avg_win_r'] else "ETF赢时赢更多", "股票输时输更少" if abs(_s['avg_loss_r']) < abs(_e['avg_loss_r']) else "ETF输时输更少",
                   "几乎相同", "股票趋势更持久" if _s['avg_hold'] > _e['avg_hold'] else "ETF趋势更持久", "股票趋势更持久" if _s['med_hold'] > _e['med_hold'] else "ETF趋势更持久"],
 })
-show_df(_quality_df, use_container_width=True, hide_index=True)
+show_df(_quality_df, width="stretch", hide_index=True)
 
 st.markdown("#### 资本效率")
 col1, col2, col3 = st.columns(3)
@@ -676,7 +676,7 @@ if "净盈亏($)" in trades_display.columns:
     trades_display["净盈亏($)"] = trades_display["净盈亏($)"].apply(
         lambda v: f"${v:+,.0f}"
     )
-show_df(trades_display, use_container_width=True, hide_index=True)
+show_df(trades_display, width="stretch", hide_index=True)
 
 # ── Streak analysis ───────────────────────────────────────────────────────────
 import json as _json_br
@@ -726,7 +726,7 @@ if _DIAG_PATH_BR.exists():
             height=360,
             margin=dict(t=50, b=40, l=40, r=20),
         )
-        st.plotly_chart(_fig_streak, use_container_width=True)
+        st.plotly_chart(_fig_streak, width="stretch")
 
     _sc1, _sc2, _sc3 = st.columns(3)
     _sc1.metric("最长连续亏损（笔）", _sa_br.get("max_consecutive_losses", 0))

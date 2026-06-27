@@ -297,7 +297,7 @@ with tab1:
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     )
     st.markdown(f"**基于标的池全部 {len(eu_rec):,} 个标的（现役 {len(rec_active):,} + 已退市 {len(rec_del):,}）**")
-    st.plotly_chart(_fig_dur, use_container_width=True)
+    st.plotly_chart(_fig_dur, width="stretch")
 
     st.markdown(f"""
 **关键发现：**
@@ -330,7 +330,7 @@ with tab2:
         height=420,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     )
-    st.plotly_chart(_fig_entry, use_container_width=True)
+    st.plotly_chart(_fig_entry, width="stretch")
 
     top_years = entry_year.nlargest(3, "count")
     _start_yr_count = entry_year[entry_year['year'] == _start_year]
@@ -358,7 +358,7 @@ with tab3:
         height=420,
         showlegend=False,
     )
-    st.plotly_chart(_fig_exit, use_container_width=True)
+    st.plotly_chart(_fig_exit, width="stretch")
 
     peak_exit = exit_year.nlargest(1, "count").iloc[0]
     st.markdown(f"""
@@ -402,7 +402,7 @@ with tab4:
         height=440,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     )
-    st.plotly_chart(_fig_pool, use_container_width=True)
+    st.plotly_chart(_fig_pool, width="stretch")
 
     peak_row = pool_df.loc[pool_df["total"].idxmax()]
     st.markdown(f"""
@@ -467,17 +467,17 @@ tab_act, tab_del, tab_all = st.tabs([
 
 with tab_act:
     _df = _fmt_df(rec_active, "累计满足天数")
-    show_df(_df, use_container_width=True, hide_index=True,
+    show_df(_df, width="stretch", hide_index=True,
                  column_config={"累计满足天数": st.column_config.NumberColumn(format="%d 天")})
 
 with tab_del:
     _df = _fmt_df(rec_del, "最近满足条件")
-    show_df(_df, use_container_width=True, hide_index=True,
+    show_df(_df, width="stretch", hide_index=True,
                  column_config={"累计满足天数": st.column_config.NumberColumn(format="%d 天")})
 
 with tab_all:
     st.markdown(f"现役 {len(rec_active):,} + 已退市 {len(rec_del):,}，满足 ≥252 交易日条件")
-    show_df(_df_all_combined, use_container_width=True, hide_index=True,
+    show_df(_df_all_combined, width="stretch", hide_index=True,
                  column_config={"累计满足天数": st.column_config.NumberColumn(format="%d 天")})
 
 st.markdown("---")
@@ -513,7 +513,7 @@ if _META_PATH.exists():
         with _etf_tab:
             _grp = _etf_df[_etf_df["category"] == _etf_cat][["ticker", "name"]]
             _grp = _grp.rename(columns={"ticker": "Ticker", "name": "名称 / Full Name"})
-            show_df(_grp, use_container_width=True, hide_index=True)
+            show_df(_grp, width="stretch", hide_index=True)
 
     st.markdown(f"**合计：{len(_etf_df)} 只 ETF**（候选池共 {len(_ETF_SET)} 只；排除原因：7 只结构性不适合 ETF 已排除；JGLO 仅 206 交易日数据不足 252 天；CPER 流动性不足 ADV 最高 \$53M 未达 \$60M 门槛；SPY 为市场环境过滤标的、SHY 为现金代理，均不参与趋势跟踪信号）")
 else:

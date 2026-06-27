@@ -115,7 +115,7 @@ if _bw:
     _fig_bw.update_yaxes(title_text="最大回撤 (%)，越接近 0 越好", secondary_y=False)
     _fig_bw.update_yaxes(title_text="Sharpe 比率", secondary_y=True, showgrid=False)
     _fig_bw.update_xaxes(title_text="突破窗口（天），其余参数保持 baseline 不变")
-    st.plotly_chart(_fig_bw, use_container_width=True)
+    st.plotly_chart(_fig_bw, width="stretch")
 
     st.markdown("绿色 = MaxDD 优于 baseline（200日），灰色 = baseline，红色 = MaxDD 差于 baseline")
 
@@ -129,7 +129,7 @@ if _bw:
     _tbl_bw["Calmar"]  = _tbl_bw["Calmar"].map(lambda v: f"{v:.4f}")
     _tbl_bw["最长回撤(天)"] = _tbl_bw["最长回撤(天)"].map(int)
     _tbl_bw["交易笔数"] = _tbl_bw["交易笔数"].map(int)
-    show_df(_tbl_bw, use_container_width=True, hide_index=True)
+    show_df(_tbl_bw, width="stretch", hide_index=True)
 
     _r150 = _bw_df[_bw_df["param_value"] == 150].iloc[0]
     _r200 = _bw_df[_bw_df["param_value"] == 200].iloc[0]
@@ -243,7 +243,7 @@ _fig_sk.update_layout(
     template="plotly_white",
     margin=dict(t=60, b=50, r=80),
 )
-st.plotly_chart(_fig_sk, use_container_width=True)
+st.plotly_chart(_fig_sk, width="stretch")
 
 # 统计数字
 _n_major   = len(_major_sk)
@@ -367,7 +367,7 @@ _fig_hld.update_layout(
 _fig_hld.update_yaxes(title_text="净盈亏（$M）", secondary_y=False)
 _fig_hld.update_yaxes(title_text="胜率 (%)", secondary_y=True, showgrid=False)
 _fig_hld.update_xaxes(title_text="持仓天数区间")
-st.plotly_chart(_fig_hld, use_container_width=True)
+st.plotly_chart(_fig_hld, width="stretch")
 
 # 数据表
 _tbl_bkt = _df_bkt.copy()
@@ -378,7 +378,7 @@ _tbl_bkt["净盈亏"] = _tbl_bkt["净盈亏M"].map(lambda v: f"${v:+.1f}M")
 _tbl_bkt["占总利润"] = _tbl_bkt["占总利润"].map(lambda v: f"{v:+.1f}%")
 show_df(
     _tbl_bkt[["持仓区间","笔数（占比）","胜率","平均R","净盈亏","占总利润"]],
-    use_container_width=True, hide_index=True,
+    width="stretch", hide_index=True,
 )
 
 # 关键数字
@@ -422,7 +422,7 @@ _fig_rdist.update_layout(
     template="plotly_white",
     margin=dict(t=60, b=50),
 )
-st.plotly_chart(_fig_rdist, use_container_width=True)
+st.plotly_chart(_fig_rdist, width="stretch")
 
 st.markdown(f"""
 **数据摘要：**

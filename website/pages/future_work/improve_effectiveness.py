@@ -128,7 +128,7 @@ fig_scatter.update_layout(
     height=400,
     margin=dict(l=60, r=30, t=55, b=50),
 )
-st.plotly_chart(fig_scatter, use_container_width=True)
+st.plotly_chart(fig_scatter, width="stretch")
 
 # Chart 1b: Dual-axis time series: SPY vol (bars) + Alpha (line)
 fig_ts = make_subplots(specs=[[{"secondary_y": True}]])
@@ -157,7 +157,7 @@ fig_ts.update_layout(
 )
 fig_ts.update_yaxes(title_text="SPY 年化波动率（%）", secondary_y=False)
 fig_ts.update_yaxes(title_text="Alpha（pp）", secondary_y=True)
-st.plotly_chart(fig_ts, use_container_width=True)
+st.plotly_chart(fig_ts, width="stretch")
 
 st.markdown(
     f'<div style="background:#f0f4ff;border-left:4px solid #1f77b4;padding:12px 16px;border-radius:4px;margin:8px 0">'
@@ -198,7 +198,7 @@ for label, lo, hi in [
         "5R+占比": f"{(g['pnl_r_multiple']>=5).mean()*100:.0f}%",
     })
 reg_df = pd.DataFrame(_reg_rows)
-show_df(reg_df, use_container_width=True, hide_index=True)
+show_df(reg_df, width="stretch", hide_index=True)
 
 # Bar chart: win rate by regime
 fig_reg = go.Figure()
@@ -230,7 +230,7 @@ fig_reg.update_layout(
     margin=dict(l=60, r=60, t=55, b=60),
     legend=dict(orientation="h", x=0, y=1.08),
 )
-st.plotly_chart(fig_reg, use_container_width=True)
+st.plotly_chart(fig_reg, width="stretch")
 
 st.markdown(
     "**核心洞察：**\n\n"
@@ -252,7 +252,7 @@ st.markdown(
     "平均Alpha = "
     f"**{_bull_drag['alpha'].mean():+.1f} pp**："
 )
-show_df(_bull_drag_show, use_container_width=True, hide_index=True)
+show_df(_bull_drag_show, width="stretch", hide_index=True)
 st.markdown(
     "在这些年份，SPY 以 15-31% 的年化速度复利增长，而趋势跟踪策略受制于 ~39% 的胜率，"
     "累计收益被大幅拉开差距。**提高胜率或让盈利单跑得更远**是应对的两条核心路径。"
@@ -295,7 +295,7 @@ _stat_rows = [
     {"指标": "Sharpe 比率", "当前策略": f"{_s_sh:.2f}", "加入熊市对冲后": f"{_bl_sh:.2f}"},
     {"指标": "vs SPY Alpha", "当前策略": f"{_s_cagr - _b_cagr:+.2f} pp", "加入熊市对冲后": f"{_bl_cagr - _b_cagr:+.2f} pp"},
 ]
-show_df(pd.DataFrame(_stat_rows), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(_stat_rows), width="stretch", hide_index=True)
 
 # Annual year-by-year for key bear years
 _yr_rows = []
@@ -337,7 +337,7 @@ fig_nav.update_layout(
     margin=dict(l=60, r=30, t=55, b=50),
     legend=dict(orientation="h", x=0, y=1.10),
 )
-st.plotly_chart(fig_nav, use_container_width=True)
+st.plotly_chart(fig_nav, width="stretch")
 
 # Bar: annual return comparison for key years
 _key_years = yr_df[(yr_df["b"] < -10) | (yr_df["alpha_blend"] - yr_df["alpha_base"] > 3)].sort_values("year")
@@ -366,7 +366,7 @@ fig_annual.update_layout(
     margin=dict(l=60, r=30, t=55, b=50),
     legend=dict(orientation="h", x=0, y=1.08),
 )
-st.plotly_chart(fig_annual, use_container_width=True)
+st.plotly_chart(fig_annual, width="stretch")
 
 st.markdown(
     f'<div style="background:#f0f4ff;border-left:4px solid #ff7f0e;padding:12px 16px;border-radius:4px;margin:8px 0">'
@@ -417,7 +417,7 @@ for ename, y1, y2 in _era_defs:
         "3R+盈利单平均持仓（天）": round(w_3r, 1),
         "5R+盈利单平均持仓（天）": round(w_5r, 1) if not np.isnan(w_5r) else "—",
     })
-show_df(pd.DataFrame(_hold_rows), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(_hold_rows), width="stretch", hide_index=True)
 
 # Scatter: pnl_r_multiple vs holding_days for winning trades
 _wins_plot = trades[trades["net_pnl"] > 0].copy()
@@ -449,7 +449,7 @@ fig_hold.update_layout(
 )
 fig_hold.update_xaxes(range=[0, 400])
 fig_hold.update_yaxes(range=[0, 20])
-st.plotly_chart(fig_hold, use_container_width=True)
+st.plotly_chart(fig_hold, width="stretch")
 
 # Distribution of 3R+ winners by era
 fig_hold_bar = go.Figure()
@@ -480,7 +480,7 @@ fig_hold_bar.update_layout(
     margin=dict(l=60, r=60, t=55, b=50),
     legend=dict(orientation="h", x=0, y=1.08),
 )
-st.plotly_chart(fig_hold_bar, use_container_width=True)
+st.plotly_chart(fig_hold_bar, width="stretch")
 
 st.markdown(
     "**关键发现：**\n\n"
@@ -518,7 +518,7 @@ _summary_rows = [
         "数据支持": "3R+盈利单平均持仓155-170天，与持仓天数/R倍数正相关",
     },
 ]
-show_df(pd.DataFrame(_summary_rows), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(_summary_rows), width="stretch", hide_index=True)
 
 st.markdown(
     "**实施优先建议：**\n\n"

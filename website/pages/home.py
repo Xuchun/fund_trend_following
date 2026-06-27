@@ -325,7 +325,7 @@ _fig_h.update_layout(
 )
 _fig_h.update_yaxes(ticksuffix="x", title_text="净值（倍）", row=1, col=1)
 _fig_h.update_yaxes(ticksuffix="%", title_text="回撤 %", row=2, col=1)
-st.plotly_chart(_fig_h, use_container_width=True)
+st.plotly_chart(_fig_h, width="stretch")
 
 st.markdown("---")
 

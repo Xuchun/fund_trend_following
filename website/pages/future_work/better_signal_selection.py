@@ -124,7 +124,7 @@ _fig_qlt.update_layout(
     height=380, template="plotly_white",
     margin=dict(t=60, b=40),
 )
-st.plotly_chart(_fig_qlt, use_container_width=True)
+st.plotly_chart(_fig_qlt, width="stretch")
 
 # 数据表
 q_grp_show = q_grp.copy()
@@ -133,7 +133,7 @@ q_grp_show["胜率"]   = q_grp_show["胜率"].map(lambda v: f"{v:.1f}%")
 q_grp_show["中位R"]  = q_grp_show["中位R"].map(lambda v: f"{v:+.3f}R")
 q_grp_show["总盈亏"] = q_grp_show["总盈亏"].map(lambda v: f"${v/1e6:.1f}M")
 show_df(q_grp_show.rename(columns={"signal_bin": "入场当天信号数"}),
-             use_container_width=True, hide_index=True)
+             width="stretch", hide_index=True)
 
 st.markdown("""
 **解读（重要）：**
@@ -191,7 +191,7 @@ _fig_yr.update_layout(
 )
 _fig_yr.update_yaxes(title_text="信号数", row=1, col=1)
 _fig_yr.update_yaxes(title_text="放弃率 %", row=2, col=1)
-st.plotly_chart(_fig_yr, use_container_width=True)
+st.plotly_chart(_fig_yr, width="stretch")
 
 st.markdown("""
 2013 年后放弃率长期维持 90%+，2024-2026 年已超过 **93%**，趋势还在持续恶化。
@@ -286,7 +286,7 @@ for r in [1, 2]:
     _strat_fig.update_yaxes(title_text="均值 pnl_r (R)", row=r, col=1)
     _strat_fig.update_yaxes(title_text="胜率 %", row=r, col=2)
 
-st.plotly_chart(_strat_fig, use_container_width=True)
+st.plotly_chart(_strat_fig, width="stretch")
 
 # ── 数据表 ────────────────────────────────────────────────────────────────────
 _tc1, _tc2 = st.columns(2)
@@ -300,7 +300,7 @@ with _tc1:
     _k_show["盈亏比"] = _k_show["盈亏比"].map(lambda v: f"{v:.2f}x" if pd.notna(v) else "—")
     _k_show["因子均值"] = _k_show["因子均值"].map(lambda v: f"{v:.2f}")
     _k_show.rename(columns={"因子均值": "k 均值", "数量": "信号数"}, inplace=True)
-    show_df(_k_show[["信号数", "k 均值", "均值R", "胜率%", "盈亏比"]], use_container_width=True)
+    show_df(_k_show[["信号数", "k 均值", "均值R", "胜率%", "盈亏比"]], width="stretch")
 
 with _tc2:
     st.markdown("**ATR% 分组明细**")
@@ -312,7 +312,7 @@ with _tc2:
     _a_show["盈亏比"] = _a_show["盈亏比"].map(lambda v: f"{v:.2f}x" if pd.notna(v) else "—")
     _a_show["因子均值"] = _a_show["因子均值"].map(lambda v: f"{v:.2f}%")
     _a_show.rename(columns={"因子均值": "ATR% 均值", "数量": "信号数"}, inplace=True)
-    show_df(_a_show[["信号数", "ATR% 均值", "均值R", "胜率%", "盈亏比"]], use_container_width=True)
+    show_df(_a_show[["信号数", "ATR% 均值", "均值R", "胜率%", "盈亏比"]], width="stretch")
 
 # ── 解读 ──────────────────────────────────────────────────────────────────────
 _corr_k   = float(_sall["k_strength"].corr(_sall["pnl_r"]))
@@ -470,7 +470,7 @@ _cap_df = _pd_cap.DataFrame({
     "每笔仓位（$136M NAV）": ["~$6.8M", "~$5.4M", "~$4.1M"],
     "信号执行率（预估）": ["~13%", "~17%", "~23%"],
 })
-show_df(_cap_df, use_container_width=True, hide_index=True)
+show_df(_cap_df, width="stretch", hide_index=True)
 
 st.markdown("""
 **权衡：** 单笔仓位缩小会减少每笔绝对盈利，但同时执行更多好信号可弥补。
@@ -514,7 +514,7 @@ if _pcap_f.exists():
         yaxis3=dict(title="交易笔数", side="right", overlaying="y", position=0.85, showgrid=False),
         legend=dict(x=0.4, y=0.05), height=380, margin=dict(t=50, b=40, r=80),
     )
-    st.plotly_chart(_fig_pc, use_container_width=True)
+    st.plotly_chart(_fig_pc, width="stretch")
     st.markdown(
         f"当前 position_cap = {_baseline_pc:.0%}（绿色），CAGR = {_pcc[_pcv.index(_baseline_pc)]:.2f}%，{_pcn[_pcv.index(_baseline_pc)]:.0f} 笔交易。"
         f"降至 3% 时交易笔数大幅增加至 {_pcn[0]:.0f} 笔，但每笔规模缩小，CAGR 降至 {_pcc[0]:.2f}%。"

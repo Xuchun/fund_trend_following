@@ -109,7 +109,7 @@ _fig_sl_pie.update_layout(
     height=350, margin=dict(l=20, r=20, t=50, b=20),
     legend=dict(orientation="h", yanchor="bottom", y=-0.15),
 )
-st.plotly_chart(_fig_sl_pie, use_container_width=True)
+st.plotly_chart(_fig_sl_pie, width="stretch")
 
 # 分布图：(exit_price - stop_loss) / entry_price 的分布
 _sl_all_copy = _sl_all.copy()
@@ -138,7 +138,7 @@ _fig_sl_dist.update_layout(
     legend=dict(orientation="h", yanchor="bottom", y=-0.3),
     height=380, margin=dict(l=60, r=20, t=50, b=80),
 )
-st.plotly_chart(_fig_sl_dist, use_container_width=True)
+st.plotly_chart(_fig_sl_dist, width="stretch")
 
 st.markdown(f"""
 **数据解读**
@@ -246,7 +246,7 @@ _fig_slip.update_layout(
     legend=dict(orientation="h", yanchor="bottom", y=-0.25),
     height=420, margin=dict(l=60, r=80, t=50, b=80),
 )
-st.plotly_chart(_fig_slip, use_container_width=True)
+st.plotly_chart(_fig_slip, width="stretch")
 
 # 关键数据表
 _tbl_slips = [5, 10, 15, 20, 30, 50]
@@ -362,7 +362,7 @@ _fig_ci.update_layout(
     legend=dict(orientation="h", yanchor="bottom", y=-0.2),
     height=420, margin=dict(l=60, r=80, t=50, b=60),
 )
-st.plotly_chart(_fig_ci, use_container_width=True)
+st.plotly_chart(_fig_ci, width="stretch")
 
 st.markdown(f"""
 **数据解读**
@@ -446,7 +446,7 @@ _fig_rf.update_layout(
     height=380, margin=dict(l=60, r=80, t=50, b=50),
     legend=dict(orientation="h", yanchor="bottom", y=-0.2),
 )
-st.plotly_chart(_fig_rf, use_container_width=True)
+st.plotly_chart(_fig_rf, width="stretch")
 
 # 图2：各年份 Sharpe 贡献（超额收益）：固定 vs 动态
 _fig_excess = _go.Figure()
@@ -471,7 +471,7 @@ _fig_excess.update_layout(
     height=380, margin=dict(l=60, r=40, t=50, b=50),
     legend=dict(orientation="h", yanchor="bottom", y=-0.2),
 )
-st.plotly_chart(_fig_excess, use_container_width=True)
+st.plotly_chart(_fig_excess, width="stretch")
 
 _diff_by_year = {y: e1 - e2 for y, e1, e2 in zip(_years, _ex_fixed, _ex_dynamic)}
 _biggest_over = max(_diff_by_year, key=lambda y: _diff_by_year[y])
@@ -572,7 +572,7 @@ _fig_cap.update_layout(
     legend=dict(orientation="h", yanchor="bottom", y=-0.25),
     height=420, margin=dict(l=60, r=80, t=50, b=80),
 )
-st.plotly_chart(_fig_cap, use_container_width=True)
+st.plotly_chart(_fig_cap, width="stretch")
 
 _acct_threshold_idx = next(
     i for i, (lo, mi, hi) in enumerate(zip(_impact_low, _impact_mid, _impact_high))
@@ -642,7 +642,7 @@ _fig_inc.update_layout(
     height=400, margin=dict(l=60, r=80, t=50, b=60),
     showlegend=False,
 )
-st.plotly_chart(_fig_inc, use_container_width=True)
+st.plotly_chart(_fig_inc, width="stretch")
 
 st.markdown(f"""
 **图表解读：内在矛盾**
@@ -698,7 +698,7 @@ _fig_dist.update_layout(
     legend=dict(orientation="h", yanchor="bottom", y=-0.3),
     height=400, margin=dict(l=60, r=20, t=50, b=100),
 )
-st.plotly_chart(_fig_dist, use_container_width=True)
+st.plotly_chart(_fig_dist, width="stretch")
 
 st.markdown(f"""
 **关键数据**：{len(_trd_gap):,} 笔已执行交易中，有 **{_n_above_2atr:,} 笔（{_n_above_2atr/len(_trd_gap)*100:.1f}%）**
@@ -759,7 +759,7 @@ _fig_perf.update_layout(
     legend=dict(orientation="h", yanchor="bottom", y=-0.25),
     height=420, margin=dict(l=70, r=70, t=50, b=80),
 )
-st.plotly_chart(_fig_perf, use_container_width=True)
+st.plotly_chart(_fig_perf, width="stretch")
 
 _total_pnl_all = sum(_grp_total_pnl)
 _high_vol_pnl  = _grp_total_pnl[-1]  # 高波动组

@@ -216,7 +216,7 @@ _val_data = {
 }
 show_df(
     pd.DataFrame(_val_data),
-    use_container_width=True, hide_index=True,
+    width="stretch", hide_index=True,
 )
 
 st.info("""
@@ -268,7 +268,7 @@ _gate_data = {
 }
 show_df(
     pd.DataFrame(_gate_data),
-    use_container_width=True, hide_index=True,
+    width="stretch", hide_index=True,
 )
 
 st.warning("""
@@ -512,7 +512,7 @@ _fig_rdist.update_layout(
 )
 _fig_rdist.update_yaxes(title_text="笔数", row=1, col=1)
 _fig_rdist.update_yaxes(title_text="净盈亏（$M）", row=1, col=2)
-st.plotly_chart(_fig_rdist, use_container_width=True)
+st.plotly_chart(_fig_rdist, width="stretch")
 
 _total_pnl = trades["net_pnl"].sum()
 _big_trades = trades[trades["pnl_r_multiple"] >= 3.0]
@@ -579,7 +579,7 @@ if _bw_d:
                     position=0.85, showgrid=False),
         legend=dict(x=0.35, y=0.05), height=380, margin=dict(t=50, b=40, r=80),
     )
-    st.plotly_chart(_fig_bw, use_container_width=True)
+    st.plotly_chart(_fig_bw, width="stretch")
     st.markdown(
         f"200 日突破（绿色）是所有测试窗口中 CAGR 和 Sharpe 的最优点。"
         f"更短窗口（150日）CAGR {_bwc[0]:.2f}% 但 MaxDD 更低 {_bwm[0]:.2f}%；"
@@ -641,7 +641,7 @@ _fig_pyra.update_layout(
     legend=dict(x=0.45, y=0.95),
     margin=dict(t=60, b=40),
 )
-st.plotly_chart(_fig_pyra, use_container_width=True)
+st.plotly_chart(_fig_pyra, width="stretch")
 
 _total_pyramid = _big_trades["pyramid_gain"].sum()
 _total_current_big = _big_trades["net_pnl"].sum()
@@ -707,7 +707,7 @@ if _sl_d:
                     position=0.85, showgrid=False),
         legend=dict(x=0.35, y=0.05), height=380, margin=dict(t=50, b=40, r=80),
     )
-    st.plotly_chart(_fig_sl, use_container_width=True)
+    st.plotly_chart(_fig_sl, width="stretch")
 
     _sl_base_i = _slv.index(_slbase)
     _sl_25_i   = _slv.index(2.5) if 2.5 in _slv else 2
@@ -802,7 +802,7 @@ if _be_csv.exists():
          "最大回撤": f"{_mdd_be1r_is*100:.2f}%",
          "最大回撤变化": f"{(_mdd_be1r_is-_mdd_orig_be)*100:+.2f} pp"},
     ]
-    show_df(pd.DataFrame(_be_rows), use_container_width=True, hide_index=True)
+    show_df(pd.DataFrame(_be_rows), width="stretch", hide_index=True)
 
     st.markdown(f"""
 **回测结果（{_total_be:,} 笔交易，2000–2026）：**
@@ -866,7 +866,7 @@ if _tr_d:
                     position=0.85, showgrid=False),
         legend=dict(x=0.35, y=0.05), height=380, margin=dict(t=50, b=40, r=80),
     )
-    st.plotly_chart(_fig_tr, use_container_width=True)
+    st.plotly_chart(_fig_tr, width="stretch")
 
     _tr_base_i = _trv.index(_trbase)
     st.markdown(
@@ -903,7 +903,7 @@ show_df(
         "pnl_r_multiple": "R倍数", "net_pnl": "净盈亏",
         "holding_days": "持仓天数", "exit_reason": "出场原因",
     }),
-    use_container_width=True, hide_index=True,
+    width="stretch", hide_index=True,
 )
 st.markdown(
     "注：'end_of_backtest' 表示回测结束时仍持仓——这些仓位实际上可能还在继续运行，"
@@ -966,7 +966,7 @@ _stat_rows_is = [
     {"指标": "Sharpe 比率",   "当前策略": f"{_s_sh_is:.2f}",                 "加入熊市对冲后": f"{_bl_sh_is:.2f}"},
     {"指标": "vs SPY Alpha",  "当前策略": f"{_s_cagr_is - _b_cagr_is:+.2f} pp", "加入熊市对冲后": f"{_bl_cagr_is - _b_cagr_is:+.2f} pp"},
 ]
-show_df(pd.DataFrame(_stat_rows_is), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(_stat_rows_is), width="stretch", hide_index=True)
 
 _fig_nav_is = go.Figure()
 _fig_nav_is.add_trace(go.Scatter(
@@ -992,7 +992,7 @@ _fig_nav_is.update_layout(
     margin=dict(l=60, r=30, t=55, b=50),
     legend=dict(orientation="h", x=0, y=1.10),
 )
-st.plotly_chart(_fig_nav_is, use_container_width=True)
+st.plotly_chart(_fig_nav_is, width="stretch")
 
 st.markdown(
     f'<div style="background:#f0f4ff;border-left:4px solid #ff7f0e;padding:12px 16px;border-radius:4px;margin:8px 0">'
@@ -1096,7 +1096,7 @@ _fig_hd.update_layout(
     yaxis4=dict(title="平均 R", side="right", overlaying="y3", range=[-2, 8]),
     legend=dict(orientation="h", y=1.06),
 )
-st.plotly_chart(_fig_hd, use_container_width=True)
+st.plotly_chart(_fig_hd, width="stretch")
 
 _wr_0_19 = sum(_hd_n_win[:2]) / (sum(_hd_n_win[:2]) + sum(_hd_n_lose[:2])) * 100
 _wr_60p  = sum(_hd_n_win[4:]) / (sum(_hd_n_win[4:]) + sum(_hd_n_lose[4:])) * 100
@@ -1136,7 +1136,7 @@ _fig_hd2.update_layout(
     height=360,
     margin=dict(t=50, b=40),
 )
-st.plotly_chart(_fig_hd2, use_container_width=True)
+st.plotly_chart(_fig_hd2, width="stretch")
 
 st.markdown(
     f"0–9 天区间：{_hd_n_win[0]+_hd_n_lose[0]:,} 笔交易累计亏损 \${abs(_hd_pnl[0]):.1f}M，"
@@ -1258,7 +1258,7 @@ _fig_conc.update_layout(
 )
 _fig_conc.update_yaxes(title_text="胜率 (%)", row=1, col=1)
 _fig_conc.update_yaxes(title_text="平均 R", row=1, col=2)
-st.plotly_chart(_fig_conc, use_container_width=True)
+st.plotly_chart(_fig_conc, width="stretch")
 
 st.markdown(
     f"持仓拥挤时（15–19 只：胜率 {_conc_wr[3]:.1f}%，均值 {_conc_avgr[3]:+.3f}R；"
@@ -1304,7 +1304,7 @@ _fig_cluster.update_layout(
     legend=dict(x=0.01, y=0.95),
     margin=dict(t=60, b=40),
 )
-st.plotly_chart(_fig_cluster, use_container_width=True)
+st.plotly_chart(_fig_cluster, width="stretch")
 
 st.markdown("""
 **图解读**：当同一行业有 4 只相关仓位时，当前做法（逐对减半）仍累积 2.0R 的集中风险，
@@ -1447,7 +1447,7 @@ if _adv_d and _prc_d:
     )
     _fig_univ.update_xaxes(title_text="ADV 门槛", row=1, col=1)
     _fig_univ.update_xaxes(title_text="价格门槛", row=1, col=2)
-    st.plotly_chart(_fig_univ, use_container_width=True)
+    st.plotly_chart(_fig_univ, width="stretch")
 
     _best_adv_i = _adv_cagr.index(max(_adv_cagr))
     st.markdown(
@@ -1490,7 +1490,7 @@ if _sp_d:
         yaxis2=dict(title="最大回撤（%）", side="right", overlaying="y", range=[16, 23]),
         legend=dict(x=0.55, y=0.05), height=360, margin=dict(t=50, b=40),
     )
-    st.plotly_chart(_fig_sp, use_container_width=True)
+    st.plotly_chart(_fig_sp, width="stretch")
 
     _sp_base_i = _spv.index(_spbase)
     _sp_low_diff = _spc[0] - _spc[_sp_base_i]
@@ -1592,7 +1592,7 @@ if _pc_d:
         yaxis3=dict(title="CAGR (%)", range=[7, 12]),
         yaxis4=dict(title="最大回撤（%）", overlaying="y3", side="right", range=[17, 28]),
     )
-    st.plotly_chart(_fig_pm, use_container_width=True)
+    st.plotly_chart(_fig_pm, width="stretch")
 
     _pc_base_i = _pcv.index(_pcbase)
     _hl_caption = ""
@@ -1660,7 +1660,7 @@ if _vol_d:
                     position=0.85, showgrid=False),
         legend=dict(x=0.4, y=0.05), height=380, margin=dict(t=50, b=40, r=80),
     )
-    st.plotly_chart(_fig_vol, use_container_width=True)
+    st.plotly_chart(_fig_vol, width="stretch")
     st.markdown(
         f"当前 1.5×（绿色）：CAGR {_vc[_vv.index(_vbase)]:.2f}%，MaxDD {_vm[_vv.index(_vbase)]:.2f}%，{_vn[_vv.index(_vbase)]:.0f} 笔交易。"
         f"调高至 2.0× 时 MaxDD 恶化至 {_vm[-1]:.2f}%（因过度过滤了成交量并非总是高的真实趋势）；"

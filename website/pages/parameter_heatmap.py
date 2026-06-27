@@ -189,7 +189,7 @@ def _render_1d_chart(data: dict, title: str) -> None:
         paper_bgcolor="white",
     )
 
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
     c1, c2, c3 = st.columns(3)
     c1.metric("CV（Sharpe）", f"{cv:.3f}", help="< 0.10 = 高鲁棒")
     c2.metric("鲁棒性", _robustness(cv).split("（")[0])
@@ -265,7 +265,7 @@ if _bw_data:
             "Sortino": f"{r['sortino']:+.3f}",
             "胜率": f"{r['win_rate']*100:.1f}%",
         })
-    show_df(pd.DataFrame(_bw_rows), use_container_width=True, hide_index=True)
+    show_df(pd.DataFrame(_bw_rows), width="stretch", hide_index=True)
 else:
     st.warning("breakout_window 扰动数据未找到")
 
@@ -297,7 +297,7 @@ if _sl_data:
             "Sortino": f"{r['sortino']:+.3f}",
             "胜率": f"{r['win_rate']*100:.1f}%",
         })
-    show_df(pd.DataFrame(_sl_rows), use_container_width=True, hide_index=True)
+    show_df(pd.DataFrame(_sl_rows), width="stretch", hide_index=True)
 else:
     st.warning("stop_loss_multiplier 扰动数据未找到")
 
@@ -329,7 +329,7 @@ if _tm_data:
             "Sortino": f"{r['sortino']:+.3f}",
             "胜率": f"{r['win_rate']*100:.1f}%",
         })
-    show_df(pd.DataFrame(_tm_rows), use_container_width=True, hide_index=True)
+    show_df(pd.DataFrame(_tm_rows), width="stretch", hide_index=True)
 else:
     st.warning("trail_multiplier_r1 扰动数据未找到")
 
@@ -376,7 +376,7 @@ for _pname, _plabel, _pbase, _pfmt in _SLICE_PARAMS:
 
 if _slice_summary_rows:
     st.markdown("**Slice Tests 汇总（点击展开各参数详细图表）：**")
-    show_df(pd.DataFrame(_slice_summary_rows), use_container_width=True, hide_index=True)
+    show_df(pd.DataFrame(_slice_summary_rows), width="stretch", hide_index=True)
 
 st.markdown("")
 
@@ -422,7 +422,7 @@ for _pname, _plabel, _pbase, _pfmt in _SLICE_PARAMS:
             height=300, margin=dict(t=30, b=40, l=50, r=60),
             plot_bgcolor="white", paper_bgcolor="white",
         )
-        st.plotly_chart(_fig2, use_container_width=True)
+        st.plotly_chart(_fig2, width="stretch")
         _cv2 = _cv(_recs)
         _stab_lo2, _stab_hi2 = _stability_region(_recs)
         _stab_str2 = (f"{_pfmt(_stab_lo2)} → {_pfmt(_stab_hi2)}"
@@ -562,7 +562,7 @@ def _render_2d_heatmap(hm: dict, metric: str = "sharpe", title: str = "") -> Non
         height=420,
         margin=dict(t=55, b=60, l=100, r=60),
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
     # Stability summary
     st.markdown(f"**峰值 Sharpe = {peak_s:+.3f}；90% 阈值 = {threshold_s:.3f}**（绿色格子为稳定区间）")

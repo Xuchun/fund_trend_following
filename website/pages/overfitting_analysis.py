@@ -106,7 +106,7 @@ _param_origin = [
 
 show_df(
     pd.DataFrame(_param_origin, columns=["参数", "选择依据", "来源类型"]),
-    use_container_width=True, hide_index=True,
+    width="stretch", hide_index=True,
 )
 
 st.success("""
@@ -176,7 +176,7 @@ _fig_cv.update_layout(
     showlegend=False,
     xaxis=dict(range=[0, max(_max_cv * 1.3, 0.14)]),
 )
-st.plotly_chart(_fig_cv, use_container_width=True)
+st.plotly_chart(_fig_cv, width="stretch")
 
 _c1, _c2, _c3 = st.columns(3)
 _c1.metric("高鲁棒参数数（CV < 0.10）", f"{_n_robust} / {_n_total}")
@@ -236,7 +236,7 @@ if _bw_data and _sl_data:
     )
     _fig_plateau.update_yaxes(title_text="Sharpe", row=1, col=1)
     _fig_plateau.update_yaxes(title_text="Sharpe", row=1, col=2)
-    st.plotly_chart(_fig_plateau, use_container_width=True)
+    st.plotly_chart(_fig_plateau, width="stretch")
     st.markdown("两个参数景观均呈现「高原形态」：基准值附近表现稳定，无对单一精确值的依赖。")
 
 st.markdown("---")
@@ -296,7 +296,7 @@ _fig_wf.update_layout(
 _labels_oos = [f"{w['oos_start'][:4]}" for w in _windows]
 _fig_wf.update_xaxes(ticktext=[f"{l}<br>({y})" for l, y in zip(_win_labels, _labels_oos)],
                      tickvals=_win_labels)
-st.plotly_chart(_fig_wf, use_container_width=True)
+st.plotly_chart(_fig_wf, width="stretch")
 
 _sharpe_ret = _wf["retention"]["sharpe_retention"]
 _n_pos_oos  = sum(1 for s in _oos_sharpes if s > 0)
@@ -398,7 +398,7 @@ _fig_reg.update_yaxes(title_text="CAGR (%)", row=1, col=1)
 _fig_reg.update_yaxes(title_text="Sharpe", row=1, col=2)
 _fig_reg.update_xaxes(tickangle=-30, row=1, col=1)
 _fig_reg.update_xaxes(tickangle=-30, row=1, col=2)
-st.plotly_chart(_fig_reg, use_container_width=True)
+st.plotly_chart(_fig_reg, width="stretch")
 
 _n_pos_strat   = sum(1 for c in _reg_strat_cagr if c >= 0)
 _n_beat_spy    = sum(1 for s, sp in zip(_reg_strat_cagr, _reg_spy_cagr) if s > sp)
@@ -424,7 +424,7 @@ for name in _regime_names:
         "SPY Sharpe": f"{ps:+.3f}",
         "结论": ("✅ 绝对正收益" if sc >= 0 else "⚠️ 绝对亏损，但跑赢SPY" if sc > pc else "❌ 绝对亏损且跑输SPY"),
     })
-show_df(pd.DataFrame(_reg_table), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(_reg_table), width="stretch", hide_index=True)
 
 _neg_explain = "、".join(_neg_regimes) if _neg_regimes else "无"
 if _n_pos_strat >= 4:
@@ -507,7 +507,7 @@ _budget_def = {
         "退出逻辑对策略行为影响最大，且最难在OOS中单独验证；保持简单是优先原则",
     ],
 }
-show_df(pd.DataFrame(_budget_def), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(_budget_def), width="stretch", hide_index=True)
 
 st.markdown("""
 **② 「换入换出」规则**：
@@ -534,7 +534,7 @@ _budget_data = {
     "预算上限": ["≤ 18 个", "≤ 5 层", "≤ 4 种"],
     "状态": ["✅ 在预算内", "✅ 在预算内", "✅ 在预算内"],
 }
-show_df(pd.DataFrame(_budget_data), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(_budget_data), width="stretch", hide_index=True)
 st.page_link("pages/future_work/improve_strategy.py", label="→ 如何改进策略1.0（E. 策略复杂度预算详情）", icon="📐")
 
 _n_trades = _met["n_trades"]
@@ -582,7 +582,7 @@ _verdict_rows = [
 
 show_df(
     pd.DataFrame(_verdict_rows, columns=["评估维度", "证据", "结论", "过拟合风险等级"]),
-    use_container_width=True, hide_index=True,
+    width="stretch", hide_index=True,
 )
 
 st.markdown("""

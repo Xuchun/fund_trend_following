@@ -476,7 +476,7 @@ _param_rows = [
 ]
 show_df(
     _pd.DataFrame(_param_rows, columns=["模块", "参数", "Baseline值", "测试值", "经济含义"]),
-    use_container_width=True, hide_index=True,
+    width="stretch", hide_index=True,
 )
 
 st.markdown("---")
@@ -498,5 +498,5 @@ _diff_rows = [
 show_df(
     _pd.DataFrame(_diff_rows,
                   columns=["模块", "维度", "策略1.0", "策略2.0", "说明"]),
-    use_container_width=True, hide_index=True,
+    width="stretch", hide_index=True,
 )

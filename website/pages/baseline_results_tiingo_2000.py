@@ -355,7 +355,7 @@ _fig_nd.update_layout(
 )
 _fig_nd.update_yaxes(ticksuffix="x", title_text="净值（倍）", row=1, col=1)
 _fig_nd.update_yaxes(ticksuffix="%", title_text="回撤 %", row=2, col=1)
-st.plotly_chart(_fig_nd, use_container_width=True)
+st.plotly_chart(_fig_nd, width="stretch")
 
 # ── Drawdown recovery analysis table ─────────────────────────────────────────
 import numpy as _np_ep
@@ -489,7 +489,7 @@ else:
             title_font=dict(color="black", size=13),
         ),
     )
-    st.plotly_chart(_fig_ddd, use_container_width=True)
+    st.plotly_chart(_fig_ddd, width="stretch")
 
     _avg_total_ddd   = float(_deep_eps_ddd["总水下时间（交易日）"].mean())
     _longest_idx_ddd = _deep_eps_ddd["总水下时间（交易日）"].idxmax()
@@ -573,7 +573,7 @@ if _DIAG_PATH_BR.exists():
             margin=dict(t=50, b=40, l=40, r=20),
             xaxis=dict(type="category"),
         )
-        st.plotly_chart(_fig_streak, use_container_width=True)
+        st.plotly_chart(_fig_streak, width="stretch")
 
     _sc1, _sc2, _sc3 = st.columns(3)
     _sc1.metric("最长连续亏损（笔）", _sa_br.get("max_consecutive_losses", 0))
@@ -702,7 +702,7 @@ _fig_max_s.update_layout(
     margin=dict(t=50, b=80, l=50, r=20),
     xaxis=dict(type="category", tickangle=-45, tickfont=dict(size=10)),
 )
-st.plotly_chart(_fig_max_s, use_container_width=True)
+st.plotly_chart(_fig_max_s, width="stretch")
 
 st.markdown(
     f'<div class="info-box">'
@@ -758,7 +758,7 @@ for _, _sr2 in _long_s2.iterrows():
     })
 
 _tbl_s2 = _pd_streak2.DataFrame(_tbl_rows)
-show_df(_tbl_s2, use_container_width=True, hide_index=True)
+show_df(_tbl_s2, width="stretch", hide_index=True)
 
 # SPY during streak bar chart
 _fig_spy_s = _go_streak2.Figure()
@@ -779,7 +779,7 @@ _fig_spy_s.update_layout(
     height=360,
     margin=dict(t=50, b=70, l=50, r=20),
 )
-st.plotly_chart(_fig_spy_s, use_container_width=True)
+st.plotly_chart(_fig_spy_s, width="stretch")
 
 _n_neg_spy = sum(1 for r in _tbl_rows if float(r["期间SPY"].replace("%","").replace("+","")) < 0)
 _n_pos_spy = len(_tbl_rows) - _n_neg_spy
@@ -849,7 +849,7 @@ _fig_l20r.update_layout(
     margin=dict(l=140, r=80, t=50, b=40),
     showlegend=False,
 )
-st.plotly_chart(_fig_l20r, use_container_width=True)
+st.plotly_chart(_fig_l20r, width="stretch")
 
 # ── 指标行 ────────────────────────────────────────────────────────────────────
 _lm1, _lm2, _lm3, _lm4 = st.columns(4)
@@ -900,7 +900,7 @@ with _lca:
         height=380,
         margin=dict(l=50, r=30, t=50, b=40),
     )
-    st.plotly_chart(_fig_lsc, use_container_width=True)
+    st.plotly_chart(_fig_lsc, width="stretch")
 
 with _lcb:
     _l20_yr = _l20["入场年份"].value_counts().sort_index()
@@ -918,7 +918,7 @@ with _lcb:
         height=380,
         margin=dict(l=50, r=30, t=50, b=40),
     )
-    st.plotly_chart(_fig_lyr, use_container_width=True)
+    st.plotly_chart(_fig_lyr, width="stretch")
 
 # ── 行业分布（亏损）────────────────────────────────────────────────────────────
 _SECTOR_CN_L20 = {
@@ -1000,7 +1000,7 @@ with _col_pie_l:
         margin=dict(l=10, r=10, t=50, b=10),
         showlegend=False,
     )
-    st.plotly_chart(_fig_sec_l_pie, use_container_width=True)
+    st.plotly_chart(_fig_sec_l_pie, width="stretch")
 
 with _col_bar_l:
     _sec_grp_ls = _sec_grp_l20.sort_values("合计R", ascending=False)
@@ -1021,12 +1021,12 @@ with _col_bar_l:
         margin=dict(l=120, r=70, t=50, b=40),
         showlegend=False,
     )
-    st.plotly_chart(_fig_sec_l_bar, use_container_width=True)
+    st.plotly_chart(_fig_sec_l_bar, width="stretch")
 
 _sec_grp_l_show = _sec_grp_l20.copy()
 _sec_grp_l_show.columns = ["行业 / 类别", "笔数", "合计 R", "包含标的"]
 _sec_grp_l_show["合计 R"] = _sec_grp_l_show["合计 R"].map(lambda v: f"{v:.1f}R")
-show_df(_sec_grp_l_show, use_container_width=True, hide_index=True)
+show_df(_sec_grp_l_show, width="stretch", hide_index=True)
 
 # ── 买入股价分布（还原拆股后的真实市场价）────────────────────────────────────────────
 st.markdown("#### 买入原始股价分布")
@@ -1092,7 +1092,7 @@ _fig_price_l.update_layout(
     margin=dict(l=80, r=90, t=50, b=40),
     showlegend=False,
 )
-st.plotly_chart(_fig_price_l, use_container_width=True)
+st.plotly_chart(_fig_price_l, width="stretch")
 
 _tier_cnt_l = _l20_wp["价格区间"].value_counts() if not _l20_wp.empty else {}
 _pt_cols_l = st.columns(4)
@@ -1125,7 +1125,7 @@ _l20_show["实际R(含跳空)"] = _l20_show["实际R(含跳空)"].map(
 )
 
 with st.expander("📋 Top 20 大亏家明细", expanded=True):
-    show_df(_l20_show, use_container_width=True, hide_index=True)
+    show_df(_l20_show, width="stretch", hide_index=True)
 
 # ── 共性总结 ──────────────────────────────────────────────────────────────────
 _l20_yr_top3 = _l20["入场年份"].value_counts().nlargest(3)
@@ -1248,7 +1248,7 @@ _fig_ay.update_layout(
 )
 _fig_ay.update_yaxes(ticksuffix="%", title_text="年回报率 %", row=1, col=1)
 _fig_ay.update_yaxes(title_text="交易笔数", row=2, col=1)
-st.plotly_chart(_fig_ay, use_container_width=True)
+st.plotly_chart(_fig_ay, width="stretch")
 
 st.markdown(
     f"**解读（上）：** {_n_yr_ar} 个完整年度中 **{_pos_yr_ar}** 年正收益（{_pos_yr_ar/_n_yr_ar*100:.0f}%）。"
@@ -1266,7 +1266,7 @@ st.markdown("---")
 # ── R-multiple distribution ───────────────────────────────────────────────────
 st.markdown('<div id="sec-rdist"></div>', unsafe_allow_html=True)
 st.subheader("交易盈亏分布（R 倍数）")
-st.plotly_chart(r_multiple_distribution(res.trades), use_container_width=True)
+st.plotly_chart(r_multiple_distribution(res.trades), width="stretch")
 
 win_rate = m.get("win_rate", 0)
 avg_win  = m.get("avg_win_r", 0)
@@ -1299,7 +1299,7 @@ _big_r_show["R 倍数"]  = _big_r_show["R 倍数"].map(lambda x: f"{x:.2f}R")
 _big_r_show = _big_r_show.sort_values("R 倍数", ascending=False).reset_index(drop=True)
 
 with st.expander(f"📋 R > 3 的大盈利交易明细（共 {len(_big_r_show)} 笔）", expanded=False):
-    show_df(_big_r_show, use_container_width=True, hide_index=True, height=500)
+    show_df(_big_r_show, width="stretch", hide_index=True, height=500)
 
 st.markdown("---")
 
@@ -1349,7 +1349,7 @@ _fig_t20r.update_layout(
     margin=dict(l=140, r=80, t=50, b=40),
     showlegend=False,
 )
-st.plotly_chart(_fig_t20r, use_container_width=True)
+st.plotly_chart(_fig_t20r, width="stretch")
 
 # ── 指标行 ────────────────────────────────────────────────────────────────────
 _tm1, _tm2, _tm3, _tm4 = st.columns(4)
@@ -1398,7 +1398,7 @@ with _tca:
         height=380,
         margin=dict(l=50, r=30, t=50, b=40),
     )
-    st.plotly_chart(_fig_scatter, use_container_width=True)
+    st.plotly_chart(_fig_scatter, width="stretch")
 
 with _tcb:
     _t20_yr = _t20["入场年份"].value_counts().sort_index()
@@ -1416,7 +1416,7 @@ with _tcb:
         height=380,
         margin=dict(l=50, r=30, t=50, b=40),
     )
-    st.plotly_chart(_fig_yr, use_container_width=True)
+    st.plotly_chart(_fig_yr, width="stretch")
 
 # ── 行业分布 ──────────────────────────────────────────────────────────────────
 _SECTOR_CN_T20 = {
@@ -1498,7 +1498,7 @@ with _col_pie:
         margin=dict(l=10, r=10, t=50, b=10),
         showlegend=False,
     )
-    st.plotly_chart(_fig_sec_pie, use_container_width=True)
+    st.plotly_chart(_fig_sec_pie, width="stretch")
 
 with _col_bar:
     _sec_grp_s = _sec_grp.sort_values("合计R")
@@ -1519,12 +1519,12 @@ with _col_bar:
         margin=dict(l=120, r=70, t=50, b=40),
         showlegend=False,
     )
-    st.plotly_chart(_fig_sec_bar, use_container_width=True)
+    st.plotly_chart(_fig_sec_bar, width="stretch")
 
 _sec_grp_show = _sec_grp.copy()
 _sec_grp_show.columns = ["行业 / 类别", "笔数", "合计 R", "包含标的"]
 _sec_grp_show["合计 R"] = _sec_grp_show["合计 R"].map(lambda v: f"{v:.1f}R")
-show_df(_sec_grp_show, use_container_width=True, hide_index=True)
+show_df(_sec_grp_show, width="stretch", hide_index=True)
 
 # ── 买入股价分布（还原拆股后的真实市场价）────────────────────────────────────────────
 st.markdown("#### 买入原始股价分布")
@@ -1592,7 +1592,7 @@ _fig_price.update_layout(
     margin=dict(l=80, r=90, t=50, b=40),
     showlegend=False,
 )
-st.plotly_chart(_fig_price, use_container_width=True)
+st.plotly_chart(_fig_price, width="stretch")
 
 _tier_cnt = _t20_wp["价格区间"].value_counts() if not _t20_wp.empty else {}
 _pt_cols = st.columns(4)
@@ -1622,7 +1622,7 @@ _t20_show["真实买入价($)"] = _t20_show["真实买入价($)"].map(
 )
 
 with st.expander("📋 Top 20 大赢家明细", expanded=True):
-    show_df(_t20_show, use_container_width=True, hide_index=True)
+    show_df(_t20_show, width="stretch", hide_index=True)
 
 # ── 共性总结 ──────────────────────────────────────────────────────────────────
 _t20_yr_top3 = _t20["入场年份"].value_counts().nlargest(3)
@@ -1648,7 +1648,7 @@ st.markdown("---")
 # ── Profit by type: stock vs ETF ──────────────────────────────────────────────
 st.markdown('<div id="sec-stocketf"></div>', unsafe_allow_html=True)
 st.subheader("盈利来源：股票 vs ETF")
-st.plotly_chart(profit_by_type_chart(res.trades, _ETF_SET), use_container_width=True)
+st.plotly_chart(profit_by_type_chart(res.trades, _ETF_SET), width="stretch")
 
 etf_pnl   = res.trades[res.trades["ticker"].isin(_ETF_SET)]["net_pnl"].sum()
 stock_pnl = res.trades[~res.trades["ticker"].isin(_ETF_SET)]["net_pnl"].sum()
@@ -1720,7 +1720,7 @@ _quality_df = _pd2.DataFrame({
     "结论":      [f"ETF 仅占 {_e['n']/(_s['n']+_e['n'])*100:.0f}%", "ETF 胜率更高" if _e['win_rate'] > _s['win_rate'] else "股票胜率更高", "股票赢时赢更多" if _s['avg_win_r'] > _e['avg_win_r'] else "ETF赢时赢更多", "股票输时输更少" if abs(_s['avg_loss_r']) < abs(_e['avg_loss_r']) else "ETF输时输更少",
                   "几乎相同", "股票趋势更持久" if _s['avg_hold'] > _e['avg_hold'] else "ETF趋势更持久", "股票趋势更持久" if _s['med_hold'] > _e['med_hold'] else "ETF趋势更持久"],
 })
-show_df(_quality_df, use_container_width=True, hide_index=True)
+show_df(_quality_df, width="stretch", hide_index=True)
 
 st.markdown("#### 资本效率")
 col1, col2, col3 = st.columns(3)
@@ -1804,7 +1804,7 @@ if _m_s_path.exists() and _m_e_path.exists():
         }
         for label, key, fmt in _cmp_rows
     ])
-    show_df(_cmp_df, use_container_width=True, hide_index=True)
+    show_df(_cmp_df, width="stretch", hide_index=True)
 
     _cagr_s = _m_stocks.get("cagr", 0)
     _cagr_e = _m_etfs.get("cagr", 0)
@@ -1869,7 +1869,7 @@ _fig_top20_c2.update_layout(
     margin=dict(l=70, r=80, t=50, b=40),
     showlegend=False,
 )
-st.plotly_chart(_fig_top20_c2, use_container_width=True)
+st.plotly_chart(_fig_top20_c2, width="stretch")
 
 _top5_c2   = float(_tk_c2.nlargest(5,  "总盈亏")["总盈亏"].sum())
 _top10_c2  = float(_tk_c2.nlargest(10, "总盈亏")["总盈亏"].sum())
@@ -1893,7 +1893,7 @@ with st.expander("📋 亏损最大的 10 个标的", expanded=False):
     _bot10_c2["总盈亏"] = _bot10_c2["总盈亏"].map(lambda v: f"${v:+,.0f}")
     _bot10_c2["胜率"]   = _bot10_c2["胜率"].map(lambda v: f"{v*100:.0f}%")
     _bot10_c2["平均R"]  = _bot10_c2["平均R"].map(lambda v: f"{v:.2f}R")
-    show_df(_bot10_c2, use_container_width=True, hide_index=True)
+    show_df(_bot10_c2, width="stretch", hide_index=True)
 
 st.markdown("---")
 
@@ -1967,7 +1967,7 @@ else:
         margin=dict(l=60, r=30, t=55, b=50),
         legend=dict(orientation="h", x=0, y=1.10),
     )
-    st.plotly_chart(_fig_e1, use_container_width=True)
+    st.plotly_chart(_fig_e1, width="stretch")
 
     _n_beat_e  = int(_beat_e.sum())
     _n_total_e = len(_ann_e)
@@ -2027,7 +2027,7 @@ else:
     _fig_e2.update_yaxes(title_text="CAGR（%）", row=1, col=1)
     _fig_e2.update_yaxes(title_text="Alpha（pp）", row=2, col=1)
     _fig_e2.update_xaxes(title_text="滚动窗口结束年份", row=2, col=1)
-    st.plotly_chart(_fig_e2, use_container_width=True)
+    st.plotly_chart(_fig_e2, width="stretch")
 
     _alpha_early = float(_roll_e[_roll_e["year"].astype(int) <= 2008]["a5"].mean())
     _alpha_late  = float(_roll_e[_roll_e["year"].astype(int) >= 2015]["a5"].mean())
@@ -2070,7 +2070,7 @@ else:
             "SPY最大回撤":  f"{_bdd*100:.1f}%",
             "跑赢SPY年数":  f"{_nb}/{len(_ann_m)} 年",
         })
-    show_df(_pd_eff.DataFrame(_era_rows), use_container_width=True, hide_index=True)
+    show_df(_pd_eff.DataFrame(_era_rows), width="stretch", hide_index=True)
 
     # ── Conclusion ────────────────────────────────────────────────────────────
     _a1, _a2, _a3 = (_era_alphas + [0, 0, 0])[:3]
@@ -2218,7 +2218,7 @@ def _render_breakeven():
         _m_rows.append(_row)
 
     st.markdown("**各方案指标对比**")
-    show_df(_pd_be.DataFrame(_m_rows), use_container_width=True, hide_index=True)
+    show_df(_pd_be.DataFrame(_m_rows), width="stretch", hide_index=True)
 
     # ── Trade impact breakdown ────────────────────────────────────────────────
     _total = len(_be)
@@ -2234,7 +2234,7 @@ def _render_breakeven():
             "曾触发": f"{_n_trig} 笔 ({_n_trig/_total*100:.0f}%)",
             "实际提前出场": f"{_n_early} 笔 ({_n_early/_total*100:.1f}%)",
         })
-    show_df(_pd_be.DataFrame(_imp), use_container_width=True, hide_index=True)
+    show_df(_pd_be.DataFrame(_imp), width="stretch", hide_index=True)
 
     st.markdown(
         "注：「曾触发」= 该交易浮盈曾达到阈值（止损已上移至略高于开仓价格的位置）。"
@@ -2310,7 +2310,7 @@ Gap > 2.5% 被过滤的信号另外 {_pd_ks.read_csv(_SIM_CSV)['gap_filtered'].s
         height=360, margin=dict(l=60, r=30, t=50, b=50),
         legend=dict(orientation="h", x=0.4, y=1.14),
     )
-    st.plotly_chart(_fig_dist, use_container_width=True)
+    st.plotly_chart(_fig_dist, width="stretch")
 
     # ── Bucket analysis charts ────────────────────────────────────────────────
     def _bkt_chart(df, title, ks_mean, color_bar, color_line):
@@ -2363,13 +2363,13 @@ Gap > 2.5% 被过滤的信号另外 {_pd_ks.read_csv(_SIM_CSV)['gap_filtered'].s
         st.plotly_chart(
             _bkt_chart(_sim, "全量信号（已执行 + 未执行）",
                        _sim["k_strength"].mean(), "#1f77b4", "#ff7f0e"),
-            use_container_width=True,
+            width="stretch",
         )
     with _c2:
         st.plotly_chart(
             _bkt_chart(_ex, "仅已执行信号",
                        _ex["k_strength"].mean(), "#2ca02c", "#d62728"),
-            use_container_width=True,
+            width="stretch",
         )
 
     # ── Correlation stats ─────────────────────────────────────────────────────
@@ -2445,7 +2445,7 @@ st.markdown("---")
 # ── Holding days distribution ─────────────────────────────────────────────────
 st.markdown('<div id="sec-holdingdays"></div>', unsafe_allow_html=True)
 st.subheader("持仓天数分布")
-st.plotly_chart(holding_days_distribution(res.trades), use_container_width=True)
+st.plotly_chart(holding_days_distribution(res.trades), width="stretch")
 
 _avg_hold      = m.get("avg_holding_days", 0)
 _med_hold      = float(res.trades["holding_days"].median()) if "holding_days" in res.trades.columns else 0
@@ -2480,7 +2480,7 @@ if len(_lh200) > 0:
     _lh200_show["R 倍数"]    = _lh200_show["R 倍数"].map(lambda v: f"{v:.2f}R")
     _lh200_show = _lh200_show.sort_values("持仓天数", ascending=False).reset_index(drop=True)
     with st.expander(f"📋 持仓天数 > 200 天的交易（共 {len(_lh200_show)} 笔）", expanded=True):
-        show_df(_lh200_show, use_container_width=True, hide_index=True)
+        show_df(_lh200_show, width="stretch", hide_index=True)
 
 # ── Capital utilization ───────────────────────────────────────────────────────
 st.markdown('<div id="sec-capitaluse"></div>', unsafe_allow_html=True)
@@ -2488,7 +2488,7 @@ st.subheader("资金使用率")
 
 st.plotly_chart(
     capital_utilization_chart(res.trades, res.nav, meta.color),
-    use_container_width=True,
+    width="stretch",
 )
 
 _cash_proxy_name = meta.params_anchor.get("cash_proxy", "SHY")
@@ -2511,7 +2511,7 @@ st.markdown('<div id="sec-dailypos"></div>', unsafe_allow_html=True)
 st.subheader("每日持仓标的数目")
 st.plotly_chart(
     daily_position_count_chart(res.trades, res.nav.index, meta.color),
-    use_container_width=True,
+    width="stretch",
 )
 _dc = res.trades.copy()
 _dc["entry_date"] = _pd_ar.to_datetime(_dc["entry_date"])
@@ -2540,7 +2540,7 @@ if _es_path.exists():
     st.subheader("每日开仓信号：已开仓 vs 放弃开仓")
     st.plotly_chart(
         daily_entries_vs_skipped_chart(_entry_stats, meta.color),
-        use_container_width=True,
+        width="stretch",
     )
     _tot_sig = int(_entry_stats["signals"].sum())
     _tot_exe = int(_entry_stats["executed"].sum())
@@ -2638,7 +2638,7 @@ show_df(_pd_ta.DataFrame([
      "覆盖率": f"{_pct_e:.1f}%", "未触发": _n_pe - _n_te},
     {"类别": "合计", "标的池": _n_pt, "实际开仓": _n_ta,
      "覆盖率": f"{_pct_all:.1f}%", "未触发": _n_pt - _n_ta},
-]), use_container_width=True, hide_index=True)
+]), width="stretch", hide_index=True)
 
 st.markdown(
     f"**解读：** 标的池共 **{_n_pt:,}** 个历史标的（含已退市），回测期间实际触发开仓的有 **{_n_ta:,}** 个，"
@@ -2690,7 +2690,7 @@ else:
         height=280, margin=dict(l=50, r=20, t=50, b=40),
         bargap=0.3,
     )
-    st.plotly_chart(_fig_dl, use_container_width=True)
+    st.plotly_chart(_fig_dl, width="stretch")
 
     # Detail table
     with st.expander(f"查看全部 {_n_dl} 笔退市平仓明细", expanded=False):
@@ -2700,7 +2700,7 @@ else:
         _dl_show.columns = ["代码", "入场日", "退市平仓日", "持仓天数", "R 倍数", "净盈亏 ($)"]
         _dl_show["R 倍数"]    = _dl_show["R 倍数"].map(lambda x: f"{x:.2f}R")
         _dl_show["净盈亏 ($)"] = _dl_show["净盈亏 ($)"].map(lambda x: f"${x:,.0f}")
-        show_df(_dl_show, use_container_width=True, hide_index=True)
+        show_df(_dl_show, width="stretch", hide_index=True)
 
     st.markdown(f"""
 **解读：** 回测期间共有 **{_n_dl}** 笔交易（占总交易的 {_dl_pct:.1f}%）因标的退市或被收购而平仓。
@@ -2758,7 +2758,7 @@ if _es_path.exists():
         xaxis=dict(title_text="<b>年份</b>", title_font=dict(size=13), dtick=1),
         yaxis=dict(title_text="<b>信号数量（个）</b>", title_font=dict(size=13)),
     )
-    st.plotly_chart(_fig_esy, use_container_width=True)
+    st.plotly_chart(_fig_esy, width="stretch")
 
     _tot_all_esy = int(sum(_all_sigs_esy))
     _tot_exe_esy = int(sum(_exe_sigs_esy))
@@ -2896,7 +2896,7 @@ _fig_heat.update_layout(
     showlegend=False,
     margin=dict(l=60, r=30, t=60, b=40),
 )
-st.plotly_chart(_fig_heat, use_container_width=True)
+st.plotly_chart(_fig_heat, width="stretch")
 
 _hc1, _hc2, _hc3, _hc4 = st.columns(4)
 _hc1.metric("平均热度", f"{_heat_mean:.1f}%",
@@ -2966,7 +2966,7 @@ _fig_freq_ta.update_layout(
     yaxis_title="标的数量",
     height=320, margin=dict(l=50, r=20, t=50, b=40),
 )
-st.plotly_chart(_fig_freq_ta, use_container_width=True)
+st.plotly_chart(_fig_freq_ta, width="stretch")
 st.markdown(
     f"**{_once_ta:,} 个**标的（{_once_ta/_n_ta*100:.0f}%）仅交易过 1 次；"
     f"**{_multi_ta:,} 个**（{_multi_ta/_n_ta*100:.0f}%）被多次买卖，"
@@ -2985,7 +2985,7 @@ with st.expander("📋 交易次数最多的 TOP 10 标的", expanded=False):
     _topfreq_df["总净盈亏($)"] = _topfreq_df["标的"].map(_tk_pnl_map).map(
         lambda v: f"${v:+,.0f}"
     )
-    show_df(_topfreq_df, use_container_width=True, hide_index=True)
+    show_df(_topfreq_df, width="stretch", hide_index=True)
 
 st.markdown("---")
 
@@ -3101,7 +3101,7 @@ if _uni_path.exists():
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         margin=dict(l=50, r=20, t=50, b=70),
     )
-    st.plotly_chart(_fig_uni, use_container_width=True)
+    st.plotly_chart(_fig_uni, width="stretch")
 
     _peak_yr  = _years[_yr_totals.index(max(_yr_totals))]
     _peak_n   = max(_yr_totals)
@@ -3158,7 +3158,7 @@ if _uni_path.exists():
     }
     _yr_display = (_yr_list[list(_display_cols.keys())]
                    .rename(columns=_display_cols))
-    show_df(_yr_display, use_container_width=True, hide_index=True)
+    show_df(_yr_display, width="stretch", hide_index=True)
 
     _dl_cols = ["ticker", "类别", "状态", "first_eligible", "last_eligible", "eligible_days"]
     _csv_uni = (_yr_list[_dl_cols]
@@ -3180,7 +3180,7 @@ st.markdown("---")
 # ── Monthly return heatmap ────────────────────────────────────────────────────
 st.markdown('<div id="sec-monthly"></div>', unsafe_allow_html=True)
 st.subheader("月度收益热力图")
-st.plotly_chart(monthly_return_heatmap(res.nav), use_container_width=True)
+st.plotly_chart(monthly_return_heatmap(res.nav), width="stretch")
 
 _nav_mh = res.nav.copy()
 if not isinstance(_nav_mh.index, _pd_ar.DatetimeIndex):
@@ -3371,7 +3371,7 @@ if "净盈亏($)" in trades_display.columns:
     trades_display["净盈亏($)"] = trades_display["净盈亏($)"].apply(
         lambda v: f"${v:+,.0f}"
     )
-show_df(trades_display, use_container_width=True, hide_index=True)
+show_df(trades_display, width="stretch", hide_index=True)
 
 # ── K线图（历史回测交易）──────────────────────────────────────────────────────
 import pandas as _pd_bt_kl
@@ -3628,7 +3628,7 @@ if _bt_kl_df is not None and not _bt_kl_df.empty:
         font=dict(size=11, color="#333333"),
         bgcolor="rgba(255,255,255,0.82)", bordercolor="#bbbbbb", borderwidth=1,
     )
-    st.plotly_chart(_bt_kl_fig, use_container_width=True)
+    st.plotly_chart(_bt_kl_fig, width="stretch")
 else:
     st.warning(
         f"无法获取 {_bt_kl_tk} 的K线数据（Tiingo 数据不可用，该标的可能已退市）。"

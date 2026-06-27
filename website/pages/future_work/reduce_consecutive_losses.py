@@ -93,7 +93,7 @@ _priority_rows = [
 
 show_df(
     pd.DataFrame(_priority_rows),
-    use_container_width=True,
+    width="stretch",
     hide_index=True,
 )
 
@@ -291,7 +291,7 @@ fig_sc.update_layout(
     height=420,
     margin=dict(l=60, r=20, t=60, b=50),
 )
-st.plotly_chart(fig_sc, use_container_width=True)
+st.plotly_chart(fig_sc, width="stretch")
 
 st.markdown("""
 **图表解读：** 持仓天数越短（横轴越靠左）、气泡颜色越深（止损占比越高），
@@ -310,7 +310,7 @@ with st.expander("📋 全部 ≥10 笔连亏序列明细", expanded=False):
     show["止损%"] = show["止损%"].map(lambda v: f"{v*100:.0f}%")
     show["净亏损($)"] = show["净亏损($)"].map(lambda v: f"${v:,.0f}")
     show = show.sort_values("长度(笔)", ascending=False).reset_index(drop=True)
-    show_df(show, use_container_width=True, hide_index=True)
+    show_df(show, width="stretch", hide_index=True)
 
 st.markdown("---")
 
@@ -435,7 +435,7 @@ if _volf2.exists():
         yaxis2=dict(title="交易笔数", side="right", overlaying="y", range=[2800, 3900]),
         legend=dict(x=0.6, y=0.05), height=360, margin=dict(t=50, b=40),
     )
-    st.plotly_chart(_fig_v2, use_container_width=True)
+    st.plotly_chart(_fig_v2, width="stretch")
     st.markdown(
         f"成交量要求从 1.0× 升至当前值 {_baseline_v2}×，CAGR 从 {_vc2[0]:.2f}% 升至 {_vc2[_vv2.index(_baseline_v2)]:.2f}%，"
         f"交易笔数从 {_vn2[0]:.0f} 降至 {_vn2[_vv2.index(_baseline_v2)]:.0f}。"
@@ -491,7 +491,7 @@ _fig_sig2.update_layout(
     margin=dict(t=50, b=40),
     yaxis=dict(range=[0, max(_sig_counts2) * 1.2]),
 )
-st.plotly_chart(_fig_sig2, use_container_width=True)
+st.plotly_chart(_fig_sig2, width="stretch")
 st.markdown(
     f"有 {_sig_counts2[3]+_sig_counts2[4]+_sig_counts2[5]:,} 天（{_sig_pcts2[3]+_sig_pcts2[4]+_sig_pcts2[5]:.1f}%）每日信号数 ≥ 6个，"
     "这类高拥挤日下集中开仓风险最大。"
@@ -666,7 +666,7 @@ if "exit_reason" in trades.columns and "exit_date" in trades.columns:
         margin=dict(t=50, b=40),
         yaxis=dict(range=[0, max(_sl_counts) * 1.2]),
     )
-    st.plotly_chart(_fig_sl, use_container_width=True)
+    st.plotly_chart(_fig_sl, width="stretch")
     _n_batch = sum(_sl_counts[2:])
     st.markdown(
         f"共有 {_n_batch} 天出现同日 ≥3 笔止损，若每次触发后暂停5个交易日，"

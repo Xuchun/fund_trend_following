@@ -198,7 +198,7 @@ for _label, _pt_v, _bt_v, _fmt, _gdir in _rows:
             pass
     _cmp_rows.append({"指标": _label, "模拟交易（样本外）": _pt_s, "回测基准（样本内）": _bt_s, "差异": _delta})
 
-show_df(pd.DataFrame(_cmp_rows), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(_cmp_rows), width="stretch", hide_index=True)
 
 # Exit reason split
 _exit_cols = st.columns(2)
@@ -213,7 +213,7 @@ with _exit_cols[0]:
             hole=0.4, textinfo="label+percent",
         ))
         _fig_er_pt.update_layout(height=240, margin=dict(l=0,r=0,t=10,b=0), showlegend=False)
-        st.plotly_chart(_fig_er_pt, use_container_width=True)
+        st.plotly_chart(_fig_er_pt, width="stretch")
     else:
         st.info(f"需 ≥ {_MIN_CHART} 笔平仓")
 with _exit_cols[1]:
@@ -227,7 +227,7 @@ with _exit_cols[1]:
             hole=0.4, textinfo="label+percent",
         ))
         _fig_er_bt.update_layout(height=240, margin=dict(l=0,r=0,t=10,b=0), showlegend=False)
-        st.plotly_chart(_fig_er_bt, use_container_width=True)
+        st.plotly_chart(_fig_er_bt, width="stretch")
     else:
         st.info("回测数据不可用")
 
@@ -273,7 +273,7 @@ if n_closed >= _MIN_CHART and "pnl_r" in ct.columns:
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         margin=dict(l=50, r=20, t=50, b=50), template="plotly_white",
     )
-    st.plotly_chart(_fig_dist, use_container_width=True)
+    st.plotly_chart(_fig_dist, width="stretch")
 
     # Statistical tests (only when enough data)
     if n_closed >= _MIN_STATS and len(_bt_r) > 0:
@@ -349,7 +349,7 @@ _fig_cumr.update_layout(
     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     margin=dict(l=50, r=20, t=50, b=50),
 )
-st.plotly_chart(_fig_cumr, use_container_width=True)
+st.plotly_chart(_fig_cumr, width="stretch")
 st.markdown("---")
 
 # ── 五、NAV 走势 ──────────────────────────────────────────────────────────────
@@ -388,7 +388,7 @@ _fig_nav.update_layout(
     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     margin=dict(l=50, r=20, t=50, b=50),
 )
-st.plotly_chart(_fig_nav, use_container_width=True)
+st.plotly_chart(_fig_nav, width="stretch")
 st.markdown("---")
 
 # ── 六、信号漏斗分析 ──────────────────────────────────────────────────────────
@@ -433,7 +433,7 @@ if _has_funnel and len(sig_df) >= 3:
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         template="plotly_white", margin=dict(l=50, r=20, t=50, b=50),
     )
-    st.plotly_chart(_fig_funnel, use_container_width=True)
+    st.plotly_chart(_fig_funnel, width="stretch")
 
     # Utilization stats
     _total_raw  = _sg["n_raw_breakouts"].sum()
@@ -502,7 +502,7 @@ if _has_strength and n_closed >= _MIN_CHART:
             height=380, template="plotly_white",
             margin=dict(l=50, r=20, t=40, b=50),
         )
-        st.plotly_chart(_fig_str, use_container_width=True)
+        st.plotly_chart(_fig_str, width="stretch")
 
         # Quartile analysis
         if len(_str_df) >= 8:
@@ -513,7 +513,7 @@ if _has_strength and n_closed >= _MIN_CHART:
                         .reset_index().rename(columns={"quartile": "突破强度分组"}))
             _q_stats["均值R"]  = _q_stats["均值R"].round(3)
             _q_stats["胜率"]   = (_q_stats["胜率"] * 100).round(1).astype(str) + "%"
-            show_df(_q_stats, use_container_width=True, hide_index=True)
+            show_df(_q_stats, width="stretch", hide_index=True)
     else:
         st.info(f"突破强度分析需要至少 {_MIN_CHART} 笔有效数据，当前 {len(_str_df)} 笔。")
 elif not _has_strength and n_closed > 0:
@@ -580,7 +580,7 @@ if _has_mfe and n_closed >= _MIN_CHART:
             height=380, template="plotly_white",
             margin=dict(l=50, r=20, t=40, b=50),
         )
-        st.plotly_chart(_fig_mfe, use_container_width=True)
+        st.plotly_chart(_fig_mfe, width="stretch")
 
         # Capture ratio distribution
         _fig_cap = go.Figure(go.Histogram(
@@ -597,7 +597,7 @@ if _has_mfe and n_closed >= _MIN_CHART:
             height=260, template="plotly_white",
             margin=dict(l=50, r=20, t=30, b=50),
         )
-        st.plotly_chart(_fig_cap, use_container_width=True)
+        st.plotly_chart(_fig_cap, width="stretch")
     else:
         st.info(f"有效 MFE 数据 {len(_mfe)} 笔，需 ≥ {_MIN_CHART} 笔。")
 else:
@@ -661,7 +661,7 @@ if n_closed >= 3 and "pnl_r" in ct.columns:
         margin=dict(l=50, r=60, t=40, b=50),
         showlegend=False,
     )
-    st.plotly_chart(_fig_t, use_container_width=True)
+    st.plotly_chart(_fig_t, width="stretch")
     st.caption(
         f"⚠️ 以上预测假设均值R（{_mu:+.3f}）和标准差R（{_sigma:.3f}）保持不变，仅供参考。"
         f"若未来交易质量下滑（均值R降低），达到显著性所需的笔数将大幅增加。"

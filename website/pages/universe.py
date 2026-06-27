@@ -125,7 +125,7 @@ if meta.etf_universe:
         with tab:
             grp = etf_df[etf_df["category"] == cat][["ticker", "name"]]
             grp = grp.rename(columns={"ticker": "Ticker", "name": "名称 / Full Name"})
-            show_df(grp, use_container_width=True, hide_index=True)
+            show_df(grp, width="stretch", hide_index=True)
 
     st.markdown(f"**合计：{len(etf_df)} 只 ETF**（SPY + SHY 标注为辅助标的，不纳入策略1.0交易）")
 else:

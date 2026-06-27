@@ -53,7 +53,7 @@ if _qr_path.exists():
         legend=dict(orientation="h", y=-0.1),
         annotations=[dict(text=f"{_clean/_total*100:.0f}%<br>无异常", x=0.5, y=0.5, showarrow=False, font_size=14)],
     )
-    st.plotly_chart(_fig_qual, use_container_width=True)
+    st.plotly_chart(_fig_qual, width="stretch")
 
     # Price spike count distribution
     _sp_dist = _qr[_qr["price_spikes"] > 0]["price_spikes"].clip(upper=10)
@@ -76,7 +76,7 @@ if _qr_path.exists():
         height=300,
         margin=dict(t=50, b=40),
     )
-    st.plotly_chart(_fig_sp, use_container_width=True)
+    st.plotly_chart(_fig_sp, width="stretch")
 
     st.info(
         f"**策略1.0的处理方式：** 引擎在回测前会扫描每个标的的价格序列，"

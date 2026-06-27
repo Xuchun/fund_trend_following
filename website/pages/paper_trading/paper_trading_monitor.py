@@ -113,14 +113,14 @@ def _build_method_zip(data: dict, method: str) -> bytes:
              "signal_date": p.get("signal_date", ""), "signal_price": p.get("signal_price", ""),
              "entry_date": p["entry_date"], "open_price": p.get("open_price", ""), "entry_price": p["entry_price"],
              "shares": p["shares"], "stop_loss": p.get("stop_loss", ""),
-             "atr_at_entry": p.get("atr_at_entry", ""), "status": "open"}
+             "atr_at_entry": p.get("atr_at_entry"), "status": "open"}
             for p in op
         ] + [
             {"ticker": c["ticker"],
              "signal_date": c.get("signal_date", ""), "signal_price": c.get("signal_price", ""),
              "entry_date": c.get("entry_date", ""), "entry_price": c.get("entry_price", ""),
              "shares": c.get("shares", ""), "stop_loss": c.get("stop_loss", c.get("initial_stop", "")),
-             "open_price": c.get("open_price", ""), "atr_at_entry": c.get("atr_at_entry", ""),
+             "open_price": c.get("open_price", ""), "atr_at_entry": c.get("atr_at_entry"),
              "status": "closed"}
             for c in ct
         ], key=lambda x: x["entry_date"], reverse=True)
@@ -654,7 +654,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
         show_df(
             _trade_df.style.map(_style_trade_col, subset=["盈亏（R）", "净盈亏（$）"]),
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
         )
 
@@ -829,7 +829,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     showgrid=True, gridcolor="#eeeeee",
                     range=[_s2_x_start.isoformat(), _s2_x_end.isoformat()],
                 )
-                st.plotly_chart(_s2_fig, use_container_width=True)
+                st.plotly_chart(_s2_fig, width="stretch")
             else:
                 st.warning(f"无法获取 {_s2_sel_tk} 的K线数据，请稍后刷新重试。")
 
@@ -923,7 +923,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     if _order_rows:
         _ord_cols = ["执行顺序", "操作", "标的", "股数", "参考价", "总金额", "订单类型", "备注"]
-        show_df(pd.DataFrame(_order_rows)[_ord_cols], use_container_width=True, hide_index=True)
+        show_df(pd.DataFrame(_order_rows)[_ord_cols], width="stretch", hide_index=True)
 
         n_sell      = len(_pend_exits)
         n_buy       = len(_pend_entries) - len(_blocked_entries)
@@ -1168,7 +1168,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     showgrid=True, gridcolor="#eeeeee",
                     range=[_x_start.isoformat(), _x_end.isoformat()],
                 )
-                st.plotly_chart(_fig_k, use_container_width=True)
+                st.plotly_chart(_fig_k, width="stretch")
             else:
                 st.warning(f"无法获取 {_sel_tk} 的K线数据，请稍后刷新重试。")
 
@@ -1219,7 +1219,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                                f"${s.get('stop_price', 0):.2f}" if s.get("stop_price") else ""),
                     "股数":    s.get("shares", ""),
                     "执行方式": "市价单（次日开盘）",
-                } for s in sorted(_ts_exit_sigs, key=lambda x: x["ticker"])]), use_container_width=True, hide_index=True)
+                } for s in sorted(_ts_exit_sigs, key=lambda x: x["ticker"])]), width="stretch", hide_index=True)
             else:
                 st.info("今日无退出信号")
 
@@ -1267,7 +1267,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         "执行方式":      "市价单（次日开盘）" if _tk in _approved_tickers else "—",
                     })
                 _cand_rows.sort(key=lambda r: (_status_order.get(r["状态"], 9), r["标的"]))
-                show_df(pd.DataFrame(_cand_rows), use_container_width=True, hide_index=True)
+                show_df(pd.DataFrame(_cand_rows), width="stretch", hide_index=True)
             elif _ts_entry_sigs:
                 # Fallback: only approved signals available (old schema or first run)
                 st.caption("仅显示已选入信号（候选汇总数据将在下次日脚本运行后更新）")
@@ -1280,7 +1280,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     "状态":          ("🔴 未选（现金不足）" if e["ticker"] in _blocked_entries
                                       else "✅ 已选入（次日执行）"),
                     "执行方式":      "—" if e["ticker"] in _blocked_entries else "市价单（次日开盘）",
-                } for e in sorted(_ts_entry_sigs, key=lambda x: x["ticker"])]), use_container_width=True, hide_index=True)
+                } for e in sorted(_ts_entry_sigs, key=lambda x: x["ticker"])]), width="stretch", hide_index=True)
             else:
                 st.info("今日无入场信号")
     else:
@@ -1383,7 +1383,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             margin=dict(l=70, r=100, t=50, b=40),
             template="plotly_white", showlegend=False,
         )
-        st.plotly_chart(_fig, use_container_width=True)
+        st.plotly_chart(_fig, width="stretch")
 
     st.markdown("---")
 
@@ -1550,7 +1550,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         )
         _fig_nav.update_yaxes(ticksuffix="x", title_text="净值（倍）", row=1, col=1)
         _fig_nav.update_yaxes(ticksuffix="%", title_text="回撤 %", row=2, col=1)
-        st.plotly_chart(_fig_nav, use_container_width=True)
+        st.plotly_chart(_fig_nav, width="stretch")
 
     # ── Trade history (open + closed) ────────────────────────────────────────
     st.subheader("八、交易历史")
@@ -1583,7 +1583,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         })
     if _all_trades:
         _all_trades_df = pd.DataFrame(_all_trades)
-        show_df(_all_trades_df, use_container_width=True, hide_index=True)
+        show_df(_all_trades_df, width="stretch", hide_index=True)
         _csv_trades = _all_trades_df.to_csv(index=False).encode("utf-8-sig")
         st.download_button(
             "⬇️ 下载交易历史 CSV",
@@ -1754,7 +1754,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     showgrid=True, gridcolor="#eeeeee",
                     range=[_s9_kdf.index[0].isoformat(), _s9_x_end.isoformat()],
                 )
-                st.plotly_chart(_s9_fig, use_container_width=True)
+                st.plotly_chart(_s9_fig, width="stretch")
             else:
                 st.warning(f"无法获取 {_s9_tk} 的K线数据，请稍后刷新重试。")
 
@@ -2034,7 +2034,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 legend=dict(orientation="h", y=1.02, x=1, xanchor="right"),
                 margin=dict(l=60, r=20, t=60, b=40),
             )
-            st.plotly_chart(_fig_r, use_container_width=True)
+            st.plotly_chart(_fig_r, width="stretch")
 
         # ── 入场滑点（隔夜跳空）分析 ───────────────────────────────────────────
         _slip_rows = [
@@ -2072,7 +2072,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     "隔夜跳空(bps)":   st.column_config.NumberColumn(format="%+.1f"),
                     "应用滑点(bps)":   st.column_config.NumberColumn(format="%.1f"),
                 },
-                use_container_width=True, hide_index=True,
+                width="stretch", hide_index=True,
             )
 
         # ── 累计滑点与手续费对NAV的影响 ───────────────────────────────────────
@@ -2201,7 +2201,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             height=350,
             template="plotly_white",
         )
-        st.plotly_chart(_fig_sh, use_container_width=True)
+        st.plotly_chart(_fig_sh, width="stretch")
         st.markdown(
             "<span style='color:#111111'>蓝线 = 每日通过个股筛选的突破总数；绿色 = 被组合约束选入；红色 = 被热度/现金上限拦截。</span>",
             unsafe_allow_html=True,
@@ -2257,7 +2257,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 f"⚠️ 实盘仅 {_n_cl} 笔平仓，样本量不足，差值无统计意义，"
                 f"仅供趋势观察（回测基于 {_bt_n} 笔 / 24 年数据）。"
             )
-        show_df(pd.DataFrame(_cmp_data), use_container_width=True, hide_index=True)
+        show_df(pd.DataFrame(_cmp_data), width="stretch", hide_index=True)
         st.markdown("---")
 
     # ── 十二、月度 P&L 汇总 ───────────────────────────────────────────────────
@@ -2295,7 +2295,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "SPY月收益率":   st.column_config.NumberColumn(format="%+.2f%%"),
                 "超额收益（α）": st.column_config.NumberColumn(format="%+.2f%%"),
             },
-            use_container_width=True, hide_index=True,
+            width="stretch", hide_index=True,
         )
         if len(_monthly_rows) >= 2:
             _fig_mon = go.Figure()
@@ -2322,7 +2322,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 legend=dict(orientation="h", y=1.02, x=1, xanchor="right"),
                 margin=dict(l=60, r=20, t=60, b=40),
             )
-            st.plotly_chart(_fig_mon, use_container_width=True)
+            st.plotly_chart(_fig_mon, width="stretch")
         st.markdown("---")
 
     # ── 数据下载（方法一）────────────────────────────────────────────────────
@@ -2345,7 +2345,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
          "signal_date": p.get("signal_date", ""), "signal_price": p.get("signal_price", ""),
          "entry_date": p["entry_date"], "open_price": p.get("open_price", ""), "entry_price": p["entry_price"],
          "shares": p["shares"], "stop_loss": p.get("stop_loss", ""),
-         "atr_at_entry": p.get("atr_at_entry", ""), "状态": "持仓中"}
+         "atr_at_entry": p.get("atr_at_entry"), "状态": "持仓中"}
         for p in _dl1_op
     ] + [
         {"ticker": c["ticker"],
@@ -2353,7 +2353,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
          "entry_date": c.get("entry_date", ""), "open_price": c.get("open_price", ""),
          "entry_price": c.get("entry_price", ""),
          "shares": c.get("shares", ""), "stop_loss": c.get("stop_loss", ""),
-         "atr_at_entry": "", "状态": "已平仓"}
+         "atr_at_entry": None, "状态": "已平仓"}
         for c in _dl1_ct
     ], key=lambda x: x["entry_date"], reverse=True)
 
@@ -2368,13 +2368,13 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         if _dl1_nav:
             show_df(
                 pd.DataFrame(_dl1_nav).sort_values("date", ascending=False),
-                use_container_width=True, hide_index=True)
+                width="stretch", hide_index=True)
         else:
             st.info("暂无数据")
 
     with st.expander(f"开仓记录（{len(_dl1_entries)} 笔，含持仓中 + 已平仓）"):
         if _dl1_entries:
-            show_df(pd.DataFrame(_dl1_entries), use_container_width=True, hide_index=True)
+            show_df(pd.DataFrame(_dl1_entries), width="stretch", hide_index=True)
         else:
             st.info("暂无开仓记录")
 
@@ -2382,7 +2382,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         if _dl1_ct:
             show_df(
                 pd.DataFrame(_dl1_ct).sort_values("exit_date", ascending=False),
-                use_container_width=True, hide_index=True)
+                width="stretch", hide_index=True)
         else:
             st.info("暂无平仓记录")
 
@@ -2405,7 +2405,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "当日开仓信号":   s.get("n_entries",       ""),  # 保存为 pending
                 "当日已执行":     s.get("n_executed",      ""),  # T+1 开盘实际成交
                 "平仓数":         s.get("n_exits",         ""),
-            } for s in reversed(_dl1_sig)]), use_container_width=True, hide_index=True)
+            } for s in reversed(_dl1_sig)]), width="stretch", hide_index=True)
         else:
             st.info("暂无数据")
 
@@ -2429,7 +2429,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "风险% NAV":     f"{c['trade_risk']*100:.2f}%" if c.get("trade_risk") else "",
                 "状态":          _dl1_rejection_label.get(c.get("rejection"), c.get("rejection", "✅ 已选入")),
             } for c in sorted(_dl1_cands, key=lambda x: x["ticker"])]),
-            use_container_width=True, hide_index=True)
+            width="stretch", hide_index=True)
         else:
             st.info(
                 "候选明细将在下次日脚本运行后自动填充（需运行更新后的 paper_trading_daily.py）。"
@@ -2437,7 +2437,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     with st.expander(f"当前持仓（{len(_dl1_op)} 只）"):
         if _dl1_op:
-            show_df(pd.DataFrame(_dl1_op), use_container_width=True, hide_index=True)
+            show_df(pd.DataFrame(_dl1_op), width="stretch", hide_index=True)
         else:
             st.info("当前无持仓")
 
@@ -2567,7 +2567,7 @@ with tab2:
                     "止损价": f"${e['stop_price']:.2f}",
                     "订单类型": e["order_type"],
                 } for e in sig_exits])
-                show_df(_ex_df, use_container_width=True, hide_index=True)
+                show_df(_ex_df, width="stretch", hide_index=True)
             else:
                 st.info("无退出信号")
 
@@ -2583,7 +2583,7 @@ with tab2:
                     "风险%": f"{e['trade_risk']*100:.2f}%",
                     "订单类型": e["order_type"],
                 } for e in sig_entries])
-                show_df(_en_df, use_container_width=True, hide_index=True)
+                show_df(_en_df, width="stretch", hide_index=True)
             else:
                 st.info("无入场信号")
     else:
@@ -2625,7 +2625,7 @@ with tab2:
         } for p in sorted(_m2_ok, key=lambda x: x.get("R", 0), reverse=True)]
 
         if _m2_rows:
-            show_df(pd.DataFrame(_m2_rows), use_container_width=True, hide_index=True)
+            show_df(pd.DataFrame(_m2_rows), width="stretch", hide_index=True)
     else:
         st.info("当前无持仓。Regime 允许时，下次运行脚本将扫描开仓信号。")
 
@@ -2647,7 +2647,7 @@ with tab2:
             title="方法二 NAV（相对起始 $200K）", yaxis_title="倍数",
             height=280, margin=dict(l=60, r=20, t=45, b=40), template="plotly_white",
         )
-        st.plotly_chart(_fig_m2nav, use_container_width=True)
+        st.plotly_chart(_fig_m2nav, width="stretch")
         st.markdown("---")
 
     # ── Closed trades ─────────────────────────────────────────────────────────
@@ -2671,7 +2671,7 @@ with tab2:
         with st.expander(f"📋 订单历史（最近 {min(50, len(_m2_orders_hist))} 条）"):
             _ord_df = pd.DataFrame(_m2_orders_hist[-50:][::-1])
             _show_cols = [c for c in ["ticker","action","shares","order_type","reason","signal_price","stop_price","ib_status","submitted_at","dry_run"] if c in _ord_df.columns]
-            show_df(_ord_df[_show_cols], use_container_width=True, hide_index=True)
+            show_df(_ord_df[_show_cols], width="stretch", hide_index=True)
 
     # ── Setup guide ───────────────────────────────────────────────────────────
     with st.expander("⚙️ IB Paper Trading 配置与使用指南"):
@@ -2743,13 +2743,13 @@ git push
     _dl2_entries = sorted([
         {"ticker": p["ticker"], "entry_date": p["entry_date"],
          "entry_price": p["entry_price"], "shares": p["shares"],
-         "stop_loss": p.get("stop_loss", p.get("initial_stop_loss", "")), "atr_at_entry": p.get("atr_at_entry", ""),
+         "stop_loss": p.get("stop_loss", p.get("initial_stop_loss", "")), "atr_at_entry": p.get("atr_at_entry"),
          "状态": "持仓中"}
         for p in _dl2_op
     ] + [
         {"ticker": c["ticker"], "entry_date": c.get("entry_date", ""),
          "entry_price": c.get("entry_price", ""), "shares": c.get("shares", ""),
-         "stop_loss": c.get("stop_loss", c.get("initial_stop", "")), "atr_at_entry": "",
+         "stop_loss": c.get("stop_loss", c.get("initial_stop", "")), "atr_at_entry": None,
          "状态": "已平仓"}
         for c in _dl2_ct
     ], key=lambda x: x["entry_date"], reverse=True)
@@ -2765,13 +2765,13 @@ git push
         if _dl2_nav:
             show_df(
                 pd.DataFrame(_dl2_nav).sort_values("date", ascending=False),
-                use_container_width=True, hide_index=True)
+                width="stretch", hide_index=True)
         else:
             st.info("暂无数据")
 
     with st.expander(f"开仓记录（{len(_dl2_entries)} 笔，含持仓中 + 已平仓）"):
         if _dl2_entries:
-            show_df(pd.DataFrame(_dl2_entries), use_container_width=True, hide_index=True)
+            show_df(pd.DataFrame(_dl2_entries), width="stretch", hide_index=True)
         else:
             st.info("暂无开仓记录")
 
@@ -2779,7 +2779,7 @@ git push
         if _dl2_ct:
             show_df(
                 pd.DataFrame(_dl2_ct).sort_values("exit_date", ascending=False),
-                use_container_width=True, hide_index=True)
+                width="stretch", hide_index=True)
         else:
             st.info("暂无平仓记录")
 
@@ -2801,7 +2801,7 @@ git push
                 "当日开仓信号":   s.get("n_entries",       ""),
                 "当日已执行":     s.get("n_executed",      ""),
                 "平仓数":         s.get("n_exits",         ""),
-            } for s in reversed(_dl2_sig)]), use_container_width=True, hide_index=True)
+            } for s in reversed(_dl2_sig)]), width="stretch", hide_index=True)
         else:
             st.info("暂无数据")
 
@@ -2824,13 +2824,13 @@ git push
                 "风险% NAV":     f"{c['trade_risk']*100:.2f}%" if c.get("trade_risk") else "",
                 "状态":          _dl2_rejection_label.get(c.get("rejection"), c.get("rejection", "✅ 已选入")),
             } for c in sorted(_dl2_cands, key=lambda x: x["ticker"])]),
-            use_container_width=True, hide_index=True)
+            width="stretch", hide_index=True)
         else:
             st.info("候选明细将在方法二日脚本运行后自动填充。")
 
     with st.expander(f"当前持仓（{len(_dl2_op)} 只）"):
         if _dl2_op:
-            show_df(pd.DataFrame(_dl2_op), use_container_width=True, hide_index=True)
+            show_df(pd.DataFrame(_dl2_op), width="stretch", hide_index=True)
         else:
             st.info("当前无持仓")
 

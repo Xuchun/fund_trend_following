@@ -105,7 +105,7 @@ fig_nav.update_layout(
     legend=dict(x=0.01, y=0.99),
     yaxis=dict(type="log"),
 )
-st.plotly_chart(fig_nav, use_container_width=True)
+st.plotly_chart(fig_nav, width="stretch")
 
 # Summary table of worst episodes
 worst = _edf.nsmallest(8, "min_dd")[["start", "end", "min_dd", "duration"]].copy()
@@ -114,7 +114,7 @@ worst["end"] = worst["end"].dt.strftime("%Y-%m-%d")
 worst["min_dd"] = worst["min_dd"].map(lambda x: f"{x:.1f}%")
 worst.columns = ["开始日期", "结束日期", "最大回撤深度", "持续天数"]
 st.markdown("**最深的 8 段回撤（>10% 阈值）：**")
-show_df(worst, use_container_width=True, hide_index=True)
+show_df(worst, width="stretch", hide_index=True)
 
 st.markdown("---")
 
@@ -140,7 +140,7 @@ with col_a:
         margin=dict(t=50, b=40),
         yaxis=dict(range=[0, 0.55]),
     )
-    st.plotly_chart(fig_compare, use_container_width=True)
+    st.plotly_chart(fig_compare, width="stretch")
 
 with col_b:
     fig_wr = go.Figure(go.Bar(
@@ -157,7 +157,7 @@ with col_b:
         margin=dict(t=50, b=40),
         yaxis=dict(range=[0, 55]),
     )
-    st.plotly_chart(fig_wr, use_container_width=True)
+    st.plotly_chart(fig_wr, width="stretch")
 
 st.warning(
     f"**反直觉发现：** 深度回撤期间（NAV < −10% 高水位）开仓的 {len(during):,} 笔交易，"
@@ -259,7 +259,7 @@ if _heat_path.exists():
         height=380,
         margin=dict(t=50, b=40),
     )
-    st.plotly_chart(fig_heat, use_container_width=True)
+    st.plotly_chart(fig_heat, width="stretch")
     st.markdown(
         f"当前 baseline heat_limit = {heat_data['baseline_value']:.0%}。"
         f"降至 5% 时 MaxDD 降至约 {h_mdd[1]:.1f}%，但 CAGR 也下降至 {h_cagr[1]:.2f}%，"
@@ -342,7 +342,7 @@ if _trail_path.exists():
         height=400,
         margin=dict(t=50, b=40),
     )
-    st.plotly_chart(fig_trail, use_container_width=True)
+    st.plotly_chart(fig_trail, width="stretch")
 
     best_idx = t_cagr.index(max(t_cagr))
     st.markdown(

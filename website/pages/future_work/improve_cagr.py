@@ -74,7 +74,7 @@ fig.update_layout(
     height=420,
     template="plotly_white",
 )
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig, width="stretch")
 
 st.markdown("""
 **规律 1：持仓时间越长，R 倍数越高。**
@@ -169,7 +169,7 @@ _fig_pyra.update_layout(
     legend=dict(x=0.55, y=0.95),
     margin=dict(t=50, b=40),
 )
-st.plotly_chart(_fig_pyra, use_container_width=True)
+st.plotly_chart(_fig_pyra, width="stretch")
 st.markdown(
     f"R>3 的 {len(_big)} 笔交易当前利润共 ${_big['net_pnl'].sum()/1e6:.1f}M；"
     f"若在 3R 时追加 50% 仓位，额外利润约 ${_big['pyramid_gain'].sum()/1e6:.1f}M（+{_big['pyramid_gain'].sum()/_big['net_pnl'].sum()*100:.0f}%）。"
@@ -249,7 +249,7 @@ if _trail_f.exists():
         yaxis2=dict(title="最大回撤（%）", side="right", overlaying="y", range=[18, 23]),
         legend=dict(x=0.6, y=0.05), height=360, margin=dict(t=50, b=40),
     )
-    st.plotly_chart(_fig_trail, use_container_width=True)
+    st.plotly_chart(_fig_trail, width="stretch")
     st.markdown(
         "当前 trail_multiplier_r1 = 3.0（1R→3R 阶段）已是 CAGR 最优点（10.36%）。"
         "建议 2 针对的是 >10R 阶段新增第四档（trail_multiplier_r10 = 7.0×），"
@@ -312,7 +312,7 @@ if _corr_f.exists():
         yaxis2=dict(title="最大回撤（%）", side="right", overlaying="y", range=[15, 26]),
         legend=dict(x=0.5, y=0.05), height=360, margin=dict(t=50, b=40),
     )
-    st.plotly_chart(_fig_corr, use_container_width=True)
+    st.plotly_chart(_fig_corr, width="stretch")
     st.markdown(
         f"当前 correlation_threshold = {_baseline_corr}（绿色）。"
         f"更严格的阈值（0.5）大幅增加交易笔数（{_cn[0]:.0f}），MaxDD 升至 {_cm[0]:.1f}%，CAGR 反而降至 {_cc[0]:.2f}%。"
@@ -404,7 +404,7 @@ if _volf.exists():
         yaxis2=dict(title="交易笔数", side="right", overlaying="y"),
         legend=dict(x=0.6, y=0.05), height=360, margin=dict(t=50, b=40),
     )
-    st.plotly_chart(_fig_vol, use_container_width=True)
+    st.plotly_chart(_fig_vol, width="stretch")
     best_vidx = _vc.index(max(_vc))
     st.markdown(
         f"当前 volume_filter_multiplier = {_baseline_v}（绿色），CAGR = {_vc[_vv.index(_baseline_v)]:.2f}%。"

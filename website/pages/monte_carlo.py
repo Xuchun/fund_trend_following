@@ -163,7 +163,7 @@ if mc and "nav_percentiles" in mc:
         hovermode="x unified",
     )
     fig.update_yaxes(tickformat=".2f")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 st.markdown("---")
 
@@ -250,7 +250,7 @@ if mc and "cagr_dist" in mc:
         fig2.update_xaxes(title_text="CAGR (%)", row=1, col=1)
         fig2.update_xaxes(title_text="最大回撤 (%)", row=1, col=2)
         fig2.update_yaxes(title_text="模拟次数", row=1, col=1)
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, width="stretch")
 
     # Summary table
     prob_neg = cd.get("prob_negative_cagr", 0)
@@ -279,7 +279,7 @@ if mc and "cagr_dist" in mc:
     import pandas as pd
     show_df(
         pd.DataFrame(dur_rows, columns=["指标", "概率（1,000 条路径）"]),
-        use_container_width=True, hide_index=True,
+        width="stretch", hide_index=True,
     )
 
     d1, d2, d3 = st.columns(3)

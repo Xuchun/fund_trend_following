@@ -130,7 +130,7 @@ if wf_data:
 
         fig_full = _build_oos_fig(oos_dates, oos_nav, spy_dates, spy_nav,
                                   _chart_title, 420)
-        st.plotly_chart(fig_full, use_container_width=True)
+        st.plotly_chart(fig_full, width="stretch")
 
     # ── IS vs OOS summary table ───────────────────────────────────────────
     st.subheader("IS vs OOS 指标对比")
@@ -155,7 +155,7 @@ if wf_data:
             "SPY OOS MaxDD":  f"{spy_oos.get('max_drawdown',0)*100:.1f}%" if spy_oos else "—",
         })
 
-    show_df(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+    show_df(pd.DataFrame(rows), width="stretch", hide_index=True)
 
     # ── Compute SPY stitched metrics from nav data ────────────────────────
     import numpy as _np_wf
@@ -270,13 +270,13 @@ if stress_data:
         # Mark baseline
         fig3.add_vline(x=10, line_dash="dash", line_color="#888",
                        annotation_text="基准 10bps", annotation_position="top right")
-        st.plotly_chart(fig3, use_container_width=True)
+        st.plotly_chart(fig3, width="stretch")
 
     # Sensitivity summary table
     sens_rows = stress_data.get("sensitivity_table", [])
     if sens_rows:
         st.subheader("执行敏感性汇总表")
-        show_df(pd.DataFrame(sens_rows), use_container_width=True, hide_index=True)
+        show_df(pd.DataFrame(sens_rows), width="stretch", hide_index=True)
 
 else:
     st.info(

@@ -133,7 +133,7 @@ if regime_data and "regimes" in regime_data:
             legend=dict(orientation="h", yanchor="bottom", y=1.02),
         )
         _fig_rg.update_yaxes(tickformat=".2f")
-        st.plotly_chart(_fig_rg, use_container_width=True)
+        st.plotly_chart(_fig_rg, width="stretch")
         st.markdown(
             "红色背景区域：SPY 收盘价低于 200 日均线，策略暂停开立新仓（已持仓继续按止损/移动止盈管理）。"
             " TLT、GLD、UUP 在熊市期间豁免此限制，仍可开仓。"
@@ -158,7 +158,7 @@ if regime_data and "regimes" in regime_data:
             "胜率":          f"{s.get('win_rate',0)*100:.1f}%",
         })
 
-    show_df(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+    show_df(pd.DataFrame(rows), width="stretch", hide_index=True)
 
     # ── CAGR comparison bar chart ──────────────────────────────────────────
     st.subheader("策略1.0 vs SPY：各环境 CAGR 对比")
@@ -195,7 +195,7 @@ if regime_data and "regimes" in regime_data:
         hovermode="x unified",
     )
     fig.add_hline(y=0, line_dash="solid", line_color="black", line_width=1)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
     # ── MaxDD comparison chart ─────────────────────────────────────────────
     st.subheader("各环境最大回撤对比")
@@ -226,7 +226,7 @@ if regime_data and "regimes" in regime_data:
         margin=dict(t=50, b=80, l=50, r=20),
         legend=dict(orientation="h", yanchor="bottom", y=1.02),
     )
-    st.plotly_chart(fig2, use_container_width=True)
+    st.plotly_chart(fig2, width="stretch")
 
     # ── Per-regime detail cards ────────────────────────────────────────────
     st.subheader("逐环境详情")

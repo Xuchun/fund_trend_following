@@ -103,7 +103,7 @@ _fig_pool.update_layout(
     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     height=420, margin=dict(l=60, r=20, t=60, b=50),
 )
-st.plotly_chart(_fig_pool, use_container_width=True)
+st.plotly_chart(_fig_pool, width="stretch")
 
 _n96 = int(_pool_df.loc[_pool_df["year"]==1996, "total"].values[0])
 _n99 = int(_pool_df.loc[_pool_df["year"]==1999, "total"].values[0])
@@ -201,7 +201,7 @@ _fig_adv.update_layout(
     height=400, margin=dict(l=60, r=20, t=60, b=50),
     hovermode="x unified",
 )
-st.plotly_chart(_fig_adv, use_container_width=True)
+st.plotly_chart(_fig_adv, width="stretch")
 
 _adv_2024 = _adv_base * (_CPI[2024] / _cpi_base)
 st.markdown(f"""
@@ -274,7 +274,7 @@ if not trades.empty and "entry_price" in trades.columns:
         height=420, margin=dict(l=50, r=50, t=80, b=60),
     )
     _fig_tier.update_yaxes(row=1, col=2, range=[_tier["平均R"].min()-0.1, _tier["平均R"].max()+0.15])
-    st.plotly_chart(_fig_tier, use_container_width=True)
+    st.plotly_chart(_fig_tier, width="stretch")
 
     _wr_low   = float(_tier.loc[_tier["_pt"]=="低价股\n$10–20",  "胜率"].values[0])
     _wr_mid   = float(_tier.loc[_tier["_pt"]=="中价股\n$20–100", "胜率"].values[0])
@@ -353,7 +353,7 @@ _fig_dd.update_layout(
     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     height=400, margin=dict(l=60, r=20, t=80, b=50),
 )
-st.plotly_chart(_fig_dd, use_container_width=True)
+st.plotly_chart(_fig_dd, width="stretch")
 
 st.markdown("""
 > **注：** 绿色柱"加行业集中度限制后"为估算值，假设单行业持仓上限 25% 可将行业集中导致的额外回撤

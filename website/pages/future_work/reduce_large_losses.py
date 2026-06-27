@@ -72,7 +72,7 @@ with col_a:
         margin=dict(t=50, b=40),
         yaxis=dict(range=[0, b_count * 1.15]),
     )
-    st.plotly_chart(fig_type, use_container_width=True)
+    st.plotly_chart(fig_type, width="stretch")
 
 with col_b:
     fig_top20 = go.Figure(go.Bar(
@@ -90,7 +90,7 @@ with col_b:
         margin=dict(t=50, b=40),
         yaxis=dict(range=[0, 25]),
     )
-    st.plotly_chart(fig_top20, use_container_width=True)
+    st.plotly_chart(fig_top20, width="stretch")
 
 st.info(
     f"**数据结论：** 全部 {a_count + b_count:,} 笔亏损交易中，"
@@ -139,7 +139,7 @@ fig_rdist.update_layout(
     height=380,
     margin=dict(t=50, b=40),
 )
-st.plotly_chart(fig_rdist, use_container_width=True)
+st.plotly_chart(fig_rdist, width="stretch")
 st.markdown(
     f"大部分亏损集中在 −0.5R 至 −1.5R 区间（共 {sum(bucket_counts[:3]):,} 笔）；"
     f"极端亏损（< −2R）仅 {sum(bucket_counts[3:]):,} 笔，但每笔绝对金额更大。"
@@ -185,7 +185,7 @@ fig_hold.update_layout(
     height=380,
     margin=dict(t=50, b=40),
 )
-st.plotly_chart(fig_hold, use_container_width=True)
+st.plotly_chart(fig_hold, width="stretch")
 
 pnl_early = sum(b_pnl[:2])
 st.markdown(
@@ -290,7 +290,7 @@ fig_early.update_layout(
     margin=dict(t=50, b=40),
     yaxis=dict(range=[0, max(abs(early_pnl), abs(late_pnl)) * 1.3]),
 )
-st.plotly_chart(fig_early, use_container_width=True)
+st.plotly_chart(fig_early, width="stretch")
 
 st.code("""
 FAILED_BREAKOUT_WINDOW = 10   # 入场后 N 天内观察
@@ -348,7 +348,7 @@ fig_top20_scatter.update_layout(
     height=420,
     margin=dict(t=50, b=40),
 )
-st.plotly_chart(fig_top20_scatter, use_container_width=True)
+st.plotly_chart(fig_top20_scatter, width="stretch")
 
 slow_losers = _trd[(_trd["holding_days"] > 30) & (_trd["pnl_r_multiple"] < -1.0)]
 st.code("""
@@ -409,7 +409,7 @@ if "atr_pct" in _trd.columns:
         margin=dict(t=50, b=40),
         yaxis=dict(range=[0, max(group_atrs) * 1.25]),
     )
-    st.plotly_chart(fig_atr, use_container_width=True)
+    st.plotly_chart(fig_atr, width="stretch")
     big_atr  = group_atrs[0]
     all_atr  = _trd["atr_pct"].mean() * 100
     st.markdown(

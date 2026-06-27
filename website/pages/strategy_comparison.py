@@ -121,7 +121,7 @@ _param_rows = [
 ]
 show_df(
     _pd.DataFrame(_param_rows, columns=["模块", "维度", "策略1.0", "策略2.0"]),
-    use_container_width=True, hide_index=True,
+    width="stretch", hide_index=True,
 )
 
 st.markdown("---")
@@ -189,7 +189,7 @@ _placeholder_metrics = [
 show_df(
     _pd.DataFrame(_placeholder_metrics,
                   columns=["指标", "策略1.0（实际）", "策略2.0（待填充）", "SPY 参考"]),
-    use_container_width=True, hide_index=True,
+    width="stretch", hide_index=True,
 )
 
 st.markdown("""

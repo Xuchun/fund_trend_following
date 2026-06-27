@@ -66,7 +66,7 @@ for label, lo, hi in buckets:
         "占总利润": f"{pnl/total_pnl*100:.1f}%",
     })
 
-show_df(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(rows), width="stretch", hide_index=True)
 
 st.markdown("""
 规律一目了然：**持仓越长，胜率越高、R 倍数越高、利润越大。**
@@ -98,7 +98,7 @@ fig_bar.update_layout(
     template="plotly_white",
     margin=dict(t=50, b=40),
 )
-st.plotly_chart(fig_bar, use_container_width=True)
+st.plotly_chart(fig_bar, width="stretch")
 
 st.markdown("---")
 
@@ -120,7 +120,7 @@ long["入场日期"] = long["entry_date"].dt.strftime("%Y-%m-%d")
 long["平仓日期"] = long["exit_date"].dt.strftime("%Y-%m-%d")
 
 show_df(long[["ticker","入场日期","平仓日期","持仓天数","持仓年数","R 倍数","净盈亏","退出方式"]].reset_index(drop=True),
-             use_container_width=True, hide_index=True)
+             width="stretch", hide_index=True)
 
 st.markdown("""
 **三个关键观察：**
@@ -153,7 +153,7 @@ for label, lo, hi in buckets:
         "全部交易年化资本效率（含亏损）": f"{all_mean:.1f}%",
     })
 
-show_df(pd.DataFrame(eff_rows), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(eff_rows), width="stretch", hide_index=True)
 
 st.markdown("""
 **结论：**
@@ -226,7 +226,7 @@ _fig_split.update_layout(
     margin=dict(t=50, b=40),
     yaxis=dict(range=[_fast["net_pnl"].sum() / 1e6 * 1.15, _slow["net_pnl"].sum() / 1e6 * 1.2]),
 )
-st.plotly_chart(_fig_split, use_container_width=True)
+st.plotly_chart(_fig_split, width="stretch")
 
 st.markdown(f"""
 | 问题 | 数据 | 说明 |

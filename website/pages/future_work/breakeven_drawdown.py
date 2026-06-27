@@ -147,7 +147,7 @@ for (_nm, _nav), _lbl_wr in zip(_navs_all.items(), ["orig", "be1r", "be15r", "be
         _row["最长连续亏损次数"] = str(_mc)
     _m_rows.append(_row)
 
-show_df(pd.DataFrame(_m_rows), use_container_width=True, hide_index=True)
+show_df(pd.DataFrame(_m_rows), width="stretch", hide_index=True)
 
 st.markdown("""
 **核心结论**：在 {total:,} 笔已执行交易中，平价保护 1R（浮盈达到 1R 时将止损移至略高于开仓价的位置，使出场净盈利 ≈ +$1）可使最大回撤
@@ -257,7 +257,7 @@ _fig.update_layout(
 _fig.update_yaxes(title_text="归一化 NAV", row=1, col=1)
 _fig.update_yaxes(title_text="回撤（%）", row=2, col=1)
 
-st.plotly_chart(_fig, use_container_width=True)
+st.plotly_chart(_fig, width="stretch")
 
 st.markdown(f"""
 最大回撤出现在 **{_max_dd_date.strftime('%Y-%m-%d')}**，原始策略为 **{_max_dd_orig:.2f}%**，
@@ -353,7 +353,7 @@ _fig_sc.update_layout(
     margin=dict(l=60, r=30, t=60, b=50),
 )
 
-st.plotly_chart(_fig_sc, use_container_width=True)
+st.plotly_chart(_fig_sc, width="stretch")
 
 st.markdown(f"""
 图中每个点代表一笔受影响的交易。**对角线上方（绿色）= BE 改善了结果**；**对角线下方（红色）= BE 使结果变差**。
@@ -398,7 +398,7 @@ _fig_yr.update_layout(
 )
 _fig_yr.add_hline(y=0, line_color="gray", line_width=1)
 
-st.plotly_chart(_fig_yr, use_container_width=True)
+st.plotly_chart(_fig_yr, width="stretch")
 
 st.markdown("---")
 
