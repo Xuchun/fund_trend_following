@@ -971,6 +971,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     s.at[i, "止损"] = "font-weight: bold"
                 else:
                     s.at[i, "移动止盈"] = "font-weight: bold"
+                s.at[i, "当前价"] = (
+                    "color: #d62728" if p["current_price"] < p["entry_price"]
+                    else "color: #2ca02c"
+                )
             return s
         show_df(_sd_df.style.apply(_style_sd, axis=None),
             column_config={
