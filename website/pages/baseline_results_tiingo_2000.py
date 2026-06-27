@@ -2267,6 +2267,7 @@ def _render_kstrength():
     _sim = _load_sim_signals(_SIM_MTIME)
     _ks_total = len(res.trades)
 
+    st.markdown('<div id="sec-klinestrength"></div>', unsafe_allow_html=True)
     st.subheader("开仓K线强度分析")
     st.markdown("""
 **开仓K线强度** 定义为开仓信号产生当天的日涨幅（使用复权收盘价）：
