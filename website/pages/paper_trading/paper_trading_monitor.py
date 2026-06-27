@@ -862,7 +862,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                                 y=_sig_p, row=1, col=1,
                                 line_color="#2ca02c", line_dash="dash", line_width=1.5,
                                 annotation_text=f"信号价 ${_sig_p:.2f}",
-                                annotation_position="bottom left",
+                                annotation_position="top left",
                                 annotation_font_color="#2ca02c",
                             )
                         if _stop_p:
