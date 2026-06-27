@@ -1717,7 +1717,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                             _ax_price.axvline(x=_b_edt_pos, color="#1f77b4",
                                               linestyle=":", linewidth=1.5)
                             _ax_price.text(_b_edt_pos, _ax_price.get_ylim()[0],
-                                           " Entry", color="#1f77b4", fontsize=8,
+                                           " 开仓日", color="#1f77b4", fontsize=8,
                                            va="bottom", ha="left")
                         # Exit date vline (orange dashed)
                         if _b_xdt is not None and _b_xdt in _bkdf2.index:
