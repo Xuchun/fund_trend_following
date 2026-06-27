@@ -807,6 +807,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     showlegend=False,
                 ), row=2, col=1)
 
+                # 执行日（明日）的 Timestamp，用于平仓/开仓竖线
+                _exec_dt = pd.Timestamp(str(_next_td))
+
                 if _is_sell_chart and _pos_info_chart:
                     _ep = _pos_info_chart.get("entry_price")
                     _sp = next(
@@ -829,25 +832,23 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                             annotation_position="top left",
                             annotation_font_color="#d62728",
                         )
-                    # 开仓点：用上三角标记在入场K线下方
+                    # 蓝色虚线：开仓日
                     if _entry_dt_chart is not None:
-                        _tri_dt = _entry_dt_chart
-                        if _tri_dt not in _kdf.index:
-                            _after = _kdf.index[_kdf.index >= _tri_dt]
-                            _tri_dt = _after[0] if len(_after) > 0 else _kdf.index[-1]
-                        _tri_low = float(_kdf.loc[_tri_dt, "Low"])
-                        _tri_y   = _tri_low * 0.984
-                        _fig_k.add_trace(go.Scatter(
-                            x=[_tri_dt],
-                            y=[_tri_y],
-                            mode="markers+text",
-                            marker=dict(symbol="triangle-up", size=14, color="#1f77b4"),
-                            text=["买入"],
-                            textposition="bottom center",
-                            textfont=dict(color="#1f77b4", size=10),
-                            name="买入点",
-                            showlegend=True,
-                        ), row=1, col=1)
+                        _fig_k.add_vline(
+                            x=_entry_dt_chart.isoformat(),
+                            line_color="#1f77b4", line_dash="dot", line_width=1.5,
+                            annotation_text="开仓日",
+                            annotation_position="top left",
+                            annotation_font_color="#1f77b4",
+                        )
+                    # 橙色虚线：明日平仓（尚无K线，x轴向右延伸一格显示）
+                    _fig_k.add_vline(
+                        x=_exec_dt.isoformat(),
+                        line_color="#ff7f0e", line_dash="dash", line_width=2,
+                        annotation_text="明日平仓",
+                        annotation_position="top right",
+                        annotation_font_color="#ff7f0e",
+                    )
                 else:
                     _entry_sig_chart = next(
                         (e for e in _exec_entries if e["ticker"] == _sel_tk), None
@@ -871,6 +872,18 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                                 annotation_position="top left",
                                 annotation_font_color="#d62728",
                             )
+                    # 绿色虚线：明日开仓（尚无K线，x轴向右延伸一格显示）
+                    _fig_k.add_vline(
+                        x=_exec_dt.isoformat(),
+                        line_color="#2ca02c", line_dash="dash", line_width=2,
+                        annotation_text="明日开仓",
+                        annotation_position="top right",
+                        annotation_font_color="#2ca02c",
+                    )
+
+                # x轴向右多留 3 个交易日的空间，使明日竖线完整可见
+                _x_end = _exec_dt + pd.Timedelta(days=4)
+                _x_start = _kdf.index[0]
 
                 _action_str = "明日平仓" if _is_sell_chart else "明日开仓"
                 _fig_k.update_layout(
