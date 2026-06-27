@@ -765,10 +765,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         line_color="#2ca02c", line_dash="dash", line_width=2)
                     _s2_fig.add_annotation(
                         x=_s2_exec_dt.isoformat(), xref="x",
-                        y=0.22, yref="paper",
+                        y=0.28, yref="paper",
                         text="今日开仓", showarrow=False,
                         font=dict(color="#2ca02c", size=11),
-                        xanchor="right", yanchor="top")
+                        xanchor="right", yanchor="bottom")
 
                 _s2_x_end   = _s2_exec_dt + pd.Timedelta(days=4)
                 _s2_x_start = _s2_kdf.index[0]
