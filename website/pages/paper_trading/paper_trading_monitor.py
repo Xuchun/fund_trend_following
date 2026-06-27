@@ -883,9 +883,14 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     _fig_k.add_vline(
                         x=_exec_dt.isoformat(),
                         line_color="#2ca02c", line_dash="dash", line_width=2,
-                        annotation_text="明日开仓",
-                        annotation_position="top left",
-                        annotation_font_color="#2ca02c",
+                    )
+                    _fig_k.add_annotation(
+                        x=_exec_dt.isoformat(), xref="x",
+                        y=0.22, yref="paper",
+                        text="明日开仓",
+                        showarrow=False,
+                        font=dict(color="#2ca02c", size=11),
+                        xanchor="right", yanchor="top",
                     )
 
                 # x轴向右多留 3 个交易日的空间，使明日竖线完整可见
