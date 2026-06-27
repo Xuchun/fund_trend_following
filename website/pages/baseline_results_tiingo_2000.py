@@ -2713,6 +2713,7 @@ else:
 st.markdown("---")
 
 # ── 每年开仓信号数量柱状图 ────────────────────────────────────────────────────
+st.markdown('<div id="sec-annualsig"></div>', unsafe_allow_html=True)
 st.subheader("每年开仓信号数量柱状图")
 
 if _es_path.exists():
