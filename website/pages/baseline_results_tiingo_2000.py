@@ -2938,6 +2938,7 @@ st.markdown(f"""
 st.markdown("---")
 
 # ── 每标的交易次数分布 ─────────────────────────────────────────────────────────
+st.markdown('<div id="sec-perticker"></div>', unsafe_allow_html=True)
 st.subheader("每标的交易次数分布")
 
 _freq_ta     = _ta.groupby("ticker").size()
