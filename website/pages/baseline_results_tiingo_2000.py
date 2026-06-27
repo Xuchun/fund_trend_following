@@ -511,6 +511,7 @@ st.markdown("---")
 import json as _json_br
 _DIAG_PATH_BR = Path(__file__).resolve().parents[2] / "results" / "v1_unbiased_60m_2000" / "diagnostics.json"
 
+st.markdown('<div id="sec-streak"></div>', unsafe_allow_html=True)
 st.subheader("连续亏损分析")
 
 if _DIAG_PATH_BR.exists():
