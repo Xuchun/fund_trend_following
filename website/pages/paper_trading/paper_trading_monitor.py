@@ -1673,7 +1673,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         y=0.28, yref="paper",
                         text="出场日", showarrow=False,
                         font=dict(color="#ff7f0e", size=11),
-                        xanchor="right", yanchor="bottom")
+                        xanchor="left", yanchor="bottom")
 
                 # x轴范围
                 _s9_x_end = (
