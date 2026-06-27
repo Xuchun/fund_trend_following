@@ -1674,7 +1674,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     if _s9_trl_stop and _s9_init_stop and abs(_s9_trl_stop - _s9_init_stop) > 0.01:
                         _s9_fig.add_hline(y=_s9_trl_stop, row=1, col=1,
                             line_color="#ff7f0e", line_dash="dot", line_width=1.5,
-                            annotation_text=f"移动止损 ${_s9_trl_stop:.2f}",
+                            annotation_text=f"移动止盈 ${_s9_trl_stop:.2f}",
                             annotation_position="top left",
                             annotation_font_color="#ff7f0e")
                 else:
