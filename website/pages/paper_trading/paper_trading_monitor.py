@@ -1627,23 +1627,24 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 import matplotlib.pyplot as _plt
                 import matplotlib.patches as _mpatch
                 import mplfinance as _mpf
-                # 尝试加载系统中文字体（Streamlit Cloud 通过 packages.txt 安装了 fonts-wqy-zenhei）
+                # 用 fc-list 动态查找系统中文字体（最可靠）
                 try:
-                    _wqy_candidates = [
-                        "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
-                        "/usr/share/fonts/wqy-zenhei/wqy-zenhei.ttc",
-                        "/usr/share/fonts/truetype/wqy-zenhei/wqy-zenhei.ttc",
-                    ]
-                    _cn_font_loaded = False
-                    for _wqy_p in _wqy_candidates:
-                        import os as _os
-                        if _os.path.exists(_wqy_p):
-                            _fm_batch.fontManager.addfont(_wqy_p)
-                            _cn_fn = _fm_batch.FontProperties(fname=_wqy_p).get_name()
-                            matplotlib.rcParams["font.family"] = _cn_fn
-                            matplotlib.rcParams["axes.unicode_minus"] = False
-                            _cn_font_loaded = True
-                            break
+                    import subprocess as _sp
+                    _fc = _sp.run(
+                        ["fc-list", ":lang=zh", "--format=%{file}\n"],
+                        capture_output=True, text=True, timeout=5
+                    )
+                    _zh_font_files = [f.strip() for f in _fc.stdout.splitlines() if f.strip()]
+                    if _zh_font_files:
+                        _zh_font_path = _zh_font_files[0]
+                        _fm_batch.fontManager.addfont(_zh_font_path)
+                        _cn_fn = _fm_batch.FontProperties(fname=_zh_font_path).get_name()
+                        matplotlib.rcParams["font.family"] = _cn_fn
+                        matplotlib.rcParams["axes.unicode_minus"] = False
+                    else:
+                        matplotlib.rcParams["font.sans-serif"] = [
+                            "WenQuanYi Zen Hei", "WenQuanYi Micro Hei", "DejaVu Sans"]
+                        matplotlib.rcParams["axes.unicode_minus"] = False
                 except Exception:
                     pass
 
