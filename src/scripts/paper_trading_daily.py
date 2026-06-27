@@ -822,25 +822,13 @@ def main() -> None:
             log.info(
                 f"  Raw breakouts: {scan_stats['n_raw_breakouts']} | "
                 f"Heat-blocked: {scan_stats['n_heat_blocked']} | "
-                f"Cash-blocked: {scan_stats['n_cash_blocked']} | "
                 f"Corr-reduced: {scan_stats['n_corr_reduced']} | "
                 f"Accepted: {len(candidates)}"
             )
-            # Project available cash at T+1 open:
-            #   current cash + expected proceeds from pending exits (stop_used × shares)
-            # Then deduct each approved entry sequentially to avoid over-committing cash.
-            _exit_proceeds = sum(
-                s.get("shares", 0) * s.get("stop_used", 0)
-                for s in state.get("pending_exits", [])
-            )
-            _running_cash = state.get("cash", 0.0) + _exit_proceeds
-            log.info(f"  Projected cash for entry sizing: ${_running_cash:,.0f} "
-                     f"(current ${state.get('cash',0):,.0f} + exit proceeds ${_exit_proceeds:,.0f})")
+            # All heat-passing candidates go to pending_entries — mirrors backtest.
+            # Cash check is deferred to T+1 execution, so gap-filter failures free
+            # cash for the next signal in line without needing a separate backup list.
             for sig in candidates:
-                if _running_cash < sig["notional"]:
-                    log.info(f"  Skip {sig['ticker']}: insufficient projected cash "
-                             f"(need ${sig['notional']:,.0f}, available ${_running_cash:,.0f})")
-                    continue
                 new_pending.append({
                     "ticker":       sig["ticker"],
                     "signal_date":  str(today),
@@ -848,14 +836,13 @@ def main() -> None:
                     "stop_price":   sig["stop_loss"],
                     "shares":       sig["shares"],
                     "atr":          sig["atr"],
-                    "strength":     sig["strength"],   # breakout strength for signal quality analysis
+                    "strength":     sig["strength"],
                     "trade_risk":   sig["trade_risk"],
                     "notional":     sig["notional"],
                 })
-                _running_cash -= sig["notional"]   # deduct sequentially to prevent over-commitment
                 log.info(f"  PENDING {sig['ticker']} @ signal ${sig['signal_price']:.2f}  "
                          f"stop=${sig['stop_loss']:.2f}  shares={sig['shares']:,}  "
-                         f"risk={sig['trade_risk']*100:.2f}%  remaining_cash=${_running_cash:,.0f}")
+                         f"risk={sig['trade_risk']*100:.2f}%")
     else:
         log.info("  --no-entries flag set — skipping entry scan")
 
