@@ -2105,6 +2105,7 @@ def _load_be_scenarios():
 
 
 def _render_breakeven():
+    st.markdown('<div id="sec-parity"></div>', unsafe_allow_html=True)
     st.subheader("平价保护分析")
     st.markdown("""
 **平价保护**（Breakeven Protection）：开仓后，一旦浮盈达到设定阈值，将移动止盈上移至略高于开仓价格的位置，使出场时净盈利 ≈ +$1（扣除滑点和佣金后）。其他策略设置（过滤条件、仓位管理、执行与成本假设）均保持不变。
