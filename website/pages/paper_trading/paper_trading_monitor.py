@@ -1668,7 +1668,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         if _bstat == "open":
                             _b_sp  = _bt.get("stop_loss")
                             _b_xdt = None
-                            _b_lbl = "Open Position"
+                            _b_lbl = "持仓中"
                         else:
                             _b_sp  = _bt.get("stop_used") or _bt.get("stop_loss")
                             _b_xdt = pd.Timestamp(_bt["exit_date"]) if _bt.get("exit_date") else None
