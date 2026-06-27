@@ -3223,7 +3223,7 @@ _bt_kl_all = res.trades.sort_values("exit_date", ascending=False).reset_index(dr
 _bt_kl_all_tickers = sorted(_bt_kl_all["ticker"].unique().tolist())
 
 # ── K线图筛选条件 ────────────────────────────────────────────────────────────
-st.markdown("**🔍 筛选条件**（勾选后生效，不勾选则忽略该条件）")
+st.markdown("**🔍 K线图显示筛选条件**（勾选后生效，不勾选则忽略该条件）")
 
 # Filter 1: Ticker
 _flt_tk_en = st.checkbox("限定标的（Ticker）", key="flt_tk_en")
