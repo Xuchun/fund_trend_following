@@ -174,11 +174,11 @@ def _fetch_yf_chart_single(ticker: str, period: str = "600d") -> pd.DataFrame:
     # 主数据：2年历史（约500根K线）
     df = tk.history(period="2y", auto_adjust=True)
 
-    # 补充最近5天：Yahoo Finance短周期使用实时API端点，可获取最新K线
+    # 补充最近1天：Yahoo Finance 1d端点使用实时API，确认能返回最新交易日K线
     try:
-        _df5d = tk.history(period="5d", auto_adjust=True)
-        if not _df5d.empty:
-            df = pd.concat([df, _df5d])
+        _df1d = tk.history(period="1d", auto_adjust=True)
+        if not _df1d.empty:
+            df = pd.concat([df, _df1d])
             df = df[~df.index.duplicated(keep="last")].sort_index()
     except Exception:
         pass
