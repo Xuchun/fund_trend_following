@@ -893,6 +893,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 s.at[i, "止损" if p["stop_loss"] >= p["trail_stop_live"] else "移动止盈"] = "font-weight: bold"
                 if p["stop_buffer_pct"] <= 3.0:
                     s.at[i, "缓冲"] = "color: #d62728; font-weight: bold"
+                s.at[i, "当前价"] = (
+                    "color: #d62728" if p["current_price"] < p["entry_price"]
+                    else "color: #2ca02c"
+                )
             return s
 
         show_df(
