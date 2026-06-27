@@ -1660,11 +1660,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         if _bstat == "open":
                             _b_sp  = _bt.get("stop_loss")
                             _b_xdt = None
-                            _b_lbl = "持仓中"
+                            _b_lbl = "Open Position"
                         else:
                             _b_sp  = _bt.get("stop_used") or _bt.get("stop_loss")
                             _b_xdt = pd.Timestamp(_bt["exit_date"]) if _bt.get("exit_date") else None
-                            _b_lbl = f"已平仓 R{_bt.get('pnl_r', 0):+.2f}"
+                            _b_lbl = f"Closed  R{_bt.get('pnl_r', 0):+.2f}"
 
                         _bkdf_raw = _get_df(_batch_raw, _btk)
                         if _bkdf_raw is None or _bkdf_raw.empty:
