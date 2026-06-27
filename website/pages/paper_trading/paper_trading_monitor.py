@@ -1052,7 +1052,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         _fig_k.add_hline(
                             y=_trail_p, row=1, col=1,
                             line_color="#ff7f0e", line_dash="dot", line_width=1.5,
-                            annotation_text=f"移动止损 ${_trail_p:.2f}",
+                            annotation_text=f"移动止盈 ${_trail_p:.2f}",
                             annotation_position="top left",
                             annotation_font_color="#ff7f0e",
                         )
