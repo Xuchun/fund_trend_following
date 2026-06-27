@@ -1902,6 +1902,7 @@ import plotly.graph_objects as _go_eff
 import pandas as _pd_eff
 from plotly.subplots import make_subplots as _msp_eff
 
+st.markdown('<div id="sec-validity"></div>', unsafe_allow_html=True)
 st.subheader("策略有效性分析")
 st.markdown(
     "随着市场演化，趋势跟踪策略的超额收益（Alpha）可能随时间变化。"
