@@ -940,6 +940,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     # ── Stop detail ──────────────────────────────────────────────────────────
     st.subheader("六、止损/移动止盈明细")
     if _m1_ok:
+        _sd_sorted = sorted(_m1_ok, key=lambda x: (
+            0 if x.get("stop_reason") == "stop_loss" else
+            1 if x.get("stop_reason") == "trailing_stop" else 2,
+            x["ticker"]
+        ))
         _sd_df = pd.DataFrame([{
             "标的":          p["ticker"],
             "状态":          ("🔴 触止损（待次日清仓）" if p.get("stop_reason") == "stop_loss"
@@ -952,12 +957,17 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             "移动止盈":      p["trail_stop_live"],
             "有效止损/止盈": p["current_stop"],
             "距止损/止盈":   p["stop_buffer_pct"],
-        } for p in sorted(_m1_ok, key=lambda x: (
-            0 if x.get("stop_reason") == "stop_loss" else
-            1 if x.get("stop_reason") == "trailing_stop" else 2,
-            x["ticker"]
-        ))])
-        show_df(_sd_df,
+        } for p in _sd_sorted])
+        def _style_sd(df):
+            s = pd.DataFrame("", index=df.index, columns=df.columns)
+            for i, p in enumerate(_sd_sorted):
+                # Bold whichever is the binding (effective) stop
+                if p["stop_loss"] >= p["trail_stop_live"]:
+                    s.at[i, "止损"] = "font-weight: bold"
+                else:
+                    s.at[i, "移动止盈"] = "font-weight: bold"
+            return s
+        show_df(_sd_df.style.apply(_style_sd, axis=None),
             column_config={
                 "当前价":        st.column_config.NumberColumn(format="$%.2f"),
                 "历史最高":      st.column_config.NumberColumn(format="$%.2f"),
