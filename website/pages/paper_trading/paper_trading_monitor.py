@@ -1405,10 +1405,14 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             delta=f"{_total_cost / _m1_init_nav * -100:.3f}% 初始NAV" if _m1_init_nav else None,
             delta_color="inverse",
         )
-        st.caption(
-            "说明：入场/出场滑点 = 成交价与开盘参考价之差 × 股数；"
-            "手续费 = 策略设定的按成交额计收；"
-            "出场滑点与出场手续费仅统计已平仓笔数，当前持仓尚未发生出场成本。"
+        st.markdown(
+            f"<span style='color:#000000;font-size:0.85em'>"
+            f"说明：入场/出场滑点 = 成交价与开盘参考价之差 × 股数；"
+            f"手续费 = 策略设定的按成交额计收；"
+            f"出场滑点与出场手续费仅统计已平仓笔数，当前持仓尚未发生出场成本。"
+            f"模拟交易采用滑点 {int(_V1_PARAMS.slippage_bps)} bps（单边）、手续费 {_V1_PARAMS.commission_bps:.0f} bps（单边），与回测假设一致。"
+            f"</span>",
+            unsafe_allow_html=True,
         )
 
     else:
