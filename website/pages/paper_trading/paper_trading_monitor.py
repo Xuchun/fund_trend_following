@@ -1729,11 +1729,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                                            va="top", ha="left")
                         # Entry price / stop price labels
                         if _b_ep:
-                            _ax_price.text(0, _b_ep, f" Entry ${_b_ep:.2f}",
+                            _ax_price.text(0, _b_ep, f" 买入价 ${_b_ep:.2f}",
                                            color="#1f77b4", fontsize=8,
                                            va="bottom", transform=_ax_price.get_yaxis_transform())
                         if _b_sp:
-                            _ax_price.text(0, _b_sp, f" Stop ${_b_sp:.2f}",
+                            _ax_price.text(0, _b_sp, f" 止损价 ${_b_sp:.2f}",
                                            color="#d62728", fontsize=8,
                                            va="top", transform=_ax_price.get_yaxis_transform())
 
