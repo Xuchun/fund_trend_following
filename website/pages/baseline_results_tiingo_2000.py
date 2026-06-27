@@ -3648,7 +3648,7 @@ st.caption(f"筛选后共 **{_bt_range_n}** 笔交易　｜　全部回测共 **
 # 两个并排按钮
 _bt_bcol1, _bt_bcol2 = st.columns(2)
 with _bt_bcol1:
-    if st.button(f"📊 生成日期范围内 {_bt_range_n} 笔K线图", key="bt_kl_gen_range"):
+    if st.button(f"📊 生成筛选后 {_bt_range_n} 笔K线图", key="bt_kl_gen_range"):
         with st.spinner(f"正在生成 {_bt_range_n} 笔交易K线图，请稍候…"):
             st.session_state[_bt_kl_zip_key] = _gen_kline_charts_zip(_bt_range_trades)
 with _bt_bcol2:
@@ -3662,9 +3662,9 @@ with _bt_bcol2:
 
 if st.session_state.get(_bt_kl_zip_key):
     st.download_button(
-        f"⬇️ 下载日期范围K线图 ZIP（{_bt_range_n} 笔，{_bt_dl_start} ~ {_bt_dl_end}）",
+        f"⬇️ 下载筛选后K线图 ZIP（{_bt_range_n} 笔）",
         data=st.session_state[_bt_kl_zip_key],
-        file_name=f"backtest_klines_{_bt_dl_start}_{_bt_dl_end}.zip",
+        file_name=f"backtest_klines_filtered_{_bt_range_n}trades.zip",
         mime="application/zip",
         key="bt_kl_dl_range",
     )
