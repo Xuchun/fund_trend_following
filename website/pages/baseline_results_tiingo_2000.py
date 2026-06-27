@@ -2990,6 +2990,7 @@ with st.expander("📋 交易次数最多的 TOP 10 标的", expanded=False):
 st.markdown("---")
 
 # ── Per-year universe size ────────────────────────────────────────────────────
+st.markdown('<div id="sec-universe"></div>', unsafe_allow_html=True)
 st.subheader("每年标的池里面的标的数量")
 
 # ── Entry criteria explanation ────────────────────────────────────────────────
