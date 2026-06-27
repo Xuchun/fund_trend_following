@@ -3195,44 +3195,26 @@ from plotly.subplots import make_subplots as _msp_bt_kl
 
 @st.cache_data(ttl=86400, show_spinner=False)
 def _bt_tiingo_get(ticker: str, start_str: str, end_str: str) -> "_pd_bt_kl.DataFrame":
-    """复权日K线数据：优先读本地 Tiingo parquet，不存在时回退到 yfinance。"""
+    """从 data/tiingo_bt/ 读取 Tiingo 复权日K线数据（仅使用 Tiingo，不使用 yfinance）。"""
     from pathlib import Path as _P2
-    _tdir = _P2(__file__).resolve().parents[2] / "data" / "cache" / "tiingo"
+    _tdir = _P2(__file__).resolve().parents[2] / "data" / "tiingo_bt"
     _fpath = _tdir / f"{ticker.upper()}.parquet"
-
-    # ① 本地 Tiingo parquet
-    if _fpath.exists():
-        try:
-            _df = _pd_bt_kl.read_parquet(_fpath)
-            _df.index = _pd_bt_kl.DatetimeIndex(_df.index)
-            for _c in ("open", "high", "low", "close"):
-                _df[_c] = _df[_c] * _df["adj_factor"]
-            if start_str:
-                _df = _df[_df.index >= start_str]
-            if end_str:
-                _df = _df[_df.index <= end_str]
-            _df = _df.rename(columns={
-                "open": "Open", "high": "High",
-                "low": "Low", "close": "Close", "volume": "Volume",
-            })
-            _res = _df[["Open", "High", "Low", "Close", "Volume"]].dropna(subset=["Close"])
-            if not _res.empty:
-                return _res
-        except Exception:
-            pass
-
-    # ② 回退到 yfinance（Streamlit Cloud 或本地缺文件时）
+    if not _fpath.exists():
+        return _pd_bt_kl.DataFrame()
     try:
-        import yfinance as _yf_bt
-        _raw = _yf_bt.download(ticker, start=start_str, end=end_str,
-                               auto_adjust=True, progress=False)
-        if _raw.empty:
-            return _pd_bt_kl.DataFrame()
-        if isinstance(_raw.columns, _pd_bt_kl.MultiIndex):
-            if ticker not in _raw.columns.get_level_values(1):
-                return _pd_bt_kl.DataFrame()
-            _raw = _raw.xs(ticker, level=1, axis=1)
-        return _raw[["Open", "High", "Low", "Close", "Volume"]].dropna(subset=["Close"])
+        _df = _pd_bt_kl.read_parquet(_fpath)
+        _df.index = _pd_bt_kl.DatetimeIndex(_df.index)
+        for _c in ("open", "high", "low", "close"):
+            _df[_c] = _df[_c] * _df["adj_factor"]
+        if start_str:
+            _df = _df[_df.index >= start_str]
+        if end_str:
+            _df = _df[_df.index <= end_str]
+        _df = _df.rename(columns={
+            "open": "Open", "high": "High",
+            "low": "Low", "close": "Close", "volume": "Volume",
+        })
+        return _df[["Open", "High", "Low", "Close", "Volume"]].dropna(subset=["Close"])
     except Exception:
         return _pd_bt_kl.DataFrame()
 
