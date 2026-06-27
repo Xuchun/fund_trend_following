@@ -3431,8 +3431,7 @@ if _bt_kl_df is not None and not _bt_kl_df.empty:
     st.plotly_chart(_bt_kl_fig, use_container_width=True)
 else:
     st.warning(
-        f"无法获取 {_bt_kl_tk} 的K线数据（该交易发生于 {_bt_kl_edt.date()}，"
-        "可能超出 yfinance 可获取的历史范围）。请选择近几年内的交易。"
+        f"无法读取 {_bt_kl_tk} 的 Tiingo K线数据（data/cache/tiingo/{_bt_kl_tk}.parquet 不存在或数据为空）。"
     )
 
 # ── 批量下载K线图 ─────────────────────────────────────────────────────────────
