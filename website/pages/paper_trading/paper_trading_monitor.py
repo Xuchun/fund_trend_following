@@ -163,23 +163,53 @@ def _fetch_yf(tickers: tuple, period: str = "300d", day: str = ""):
 
 
 def _fetch_yf_chart_single(ticker: str, period: str = "600d") -> pd.DataFrame:
-    """单股K线图数据拉取，使用 yf.Ticker.history() 确保获取最新日K线数据。"""
+    """单股K线图数据拉取，yfinance + 直接 HTTP 补充最新日K线数据。"""
     import yfinance as yf
+    import requests, time
     if not ticker:
         return pd.DataFrame()
     tk = yf.Ticker(ticker)
-    # 用 period="2y" 确保包含最新数据（不依赖 start/end 日期计算）
     df = tk.history(period="2y", auto_adjust=True)
-    # 补充最近 10 天防止 period 参数也有延迟
-    df_recent = tk.history(period="10d", auto_adjust=True)
-    if not df_recent.empty:
-        df = pd.concat([df, df_recent])
-        df = df[~df.index.duplicated(keep="last")].sort_index()
-    if df.empty:
-        return pd.DataFrame()
     if df.index.tz is not None:
         df.index = df.index.tz_localize(None)
-    return df.sort_index().dropna(subset=["Close"])
+    df = df.sort_index()
+
+    # 直接调用 Yahoo Finance query2 API 补充最近 15 天数据
+    # 绕过 yfinance 的内部缓存和 CDN 地域差异
+    try:
+        _now = int(time.time())
+        _url = f"https://query2.finance.yahoo.com/v8/finance/chart/{ticker}"
+        _params = {
+            "period1": _now - 15 * 86400,
+            "period2": _now + 86400,
+            "interval": "1d",
+            "events": "",
+        }
+        _headers = {"User-Agent": "Mozilla/5.0"}
+        _resp = requests.get(_url, params=_params, headers=_headers, timeout=8)
+        _data = _resp.json()
+        _res  = _data["chart"]["result"][0]
+        _ts   = _res["timestamp"]
+        _q    = _res["indicators"]["quote"][0]
+        _ac   = (_res["indicators"].get("adjclose", [{}])[0].get("adjclose")
+                 or _q["close"])
+        _df2 = pd.DataFrame({
+            "Open": _q["open"], "High": _q["high"],
+            "Low": _q["low"],  "Close": _ac,
+            "Volume": _q["volume"],
+        }, index=pd.to_datetime(_ts, unit="s", utc=True))
+        _df2.index = (_df2.index
+                      .tz_convert("America/New_York")
+                      .normalize()
+                      .tz_localize(None))
+        _df2 = _df2.dropna(subset=["Close"])
+        if not _df2.empty:
+            df = pd.concat([df, _df2])
+            df = df[~df.index.duplicated(keep="last")].sort_index()
+    except Exception:
+        pass
+
+    return df.dropna(subset=["Close"]) if not df.empty else pd.DataFrame()
 
 
 def _us_open_to_sgt(date_str: str) -> str:
