@@ -163,61 +163,31 @@ def _fetch_yf(tickers: tuple, period: str = "300d", day: str = ""):
 
 
 def _fetch_yf_chart_single(ticker: str, period: str = "600d") -> pd.DataFrame:
-    """单股K线图数据拉取。历史数据用 history(period='2y')，
-    如果历史数据不含最近交易日，用 fast_info 实时报价补最后一根K线。"""
+    """单股K线图数据拉取。
+    period='2y' 使用历史数据库（可能滞后1天），
+    period='5d' 使用实时端点（包含最新交易日），两者合并取最新。"""
     import yfinance as yf
     if not ticker:
         return pd.DataFrame()
     tk = yf.Ticker(ticker)
 
-    # 主数据：2年历史
+    # 主数据：2年历史（约500根K线）
     df = tk.history(period="2y", auto_adjust=True)
+
+    # 补充最近5天：Yahoo Finance短周期使用实时API端点，可获取最新K线
+    try:
+        _df5d = tk.history(period="5d", auto_adjust=True)
+        if not _df5d.empty:
+            df = pd.concat([df, _df5d])
+            df = df[~df.index.duplicated(keep="last")].sort_index()
+    except Exception:
+        pass
+
+    if df.empty:
+        return pd.DataFrame()
     if df.index.tz is not None:
         df.index = df.index.tz_localize(None)
-    df = df.sort_index()
-
-    # 判断最近交易日（周末取上周五，工作日取今日）
-    _today = pd.Timestamp.today().normalize()
-    if _today.weekday() >= 5:          # 周六=5, 周日=6
-        _last_bday = _today - pd.offsets.BDay(1)
-    else:
-        _last_bday = _today
-
-    # 如果历史数据落后最近交易日，用 fast_info 实时报价补一根
-    if not df.empty and df.index[-1].normalize() < _last_bday:
-        try:
-            fi = tk.fast_info
-
-            def _clean(v, fallback=None):
-                """把 NaN/None 替换为 fallback。"""
-                if v is None:
-                    return fallback
-                try:
-                    import math
-                    if math.isnan(float(v)):
-                        return fallback
-                except (TypeError, ValueError):
-                    pass
-                return v
-
-            _close = _clean(fi.last_price)
-            if _close:
-                _open = _clean(getattr(fi, "open",        None), _close)
-                _high = _clean(getattr(fi, "day_high",    None), _close)
-                _low  = _clean(getattr(fi, "day_low",     None), _close)
-                _vol  = _clean(getattr(fi, "last_volume", None), 0)
-                _bar = pd.DataFrame(
-                    {"Open": [float(_open)], "High": [float(_high)],
-                     "Low": [float(_low)],   "Close": [float(_close)],
-                     "Volume": [int(float(_vol))]},
-                    index=pd.DatetimeIndex([_last_bday]),
-                )
-                df = pd.concat([df, _bar])
-                df = df[~df.index.duplicated(keep="last")].sort_index()
-        except Exception:
-            pass
-
-    return df.dropna(subset=["Close"]) if not df.empty else pd.DataFrame()
+    return df.sort_index().dropna(subset=["Close"])
 
 
 def _us_open_to_sgt(date_str: str) -> str:
