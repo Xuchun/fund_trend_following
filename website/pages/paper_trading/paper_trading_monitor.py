@@ -162,15 +162,20 @@ def _fetch_yf(tickers: tuple, period: str = "300d", day: str = ""):
     return _df, _fetch_time
 
 
-def _fetch_yf_chart(tickers: tuple, period: str = "600d"):
-    """K线图数据拉取，不缓存，每次直接从 yfinance 获取最新日K线。"""
+def _fetch_yf_chart_single(ticker: str, period: str = "600d") -> pd.DataFrame:
+    """单股K线图数据拉取，使用 yf.Ticker.history() 确保获取最新日K线数据。"""
     import yfinance as yf
-    if not tickers:
+    if not ticker:
         return pd.DataFrame()
-    _days     = int(period.rstrip("d"))
-    _end_dt   = (pd.Timestamp.today() + pd.Timedelta(days=1)).strftime("%Y-%m-%d")
-    _start_dt = (pd.Timestamp.today() - pd.Timedelta(days=_days)).strftime("%Y-%m-%d")
-    return yf.download(list(tickers), start=_start_dt, end=_end_dt, auto_adjust=True, progress=False)
+    _days  = int(period.rstrip("d"))
+    _end   = pd.Timestamp.today() + pd.Timedelta(days=2)
+    _start = pd.Timestamp.today() - pd.Timedelta(days=_days)
+    df = yf.Ticker(ticker).history(start=_start, end=_end, auto_adjust=True)
+    if df.empty:
+        return pd.DataFrame()
+    if df.index.tz is not None:
+        df.index = df.index.tz_localize(None)
+    return df.dropna(subset=["Close"])
 
 
 def _us_open_to_sgt(date_str: str) -> str:
