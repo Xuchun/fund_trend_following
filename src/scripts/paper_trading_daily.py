@@ -789,8 +789,7 @@ def main() -> None:
     #   Bear  → scan only bear_exempt_tickers (e.g. GLD, TLT, UUP); empty list → no scan
     candidates:  list[dict] = []
     new_pending: list[dict] = []
-    scan_stats:  dict       = {"n_raw_breakouts": 0, "n_heat_blocked": 0,
-                               "n_cash_blocked": 0,  "n_corr_reduced": 0}
+    scan_stats:  dict       = {"n_raw_breakouts": 0, "n_heat_blocked": 0, "n_corr_reduced": 0}
     _bear_exempt = list(PARAMS.bear_exempt_tickers)  # e.g. ['GLD', 'TLT', 'UUP']
 
     if not args.no_entries:
