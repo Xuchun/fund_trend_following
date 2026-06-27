@@ -3362,9 +3362,11 @@ _bt_kl_tk   = _bt_kl_row["ticker"]
 _bt_kl_edt  = _pd_bt_kl.Timestamp(_bt_kl_row["entry_date"])
 _bt_kl_xdt  = _pd_bt_kl.Timestamp(_bt_kl_row["exit_date"])
 _bt_kl_ep   = float(_bt_kl_row["entry_price"])
+_bt_kl_xp   = float(_bt_kl_row["exit_price"])
 _bt_kl_sp   = float(_bt_kl_row["stop_loss"])
 _bt_kl_r    = float(_bt_kl_row["pnl_r_multiple"])
-_bt_kl_n    = 300 + int(_bt_kl_row["holding_days"])
+_bt_kl_hd   = int(_bt_kl_row["holding_days"])
+_bt_kl_n    = 300 + _bt_kl_hd
 
 _bt_kl_start_s = (_bt_kl_edt - _pd_bt_kl.Timedelta(days=450)).strftime("%Y-%m-%d")
 _bt_kl_end_s   = (_bt_kl_xdt + _pd_bt_kl.Timedelta(days=10)).strftime("%Y-%m-%d")
