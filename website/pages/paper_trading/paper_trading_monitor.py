@@ -1577,7 +1577,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             "入场价": f"${c.get('entry_price',0):.2f}",
             "出场价": f"${c.get('exit_price',0):.2f}",
             "股数": c.get("shares", ""),
-            "持仓天数": c.get("holding_days", ""),
+            "持仓天数": c.get("holding_days"),
             "R": f"{c['pnl_r']:+.2f}R" if c.get("pnl_r") is not None else "—",
             "净盈亏": f"${c['net_pnl']:+,.0f}" if c.get("net_pnl") is not None else "—",
         })
