@@ -3533,35 +3533,117 @@ def _gen_kline_charts_zip(trades_df) -> bytes:
     _buf_zip.seek(0)
     return _buf_zip.read()
 
-# 日期范围选择器
-_bt_date_min = _bt_kl_all["exit_date"].min().date()
-_bt_date_max = _bt_kl_all["exit_date"].max().date()
-_bt_default_start = max(_bt_date_min,
-    (_pd_bt_kl.Timestamp.today() - _pd_bt_kl.Timedelta(days=730)).date())
+# ── 批量下载筛选条件（与上方K线图筛选独立，key前缀 dl_）────────────────────
+st.markdown("**🔍 批量下载筛选条件**（勾选后生效，不勾选则忽略该条件）")
 
-_bt_dcol1, _bt_dcol2 = st.columns(2)
-with _bt_dcol1:
-    _bt_dl_start = st.date_input(
-        "下载开始日期（按出场日）",
-        value=_bt_default_start,
-        min_value=_bt_date_min, max_value=_bt_date_max,
-        key="bt_kl_start_date",
-    )
-with _bt_dcol2:
-    _bt_dl_end = st.date_input(
-        "下载截止日期（按出场日）",
-        value=_bt_date_max,
-        min_value=_bt_date_min, max_value=_bt_date_max,
-        key="bt_kl_end_date",
-    )
+# DL Filter 1: Ticker
+_dl_tk_en = st.checkbox("限定标的（Ticker）", key="dl_flt_tk_en")
+if _dl_tk_en:
+    _dl_col_a, _dl_col_b = st.columns(2)
+    with _dl_col_a:
+        _dl_tk_multi = st.multiselect(
+            "从列表选择标的（可多选）",
+            _bt_kl_all_tickers, key="dl_flt_tk_multi",
+        )
+    with _dl_col_b:
+        _dl_tk_text = st.text_input(
+            "或手动输入标的（逗号分隔，如 AAPL, MSFT）",
+            key="dl_flt_tk_text",
+        )
+    _dl_tk_set = set(t.upper() for t in _dl_tk_multi)
+    for _dtx in _dl_tk_text.split(","):
+        _dtx = _dtx.strip().upper()
+        if _dtx:
+            _dl_tk_set.add(_dtx)
+else:
+    _dl_tk_set = set()
 
-_bt_range_trades = _bt_kl_all[
-    (_bt_kl_all["exit_date"].dt.date >= _bt_dl_start) &
-    (_bt_kl_all["exit_date"].dt.date <= _bt_dl_end)
-]
-_bt_range_n   = len(_bt_range_trades)
-_bt_all_n     = len(_bt_kl_all)
-st.caption(f"所选日期范围内共 **{_bt_range_n}** 笔交易　｜　全部回测共 **{_bt_all_n}** 笔交易")
+# DL Filter 2 & 3: Entry / Exit date
+_dl_d1, _dl_d2 = st.columns(2)
+with _dl_d1:
+    _dl_edt_en = st.checkbox("限制开仓最早日期（开仓日 ≥）", key="dl_flt_edt_en")
+    if _dl_edt_en:
+        _dl_edt_val = st.date_input(
+            "开仓最早日期（该日期及之后开仓的交易才下载）",
+            value=_bt_kl_all["entry_date"].min().date(),
+            min_value=_bt_kl_all["entry_date"].min().date(),
+            max_value=_bt_kl_all["entry_date"].max().date(),
+            key="dl_flt_edt_val",
+        )
+    else:
+        _dl_edt_val = None
+with _dl_d2:
+    _dl_xdt_en = st.checkbox("限制平仓最晚日期（出场日 ≤）", key="dl_flt_xdt_en")
+    if _dl_xdt_en:
+        _dl_xdt_val = st.date_input(
+            "平仓最晚日期（该日期及之前出场的交易才下载）",
+            value=_bt_kl_all["exit_date"].max().date(),
+            min_value=_bt_kl_all["exit_date"].min().date(),
+            max_value=_bt_kl_all["exit_date"].max().date(),
+            key="dl_flt_xdt_val",
+        )
+    else:
+        _dl_xdt_val = None
+
+# DL Filter 4: R value range
+_dl_r1, _dl_r2 = st.columns(2)
+with _dl_r1:
+    _dl_rmin_en = st.checkbox("R 大于等于（R ≥ 某值）", key="dl_flt_rmin_en")
+    if _dl_rmin_en:
+        _dl_rmin = st.number_input(
+            "R 最小值", value=0.0, step=0.5, format="%.2f", key="dl_flt_rmin_val",
+        )
+    else:
+        _dl_rmin = None
+with _dl_r2:
+    _dl_rmax_en = st.checkbox("R 小于等于（R ≤ 某值）", key="dl_flt_rmax_en")
+    if _dl_rmax_en:
+        _dl_rmax = st.number_input(
+            "R 最大值", value=0.0, step=0.5, format="%.2f", key="dl_flt_rmax_val",
+        )
+    else:
+        _dl_rmax = None
+
+# DL Filter 5: Holding days
+_dl_h1, _dl_h2 = st.columns(2)
+with _dl_h1:
+    _dl_hmin_en = st.checkbox("持仓天数 大于等于（天 ≥）", key="dl_flt_hmin_en")
+    if _dl_hmin_en:
+        _dl_hmin = st.number_input(
+            "持仓天数最小值", value=1, step=1, min_value=0, key="dl_flt_hmin_val",
+        )
+    else:
+        _dl_hmin = None
+with _dl_h2:
+    _dl_hmax_en = st.checkbox("持仓天数 小于等于（天 ≤）", key="dl_flt_hmax_en")
+    if _dl_hmax_en:
+        _dl_hmax = st.number_input(
+            "持仓天数最大值", value=100, step=1, min_value=0, key="dl_flt_hmax_val",
+        )
+    else:
+        _dl_hmax = None
+
+# 应用批量下载筛选条件
+_bt_range_trades = _bt_kl_all.copy()
+if _dl_tk_set:
+    _bt_range_trades = _bt_range_trades[_bt_range_trades["ticker"].isin(_dl_tk_set)]
+if _dl_edt_val is not None:
+    _bt_range_trades = _bt_range_trades[_bt_range_trades["entry_date"].dt.date >= _dl_edt_val]
+if _dl_xdt_val is not None:
+    _bt_range_trades = _bt_range_trades[_bt_range_trades["exit_date"].dt.date <= _dl_xdt_val]
+if _dl_rmin is not None:
+    _bt_range_trades = _bt_range_trades[_bt_range_trades["pnl_r_multiple"] >= _dl_rmin]
+if _dl_rmax is not None:
+    _bt_range_trades = _bt_range_trades[_bt_range_trades["pnl_r_multiple"] <= _dl_rmax]
+if _dl_hmin is not None:
+    _bt_range_trades = _bt_range_trades[_bt_range_trades["holding_days"] >= _dl_hmin]
+if _dl_hmax is not None:
+    _bt_range_trades = _bt_range_trades[_bt_range_trades["holding_days"] <= _dl_hmax]
+_bt_range_trades = _bt_range_trades.reset_index(drop=True)
+
+_bt_range_n = len(_bt_range_trades)
+_bt_all_n   = len(_bt_kl_all)
+st.caption(f"筛选后共 **{_bt_range_n}** 笔交易　｜　全部回测共 **{_bt_all_n}** 笔交易")
 
 # 两个并排按钮
 _bt_bcol1, _bt_bcol2 = st.columns(2)
