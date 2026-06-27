@@ -797,24 +797,29 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     "🔴 未选（现金不足）":      2,
                     "🔴 未选（热度上限）":      3,
                 }
-                def _get_status(c):
-                    if c["ticker"] in _blocked_entries:
-                        return "🔴 未选（现金不足）"
-                    rejection = c.get("rejection")
-                    # scan_entries approved it (rejection=None/corr_reduced), but main()'s
-                    # sequential cash deduction may have dropped it from entry_signals.
-                    if rejection in (None, "corr_reduced") and c["ticker"] not in _approved_tickers:
-                        return "🔴 未选（现金不足）"
-                    return _rejection_label.get(rejection, rejection or "✅ 已选入")
-                _cand_rows = [{
-                    "标的":         c["ticker"],
-                    "信号价（今收）": f"${c.get('signal_price', 0):.2f}" if c.get("signal_price") else "",
-                    "参考止损":      f"${c.get('stop_price', 0):.2f}"   if c.get("stop_price")   else "",
-                    "股数":          c.get("shares", ""),
-                    "风险% NAV":     f"{c['trade_risk']*100:.2f}%" if c.get("trade_risk") else "",
-                    "状态":          _get_status(c),
-                    "执行方式":      "市价单（次日开盘）" if c["ticker"] in _approved_tickers else "—",
-                } for c in _ts_all_cands]
+                _cand_rows = []
+                for c in _ts_all_cands:
+                    _tk  = c["ticker"]
+                    _rej = c.get("rejection")
+                    # Determine status — three levels of cash blocking:
+                    # 1. Website-side T+1 projected-cash check (_blocked_entries)
+                    # 2. Script main() sequential deduction (in candidates but not entry_signals)
+                    # 3. scan_entries portfolio-level rejection (heat_limit / cash_limit)
+                    if _tk in _blocked_entries:
+                        _status = "🔴 未选（现金不足）"
+                    elif _rej in (None, "corr_reduced") and _tk not in _approved_tickers:
+                        _status = "🔴 未选（现金不足）"
+                    else:
+                        _status = _rejection_label.get(_rej, _rej or "✅ 已选入")
+                    _cand_rows.append({
+                        "标的":         _tk,
+                        "信号价（今收）": f"${c.get('signal_price', 0):.2f}" if c.get("signal_price") else "",
+                        "参考止损":      f"${c.get('stop_price', 0):.2f}"   if c.get("stop_price")   else "",
+                        "股数":          int(c["shares"]) if c.get("shares") else "",
+                        "风险% NAV":     f"{c['trade_risk']*100:.2f}%" if c.get("trade_risk") else "",
+                        "状态":          _status,
+                        "执行方式":      "市价单（次日开盘）" if _tk in _approved_tickers else "—",
+                    })
                 _cand_rows.sort(key=lambda r: (_status_order.get(r["状态"], 9), r["标的"]))
                 show_df(pd.DataFrame(_cand_rows), use_container_width=True, hide_index=True)
             elif _ts_entry_sigs:
