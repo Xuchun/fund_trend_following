@@ -679,6 +679,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     _s2_entry_dt = pd.Timestamp(_s2_cl["entry_date"])
                     _s2_ep       = _s2_cl.get("entry_price")
                     _s2_sp       = _s2_cl.get("stop_used") or _s2_cl.get("stop_loss")
+                    _s2_trail    = _s2_cl.get("trail_stop_at_exit")
                     _s2_kline_n  = 300 + max(0, (_s2_exec_dt - _s2_entry_dt).days * 5 // 7)
 
             _s2_raw, _ = _fetch_yf(tuple(sorted(set(_s2_all_tks))), "600d")
