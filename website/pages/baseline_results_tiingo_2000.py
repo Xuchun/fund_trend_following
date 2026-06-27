@@ -2412,6 +2412,7 @@ commission_bps = meta.params_anchor.get("commission_bps", 3)
 rt_cost_bps    = (slippage_bps + commission_bps) * 2
 implied_cost_pct = turnover * rt_cost_bps / 100   # in bps→%
 
+st.markdown('<div id="sec-turnover"></div>', unsafe_allow_html=True)
 st.subheader("组合换手率（Portfolio Turnover）")
 col1, col2, col3 = st.columns(3)
 with col1:
