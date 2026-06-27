@@ -3904,6 +3904,7 @@ if st.session_state.get(_bt_kl_all_zip_key):
 
 # ── Assessment ─────────────────────────────────────────────────────────────────
 st.markdown("---")
+st.markdown('<div id="sec-assessment"></div>', unsafe_allow_html=True)
 st.subheader("评估")
 
 import numpy as _np2
