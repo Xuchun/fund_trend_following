@@ -1725,7 +1725,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                             _ax_price.axvline(x=_b_xdt_pos, color="#ff7f0e",
                                               linestyle="--", linewidth=2)
                             _ax_price.text(_b_xdt_pos, _ax_price.get_ylim()[1],
-                                           " Exit", color="#ff7f0e", fontsize=8,
+                                           " 出场日", color="#ff7f0e", fontsize=8,
                                            va="top", ha="left")
                         # Entry price / stop price labels
                         if _b_ep:
