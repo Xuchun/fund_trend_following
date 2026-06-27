@@ -1346,6 +1346,71 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 use_container_width=True, hide_index=True,
             )
 
+        # ── 累计滑点与手续费对NAV的影响 ───────────────────────────────────────
+        _cost_entry_slip_closed = sum(
+            (c["entry_price"] - c["open_price"]) * c["shares"]
+            for c in _m1_closed
+            if c.get("entry_price") and c.get("open_price") and c.get("shares")
+        )
+        _cost_exit_slip_closed = sum(
+            (c["exit_open"] - c["exit_price"]) * c["shares"]
+            for c in _m1_closed
+            if c.get("exit_open") and c.get("exit_price") and c.get("shares")
+        )
+        _cost_entry_comm_closed = sum(
+            c.get("entry_commission", 0.0) for c in _m1_closed
+        )
+        _cost_exit_comm_closed = sum(
+            c.get("exit_commission", 0.0) for c in _m1_closed
+        )
+        _cost_entry_slip_open = sum(
+            (p["entry_price"] - p["open_price"]) * p["shares"]
+            for p in _m1_positions
+            if p.get("entry_price") and p.get("open_price") and p.get("shares")
+        )
+        _cost_entry_comm_open = sum(
+            p.get("entry_commission", 0.0) for p in _m1_positions
+        )
+        _total_entry_slip  = _cost_entry_slip_closed + _cost_entry_slip_open
+        _total_exit_slip   = _cost_exit_slip_closed
+        _total_entry_comm  = _cost_entry_comm_closed + _cost_entry_comm_open
+        _total_exit_comm   = _cost_exit_comm_closed
+        _total_slip        = _total_entry_slip + _total_exit_slip
+        _total_comm        = _total_entry_comm + _total_exit_comm
+        _total_cost        = _total_slip + _total_comm
+
+        st.markdown("**累计滑点与手续费对策略净值的影响**（含当前持仓已发生成本）")
+        _ca, _cb, _cc, _cd = st.columns(4)
+        _ca.metric(
+            "入场滑点合计",
+            f"−${_total_entry_slip:,.0f}",
+            delta=f"{_total_entry_slip / _m1_init_nav * -100:.3f}% 初始NAV" if _m1_init_nav else None,
+            delta_color="inverse",
+        )
+        _cb.metric(
+            "出场滑点合计",
+            f"−${_total_exit_slip:,.0f}",
+            delta=f"{_total_exit_slip / _m1_init_nav * -100:.3f}% 初始NAV" if _m1_init_nav else None,
+            delta_color="inverse",
+        )
+        _cc.metric(
+            "手续费合计（进+出）",
+            f"−${_total_comm:,.0f}",
+            delta=f"{_total_comm / _m1_init_nav * -100:.3f}% 初始NAV" if _m1_init_nav else None,
+            delta_color="inverse",
+        )
+        _cd.metric(
+            "总成本合计",
+            f"−${_total_cost:,.0f}",
+            delta=f"{_total_cost / _m1_init_nav * -100:.3f}% 初始NAV" if _m1_init_nav else None,
+            delta_color="inverse",
+        )
+        st.caption(
+            "说明：入场/出场滑点 = 成交价与开盘参考价之差 × 股数；"
+            "手续费 = 策略设定的按成交额计收；"
+            "出场滑点与出场手续费仅统计已平仓笔数，当前持仓尚未发生出场成本。"
+        )
+
     else:
         _win_rate = _avg_r = _avg_days = _avg_win_r = _avg_loss_r = _tot_pnl = 0.0
         _max_ws = _max_ls = 0
