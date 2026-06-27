@@ -728,18 +728,22 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                             annotation_font_color="#d62728")
                     if _s2_entry_dt is not None:
                         _s2_fig.add_vline(x=_s2_entry_dt.isoformat(),
-                            line_color="#1f77b4", line_dash="dot", line_width=1.5,
-                            annotation_text="开仓日",
-                            annotation_position="bottom left",
-                            annotation_font_color="#1f77b4")
+                            line_color="#1f77b4", line_dash="dot", line_width=1.5)
+                        _s2_fig.add_annotation(
+                            x=_s2_entry_dt.isoformat(), xref="x",
+                            y=0, yref="y domain",
+                            text="开仓日", showarrow=False,
+                            font=dict(color="#1f77b4", size=11),
+                            xanchor="right", yanchor="bottom",
+                            row=1, col=1)
                     _s2_fig.add_vline(x=_s2_exec_dt.isoformat(),
                         line_color="#ff7f0e", line_dash="dash", line_width=2)
                     _s2_fig.add_annotation(
                         x=_s2_exec_dt.isoformat(), xref="x",
-                        y=0.22, yref="paper",
+                        y=0.28, yref="paper",
                         text="今日平仓", showarrow=False,
                         font=dict(color="#ff7f0e", size=11),
-                        xanchor="right", yanchor="top")
+                        xanchor="right", yanchor="bottom")
                 else:
                     _s2_esig = next((e for e in _entries_exec if e["ticker"] == _s2_sel_tk), None)
                     if _s2_esig:
