@@ -2621,6 +2621,7 @@ _pct_s   = _n_ts / _n_ps * 100 if _n_ps else 0
 _pct_e   = _n_te / _n_pe * 100 if _n_pe else 0
 
 # ── 一、标的覆盖率 ────────────────────────────────────────────────────────────
+st.markdown('<div id="sec-coverage"></div>', unsafe_allow_html=True)
 st.subheader("实际开仓标的覆盖率")
 _tc1, _tc2, _tc3 = st.columns(3)
 _tc1.metric("实际开仓标的总数", f"{_n_ta:,}",
