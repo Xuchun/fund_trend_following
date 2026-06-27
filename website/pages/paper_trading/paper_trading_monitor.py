@@ -798,6 +798,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     increasing_fillcolor="#2ca02c",
                     decreasing_fillcolor="#d62728",
                     name="K线",
+                    showlegend=False,
                 ), row=1, col=1)
                 _fig_k.add_trace(go.Bar(
                     x=_kdf.index,
