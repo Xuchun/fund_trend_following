@@ -1061,11 +1061,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     )
                     _fig_k.add_annotation(
                         x=_exec_dt.isoformat(), xref="x",
-                        y=0.28, yref="paper",
+                        y=0.36, yref="paper",
                         text="明日平仓",
                         showarrow=False,
                         font=dict(color="#ff7f0e", size=11),
-                        xanchor="left", yanchor="bottom",
+                        xanchor="right", yanchor="bottom",
                     )
                 else:
                     _entry_sig_chart = next(
