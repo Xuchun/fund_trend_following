@@ -698,8 +698,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     _s2_trail    = _s2_cl.get("trail_stop_at_exit")
                     _s2_kline_n  = 300 + max(0, (_s2_exec_dt - _s2_entry_dt).days * 5 // 7)
 
-            _s2_raw    = _fetch_yf_chart(tuple(sorted(set(_s2_all_tks))), "600d")
-            _s2_kdf    = _get_df(_s2_raw, _s2_sel_tk)
+            _s2_kdf    = _fetch_yf_chart_single(_s2_sel_tk, "600d")
 
             if _s2_kdf is not None and not _s2_kdf.empty:
                 if _s2_is_sell and _s2_entry_dt is not None:
