@@ -740,10 +740,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         line_color="#ff7f0e", line_dash="dash", line_width=2)
                     _s2_fig.add_annotation(
                         x=_s2_exec_dt.isoformat(), xref="x",
-                        y=0.28, yref="paper",
+                        y=0.36, yref="paper",
                         text="今日平仓", showarrow=False,
                         font=dict(color="#ff7f0e", size=11),
-                        xanchor="left", yanchor="bottom")
+                        xanchor="right", yanchor="bottom")
                 else:
                     _s2_esig = next((e for e in _entries_exec if e["ticker"] == _s2_sel_tk), None)
                     if _s2_esig:
