@@ -267,6 +267,7 @@ from plotly.subplots import make_subplots as _make_subplots_nd
 import plotly.graph_objects as _go_nd
 import datetime as _dt_nd
 
+st.markdown('<div id="sec-nav"></div>', unsafe_allow_html=True)
 st.subheader("净值曲线 & 回撤曲线")
 _show_spy = st.checkbox("显示 SPY 基准曲线", value=True, key="nav_show_spy")
 
