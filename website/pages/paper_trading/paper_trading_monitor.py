@@ -1710,7 +1710,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                             type="candle",
                             volume=True,
                             style=_mpf_style,
-                            title=f"{_btk}  {_b_lbl}  （最近 {_b_n} 根日K线）",
                             figsize=(16, 7),
                             returnfig=True,
                             warn_too_much_data=9999,
@@ -1721,6 +1720,13 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         _bfig_mpf, _baxes_mpf = _mpf.plot(_bkdf2, **_mpf_kwargs)
                         _ax_price = _baxes_mpf[0]
 
+                        # 标题（直接指定字体文件，绕过 font cache）
+                        _b_title = f"{_btk}  {_b_lbl}  （最近 {_b_n} 根日K线）"
+                        if _cn_fp:
+                            _bfig_mpf.suptitle(_b_title, fontproperties=_cn_fp, fontsize=12)
+                        else:
+                            _bfig_mpf.suptitle(_b_title, fontsize=12)
+
                         # Entry date vline (blue dotted)
                         if _b_edt in _bkdf2.index:
                             _b_edt_pos = _bkdf2.index.get_loc(_b_edt)
@@ -1728,7 +1734,8 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                                               linestyle=":", linewidth=1.5)
                             _ax_price.text(_b_edt_pos, _ax_price.get_ylim()[0],
                                            " 开仓日", color="#1f77b4", fontsize=8,
-                                           va="bottom", ha="left")
+                                           va="bottom", ha="left",
+                                           fontproperties=_cn_fp8)
                         # Exit date vline (orange dashed)
                         if _b_xdt is not None and _b_xdt in _bkdf2.index:
                             _b_xdt_pos = _bkdf2.index.get_loc(_b_xdt)
@@ -1736,16 +1743,19 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                                               linestyle="--", linewidth=2)
                             _ax_price.text(_b_xdt_pos, _ax_price.get_ylim()[1],
                                            " 出场日", color="#ff7f0e", fontsize=8,
-                                           va="top", ha="left")
+                                           va="top", ha="left",
+                                           fontproperties=_cn_fp8)
                         # Entry price / stop price labels
                         if _b_ep:
                             _ax_price.text(0, _b_ep, f" 买入价 ${_b_ep:.2f}",
                                            color="#1f77b4", fontsize=8,
-                                           va="bottom", transform=_ax_price.get_yaxis_transform())
+                                           va="bottom", transform=_ax_price.get_yaxis_transform(),
+                                           fontproperties=_cn_fp8)
                         if _b_sp:
                             _ax_price.text(0, _b_sp, f" 止损价 ${_b_sp:.2f}",
                                            color="#d62728", fontsize=8,
-                                           va="top", transform=_ax_price.get_yaxis_transform())
+                                           va="top", transform=_ax_price.get_yaxis_transform(),
+                                           fontproperties=_cn_fp8)
 
                         _buf = _io.BytesIO()
                         _bfig_mpf.savefig(_buf, format="png", dpi=150, bbox_inches="tight")
