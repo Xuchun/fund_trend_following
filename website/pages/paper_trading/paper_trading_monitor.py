@@ -1616,6 +1616,123 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             else:
                 st.warning(f"无法获取 {_s9_tk} 的K线数据，请稍后刷新重试。")
 
+        # ── 批量下载所有交易K线图 ─────────────────────────────────────────────
+        _s8_zip_key = "s8_all_charts_zip"
+        if st.button("📊 生成所有交易K线图（准备下载）", key="s8_gen_zip"):
+            with st.spinner("正在生成所有交易的K线图，请稍候…"):
+                import io as _io, zipfile as _zf_mod
+                import plotly.io as _pio
+                from plotly.subplots import make_subplots as _mk_batch
+
+                _batch_tks = tuple(sorted(set(
+                    [p["ticker"] for p in _m1_positions] +
+                    [c["ticker"] for c in _m1_closed]
+                )))
+                _batch_raw, _ = _fetch_yf(_batch_tks, "600d")
+
+                _zip_buf = _io.BytesIO()
+                with _zf_mod.ZipFile(_zip_buf, "w", _zf_mod.ZIP_DEFLATED) as _zf:
+                    _batch_items = (
+                        [("open", p) for p in sorted(_m1_positions, key=lambda x: x["entry_date"])] +
+                        [("closed", c) for c in sorted(_m1_closed, key=lambda x: x.get("exit_date", ""), reverse=True)]
+                    )
+                    for _bstat, _bt in _batch_items:
+                        _btk       = _bt["ticker"]
+                        _b_edt     = pd.Timestamp(_bt["entry_date"])
+                        _b_ep      = _bt.get("entry_price")
+                        if _bstat == "open":
+                            _b_sp   = _bt.get("stop_loss")
+                            _b_xdt  = None
+                            _b_lbl  = "持仓中"
+                        else:
+                            _b_sp   = _bt.get("stop_used") or _bt.get("stop_loss")
+                            _b_xdt  = pd.Timestamp(_bt["exit_date"]) if _bt.get("exit_date") else None
+                            _b_lbl  = f"已平仓_R{_bt.get('pnl_r', 0):+.2f}"
+
+                        _bkdf = _get_df(_batch_raw, _btk)
+                        if _bkdf is None or _bkdf.empty:
+                            continue
+                        _b_n  = 300 + int((_bkdf.index >= _b_edt).sum())
+                        _bkdf = _bkdf.tail(_b_n).copy()
+
+                        _bvc  = [
+                            "#2ca02c" if float(_bkdf["Close"].iloc[i]) >= float(_bkdf["Open"].iloc[i])
+                            else "#d62728" for i in range(len(_bkdf))
+                        ]
+                        _bfig = _mk_batch(rows=2, cols=1, shared_xaxes=True,
+                                          vertical_spacing=0.03, row_heights=[0.75, 0.25])
+                        _bfig.add_trace(go.Candlestick(
+                            x=_bkdf.index,
+                            open=_bkdf["Open"].values, high=_bkdf["High"].values,
+                            low=_bkdf["Low"].values,   close=_bkdf["Close"].values,
+                            increasing_line_color="#2ca02c", decreasing_line_color="#d62728",
+                            increasing_fillcolor="#2ca02c", decreasing_fillcolor="#d62728",
+                            showlegend=False,
+                        ), row=1, col=1)
+                        _bfig.add_trace(go.Bar(
+                            x=_bkdf.index, y=_bkdf["Volume"].values,
+                            marker_color=_bvc, showlegend=False,
+                        ), row=2, col=1)
+                        if _b_ep:
+                            _bfig.add_hline(y=_b_ep, row=1, col=1,
+                                line_color="#1f77b4", line_dash="dash", line_width=1.5,
+                                annotation_text=f"买入价 ${_b_ep:.2f}",
+                                annotation_position="top left",
+                                annotation_font_color="#1f77b4")
+                        if _b_sp:
+                            _bfig.add_hline(y=_b_sp, row=1, col=1,
+                                line_color="#d62728", line_dash="dash", line_width=1.5,
+                                annotation_text=f"止损价 ${_b_sp:.2f}",
+                                annotation_position="top left",
+                                annotation_font_color="#d62728")
+                        _bfig.add_vline(x=_b_edt.isoformat(),
+                            line_color="#1f77b4", line_dash="dot", line_width=1.5,
+                            annotation_text="开仓日",
+                            annotation_position="bottom left",
+                            annotation_font_color="#1f77b4")
+                        if _b_xdt is not None:
+                            _bfig.add_vline(x=_b_xdt.isoformat(),
+                                line_color="#ff7f0e", line_dash="dash", line_width=2)
+                            _bfig.add_annotation(
+                                x=_b_xdt.isoformat(), xref="x",
+                                y=0.22, yref="paper",
+                                text="出场日", showarrow=False,
+                                font=dict(color="#ff7f0e", size=11),
+                                xanchor="right", yanchor="top")
+                        _b_x_end = (
+                            _b_xdt + pd.Timedelta(days=4) if _b_xdt
+                            else pd.Timestamp.today() + pd.Timedelta(days=4)
+                        )
+                        _bfig.update_layout(
+                            title=f"{_btk}  {_b_lbl}  (最近 {_b_n} 根日K线)",
+                            height=520, width=1400, template="plotly_white",
+                            margin=dict(l=60, r=20, t=50, b=20),
+                        )
+                        _bfig.update_layout(xaxis_rangeslider_visible=False)
+                        _bfig.update_yaxes(title_text="价格 ($)", row=1, col=1,
+                                           showgrid=True, gridcolor="#eeeeee")
+                        _bfig.update_yaxes(title_text="成交量", row=2, col=1,
+                                           showgrid=True, gridcolor="#eeeeee")
+                        _bfig.update_xaxes(
+                            showgrid=True, gridcolor="#eeeeee",
+                            range=[_bkdf.index[0].isoformat(), _b_x_end.isoformat()])
+
+                        _b_img = _pio.to_image(_bfig, format="png", width=1400, height=520, scale=2)
+                        _b_fname = f"{_btk}_{_bt.get('entry_date', 'unknown')}_{_b_lbl}.png"
+                        _zf.writestr(_b_fname, _b_img)
+
+                _zip_buf.seek(0)
+                st.session_state[_s8_zip_key] = _zip_buf.read()
+
+        if st.session_state.get(_s8_zip_key):
+            st.download_button(
+                "⬇️ 下载所有交易K线图 (ZIP)",
+                data=st.session_state[_s8_zip_key],
+                file_name="trade_charts.zip",
+                mime="application/zip",
+                key="s8_dl_zip_btn",
+            )
+
     else:
         st.info("暂无交易记录")
 
