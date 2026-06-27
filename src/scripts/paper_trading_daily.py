@@ -848,30 +848,6 @@ def main() -> None:
 
     state["pending_entries"] = new_pending
 
-    # ── Build backup pending entries (top-5 cash_blocked signals) ─────────────
-    # These are tried at T+1 execution if a primary pending entry fails the gap filter,
-    # freeing up cash that was previously unavailable.
-    _backup_candidates = scan_stats.get("backup_candidates", [])
-    _backup_pending: list[dict] = []
-    for sig in _backup_candidates[:5]:
-        _backup_pending.append({
-            "ticker":       sig["ticker"],
-            "signal_date":  str(today),
-            "signal_price": sig["signal_price"],
-            "stop_price":   sig["stop_loss"],
-            "shares":       sig["shares"],
-            "atr":          sig["atr"],
-            "strength":     sig["strength"],
-            "trade_risk":   sig["trade_risk"],
-            "notional":     sig["notional"],
-        })
-        log.info(
-            f"  BACKUP {sig['ticker']} @ signal ${sig['signal_price']:.2f}  "
-            f"stop=${sig['stop_loss']:.2f}  shares={sig['shares']:,}  "
-            f"strength={sig['strength']:.4f}"
-        )
-    state["backup_pending_entries"] = _backup_pending
-
     # ── Step 7: update metadata & NAV history ────────────────────────────────
     history = [h for h in state.get("nav_history", []) if h["date"] != str(today)]
     history.append({
