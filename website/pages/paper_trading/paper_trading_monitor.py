@@ -612,7 +612,25 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "净盈亏（$）": f"风险 {_risk_pct*100:.2f}% NAV" if _risk_pct else "—",
             })
     if _trade_rows:
-        show_df(pd.DataFrame(sorted(_trade_rows, key=lambda x: (0 if "卖出" in x["方向"] else 1, x["标的"]))), use_container_width=True, hide_index=True)
+        _trade_df = pd.DataFrame(sorted(_trade_rows, key=lambda x: (0 if "卖出" in x["方向"] else 1, x["标的"])))
+
+        def _style_r(val):
+            if isinstance(val, str) and val not in ("—",) and val.endswith("R"):
+                try:
+                    num = float(val.rstrip("R"))
+                    if num > 0:
+                        return "color:#2ca02c;font-weight:bold"
+                    elif num < 0:
+                        return "color:#d62728;font-weight:bold"
+                except ValueError:
+                    pass
+            return ""
+
+        show_df(
+            _trade_df.style.map(_style_r, subset=["盈亏（R）"]),
+            use_container_width=True,
+            hide_index=True,
+        )
 
         # ── K线图（今日已执行交易）────────────────────────────────────────────
         _s2_sell_tks = [e["ticker"] for e in _exits_exec]
