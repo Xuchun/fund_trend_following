@@ -950,6 +950,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             _sel_tk          = _chart_opt_to_tk[_sel_opt]
             _is_sell_chart   = _sel_tk in _chart_sell_tks
             _pos_info_chart  = None
+            _entry_sig_chart = None
             _entry_dt_chart  = None
             _kline_n         = 300
 
