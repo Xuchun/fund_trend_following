@@ -3656,7 +3656,7 @@ def _gen_kline_charts_zip(trades_df) -> bytes:
                       color="#d62728", fontsize=8, va="top",
                       transform=_axz.get_yaxis_transform(), fontproperties=_cn_fp8_z)
             _info_z = (f"买入 {_edtz.strftime('%Y-%m-%d')} @ ${_epz:.2f}  |  "
-                       f"卖出 {_xdtz.strftime('%Y-%m-%d')} @ ${_xpz:.2f}  |  "
+                       f"出场 {_xdtz.strftime('%Y-%m-%d')} @ ${_xpz:.2f}  |  "
                        f"R={_rz_r:+.2f}  |  持仓 {_hdz} 天")
             _axz.text(0.01, 0.99, _info_z, transform=_axz.transAxes,
                       va="top", ha="left", fontsize=9, color="#333333",
