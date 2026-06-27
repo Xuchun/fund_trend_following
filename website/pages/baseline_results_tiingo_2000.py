@@ -3785,6 +3785,17 @@ _bt_range_n = len(_bt_range_trades)
 _bt_all_n   = len(_bt_kl_all)
 st.caption(f"筛选后共 **{_bt_range_n}** 笔交易　｜　全部回测共 **{_bt_all_n}** 笔交易")
 
+# 筛选条件签名：条件变化时自动清除旧 ZIP，防止下载到不匹配的旧数据
+_bt_range_sig = (
+    frozenset(_dl_tk_set),
+    str(_dl_edt_val), str(_dl_xdt_val),
+    _dl_rmin, _dl_rmax,
+    _dl_hmin, _dl_hmax,
+)
+if st.session_state.get("_bt_kl_zip_range_sig") != _bt_range_sig:
+    st.session_state.pop(_bt_kl_zip_key, None)
+    st.session_state["_bt_kl_zip_range_sig"] = _bt_range_sig
+
 # 两个并排按钮
 _bt_bcol1, _bt_bcol2 = st.columns(2)
 with _bt_bcol1:
