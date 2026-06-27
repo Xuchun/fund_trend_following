@@ -3164,13 +3164,123 @@ with _trade_btn_col:
         file_name="all_trades.csv",
         mime="text/csv",
     )
-n_show = st.slider("显示交易笔数", 10, 100, 20, 10)
-trades_display = res.trades.sort_values("exit_date", ascending=False).head(n_show).copy()
-_td_cols = ["ticker", "entry_date", "exit_date", "holding_days",
-            "entry_price", "exit_price", "shares", "net_pnl",
-            "pnl_r_multiple", "exit_reason"]
-_td_cols = [c for c in _td_cols if c in trades_display.columns]
-trades_display = trades_display[_td_cols].rename(columns={
+# ── 交易明细筛选条件 ────────────────────────────────────────────────────────────
+_td_all = res.trades.sort_values("exit_date", ascending=False).reset_index(drop=True)
+_td_all_tickers = sorted(_td_all["ticker"].unique().tolist())
+
+st.markdown("**🔍 交易明细显示筛选条件**（勾选后生效，不勾选则忽略该条件）")
+
+# Filter 1: Ticker
+_td_flt_tk_en = st.checkbox("限定标的（Ticker）", key="td_flt_tk_en")
+if _td_flt_tk_en:
+    _td_flt_col_a, _td_flt_col_b = st.columns(2)
+    with _td_flt_col_a:
+        _td_flt_tk_multi = st.multiselect(
+            "从列表选择标的（可多选）",
+            _td_all_tickers, key="td_flt_tk_multi",
+        )
+    with _td_flt_col_b:
+        _td_flt_tk_text = st.text_input(
+            "或手动输入标的（逗号分隔，如 AAPL, MSFT）",
+            key="td_flt_tk_text",
+        )
+    _td_flt_tk_set = set(t.upper() for t in _td_flt_tk_multi)
+    for _tdtx in _td_flt_tk_text.split(","):
+        _tdtx = _tdtx.strip().upper()
+        if _tdtx:
+            _td_flt_tk_set.add(_tdtx)
+else:
+    _td_flt_tk_set = set()
+
+# Filter 2 & 3: Entry / Exit date
+_td_flt_d1, _td_flt_d2 = st.columns(2)
+with _td_flt_d1:
+    _td_flt_edt_en = st.checkbox("限制开仓最早日期（开仓日 ≥）", key="td_flt_edt_en")
+    if _td_flt_edt_en:
+        _td_flt_edt_val = st.date_input(
+            "开仓最早日期（该日期及之后开仓的交易才显示）",
+            value=_td_all["entry_date"].min().date(),
+            min_value=_td_all["entry_date"].min().date(),
+            max_value=_td_all["entry_date"].max().date(),
+            key="td_flt_edt_val",
+        )
+    else:
+        _td_flt_edt_val = None
+with _td_flt_d2:
+    _td_flt_xdt_en = st.checkbox("限制平仓最晚日期（出场日 ≤）", key="td_flt_xdt_en")
+    if _td_flt_xdt_en:
+        _td_flt_xdt_val = st.date_input(
+            "平仓最晚日期（该日期及之前出场的交易才显示）",
+            value=_td_all["exit_date"].max().date(),
+            min_value=_td_all["exit_date"].min().date(),
+            max_value=_td_all["exit_date"].max().date(),
+            key="td_flt_xdt_val",
+        )
+    else:
+        _td_flt_xdt_val = None
+
+# Filter 4: R value range
+_td_flt_r1, _td_flt_r2 = st.columns(2)
+with _td_flt_r1:
+    _td_flt_rmin_en = st.checkbox("R 大于等于（R ≥ 某值）", key="td_flt_rmin_en")
+    if _td_flt_rmin_en:
+        _td_flt_rmin = st.number_input(
+            "R 最小值", value=0.0, step=0.5, format="%.2f", key="td_flt_rmin_val",
+        )
+    else:
+        _td_flt_rmin = None
+with _td_flt_r2:
+    _td_flt_rmax_en = st.checkbox("R 小于等于（R ≤ 某值）", key="td_flt_rmax_en")
+    if _td_flt_rmax_en:
+        _td_flt_rmax = st.number_input(
+            "R 最大值", value=0.0, step=0.5, format="%.2f", key="td_flt_rmax_val",
+        )
+    else:
+        _td_flt_rmax = None
+
+# Filter 5: Holding days
+_td_flt_h1, _td_flt_h2 = st.columns(2)
+with _td_flt_h1:
+    _td_flt_hmin_en = st.checkbox("持仓天数 大于等于（天 ≥）", key="td_flt_hmin_en")
+    if _td_flt_hmin_en:
+        _td_flt_hmin = st.number_input(
+            "持仓天数最小值", value=1, step=1, min_value=0, key="td_flt_hmin_val",
+        )
+    else:
+        _td_flt_hmin = None
+with _td_flt_h2:
+    _td_flt_hmax_en = st.checkbox("持仓天数 小于等于（天 ≤）", key="td_flt_hmax_en")
+    if _td_flt_hmax_en:
+        _td_flt_hmax = st.number_input(
+            "持仓天数最大值", value=100, step=1, min_value=0, key="td_flt_hmax_val",
+        )
+    else:
+        _td_flt_hmax = None
+
+# ── 应用交易明细筛选 ─────────────────────────────────────────────────────────────
+_td_filtered = _td_all.copy()
+if _td_flt_tk_set:
+    _td_filtered = _td_filtered[_td_filtered["ticker"].isin(_td_flt_tk_set)]
+if _td_flt_edt_val is not None:
+    _td_filtered = _td_filtered[_td_filtered["entry_date"].dt.date >= _td_flt_edt_val]
+if _td_flt_xdt_val is not None:
+    _td_filtered = _td_filtered[_td_filtered["exit_date"].dt.date <= _td_flt_xdt_val]
+if _td_flt_rmin is not None:
+    _td_filtered = _td_filtered[_td_filtered["pnl_r_multiple"] >= _td_flt_rmin]
+if _td_flt_rmax is not None:
+    _td_filtered = _td_filtered[_td_filtered["pnl_r_multiple"] <= _td_flt_rmax]
+if _td_flt_hmin is not None:
+    _td_filtered = _td_filtered[_td_filtered["holding_days"] >= _td_flt_hmin]
+if _td_flt_hmax is not None:
+    _td_filtered = _td_filtered[_td_filtered["holding_days"] <= _td_flt_hmax]
+
+st.caption(f"筛选后共 **{len(_td_filtered)}** 笔交易 ｜ 全部回测共 {len(_td_all)} 笔")
+
+_td_show_cols = ["ticker", "entry_date", "exit_date", "holding_days",
+                 "entry_price", "exit_price", "shares", "net_pnl",
+                 "pnl_r_multiple", "exit_reason"]
+_td_show_cols = [c for c in _td_show_cols if c in _td_filtered.columns]
+trades_display = _td_filtered[_td_show_cols].rename(columns={
     "ticker":         "标的",
     "entry_date":     "入场日",
     "exit_date":      "出场日",
