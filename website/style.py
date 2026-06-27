@@ -4,14 +4,19 @@ import pandas as _pd
 import streamlit as _st
 
 
-def show_df(df, use_container_width: bool = True, hide_index: bool = True, escape: bool = True, **kwargs) -> None:
+def show_df(df, hide_index: bool = True, escape: bool = True, **kwargs) -> None:
     """Display a sortable DataFrame. Click any column header to sort ascending/descending.
 
     Pass a pandas Styler to apply cell-level CSS (bold, color).
     The escape parameter is kept for API compatibility but is unused.
     Only use with system-generated data — never with raw user input.
     """
-    _st.dataframe(df, use_container_width=use_container_width, hide_index=hide_index, **kwargs)
+    # Backward-compat: translate old use_container_width kwarg to new width param
+    if "use_container_width" in kwargs:
+        ucw = kwargs.pop("use_container_width")
+        if "width" not in kwargs:
+            kwargs["width"] = "stretch" if ucw else "content"
+    _st.dataframe(df, hide_index=hide_index, **kwargs)
 
 
 SPY_COLOR      = "#aaaaaa"
