@@ -740,12 +740,14 @@ def scan_entries(
         heat_used += trade_risk
 
     signals.sort(key=lambda x: x["strength"], reverse=True)
+    backup_candidates.sort(key=lambda x: x["strength"], reverse=True)
     scan_stats = {
         "n_raw_breakouts":    n_raw_breakouts,
         "n_heat_blocked":     n_heat_blocked,
         "n_cash_blocked":     n_cash_blocked,
         "n_corr_reduced":     n_corr_reduced,
         "all_raw_candidates": all_raw_candidates,   # full funnel; displayed in 四
+        "backup_candidates":  backup_candidates,    # cash_blocked but heat_passed; top-5 stored as pending backup
     }
     return signals, scan_stats
 
