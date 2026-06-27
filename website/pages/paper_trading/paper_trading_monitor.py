@@ -1564,7 +1564,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             "入场价": f"${p['entry_price']:.2f}",
             "出场价": "—",
             "股数": p["shares"],
-            "持仓天数": "—",
+            "持仓天数": None,
             "R": "—",
             "净盈亏": "—",
         })
