@@ -8,3 +8,4 @@ playwright>=1.40.0
 pypdf>=3.0.0
 yfinance>=0.2.0
 scipy>=1.10.0
+kaleido>=0.2.1
