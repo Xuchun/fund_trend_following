@@ -3486,9 +3486,11 @@ def _gen_kline_charts_zip(trades_df) -> bytes:
             _edtz = _pd_bt_kl.Timestamp(_rz["entry_date"])
             _xdtz = _pd_bt_kl.Timestamp(_rz["exit_date"])
             _epz  = float(_rz["entry_price"])
+            _xpz  = float(_rz["exit_price"])
             _spz  = float(_rz["stop_loss"])
             _rz_r = float(_rz["pnl_r_multiple"])
-            _nz   = 300 + int(_rz["holding_days"])
+            _hdz  = int(_rz["holding_days"])
+            _nz   = 300 + _hdz
 
             _st_z = (_edtz - _pd_bt_kl.Timedelta(days=450)).strftime("%Y-%m-%d")
             _en_z = (_xdtz + _pd_bt_kl.Timedelta(days=10)).strftime("%Y-%m-%d")
