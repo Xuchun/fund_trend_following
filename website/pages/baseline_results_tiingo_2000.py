@@ -1264,6 +1264,7 @@ st.markdown(
 st.markdown("---")
 
 # ── R-multiple distribution ───────────────────────────────────────────────────
+st.markdown('<div id="sec-rdist"></div>', unsafe_allow_html=True)
 st.subheader("交易盈亏分布（R 倍数）")
 st.plotly_chart(r_multiple_distribution(res.trades), use_container_width=True)
 
