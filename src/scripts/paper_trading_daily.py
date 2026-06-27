@@ -864,7 +864,6 @@ def main() -> None:
         "n_exits":         len(new_exit_signals),      # exit signals pending for tomorrow
         "n_raw_breakouts": scan_stats["n_raw_breakouts"],  # breakouts before portfolio constraints
         "n_heat_blocked":  scan_stats["n_heat_blocked"],   # blocked by heat limit
-        "n_cash_blocked":  scan_stats["n_cash_blocked"],   # blocked by cash
         "n_corr_reduced":  scan_stats["n_corr_reduced"],   # size reduced by correlation filter
 
         # ① OPEN executions (from yesterday's pending signals)
