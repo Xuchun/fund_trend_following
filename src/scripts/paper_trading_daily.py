@@ -578,6 +578,10 @@ def scan_entries(
     # "四、今日开平仓信号" displays this so the user sees the full funnel, not just approved ones.
     all_raw_candidates: list[dict] = []
 
+    # Backup candidates: passed heat check but blocked by cash; tried at execution if a
+    # primary pending entry fails the gap filter and cash becomes available.
+    backup_candidates: list[dict] = []
+
     # Pre-compute log returns for held positions (for Step 3 correlation check)
     held_log_returns: dict[str, pd.Series] = {}
     if pos_data and held_tickers:
