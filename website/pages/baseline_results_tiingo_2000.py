@@ -2656,6 +2656,7 @@ _n_total   = len(res.trades)
 _n_dl      = len(_dl)
 _dl_pct    = _n_dl / _n_total * 100 if _n_total else 0
 
+st.markdown('<div id="sec-delisted"></div>', unsafe_allow_html=True)
 st.subheader("退市 / 被收购标的的交易")
 
 if _n_dl == 0:
