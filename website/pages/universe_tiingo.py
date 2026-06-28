@@ -52,19 +52,13 @@ with _col_u_title:
 with _col_u_right:
     st.html("""
     <div style="display:flex;justify-content:flex-end;align-items:center;padding-top:10px;">
-        <button id="univ-pdf-btn"
+        <button onclick="window.print()"
             title="打开打印对话框后选择「存储为 PDF」即可下载"
             style="background:#1565c0;color:#fff;border:none;padding:7px 16px;
                    border-radius:5px;cursor:pointer;font-size:13px;
                    font-family:sans-serif;white-space:nowrap;">📄 下载 PDF</button>
     </div>
-    <script>
-    (function() {
-        var btn = document.getElementById('univ-pdf-btn');
-        if (btn) btn.onclick = function() { window.print(); };
-    })();
-    </script>
-    """, unsafe_allow_javascript=True)
+    """)
 st.markdown("---")
 
 
