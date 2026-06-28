@@ -48,19 +48,14 @@ st.markdown("""
 
 import streamlit.components.v1 as _components_v1
 
-_col_u_title, _col_u_right = st.columns([4, 2])
+_col_u_title, _col_u_right = st.columns([4, 1])
 with _col_u_title:
     st.title("数据与标的池")
 with _col_u_right:
-    _components_v1.html("""
-    <div style="display:flex;justify-content:flex-end;align-items:center;height:46px;">
-        <button onclick="window.top.print()"
-            title="打开打印对话框后选择「存储为 PDF」即可下载"
-            style="background:#1565c0;color:#fff;border:none;padding:7px 16px;
-                   border-radius:5px;cursor:pointer;font-size:13px;
-                   font-family:sans-serif;white-space:nowrap;">📄 下载 PDF</button>
-    </div>
-    """, height=50)
+    st.write("")
+    _u_pdf_clicked = st.button("📄 下载 PDF", key="u_pdf_btn", type="primary")
+if _u_pdf_clicked:
+    _components_v1.html("<script>window.top.print();</script>", height=1)
 st.markdown("---")
 
 
