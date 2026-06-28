@@ -790,98 +790,32 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     _s2_kline_n = 300 + int((_s2_kdf.index >= _s2_entry_dt).sum())
                 _s2_kdf = _s2_kdf.tail(_s2_kline_n).copy()
 
-                _s2_vol_colors = [
-                    "#2ca02c" if float(_s2_kdf["Close"].iloc[i]) >= float(_s2_kdf["Open"].iloc[i])
-                    else "#d62728"
-                    for i in range(len(_s2_kdf))
-                ]
-
-                from plotly.subplots import make_subplots as _mk_sub2
-                _s2_fig = _mk_sub2(
-                    rows=2, cols=1, shared_xaxes=True,
-                    vertical_spacing=0.03, row_heights=[0.75, 0.25],
-                )
-                _s2_fig.add_trace(go.Candlestick(
-                    x=_s2_kdf.index,
-                    open=_s2_kdf["Open"].values, high=_s2_kdf["High"].values,
-                    low=_s2_kdf["Low"].values,   close=_s2_kdf["Close"].values,
-                    increasing_line_color="#2ca02c", decreasing_line_color="#d62728",
-                    increasing_fillcolor="#2ca02c", decreasing_fillcolor="#d62728",
-                    name="K线", showlegend=False,
-                ), row=1, col=1)
-                _s2_fig.add_trace(go.Bar(
-                    x=_s2_kdf.index, y=_s2_kdf["Volume"].values,
-                    marker_color=_s2_vol_colors, showlegend=False,
-                ), row=2, col=1)
-
+                _s2_hlines = []
+                _s2_vlines = []
+                _s2_esig   = None
                 if _s2_is_sell:
                     if _s2_ep:
-                        _s2_fig.add_hline(y=_s2_ep, row=1, col=1,
-                            line_color="#1f77b4", line_dash="dash", line_width=1.5,
-                            annotation_text=f"买入价 ${_s2_ep:.2f}",
-                            annotation_position="top left",
-                            annotation_font_color="#1f77b4")
+                        _s2_hlines.append({"y": _s2_ep, "color": "#1f77b4", "dash": "dash", "label": f"买入价 ${_s2_ep:.2f}"})
                     if _s2_sp:
-                        _s2_fig.add_hline(y=_s2_sp, row=1, col=1,
-                            line_color="#d62728", line_dash="dash", line_width=1.5,
-                            annotation_text=f"止损价 ${_s2_sp:.2f}",
-                            annotation_position="top left",
-                            annotation_font_color="#d62728")
+                        _s2_hlines.append({"y": _s2_sp, "color": "#d62728", "dash": "dash", "label": f"止损价 ${_s2_sp:.2f}"})
                     if _s2_trail and _s2_sp and abs(_s2_trail - _s2_sp) > 0.01:
-                        _s2_fig.add_hline(y=_s2_trail, row=1, col=1,
-                            line_color="#ff7f0e", line_dash="dot", line_width=1.5,
-                            annotation_text=f"移动止盈 ${_s2_trail:.2f}",
-                            annotation_position="top left",
-                            annotation_font_color="#ff7f0e")
+                        _s2_hlines.append({"y": _s2_trail, "color": "#ff7f0e", "dash": "dot", "label": f"移动止盈 ${_s2_trail:.2f}"})
                     if _s2_entry_dt is not None:
-                        _s2_fig.add_vline(x=_s2_entry_dt.isoformat(),
-                            line_color="#1f77b4", line_dash="dot", line_width=1.5)
-                        _s2_fig.add_annotation(
-                            x=_s2_entry_dt.isoformat(), xref="x",
-                            y=0, yref="y domain",
-                            text="开仓日", showarrow=False,
-                            font=dict(color="#1f77b4", size=11),
-                            xanchor="right", yanchor="bottom",
-                            row=1, col=1)
-                    _s2_fig.add_vline(x=_s2_exec_dt.isoformat(),
-                        line_color="#ff7f0e", line_dash="dash", line_width=2)
-                    _s2_fig.add_annotation(
-                        x=_s2_exec_dt.isoformat(), xref="x",
-                        y=0.36, yref="paper",
-                        text="今日平仓", showarrow=False,
-                        font=dict(color="#ff7f0e", size=11),
-                        xanchor="right", yanchor="bottom")
+                        _s2_vlines.append({"x": _s2_entry_dt.isoformat(), "color": "#1f77b4", "dash": "dot", "width": 1.5, "text": "开仓日", "use_domain": True})
+                    _s2_vlines.append({"x": _s2_exec_dt.isoformat(), "color": "#ff7f0e", "dash": "dash", "width": 2, "text": "今日平仓", "use_domain": False, "y_paper": 0.36})
                 else:
                     _s2_esig = next((e for e in _entries_exec if e["ticker"] == _s2_sel_tk), None)
                     if _s2_esig:
                         _s2_sig_p  = _s2_esig.get("signal_price")
                         _s2_stop_p = _s2_esig.get("stop_price")
                         if _s2_sig_p:
-                            _s2_fig.add_hline(y=_s2_sig_p, row=1, col=1,
-                                line_color="#2ca02c", line_dash="dash", line_width=1.5,
-                                annotation_text=f"信号价 ${_s2_sig_p:.2f}",
-                                annotation_position="top left",
-                                annotation_font_color="#2ca02c")
+                            _s2_hlines.append({"y": _s2_sig_p, "color": "#2ca02c", "dash": "dash", "label": f"信号价 ${_s2_sig_p:.2f}"})
                         if _s2_stop_p:
-                            _s2_fig.add_hline(y=_s2_stop_p, row=1, col=1,
-                                line_color="#d62728", line_dash="dash", line_width=1.5,
-                                annotation_text=f"止损价 ${_s2_stop_p:.2f}",
-                                annotation_position="top left",
-                                annotation_font_color="#d62728")
-                    _s2_fig.add_vline(x=_s2_exec_dt.isoformat(),
-                        line_color="#2ca02c", line_dash="dash", line_width=2)
-                    _s2_fig.add_annotation(
-                        x=_s2_exec_dt.isoformat(), xref="x",
-                        y=0.28, yref="paper",
-                        text="今日开仓", showarrow=False,
-                        font=dict(color="#2ca02c", size=11),
-                        xanchor="right", yanchor="bottom")
+                            _s2_hlines.append({"y": _s2_stop_p, "color": "#d62728", "dash": "dash", "label": f"止损价 ${_s2_stop_p:.2f}"})
+                    _s2_vlines.append({"x": _s2_exec_dt.isoformat(), "color": "#2ca02c", "dash": "dash", "width": 2, "text": "今日开仓", "use_domain": False, "y_paper": 0.28})
 
-                _s2_x_end   = _s2_exec_dt + pd.Timedelta(days=4)
-                _s2_x_start = _s2_kdf.index[0]
-                _s2_action  = "今日已平仓" if _s2_is_sell else "今日已开仓"
-
-                # Build extra info for chart title
+                _s2_x_end  = _s2_exec_dt + pd.Timedelta(days=4)
+                _s2_action = "今日已平仓" if _s2_is_sell else "今日已开仓"
                 _s2_title_info = ""
                 if _s2_is_sell and _s2_cl:
                     _s2_t_ent = f"{_s2_cl.get('entry_date','')}  ${_s2_cl['entry_price']:.2f}"
@@ -899,20 +833,13 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         + (f"  ${_s2_t_px:.2f}" if _s2_t_px else "")
                     )
 
-                _s2_fig.update_layout(
+                _s2_fig = _build_kline_fig(
+                    _s2_kdf,
                     title=f"{_s2_sel_tk}　{_s2_action}{_s2_title_info}　（最近 {_s2_kline_n} 根日K线）",
-                    height=520, template="plotly_white",
-                    margin=dict(l=60, r=20, t=50, b=20),
-                    legend=dict(orientation="h", y=1.02, x=0, xanchor="left"),
-                )
-                _s2_fig.update_layout(xaxis_rangeslider_visible=False)
-                _s2_fig.update_yaxes(title_text="价格 ($)", row=1, col=1,
-                                     showgrid=True, gridcolor="#eeeeee")
-                _s2_fig.update_yaxes(title_text="成交量", row=2, col=1,
-                                     showgrid=True, gridcolor="#eeeeee")
-                _s2_fig.update_xaxes(
-                    showgrid=True, gridcolor="#eeeeee",
-                    range=[_s2_x_start.isoformat(), _s2_x_end.isoformat()],
+                    x_start=_s2_kdf.index[0].isoformat(),
+                    x_end=_s2_x_end.isoformat(),
+                    hlines=_s2_hlines,
+                    vlines=_s2_vlines,
                 )
                 st.plotly_chart(_s2_fig, width="stretch")
             else:
