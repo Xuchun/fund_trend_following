@@ -45,20 +45,17 @@ _ATR_PERIOD = _V1_PARAMS.atr_period            # 20
 _SMA_WINDOW = _V1_PARAMS.regime_sma_window     # 200
 
 # ─────────────────────────────────────────────────────────────────────────────
-_col_pt_title, _col_pt_right = st.columns([4, 2])
-with _col_pt_title:
-    st.title("策略1.0 模拟交易监控")
-with _col_pt_right:
-    st.markdown("""
-<div style="display:flex;justify-content:flex-end;align-items:center;padding-top:10px;">
-    <button onclick="window.print()"
-        title="打开打印对话框后选择「存储为 PDF」即可下载"
-        style="background:#1565c0;color:#fff;border:none;padding:7px 16px;
-               border-radius:5px;cursor:pointer;font-size:13px;
-               font-family:sans-serif;white-space:nowrap;">📄 下载 PDF</button>
+st.title("策略1.0 模拟交易监控")
+st.markdown("""
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:-16px;margin-bottom:8px;">
+    <span style="color:#555;font-size:15px;">同时运行两种模拟交易方法，互相验证信号与执行质量</span>
+    <div onclick="window.print()"
+         title="打开打印对话框后选择「存储为 PDF」即可下载"
+         style="background:#1565c0;color:#fff;padding:7px 18px;border-radius:5px;
+                cursor:pointer;font-size:13px;font-family:sans-serif;
+                white-space:nowrap;user-select:none;flex-shrink:0;">📄 下载 PDF</div>
 </div>
 """, unsafe_allow_html=True)
-st.markdown("同时运行两种模拟交易方法，互相验证信号与执行质量")
 
 tab1, tab2 = st.tabs(["📊 方法一：手动跟踪（Yahoo Finance）", "🤖 方法二：IB 自动交易（Interactive Brokers）"])
 
