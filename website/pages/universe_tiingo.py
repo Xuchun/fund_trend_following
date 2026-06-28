@@ -46,25 +46,21 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+import streamlit.components.v1 as _components_v1
+
 _col_u_title, _col_u_right = st.columns([4, 2])
 with _col_u_title:
     st.title("数据与标的池")
 with _col_u_right:
-    st.html("""
-    <div style="display:flex;justify-content:flex-end;align-items:center;padding-top:10px;">
-        <button id="univ-pdf-btn"
+    _components_v1.html("""
+    <div style="display:flex;justify-content:flex-end;align-items:center;height:46px;">
+        <button onclick="window.top.print()"
             title="打开打印对话框后选择「存储为 PDF」即可下载"
             style="background:#1565c0;color:#fff;border:none;padding:7px 16px;
                    border-radius:5px;cursor:pointer;font-size:13px;
                    font-family:sans-serif;white-space:nowrap;">📄 下载 PDF</button>
     </div>
-    <script>
-    (function() {
-        var btn = document.getElementById('univ-pdf-btn');
-        if (btn) btn.onclick = function() { window.print(); };
-    })();
-    </script>
-    """, unsafe_allow_javascript=True)
+    """, height=50)
 st.markdown("---")
 
 
