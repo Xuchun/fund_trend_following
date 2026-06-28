@@ -49,11 +49,11 @@ st.markdown("""
 st.title("数据与标的池")
 st.markdown("""
 <div style="display:flex;justify-content:flex-end;align-items:center;margin-top:-16px;margin-bottom:8px;">
-    <div onclick="window.print()"
-         title="打开打印对话框后选择「存储为 PDF」即可下载"
-         style="background:#1565c0;color:#fff;padding:7px 18px;border-radius:5px;
-                cursor:pointer;font-size:13px;font-family:sans-serif;
-                white-space:nowrap;user-select:none;">📄 下载 PDF</div>
+    <a href="javascript:window.print()"
+       title="打开打印对话框后选择「存储为 PDF」即可下载"
+       style="background:#1565c0;color:#fff;padding:7px 18px;border-radius:5px;
+              cursor:pointer;font-size:13px;font-family:sans-serif;
+              white-space:nowrap;user-select:none;text-decoration:none;">📄 下载 PDF</a>
 </div>
 """, unsafe_allow_html=True)
 st.markdown("---")
