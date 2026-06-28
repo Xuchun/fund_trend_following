@@ -1537,90 +1537,28 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 _s9_kline_n = 300 + int((_s9_kdf.index >= _s9_entry_dt).sum())
                 _s9_kdf = _s9_kdf.tail(_s9_kline_n).copy()
 
-                _s9_vol_colors = [
-                    "#2ca02c" if float(_s9_kdf["Close"].iloc[i]) >= float(_s9_kdf["Open"].iloc[i])
-                    else "#d62728"
-                    for i in range(len(_s9_kdf))
-                ]
-
-                from plotly.subplots import make_subplots as _mk_sub9
-                _s9_fig = _mk_sub9(
-                    rows=2, cols=1, shared_xaxes=True,
-                    vertical_spacing=0.03, row_heights=[0.75, 0.25],
-                )
-                _s9_fig.add_trace(go.Candlestick(
-                    x=_s9_kdf.index,
-                    open=_s9_kdf["Open"].values, high=_s9_kdf["High"].values,
-                    low=_s9_kdf["Low"].values,   close=_s9_kdf["Close"].values,
-                    increasing_line_color="#2ca02c", decreasing_line_color="#d62728",
-                    increasing_fillcolor="#2ca02c", decreasing_fillcolor="#d62728",
-                    name="K线", showlegend=False,
-                ), row=1, col=1)
-                _s9_fig.add_trace(go.Bar(
-                    x=_s9_kdf.index, y=_s9_kdf["Volume"].values,
-                    marker_color=_s9_vol_colors, showlegend=False,
-                ), row=2, col=1)
-
-                # 水平参考线
+                _s9_hlines = []
+                _s9_vlines = []
                 if _s9_ep:
-                    _s9_fig.add_hline(y=_s9_ep, row=1, col=1,
-                        line_color="#1f77b4", line_dash="dash", line_width=1.5,
-                        annotation_text=f"买入价 ${_s9_ep:.2f}",
-                        annotation_position="top left",
-                        annotation_font_color="#1f77b4")
+                    _s9_hlines.append({"y": _s9_ep, "color": "#1f77b4", "dash": "dash", "label": f"买入价 ${_s9_ep:.2f}"})
                 if _s9_is_open:
                     _s9_init_stop = _s9_pos.get("stop_loss")
                     _s9_trl_stop  = _s9_pos.get("trail_stop")
                     if _s9_init_stop:
-                        _s9_fig.add_hline(y=_s9_init_stop, row=1, col=1,
-                            line_color="#d62728", line_dash="dash", line_width=1.5,
-                            annotation_text=f"止损 ${_s9_init_stop:.2f}",
-                            annotation_position="top left",
-                            annotation_font_color="#d62728")
+                        _s9_hlines.append({"y": _s9_init_stop, "color": "#d62728", "dash": "dash", "label": f"止损 ${_s9_init_stop:.2f}"})
                     if _s9_trl_stop and _s9_init_stop and abs(_s9_trl_stop - _s9_init_stop) > 0.01:
-                        _s9_fig.add_hline(y=_s9_trl_stop, row=1, col=1,
-                            line_color="#ff7f0e", line_dash="dot", line_width=1.5,
-                            annotation_text=f"移动止盈 ${_s9_trl_stop:.2f}",
-                            annotation_position="top left",
-                            annotation_font_color="#ff7f0e")
+                        _s9_hlines.append({"y": _s9_trl_stop, "color": "#ff7f0e", "dash": "dot", "label": f"移动止盈 ${_s9_trl_stop:.2f}"})
                 else:
                     if _s9_sp:
-                        _s9_fig.add_hline(y=_s9_sp, row=1, col=1,
-                            line_color="#d62728", line_dash="dash", line_width=1.5,
-                            annotation_text=f"止损价 ${_s9_sp:.2f}",
-                            annotation_position="top left",
-                            annotation_font_color="#d62728")
+                        _s9_hlines.append({"y": _s9_sp, "color": "#d62728", "dash": "dash", "label": f"止损价 ${_s9_sp:.2f}"})
                     _s9_trl_cl = _s9_cl.get("trail_stop_at_exit")
                     if _s9_trl_cl and _s9_sp and abs(_s9_trl_cl - _s9_sp) > 0.01:
-                        _s9_fig.add_hline(y=_s9_trl_cl, row=1, col=1,
-                            line_color="#ff7f0e", line_dash="dot", line_width=1.5,
-                            annotation_text=f"移动止盈 ${_s9_trl_cl:.2f}",
-                            annotation_position="top left",
-                            annotation_font_color="#ff7f0e")
+                        _s9_hlines.append({"y": _s9_trl_cl, "color": "#ff7f0e", "dash": "dot", "label": f"移动止盈 ${_s9_trl_cl:.2f}"})
 
-                # 开仓日竖线（蓝色点状）
-                _s9_fig.add_vline(x=_s9_entry_dt.isoformat(),
-                    line_color="#1f77b4", line_dash="dot", line_width=1.5)
-                _s9_fig.add_annotation(
-                    x=_s9_entry_dt.isoformat(), xref="x",
-                    y=0, yref="y domain",
-                    text="开仓日", showarrow=False,
-                    font=dict(color="#1f77b4", size=11),
-                    xanchor="right", yanchor="bottom",
-                    row=1, col=1)
-
-                # 出场日竖线（橙色虚线，仅已平仓）
+                _s9_vlines.append({"x": _s9_entry_dt.isoformat(), "color": "#1f77b4", "dash": "dot", "width": 1.5, "text": "开仓日", "use_domain": True})
                 if _s9_exit_dt is not None:
-                    _s9_fig.add_vline(x=_s9_exit_dt.isoformat(),
-                        line_color="#ff7f0e", line_dash="dash", line_width=2)
-                    _s9_fig.add_annotation(
-                        x=_s9_exit_dt.isoformat(), xref="x",
-                        y=0.36, yref="paper",
-                        text="出场日", showarrow=False,
-                        font=dict(color="#ff7f0e", size=11),
-                        xanchor="right", yanchor="bottom")
+                    _s9_vlines.append({"x": _s9_exit_dt.isoformat(), "color": "#ff7f0e", "dash": "dash", "width": 2, "text": "出场日", "use_domain": False, "y_paper": 0.36})
 
-                # x轴范围
                 _s9_x_end = (
                     _s9_exit_dt + pd.Timedelta(days=4) if _s9_exit_dt is not None
                     else pd.Timestamp.today() + pd.Timedelta(days=4)
@@ -1637,20 +1575,13 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         + (f"　R={_s9_t_r:+.2f}" if _s9_t_r is not None else "")
                     )
 
-                _s9_fig.update_layout(
+                _s9_fig = _build_kline_fig(
+                    _s9_kdf,
                     title=f"{_s9_tk}　{_s9_action}{_s9_title_info}　（最近 {_s9_kline_n} 根日K线）",
-                    height=520, template="plotly_white",
-                    margin=dict(l=60, r=20, t=50, b=20),
-                    legend=dict(orientation="h", y=1.02, x=0, xanchor="left"),
-                )
-                _s9_fig.update_layout(xaxis_rangeslider_visible=False)
-                _s9_fig.update_yaxes(title_text="价格 ($)", row=1, col=1,
-                                     showgrid=True, gridcolor="#eeeeee")
-                _s9_fig.update_yaxes(title_text="成交量", row=2, col=1,
-                                     showgrid=True, gridcolor="#eeeeee")
-                _s9_fig.update_xaxes(
-                    showgrid=True, gridcolor="#eeeeee",
-                    range=[_s9_kdf.index[0].isoformat(), _s9_x_end.isoformat()],
+                    x_start=_s9_kdf.index[0].isoformat(),
+                    x_end=_s9_x_end.isoformat(),
+                    hlines=_s9_hlines,
+                    vlines=_s9_vlines,
                 )
                 st.plotly_chart(_s9_fig, width="stretch")
             else:
