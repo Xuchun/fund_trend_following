@@ -556,6 +556,7 @@ if _has_mfe and n_closed >= _MIN_CHART:
         _mfe_cols[2].metric("平均捕获率",
                             f"{_mfe_clean['capture'].median()*100:.0f}%（中位数）")
 
+        _colors_map = {"stop_loss": "#d62728", "trailing_stop": "#ff7f0e"}
         _fig_mfe = go.Figure()
         _er_colors = [_colors_map.get(r, "#2ca02c") for r in _mfe_clean["exit_reason"]]
         _fig_mfe.add_trace(go.Scatter(
