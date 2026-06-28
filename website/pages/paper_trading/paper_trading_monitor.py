@@ -1013,144 +1013,38 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     _kline_n = 300 + _holding_tds
                 _kdf = _kdf.tail(_kline_n).copy()
 
-                _vol_colors = [
-                    "#2ca02c" if float(_kdf["Close"].iloc[i]) >= float(_kdf["Open"].iloc[i])
-                    else "#d62728"
-                    for i in range(len(_kdf))
-                ]
-
-                from plotly.subplots import make_subplots as _mk_sub
-                _fig_k = _mk_sub(
-                    rows=2, cols=1,
-                    shared_xaxes=True,
-                    vertical_spacing=0.03,
-                    row_heights=[0.75, 0.25],
-                )
-                _fig_k.add_trace(go.Candlestick(
-                    x=_kdf.index,
-                    open=_kdf["Open"].values,
-                    high=_kdf["High"].values,
-                    low=_kdf["Low"].values,
-                    close=_kdf["Close"].values,
-                    increasing_line_color="#2ca02c",
-                    decreasing_line_color="#d62728",
-                    increasing_fillcolor="#2ca02c",
-                    decreasing_fillcolor="#d62728",
-                    name="K线",
-                    showlegend=False,
-                ), row=1, col=1)
-                _fig_k.add_trace(go.Bar(
-                    x=_kdf.index,
-                    y=_kdf["Volume"].values,
-                    name="成交量",
-                    marker_color=_vol_colors,
-                    showlegend=False,
-                ), row=2, col=1)
-
                 # 执行日（明日）的 Timestamp，用于平仓/开仓竖线
                 _exec_dt = pd.Timestamp(str(_next_td))
 
+                _hlines_3      = []
+                _vlines_3      = []
+                _entry_sig_chart = None
                 if _is_sell_chart and _pos_info_chart:
                     _ep      = _pos_info_chart.get("entry_price")
-                    _sp      = next(
-                        (s.get("stop_used") for s in _pend_exits if s["ticker"] == _sel_tk), None
-                    )
+                    _sp      = next((s.get("stop_used") for s in _pend_exits if s["ticker"] == _sel_tk), None)
                     _trail_p = _pos_info_chart.get("trail_stop")
-                    # 水平参考线：标注放左侧，避免与右侧图例遮挡
                     if _ep:
-                        _fig_k.add_hline(
-                            y=_ep, row=1, col=1,
-                            line_color="#1f77b4", line_dash="dash", line_width=1.5,
-                            annotation_text=f"买入价 ${_ep:.2f}",
-                            annotation_position="top left",
-                            annotation_font_color="#1f77b4",
-                        )
+                        _hlines_3.append({"y": _ep, "color": "#1f77b4", "dash": "dash", "label": f"买入价 ${_ep:.2f}"})
                     if _sp:
-                        _fig_k.add_hline(
-                            y=_sp, row=1, col=1,
-                            line_color="#d62728", line_dash="dash", line_width=1.5,
-                            annotation_text=f"止损价 ${_sp:.2f}",
-                            annotation_position="top left",
-                            annotation_font_color="#d62728",
-                        )
+                        _hlines_3.append({"y": _sp, "color": "#d62728", "dash": "dash", "label": f"止损价 ${_sp:.2f}"})
                     if _trail_p and _sp and abs(_trail_p - _sp) > 0.01:
-                        _fig_k.add_hline(
-                            y=_trail_p, row=1, col=1,
-                            line_color="#ff7f0e", line_dash="dot", line_width=1.5,
-                            annotation_text=f"移动止盈 ${_trail_p:.2f}",
-                            annotation_position="top left",
-                            annotation_font_color="#ff7f0e",
-                        )
-                    # 蓝色虚线：开仓日
+                        _hlines_3.append({"y": _trail_p, "color": "#ff7f0e", "dash": "dot", "label": f"移动止盈 ${_trail_p:.2f}"})
                     if _entry_dt_chart is not None:
-                        _fig_k.add_vline(
-                            x=_entry_dt_chart.isoformat(),
-                            line_color="#1f77b4", line_dash="dot", line_width=1.5,
-                        )
-                        _fig_k.add_annotation(
-                            x=_entry_dt_chart.isoformat(), xref="x",
-                            y=0, yref="y domain",
-                            text="开仓日", showarrow=False,
-                            font=dict(color="#1f77b4", size=11),
-                            xanchor="right", yanchor="bottom",
-                            row=1, col=1,
-                        )
-                    # 橙色虚线：明日平仓（尚无K线，x轴向右延伸一格显示）
-                    _fig_k.add_vline(
-                        x=_exec_dt.isoformat(),
-                        line_color="#ff7f0e", line_dash="dash", line_width=2,
-                    )
-                    _fig_k.add_annotation(
-                        x=_exec_dt.isoformat(), xref="x",
-                        y=0.36, yref="paper",
-                        text="明日平仓",
-                        showarrow=False,
-                        font=dict(color="#ff7f0e", size=11),
-                        xanchor="right", yanchor="bottom",
-                    )
+                        _vlines_3.append({"x": _entry_dt_chart.isoformat(), "color": "#1f77b4", "dash": "dot", "width": 1.5, "text": "开仓日", "use_domain": True})
+                    _vlines_3.append({"x": _exec_dt.isoformat(), "color": "#ff7f0e", "dash": "dash", "width": 2, "text": "明日平仓", "use_domain": False, "y_paper": 0.36})
                 else:
-                    _entry_sig_chart = next(
-                        (e for e in _exec_entries if e["ticker"] == _sel_tk), None
-                    )
+                    _entry_sig_chart = next((e for e in _exec_entries if e["ticker"] == _sel_tk), None)
                     if _entry_sig_chart:
                         _sig_p  = _entry_sig_chart.get("signal_price")
                         _stop_p = _entry_sig_chart.get("stop_price")
                         if _sig_p:
-                            _fig_k.add_hline(
-                                y=_sig_p, row=1, col=1,
-                                line_color="#2ca02c", line_dash="dash", line_width=1.5,
-                                annotation_text=f"信号价 ${_sig_p:.2f}",
-                                annotation_position="top left",
-                                annotation_font_color="#2ca02c",
-                            )
+                            _hlines_3.append({"y": _sig_p, "color": "#2ca02c", "dash": "dash", "label": f"信号价 ${_sig_p:.2f}"})
                         if _stop_p:
-                            _fig_k.add_hline(
-                                y=_stop_p, row=1, col=1,
-                                line_color="#d62728", line_dash="dash", line_width=1.5,
-                                annotation_text=f"止损价 ${_stop_p:.2f}",
-                                annotation_position="top left",
-                                annotation_font_color="#d62728",
-                            )
-                    # 绿色虚线：明日开仓（尚无K线，x轴向右延伸一格显示）
-                    _fig_k.add_vline(
-                        x=_exec_dt.isoformat(),
-                        line_color="#2ca02c", line_dash="dash", line_width=2,
-                    )
-                    _fig_k.add_annotation(
-                        x=_exec_dt.isoformat(), xref="x",
-                        y=0.28, yref="paper",
-                        text="明日开仓",
-                        showarrow=False,
-                        font=dict(color="#2ca02c", size=11),
-                        xanchor="right", yanchor="bottom",
-                    )
+                            _hlines_3.append({"y": _stop_p, "color": "#d62728", "dash": "dash", "label": f"止损价 ${_stop_p:.2f}"})
+                    _vlines_3.append({"x": _exec_dt.isoformat(), "color": "#2ca02c", "dash": "dash", "width": 2, "text": "明日开仓", "use_domain": False, "y_paper": 0.28})
 
-                # x轴向右多留 3 个交易日的空间，使明日竖线完整可见
-                _x_end = _exec_dt + pd.Timedelta(days=4)
-                _x_start = _kdf.index[0]
-
-                _action_str = "明日平仓" if _is_sell_chart else "明日开仓"
-
+                _x_end       = _exec_dt + pd.Timedelta(days=4)
+                _action_str  = "明日平仓" if _is_sell_chart else "明日开仓"
                 _title_info_3 = ""
                 if _is_sell_chart and _pos_info_chart:
                     _t3_ent_d = _pos_info_chart.get("entry_date", "")
@@ -1164,21 +1058,13 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         + (f"　止损 ${_t3_stp:.2f}" if _t3_stp else "")
                     )
 
-                _fig_k.update_layout(
+                _fig_k = _build_kline_fig(
+                    _kdf,
                     title=f"{_sel_tk}　{_action_str}{_title_info_3}　（最近 {_kline_n} 根日K线）",
-                    height=520,
-                    template="plotly_white",
-                    margin=dict(l=60, r=20, t=50, b=20),
-                    legend=dict(orientation="h", y=1.02, x=0, xanchor="left"),
-                )
-                _fig_k.update_layout(xaxis_rangeslider_visible=False)
-                _fig_k.update_yaxes(title_text="价格 ($)", row=1, col=1,
-                                    showgrid=True, gridcolor="#eeeeee")
-                _fig_k.update_yaxes(title_text="成交量", row=2, col=1,
-                                    showgrid=True, gridcolor="#eeeeee")
-                _fig_k.update_xaxes(
-                    showgrid=True, gridcolor="#eeeeee",
-                    range=[_x_start.isoformat(), _x_end.isoformat()],
+                    x_start=_kdf.index[0].isoformat(),
+                    x_end=_x_end.isoformat(),
+                    hlines=_hlines_3,
+                    vlines=_vlines_3,
                 )
                 st.plotly_chart(_fig_k, width="stretch")
             else:
