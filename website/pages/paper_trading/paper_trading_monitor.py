@@ -190,6 +190,79 @@ def _fetch_yf_chart_single(ticker: str, period: str = "600d") -> pd.DataFrame:
     return df.sort_index().dropna(subset=["Close"])
 
 
+def _build_kline_fig(kdf, title, x_start, x_end, hlines=None, vlines=None):
+    """构建K线图（日本蜡烛图 + 成交量），返回 plotly Figure。
+
+    hlines: list of dict，每项 keys: y, color, dash (默认"dash"), width (默认1.5), label
+    vlines: list of dict，每项 keys: x (ISO date str), color, dash, width, text,
+            use_domain (True=标注贴价格子图底部，False=标注用paper坐标), y_paper (float)
+    """
+    from plotly.subplots import make_subplots
+    vol_colors = [
+        "#2ca02c" if float(kdf["Close"].iloc[i]) >= float(kdf["Open"].iloc[i])
+        else "#d62728"
+        for i in range(len(kdf))
+    ]
+    fig = make_subplots(rows=2, cols=1, shared_xaxes=True,
+                        vertical_spacing=0.03, row_heights=[0.75, 0.25])
+    fig.add_trace(go.Candlestick(
+        x=kdf.index,
+        open=kdf["Open"].values, high=kdf["High"].values,
+        low=kdf["Low"].values,   close=kdf["Close"].values,
+        increasing_line_color="#2ca02c", decreasing_line_color="#d62728",
+        increasing_fillcolor="#2ca02c", decreasing_fillcolor="#d62728",
+        name="K线", showlegend=False,
+    ), row=1, col=1)
+    fig.add_trace(go.Bar(
+        x=kdf.index, y=kdf["Volume"].values,
+        marker_color=vol_colors, showlegend=False,
+    ), row=2, col=1)
+    for hl in (hlines or []):
+        fig.add_hline(
+            y=hl["y"], row=1, col=1,
+            line_color=hl["color"],
+            line_dash=hl.get("dash", "dash"),
+            line_width=hl.get("width", 1.5),
+            annotation_text=hl["label"],
+            annotation_position="top left",
+            annotation_font_color=hl["color"],
+        )
+    for vl in (vlines or []):
+        fig.add_vline(
+            x=vl["x"],
+            line_color=vl["color"],
+            line_dash=vl.get("dash", "dash"),
+            line_width=vl.get("width", 1.5),
+        )
+        if vl.get("use_domain"):
+            fig.add_annotation(
+                x=vl["x"], xref="x",
+                y=0, yref="y domain",
+                text=vl["text"], showarrow=False,
+                font=dict(color=vl["color"], size=11),
+                xanchor="right", yanchor="bottom",
+                row=1, col=1,
+            )
+        else:
+            fig.add_annotation(
+                x=vl["x"], xref="x",
+                y=vl.get("y_paper", 0.28), yref="paper",
+                text=vl["text"], showarrow=False,
+                font=dict(color=vl["color"], size=11),
+                xanchor="right", yanchor="bottom",
+            )
+    fig.update_layout(
+        title=title, height=520, template="plotly_white",
+        margin=dict(l=60, r=20, t=50, b=20),
+        legend=dict(orientation="h", y=1.02, x=0, xanchor="left"),
+    )
+    fig.update_layout(xaxis_rangeslider_visible=False)
+    fig.update_yaxes(title_text="价格 ($)", row=1, col=1, showgrid=True, gridcolor="#eeeeee")
+    fig.update_yaxes(title_text="成交量", row=2, col=1, showgrid=True, gridcolor="#eeeeee")
+    fig.update_xaxes(showgrid=True, gridcolor="#eeeeee", range=[x_start, x_end])
+    return fig
+
+
 def _us_open_to_sgt(date_str: str) -> str:
     """把交易日（美股开盘 9:30 AM 美东时间）转换为新加坡时间字符串，自动处理夏/冬令时。"""
     from datetime import datetime
