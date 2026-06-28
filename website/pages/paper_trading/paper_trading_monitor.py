@@ -44,10 +44,16 @@ _TRAIL_R5   = _V1_PARAMS.trail_multiplier_r5   # 5.0
 _ATR_PERIOD = _V1_PARAMS.atr_period            # 20
 _SMA_WINDOW = _V1_PARAMS.regime_sma_window     # 200
 
-st.title("策略1.0 模拟交易监控")
-if st.button("📄 下载 PDF", key="pt_pdf_btn"):
-    import streamlit.components.v1 as _cv1
-    _cv1.html("<script>window.top.print();</script>", height=1)
+import streamlit.components.v1 as _components_v1
+
+_col_pt_title, _col_pt_right = st.columns([4, 1])
+with _col_pt_title:
+    st.title("策略1.0 模拟交易监控")
+with _col_pt_right:
+    st.write("")
+    _pt_pdf_clicked = st.button("📄 下载 PDF", key="pt_pdf_btn", type="primary")
+if _pt_pdf_clicked:
+    _components_v1.html("<script>window.top.print();</script>", height=1)
 st.markdown("同时运行两种模拟交易方法，互相验证信号与执行质量")
 
 tab1, tab2 = st.tabs(["📊 方法一：手动跟踪（Yahoo Finance）", "🤖 方法二：IB 自动交易（Interactive Brokers）"])
