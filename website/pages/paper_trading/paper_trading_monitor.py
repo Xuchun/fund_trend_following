@@ -74,11 +74,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("策略1.0 模拟交易监控")
-_pt_pdf_spacer, _pt_pdf_col = st.columns([5, 1])
-with _pt_pdf_col:
-    if st.button("📄 下载 PDF", key="pt_pdf_btn", type="primary", use_container_width=True):
-        import streamlit.components.v1 as _cv1
-        _cv1.html("<script>window.top.print();</script>", height=1)
+if st.button("📄 下载 PDF", key="pt_pdf_btn", type="primary"):
+    import streamlit.components.v1 as _cv1
+    _cv1.html("<script>window.top.print();</script>", height=1)
 st.markdown("同时运行两种模拟交易方法，互相验证信号与执行质量")
 
 tab1, tab2 = st.tabs(["📊 方法一：手动跟踪（Yahoo Finance）", "🤖 方法二：IB 自动交易（Interactive Brokers）"])
