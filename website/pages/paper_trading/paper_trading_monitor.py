@@ -1129,7 +1129,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     hlines=_hlines_3,
                     vlines=_vlines_3,
                 )
-                st.plotly_chart(_fig_k, width="stretch")
+                st.plotly_chart(_fig_k, width="stretch", key="s3_kline_chart")
             else:
                 st.warning(f"无法获取 {_sel_tk} 的K线数据，请稍后刷新重试。")
 
