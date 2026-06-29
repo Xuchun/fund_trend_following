@@ -2498,7 +2498,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             _dl1_daily_entries.append({
                 "日期":     _d,
                 "标的":     _e.get("ticker", ""),
-                "突破强度": (f"{(_e['strength']-1)*100:+.2f}%" if _e.get("strength") else "—"),
+                "突破强度": (f"{(_e['strength']-1)*100:+.3f}%" if _e.get("strength") else "—"),
                 "信号价":   f"${_e['signal_price']:.2f}" if _e.get("signal_price") else "",
                 "参考止损": f"${_e['stop_price']:.2f}"   if _e.get("stop_price")   else "",
                 "股数":     _e.get("shares", ""),
@@ -2912,7 +2912,7 @@ git push
             _dl2_daily_entries.append({
                 "日期":     _d,
                 "标的":     _e.get("ticker", ""),
-                "突破强度": (f"{(_e['strength']-1)*100:+.2f}%" if _e.get("strength") else "—"),
+                "突破强度": (f"{(_e['strength']-1)*100:+.3f}%" if _e.get("strength") else "—"),
                 "信号价":   f"${_e['signal_price']:.2f}" if _e.get("signal_price") else "",
                 "参考止损": f"${_e['stop_price']:.2f}"   if _e.get("stop_price")   else "",
                 "股数":     _e.get("shares", ""),
