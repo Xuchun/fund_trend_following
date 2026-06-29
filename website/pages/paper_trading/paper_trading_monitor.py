@@ -109,40 +109,54 @@ if _m1_file.exists():
         # ① 历史已知失败（data_error_log）
         for _wlog in _warn_err_log:
             _wlog_tks  = _wlog.get("tickers_missed", [])
-            _wlog_ctx  = _wlog.get("context", "")
             _wlog_date = _wlog.get("date", "")
-            _wlog_note = _wlog.get("note", "")
-            _wn        = len(_wlog_tks)
-            _wpct      = _wn / _warn_univ * 100 if _warn_univ else 0
-            _wline = (
-                f"- **{_wlog_date}**（{_wlog_ctx}）：**{_wn} 个标的**数据下载失败"
-                f"（**{'、'.join(_wlog_tks)}**），"
-                f"占标的池 {_warn_univ:,} 个的 **{_wpct:.2f}%**。"
-                f"经事后补算，{'该标的' if _wn == 1 else '这些标的'}满足全部入场条件，"
-                f"突破强度排名靠前，本应被选入但实际未执行。"
+            # last_attempt_sgt: 用 pending_retry.created_utc 转换，若无则只显示日期
+            _wlog_last = _wlog_date  # fallback
+            _wlog_created = _wlog.get("created_utc", "")
+            if _wlog_created:
+                try:
+                    import datetime as _dt
+                    _utc = _dt.datetime.fromisoformat(_wlog_created.replace("Z", "+00:00"))
+                    _sgt = _utc + _dt.timedelta(hours=8)
+                    _wlog_last = _sgt.strftime("%Y-%m-%d %H:%M 新加坡时间（SGT）")
+                except Exception:
+                    pass
+            _warn_lines.append(
+                f"- 数据下载失败标的：**{'、'.join(_wlog_tks)}**。"
+                f"最后尝试下载时间：**{_wlog_last}**。"
             )
-            if _wlog_note:
-                _wline += f"\n  > 备注：{_wlog_note}"
-            _warn_lines.append(_wline)
 
         # ② 当前等待自动重试（pending_retry）
         if _warn_pending_tks:
             _pr_sgt     = _warn_pending.get("next_retry_sgt", "")
             _pr_attempt = _warn_pending.get("attempt", 1)
-            _pr_date    = _warn_pending.get("scan_date", "")
+            # last attempt time
+            _pr_created = _warn_pending.get("created_utc", "")
+            _pr_last    = _warn_pending.get("scan_date", "")
+            if _pr_created:
+                try:
+                    import datetime as _dt2
+                    _utc2 = _dt2.datetime.fromisoformat(_pr_created.replace("Z", "+00:00"))
+                    _sgt2 = _utc2 + _dt2.timedelta(hours=8)
+                    _pr_last = _sgt2.strftime("%Y-%m-%d %H:%M 新加坡时间（SGT）")
+                except Exception:
+                    pass
             _warn_lines.append(
-                f"- **⏳ 第 {_pr_attempt} 次自动重试等待中**（{_pr_date} 的信号）："
-                f"**{'、'.join(_warn_pending_tks)}** 数据仍未下载成功，"
-                f"系统将于 **{_pr_sgt}** 自动重试，重试成功后此提示将消失。"
+                f"- **⏳ 第 {_pr_attempt} 次自动重试等待中**：**{'、'.join(_warn_pending_tks)}** "
+                f"数据仍未下载成功。最后尝试下载时间：**{_pr_last}**。"
+                f"系统将于 **{_pr_sgt}** 自动重试，成功后此提示消失。"
             )
+
+        # 计算下次自动重试时间文字
+        _next_retry_str = ""
+        if _warn_pending_tks:
+            _next_retry_str = f"下次自动重试：**{_warn_pending.get('next_retry_sgt', '待定')}**。"
 
         st.error(
             "**⚠️ 数据完整性警告：Yahoo Finance 限速导致部分标的漏评**\n\n"
             + "\n\n".join(_warn_lines)
             + "\n\n**自动重试机制**：一旦检测到标的数据下载失败，系统每隔 **1 小时**自动重新"
-            "尝试下载，直到成功为止，无需人工干预。"
-            "\n\n**影响**：模拟组合缺少上述持仓，实际净值走势可能偏离策略理论表现。"
-            ' 漏评标的已在"四、今日开平仓信号"中以 ⚠️ 脚本漏评（应选入）标注。'
+            f"尝试下载，直到成功为止，无需人工干预。{_next_retry_str}"
         )
 
 tab1, tab2 = st.tabs(["📊 方法一：手动跟踪（Yahoo Finance）", "🤖 方法二：IB 自动交易（Interactive Brokers）"])
