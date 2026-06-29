@@ -555,18 +555,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 """)
 
     # ── Load Method 1 state ──────────────────────────────────────────────────
-    @st.cache_data(ttl=120)
-    def _load_m1():
-        if _m1_file.exists():
-            return json.loads(_m1_file.read_text()), False
-        # Fallback: empty $200K fresh state
-        return {
-            "initial_nav": 200000.0, "cash": 200000.0,
-            "positions": [], "closed_trades": [],
-            "nav_history": [{"date": "2026-06-19", "nav": 200000.0}],
-            "last_update_date": "尚未运行",
-        }, True
-
     _m1, _m1_fallback = _load_m1()
     if _m1_fallback:
         st.info("ℹ️ positions.json 尚未生成，等待 GitHub Actions 首次运行后自动创建。")
