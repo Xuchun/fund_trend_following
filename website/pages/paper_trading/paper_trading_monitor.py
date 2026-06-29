@@ -1800,16 +1800,30 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                                            " 出场日", color="#ff7f0e", fontsize=8,
                                            va="top", ha="left",
                                            fontproperties=_cn_fp8)
-                        # Entry price / stop price labels
+                        # Entry price / stop price / trailing stop labels
+                        # 规则：红（止损价）与橘（移动止盈）标注始终朝对立方向
+                        #   红线在上 → 红标注在线上方(va=bottom)，橘标注在线下方(va=top)
+                        #   红线在下 → 红标注在线下方(va=top)，橘标注在线上方(va=bottom)
+                        #   无移动止盈时 → 红标注默认在线上方(va=bottom)
                         if _b_ep:
                             _ax_price.text(0, _b_ep, f" 买入价 ${_b_ep:.2f}",
                                            color="#1f77b4", fontsize=8,
                                            va="bottom", transform=_ax_price.get_yaxis_transform(),
                                            fontproperties=_cn_fp8)
                         if _b_sp:
+                            if _b_show_trl:
+                                _b_red_va = "bottom" if _b_sp >= _b_trl else "top"
+                                _b_ora_va = "top"    if _b_sp >= _b_trl else "bottom"
+                            else:
+                                _b_red_va = "bottom"   # 无移动止盈：红标注在线上方
                             _ax_price.text(0, _b_sp, f" 止损价 ${_b_sp:.2f}",
                                            color="#d62728", fontsize=8,
-                                           va="top", transform=_ax_price.get_yaxis_transform(),
+                                           va=_b_red_va, transform=_ax_price.get_yaxis_transform(),
+                                           fontproperties=_cn_fp8)
+                        if _b_show_trl:
+                            _ax_price.text(0, _b_trl, f" 移动止盈 ${_b_trl:.2f}",
+                                           color="#ff7f0e", fontsize=8,
+                                           va=_b_ora_va, transform=_ax_price.get_yaxis_transform(),
                                            fontproperties=_cn_fp8)
 
                         _buf = _io.BytesIO()
