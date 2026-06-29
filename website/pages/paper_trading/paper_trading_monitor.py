@@ -198,10 +198,9 @@ def _fetch_yf(tickers: tuple, period: str = "300d", day: str = ""):
     return _df, _fetch_time
 
 
-def _fetch_yf_chart_single(ticker: str, period: str = "600d") -> pd.DataFrame:
-    """单股K线图数据拉取。
-    period='2y' 使用历史数据库（可能滞后1天），
-    period='5d' 使用实时端点（包含最新交易日），两者合并取最新。"""
+@st.cache_data(ttl=3600)
+def _fetch_yf_chart_single(ticker: str) -> pd.DataFrame:
+    """单股K线图数据拉取，缓存1小时（与批量价格缓存TTL一致）。"""
     import yfinance as yf
     if not ticker:
         return pd.DataFrame()
