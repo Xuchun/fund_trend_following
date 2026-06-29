@@ -114,13 +114,12 @@ def _fetch_batch(tickers: list[str], period: str) -> dict[str, pd.DataFrame]:
     return out
 
 
-def fetch_price_data(tickers: list[str], period: str = "300d", batch_size: int = 200,
-                     retry_delay: int = 90) -> dict[str, pd.DataFrame]:
+def fetch_price_data(tickers: list[str], period: str = "300d", batch_size: int = 200) -> dict[str, pd.DataFrame]:
     """Fetch OHLCV for many tickers in batches. Returns ticker → DataFrame.
 
-    After the initial pass, any tickers whose data is missing (silent rate-limit
-    drop) are retried individually after `retry_delay` seconds.  Only tickers
-    that are *still* absent after the retry are truly lost.
+    Missing tickers (silent rate-limit drops) are logged.  Callers that need
+    retry behaviour should check the returned dict and schedule retries via
+    pending_retry / --retry-mode rather than sleeping inline.
     """
     result: dict[str, pd.DataFrame] = {}
     total = len(tickers)
@@ -129,29 +128,11 @@ def fetch_price_data(tickers: list[str], period: str = "300d", batch_size: int =
         n_batch = (total - 1) // batch_size + 1
         log.info(f"  Batch {i // batch_size + 1}/{n_batch}: {len(batch)} tickers")
         result.update(_fetch_batch(batch, period))
-    log.info(f"  Data loaded: {len(result)}/{total} tickers")
-
-    # Retry tickers silently dropped (rate-limit guard)
-    missing = [t for t in tickers if t not in result]
-    if missing:
-        log.warning(
-            f"  {len(missing)} tickers missing from initial download — "
-            f"retrying individually in {retry_delay}s: {missing}"
-        )
-        time.sleep(retry_delay)
-        for t in missing:
-            recovered = _fetch_batch([t], period)
-            result.update(recovered)
-        still_missing = [t for t in missing if t not in result]
-        recovered_n   = len(missing) - len(still_missing)
-        if recovered_n:
-            log.info(f"  Retry recovered {recovered_n} tickers")
-        if still_missing:
-            log.warning(f"  PERMANENTLY MISSING after retry: {still_missing}")
-        else:
-            log.info(f"  All {len(missing)} missing tickers recovered on retry")
-
-    log.info(f"  Final data: {len(result)}/{total} tickers")
+    n_loaded = len(result)
+    log.info(f"  Data loaded: {n_loaded}/{total} tickers")
+    if n_loaded < total:
+        _missing = [t for t in tickers if t not in result]
+        log.warning(f"  Missing ({len(_missing)}): {_missing}")
     return result
 
 
