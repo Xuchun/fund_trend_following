@@ -97,17 +97,16 @@ st.markdown("同时运行两种模拟交易方法，互相验证信号与执行�
 
 # ── 数据完整性警告（在 tabs 之前，确保渲染在页面最顶部）──────────────────────
 if _m1_file.exists():
-    _warn_data    = json.loads(_m1_file.read_text())
-    _warn_err_log = _warn_data.get("data_error_log", [])
-    _warn_univ    = _warn_data.get("universe_size", 0)
-    if _warn_err_log:
-        _warn_now_sgt   = pd.Timestamp.now(tz="Asia/Singapore")
-        _warn_next_bday = (_warn_now_sgt.normalize().tz_localize(None)
-                           + pd.tseries.offsets.BDay(1))
-        _warn_retry_str = (
-            _warn_next_bday.strftime("%Y-%m-%d（%A）") + " 早上 07:00 新加坡时间（SGT，UTC+8）"
-        )
+    _warn_data        = json.loads(_m1_file.read_text())
+    _warn_err_log     = _warn_data.get("data_error_log", [])
+    _warn_univ        = _warn_data.get("universe_size", 0)
+    _warn_pending     = _warn_data.get("pending_retry", {})
+    _warn_pending_tks = _warn_pending.get("tickers", [])
+
+    if _warn_err_log or _warn_pending_tks:
         _warn_lines = []
+
+        # ① 历史已知失败（data_error_log）
         for _wlog in _warn_err_log:
             _wlog_tks  = _wlog.get("tickers_missed", [])
             _wlog_ctx  = _wlog.get("context", "")
@@ -125,13 +124,23 @@ if _m1_file.exists():
             if _wlog_note:
                 _wline += f"\n  > 备注：{_wlog_note}"
             _warn_lines.append(_wline)
+
+        # ② 当前等待自动重试（pending_retry）
+        if _warn_pending_tks:
+            _pr_sgt     = _warn_pending.get("next_retry_sgt", "")
+            _pr_attempt = _warn_pending.get("attempt", 1)
+            _pr_date    = _warn_pending.get("scan_date", "")
+            _warn_lines.append(
+                f"- **⏳ 第 {_pr_attempt} 次自动重试等待中**（{_pr_date} 的信号）："
+                f"**{'、'.join(_warn_pending_tks)}** 数据仍未下载成功，"
+                f"系统将于 **{_pr_sgt}** 自动重试，重试成功后此提示将消失。"
+            )
+
         st.error(
             "**⚠️ 数据完整性警告：Yahoo Finance 限速导致部分标的漏评**\n\n"
             + "\n\n".join(_warn_lines)
-            + f"\n\n**下次自动重试**：脚本将于 **{_warn_retry_str}** 对全量标的池重新下载数据，"
-            "届时失败标的将自动重新评估（脚本已内置 90 秒等待后重试机制）。"
-            "\n\n**立即重试**：无需等到明天 — 可在 GitHub → Actions → "
-            "**Paper Trading M1** 页面点击 **Run workflow** 立即手动触发重跑。"
+            + "\n\n**自动重试机制**：一旦检测到标的数据下载失败，系统每隔 **1 小时**自动重新"
+            "尝试下载，直到成功为止，无需人工干预。"
             "\n\n**影响**：模拟组合缺少上述持仓，实际净值走势可能偏离策略理论表现。"
             ' 漏评标的已在"四、今日开平仓信号"中以 ⚠️ 脚本漏评（应选入）标注。'
         )
