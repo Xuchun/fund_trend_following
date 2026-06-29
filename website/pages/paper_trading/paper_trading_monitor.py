@@ -1260,10 +1260,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     else:
                         _status = _rejection_label.get(_rej, _rej or "✅ 已选入")
                         _strength = c.get("strength") or _entry_strength_map.get(_tk)
-                    _strength_disp = f"{(_strength - 1)*100:+.2f}%" if _strength else "—"
+                    _strength_disp = f"{(_strength - 1)*100:+.3f}%" if _strength else "—"
                     _cand_rows.append({
                         "标的":         _tk,
                         "突破强度":     _strength_disp,
+                        "_strength_val": _strength or 0,
                         "信号价（今收）": f"${c.get('signal_price', 0):.2f}" if c.get("signal_price") else "",
                         "参考止损":      f"${c.get('stop_price', 0):.2f}"   if c.get("stop_price")   else "",
                         "股数":          int(c["shares"]) if c.get("shares") else "",
@@ -1271,7 +1272,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         "状态":          _status,
                         "执行方式":      "市价单（次日开盘）" if _tk in _approved_tickers else "—",
                     })
-                _cand_rows.sort(key=lambda r: (_status_order.get(r["状态"], 9), r["标的"]))
+                _cand_rows.sort(key=lambda r: r["_strength_val"], reverse=True)
+                for _r in _cand_rows:
+                    _r.pop("_strength_val", None)
                 show_df(pd.DataFrame(_cand_rows), width="stretch", hide_index=True)
             elif _ts_entry_sigs:
                 # Fallback: only approved signals available (old schema or first run)
