@@ -95,6 +95,38 @@ with _col_pt_right:
     """, unsafe_allow_javascript=True)
 st.markdown("同时运行两种模拟交易方法，互相验证信号与执行质量")
 
+# ── 数据完整性警告（在 tabs 之前，确保渲染在页面最顶部）──────────────────────
+if _m1_file.exists():
+    _warn_data    = json.loads(_m1_file.read_text())
+    _warn_err_log = _warn_data.get("data_error_log", [])
+    _warn_univ    = _warn_data.get("universe_size", 0)
+    if _warn_err_log:
+        _warn_next_bday = (pd.Timestamp.now(tz="Asia/Singapore").normalize().tz_localize(None)
+                           + pd.tseries.offsets.BDay(1))
+        _warn_retry_str = _warn_next_bday.strftime("%Y-%m-%d（%A）")
+        _warn_lines = []
+        for _wlog in _warn_err_log:
+            _wlog_tks  = _wlog.get("tickers_missed", [])
+            _wlog_ctx  = _wlog.get("context", "")
+            _wlog_date = _wlog.get("date", "")
+            _wn        = len(_wlog_tks)
+            _wpct      = _wn / _warn_univ * 100 if _warn_univ else 0
+            _warn_lines.append(
+                f"- **{_wlog_date}**（{_wlog_ctx}）：**{_wn} 个标的**数据下载失败"
+                f"（**{'、'.join(_wlog_tks)}**），"
+                f"占标的池 {_warn_univ:,} 个的 **{_wpct:.2f}%**。"
+                f"经事后补算，{'该标的' if _wn == 1 else '这些标的'}满足全部入场条件，"
+                f"突破强度排名靠前，本应被选入但实际未执行。"
+            )
+        st.error(
+            "**⚠️ 数据完整性警告：Yahoo Finance 限速导致部分标的漏评**\n\n"
+            + "\n\n".join(_warn_lines)
+            + f"\n\n**下次重试时间**：脚本将于 **{_warn_retry_str}** 美股收盘后自动运行，"
+            "届时将对全量标的池重新下载数据，上述缺失数据将自动修复。"
+            "\n\n**影响**：模拟组合缺少上述持仓，实际净值走势可能偏离策略理论表现。"
+            ' 漏评标的已在"四、今日开平仓信号"中以 ⚠️ 脚本漏评（应选入）标注。'
+        )
+
 tab1, tab2 = st.tabs(["📊 方法一：手动跟踪（Yahoo Finance）", "🤖 方法二：IB 自动交易（Interactive Brokers）"])
 
 # ═══════════════════════════════════════════════════════════════════════════════
