@@ -895,7 +895,7 @@ if _DIAG_PATH.exists():
             cnt = streak_counts.get(key, 0)
             cumulative += cnt
             table_rows.append({
-                "序列长度（笔）": length,
+                "序列长度（笔）": str(length),
                 "出现次数": cnt,
                 "累计占比": f"{cumulative / total_streaks * 100:.1f}%",
             })
