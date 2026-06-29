@@ -276,6 +276,12 @@ def scan_entries(
     new_pos:  list[dict] = []
     orders:   list[dict] = []
 
+    # ── Phase 1: apply all per-stock filters, collect pre-candidates ─────────
+    # Heat/cash checks are deferred to Phase 2 so candidates are sorted by
+    # breakout strength first. This ensures the budget is allocated to the
+    # strongest breakouts, not whichever ticker appears first in the universe dict.
+    pre_candidates: list[dict] = []
+
     for ticker, df in universe_data.items():
         if ticker in held:
             continue
@@ -333,14 +339,38 @@ def scan_entries(
             notional = entry_px * shares
 
         trade_risk = stop_dist * shares / nav
+        strength   = float(compute_breakout_strength(close, rolling_high).iloc[-1])
+
+        pre_candidates.append({
+            "ticker":    ticker,
+            "entry_px":  entry_px,
+            "stop_px":   stop_px,
+            "cur_atr":   cur_atr,
+            "shares":    shares,
+            "notional":  notional,
+            "trade_risk": trade_risk,
+            "strength":  strength,
+        })
+
+    # ── Phase 2: sort by breakout strength, then apply heat/cash checks ───────
+    pre_candidates.sort(key=lambda x: x["strength"], reverse=True)
+
+    for cand in pre_candidates:
+        ticker     = cand["ticker"]
+        entry_px   = cand["entry_px"]
+        stop_px    = cand["stop_px"]
+        cur_atr    = cand["cur_atr"]
+        shares     = cand["shares"]
+        notional   = cand["notional"]
+        trade_risk = cand["trade_risk"]
+        strength   = cand["strength"]
+
         if heat_used + trade_risk > PARAMS.heat_limit:
             log.debug(f"  {ticker}: heat limit reached, skipping")
             continue
         if notional > cash:
             log.debug(f"  {ticker}: insufficient cash, skipping")
             continue
-
-        strength = float(compute_breakout_strength(close, rolling_high).iloc[-1])
 
         new_pos.append({
             "ticker":            ticker,
@@ -374,9 +404,8 @@ def scan_entries(
         log.info(f"  ENTRY {ticker}  signal=${entry_px:.2f}  stop=${stop_px:.2f}  "
                  f"shares={shares:,}  risk={trade_risk*100:.2f}%")
 
-    # Sort by breakout strength
-    combined = sorted(zip(new_pos, orders), key=lambda x: x[0]["signal_strength"], reverse=True)
-    return [x[0] for x in combined], [x[1] for x in combined]
+    # new_pos and orders are already in strength order (pre_candidates was sorted)
+    return new_pos, orders
 
 
 # ── IB order placement ────────────────────────────────────────────────────────
