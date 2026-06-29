@@ -1246,9 +1246,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 st.info("今日无入场信号")
 
         # ── K线图：平仓 / 开仓信号（同"三"section 规则）──────────────────────
+        # 开仓候选：优先用 _ts_all_cands（含所有被拒绝候选），与表格一致
+        _s4_all_cand_src = _ts_all_cands or _ts_entry_sigs
         _s4_sell_tks = sorted({s["ticker"] for s in _ts_exit_sigs})
-        _s4_buy_tks  = sorted({e["ticker"] for e in _ts_entry_sigs
-                                if e["ticker"] not in _blocked_entries})
+        _s4_buy_tks  = sorted({e["ticker"] for e in _s4_all_cand_src})
         if _s4_sell_tks or _s4_buy_tks:
             _s4_opts = (
                 [f"🔴 平仓卖出  {t}" for t in _s4_sell_tks] +
