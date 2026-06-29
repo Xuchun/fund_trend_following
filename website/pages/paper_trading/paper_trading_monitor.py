@@ -2474,7 +2474,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         if _dl1_cands:
             show_df(pd.DataFrame([{
                 "标的":         c["ticker"],
-                "突破强度":     (f"+{(c['strength']-1)*100:.2f}%" if c.get("strength") else "—"),
+                "突破强度":     (f"{(c['strength']-1)*100:+.2f}%" if c.get("strength") else "—"),
                 "信号价（今收）": f"${c.get('signal_price', 0):.2f}" if c.get("signal_price") else "",
                 "参考止损":      f"${c.get('stop_price', 0):.2f}"   if c.get("stop_price")   else "",
                 "股数":          c.get("shares", ""),
@@ -2891,7 +2891,7 @@ git push
         if _dl2_cands:
             show_df(pd.DataFrame([{
                 "标的":         c["ticker"],
-                "突破强度":     (f"+{(c['strength']-1)*100:.2f}%" if c.get("strength") else "—"),
+                "突破强度":     (f"{(c['strength']-1)*100:+.2f}%" if c.get("strength") else "—"),
                 "信号价（今收）": f"${c.get('signal_price', 0):.2f}" if c.get("signal_price") else "",
                 "参考止损":      f"${c.get('stop_price', 0):.2f}"   if c.get("stop_price")   else "",
                 "股数":          c.get("shares", ""),
