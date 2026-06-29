@@ -527,6 +527,7 @@ else:
 st.markdown("---")
 
 # ── 八、MFE 分析（最大有利偏移） ─────────────────────────────────────────────
+_colors_map = {"stop_loss": "#d62728", "trailing_stop": "#ff7f0e"}
 st.subheader("八、MFE 分析（最大有利偏移 vs 最终出场 R）")
 st.caption(
     "MFE = 持仓期间历史最高价带来的最大浮盈（以 R 表示）。"
