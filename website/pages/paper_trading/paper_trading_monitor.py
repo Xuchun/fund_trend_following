@@ -620,12 +620,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _last_upd_d  = _m1.get("last_update_date", "")
 
     if _err_log:
-        import pandas as pd as _pd_warn
-        from datetime import date as _date_cls, timedelta as _td_cls
-
         # 计算下次重试日期（下一个交易日 = 跳过周末）
         if _last_upd_d:
-            _next_retry = _pd_warn.Timestamp(_last_upd_d) + _pd_warn.tseries.offsets.BDay(1)
+            _next_retry = pd.Timestamp(_last_upd_d) + pd.tseries.offsets.BDay(1)
             _next_retry_str = _next_retry.strftime("%Y-%m-%d（%A）")
         else:
             _next_retry_str = "下一个交易日"
