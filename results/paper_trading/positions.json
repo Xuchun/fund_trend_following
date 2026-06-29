@@ -1923,5 +1923,6 @@
       "created_utc": "2026-06-26T23:00:00Z"
     }
   ],
-  "universe_size": 4477
+  "universe_size": 3102,
+  "universe_size_note": "活跃标的数（is_active=True），不含非活跃/退市标的 1,256 个"
 }
