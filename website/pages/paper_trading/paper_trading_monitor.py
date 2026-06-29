@@ -147,10 +147,16 @@ if _m1_file.exists():
                 f"系统将于 **{_pr_sgt}** 自动重试，成功后此提示消失。"
             )
 
-        # 计算下次自动重试时间文字
-        _next_retry_str = ""
+        # 计算下次重下时间：pending_retry 有则用其精确时间，否则用下一个交易日自动运行时间
         if _warn_pending_tks:
             _next_retry_str = f"下次自动重试：**{_warn_pending.get('next_retry_sgt', '待定')}**。"
+        else:
+            _next_run_day = (
+                pd.Timestamp.now(tz="Asia/Singapore").normalize().tz_localize(None)
+                + pd.tseries.offsets.BDay(1)
+            )
+            _next_run_sgt = _next_run_day.strftime("%Y-%m-%d（%A）早上 07:00 新加坡时间（SGT）")
+            _next_retry_str = f"下次自动重新下载全量标的数据的时间：**{_next_run_sgt}**。"
 
         st.error(
             "**⚠️ 数据完整性警告：Yahoo Finance 限速导致部分标的漏评**\n\n"
