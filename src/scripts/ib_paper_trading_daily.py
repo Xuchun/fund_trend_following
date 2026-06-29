@@ -325,10 +325,13 @@ def scan_entries(
         low    = today_df["Low"]
         volume = today_df["Volume"]
 
-        if float(close.iloc[-1]) < PARAMS.min_price:
+        # Min-price filter uses Raw_Close (unadjusted) — mirrors backtest entry.py row["close"]
+        if float(today_df["Raw_Close"].iloc[-1]) < PARAMS.min_price:
             continue
 
-        adv = (close * volume).rolling(60).mean().iloc[-1]
+        # ADV filter — Raw_Close × volume, shift(1), no look-ahead bias.
+        # Mirrors backtest: compute_adv_from_ohlcv(df["close"], volume) uses raw close + shift(1).
+        adv = (today_df["Raw_Close"] * volume).shift(1).rolling(60).mean().iloc[-1]
         if pd.isna(adv) or adv < PARAMS.min_adv_m * 1e6:
             continue
 
