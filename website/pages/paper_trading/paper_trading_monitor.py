@@ -141,7 +141,30 @@ def _build_method_zip(data: dict, method: str) -> bytes:
         if _cands:
             zf.writestr(f"{method}_today_candidate_signals.csv",
                 _rows_to_csv(_cands, [
-                    "ticker", "signal_price", "stop_price", "shares", "trade_risk", "rejection",
+                    "ticker", "signal_price", "stop_price", "shares", "trade_risk",
+                    "strength", "rejection",
+                ]))
+
+        # Historical per-day entry signals with breakout strength
+        # Built from signals_history[].entry_signals (approved signals each day, pending T+1 execution).
+        _daily_entries = []
+        for _sh in data.get("signals_history", []):
+            _d = _sh.get("date", "")
+            for _e in _sh.get("entry_signals", []):
+                _daily_entries.append({
+                    "date":         _d,
+                    "ticker":       _e.get("ticker", ""),
+                    "strength":     _e.get("strength"),
+                    "signal_price": _e.get("signal_price"),
+                    "stop_price":   _e.get("stop_price"),
+                    "shares":       _e.get("shares"),
+                    "trade_risk":   _e.get("trade_risk"),
+                })
+        if _daily_entries:
+            zf.writestr(f"{method}_daily_entry_signals.csv",
+                _rows_to_csv(_daily_entries, [
+                    "date", "ticker", "strength", "signal_price",
+                    "stop_price", "shares", "trade_risk",
                 ]))
 
         ct = data.get("closed_trades", [])
