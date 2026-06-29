@@ -792,6 +792,96 @@ def scan_entries(
     return signals, scan_stats
 
 
+# ── Retry mode ───────────────────────────────────────────────────────────────
+
+def run_retry() -> None:
+    """Retry downloading and re-evaluating tickers listed in state['pending_retry'].
+
+    Called by `--retry-mode`.  A dedicated GitHub Actions workflow runs this every
+    hour so failed tickers are automatically re-evaluated without waiting for the
+    next full daily run.
+    """
+    state   = load_state()
+    pending = state.get("pending_retry", {})
+    retry_tickers = pending.get("tickers", [])
+
+    if not retry_tickers:
+        log.info("=== Retry mode: no pending_retry — nothing to do ===")
+        return
+
+    # ── Timing check ─────────────────────────────────────────────────────────
+    next_utc_str = pending.get("next_retry_utc", "")
+    if next_utc_str:
+        next_retry_dt = datetime.fromisoformat(next_utc_str.replace("Z", "+00:00"))
+        now_utc       = datetime.now(timezone.utc)
+        if now_utc < next_retry_dt:
+            remaining = int((next_retry_dt - now_utc).total_seconds() / 60)
+            log.info(
+                f"=== Retry mode: {remaining}min until next retry "
+                f"({pending.get('next_retry_sgt', '')}) — exiting ==="
+            )
+            return
+
+    scan_date = date.fromisoformat(pending.get("scan_date", str(date.today())))
+    attempt   = pending.get("attempt", 1)
+    log.info(f"=== Retry mode: attempt {attempt} for {scan_date}: {retry_tickers} ===")
+
+    # ── Download only the missing tickers ────────────────────────────────────
+    retry_data    = fetch_price_data(retry_tickers, period="310d")
+    still_missing = [t for t in retry_tickers if t not in retry_data]
+    recovered     = [t for t in retry_tickers if t in retry_data]
+
+    # ── Re-evaluate entry signals for recovered tickers ──────────────────────
+    if recovered:
+        log.info(f"  Recovered: {recovered}")
+        last_nav = (
+            state["nav_history"][-1]["nav"]
+            if state.get("nav_history") else state.get("initial_nav", 200_000.0)
+        )
+        retry_candidates, _ = scan_entries(state, retry_data, scan_date, last_nav, pos_data={})
+        existing_tickers    = {e["ticker"] for e in state.get("pending_entries", [])}
+        for sig in retry_candidates:
+            if sig["ticker"] not in existing_tickers:
+                state.setdefault("pending_entries", []).append({
+                    "ticker":       sig["ticker"],
+                    "signal_date":  str(scan_date),
+                    "signal_price": sig["signal_price"],
+                    "stop_price":   sig["stop_loss"],
+                    "shares":       sig["shares"],
+                    "atr":          round(sig["atr"], 4),
+                    "strength":     round(sig["strength"], 4),
+                    "trade_risk":   round(sig["trade_risk"], 4),
+                    "notional":     round(sig["notional"], 2),
+                })
+                log.info(
+                    f"  RETRY ENTRY added: {sig['ticker']} @ ${sig['signal_price']:.2f} "
+                    f"strength={sig['strength']:.4f}"
+                )
+    else:
+        log.warning("  No tickers recovered on this attempt")
+
+    # ── Update or clear pending_retry ─────────────────────────────────────────
+    if still_missing:
+        log.warning(f"  Still missing: {still_missing}")
+        _next      = datetime.now(timezone.utc) + timedelta(hours=1)
+        _sgt_off   = timedelta(hours=8)
+        state["pending_retry"] = {
+            "tickers":        still_missing,
+            "scan_date":      str(scan_date),
+            "attempt":        attempt + 1,
+            "next_retry_utc": _next.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "next_retry_sgt": (_next + _sgt_off).strftime("%Y-%m-%d %H:%M SGT"),
+            "created_utc":    pending.get("created_utc", datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")),
+        }
+        log.info(f"  Next retry scheduled: {state['pending_retry']['next_retry_sgt']}")
+    else:
+        log.info("  All tickers recovered — clearing pending_retry")
+        state.pop("pending_retry", None)
+
+    save_state(state)
+    log.info("=== Retry done ===")
+
+
 # ── Main ─────────────────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -799,7 +889,12 @@ def main() -> None:
     parser.add_argument("--date",            default=None,   help="Trading date YYYY-MM-DD (default: today)")
     parser.add_argument("--no-entries",      action="store_true", help="Skip new entry scanning")
     parser.add_argument("--universe-period", default="310d", help="yfinance period string for universe download")
+    parser.add_argument("--retry-mode",      action="store_true", help="Retry downloading pending_retry tickers")
     args = parser.parse_args()
+
+    if args.retry_mode:
+        run_retry()
+        return
 
     today = date.fromisoformat(args.date) if args.date else date.today()
     log.info(f"=== Strategy 1.0 Paper Trading: {today} ===")
