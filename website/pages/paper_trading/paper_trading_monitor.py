@@ -2434,17 +2434,17 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     # 开仓历史 = 所有已开仓交易（持仓中 + 已平仓），按开仓日期排序
     _dl1_entries = sorted([
         {"ticker": p["ticker"],
-         "signal_date": p.get("signal_date", ""), "signal_price": p.get("signal_price", ""),
-         "entry_date": p["entry_date"], "open_price": p.get("open_price", ""), "entry_price": p["entry_price"],
-         "shares": p["shares"], "stop_loss": p.get("stop_loss", ""),
+         "signal_date": p.get("signal_date", ""), "signal_price": p.get("signal_price"),
+         "entry_date": p["entry_date"], "open_price": p.get("open_price"), "entry_price": p["entry_price"],
+         "shares": p["shares"], "stop_loss": p.get("stop_loss"),
          "atr_at_entry": p.get("atr_at_entry"), "状态": "持仓中"}
         for p in _dl1_op
     ] + [
         {"ticker": c["ticker"],
-         "signal_date": c.get("signal_date", ""), "signal_price": c.get("signal_price", ""),
-         "entry_date": c.get("entry_date", ""), "open_price": c.get("open_price", ""),
-         "entry_price": c.get("entry_price", ""),
-         "shares": c.get("shares", ""), "stop_loss": c.get("stop_loss", ""),
+         "signal_date": c.get("signal_date", ""), "signal_price": c.get("signal_price"),
+         "entry_date": c.get("entry_date", ""), "open_price": c.get("open_price"),
+         "entry_price": c.get("entry_price"),
+         "shares": c.get("shares"), "stop_loss": c.get("stop_loss"),
          "atr_at_entry": None, "状态": "已平仓"}
         for c in _dl1_ct
     ], key=lambda x: x["entry_date"], reverse=True)
