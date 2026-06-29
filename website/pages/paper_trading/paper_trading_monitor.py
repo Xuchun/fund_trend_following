@@ -668,7 +668,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _colored_metric(c3, "净值浮盈/亏（%）", f"{_nav_pnl_pct:+.2f}%", _nav_pnl_pct >= 0)
     _colored_metric(c4, "净值浮盈/亏（$）", f"${_nav_pnl_usd:+,.0f}", _nav_pnl_usd >= 0)
     _dd_sub = "当前在历史高点" if _cur_dd >= -0.01 else f"峰值 ${_peak_nav/1e3:,.0f}K"
-    _colored_metric(c5, "净值回撤", f"{_cur_dd:.2f}%", _cur_dd >= -0.01, sub=_dd_sub)
+    _colored_metric(c5, "净值从峰值回撤", f"{_cur_dd:.2f}%", _cur_dd >= -0.01, sub=_dd_sub)
     c6.metric("持仓数量", f"{len(_m1_ok)} 只",
               delta=f"其中 {len(_m1_stop)} 只触止损" if _m1_stop else None,
               delta_color="inverse" if _m1_stop else "normal")
