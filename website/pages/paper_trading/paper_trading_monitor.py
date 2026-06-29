@@ -252,19 +252,25 @@ def _build_kline_fig(kdf, title, x_start, x_end, hlines=None, vlines=None):
         x=kdf.index, y=kdf["Volume"].values,
         marker_color=vol_colors, showlegend=False,
     ), row=2, col=1)
-    # 当相邻两条线价差 < 2% 时，下方线标注改为 bottom left，上方线保持 top left
-    # 使标注文字分别位于各自线的下方和上方，获得最大垂直间距
+    # 用独立 add_annotation 渲染标注，支持精确像素偏移避免重叠
+    # 当两条线价差 < 2% 时（如 $283.10 vs $283.06，基本同像素），
+    # 下方线标注向下推 18px，上方线标注向上推 18px，总间距 ~36px
     _hl_list = list(hlines or [])
     _hl_order = sorted(range(len(_hl_list)), key=lambda _i: _hl_list[_i]["y"])
-    _ann_pos = ["top left"] * len(_hl_list)
+    _PUSH_PX = 18
+    _ann_yanchor = ["bottom"] * len(_hl_list)   # 默认：文字在线上方
+    _ann_yshift  = [4]        * len(_hl_list)   # 默认：4px 偏移
+
     for _k in range(1, len(_hl_order)):
-        _pi = _hl_order[_k - 1]  # 较低线的索引
-        _ci = _hl_order[_k]      # 较高线的索引
+        _pi = _hl_order[_k - 1]  # 较低线
+        _ci = _hl_order[_k]      # 较高线
         _py = _hl_list[_pi]["y"]
         _cy = _hl_list[_ci]["y"]
         if _py > 0 and (_cy - _py) / _py < 0.02:
-            _ann_pos[_pi] = "bottom left"  # 下方线：文字在线的下方
-            _ann_pos[_ci] = "top left"     # 上方线：文字在线的上方
+            _ann_yanchor[_pi] = "top"       # 较低线：yanchor=top → 文字在线下方
+            _ann_yshift[_pi]  = -_PUSH_PX  # 继续向下推
+            _ann_yanchor[_ci] = "bottom"    # 较高线：文字在线上方
+            _ann_yshift[_ci]  = _PUSH_PX   # 继续向上推
 
     for _idx, hl in enumerate(_hl_list):
         fig.add_hline(
@@ -272,9 +278,16 @@ def _build_kline_fig(kdf, title, x_start, x_end, hlines=None, vlines=None):
             line_color=hl["color"],
             line_dash=hl.get("dash", "dash"),
             line_width=hl.get("width", 1.5),
-            annotation_text=hl["label"],
-            annotation_position=_ann_pos[_idx],
-            annotation_font_color=hl["color"],
+        )
+        fig.add_annotation(
+            x=0, xref="paper",
+            y=hl["y"], yref="y",
+            text=hl["label"],
+            showarrow=False,
+            font=dict(color=hl["color"], size=11),
+            xanchor="left",
+            yanchor=_ann_yanchor[_idx],
+            yshift=_ann_yshift[_idx],
         )
     for vl in (vlines or []):
         fig.add_vline(
