@@ -44,6 +44,34 @@ _TRAIL_R5   = _V1_PARAMS.trail_multiplier_r5   # 5.0
 _ATR_PERIOD = _V1_PARAMS.atr_period            # 20
 _SMA_WINDOW = _V1_PARAMS.regime_sma_window     # 200
 
+st.markdown("""
+<style>
+@media print {
+    [data-testid="stSidebar"],
+    [data-testid="stSidebarNav"],
+    [data-testid="stHeader"],
+    [data-testid="stDecoration"],
+    [data-testid="stToolbar"],
+    [data-testid="stStatusWidget"],
+    header, footer,
+    .stApp > header { display: none !important; }
+    iframe { display: none !important; }
+    .main .block-container,
+    [data-testid="stMainBlockContainer"] {
+        padding-top: 0.5cm !important;
+        padding-left: 1cm !important;
+        padding-right: 1cm !important;
+        max-width: 100% !important;
+    }
+    @page { margin: 1.5cm; }
+    .stPlotlyChart,
+    [data-testid="stDataFrame"],
+    [data-testid="stAlert"] { page-break-inside: avoid; }
+    h2, h3 { page-break-after: avoid; }
+}
+</style>
+""", unsafe_allow_html=True)
+
 import streamlit.components.v1 as _components_v1
 
 _col_pt_title, _col_pt_right = st.columns([4, 1])
