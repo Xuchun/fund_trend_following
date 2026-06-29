@@ -121,10 +121,15 @@ if _m1_file.exists():
                     _wlog_last = _sgt.strftime("%Y-%m-%d %H:%M 新加坡时间（SGT）")
                 except Exception:
                     pass
-            _warn_lines.append(
+            _wlog_dl    = _wlog.get("downloaded_count")
+            _wlog_total = _wlog.get("total_scanned")
+            _wlog_line  = (
                 f"- 数据下载失败标的：**{'、'.join(_wlog_tks)}**。"
                 f"最后尝试下载时间：**{_wlog_last}**。"
             )
+            if _wlog_dl is not None and _wlog_total:
+                _wlog_line += f"本次成功下载 **{_wlog_dl:,}** 个，标的池共 **{_wlog_total:,}** 个。"
+            _warn_lines.append(_wlog_line)
 
         # ② 当前等待自动重试（pending_retry）
         if _warn_pending_tks:
