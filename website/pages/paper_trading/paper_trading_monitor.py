@@ -252,25 +252,27 @@ def _build_kline_fig(kdf, title, x_start, x_end, hlines=None, vlines=None):
         x=kdf.index, y=kdf["Volume"].values,
         marker_color=vol_colors, showlegend=False,
     ), row=2, col=1)
-    # 用独立 add_annotation 渲染标注，支持精确像素偏移避免重叠
-    # 当两条线价差 < 2% 时（如 $283.10 vs $283.06，基本同像素），
-    # 下方线标注向下推 18px，上方线标注向上推 18px，总间距 ~36px
+    # 用独立 add_annotation 渲染标注
+    # 当两条线价差 < 2% 时（止损价 vs 移动止盈几乎同像素），
+    # 用数据坐标偏移把标注 y 值直接拉开 5% 价格距离，彻底解决重叠：
+    #   较高线（如止损价）→ 标注 y 上移 5%  + yanchor="bottom"（文字在参考点上方）
+    #   较低线（如移动止盈）→ 标注 y 下移 5% + yanchor="top"（文字在参考点下方）
     _hl_list = list(hlines or [])
     _hl_order = sorted(range(len(_hl_list)), key=lambda _i: _hl_list[_i]["y"])
-    _PUSH_PX = 18
-    _ann_yanchor = ["bottom"] * len(_hl_list)   # 默认：文字在线上方
-    _ann_yshift  = [4]        * len(_hl_list)   # 默认：4px 偏移
+    _ann_y       = [hl["y"] for hl in _hl_list]   # 标注的实际 y 坐标（数据单位）
+    _ann_yanchor = ["bottom"] * len(_hl_list)      # 默认：文字在 y 点上方
 
     for _k in range(1, len(_hl_order)):
-        _pi = _hl_order[_k - 1]  # 较低线
-        _ci = _hl_order[_k]      # 较高线
+        _pi = _hl_order[_k - 1]   # 较低价格线的索引
+        _ci = _hl_order[_k]       # 较高价格线的索引
         _py = _hl_list[_pi]["y"]
         _cy = _hl_list[_ci]["y"]
         if _py > 0 and (_cy - _py) / _py < 0.02:
-            _ann_yanchor[_pi] = "top"       # 较低线：yanchor=top → 文字在线下方
-            _ann_yshift[_pi]  = -_PUSH_PX  # 继续向下推
-            _ann_yanchor[_ci] = "bottom"    # 较高线：文字在线上方
-            _ann_yshift[_ci]  = _PUSH_PX   # 继续向上推
+            _off = max(_py * 0.05, 5.0)        # 5% 价格 or 最少 $5 的偏移
+            _ann_y[_pi]       = _py - _off     # 较低线：标注推到线的下方
+            _ann_yanchor[_pi] = "top"          # yanchor=top → 文字从参考点向下延伸
+            _ann_y[_ci]       = _cy + _off     # 较高线：标注推到线的上方
+            # _ann_yanchor[_ci] 保持 "bottom"（文字从参考点向上延伸）
 
     for _idx, hl in enumerate(_hl_list):
         fig.add_hline(
@@ -281,13 +283,12 @@ def _build_kline_fig(kdf, title, x_start, x_end, hlines=None, vlines=None):
         )
         fig.add_annotation(
             x=0, xref="paper",
-            y=hl["y"], yref="y",
+            y=_ann_y[_idx], yref="y",
             text=hl["label"],
             showarrow=False,
             font=dict(color=hl["color"], size=11),
             xanchor="left",
             yanchor=_ann_yanchor[_idx],
-            yshift=_ann_yshift[_idx],
         )
     for vl in (vlines or []):
         fig.add_vline(
