@@ -1288,6 +1288,16 @@
           "strength": 1.0484
         },
         {
+          "ticker": "BIIB",
+          "signal_price": 216.03,
+          "stop_price": 203.208,
+          "shares": 45,
+          "trade_risk": 0.003,
+          "strength": 1.0453,
+          "rejection": "data_error",
+          "corr_with": null
+        },
+        {
           "ticker": "ABBV",
           "signal_price": 253.35,
           "stop_price": 240.7687,
@@ -1618,6 +1628,16 @@
         "rejection": null,
         "corr_with": null,
         "strength": 1.0484
+      },
+      {
+        "ticker": "BIIB",
+        "signal_price": 216.03,
+        "stop_price": 203.208,
+        "shares": 45,
+        "trade_risk": 0.003,
+        "strength": 1.0453,
+        "rejection": "data_error",
+        "corr_with": null
       },
       {
         "ticker": "ABBV",
