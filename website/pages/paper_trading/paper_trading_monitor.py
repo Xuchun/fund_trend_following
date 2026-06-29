@@ -1249,6 +1249,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 for c in _ts_all_cands:
                     _tk  = c["ticker"]
                     _rej = c.get("rejection")
+                    _strength = c.get("strength") or _entry_strength_map.get(_tk)
                     # Determine status — three levels of cash blocking:
                     # 1. Website-side T+1 projected-cash check (_blocked_entries)
                     # 2. Script main() sequential deduction (in candidates but not entry_signals)
@@ -1259,7 +1260,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         _status = "🔴 未选（现金不足）"
                     else:
                         _status = _rejection_label.get(_rej, _rej or "✅ 已选入")
-                        _strength = c.get("strength") or _entry_strength_map.get(_tk)
                     _strength_disp = f"{(_strength - 1)*100:+.3f}%" if _strength else "—"
                     _cand_rows.append({
                         "标的":         _tk,
