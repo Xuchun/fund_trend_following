@@ -1166,6 +1166,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         if not _approved_tickers:
             _approved_tickers = {p["ticker"] for p in _m1.get("pending_entries", [])} - set(_blocked_entries)
 
+        # Strength lookup from pending_entries (fallback for old candidate_signals without strength)
+        _entry_strength_map = {e["ticker"]: e.get("strength") for e in _ts_entry_sigs}
+
         _ts_regime_str = "🟢 BULL" if _ts_regime == "BULL" else "🔴 BEAR"
         if _spy_close and _spy_sma:
             _ts_gap = (_spy_close / _spy_sma - 1) * 100
