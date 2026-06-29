@@ -1296,7 +1296,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     _s4_vlines.append({"x": _s4_exec_dt.isoformat(), "color": "#ff7f0e", "dash": "dash", "width": 2,   "text": "明日平仓", "use_domain": False, "y_paper": 0.36})
                     _s4_action = "明日平仓"
                 else:
-                    _s4_ent_sig = next((e for e in _ts_entry_sigs if e["ticker"] == _s4_tk), None)
+                    # 先从全部候选里查（包含被拒绝的），再回落到 entry_sigs
+                    _s4_ent_sig = (
+                        next((e for e in _s4_all_cand_src if e["ticker"] == _s4_tk), None)
+                        or next((e for e in _ts_entry_sigs if e["ticker"] == _s4_tk), None)
+                    )
                     if _s4_ent_sig:
                         _s4_sig_p  = _s4_ent_sig.get("signal_price")
                         _s4_stop_p = _s4_ent_sig.get("stop_price")
