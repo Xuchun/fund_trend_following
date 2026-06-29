@@ -57,12 +57,43 @@ def save_state(state: dict) -> None:
 
 # ── Yahoo Finance helpers ─────────────────────────────────────────────────────
 
+def _normalize_ohlcv(df: pd.DataFrame) -> pd.DataFrame:
+    """Normalize a yfinance auto_adjust=False DataFrame.
+
+    Returns a DataFrame where:
+      Close     = dividend+split adjusted close  (for breakout/signal calculations)
+      High/Low/Open = same adjustment factor applied  (for ATR, rolling_high, gap filter)
+      Volume    = raw share volume (unchanged)
+      Raw_Close = unadjusted close (for ADV and min_price filter, matching backtest)
+
+    Matches the backtest's precompute.py / adv.py which uses:
+      adj_close / adj_high for breakout_strength, but raw close for ADV dollar volume.
+    """
+    adj = df.get("Adj Close")
+    if adj is None or adj.isna().all():
+        df = df.copy()
+        df["Raw_Close"] = df["Close"]
+        return df
+
+    raw_close = df["Close"].replace(0, float("nan"))
+    factor    = adj / raw_close
+
+    return pd.DataFrame({
+        "Open":      df["Open"]  * factor,
+        "High":      df["High"]  * factor,
+        "Low":       df["Low"]   * factor,
+        "Close":     adj,
+        "Volume":    df["Volume"],
+        "Raw_Close": df["Close"],
+    }, index=df.index)
+
+
 def _fetch_batch(tickers: list[str], period: str) -> dict[str, pd.DataFrame]:
     """Download OHLCV for a batch and split into per-ticker DataFrames."""
     if not tickers:
         return {}
     try:
-        raw = yf.download(tickers, period=period, auto_adjust=True, progress=False)
+        raw = yf.download(tickers, period=period, auto_adjust=False, progress=False)
     except Exception as exc:
         log.warning(f"  yfinance download failed: {exc}")
         return {}
@@ -75,11 +106,11 @@ def _fetch_batch(tickers: list[str], period: str) -> dict[str, pd.DataFrame]:
             if t in raw.columns.get_level_values(1):
                 df = raw.xs(t, level=1, axis=1).dropna(subset=["Close"])
                 if not df.empty:
-                    out[t] = df
+                    out[t] = _normalize_ohlcv(df)
     else:
         df = raw.dropna(subset=["Close"])
         if not df.empty and len(tickers) == 1:
-            out[tickers[0]] = df
+            out[tickers[0]] = _normalize_ohlcv(df)
     return out
 
 
