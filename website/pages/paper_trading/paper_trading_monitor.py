@@ -1039,7 +1039,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     _kline_n = 300 + _holding_approx
 
             # 拉取数据：600d ≈ 420 交易日，足够 300 + 任意典型持仓天数
-            _kdf = _fetch_yf_chart_single(_sel_tk, "600d")
+            _kdf = _fetch_yf_chart_single(_sel_tk)
 
             if _kdf is not None and not _kdf.empty:
                 # 精确计算开仓后的交易日数
