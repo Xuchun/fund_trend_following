@@ -1,0 +1,41 @@
+name: Paper Trading M1 — Retry Failed Downloads
+
+on:
+  schedule:
+    # Run at :30 every hour on weekdays (UTC) — checks if 1-hour window has elapsed
+    - cron: '30 * * * 1-5'
+  workflow_dispatch:   # allow manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  retry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install yfinance pandas numpy
+
+      - name: Retry failed ticker downloads
+        run: python src/scripts/paper_trading_daily.py --retry-mode
+
+      - name: Commit and push results
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/paper_trading/positions.json
+          git diff --staged --quiet && echo "No changes to commit" || \
+            git commit -m "auto: paper trading M1 retry $(date -u +%Y-%m-%dT%H:%M UTC)" && git push
