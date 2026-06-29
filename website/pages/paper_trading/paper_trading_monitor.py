@@ -101,28 +101,37 @@ if _m1_file.exists():
     _warn_err_log = _warn_data.get("data_error_log", [])
     _warn_univ    = _warn_data.get("universe_size", 0)
     if _warn_err_log:
-        _warn_next_bday = (pd.Timestamp.now(tz="Asia/Singapore").normalize().tz_localize(None)
+        _warn_now_sgt   = pd.Timestamp.now(tz="Asia/Singapore")
+        _warn_next_bday = (_warn_now_sgt.normalize().tz_localize(None)
                            + pd.tseries.offsets.BDay(1))
-        _warn_retry_str = _warn_next_bday.strftime("%Y-%m-%d（%A）")
+        _warn_retry_str = (
+            _warn_next_bday.strftime("%Y-%m-%d（%A）") + " 早上 07:00 新加坡时间（SGT，UTC+8）"
+        )
         _warn_lines = []
         for _wlog in _warn_err_log:
             _wlog_tks  = _wlog.get("tickers_missed", [])
             _wlog_ctx  = _wlog.get("context", "")
             _wlog_date = _wlog.get("date", "")
+            _wlog_note = _wlog.get("note", "")
             _wn        = len(_wlog_tks)
             _wpct      = _wn / _warn_univ * 100 if _warn_univ else 0
-            _warn_lines.append(
+            _wline = (
                 f"- **{_wlog_date}**（{_wlog_ctx}）：**{_wn} 个标的**数据下载失败"
                 f"（**{'、'.join(_wlog_tks)}**），"
                 f"占标的池 {_warn_univ:,} 个的 **{_wpct:.2f}%**。"
                 f"经事后补算，{'该标的' if _wn == 1 else '这些标的'}满足全部入场条件，"
                 f"突破强度排名靠前，本应被选入但实际未执行。"
             )
+            if _wlog_note:
+                _wline += f"\n  > 备注：{_wlog_note}"
+            _warn_lines.append(_wline)
         st.error(
             "**⚠️ 数据完整性警告：Yahoo Finance 限速导致部分标的漏评**\n\n"
             + "\n\n".join(_warn_lines)
-            + f"\n\n**下次重试时间**：脚本将于 **{_warn_retry_str}** 美股收盘后自动运行，"
-            "届时将对全量标的池重新下载数据，上述缺失数据将自动修复。"
+            + f"\n\n**下次自动重试**：脚本将于 **{_warn_retry_str}** 对全量标的池重新下载数据，"
+            "届时失败标的将自动重新评估（脚本已内置 90 秒等待后重试机制）。"
+            "\n\n**立即重试**：无需等到明天 — 可在 GitHub → Actions → "
+            "**Paper Trading M1** 页面点击 **Run workflow** 立即手动触发重跑。"
             "\n\n**影响**：模拟组合缺少上述持仓，实际净值走势可能偏离策略理论表现。"
             ' 漏评标的已在"四、今日开平仓信号"中以 ⚠️ 脚本漏评（应选入）标注。'
         )
