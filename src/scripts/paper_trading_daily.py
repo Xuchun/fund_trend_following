@@ -809,6 +809,20 @@ def main() -> None:
     spy_close = float(spy_df["Close"].iloc[-1]) if spy_df is not None and not spy_df.empty else None
     log.info(f"  Regime: {'BULL ✅' if regime_ok else 'BEAR 🚫'}  SPY close: {f'${spy_close:.2f}' if spy_close else 'N/A'}")
 
+    # Guard: if today has no market data (pre-market, weekend, holiday), abort without
+    # touching state so the website continues to show the last completed trading day.
+    _spy_today = (
+        spy_df[spy_df.index.normalize() == pd.Timestamp(today)]
+        if spy_df is not None and not spy_df.empty else pd.DataFrame()
+    )
+    if _spy_today.empty:
+        log.warning(
+            f"  No market data for {today} — pre-market, weekend, or holiday. "
+            "State unchanged; website keeps showing last completed trading day."
+        )
+        log.info("=== Done (no-op — market not yet open) ===")
+        return
+
     # ── Step 2: ① OPEN — execute yesterday's pending exits ───────────────────
     exits_executed, remaining_exits = execute_pending_exits(state, pos_data, today)
     # Carry over any exits that couldn't execute (no data)
