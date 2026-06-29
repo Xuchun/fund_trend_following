@@ -1235,7 +1235,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "corr_reduced": "⚠️ 已选入（相关性减仓）",
                 "heat_limit":   "🔴 未选（热度上限）",
                 "cash_limit":   "🔴 未选（现金不足）",
-                "data_error":   "⚠️ 数据缺失（应选入）",
+                "data_error":   "⚠️ 脚本漏评（应选入）",
             }
             if _ts_all_cands:
                 # Full funnel view: all raw breakout candidates with rejection reason
@@ -2422,7 +2422,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         "corr_reduced": "⚠️ 已选入（相关性减仓）",
         "heat_limit":   "🔴 未选（热度上限）",
         "cash_limit":   "🔴 未选（现金不足）",
-        "data_error":   "⚠️ 数据缺失（应选入）",
+        "data_error":   "⚠️ 脚本漏评（应选入）",
     }
 
     with st.expander(f"NAV 历史（{len(_dl1_nav)} 条）"):
@@ -2842,7 +2842,7 @@ git push
         "corr_reduced": "⚠️ 已选入（相关性减仓）",
         "heat_limit":   "🔴 未选（热度上限）",
         "cash_limit":   "🔴 未选（现金不足）",
-        "data_error":   "⚠️ 数据缺失（应选入）",
+        "data_error":   "⚠️ 脚本漏评（应选入）",
     }
 
     with st.expander(f"NAV 历史（{len(_dl2_nav)} 条）"):
