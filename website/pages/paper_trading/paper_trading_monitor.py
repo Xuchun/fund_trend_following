@@ -508,6 +508,25 @@ except FileNotFoundError:
     st.stop()
 
 
+@st.cache_data(ttl=120)
+def _load_m1():
+    if _m1_file.exists():
+        return json.loads(_m1_file.read_text()), False
+    return {
+        "initial_nav": 200000.0, "cash": 200000.0,
+        "positions": [], "closed_trades": [],
+        "nav_history": [{"date": "2026-06-19", "nav": 200000.0}],
+        "last_update_date": "尚未运行",
+    }, True
+
+
+@st.cache_data(ttl=120)
+def _load_m2():
+    if _m2_file.exists():
+        return json.loads(_m2_file.read_text())
+    return None
+
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # TAB 1 — 方法一：手动跟踪（Yahoo Finance）
 # ═══════════════════════════════════════════════════════════════════════════════
