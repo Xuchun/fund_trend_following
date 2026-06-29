@@ -902,7 +902,30 @@ def main() -> None:
             log.info("  BEAR regime — no new entry signals (no bear-exempt tickers configured)")
 
         if scan_tickers:
-            univ_data           = fetch_price_data(scan_tickers, period=args.universe_period)
+            univ_data = fetch_price_data(scan_tickers, period=args.universe_period)
+
+            # Track any tickers whose data was silently dropped (rate-limit) and
+            # schedule them for an automatic retry 1 hour later via pending_retry.
+            _missing_tickers = [t for t in scan_tickers if t not in univ_data]
+            if _missing_tickers:
+                _retry_at   = datetime.now(timezone.utc) + timedelta(hours=1)
+                _sgt_offset = timedelta(hours=8)
+                state["pending_retry"] = {
+                    "tickers":        _missing_tickers,
+                    "scan_date":      str(today),
+                    "attempt":        1,
+                    "next_retry_utc": _retry_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    "next_retry_sgt": (_retry_at + _sgt_offset).strftime("%Y-%m-%d %H:%M SGT"),
+                    "created_utc":    datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                }
+                log.warning(
+                    f"  {len(_missing_tickers)} tickers missing → pending_retry "
+                    f"at {state['pending_retry']['next_retry_sgt']}: {_missing_tickers}"
+                )
+            elif state.get("pending_retry"):
+                state.pop("pending_retry")
+                log.info("  All tickers downloaded — cleared previous pending_retry")
+
             candidates, scan_stats = scan_entries(state, univ_data, today, current_nav, pos_data=pos_data)
             log.info(
                 f"  Raw breakouts: {scan_stats['n_raw_breakouts']} | "
