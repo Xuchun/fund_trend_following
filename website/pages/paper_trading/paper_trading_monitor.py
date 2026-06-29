@@ -649,43 +649,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     if _m1_fallback:
         st.info("ℹ️ positions.json 尚未生成，等待 GitHub Actions 首次运行后自动创建。")
 
-    # ── 顶部：数据完整性警告（读 data_error_log 字段）────────────────────────
-    _err_log     = _m1.get("data_error_log", [])
-    _univ_size   = _m1.get("universe_size", 0)
-    _last_upd_d  = _m1.get("last_update_date", "")
-
-    if _err_log:
-        # 计算下次重试日期（下一个交易日 = 跳过周末）
-        if _last_upd_d:
-            _next_retry = pd.Timestamp(_last_upd_d) + pd.tseries.offsets.BDay(1)
-            _next_retry_str = _next_retry.strftime("%Y-%m-%d（%A）")
-        else:
-            _next_retry_str = "下一个交易日"
-
-        _warn_lines = []
-        for _log in _err_log:
-            _log_date  = _log.get("date", "")
-            _log_tks   = _log.get("tickers_missed", [])
-            _log_ctx   = _log.get("context", "")
-            _n_failed  = len(_log_tks)
-            _pct       = _n_failed / _univ_size * 100 if _univ_size else 0
-            _warn_lines.append(
-                f"- **{_log_date}**（{_log_ctx}）：**{_n_failed} 个标的**数据下载失败"
-                f"（**{'、'.join(_log_tks)}**），"
-                f"占标的池 {_univ_size:,} 个的 **{_pct:.2f}%**。\n"
-                f"  经事后补算，{'该标的' if _n_failed==1 else '这些标的'}满足全部入场条件，"
-                f"突破强度排名靠前，本应被选入但实际未执行。"
-            )
-
-        st.error(
-            "### ⚠️ 数据完整性警告：Yahoo Finance 限速导致部分标的漏评\n\n"
-            + "\n".join(_warn_lines)
-            + f"\n\n**下次重试时间**：脚本将于 **{_next_retry_str}** 收盘后自动运行，"
-            "届时将对全量标的池重新下载数据，上述缺失数据将自动修复。\n\n"
-            "**影响**：模拟组合缺少上述持仓，实际净值走势可能偏离策略理论表现。"
-            ' 漏评标的已在下方"四、今日开平仓信号"中以 ⚠️ 脚本漏评（应选入）标注。'
-        )
-
     _m1_positions  = [p for p in _m1["positions"] if not p.get("closed")]
     _m1_closed     = _m1.get("closed_trades", [])
     _m1_history    = _m1.get("nav_history", [])
