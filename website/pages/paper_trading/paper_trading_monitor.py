@@ -95,6 +95,41 @@ with _col_pt_right:
     """, unsafe_allow_javascript=True)
 st.markdown("同时运行两种模拟交易方法，互相验证信号与执行质量")
 
+# ── 顶部数据完整性警告（tabs 之前，确保始终可见）────────────────────────────
+_warn_m1, _ = _load_m1()
+_err_log    = _warn_m1.get("data_error_log", [])
+_univ_size  = _warn_m1.get("universe_size", 0)
+if _err_log:
+    _last_upd_d = _warn_m1.get("last_update_date", "")
+    # 下次重试 = 从今天起的下一个交易日
+    _next_bday = (pd.Timestamp.now(tz="Asia/Singapore").normalize().tz_localize(None)
+                  + pd.tseries.offsets.BDay(1))
+    _next_retry_str = _next_bday.strftime("%Y-%m-%d（%A）")
+
+    _warn_lines = []
+    for _log in _err_log:
+        _log_tks  = _log.get("tickers_missed", [])
+        _log_ctx  = _log.get("context", "")
+        _log_date = _log.get("date", "")
+        _n        = len(_log_tks)
+        _pct      = _n / _univ_size * 100 if _univ_size else 0
+        _warn_lines.append(
+            f"- **{_log_date}**（{_log_ctx}）：**{_n} 个标的**数据下载失败"
+            f"（**{'、'.join(_log_tks)}**），"
+            f"占标的池 {_univ_size:,} 个的 **{_pct:.2f}%**。"
+            f"经事后补算，{'该标的' if _n == 1 else '这些标的'}满足全部入场条件，"
+            f"突破强度排名靠前，本应被选入但实际未执行。"
+        )
+
+    st.error(
+        "**⚠️ 数据完整性警告：Yahoo Finance 限速导致部分标的漏评**\n\n"
+        + "\n\n".join(_warn_lines)
+        + f"\n\n**下次重试时间**：脚本将于 **{_next_retry_str}** 美股收盘后自动运行，"
+        "届时将对全量标的池重新下载数据，上述缺失数据将自动修复。"
+        "\n\n**影响**：模拟组合缺少上述持仓，实际净值走势可能偏离策略理论表现。"
+        ' 漏评标的已在"四、今日开平仓信号"中以 ⚠️ 脚本漏评（应选入）标注。'
+    )
+
 tab1, tab2 = st.tabs(["📊 方法一：手动跟踪（Yahoo Finance）", "🤖 方法二：IB 自动交易（Interactive Brokers）"])
 
 # ═══════════════════════════════════════════════════════════════════════════════
