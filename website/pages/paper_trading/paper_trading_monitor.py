@@ -254,25 +254,26 @@ def _build_kline_fig(kdf, title, x_start, x_end, hlines=None, vlines=None):
     ), row=2, col=1)
     # 用独立 add_annotation 渲染标注
     # 当两条线价差 < 2% 时（止损价 vs 移动止盈几乎同像素），
-    # 用数据坐标偏移把标注 y 值直接拉开 5% 价格距离，彻底解决重叠：
-    #   较高线（如止损价）→ 标注 y 上移 5%  + yanchor="bottom"（文字在参考点上方）
-    #   较低线（如移动止盈）→ 标注 y 下移 5% + yanchor="top"（文字在参考点下方）
+    # 用 kdf 全历史价格范围计算偏移量，把标注 y 值拉开足够距离：
+    #   较高线 → 标注 y 上移 offset，yanchor="bottom"（文字在参考点上方）
+    #   较低线 → 标注 y 下移 offset，yanchor="top"（文字在参考点下方）
     _hl_list = list(hlines or [])
     _hl_order = sorted(range(len(_hl_list)), key=lambda _i: _hl_list[_i]["y"])
-    _ann_y       = [hl["y"] for hl in _hl_list]   # 标注的实际 y 坐标（数据单位）
-    _ann_yanchor = ["bottom"] * len(_hl_list)      # 默认：文字在 y 点上方
+    _ann_y       = [hl["y"] for hl in _hl_list]
+    _ann_yanchor = ["bottom"] * len(_hl_list)
+    # 用 kdf 历史数据计算 y 轴可见范围，偏移量 = 8% 该范围，保证视觉上明显分开
+    _y_range = float(kdf["High"].max() - kdf["Low"].min())
+    _label_off = max(_y_range * 0.08, 5.0)
 
     for _k in range(1, len(_hl_order)):
-        _pi = _hl_order[_k - 1]   # 较低价格线的索引
-        _ci = _hl_order[_k]       # 较高价格线的索引
+        _pi = _hl_order[_k - 1]
+        _ci = _hl_order[_k]
         _py = _hl_list[_pi]["y"]
         _cy = _hl_list[_ci]["y"]
         if _py > 0 and (_cy - _py) / _py < 0.02:
-            _off = max(_py * 0.05, 5.0)        # 5% 价格 or 最少 $5 的偏移
-            _ann_y[_pi]       = _py - _off     # 较低线：标注推到线的下方
-            _ann_yanchor[_pi] = "top"          # yanchor=top → 文字从参考点向下延伸
-            _ann_y[_ci]       = _cy + _off     # 较高线：标注推到线的上方
-            # _ann_yanchor[_ci] 保持 "bottom"（文字从参考点向上延伸）
+            _ann_y[_pi]       = _py - _label_off   # 较低线：标注推到线的下方
+            _ann_yanchor[_pi] = "top"               # 文字从参考点向下延伸
+            _ann_y[_ci]       = _cy + _label_off   # 较高线：标注推到线的上方
 
     for _idx, hl in enumerate(_hl_list):
         fig.add_hline(
