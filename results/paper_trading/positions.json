@@ -1919,10 +1919,8 @@
       "tickers_missed": [
         "BIIB"
       ],
-      "note": "Yahoo Finance rate limit 导致 BIIB 数据下载失败，脚本未评估该标的。经事后补算，BIIB 满足全部入场条件（突破强度 +4.53%，rank #2），已手动补录至 pending_entries。",
-      "created_utc": "2026-06-26T23:00:00Z",
-      "total_scanned": 3221,
-      "downloaded_count": 3220
+      "note": "Yahoo Finance rate limit 导致部分标的数据下载失败。当时脚本未追踪下载失败数量，实际失败标的数不明（事后全量验证发现约330个标的遭到 YFRateLimitError）。BIIB 因产生强信号（突破强度 +4.53%，rank #2）而被人工发现并补录至 pending_entries；其余 rate-limited 标的未产生强信号，当时未被察觉。",
+      "created_utc": "2026-06-26T23:00:00Z"
     }
   ],
   "universe_size": 3102,
