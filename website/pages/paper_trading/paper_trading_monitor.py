@@ -1281,7 +1281,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 st.caption("仅显示已选入信号（候选汇总数据将在下次日脚本运行后更新）")
                 show_df(pd.DataFrame([{
                     "标的":    e["ticker"],
-                    "突破强度": (f"{(e['strength']-1)*100:+.2f}%" if e.get("strength") else "—"),
+                    "突破强度": (f"{(e['strength']-1)*100:+.3f}%" if e.get("strength") else "—"),
                     "信号价（今收）": f"${e.get('signal_price', 0):.2f}" if e.get("signal_price") else "",
                     "参考止损":      f"${e.get('stop_price', 0):.2f}"   if e.get("stop_price")   else "",
                     "股数":          e.get("shares", ""),
