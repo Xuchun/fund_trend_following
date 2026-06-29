@@ -252,49 +252,36 @@ def _build_kline_fig(kdf, title, x_start, x_end, hlines=None, vlines=None):
         x=kdf.index, y=kdf["Volume"].values,
         marker_color=vol_colors, showlegend=False,
     ), row=2, col=1)
-    # 用独立 add_annotation 渲染标注
-    # 止损价（红色 #d62728）和移动止盈（橘色 #ff7f0e）始终放到对立方向：
-    #   红在上 → 红标注在红线上方，橘标注在橘线下方
-    #   红在下 → 红标注在红线下方，橘标注在橘线上方
-    # 偏移量 = kdf 历史价格全程范围的 8%，保证视觉上明显分开
-    _hl_list = list(hlines or [])
-    _y_range  = float(kdf["High"].max() - kdf["Low"].min())
-    _lbl_off  = max(_y_range * 0.08, 5.0)
-
-    _ann_y       = [hl["y"] for hl in _hl_list]   # 默认：标注 y = 线的 y
-    _ann_yanchor = ["bottom"] * len(_hl_list)       # 默认：文字在参考点上方
-
-    _RED_C    = "#d62728"   # 止损价
-    _ORANGE_C = "#ff7f0e"   # 移动止盈
+    # 止损价（红 #d62728）→ 标注在线上方（top left）
+    # 移动止盈（橘 #ff7f0e）→ 标注在线下方（bottom left）
+    # 两者位于对立方向，贴近各自线条，与蓝色买入价标注距离一致
+    # 当红线在下/橘线在上时（少见），方向互换
+    _hl_list  = list(hlines or [])
+    _RED_C    = "#d62728"
+    _ORANGE_C = "#ff7f0e"
     _ri = next((i for i, h in enumerate(_hl_list) if h.get("color") == _RED_C),    None)
     _oi = next((i for i, h in enumerate(_hl_list) if h.get("color") == _ORANGE_C), None)
 
+    _red_pos, _orange_pos = "top left", "bottom left"   # 红上橘下（默认）
     if _ri is not None and _oi is not None:
-        _ry, _oy = _hl_list[_ri]["y"], _hl_list[_oi]["y"]
-        if _ry >= _oy:
-            # 红线在上（止损价 ≥ 移动止盈）
-            _ann_y[_ri] = _ry + _lbl_off;  _ann_yanchor[_ri] = "bottom"  # 红：上方
-            _ann_y[_oi] = _oy - _lbl_off;  _ann_yanchor[_oi] = "top"     # 橘：下方
-        else:
-            # 红线在下（移动止盈 > 止损价，少见但兼容）
-            _ann_y[_ri] = _ry - _lbl_off;  _ann_yanchor[_ri] = "top"     # 红：下方
-            _ann_y[_oi] = _oy + _lbl_off;  _ann_yanchor[_oi] = "bottom"  # 橘：上方
+        if _hl_list[_ri]["y"] < _hl_list[_oi]["y"]:
+            _red_pos, _orange_pos = "bottom left", "top left"  # 红下橘上
 
     for _idx, hl in enumerate(_hl_list):
+        if _idx == _ri:
+            _pos = _red_pos
+        elif _idx == _oi:
+            _pos = _orange_pos
+        else:
+            _pos = "top left"   # 其他线（买入价等）默认在线上方
         fig.add_hline(
             y=hl["y"], row=1, col=1,
             line_color=hl["color"],
             line_dash=hl.get("dash", "dash"),
             line_width=hl.get("width", 1.5),
-        )
-        fig.add_annotation(
-            x=0, xref="paper",
-            y=_ann_y[_idx], yref="y",
-            text=hl["label"],
-            showarrow=False,
-            font=dict(color=hl["color"], size=11),
-            xanchor="left",
-            yanchor=_ann_yanchor[_idx],
+            annotation_text=hl["label"],
+            annotation_position=_pos,
+            annotation_font_color=hl["color"],
         )
     for vl in (vlines or []):
         fig.add_vline(
