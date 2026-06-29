@@ -253,27 +253,32 @@ def _build_kline_fig(kdf, title, x_start, x_end, hlines=None, vlines=None):
         marker_color=vol_colors, showlegend=False,
     ), row=2, col=1)
     # 用独立 add_annotation 渲染标注
-    # 当两条线价差 < 2% 时（止损价 vs 移动止盈几乎同像素），
-    # 用 kdf 全历史价格范围计算偏移量，把标注 y 值拉开足够距离：
-    #   较高线 → 标注 y 上移 offset，yanchor="bottom"（文字在参考点上方）
-    #   较低线 → 标注 y 下移 offset，yanchor="top"（文字在参考点下方）
+    # 止损价（红色 #d62728）和移动止盈（橘色 #ff7f0e）始终放到对立方向：
+    #   红在上 → 红标注在红线上方，橘标注在橘线下方
+    #   红在下 → 红标注在红线下方，橘标注在橘线上方
+    # 偏移量 = kdf 历史价格全程范围的 8%，保证视觉上明显分开
     _hl_list = list(hlines or [])
-    _hl_order = sorted(range(len(_hl_list)), key=lambda _i: _hl_list[_i]["y"])
-    _ann_y       = [hl["y"] for hl in _hl_list]
-    _ann_yanchor = ["bottom"] * len(_hl_list)
-    # 用 kdf 历史数据计算 y 轴可见范围，偏移量 = 8% 该范围，保证视觉上明显分开
-    _y_range = float(kdf["High"].max() - kdf["Low"].min())
-    _label_off = max(_y_range * 0.08, 5.0)
+    _y_range  = float(kdf["High"].max() - kdf["Low"].min())
+    _lbl_off  = max(_y_range * 0.08, 5.0)
 
-    for _k in range(1, len(_hl_order)):
-        _pi = _hl_order[_k - 1]
-        _ci = _hl_order[_k]
-        _py = _hl_list[_pi]["y"]
-        _cy = _hl_list[_ci]["y"]
-        if _py > 0 and (_cy - _py) / _py < 0.02:
-            _ann_y[_pi]       = _py - _label_off   # 较低线：标注推到线的下方
-            _ann_yanchor[_pi] = "top"               # 文字从参考点向下延伸
-            _ann_y[_ci]       = _cy + _label_off   # 较高线：标注推到线的上方
+    _ann_y       = [hl["y"] for hl in _hl_list]   # 默认：标注 y = 线的 y
+    _ann_yanchor = ["bottom"] * len(_hl_list)       # 默认：文字在参考点上方
+
+    _RED_C    = "#d62728"   # 止损价
+    _ORANGE_C = "#ff7f0e"   # 移动止盈
+    _ri = next((i for i, h in enumerate(_hl_list) if h.get("color") == _RED_C),    None)
+    _oi = next((i for i, h in enumerate(_hl_list) if h.get("color") == _ORANGE_C), None)
+
+    if _ri is not None and _oi is not None:
+        _ry, _oy = _hl_list[_ri]["y"], _hl_list[_oi]["y"]
+        if _ry >= _oy:
+            # 红线在上（止损价 ≥ 移动止盈）
+            _ann_y[_ri] = _ry + _lbl_off;  _ann_yanchor[_ri] = "bottom"  # 红：上方
+            _ann_y[_oi] = _oy - _lbl_off;  _ann_yanchor[_oi] = "top"     # 橘：下方
+        else:
+            # 红线在下（移动止盈 > 止损价，少见但兼容）
+            _ann_y[_ri] = _ry - _lbl_off;  _ann_yanchor[_ri] = "top"     # 红：下方
+            _ann_y[_oi] = _oy + _lbl_off;  _ann_yanchor[_oi] = "bottom"  # 橘：上方
 
     for _idx, hl in enumerate(_hl_list):
         fig.add_hline(
