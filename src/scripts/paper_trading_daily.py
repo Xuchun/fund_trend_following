@@ -578,6 +578,12 @@ def scan_entries(
             if hdf is not None and not hdf.empty:
                 held_log_returns[ht] = compute_log_returns(hdf["Close"])
 
+    # ── Phase 1: apply all per-stock filters, collect pre-candidates ─────────
+    # Heat check is deferred to Phase 2 so candidates are sorted by strength first.
+    # This ensures the heat budget is allocated to the strongest breakouts, not
+    # whichever ticker happens to appear first in the universe dict.
+    pre_candidates: list[dict] = []
+
     for ticker, df in universe_data.items():
         if ticker in held:
             continue
@@ -663,11 +669,40 @@ def scan_entries(
         if shares <= 0:
             continue
 
-        notional = entry_px * shares
-
-        # Step 4: portfolio heat check
+        notional  = entry_px * shares
         trade_risk = stop_dist * shares / nav
         strength   = float(compute_breakout_strength(close, rolling_high).iloc[-1])
+
+        pre_candidates.append({
+            "ticker":          ticker,
+            "entry_px":        entry_px,
+            "stop_px":         stop_px,
+            "stop_dist":       stop_dist,
+            "shares":          shares,
+            "cur_atr":         cur_atr,
+            "notional":        notional,
+            "trade_risk":      trade_risk,
+            "strength":        strength,
+            "_corr_triggered": _corr_triggered,
+            "_corr_with":      _corr_with_ticker,
+        })
+
+    # ── Phase 2: sort by breakout strength, then apply heat check ─────────────
+    pre_candidates.sort(key=lambda x: x["strength"], reverse=True)
+
+    for cand in pre_candidates:
+        ticker            = cand["ticker"]
+        entry_px          = cand["entry_px"]
+        stop_px           = cand["stop_px"]
+        shares            = cand["shares"]
+        cur_atr           = cand["cur_atr"]
+        notional          = cand["notional"]
+        trade_risk        = cand["trade_risk"]
+        strength          = cand["strength"]
+        _corr_triggered   = cand["_corr_triggered"]
+        _corr_with_ticker = cand["_corr_with"]
+
+        # Step 4: portfolio heat check (applied in strength order)
         if heat_used + trade_risk > PARAMS.heat_limit:
             n_heat_blocked += 1
             all_raw_candidates.append({
@@ -679,6 +714,7 @@ def scan_entries(
                 "rejection":    "heat_limit",
             })
             continue
+
         if _corr_triggered:
             n_corr_reduced += 1
 
@@ -703,7 +739,7 @@ def scan_entries(
         })
         heat_used += trade_risk
 
-    signals.sort(key=lambda x: x["strength"], reverse=True)
+    # signals is already in strength order (pre_candidates was sorted by strength)
     scan_stats = {
         "n_raw_breakouts":    n_raw_breakouts,
         "n_heat_blocked":     n_heat_blocked,
