@@ -1727,6 +1727,13 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         _bkdf2.index = pd.DatetimeIndex(_bkdf2.index)
                         _bkdf2 = _bkdf2[["Open", "High", "Low", "Close", "Volume"]].dropna()
 
+                        # 获取移动止盈价
+                        _b_trl = (
+                            _bt.get("trail_stop") if _bstat == "open"
+                            else _bt.get("trail_stop_at_exit")
+                        )
+                        _b_show_trl = bool(_b_trl and _b_sp and abs(_b_trl - _b_sp) > 0.01)
+
                         # 水平线附加图
                         _add_plots = []
                         if _b_ep:
@@ -1738,6 +1745,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                             _add_plots.append(_mpf.make_addplot(
                                 [_b_sp] * len(_bkdf2), type="line",
                                 color="#d62728", linestyle="--", width=1.5, panel=0,
+                            ))
+                        if _b_show_trl:
+                            _add_plots.append(_mpf.make_addplot(
+                                [_b_trl] * len(_bkdf2), type="line",
+                                color="#ff7f0e", linestyle=":", width=1.5, panel=0,
                             ))
 
                         _mpf_kwargs = dict(
