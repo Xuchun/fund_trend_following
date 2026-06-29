@@ -1260,7 +1260,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     else:
                         _status = _rejection_label.get(_rej, _rej or "✅ 已选入")
                         _strength = c.get("strength") or _entry_strength_map.get(_tk)
-                    _strength_disp = f"+{(_strength - 1)*100:.2f}%" if _strength else "—"
+                    _strength_disp = f"{(_strength - 1)*100:+.2f}%" if _strength else "—"
                     _cand_rows.append({
                         "标的":         _tk,
                         "突破强度":     _strength_disp,
