@@ -1231,6 +1231,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "corr_reduced": "⚠️ 已选入（相关性减仓）",
                 "heat_limit":   "🔴 未选（热度上限）",
                 "cash_limit":   "🔴 未选（现金不足）",
+                "data_error":   "⚠️ 数据缺失（应选入）",
             }
             if _ts_all_cands:
                 # Full funnel view: all raw breakout candidates with rejection reason
