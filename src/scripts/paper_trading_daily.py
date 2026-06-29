@@ -767,6 +767,7 @@ def scan_entries(
             "stop_price":   round(stop_px, 4),
             "shares":       shares,
             "trade_risk":   round(trade_risk, 4),
+            "strength":     round(strength, 4),
             "rejection":    "corr_reduced" if _corr_triggered else None,
             "corr_with":    _corr_with_ticker if _corr_triggered else None,
         })
