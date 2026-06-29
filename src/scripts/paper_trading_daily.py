@@ -17,7 +17,7 @@ Requirements:  yfinance >= 1.0,  pandas,  src/ on PYTHONPATH
 
 import sys, json, argparse, logging, math, time
 from pathlib import Path
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timezone, timedelta
 
 _root = Path(__file__).resolve().parents[2]
 if str(_root) not in sys.path:
