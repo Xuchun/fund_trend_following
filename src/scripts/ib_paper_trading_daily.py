@@ -578,6 +578,20 @@ def main() -> None:
     spy_close = float(spy_df["Close"].iloc[-1]) if spy_df is not None and not spy_df.empty else None
     log.info(f"  Regime: {'BULL ✅' if regime_ok else 'BEAR 🚫'} | SPY: {f'${spy_close:.2f}' if spy_close else 'N/A'}")
 
+    # Guard: if today has no market data (pre-market, weekend, holiday), abort without
+    # touching state so the website continues to show the last completed trading day.
+    _spy_today = (
+        spy_df[spy_df.index.normalize() == pd.Timestamp(today)]
+        if spy_df is not None and not spy_df.empty else pd.DataFrame()
+    )
+    if _spy_today.empty:
+        log.warning(
+            f"  No market data for {today} — pre-market, weekend, or holiday. "
+            "State unchanged; website keeps showing last completed trading day."
+        )
+        log.info("=== Done (no-op — market not yet open) ===")
+        return
+
     # --- Resolve pending_moo positions: update entry_price to T+1 open ---
     # IB places MOO orders at T close; actual fill happens at T+1 open.
     # On T+1 run, we update entry_price from signal price to actual open price.
