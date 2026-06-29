@@ -252,19 +252,19 @@ def _build_kline_fig(kdf, title, x_start, x_end, hlines=None, vlines=None):
         x=kdf.index, y=kdf["Volume"].values,
         marker_color=vol_colors, showlegend=False,
     ), row=2, col=1)
-    # 计算每条线的标注 yshift，防止价格接近时文字重叠
+    # 当相邻两条线价差 < 2% 时，下方线标注改为 bottom left，上方线保持 top left
+    # 使标注文字分别位于各自线的下方和上方，获得最大垂直间距
     _hl_list = list(hlines or [])
     _hl_order = sorted(range(len(_hl_list)), key=lambda _i: _hl_list[_i]["y"])
-    _LABEL_PX = 16  # 每层标注约占 16px 高度
-    _yshift_by_idx = [2] * len(_hl_list)  # 默认 2px
+    _ann_pos = ["top left"] * len(_hl_list)
     for _k in range(1, len(_hl_order)):
-        _pi = _hl_order[_k - 1]
-        _ci = _hl_order[_k]
+        _pi = _hl_order[_k - 1]  # 较低线的索引
+        _ci = _hl_order[_k]      # 较高线的索引
         _py = _hl_list[_pi]["y"]
         _cy = _hl_list[_ci]["y"]
-        # 若两条线价差不足 2%，则叠加 yshift 避免重叠
         if _py > 0 and (_cy - _py) / _py < 0.02:
-            _yshift_by_idx[_ci] = _yshift_by_idx[_pi] + _LABEL_PX
+            _ann_pos[_pi] = "bottom left"  # 下方线：文字在线的下方
+            _ann_pos[_ci] = "top left"     # 上方线：文字在线的上方
 
     for _idx, hl in enumerate(_hl_list):
         fig.add_hline(
@@ -273,9 +273,8 @@ def _build_kline_fig(kdf, title, x_start, x_end, hlines=None, vlines=None):
             line_dash=hl.get("dash", "dash"),
             line_width=hl.get("width", 1.5),
             annotation_text=hl["label"],
-            annotation_position="top left",
+            annotation_position=_ann_pos[_idx],
             annotation_font_color=hl["color"],
-            annotation_yshift=_yshift_by_idx[_idx],
         )
     for vl in (vlines or []):
         fig.add_vline(
