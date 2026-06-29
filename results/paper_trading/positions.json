@@ -1170,6 +1170,21 @@
       "atr_at_exit": 28.8385,
       "detected_date": "2026-06-26",
       "entry_commission": 0.0
+    },
+    {
+      "ticker": "FRO",
+      "exit_reason": "stop_loss",
+      "stop_used": 36.8143,
+      "shares": 244,
+      "open_price": 39.91,
+      "entry_price": 39.9499,
+      "entry_date": "2026-06-22",
+      "signal_date": "2026-06-19",
+      "signal_price": 40.93,
+      "signal_strength": 0.0,
+      "stop_loss": 36.8143,
+      "trail_stop": 38.126712,
+      "atr_at_entry": 1.5678
     }
   ],
   "last_update_utc": "2026-06-29T06:19:05Z",
