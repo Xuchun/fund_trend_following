@@ -252,7 +252,21 @@ def _build_kline_fig(kdf, title, x_start, x_end, hlines=None, vlines=None):
         x=kdf.index, y=kdf["Volume"].values,
         marker_color=vol_colors, showlegend=False,
     ), row=2, col=1)
-    for hl in (hlines or []):
+    # 计算每条线的标注 yshift，防止价格接近时文字重叠
+    _hl_list = list(hlines or [])
+    _hl_order = sorted(range(len(_hl_list)), key=lambda _i: _hl_list[_i]["y"])
+    _LABEL_PX = 16  # 每层标注约占 16px 高度
+    _yshift_by_idx = [2] * len(_hl_list)  # 默认 2px
+    for _k in range(1, len(_hl_order)):
+        _pi = _hl_order[_k - 1]
+        _ci = _hl_order[_k]
+        _py = _hl_list[_pi]["y"]
+        _cy = _hl_list[_ci]["y"]
+        # 若两条线价差不足 2%，则叠加 yshift 避免重叠
+        if _py > 0 and (_cy - _py) / _py < 0.02:
+            _yshift_by_idx[_ci] = _yshift_by_idx[_pi] + _LABEL_PX
+
+    for _idx, hl in enumerate(_hl_list):
         fig.add_hline(
             y=hl["y"], row=1, col=1,
             line_color=hl["color"],
@@ -261,6 +275,7 @@ def _build_kline_fig(kdf, title, x_start, x_end, hlines=None, vlines=None):
             annotation_text=hl["label"],
             annotation_position="top left",
             annotation_font_color=hl["color"],
+            annotation_yshift=_yshift_by_idx[_idx],
         )
     for vl in (vlines or []):
         fig.add_vline(
