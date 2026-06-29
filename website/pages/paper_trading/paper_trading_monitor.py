@@ -2803,15 +2803,15 @@ git push
             show_df(pd.DataFrame([{
                 "日期":           s["date"],
                 "Regime":         s.get("regime", ""),
-                "SPY收盘":        s.get("spy_close", ""),
-                "原始突破数":     s.get("n_raw_breakouts", ""),
-                "热度拦截":       s.get("n_heat_blocked",  ""),
-                "现金拦截":       s.get("n_cash_blocked",  ""),
-                "相关性减仓":     s.get("n_corr_reduced",  ""),
-                "候选信号数":     s.get("n_candidates",    ""),
-                "当日开仓信号":   s.get("n_entries",       ""),
-                "当日已执行":     s.get("n_executed",      ""),
-                "平仓数":         s.get("n_exits",         ""),
+                "SPY收盘":        s.get("spy_close"),
+                "原始突破数":     s.get("n_raw_breakouts"),
+                "热度拦截":       s.get("n_heat_blocked"),
+                "现金拦截":       s.get("n_cash_blocked"),
+                "相关性减仓":     s.get("n_corr_reduced"),
+                "候选信号数":     s.get("n_candidates"),
+                "当日开仓信号":   s.get("n_entries"),
+                "当日已执行":     s.get("n_executed"),
+                "平仓数":         s.get("n_exits"),
             } for s in reversed(_dl2_sig)]), width="stretch", hide_index=True)
         else:
             st.info("暂无数据")
