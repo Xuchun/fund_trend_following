@@ -645,7 +645,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             "脚本未对其进行评估，**实际执行的开仓信号因此不完整**：\n\n"
             + "\n".join(_warn_lines)
             + "\n\n**影响**：模拟组合缺少上述持仓，实际净值走势可能偏离策略理论表现。"
-            "被漏评标的已在"四、今日开平仓信号"表格中以 ⚠️ 脚本漏评（应选入）标注，供参考。"
+            '被漏评标的已在"四、今日开平仓信号"表格中以 ⚠️ 脚本漏评（应选入）标注，供参考。'
         )
 
     _m1_positions  = [p for p in _m1["positions"] if not p.get("closed")]
