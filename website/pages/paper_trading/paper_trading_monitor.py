@@ -1298,7 +1298,8 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         # 开仓候选：优先用 _ts_all_cands（含所有被拒绝候选），与表格一致
         _s4_all_cand_src = _ts_all_cands or _ts_entry_sigs
         _s4_sell_tks = sorted({s["ticker"] for s in _ts_exit_sigs})
-        _s4_buy_tks  = sorted({e["ticker"] for e in _s4_all_cand_src})
+        _s4_str_map  = {e["ticker"]: e.get("strength", 0) for e in _s4_all_cand_src}
+        _s4_buy_tks  = sorted(_s4_str_map, key=lambda t: _s4_str_map[t], reverse=True)
         if _s4_sell_tks or _s4_buy_tks:
             _s4_opts = (
                 [f"🔴 平仓卖出  {t}" for t in _s4_sell_tks] +
