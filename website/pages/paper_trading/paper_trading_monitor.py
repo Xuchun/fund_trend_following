@@ -614,6 +614,40 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     if _m1_fallback:
         st.info("ℹ️ positions.json 尚未生成，等待 GitHub Actions 首次运行后自动创建。")
 
+    # ── 顶部：数据完整性警告（data_error 标的）──────────────────────────────
+    _data_err_warnings = []
+    _sig_hist_all = _m1.get("signals_history", [])
+    for _sh in _sig_hist_all:
+        _err_tks = [c["ticker"] for c in _sh.get("candidate_signals", [])
+                    if c.get("rejection") == "data_error"]
+        if _err_tks:
+            _data_err_warnings.append((_sh.get("date", ""), _err_tks))
+    # 也检查 today_signals
+    _ts_err_tks = [c["ticker"] for c in (_m1.get("today_signals") or {}).get("candidate_signals", [])
+                   if c.get("rejection") == "data_error"]
+    if _ts_err_tks:
+        _ts_date = (_m1.get("today_signals") or {}).get("date", "")
+        _exists = any(d == _ts_date for d, _ in _data_err_warnings)
+        if not _exists:
+            _data_err_warnings.append((_ts_date, _ts_err_tks))
+
+    if _data_err_warnings:
+        _warn_lines = []
+        for _wdate, _wtks in sorted(_data_err_warnings):
+            _warn_lines.append(
+                f"- **{_wdate}**：**{'、'.join(_wtks)}** "
+                f"（经事后补算，{'该标的' if len(_wtks)==1 else '这些标的'}满足全部入场条件，"
+                f"突破强度排名靠前，本应被选入）"
+            )
+        st.error(
+            "### ⚠️ 数据完整性警告：部分标的在扫描时被脚本漏评\n\n"
+            "以下日期的扫描中，Yahoo Finance 限速（rate limit）导致部分标的数据下载失败，"
+            "脚本未对其进行评估，**实际执行的开仓信号因此不完整**：\n\n"
+            + "\n".join(_warn_lines)
+            + "\n\n**影响**：模拟组合缺少上述持仓，实际净值走势可能偏离策略理论表现。"
+            "被漏评标的已在"四、今日开平仓信号"表格中以 ⚠️ 脚本漏评（应选入）标注，供参考。"
+        )
+
     _m1_positions  = [p for p in _m1["positions"] if not p.get("closed")]
     _m1_closed     = _m1.get("closed_trades", [])
     _m1_history    = _m1.get("nav_history", [])
