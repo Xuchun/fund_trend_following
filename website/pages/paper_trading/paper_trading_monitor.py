@@ -1232,8 +1232,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         _status = "🔴 未选（现金不足）"
                     else:
                         _status = _rejection_label.get(_rej, _rej or "✅ 已选入")
+                        _strength = c.get("strength") or _entry_strength_map.get(_tk)
+                    _strength_disp = f"+{(_strength - 1)*100:.2f}%" if _strength else "—"
                     _cand_rows.append({
                         "标的":         _tk,
+                        "突破强度":     _strength_disp,
                         "信号价（今收）": f"${c.get('signal_price', 0):.2f}" if c.get("signal_price") else "",
                         "参考止损":      f"${c.get('stop_price', 0):.2f}"   if c.get("stop_price")   else "",
                         "股数":          int(c["shares"]) if c.get("shares") else "",
