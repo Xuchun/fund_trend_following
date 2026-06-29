@@ -1244,6 +1244,89 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 } for e in sorted(_ts_entry_sigs, key=lambda x: x["ticker"])]), width="stretch", hide_index=True)
             else:
                 st.info("今日无入场信号")
+
+        # ── K线图：平仓 / 开仓信号（同"三"section 规则）──────────────────────
+        _s4_sell_tks = sorted({s["ticker"] for s in _ts_exit_sigs})
+        _s4_buy_tks  = sorted({e["ticker"] for e in _ts_entry_sigs
+                                if e["ticker"] not in _blocked_entries})
+        if _s4_sell_tks or _s4_buy_tks:
+            _s4_opts = (
+                [f"🔴 平仓卖出  {t}" for t in _s4_sell_tks] +
+                [f"🟢 开仓买入  {t}" for t in _s4_buy_tks]
+            )
+            _s4_opt_to_tk = {
+                **{f"🔴 平仓卖出  {t}": t for t in _s4_sell_tks},
+                **{f"🟢 开仓买入  {t}": t for t in _s4_buy_tks},
+            }
+            _s4_sel     = st.selectbox("选择标的查看K线图", _s4_opts, key="s4_kline_sel")
+            _s4_tk      = _s4_opt_to_tk[_s4_sel]
+            _s4_is_sell = _s4_tk in _s4_sell_tks
+
+            _s4_kdf = _fetch_yf_chart_single(_s4_tk)
+            if _s4_kdf is not None and not _s4_kdf.empty:
+                _s4_exec_dt = pd.Timestamp(str(_next_td))
+                _s4_kline_n = 300
+                _s4_hlines  = []
+                _s4_vlines  = []
+
+                if _s4_is_sell:
+                    _s4_pos = next((p for p in _m1_positions if p["ticker"] == _s4_tk), None)
+                    if _s4_pos:
+                        _s4_entry_dt = pd.Timestamp(_s4_pos["entry_date"])
+                        _s4_kline_n  = 300 + int((_s4_kdf.index >= _s4_entry_dt).sum())
+                        _s4_ep       = _s4_pos.get("entry_price")
+                        _s4_sig_exit = next((s for s in _ts_exit_sigs if s["ticker"] == _s4_tk), None)
+                        _s4_sp       = (_s4_sig_exit.get("stop_used") if _s4_sig_exit
+                                        else _s4_pos.get("stop_loss"))
+                        _s4_trail    = _s4_pos.get("trail_stop")
+                        if _s4_ep:
+                            _s4_hlines.append({"y": _s4_ep,    "color": "#1f77b4", "dash": "dash", "label": f"买入价 ${_s4_ep:.2f}"})
+                        if _s4_sp:
+                            _s4_hlines.append({"y": _s4_sp,    "color": "#d62728", "dash": "dash", "label": f"止损价 ${_s4_sp:.2f}"})
+                        if _s4_trail and _s4_sp and abs(_s4_trail - _s4_sp) > 0.01:
+                            _s4_hlines.append({"y": _s4_trail, "color": "#ff7f0e", "dash": "dot",  "label": f"移动止盈 ${_s4_trail:.2f}"})
+                        _s4_vlines.append({"x": _s4_entry_dt.isoformat(), "color": "#1f77b4", "dash": "dot",  "width": 1.5, "text": "开仓日",  "use_domain": True})
+                        _s4_title_info = (
+                            f"　｜　开仓 {_s4_pos.get('entry_date', '')}"
+                            + (f"  ${_s4_ep:.2f}" if _s4_ep else "")
+                        )
+                    else:
+                        _s4_title_info = ""
+                    _s4_vlines.append({"x": _s4_exec_dt.isoformat(), "color": "#ff7f0e", "dash": "dash", "width": 2,   "text": "明日平仓", "use_domain": False, "y_paper": 0.36})
+                    _s4_action = "明日平仓"
+                else:
+                    _s4_ent_sig = next((e for e in _ts_entry_sigs if e["ticker"] == _s4_tk), None)
+                    if _s4_ent_sig:
+                        _s4_sig_p  = _s4_ent_sig.get("signal_price")
+                        _s4_stop_p = _s4_ent_sig.get("stop_price")
+                        if _s4_sig_p:
+                            _s4_hlines.append({"y": _s4_sig_p,  "color": "#2ca02c", "dash": "dash", "label": f"信号价 ${_s4_sig_p:.2f}"})
+                        if _s4_stop_p:
+                            _s4_hlines.append({"y": _s4_stop_p, "color": "#d62728", "dash": "dash", "label": f"止损价 ${_s4_stop_p:.2f}"})
+                        _s4_stp2 = _s4_ent_sig.get("stop_price") or _s4_ent_sig.get("stop_loss")
+                        _s4_title_info = (
+                            (f"　｜　信号价 ${_s4_sig_p:.2f}" if _s4_sig_p else "")
+                            + (f"　止损 ${_s4_stp2:.2f}" if _s4_stp2 else "")
+                        )
+                    else:
+                        _s4_title_info = ""
+                    _s4_vlines.append({"x": _s4_exec_dt.isoformat(), "color": "#2ca02c", "dash": "dash", "width": 2,   "text": "明日开仓", "use_domain": False, "y_paper": 0.28})
+                    _s4_action = "明日开仓"
+
+                _s4_kdf   = _s4_kdf.tail(_s4_kline_n).copy()
+                _s4_x_end = _s4_exec_dt + pd.Timedelta(days=4)
+                _s4_fig   = _build_kline_fig(
+                    _s4_kdf,
+                    title=f"{_s4_tk}　{_s4_action}{_s4_title_info}　（最近 {_s4_kline_n} 根日K线）",
+                    x_start=_s4_kdf.index[0].isoformat(),
+                    x_end=_s4_x_end.isoformat(),
+                    hlines=_s4_hlines,
+                    vlines=_s4_vlines,
+                )
+                st.plotly_chart(_s4_fig, width="stretch")
+            else:
+                st.warning(f"无法获取 {_s4_tk} 的K线数据，请稍后刷新重试。")
+
     else:
         _ts_regime_cap = "🟢 BULL" if _bull else "🔴 BEAR"
         st.markdown(f"信号日期：N/A ｜ Regime：{_ts_regime_cap}")
