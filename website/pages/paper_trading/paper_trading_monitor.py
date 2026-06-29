@@ -821,7 +821,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 **{f"🟢 已开仓  {t}": t for t in _s2_buy_tks},
             }
             _s2_sel_opt = st.selectbox(
-                "选择标的查看K线图（日本蜡烛图 + 成交量）",
+                "选择标的查看K线图",
                 _s2_opts,
                 key="s2_kline_sel",
             )
@@ -1044,7 +1044,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 **{f"🟢 开仓买入  {t}": t for t in _chart_buy_tks},
             }
             _sel_opt = st.selectbox(
-                "选择标的查看K线图（日本蜡烛图 + 成交量）",
+                "选择标的查看K线图",
                 _chart_opts,
                 key="s3_kline_sel",
             )
@@ -1563,7 +1563,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _s9_all_opts = _s9_open_opts + _s9_closed_opts
         if _s9_all_opts:
             _s9_sel_opt = st.selectbox(
-                "选择标的查看K线图（日本蜡烛图 + 成交量）",
+                "选择标的查看K线图",
                 _s9_all_opts,
                 key="s9_kline_sel",
             )
