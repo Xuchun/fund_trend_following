@@ -2887,6 +2887,7 @@ git push
         if _dl2_cands:
             show_df(pd.DataFrame([{
                 "标的":         c["ticker"],
+                "突破强度":     (f"+{(c['strength']-1)*100:.2f}%" if c.get("strength") else "—"),
                 "信号价（今收）": f"${c.get('signal_price', 0):.2f}" if c.get("signal_price") else "",
                 "参考止损":      f"${c.get('stop_price', 0):.2f}"   if c.get("stop_price")   else "",
                 "股数":          c.get("shares", ""),
@@ -2896,6 +2897,32 @@ git push
             width="stretch", hide_index=True)
         else:
             st.info("候选明细将在方法二日脚本运行后自动填充。")
+
+    _dl2_daily_entries = []
+    for _sh in _dl2_sig:
+        _d = _sh.get("date", "")
+        for _e in _sh.get("entry_signals", []):
+            _dl2_daily_entries.append({
+                "日期":     _d,
+                "标的":     _e.get("ticker", ""),
+                "突破强度": (f"+{(_e['strength']-1)*100:.2f}%" if _e.get("strength") else "—"),
+                "信号价":   f"${_e['signal_price']:.2f}" if _e.get("signal_price") else "",
+                "参考止损": f"${_e['stop_price']:.2f}"   if _e.get("stop_price")   else "",
+                "股数":     _e.get("shares", ""),
+                "风险% NAV": f"{_e['trade_risk']*100:.2f}%" if _e.get("trade_risk") else "",
+            })
+    with st.expander(f"每日开仓信号明细（{len(_dl2_daily_entries)} 笔，含突破强度）"):
+        st.caption(
+            "每个交易日所有通过组合约束的开仓信号及其突破强度。"
+            "突破强度 = 信号日收盘价 ÷ 前200日最高价 - 1。"
+            "下载 ZIP 中对应文件为 m2_daily_entry_signals.csv。"
+        )
+        if _dl2_daily_entries:
+            show_df(
+                pd.DataFrame(_dl2_daily_entries).sort_values(["日期", "突破强度"], ascending=[False, False]),
+                width="stretch", hide_index=True)
+        else:
+            st.info("每日开仓信号数据将在方法二日脚本运行后填充。")
 
     with st.expander(f"当前持仓（{len(_dl2_op)} 只）"):
         if _dl2_op:
