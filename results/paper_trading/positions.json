@@ -1920,7 +1920,9 @@
         "BIIB"
       ],
       "note": "Yahoo Finance rate limit 导致 BIIB 数据下载失败，脚本未评估该标的。经事后补算，BIIB 满足全部入场条件（突破强度 +4.53%，rank #2），已手动补录至 pending_entries。",
-      "created_utc": "2026-06-26T23:00:00Z"
+      "created_utc": "2026-06-26T23:00:00Z",
+      "total_scanned": 3221,
+      "downloaded_count": 3220
     }
   ],
   "universe_size": 3102,
