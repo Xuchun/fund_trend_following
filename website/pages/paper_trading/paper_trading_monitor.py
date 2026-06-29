@@ -146,11 +146,16 @@ if _m1_file.exists():
                     _pr_last = _sgt2.strftime("%Y-%m-%d %H:%M 新加坡时间（SGT）")
                 except Exception:
                     pass
-            _warn_lines.append(
+            _pr_dl    = _warn_pending.get("downloaded_count")
+            _pr_total = _warn_pending.get("total_scanned")
+            _pr_line  = (
                 f"- **⏳ 第 {_pr_attempt} 次自动重试等待中**：**{'、'.join(_warn_pending_tks)}** "
                 f"数据仍未下载成功。最后尝试下载时间：**{_pr_last}**。"
-                f"系统将于 **{_pr_sgt}** 自动重试，成功后此提示消失。"
             )
+            if _pr_dl is not None and _pr_total:
+                _pr_line += f"本次成功下载 **{_pr_dl:,}** 个，标的池共 **{_pr_total:,}** 个。"
+            _pr_line += f"系统将于 **{_pr_sgt}** 自动重试，成功后此提示消失。"
+            _warn_lines.append(_pr_line)
 
         # 计算下次重下时间：pending_retry 有则用其精确时间，否则用下一个交易日自动运行时间
         if _warn_pending_tks:
