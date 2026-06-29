@@ -1066,7 +1066,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
         # ── K线图（明日要执行交易的标的）────────────────────────────────────────
         _chart_sell_tks = [s["ticker"] for s in _pend_exits]
-        _chart_buy_tks  = [e["ticker"] for e in _exec_entries]
+        _chart_buy_tks  = sorted(
+            [e["ticker"] for e in _exec_entries],
+            key=lambda t: next((e.get("strength", 0) for e in _exec_entries if e["ticker"] == t), 0),
+            reverse=True,
+        )
         _chart_all_tks  = _chart_sell_tks + _chart_buy_tks
         if _chart_all_tks:
             _chart_opts = (
