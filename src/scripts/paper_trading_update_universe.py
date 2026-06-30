@@ -142,6 +142,9 @@ def main() -> None:
     with open(POSITIONS_PATH) as f:
         state = json.load(f)
 
+    # Use dynamic YF-unavailable list from positions.json (maintained by paper_trading_daily.py)
+    _YF_UNAVAILABLE = set(state.get("yf_persistent_unavailable", []))
+
     _tiingo_pool = df[
         (df["is_active"] == True) &
         (df["eligible_days"] >= 252) &
