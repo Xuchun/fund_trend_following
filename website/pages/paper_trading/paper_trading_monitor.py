@@ -1518,11 +1518,12 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
         with _tab_entry:
             _rejection_label = {
-                None:           "✅ 已选入（次日执行）",
-                "corr_reduced": "⚠️ 已选入（相关性减仓）",
-                "heat_limit":   "🔴 未选（热度上限）",
-                "cash_limit":   "🔴 未选（现金不足）",
-                "data_error":   "⚠️ 程序漏评（应选入）",
+                None:              "✅ 已选入（次日执行）",
+                "corr_reduced":    "⚠️ 已选入（相关性减仓）",
+                "heat_limit":      "🔴 未选（热度上限）",
+                "cash_limit":      "🔴 未选（现金不足）",
+                "data_error":      "⚠️ 程序漏评（应选入）",
+                "execution_error": "⚠️ 执行失败（应开仓，程序错误）",
             }
             if _ts_all_cands:
                 # Full funnel view: all raw breakout candidates with rejection reason
