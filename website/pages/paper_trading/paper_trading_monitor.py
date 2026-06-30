@@ -923,6 +923,37 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         else:
             st.markdown("（当前无 YF 无法下载的标的）")
 
+    with st.expander("⚠️ Tiingo 标的池的局限性与维护建议（点击展开）"):
+        st.markdown("""
+**标的池是"半静态"的**
+
+每天自动运行的 Tiingo 同步程序（`paper_trading_update_universe.py`）只做一件事：
+检查现有标的的 `endDate`，更新 `is_active` 状态（即检测已退市的标的）。
+它**不会**发现新的、尚未进入 CSV 的标的。
+
+**举例说明局限性**
+
+假设某标的历史价格从未超过 &#36;10，则当初生成 `tiingo_eligible_universe.csv` 时，
+它因为没有任何一天满足"close > &#36;10 且 ADV₆₀ > &#36;20M"而被排除在 CSV 之外。
+即使该标的半年后价格已远超 &#36;10、成交量也满足条件，
+每天的自动程序也不会把它加回来——因为 CSV 里根本没有这个标的的记录。
+
+同理，市场上随时可能有新上市（IPO）的标的或此前流动性不足、后来达标的标的，
+它们也无法被自动纳入标的池。
+
+**标的池的完整更新流程（手动，需在本地运行）**
+
+1. 更新本地 Tiingo 数据缓存（约 22,000 个标的的历史价格 parquet 文件）
+2. 重新运行 `python src/scripts/08_eligible_universe.py`，扫描所有本地 parquet，
+   重新计算每个标的的 `eligible_days`、`is_active` 等字段
+3. 将生成的 `data/tiingo_eligible_universe.csv` 推送到 GitHub
+
+**建议维护频率**
+
+每 **3～6 个月**手动更新一次标的池，以便将新达标标的纳入扫描范围，
+同时让退市时间较远的标的的 `is_active` 更精确。
+""")
+
     st.divider()
 
     # ═══════════════════════════════════════════════════════════════════════════
