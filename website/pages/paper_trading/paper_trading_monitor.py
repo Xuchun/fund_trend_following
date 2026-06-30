@@ -2957,7 +2957,7 @@ with tab2:
         _m2_stp  = [p for p in _m2_ok if p["is_stopped"]]
 
         if _m2_stp:
-            st.warning(f"⚠️ **{len(_m2_stp)} 只已触及止损** — IB 脚本运行后将自动生成退出订单")
+            st.warning(f"⚠️ **{len(_m2_stp)} 只已触及止损** — IB 程序运行后将自动生成退出订单")
 
         def _m2_status(p: dict) -> str:
             sr = p.get("stop_reason")
