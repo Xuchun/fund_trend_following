@@ -2162,5 +2162,13 @@
     "downloaded_count": 3081,
     "total_scanned": 3102,
     "updated_utc": "2026-06-29T23:29:43Z"
+  },
+  "universe_stats": {
+    "tiingo_eligible": 2199,
+    "yf_downloadable": 2194,
+    "yf_unavailable_in_pool": 5,
+    "total_active": 3099,
+    "total_delisted": 1378,
+    "updated_utc": "2026-06-30T01:22:36Z"
   }
 }
