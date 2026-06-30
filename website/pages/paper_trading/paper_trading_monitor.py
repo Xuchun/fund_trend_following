@@ -851,12 +851,21 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _ds_active_all = _ds_univ_stats.get("total_active",         _ds_active_all)
         _ds_delisted   = _ds_univ_stats.get("total_delisted",       _ds_delisted)
 
-    _ds_upd_label = f"  <span style='font-size:0.8em;color:#888;font-weight:normal'>最后更新：{_ds_univ_upd_sgt}</span>" if _ds_univ_upd_sgt else ""
-    st.markdown(f"**标的池统计**{_ds_upd_label}", unsafe_allow_html=True)
+    _ds_upd_label = (
+        f"&nbsp;&nbsp;<span style='font-size:0.8em;color:#888;font-weight:normal'>"
+        f"最后更新：{_ds_univ_upd_sgt}</span>"
+        if _ds_univ_upd_sgt else ""
+    )
+    st.markdown(
+        f"<strong>标的池统计</strong>{_ds_upd_label}",
+        unsafe_allow_html=True,
+    )
 
-    _dsm0, _dsm1, _dsm2, _dsm3, _dsm4 = st.columns(5)
+    _dsm0, _dsm_yf, _dsm1, _dsm2, _dsm3, _dsm4 = st.columns(6)
     _dsm0.metric("Tiingo 标的池（现役）", f"{_ds_n_tiingo:,}",
                  help="基于 Tiingo 数据：is_active=True，eligible_days≥252，排除结构性标的。包含 Yahoo Finance 无法下载的标的。每次定时任务运行后自动更新。")
+    _dsm_yf.metric("Yahoo Finance 标的池（现役）", f"{_ds_n_total:,}",
+                   help="用与 Tiingo 相同的策略筛选条件，从 Yahoo Finance 可下载的标的中计算出的实际每日扫描标的池大小。= Tiingo 标的池 − YF 无法下载。")
     _dsm1.metric("Yahoo Finance 可下载", f"{_ds_n_total:,}",
                  help="Tiingo 标的池中，Yahoo Finance 可正常下载价格数据、实际参与每日扫描的标的数。每次定时任务运行后自动更新。")
     _dsm2.metric("其中股票", f"{_ds_n_stock:,}")
