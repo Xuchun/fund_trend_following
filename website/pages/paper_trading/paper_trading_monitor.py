@@ -964,6 +964,30 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.markdown("**初始资金：** $200,000 USD（全新独立账户，调试期 2026-06-19 起，正式启动 2026-07-01）")
     st.markdown(f"上次更新：{_last_fetch_sgt} ｜ Yahoo Finance")
 
+    # ── GitHub Actions 运行状态 ────────────────────────────────────────────────
+    if _m1_last_upd_raw:
+        try:
+            import datetime as _dt_ga
+            _ga_last  = _dt_ga.datetime.strptime(_m1_last_upd_raw, "%Y-%m-%dT%H:%M:%SZ").replace(
+                tzinfo=_dt_ga.timezone.utc
+            )
+            _ga_hours = (_dt_ga.datetime.now(_dt_ga.timezone.utc) - _ga_last).total_seconds() / 3600
+            if _ga_hours < 26:
+                _ga_color, _ga_icon, _ga_note = "#2ca02c", "🟢", "正常"
+            elif _ga_hours < 48:
+                _ga_color, _ga_icon, _ga_note = "#ff7f0e", "🟡", "⚠️ 超过 26 小时未更新"
+            else:
+                _ga_color, _ga_icon, _ga_note = "#d62728", "🔴", "❌ 超过 48 小时未更新，请检查 GitHub Actions 工作流"
+            st.markdown(
+                f"<div style='padding:5px 14px;border-radius:6px;background:{_ga_color}18;"
+                f"border:1px solid {_ga_color}55;display:inline-block;margin:4px 0'>"
+                f"<span style='color:{_ga_color};font-weight:bold'>{_ga_icon} GitHub Actions 上次运行："
+                f"距今 <b>{_ga_hours:.1f} 小时</b>（{_ga_note}）</span></div>",
+                unsafe_allow_html=True,
+            )
+        except Exception:
+            pass
+
     # Current drawdown from all-time peak (nav_history + live nav)
     _all_nav_vals = [float(h["nav"]) for h in _m1_history] + [_m1_nav]
     _peak_nav     = max(_all_nav_vals) if _all_nav_vals else _m1_nav
