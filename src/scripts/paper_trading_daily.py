@@ -1071,6 +1071,15 @@ def main() -> None:
         if scan_tickers:
             univ_data = fetch_price_data(scan_tickers, period=args.universe_period)
 
+            # Remove from yf_persistent_unavailable any tickers that just succeeded
+            # (auto-recovery: previously flagged but now downloadable again).
+            _yf_persist_now = set(state.get("yf_persistent_unavailable", []))
+            _recovered_persist = set(univ_data.keys()) & _yf_persist_now
+            if _recovered_persist:
+                _yf_persist_now -= _recovered_persist
+                state["yf_persistent_unavailable"] = sorted(_yf_persist_now)
+                log.info(f"  Recovered from yf_persistent_unavailable: {sorted(_recovered_persist)}")
+
             # Track any tickers whose data was silently dropped (rate-limit) and
             # schedule them for an automatic retry 1 hour later via pending_retry.
             _missing_tickers = [t for t in scan_tickers if t not in univ_data]
