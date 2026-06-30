@@ -1554,7 +1554,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 show_df(pd.DataFrame(_cand_rows), width="stretch", hide_index=True)
             elif _ts_entry_sigs:
                 # Fallback: only approved signals available (old schema or first run)
-                st.caption("仅显示已选入信号（候选汇总数据将在下次日脚本运行后更新）")
+                st.caption("仅显示已选入信号（候选汇总数据将在下次日程序运行后更新）")
                 show_df(pd.DataFrame([{
                     "标的":    e["ticker"],
                     "突破强度": (f"{(e['strength']-1)*100:+.3f}%" if e.get("strength") else "—"),
@@ -2750,7 +2750,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         st.caption(
             "所有通过**个股筛选**（价格、ADV、突破、ATR、成交量）的标的，"
             "含被组合约束（热度上限/现金不足）拦截的个股及原因。"
-            "注：此处仅显示最近一次日脚本运行的候选明细；历史每日明细见『信号历史』表（汇总计数）。"
+            "注：此处仅显示最近一次日程序运行的候选明细；历史每日明细见『信号历史』表（汇总计数）。"
         )
         if _dl1_cands:
             show_df(pd.DataFrame([{
@@ -2765,7 +2765,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             width="stretch", hide_index=True)
         else:
             st.info(
-                "候选明细将在下次日脚本运行后自动填充（需运行更新后的 paper_trading_daily.py）。"
+                "候选明细将在下次日程序运行后自动填充（需运行更新后的 paper_trading_daily.py）。"
             )
 
     # 每日开仓信号明细（含突破强度）：从 signals_history 汇聚每天的 entry_signals
@@ -2793,7 +2793,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 pd.DataFrame(_dl1_daily_entries).sort_values(["日期", "突破强度"], ascending=[False, False]),
                 width="stretch", hide_index=True)
         else:
-            st.info("每日开仓信号数据将在下次日脚本运行后填充。")
+            st.info("每日开仓信号数据将在下次日程序运行后填充。")
 
     with st.expander(f"当前持仓（{len(_dl1_op)} 只）"):
         if _dl1_op:
@@ -3168,7 +3168,7 @@ git push
     ):
         st.caption(
             "所有通过**个股筛选**的标的（含被组合约束拦截的个股及原因）。"
-            "注：仅显示最近一次日脚本运行的候选明细；历史每日明细见『信号历史』表（汇总计数）。"
+            "注：仅显示最近一次日程序运行的候选明细；历史每日明细见『信号历史』表（汇总计数）。"
         )
         if _dl2_cands:
             show_df(pd.DataFrame([{
@@ -3182,7 +3182,7 @@ git push
             } for c in sorted(_dl2_cands, key=lambda x: x["ticker"])]),
             width="stretch", hide_index=True)
         else:
-            st.info("候选明细将在方法二日脚本运行后自动填充。")
+            st.info("候选明细将在方法二日程序运行后自动填充。")
 
     _dl2_daily_entries = []
     for _sh in _dl2_sig:
@@ -3208,7 +3208,7 @@ git push
                 pd.DataFrame(_dl2_daily_entries).sort_values(["日期", "突破强度"], ascending=[False, False]),
                 width="stretch", hide_index=True)
         else:
-            st.info("每日开仓信号数据将在方法二日脚本运行后填充。")
+            st.info("每日开仓信号数据将在方法二日程序运行后填充。")
 
     with st.expander(f"当前持仓（{len(_dl2_op)} 只）"):
         if _dl2_op:
