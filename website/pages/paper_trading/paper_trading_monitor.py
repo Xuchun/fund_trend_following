@@ -797,7 +797,8 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _ds_dl_fail  = _ds_dl_total - _ds_dl_ok
 
         _fetch_count_note = f"，共获取 **{len(_m1_tickers):,}** 个标的实时行情" if _m1_tickers else ""
-        _scan_count_note  = f"，共扫描 **{_ds_dl_ok:,}** 个标的" if _ds_dl_ok else ""
+        _yf_scan_count    = _m1.get("universe_stats", {}).get("yf_downloadable", 0)
+        _scan_count_note  = f"，共扫描 **{_yf_scan_count:,}** 个标的" if _yf_scan_count else ""
 
         st.markdown("**最新数据更新时间**")
         st.markdown(
