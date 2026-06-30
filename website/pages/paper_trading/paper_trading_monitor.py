@@ -3036,7 +3036,7 @@ with tab2:
 2. **启用 API 连接**：
    - TWS：File → Global Configuration → API → Settings
    - 勾选 "Enable ActiveX and Socket Clients"
-   - Socket port：**7497**（TWS Paper Trading）
+   - Socket port：**7497**（TWS 模拟交易）
    - 勾选 "Allow connections from localhost only"（安全）
 3. 推荐**重置 Paper Trading 账户**初始资金：
    - 右键账户 → Reset Paper Trading Account
