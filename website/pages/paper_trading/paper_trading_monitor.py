@@ -3032,7 +3032,7 @@ with tab2:
         st.markdown(f"""
 ### IB TWS 配置
 
-1. 登录 **IB Paper Trading 账户**（TWS 或 IB Gateway）
+1. 登录 **IB 模拟交易账户**（TWS 或 IB Gateway）
 2. **启用 API 连接**：
    - TWS：File → Global Configuration → API → Settings
    - 勾选 "Enable ActiveX and Socket Clients"
