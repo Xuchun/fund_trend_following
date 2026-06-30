@@ -894,9 +894,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         unsafe_allow_html=True,
     )
     st.markdown(
-        f"标的池中共 **{_ds_active_all:,}** 个标的仍在交易（is_active=True），"
-        f"另有 **{_ds_delisted:,}** 个已退市/被收购（保留历史记录，用于消除幸存者偏差）。"
-        f"每日扫描仅覆盖 Tiingo 历史数据 ≥252 个交易日、Yahoo Finance 可下载的现役标的。"
+        f"Tiingo 历史记录共收录 **{_ds_active_all + _ds_delisted:,}** 个标的，"
+        f"其中 **{_ds_active_all:,}** 个仍在交易（is_active=True）、"
+        f"**{_ds_delisted:,}** 个已退市/被收购（保留历史记录，用于消除幸存者偏差）。"
+        f"Tiingo 标的池（**{_ds_n_tiingo:,}** 个）为现役标的中 Tiingo 历史数据 ≥252 个交易日、且非结构性排除标的的子集。"
     )
 
     # ── Yahoo Finance 无法下载的标的明细（动态列表，来自 positions.json）────────
