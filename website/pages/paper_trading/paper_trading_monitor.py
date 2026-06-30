@@ -1875,7 +1875,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         _corr_verdict = f"✅ 平均相关 **{_avg_corr:.2f}**（低）——持仓分散化较好，各标的走势独立"
                     _max_note = (f"；最高对 **{_max_pair[0]} × {_max_pair[1]}** = **{_max_pair[2]:.2f}**"
                                  + ("，二者实质押注同一行情，若市场转向将同步触损" if _max_pair[2] > 0.7 else ""))
-                    st.caption(f"**解读：** {_corr_verdict}{_max_note}。")
+                    st.markdown(f"<span style='color:#111111'>**解读：** {_corr_verdict}{_max_note}。</span>", unsafe_allow_html=True)
 
         # ── 持仓行业/板块集中度 ──────────────────────────────────────────────────
         with st.spinner("加载行业数据（Yahoo Finance，缓存 24 小时）…"):
