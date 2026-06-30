@@ -1828,6 +1828,77 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         )
         st.plotly_chart(_fig, width="stretch")
 
+        # ── 组合相关性热力图 ─────────────────────────────────────────────────────
+        _corr_tickers = [p["ticker"] for p in _m1_ok]
+        if len(_corr_tickers) >= 2:
+            _corr_closes: dict = {}
+            for _ct_tk in _corr_tickers:
+                _ct_df = _get_df(_m1_raw, _ct_tk)
+                if _ct_df is not None and len(_ct_df) >= 20:
+                    _corr_closes[_ct_tk] = _ct_df["Close"].rename(_ct_tk)
+            if len(_corr_closes) >= 2:
+                _corr_price_df = pd.concat(list(_corr_closes.values()), axis=1).dropna()
+                _corr_rets     = _corr_price_df.pct_change().dropna()
+                _corr_mat      = _corr_rets.corr()
+                _n_corr        = len(_corr_mat)
+                _fig_corr = go.Figure(go.Heatmap(
+                    z=_corr_mat.values,
+                    x=_corr_mat.columns.tolist(),
+                    y=_corr_mat.index.tolist(),
+                    colorscale="RdYlGn",
+                    zmin=-1, zmax=1,
+                    text=[[f"{v:.2f}" for v in row] for row in _corr_mat.values],
+                    texttemplate="%{text}",
+                    hovertemplate="<b>%{y} × %{x}</b><br>相关性 = %{z:.2f}<extra></extra>",
+                ))
+                _fig_corr.update_layout(
+                    title=f"持仓相关性热力图（{_n_corr} 只，基于最近 300 日日收益率，绿=低相关/分散，红=高相关/集中）",
+                    height=max(340, _n_corr * 42 + 120),
+                    margin=dict(l=70, r=30, t=60, b=50),
+                    template="plotly_white",
+                )
+                st.plotly_chart(_fig_corr, width="stretch")
+
+        # ── 持仓行业/板块集中度 ──────────────────────────────────────────────────
+        with st.spinner("加载行业数据（Yahoo Finance，缓存 24 小时）…"):
+            _sec_data = [(p["ticker"], _fetch_sector(p["ticker"]), p["mkt_value"]) for p in _m1_ok]
+        _sec_grp_dict: dict = {}
+        for _stk, _ssec, _smv in _sec_data:
+            _sec_grp_dict.setdefault(_ssec, {"tickers": [], "mkt_value": 0.0})
+            _sec_grp_dict[_ssec]["tickers"].append(_stk)
+            _sec_grp_dict[_ssec]["mkt_value"] += _smv
+        _sec_grp_rows = [
+            {"行业/板块": k, "持仓数量": len(v["tickers"]), "市值合计": v["mkt_value"],
+             "占NAV(%)": round(v["mkt_value"] / _m1_nav * 100, 1) if _m1_nav else 0.0,
+             "标的列表": "、".join(sorted(v["tickers"]))}
+            for k, v in sorted(_sec_grp_dict.items(), key=lambda x: -x[1]["mkt_value"])
+        ]
+        _sec_grp_df = pd.DataFrame(_sec_grp_rows)
+        _fig_sec = go.Figure(go.Bar(
+            x=_sec_grp_df["行业/板块"],
+            y=_sec_grp_df["市值合计"] / 1000,
+            text=[f"{v:.1f}%" for v in _sec_grp_df["占NAV(%)"]],
+            textposition="auto",
+            marker_color="#1f77b4",
+            hovertemplate="<b>%{x}</b><br>市值 $%{y:.0f}K<extra></extra>",
+        ))
+        _fig_sec.update_layout(
+            title="持仓行业/板块集中度（市值加权）",
+            xaxis_title="行业/板块", yaxis_title="市值（$K）",
+            height=320, template="plotly_white",
+            margin=dict(l=60, r=20, t=60, b=100),
+            xaxis_tickangle=-30,
+        )
+        st.plotly_chart(_fig_sec, width="stretch")
+        show_df(
+            _sec_grp_df,
+            column_config={
+                "市值合计": st.column_config.NumberColumn(format="$%.0f"),
+                "占NAV(%)": st.column_config.NumberColumn(format="%.1f%%"),
+            },
+            hide_index=True,
+        )
+
     st.markdown("---")
 
     # ── Stop detail ──────────────────────────────────────────────────────────
