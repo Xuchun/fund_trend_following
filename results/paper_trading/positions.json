@@ -2193,11 +2193,11 @@
       "WFC-P-D"
     ],
     "scan_date": "2026-06-29",
-    "attempt": 1,
-    "downloaded_count": 3081,
-    "total_scanned": 3102,
-    "next_retry_utc": "2026-06-30T00:29:43Z",
-    "next_retry_sgt": "2026-06-30 08:29 SGT",
+    "attempt": 2,
+    "downloaded_count": 0,
+    "total_scanned": 21,
+    "next_retry_utc": "2026-06-30T02:22:36Z",
+    "next_retry_sgt": "2026-06-30 10:22 SGT",
     "created_utc": "2026-06-29T23:29:43Z"
   }
 }
