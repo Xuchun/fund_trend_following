@@ -747,14 +747,13 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.divider()
     st.subheader("一、数据 & 标的池")
 
-    # ── 常量（与 paper_trading_daily.py 保持同步）─────────────────────────────
+    # ── 常量 ──────────────────────────────────────────────────────────────────
     _DS_EXCL = {"FXI", "GDX", "KWEB", "VXX", "EMB", "ASHR", "ETH", "SPY", "SHY"}
-    _DS_YF_UNAVAIL = {
+    # Dynamic YF-unavailable list — read from positions.json (maintained automatically
+    # by paper_trading_daily.py; fallback to known initial set if not yet populated).
+    _DS_YF_UNAVAIL = set(_m1.get("yf_persistent_unavailable", [
         "SPLK", "SNCR", "WFC-P-L", "TTM", "TRUE",
-        "ZZK", "ZK", "VEDL", "TRML", "WFC-P-Y",
-        "SOVO", "T-P-A", "ZCZZT", "T-P-C", "WFC-P-Z",
-        "ZAZZT", "VBTX", "WFC-P-D",
-    }
+    ]))
 
     # ── 加载标的池 CSV ─────────────────────────────────────────────────────────
     _ds_csv  = _root / "data" / "tiingo_eligible_universe.csv"
@@ -763,14 +762,12 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     if not _ds_df.empty:
         _ds_active_all = int((_ds_df["is_active"] == True).sum())
         _ds_delisted   = int((_ds_df["is_active"] == False).sum())
-        # Tiingo 认定符合条件的全部现役标的（含YF无法下载的）
         _ds_tiingo_eligible = _ds_df[
             (_ds_df["is_active"] == True) &
             (_ds_df["eligible_days"] >= 252) &
             (~_ds_df["ticker"].isin(_DS_EXCL))
         ]
         _ds_n_tiingo = len(_ds_tiingo_eligible)
-        # 模拟交易实际扫描（排除YF无法下载的）
         _ds_pt = _ds_df[
             (_ds_df["is_active"] == True) &
             (_ds_df["eligible_days"] >= 252) &
