@@ -765,6 +765,14 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     if not _ds_df.empty:
         _ds_active_all = int((_ds_df["is_active"] == True).sum())
         _ds_delisted   = int((_ds_df["is_active"] == False).sum())
+        # Tiingo 认定符合条件的全部现役标的（含YF无法下载的）
+        _ds_tiingo_eligible = _ds_df[
+            (_ds_df["is_active"] == True) &
+            (_ds_df["eligible_days"] >= 252) &
+            (~_ds_df["ticker"].isin(_DS_EXCL))
+        ]
+        _ds_n_tiingo = len(_ds_tiingo_eligible)
+        # 模拟交易实际扫描（排除YF无法下载的）
         _ds_pt = _ds_df[
             (_ds_df["is_active"] == True) &
             (_ds_df["eligible_days"] >= 252) &
@@ -774,7 +782,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _ds_n_stock = len(_ds_pt) - _ds_n_etf
         _ds_n_total = len(_ds_pt)
     else:
-        _ds_active_all = _ds_delisted = _ds_n_etf = _ds_n_stock = _ds_n_total = 0
+        _ds_active_all = _ds_delisted = _ds_n_etf = _ds_n_stock = _ds_n_total = _ds_n_tiingo = 0
 
     # ── 数据来源 ───────────────────────────────────────────────────────────────
     _dsc1, _dsc2 = st.columns(2)
