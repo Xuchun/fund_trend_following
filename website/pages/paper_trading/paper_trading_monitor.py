@@ -837,13 +837,15 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     # ── 标的池数量统计 ─────────────────────────────────────────────────────────
     st.markdown("**标的池统计**")
-    _dsm1, _dsm2, _dsm3, _dsm4 = st.columns(4)
-    _dsm1.metric("模拟交易扫描标的数", f"{_ds_n_total:,}",
-                 help="is_active=True，eligible_days≥252，排除结构性标的及Yahoo Finance无法下载的标的")
+    _dsm0, _dsm1, _dsm2, _dsm3, _dsm4 = st.columns(5)
+    _dsm0.metric("Tiingo 标的池（现役）", f"{_ds_n_tiingo:,}",
+                 help="基于 Tiingo 数据：is_active=True，eligible_days≥252，排除结构性标的。包含 Yahoo Finance 无法下载的标的。")
+    _dsm1.metric("Yahoo Finance 可下载", f"{_ds_n_total:,}",
+                 help="Tiingo 标的池中，Yahoo Finance 可正常下载价格数据、实际参与每日扫描的标的数")
     _dsm2.metric("其中股票", f"{_ds_n_stock:,}")
     _dsm3.metric("其中 ETF", f"{_ds_n_etf:,}")
-    _dsm4.metric("仍在交易但 YF 无法下载", f"{len(_DS_YF_UNAVAIL):,}",
-                 help="Tiingo 确认仍在正常交易，Yahoo Finance 无法下载，不参与每日扫描")
+    _dsm4.metric("YF 无法下载", f"{_ds_n_tiingo - _ds_n_total:,}",
+                 help="Tiingo 确认仍在正常交易，但 Yahoo Finance 无法下载，不参与每日扫描")
 
     st.caption(
         f"标的池中共 **{_ds_active_all:,}** 个标的仍在交易（is_active=True），"
