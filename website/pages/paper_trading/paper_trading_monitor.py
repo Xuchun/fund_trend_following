@@ -1876,6 +1876,13 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     _max_note = (f"；最高对 **{_max_pair[0]} × {_max_pair[1]}** = **{_max_pair[2]:.2f}**"
                                  + ("，二者实质押注同一行情，若市场转向将同步触损" if _max_pair[2] > 0.7 else ""))
                     st.markdown(f"<span style='color:#111111'>**解读：** {_corr_verdict}{_max_note}。</span>", unsafe_allow_html=True)
+                    st.markdown(
+                        "<span style='color:#111111;font-size:0.85em'>"
+                        "判断标准：两两相关均值 **< 0.35** = 分散化良好；**0.35 – 0.60** = 中等，须关注高相关对；**> 0.60** = 偏高，组合实质同向。"
+                        "相关性基于最近 300 个交易日的日收益率计算，反映当前市场环境下各标的的历史同步程度。"
+                        "</span>",
+                        unsafe_allow_html=True,
+                    )
 
         # ── 持仓行业/板块集中度 ──────────────────────────────────────────────────
         with st.spinner("加载行业数据（Yahoo Finance，缓存 24 小时）…"):
