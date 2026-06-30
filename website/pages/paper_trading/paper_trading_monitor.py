@@ -934,8 +934,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         "**因此存在以下局限：** 若某标的历史价格从未超过 &#36;10，当初生成 CSV 时已被排除。"
         "即使该标的半年后价格远超 &#36;10 且成交量满足条件，每天的自动程序也不会把它加进来——"
         "因为 CSV 里根本没有这个标的的记录。"
-        "同理，新上市（IPO）标的或此前流动性不足、后来达标的标的，均无法被自动纳入。\n\n"
-        "**标的池完整更新流程（手动，需在本地运行，建议每 3～6 个月执行一次）：**\n"
+        "同理，新上市（IPO）标的或此前流动性不足、后来达标的标的，均无法被自动纳入。"
+    )
+    st.info(
+        "**标的池完整更新流程（手动，需在本地运行，建议每 3～6 个月执行一次）**\n\n"
         "1. 更新本地 Tiingo 数据缓存（约 22,000 个标的的历史价格 parquet 文件）\n"
         "2. 重新运行 `python src/scripts/08_eligible_universe.py`，重新计算所有标的的 `eligible_days`、`is_active` 等字段\n"
         "3. 将生成的 `data/tiingo_eligible_universe.csv` 推送到 GitHub"
