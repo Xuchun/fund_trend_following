@@ -55,6 +55,19 @@ def save_state(state: dict) -> None:
     log.info(f"State saved → {_PT_STATE}")
 
 
+_REQUIRED_PENDING_FIELDS = {"ticker", "signal_price", "atr", "signal_date", "strength"}
+
+def validate_pending_entries(state: dict) -> None:
+    """Raise ValueError if any pending_entry is missing required fields."""
+    for entry in state.get("pending_entries", []):
+        missing = _REQUIRED_PENDING_FIELDS - set(entry.keys())
+        if missing:
+            raise ValueError(
+                f"pending_entry '{entry.get('ticker', '?')}' is missing required fields: {sorted(missing)}. "
+                f"If this entry was manually added to positions.json, ensure all fields are present."
+            )
+
+
 # ── Yahoo Finance helpers ─────────────────────────────────────────────────────
 
 def _normalize_ohlcv(df: pd.DataFrame) -> pd.DataFrame:
