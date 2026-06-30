@@ -995,8 +995,15 @@ def main() -> None:
     _bear_exempt = list(PARAMS.bear_exempt_tickers)  # e.g. ['GLD', 'TLT', 'UUP']
 
     if not args.no_entries:
-        universe_df = pd.read_csv(_UNIVERSE)
-        active_set  = set(universe_df[universe_df["is_active"] == True]["ticker"].tolist())
+        universe_df  = pd.read_csv(_UNIVERSE)
+        _EXCL_TICKERS = {"FXI", "GDX", "KWEB", "VXX", "EMB", "ASHR", "ETH", "SPY", "SHY"}
+        active_set   = set(
+            universe_df[
+                (universe_df["is_active"] == True) &
+                (universe_df["eligible_days"] >= 252) &
+                (~universe_df["ticker"].isin(_EXCL_TICKERS))
+            ]["ticker"].tolist()
+        )
 
         if regime_ok:
             scan_tickers = list(active_set)
