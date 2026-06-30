@@ -3038,9 +3038,9 @@ with tab2:
    - 勾选 "Enable ActiveX and Socket Clients"
    - Socket port：**7497**（TWS 模拟交易）
    - 勾选 "Allow connections from localhost only"（安全）
-3. 推荐**重置 Paper Trading 账户**初始资金：
-   - 右键账户 → Reset Paper Trading Account
-   - 脚本使用自己的 $200K NAV 计算，但 IB 账户余额一致更易对账
+3. 推荐**重置模拟交易账户**初始资金：
+   - 右键账户 → Reset Paper Trading Account（IB 界面按钮原文）
+   - 程序使用自己的 $200K NAV 计算，但 IB 账户余额一致更易对账
 
 ### 每日运行
 
