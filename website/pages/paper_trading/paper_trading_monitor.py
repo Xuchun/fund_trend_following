@@ -869,7 +869,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                       "原始收盘价 > $10 与 ADV₆₀ > $20M 的标的，排除结构性标的。"
                       "注意：这是历史资格认定，不代表标的当前一定满足价格/成交量条件。"
                       "实际信号生成时会再次实时检查 price > $10 且 ADV₆₀ > $60M（精筛）。")
-    _dsm1.metric("每日扫描标的数", f"{_ds_n_total:,}",
+    _dsm1.metric("每日YF可下载标的数", f"{_ds_n_total:,}",
                  help="每天 paper trading 脚本实际下载并扫描的标的数。"
                       "= Tiingo 标的池 − YF 无法下载（持续无法从 Yahoo Finance 下载的标的）。"
                       "信号生成时还会进一步实时检查 price > $10 且 ADV₆₀ > $60M（精筛）。")
@@ -887,7 +887,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         unsafe_allow_html=True,
     )
     st.markdown(
-        "<strong>每日扫描标的数定义：</strong>"
+        "<strong>每日YF可下载标的数定义：</strong>"
         "Tiingo 标的池中，Yahoo Finance 可正常下载价格数据的标的，"
         "即每个工作日 paper trading 脚本实际下载并扫描信号的范围。"
         "= Tiingo 标的池（现役）− YF 无法下载。",
