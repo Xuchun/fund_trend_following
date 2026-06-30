@@ -3059,7 +3059,7 @@ python src/scripts/ib_paper_trading_daily.py \\
 
 # 完成后推送到 GitHub
 git add results/paper_trading/ib_state.json
-git commit -m "IB paper trading: YYYY-MM-DD"
+git commit -m "IB 模拟交易: YYYY-MM-DD"
 git push
 ```
 
