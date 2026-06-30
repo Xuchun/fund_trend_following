@@ -679,7 +679,7 @@ with tab1:
 - 工作流文件：`.github/workflows/paper_trading_m1.yml`
 - 触发时间：每个交易日 **夏令时 7:00 PM / 冬令时 6:00 PM**（23:00 UTC）自动运行，确保 Yahoo Finance 收盘数据已就绪
 - 运行内容：下载 Yahoo Finance 数据 → 计算信号 → 更新 positions.json → 自动推送到 GitHub
-- 也可在 GitHub → Actions → "Paper Trading M1" 页面手动触发
+- 也可在 GitHub → Actions → "模拟交易 M1" 页面手动触发
 
 如需临时手动运行（调试用）：
 ```bash
