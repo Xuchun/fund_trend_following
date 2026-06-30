@@ -1859,6 +1859,24 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 )
                 st.plotly_chart(_fig_corr, width="stretch")
 
+                # 相关性解读
+                _corr_pairs = [
+                    (_corr_mat.columns[_ci], _corr_mat.columns[_cj], float(_corr_mat.iloc[_ci, _cj]))
+                    for _ci in range(_n_corr) for _cj in range(_ci + 1, _n_corr)
+                ]
+                if _corr_pairs:
+                    _avg_corr = sum(p[2] for p in _corr_pairs) / len(_corr_pairs)
+                    _max_pair = max(_corr_pairs, key=lambda x: x[2])
+                    if _avg_corr > 0.6:
+                        _corr_verdict = f"⚠️ 平均相关 **{_avg_corr:.2f}**（偏高）——组合多数持仓在押注同一方向，回撤时会同步下跌，分散化效果有限"
+                    elif _avg_corr > 0.35:
+                        _corr_verdict = f"平均相关 **{_avg_corr:.2f}**（中等）——有一定分散效果，但高相关对需关注"
+                    else:
+                        _corr_verdict = f"✅ 平均相关 **{_avg_corr:.2f}**（低）——持仓分散化较好，各标的走势独立"
+                    _max_note = (f"；最高对 **{_max_pair[0]} × {_max_pair[1]}** = **{_max_pair[2]:.2f}**"
+                                 + ("，二者实质押注同一行情，若市场转向将同步触损" if _max_pair[2] > 0.7 else ""))
+                    st.caption(f"**解读：** {_corr_verdict}{_max_note}。")
+
         # ── 持仓行业/板块集中度 ──────────────────────────────────────────────────
         with st.spinner("加载行业数据（Yahoo Finance，缓存 24 小时）…"):
             _sec_data = [(p["ticker"], _fetch_sector(p["ticker"]), p["mkt_value"]) for p in _m1_ok]
