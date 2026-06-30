@@ -792,6 +792,41 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             f"- **策略信号计算**：{_m1_last_upd}"
         )
 
+        # ── 下载统计 ──────────────────────────────────────────────────────────
+        _ds_stats   = _m1.get("last_download_stats", {})
+        _ds_pending = _m1.get("pending_retry", {})
+
+        if _ds_stats:
+            _ds_dl_ok    = _ds_stats.get("downloaded_count", 0)
+            _ds_dl_total = _ds_stats.get("total_scanned", 0)
+            _ds_dl_fail  = _ds_dl_total - _ds_dl_ok
+            # 转换更新时间为 SGT
+            _ds_upd_raw  = _ds_stats.get("updated_utc", "")
+            _ds_upd_sgt  = ""
+            if _ds_upd_raw:
+                try:
+                    import datetime as _ddt
+                    _u = _ddt.datetime.fromisoformat(_ds_upd_raw.replace("Z", "+00:00"))
+                    _ds_upd_sgt = (_u + _ddt.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M SGT")
+                except Exception:
+                    pass
+
+            if _ds_dl_fail == 0:
+                st.success(
+                    f"上次下载（{_ds_upd_sgt}）：成功下载 **{_ds_dl_ok:,}** 个标的，"
+                    f"标的池共 **{_ds_dl_total:,}** 个，**全部下载成功**。"
+                )
+            else:
+                _ds_retry_tks  = _ds_pending.get("tickers", [])
+                _ds_next_retry = _ds_pending.get("next_retry_sgt", "")
+                st.warning(
+                    f"上次下载（{_ds_upd_sgt}）：成功下载 **{_ds_dl_ok:,}** 个，"
+                    f"标的池共 **{_ds_dl_total:,}** 个，"
+                    f"**{_ds_dl_fail}** 个下载失败"
+                    + (f"（{'、'.join(_ds_retry_tks)}）" if _ds_retry_tks else "") + "。"
+                    + (f"\n\n下次自动重试：**{_ds_next_retry}**。" if _ds_next_retry else "")
+                )
+
     # ── 标的池数量统计 ─────────────────────────────────────────────────────────
     st.markdown("**标的池统计**")
     _dsm1, _dsm2, _dsm3, _dsm4 = st.columns(4)
