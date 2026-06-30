@@ -1020,6 +1020,24 @@ def main() -> None:
                 (~universe_df["ticker"].isin(_EXCL_TICKERS | _YF_UNAVAILABLE))
             ]["ticker"].tolist()
         )
+        _tiingo_eligible = universe_df[
+            (universe_df["is_active"] == True) &
+            (universe_df["eligible_days"] >= 252) &
+            (~universe_df["ticker"].isin(_EXCL_TICKERS))
+        ]
+        state["universe_stats"] = {
+            "tiingo_eligible":      len(_tiingo_eligible),
+            "yf_downloadable":      len(active_set),
+            "yf_unavailable_in_pool": len(_tiingo_eligible) - len(active_set),
+            "total_active":         int((universe_df["is_active"] == True).sum()),
+            "total_delisted":       int((universe_df["is_active"] == False).sum()),
+            "updated_utc":          datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        }
+        log.info(
+            f"  Universe: Tiingo-eligible={len(_tiingo_eligible)}, "
+            f"YF-downloadable={len(active_set)}, "
+            f"YF-unavailable-in-pool={len(_tiingo_eligible) - len(active_set)}"
+        )
 
         if regime_ok:
             scan_tickers = list(active_set)
