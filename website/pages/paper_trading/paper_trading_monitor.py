@@ -836,25 +836,31 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     # ── 标的池数量统计 ─────────────────────────────────────────────────────────
     # 从 positions.json 读取每日脚本写入的最新统计（含时间戳）
     _ds_univ_stats = _m1.get("universe_stats", {})
-    _ds_univ_upd_sgt = ""
-    if _ds_univ_stats.get("updated_utc"):
+    if _ds_univ_stats:
+        _ds_n_tiingo   = _ds_univ_stats.get("tiingo_eligible",  _ds_n_tiingo)
+        _ds_n_total    = _ds_univ_stats.get("yf_downloadable",  _ds_n_total)
+        _ds_active_all = _ds_univ_stats.get("total_active",     _ds_active_all)
+        _ds_delisted   = _ds_univ_stats.get("total_delisted",   _ds_delisted)
+
+    # 优先显示 Tiingo 同步时间；若无则回退到 universe_stats.updated_utc
+    def _to_sgt(utc_str: str) -> str:
+        if not utc_str:
+            return ""
         try:
             import datetime as _ddt2
-            _u2 = _ddt2.datetime.fromisoformat(_ds_univ_stats["updated_utc"].replace("Z", "+00:00"))
-            _ds_univ_upd_sgt = (_u2 + _ddt2.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M SGT")
+            _u = _ddt2.datetime.fromisoformat(utc_str.replace("Z", "+00:00"))
+            return (_u + _ddt2.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M SGT")
         except Exception:
-            pass
-    # 若 positions.json 有最新统计则优先使用，否则回退到 CSV 实时计算
-    if _ds_univ_stats:
-        _ds_n_tiingo = _ds_univ_stats.get("tiingo_eligible",        _ds_n_tiingo)
-        _ds_n_total  = _ds_univ_stats.get("yf_downloadable",        _ds_n_total)
-        _ds_active_all = _ds_univ_stats.get("total_active",         _ds_active_all)
-        _ds_delisted   = _ds_univ_stats.get("total_delisted",       _ds_delisted)
+            return ""
+
+    _ds_tiingo_sync_sgt = _to_sgt(_m1.get("tiingo_universe_synced_utc", ""))
+    _ds_univ_upd_sgt    = _to_sgt(_ds_univ_stats.get("updated_utc", ""))
+    _ds_sync_label      = _ds_tiingo_sync_sgt or _ds_univ_upd_sgt
 
     _ds_upd_label = (
         f"&nbsp;&nbsp;<span style='font-size:0.8em;color:#888;font-weight:normal'>"
-        f"最后更新：{_ds_univ_upd_sgt}</span>"
-        if _ds_univ_upd_sgt else ""
+        f"Tiingo 最后同步：{_ds_sync_label}</span>"
+        if _ds_sync_label else ""
     )
     st.markdown(
         f"<strong>标的池统计</strong>{_ds_upd_label}",
