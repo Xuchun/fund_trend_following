@@ -851,8 +851,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             return ""
 
     _ds_tiingo_sync_sgt = _to_sgt(_m1.get("tiingo_universe_synced_utc", ""))
-    _ds_univ_upd_sgt    = _to_sgt(_ds_univ_stats.get("updated_utc", ""))
-    _ds_sync_label      = _ds_tiingo_sync_sgt or _ds_univ_upd_sgt
+    _ds_sync_label      = _ds_tiingo_sync_sgt  # 只显示 Tiingo 专用同步时间，不 fallback 到交易程序运行时间
 
     _ds_upd_label = (
         f"&nbsp;&nbsp;Tiingo 最后同步：{_ds_sync_label}"
