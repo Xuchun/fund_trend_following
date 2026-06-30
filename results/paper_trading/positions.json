@@ -2157,5 +2157,5 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "活跃标的数（is_active=True）且 eligible_days≥252 且排除结构性非交易标的（FXI/GDX/VXX/SPY 等9只），与回测活跃部分一致"
+  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）"
 }
