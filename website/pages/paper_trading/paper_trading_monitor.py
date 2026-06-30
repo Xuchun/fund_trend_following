@@ -1917,6 +1917,30 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             hide_index=True,
         )
 
+        # 板块集中度解读
+        if not _sec_grp_df.empty:
+            _sec_top   = _sec_grp_df.iloc[0]
+            _sec_top_pct = float(_sec_top["占NAV(%)"])
+            _sec_top_name = str(_sec_top["行业/板块"])
+            _sec_n     = len(_sec_grp_df)
+            _sec_hhi   = sum((float(w) / 100) ** 2 for w in _sec_grp_df["占NAV(%)"])
+            if _sec_top_pct > 30:
+                _sec_verdict = (
+                    f"⚠️ **{_sec_top_name}** 占 NAV **{_sec_top_pct:.1f}%**——"
+                    f"若该板块整体回调，组合实际跌幅会远超单只止损预期，须关注行业层面的尾部风险"
+                )
+            elif _sec_hhi > 0.25:
+                _sec_verdict = (
+                    f"集中度偏高（HHI={_sec_hhi:.2f}），**{_sec_top_name}** 主导组合风险——"
+                    f"考虑是否补充非相关板块标的来分散"
+                )
+            else:
+                _sec_verdict = (
+                    f"✅ {_sec_n} 个板块均衡分布（HHI={_sec_hhi:.2f}），"
+                    f"无单一行业主导，板块层面分散化合理"
+                )
+            st.caption(f"**解读：** {_sec_verdict}。")
+
     st.markdown("---")
 
     # ── Stop detail ──────────────────────────────────────────────────────────
