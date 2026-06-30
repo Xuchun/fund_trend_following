@@ -925,7 +925,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     st.markdown("**Tiingo 标的池的局限性与维护建议**")
     st.markdown(
-        "每天自动运行的 Tiingo 同步程序只做一件事：更新 CSV 中所有标的的交易状态（是否仍在交易）。"
+        "每个工作日（周一至周五）自动运行的 Tiingo 同步程序只做一件事：更新 CSV 中所有标的的交易状态（是否仍在交易）。"
         "它**不会**发现新的、尚未进入 CSV 的标的。\n\n"
         "**CSV 的筛选口径：** CSV 由本地脚本 `08_eligible_universe.py` 手动生成，"
         "扫描本地 Tiingo 历史数据缓存（约 22,000 个标的），"
