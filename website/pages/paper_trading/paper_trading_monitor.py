@@ -786,7 +786,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         st.markdown(
             "| 用途 | 来源 |\n|---|---|\n"
             "| 每日价格数据（信号计算、止损更新） | **Yahoo Finance** |\n"
-            "| 标的池资格认定（历史上市记录） | **Tiingo** |"
+            "| 标的池资格认定（历史价格 / 成交量筛选 + 是否仍在交易） | **Tiingo** |"
         )
     with _dsc2:
         st.markdown("**最新数据更新时间**")
