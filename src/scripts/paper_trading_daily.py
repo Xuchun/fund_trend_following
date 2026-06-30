@@ -997,12 +997,22 @@ def main() -> None:
 
     if not args.no_entries:
         universe_df  = pd.read_csv(_UNIVERSE)
+        # Structural exclusions: vol/inverse ETFs + auxiliary market-regime tickers
         _EXCL_TICKERS = {"FXI", "GDX", "KWEB", "VXX", "EMB", "ASHR", "ETH", "SPY", "SHY"}
+        # Yahoo Finance cannot fetch these tickers (wrong format or unavailable),
+        # but they ARE still actively trading — confirmed via Tiingo on 2026-06-30.
+        # Kept is_active=True in CSV to preserve accuracy of "数据与标的池" page.
+        _YF_UNAVAILABLE = {
+            "SPLK", "SNCR", "WFC-P-L", "TTM", "TRUE",   # eligible_days >= 252
+            "ZZK", "ZK", "VEDL", "TRML", "WFC-P-Y",      # eligible_days < 252
+            "SOVO", "T-P-A", "ZCZZT", "T-P-C", "WFC-P-Z",
+            "ZAZZT", "VBTX", "WFC-P-D",
+        }
         active_set   = set(
             universe_df[
                 (universe_df["is_active"] == True) &
                 (universe_df["eligible_days"] >= 252) &
-                (~universe_df["ticker"].isin(_EXCL_TICKERS))
+                (~universe_df["ticker"].isin(_EXCL_TICKERS | _YF_UNAVAILABLE))
             ]["ticker"].tolist()
         )
 
