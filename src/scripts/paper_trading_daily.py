@@ -1002,18 +1002,29 @@ def main() -> None:
 
     if not args.no_entries:
         universe_df  = pd.read_csv(_UNIVERSE)
-        # Structural exclusions: vol/inverse ETFs + auxiliary market-regime tickers
         _EXCL_TICKERS = {"FXI", "GDX", "KWEB", "VXX", "EMB", "ASHR", "ETH", "SPY", "SHY"}
-        # Yahoo Finance cannot fetch these tickers (wrong format or unavailable),
-        # but they ARE still actively trading — confirmed via Tiingo on 2026-06-30.
-        # Kept is_active=True in CSV to preserve accuracy of "数据与标的池" page.
-        _YF_UNAVAILABLE = {
-            "SPLK", "SNCR", "WFC-P-L", "TTM", "TRUE",   # eligible_days >= 252
-            "ZZK", "ZK", "VEDL", "TRML", "WFC-P-Y",      # eligible_days < 252
-            "SOVO", "T-P-A", "ZCZZT", "T-P-C", "WFC-P-Z",
-            "ZAZZT", "VBTX", "WFC-P-D",
-        }
-        active_set   = set(
+
+        # ── Dynamic YF-unavailable list ────────────────────────────────────────
+        # If yesterday's pending_retry is still open when today's main run starts,
+        # all retries were exhausted. A small count (≤10) means truly unavailable
+        # (not a transient rate-limit event that affects many tickers at once).
+        _stale_retry = state.get("pending_retry", {})
+        if _stale_retry and _stale_retry.get("scan_date", str(today)) != str(today):
+            _stale_tickers = _stale_retry.get("tickers", [])
+            if 0 < len(_stale_tickers) <= 10:
+                _yf_persist = set(state.get("yf_persistent_unavailable", []))
+                _newly_flagged = set(_stale_tickers) - _yf_persist
+                if _newly_flagged:
+                    _yf_persist |= _newly_flagged
+                    state["yf_persistent_unavailable"] = sorted(_yf_persist)
+                    log.warning(
+                        f"  Auto-flagged as YF-persistent-unavailable "
+                        f"(exhausted all retries): {sorted(_newly_flagged)}"
+                    )
+
+        _YF_UNAVAILABLE = set(state.get("yf_persistent_unavailable", []))
+
+        active_set = set(
             universe_df[
                 (universe_df["is_active"] == True) &
                 (universe_df["eligible_days"] >= 252) &
@@ -1026,12 +1037,12 @@ def main() -> None:
             (~universe_df["ticker"].isin(_EXCL_TICKERS))
         ]
         state["universe_stats"] = {
-            "tiingo_eligible":      len(_tiingo_eligible),
-            "yf_downloadable":      len(active_set),
+            "tiingo_eligible":        len(_tiingo_eligible),
+            "yf_downloadable":        len(active_set),
             "yf_unavailable_in_pool": len(_tiingo_eligible) - len(active_set),
-            "total_active":         int((universe_df["is_active"] == True).sum()),
-            "total_delisted":       int((universe_df["is_active"] == False).sum()),
-            "updated_utc":          datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "total_active":           int((universe_df["is_active"] == True).sum()),
+            "total_delisted":         int((universe_df["is_active"] == False).sum()),
+            "updated_utc":            datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         }
         log.info(
             f"  Universe: Tiingo-eligible={len(_tiingo_eligible)}, "
@@ -1039,12 +1050,18 @@ def main() -> None:
             f"YF-unavailable-in-pool={len(_tiingo_eligible) - len(active_set)}"
         )
 
+        # ── Weekly recovery check (Monday): try known-unavailable tickers ──────
+        # If any succeed, they'll be removed from yf_persistent_unavailable below.
+        _tiingo_pool_tickers = set(_tiingo_eligible["ticker"].tolist())
+        _persist_in_pool = _YF_UNAVAILABLE & _tiingo_pool_tickers
+
         if regime_ok:
             scan_tickers = list(active_set)
+            if today.weekday() == 0 and _persist_in_pool:
+                scan_tickers += sorted(_persist_in_pool)
+                log.info(f"  Monday recovery check: also scanning {sorted(_persist_in_pool)}")
             log.info("--- Scanning full universe for new entry signals (BULL) ---")
         elif _bear_exempt:
-            # Bear market: only scan exempt tickers that are active in the universe
-            # (mirrors backtest: [t for t in universe if t in bear_exempt])
             scan_tickers = [t for t in _bear_exempt if t in active_set]
             log.info(f"--- BEAR regime — scanning exempt tickers only: {scan_tickers} ---")
         else:
