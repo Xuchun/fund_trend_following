@@ -880,33 +880,36 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _dsm4.metric("YF 无法下载", f"{_ds_n_tiingo - _ds_n_total:,}",
                  help="Tiingo 确认仍在正常交易，但 Yahoo Finance 无法下载，不参与每日扫描")
 
-    st.caption(
+    st.markdown(
         "**Tiingo 标的池定义（粗筛口径）**：历史上曾有 ≥252 个交易日同时满足"
         "原始收盘价 > $10 且 ADV₆₀ > $20M、且 Tiingo 确认仍在交易的标的。"
         "这是历史资格认定，不代表当前一定满足价格/成交量条件；"
         "实际信号生成时会额外实时检查当天 price > $10 且 ADV₆₀ > $60M（精筛），不满足者不产生信号。"
     )
-    st.caption(
+    st.markdown(
         f"标的池中共 **{_ds_active_all:,}** 个标的仍在交易（is_active=True），"
         f"另有 **{_ds_delisted:,}** 个已退市/被收购（保留历史记录，用于消除幸存者偏差）。"
         f"每日扫描仅覆盖 Tiingo 历史数据 ≥252 个交易日、Yahoo Finance 可下载的现役标的。"
     )
 
-    # ── Yahoo Finance 无法下载的标的明细（仅限 Tiingo 标的池内的5个）──────────
-    _ds_yf_in_pool = [t for t in _DS_YF_UNAVAIL
-                      if not _ds_df.empty and
-                      len(_ds_df[(_ds_df["ticker"] == t) & (_ds_df["eligible_days"] >= 252)]) > 0]
-    _ds_yf_below252 = sorted(set(_DS_YF_UNAVAIL) - set(_ds_yf_in_pool))
+    # ── Yahoo Finance 无法下载的标的明细（动态列表，来自 positions.json）────────
+    # All tickers in yf_persistent_unavailable are by construction in the Tiingo pool
+    # (eligible_days≥252), because they were only flagged after failing to download
+    # while they were part of active_set (which already filters eligible_days≥252).
+    _ds_yf_unavail_list = sorted(_DS_YF_UNAVAIL)
 
-    with st.expander(f"Tiingo 标的池中 Yahoo Finance 无法下载的 {len(_ds_yf_in_pool)} 个标的（点击展开）"):
-        st.caption(
-            f"以下 **{len(_ds_yf_in_pool)}** 个标的在 Tiingo 标的池内（eligible_days≥252），"
-            "但 Yahoo Finance 无法下载，已从每日扫描中排除。"
-            f"另有 **{len(_ds_yf_below252)}** 个 YF 无法下载的标的（{', '.join(_ds_yf_below252)}）"
-            "因 Tiingo 历史数据不足252个交易日，本就不在标的池内。"
+    with st.expander(
+        f"Tiingo 标的池中 Yahoo Finance 无法下载的 {len(_ds_yf_unavail_list)} 个标的"
+        "（自动维护，点击展开）"
+    ):
+        st.markdown(
+            f"以下 **{len(_ds_yf_unavail_list)}** 个标的在 Tiingo 标的池内（eligible_days≥252），"
+            "但 Yahoo Finance 持续无法下载，已从每日扫描中排除。"
+            "此列表由系统自动维护：连续失败且重试后仍无法恢复的标的自动加入；"
+            "每周一自动尝试重新下载，成功则自动移出。"
         )
         _ds_yf_rows = []
-        for _dst in sorted(_ds_yf_in_pool):
+        for _dst in _ds_yf_unavail_list:
             if not _ds_df.empty:
                 _dsr = _ds_df[_ds_df["ticker"] == _dst]
                 _ds_days = int(_dsr["eligible_days"].values[0]) if len(_dsr) else "N/A"
@@ -914,8 +917,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 _ds_days = "N/A"
             _ds_type = "ETF" if _dst in _ETF_SET else "股票"
             _ds_yf_rows.append({"标的": _dst, "类型": _ds_type, "Tiingo 历史天数": _ds_days})
-        st.dataframe(pd.DataFrame(_ds_yf_rows).sort_values("标的"),
-                     use_container_width=True, hide_index=True)
+        if _ds_yf_rows:
+            st.dataframe(pd.DataFrame(_ds_yf_rows).sort_values("标的"),
+                         use_container_width=True, hide_index=True)
+        else:
+            st.markdown("（当前无 YF 无法下载的标的）")
 
     st.divider()
 
