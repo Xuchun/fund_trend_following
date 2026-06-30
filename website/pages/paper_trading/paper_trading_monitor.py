@@ -3028,7 +3028,7 @@ with tab2:
             show_df(_ord_df[_show_cols], width="stretch", hide_index=True)
 
     # ── Setup guide ───────────────────────────────────────────────────────────
-    with st.expander("⚙️ IB Paper Trading 配置与使用指南"):
+    with st.expander("⚙️ IB 模拟交易配置与使用指南"):
         st.markdown(f"""
 ### IB TWS 配置
 
