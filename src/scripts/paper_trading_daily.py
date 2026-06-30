@@ -943,6 +943,7 @@ def main() -> None:
     log.info(f"=== Strategy 1.0 Paper Trading: {today} ===")
 
     state = load_state()
+    validate_pending_entries(state)
     log.info(f"  Open positions: {len(state['positions'])} | Cash: ${state.get('cash',0)/1e6:.2f}M")
 
     # ── Step 1: fetch data for all tickers needed today ───────────────────────
