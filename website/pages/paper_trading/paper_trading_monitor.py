@@ -869,9 +869,13 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     _dsm0, _dsm_yf, _dsm1, _dsm2, _dsm3, _dsm4 = st.columns(6)
     _dsm0.metric("Tiingo 标的池（现役）", f"{_ds_n_tiingo:,}",
-                 help="基于 Tiingo 数据：is_active=True，eligible_days≥252，排除结构性标的。包含 Yahoo Finance 无法下载的标的。每次定时任务运行后自动更新。")
+                 help="粗筛口径：Tiingo 确认仍在交易（is_active=True）且历史上曾有 ≥252 天同时满足"
+                      "原始收盘价 > $10 与 ADV₆₀ > $20M 的标的，排除结构性标的。"
+                      "注意：这是历史资格认定，不代表标的当前一定满足价格/成交量条件。"
+                      "实际信号生成时会再次实时检查 price > $10 且 ADV₆₀ > $60M（精筛）。")
     _dsm_yf.metric("Yahoo Finance 标的池（现役）", f"{_ds_n_total:,}",
-                   help="用与 Tiingo 相同的策略筛选条件，从 Yahoo Finance 可下载的标的中计算出的实际每日扫描标的池大小。= Tiingo 标的池 − YF 无法下载。")
+                   help="Tiingo 标的池中，Yahoo Finance 可正常下载价格数据的标的，即每日实际参与扫描的范围。"
+                        "= Tiingo 标的池 − YF 无法下载。同样为粗筛口径，信号生成时仍有精筛。")
     _dsm1.metric("Yahoo Finance 可下载", f"{_ds_n_total:,}",
                  help="Tiingo 标的池中，Yahoo Finance 可正常下载价格数据、实际参与每日扫描的标的数。每次定时任务运行后自动更新。")
     _dsm2.metric("其中股票", f"{_ds_n_stock:,}")
@@ -883,6 +887,8 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         f"标的池中共 **{_ds_active_all:,}** 个标的仍在交易（is_active=True），"
         f"另有 **{_ds_delisted:,}** 个已退市/被收购（保留历史记录，用于消除幸存者偏差）。"
         f"每日扫描仅覆盖 Tiingo 历史数据≥252个交易日、Yahoo Finance 可下载的现役标的。"
+        f"以上数量为**粗筛口径**（历史资格认定：曾有≥252天满足原始收盘价 > $10 且 ADV₆₀ > $20M）；"
+        f"实际信号生成时会额外实时检查当天 price > $10 且 ADV₆₀ > $60M，不满足者不产生信号。"
     )
 
     # ── Yahoo Finance 无法下载的标的明细（仅限 Tiingo 标的池内的5个）──────────
