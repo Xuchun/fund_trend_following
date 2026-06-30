@@ -870,11 +870,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                  help="粗筛口径：Tiingo 确认仍在交易（is_active=True）且历史上曾有 ≥252 天同时满足"
                       "原始收盘价 > $10 与 ADV₆₀ > $20M 的标的，排除结构性标的。"
                       "注意：这是历史资格认定，不代表标的当前一定满足价格/成交量条件。"
-                      "实际信号生成时会再次实时检查 price > $10 且 ADV₆₀ > $60M（精筛）。")
+                      "实际信号生成时会再次实时检查 price > $10、ADV₆₀ > $60M、且今日成交量 ≥ 1.5× 60日均量（精筛）。")
     _dsm1.metric("每日YF可下载标的数", f"{_ds_n_total:,}",
                  help="每天 模拟交易程序实际下载并扫描的标的数。"
                       "= Tiingo 标的池 − YF 无法下载（持续无法从 Yahoo Finance 下载的标的）。"
-                      "信号生成时还会进一步实时检查 price > $10 且 ADV₆₀ > $60M（精筛）。")
+                      "信号生成时还会进一步实时检查 price > $10、ADV₆₀ > $60M、且今日成交量 ≥ 1.5× 60日均量（精筛）。")
     _dsm2.metric("其中股票", f"{_ds_n_stock:,}")
     _dsm3.metric("其中 ETF", f"{_ds_n_etf:,}")
     _dsm4.metric("YF 无法下载", f"{_ds_n_tiingo - _ds_n_total:,}",
