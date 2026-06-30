@@ -789,20 +789,23 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             "| 标的池资格认定（历史价格 / 成交量筛选 + 是否仍在交易） | **Tiingo** |"
         )
     with _dsc2:
-        st.markdown("**最新数据更新时间**")
-        st.markdown(
-            f"- **价格数据（Yahoo Finance）**：{_last_fetch_sgt}\n"
-            f"- **策略信号计算**：{_m1_last_upd}"
-        )
-
         # ── 下载统计 ──────────────────────────────────────────────────────────
         _ds_stats   = _m1.get("last_download_stats", {})
         _ds_pending = _m1.get("pending_retry", {})
+        _ds_dl_ok    = _ds_stats.get("downloaded_count", 0) if _ds_stats else 0
+        _ds_dl_total = _ds_stats.get("total_scanned", 0)   if _ds_stats else 0
+        _ds_dl_fail  = _ds_dl_total - _ds_dl_ok
+
+        _fetch_count_note = f"，共获取 **{len(_m1_tickers):,}** 个标的实时行情" if _m1_tickers else ""
+        _scan_count_note  = f"，共扫描 **{_ds_dl_ok:,}** 个标的" if _ds_dl_ok else ""
+
+        st.markdown("**最新数据更新时间**")
+        st.markdown(
+            f"- **价格数据（Yahoo Finance）**：{_last_fetch_sgt}{_fetch_count_note}\n"
+            f"- **策略信号计算**：{_m1_last_upd}{_scan_count_note}"
+        )
 
         if _ds_stats:
-            _ds_dl_ok    = _ds_stats.get("downloaded_count", 0)
-            _ds_dl_total = _ds_stats.get("total_scanned", 0)
-            _ds_dl_fail  = _ds_dl_total - _ds_dl_ok
             # 转换更新时间为 SGT
             _ds_upd_raw  = _ds_stats.get("updated_utc", "")
             _ds_upd_sgt  = ""
