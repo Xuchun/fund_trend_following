@@ -853,11 +853,21 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         f"每日扫描仅覆盖 Tiingo 历史数据≥252个交易日、Yahoo Finance 可下载的现役标的。"
     )
 
-    # ── Yahoo Finance 无法下载的标的明细 ──────────────────────────────────────
-    with st.expander(f"Yahoo Finance 无法下载的 {len(_DS_YF_UNAVAIL)} 个标的（Tiingo 有数据，点击展开）"):
-        st.caption("以下标的经 Tiingo 确认仍在正常交易（截至 2026-06-30 核查），但 Yahoo Finance 无法下载，原因包括优先股 ticker 格式差异、ADR 数据缺失等。已从每日扫描中排除，不影响其余标的的信号计算。")
+    # ── Yahoo Finance 无法下载的标的明细（仅限 Tiingo 标的池内的5个）──────────
+    _ds_yf_in_pool = [t for t in _DS_YF_UNAVAIL
+                      if not _ds_df.empty and
+                      len(_ds_df[(_ds_df["ticker"] == t) & (_ds_df["eligible_days"] >= 252)]) > 0]
+    _ds_yf_below252 = sorted(set(_DS_YF_UNAVAIL) - set(_ds_yf_in_pool))
+
+    with st.expander(f"Tiingo 标的池中 Yahoo Finance 无法下载的 {len(_ds_yf_in_pool)} 个标的（点击展开）"):
+        st.caption(
+            f"以下 **{len(_ds_yf_in_pool)}** 个标的在 Tiingo 标的池内（eligible_days≥252），"
+            "但 Yahoo Finance 无法下载，已从每日扫描中排除。"
+            f"另有 **{len(_ds_yf_below252)}** 个 YF 无法下载的标的（{', '.join(_ds_yf_below252)}）"
+            "因 Tiingo 历史数据不足252个交易日，本就不在标的池内。"
+        )
         _ds_yf_rows = []
-        for _dst in sorted(_DS_YF_UNAVAIL):
+        for _dst in sorted(_ds_yf_in_pool):
             if not _ds_df.empty:
                 _dsr = _ds_df[_ds_df["ticker"] == _dst]
                 _ds_days = int(_dsr["eligible_days"].values[0]) if len(_dsr) else "N/A"
