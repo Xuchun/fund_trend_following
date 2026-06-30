@@ -880,10 +880,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     st.markdown(
         "<strong>Tiingo 标的池定义（粗筛口径）：</strong>"
-        "历史上曾有 ≥252 个交易日同时满足原始收盘价 > $10 、且 ADV₆₀ > $20M、"
+        "历史上曾有 ≥252 个交易日同时满足原始收盘价 > &#36;10 、且 ADV₆₀ > &#36;20M、"
         "且 Tiingo 确认仍在交易的标的。"
         "这是历史资格认定，不代表当前一定满足价格/成交量条件。"
-        "实际信号生成时会额外实时检查当天 price > $10 且 ADV₆₀ > $60M（精筛），不满足者不产生信号。",
+        "实际信号生成时会额外实时检查当天 price > &#36;10 且 ADV₆₀ > &#36;60M（精筛），不满足者不产生信号。",
         unsafe_allow_html=True,
     )
     st.markdown(
