@@ -743,6 +743,88 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     except Exception:
         _last_fetch_sgt = _m1_fetch_time
 
+    # ═══════════════════════════════════════════════════════════════════════════
+    # ── 数据 & 标的池 ───────────────────────────────────────────────────────────
+    # ═══════════════════════════════════════════════════════════════════════════
+    st.subheader("数据 & 标的池")
+
+    # ── 常量（与 paper_trading_daily.py 保持同步）─────────────────────────────
+    _DS_EXCL = {"FXI", "GDX", "KWEB", "VXX", "EMB", "ASHR", "ETH", "SPY", "SHY"}
+    _DS_YF_UNAVAIL = {
+        "SPLK", "SNCR", "WFC-P-L", "TTM", "TRUE",
+        "ZZK", "ZK", "VEDL", "TRML", "WFC-P-Y",
+        "SOVO", "T-P-A", "ZCZZT", "T-P-C", "WFC-P-Z",
+        "ZAZZT", "VBTX", "WFC-P-D",
+    }
+
+    # ── 加载标的池 CSV ─────────────────────────────────────────────────────────
+    _ds_csv  = _root / "data" / "tiingo_eligible_universe.csv"
+    _ds_df   = pd.read_csv(_ds_csv) if _ds_csv.exists() else pd.DataFrame()
+
+    if not _ds_df.empty:
+        _ds_active_all = int((_ds_df["is_active"] == True).sum())
+        _ds_delisted   = int((_ds_df["is_active"] == False).sum())
+        _ds_pt = _ds_df[
+            (_ds_df["is_active"] == True) &
+            (_ds_df["eligible_days"] >= 252) &
+            (~_ds_df["ticker"].isin(_DS_EXCL | _DS_YF_UNAVAIL))
+        ]
+        _ds_n_etf   = int(_ds_pt["ticker"].isin(_ETF_SET).sum())
+        _ds_n_stock = len(_ds_pt) - _ds_n_etf
+        _ds_n_total = len(_ds_pt)
+    else:
+        _ds_active_all = _ds_delisted = _ds_n_etf = _ds_n_stock = _ds_n_total = 0
+
+    # ── 数据来源 ───────────────────────────────────────────────────────────────
+    _dsc1, _dsc2 = st.columns(2)
+    with _dsc1:
+        st.markdown("**数据来源**")
+        st.markdown(
+            "| 用途 | 来源 |\n|---|---|\n"
+            "| 每日价格数据（信号计算、止损更新） | **Yahoo Finance** |\n"
+            "| 标的池资格认定（历史上市记录） | **Tiingo** |"
+        )
+    with _dsc2:
+        st.markdown("**最新数据更新时间**")
+        st.markdown(
+            f"- **价格数据（Yahoo Finance）**：{_last_fetch_sgt}\n"
+            f"- **策略信号计算**：{_m1_last_upd}"
+        )
+
+    # ── 标的池数量统计 ─────────────────────────────────────────────────────────
+    st.markdown("**标的池统计**")
+    _dsm1, _dsm2, _dsm3, _dsm4 = st.columns(4)
+    _dsm1.metric("模拟交易扫描标的数", f"{_ds_n_total:,}",
+                 help="is_active=True，eligible_days≥252，排除结构性标的及Yahoo Finance无法下载的标的")
+    _dsm2.metric("其中股票", f"{_ds_n_stock:,}")
+    _dsm3.metric("其中 ETF", f"{_ds_n_etf:,}")
+    _dsm4.metric("仍在交易但 YF 无法下载", f"{len(_DS_YF_UNAVAIL):,}",
+                 help="Tiingo 确认仍在正常交易，Yahoo Finance 无法下载，不参与每日扫描")
+
+    st.caption(
+        f"标的池中共 **{_ds_active_all:,}** 个标的仍在交易（is_active=True），"
+        f"另有 **{_ds_delisted:,}** 个已退市/被收购（保留历史记录，用于消除幸存者偏差）。"
+        f"每日扫描仅覆盖 Tiingo 历史数据≥252个交易日、Yahoo Finance 可下载的现役标的。"
+    )
+
+    # ── Yahoo Finance 无法下载的标的明细 ──────────────────────────────────────
+    with st.expander(f"Yahoo Finance 无法下载的 {len(_DS_YF_UNAVAIL)} 个标的（Tiingo 有数据，点击展开）"):
+        st.caption("以下标的经 Tiingo 确认仍在正常交易（截至 2026-06-30 核查），但 Yahoo Finance 无法下载，原因包括优先股 ticker 格式差异、ADR 数据缺失等。已从每日扫描中排除，不影响其余标的的信号计算。")
+        _ds_yf_rows = []
+        for _dst in sorted(_DS_YF_UNAVAIL):
+            if not _ds_df.empty:
+                _dsr = _ds_df[_ds_df["ticker"] == _dst]
+                _ds_days = int(_dsr["eligible_days"].values[0]) if len(_dsr) else "N/A"
+            else:
+                _ds_days = "N/A"
+            _ds_type = "ETF" if _dst in _ETF_SET else "股票"
+            _ds_yf_rows.append({"标的": _dst, "类型": _ds_type, "Tiingo 历史天数": _ds_days})
+        st.dataframe(pd.DataFrame(_ds_yf_rows).sort_values("标的"),
+                     use_container_width=True, hide_index=True)
+
+    st.divider()
+
+    # ═══════════════════════════════════════════════════════════════════════════
     st.subheader("一、策略状态概览")
     st.markdown(f"上次更新：{_last_fetch_sgt} ｜ Yahoo Finance")
 
