@@ -1057,6 +1057,13 @@ def main() -> None:
                 state.pop("pending_retry")
                 log.info("  All tickers downloaded — cleared previous pending_retry")
 
+            # Always persist download stats for the monitor page
+            state["last_download_stats"] = {
+                "downloaded_count": len(univ_data),
+                "total_scanned":    len(scan_tickers),
+                "updated_utc":      datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            }
+
             # Auto-clean data_error_log: drop tickers that succeeded this run
             if state.get("data_error_log"):
                 _resolved = set(univ_data.keys())
