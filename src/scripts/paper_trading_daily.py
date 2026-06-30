@@ -892,6 +892,11 @@ def run_retry() -> None:
     else:
         log.info("  All tickers recovered — clearing pending_retry")
         state.pop("pending_retry", None)
+        state["last_download_stats"] = {
+            "downloaded_count": len(retry_tickers),
+            "total_scanned":    len(retry_tickers),
+            "updated_utc":      datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        }
 
     save_state(state)
     log.info("=== Retry done ===")
