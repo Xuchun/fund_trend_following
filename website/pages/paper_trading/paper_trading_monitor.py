@@ -2874,7 +2874,7 @@ with tab2:
 
     # ── Overview metrics ─────────────────────────────────────────────────────
     st.subheader("一、账户状态概览")
-    st.markdown(f"上次脚本运行：{_m2_last_upd} ｜ 初始资金：${_m2_init_cap:,.0f}")
+    st.markdown(f"上次程序运行：{_m2_last_upd} ｜ 初始资金：${_m2_init_cap:,.0f}")
 
     _m2_pnl = _m2_nav - _m2_init_cap
     _m2_pnl_pct = (_m2_nav / _m2_init_cap - 1) * 100
