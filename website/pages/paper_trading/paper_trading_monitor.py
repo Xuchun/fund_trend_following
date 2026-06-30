@@ -1939,7 +1939,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     f"✅ {_sec_n} 个板块均衡分布（HHI={_sec_hhi:.2f}），"
                     f"无单一行业主导，板块层面分散化合理"
                 )
-            st.caption(f"**解读：** {_sec_verdict}。")
+            st.markdown(f"<span style='color:#111111'>**解读：** {_sec_verdict}。</span>", unsafe_allow_html=True)
 
     st.markdown("---")
 
