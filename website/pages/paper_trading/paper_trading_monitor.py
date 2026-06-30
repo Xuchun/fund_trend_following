@@ -855,8 +855,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _ds_sync_label      = _ds_tiingo_sync_sgt or _ds_univ_upd_sgt
 
     _ds_upd_label = (
-        f"&nbsp;&nbsp;<span style='font-size:0.8em;color:#888;font-weight:normal'>"
-        f"Tiingo 最后同步：{_ds_sync_label}</span>"
+        f"&nbsp;&nbsp;Tiingo 最后同步：{_ds_sync_label}"
         if _ds_sync_label else ""
     )
     st.markdown(
