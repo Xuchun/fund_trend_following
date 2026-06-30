@@ -2155,17 +2155,7 @@
       }
     ]
   },
-  "data_error_log": [
-    {
-      "date": "2026-06-26",
-      "context": "June 22-26 历史重跑（paper_trading_daily.py 批量下载）",
-      "tickers_missed": [
-        "BIIB"
-      ],
-      "note": "Yahoo Finance rate limit 导致部分标的数据下载失败。当时脚本未追踪下载失败数量，实际失败标的数不明（事后全量验证发现约330个标的遭到 YFRateLimitError）。BIIB 因产生强信号（突破强度 +4.53%，rank #2）而被人工发现并补录至 pending_entries；其余 rate-limited 标的未产生强信号，当时未被察觉。",
-      "created_utc": "2026-06-26T23:00:00Z"
-    }
-  ],
+  "data_error_log": [],
   "universe_size": 3102,
   "universe_size_note": "活跃标的数（is_active=True），不含非活跃/退市标的 1,256 个",
   "pending_retry": {
