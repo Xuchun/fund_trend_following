@@ -884,11 +884,15 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                  help="Tiingo 确认仍在正常交易，但 Yahoo Finance 无法下载，不参与每日扫描")
 
     st.caption(
+        "**Tiingo 标的池定义（粗筛口径）**：历史上曾有 ≥252 个交易日同时满足"
+        "原始收盘价 > $10 且 ADV₆₀ > $20M、且 Tiingo 确认仍在交易的标的。"
+        "这是历史资格认定，不代表当前一定满足价格/成交量条件；"
+        "实际信号生成时会额外实时检查当天 price > $10 且 ADV₆₀ > $60M（精筛），不满足者不产生信号。"
+    )
+    st.caption(
         f"标的池中共 **{_ds_active_all:,}** 个标的仍在交易（is_active=True），"
         f"另有 **{_ds_delisted:,}** 个已退市/被收购（保留历史记录，用于消除幸存者偏差）。"
-        f"每日扫描仅覆盖 Tiingo 历史数据≥252个交易日、Yahoo Finance 可下载的现役标的。"
-        f"以上数量为**粗筛口径**（历史资格认定：曾有≥252天满足原始收盘价 > $10 且 ADV₆₀ > $20M）；"
-        f"实际信号生成时会额外实时检查当天 price > $10 且 ADV₆₀ > $60M，不满足者不产生信号。"
+        f"每日扫描仅覆盖 Tiingo 历史数据 ≥252 个交易日、Yahoo Finance 可下载的现役标的。"
     )
 
     # ── Yahoo Finance 无法下载的标的明细（仅限 Tiingo 标的池内的5个）──────────
