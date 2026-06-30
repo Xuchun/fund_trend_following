@@ -344,13 +344,16 @@ def execute_pending_entries(
         entry_px_slip = open_px * (1.0 + PARAMS.slippage_bps / 10_000)
 
         # Recompute stop/trail from actual fill price — mirrors backtest _execute_entry()
-        _atr     = sig.get("atr", 0.0)
+        if sig.get("atr") is None:
+            log.error(f"  SKIP {ticker}: pending_entry missing 'atr' field — was this entry manually added without all required fields?")
+            continue
+        _atr     = float(sig["atr"])
         stop_px  = round(entry_px_slip - PARAMS.stop_loss_multiplier * _atr, 4)
         trail_px = round(entry_px_slip - PARAMS.trail_multiplier_r1  * _atr, 4)
 
         # Guard: degenerate stop — mirrors backtest _execute_entry() guard
         if stop_px >= entry_px_slip:
-            log.info(f"  SKIP {ticker}: stop >= entry (degenerate ATR)")
+            log.info(f"  SKIP {ticker}: stop >= entry (degenerate ATR={_atr})")
             continue
         stop_dist_pct = (entry_px_slip - stop_px) / entry_px_slip
         if stop_dist_pct < PARAMS.min_stop_distance_pct:
