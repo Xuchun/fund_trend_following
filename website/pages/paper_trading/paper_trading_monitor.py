@@ -1947,6 +1947,15 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     f"无单一行业主导，板块层面分散化合理"
                 )
             st.markdown(f"<span style='color:#111111'>**解读：** {_sec_verdict}。</span>", unsafe_allow_html=True)
+            st.markdown(
+                "<span style='color:#111111;font-size:0.85em'>"
+                "判断标准：最大单一板块占 NAV **> 30%** = 敞口过高，板块系统性回撤时损失超出单只止损预期；"
+                "**HHI（赫芬达尔指数）> 0.25** = 集中度偏高，少数板块主导组合风险；"
+                "**HHI ≤ 0.25** = 集中度合理，各板块均衡分布。"
+                "HHI = 各板块占 NAV 权重的平方和，完全集中于单一板块时 HHI = 1，完全均匀分布时 HHI = 1/板块数。"
+                "</span>",
+                unsafe_allow_html=True,
+            )
 
     st.markdown("---")
 
