@@ -2484,7 +2484,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     # ── 十二、月度 P&L 汇总 ───────────────────────────────────────────────────
     if _m1_history and len(_m1_history) >= 2:
-        st.subheader("十二、月度 P&L 汇总")
+        st.subheader("十三、月度 P&L 汇总")
         _nh_mon = pd.DataFrame(_m1_history)
         _nh_mon["date"] = pd.to_datetime(_nh_mon["date"])
         _nh_mon = _nh_mon.sort_values("date").reset_index(drop=True)
