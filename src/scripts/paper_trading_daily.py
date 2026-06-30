@@ -878,14 +878,15 @@ def run_retry() -> None:
         _next      = datetime.now(timezone.utc) + timedelta(hours=1)
         _sgt_off   = timedelta(hours=8)
         state["pending_retry"] = {
-            "tickers":          still_missing,
-            "scan_date":        str(scan_date),
-            "attempt":          attempt + 1,
-            "downloaded_count": len(retry_data),
-            "total_scanned":    len(retry_tickers),
-            "next_retry_utc":   _next.strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "next_retry_sgt":   (_next + _sgt_off).strftime("%Y-%m-%d %H:%M SGT"),
-            "created_utc":      pending.get("created_utc", datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")),
+            "tickers":           still_missing,
+            "scan_date":         str(scan_date),
+            "attempt":           attempt + 1,
+            "downloaded_count":  len(retry_data),
+            "total_scanned":     len(retry_tickers),
+            "next_retry_utc":    _next.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "next_retry_sgt":    (_next + _sgt_off).strftime("%Y-%m-%d %H:%M SGT"),
+            "created_utc":       pending.get("created_utc", datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")),
+            "last_attempt_utc":  datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         }
         log.info(f"  Next retry scheduled: {state['pending_retry']['next_retry_sgt']}")
     else:
