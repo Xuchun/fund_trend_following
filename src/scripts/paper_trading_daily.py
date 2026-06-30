@@ -831,6 +831,18 @@ def run_retry() -> None:
     still_missing = [t for t in retry_tickers if t not in retry_data]
     recovered     = [t for t in retry_tickers if t in retry_data]
 
+    # Auto-clean data_error_log: drop tickers recovered this retry
+    if recovered and state.get("data_error_log"):
+        _resolved = set(recovered)
+        _new_log = []
+        for _entry in state["data_error_log"]:
+            _still = [t for t in _entry.get("tickers_missed", []) if t not in _resolved]
+            if _still:
+                _new_log.append({**_entry, "tickers_missed": _still})
+            else:
+                log.info(f"  data_error_log resolved (retry): {_entry.get('tickers_missed', [])} now downloaded")
+        state["data_error_log"] = _new_log
+
     # ── Re-evaluate entry signals for recovered tickers ──────────────────────
     if recovered:
         log.info(f"  Recovered: {recovered}")
