@@ -1025,6 +1025,18 @@ def main() -> None:
                 state.pop("pending_retry")
                 log.info("  All tickers downloaded — cleared previous pending_retry")
 
+            # Auto-clean data_error_log: drop tickers that succeeded this run
+            if state.get("data_error_log"):
+                _resolved = set(univ_data.keys())
+                _new_log = []
+                for _entry in state["data_error_log"]:
+                    _still = [t for t in _entry.get("tickers_missed", []) if t not in _resolved]
+                    if _still:
+                        _new_log.append({**_entry, "tickers_missed": _still})
+                    else:
+                        log.info(f"  data_error_log resolved: {_entry.get('tickers_missed', [])} now downloaded")
+                state["data_error_log"] = _new_log
+
             candidates, scan_stats = scan_entries(state, univ_data, today, current_nav, pos_data=pos_data)
             log.info(
                 f"  Raw breakouts: {scan_stats['n_raw_breakouts']} | "
