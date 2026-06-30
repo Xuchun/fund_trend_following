@@ -886,6 +886,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         "实际信号生成时会额外实时检查当天 price > $10 且 ADV₆₀ > $60M（精筛），不满足者不产生信号。"
     )
     st.markdown(
+        "每日扫描标的数定义：Tiingo 标的池中，Yahoo Finance 可正常下载价格数据的标的，"
+        "即每个工作日 paper trading 脚本实际下载并扫描信号的范围。"
+        "= Tiingo 标的池（现役）− YF 无法下载。"
+    )
+    st.markdown(
         f"标的池中共 **{_ds_active_all:,}** 个标的仍在交易（is_active=True），"
         f"另有 **{_ds_delisted:,}** 个已退市/被收购（保留历史记录，用于消除幸存者偏差）。"
         f"每日扫描仅覆盖 Tiingo 历史数据 ≥252 个交易日、Yahoo Finance 可下载的现役标的。"
