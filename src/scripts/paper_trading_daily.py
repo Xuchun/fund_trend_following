@@ -609,9 +609,15 @@ def scan_entries(
     """
     held         = {p["ticker"] for p in state["positions"]}
     held_tickers = [p["ticker"] for p in state["positions"]]
+    # Exclude pending_exits from heat_used — mirrors backtest where exits execute
+    # BEFORE entries at T+1 open, so their heat is already freed by the time the
+    # entry heat-check runs. Including them would over-count heat and block signals
+    # that the backtest would accept.
+    _pending_exit_tks = {e["ticker"] for e in state.get("pending_exits", [])}
     heat_used    = sum(
         (p["entry_price"] - p["stop_loss"]) * p["shares"] / nav
         for p in state["positions"]
+        if p["ticker"] not in _pending_exit_tks
     )
     signals: list[dict] = []
 
