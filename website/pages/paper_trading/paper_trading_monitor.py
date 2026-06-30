@@ -816,15 +816,15 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
             if _ds_dl_fail == 0:
                 st.success(
-                    f"上次下载（{_ds_upd_sgt}）：成功下载 **{_ds_dl_ok:,}** 个标的，"
-                    f"标的池共 **{_ds_dl_total:,}** 个，**全部下载成功**。"
+                    f"上次下载（{_ds_upd_sgt}）：成功下载 **{_ds_dl_ok:,}** 个，"
+                    f"扫描范围共 **{_ds_dl_total:,}** 个，**全部下载成功**。"
                 )
             else:
                 _ds_retry_tks  = _ds_pending.get("tickers", [])
                 _ds_next_retry = _ds_pending.get("next_retry_sgt", "")
                 st.warning(
                     f"上次下载（{_ds_upd_sgt}）：成功下载 **{_ds_dl_ok:,}** 个，"
-                    f"标的池共 **{_ds_dl_total:,}** 个，"
+                    f"扫描范围共 **{_ds_dl_total:,}** 个，"
                     f"**{_ds_dl_fail}** 个下载失败"
                     + (f"（{'、'.join(_ds_retry_tks)}）" if _ds_retry_tks else "") + "。"
                     + (f"\n\n下次自动重试：**{_ds_next_retry}**。" if _ds_next_retry else "")
