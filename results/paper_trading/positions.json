@@ -2156,38 +2156,6 @@
     ]
   },
   "data_error_log": [],
-  "universe_size": 2202,
-  "universe_size_note": "活跃标的数（is_active=True）且 eligible_days≥252 且排除结构性非交易标的（FXI/GDX/VXX/SPY 等9只），与回测活跃部分一致",
-  "pending_retry": {
-    "tickers": [
-      "ZZK",
-      "ZK",
-      "VEDL",
-      "SPLK",
-      "TGNA",
-      "TRML",
-      "SNCR",
-      "WFC-P-Y",
-      "WFC-P-L",
-      "SOVO",
-      "TTM",
-      "T-P-A",
-      "THS",
-      "VTYX",
-      "ZCZZT",
-      "T-P-C",
-      "WFC-P-Z",
-      "ZAZZT",
-      "TRUE",
-      "VBTX",
-      "WFC-P-D"
-    ],
-    "scan_date": "2026-06-29",
-    "attempt": 2,
-    "downloaded_count": 0,
-    "total_scanned": 21,
-    "next_retry_utc": "2026-06-30T02:22:36Z",
-    "next_retry_sgt": "2026-06-30 10:22 SGT",
-    "created_utc": "2026-06-29T23:29:43Z"
-  }
+  "universe_size": 2194,
+  "universe_size_note": "活跃标的数（is_active=True）且 eligible_days≥252 且排除结构性非交易标的（FXI/GDX/VXX/SPY 等9只），与回测活跃部分一致"
 }
