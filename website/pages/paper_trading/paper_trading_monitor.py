@@ -339,6 +339,17 @@ def _fetch_yf_chart_single(ticker: str) -> pd.DataFrame:
     return df.sort_index().dropna(subset=["Close"])
 
 
+@st.cache_data(ttl=86400)
+def _fetch_sector(ticker: str) -> str:
+    """返回 ticker 的 GICS 行业/板块字符串，缓存 24 小时。"""
+    try:
+        import yfinance as yf
+        info = yf.Ticker(ticker).info
+        return info.get("sector") or info.get("quoteType") or "N/A"
+    except Exception:
+        return "N/A"
+
+
 def _build_kline_fig(kdf, title, x_start, x_end, hlines=None, vlines=None):
     """构建K线图（日本蜡烛图 + 成交量），返回 plotly Figure。
 
