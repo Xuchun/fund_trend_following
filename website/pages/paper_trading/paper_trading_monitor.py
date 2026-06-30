@@ -2827,7 +2827,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 with tab2:
     st.markdown("""
     **运行方式：** 每个交易日收盘后在本地运行 `python src/scripts/ib_paper_trading_daily.py`，
-    脚本自动连接 IB TWS（Paper Trading 模式）下单，并将结果推送到 GitHub。
+    程序自动连接 IB TWS（模拟交易模式）下单，并将结果推送到 GitHub。
 
     **初始资金：** $200,000 USD（独立账户，不依赖回测历史）
     """)
