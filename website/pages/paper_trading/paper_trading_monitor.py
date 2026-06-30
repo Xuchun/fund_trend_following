@@ -2507,6 +2507,52 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             )
             st.plotly_chart(_fig_r, width="stretch")
 
+        # ── 交易执行质量汇总 ────────────────────────────────────────────────────
+        _eq_slip_valid = [
+            c for c in _m1_closed
+            if c.get("open_price") and c.get("signal_price") and c.get("entry_price")
+        ]
+        if _eq_slip_valid and "pnl_r" in pd.DataFrame(_m1_closed).columns:
+            _eq_gaps   = [(c["open_price"] - c["signal_price"]) / c["signal_price"] * 10000
+                          for c in _eq_slip_valid]
+            _eq_fav    = sum(1 for g in _eq_gaps if g <= 0)  # 低开=有利
+            _eq_unfav  = len(_eq_gaps) - _eq_fav
+            _eq_avg_g  = sum(_eq_gaps) / len(_eq_gaps) if _eq_gaps else 0.0
+            _eq_r_vals = pd.DataFrame(_m1_closed)["pnl_r"].dropna()
+            _eq_r_2p   = int((_eq_r_vals > 2).sum())
+            _eq_r_5p   = int((_eq_r_vals > 5).sum())
+            _eq_r_neg  = int((_eq_r_vals < -1.05).sum())  # 止损超出预期（-1R以下）
+            st.markdown("**执行质量汇总**")
+            _eq1, _eq2, _eq3, _eq4 = st.columns(4)
+            _eq1.metric(
+                "隔夜跳空均值",
+                f"{_eq_avg_g:+.0f} bps",
+                delta="有利（低开）" if _eq_avg_g < 0 else "不利（高开）",
+                delta_color="normal" if _eq_avg_g < 0 else "inverse",
+                help="开盘价 vs 信号收盘价之差（bps）。负值=低开=实际买入成本低于信号价，有利。"
+            )
+            _eq2.metric(
+                "有利跳空笔数",
+                f"{_eq_fav} / {len(_eq_gaps)}",
+                delta=f"{_eq_fav/len(_eq_gaps)*100:.0f}% 笔低开（有利）" if _eq_gaps else None,
+                delta_color="normal",
+                help="低开（开盘价 ≤ 信号收盘价）= 有利；高开 = 不利。"
+            )
+            _eq3.metric(
+                "R > 2R 的笔数",
+                f"{_eq_r_2p} 笔",
+                delta=f"其中 {_eq_r_5p} 笔 > 5R" if _eq_r_5p else None,
+                delta_color="normal",
+                help="已平仓笔数中浮盈超过 2R（2倍初始风险）的笔数。"
+            )
+            _eq4.metric(
+                "超额亏损笔数（< −1R）",
+                f"{_eq_r_neg} 笔",
+                delta="止损执行超出预期" if _eq_r_neg > 0 else "止损执行符合预期",
+                delta_color="inverse" if _eq_r_neg > 0 else "normal",
+                help="已平仓笔数中实际亏损超过初始风险（< −1R）的笔数，通常由隔夜跳空造成。"
+            )
+
         # ── 入场滑点（隔夜跳空）分析 ───────────────────────────────────────────
         _slip_rows = [
             {
