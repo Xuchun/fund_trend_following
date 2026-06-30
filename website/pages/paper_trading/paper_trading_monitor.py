@@ -1653,7 +1653,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.markdown("---")
 
     # ── Stop detail ──────────────────────────────────────────────────────────
-    st.subheader("六、止损/移动止盈明细")
+    st.subheader("七、止损/移动止盈明细")
     if _m1_ok:
         _sd_sorted = sorted(_m1_ok, key=lambda x: (
             0 if x.get("stop_reason") == "stop_loss" else
