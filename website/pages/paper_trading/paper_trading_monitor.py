@@ -135,13 +135,13 @@ if _m1_file.exists():
         if _warn_pending_tks:
             _pr_sgt     = _warn_pending.get("next_retry_sgt", "")
             _pr_attempt = _warn_pending.get("attempt", 1)
-            # last attempt time
-            _pr_created = _warn_pending.get("created_utc", "")
-            _pr_last    = _warn_pending.get("scan_date", "")
-            if _pr_created:
+            # 优先用 last_attempt_utc（最近一次实际运行时间），回退到 created_utc
+            _pr_last_raw = _warn_pending.get("last_attempt_utc") or _warn_pending.get("created_utc", "")
+            _pr_last     = _warn_pending.get("scan_date", "")
+            if _pr_last_raw:
                 try:
                     import datetime as _dt2
-                    _utc2 = _dt2.datetime.fromisoformat(_pr_created.replace("Z", "+00:00"))
+                    _utc2 = _dt2.datetime.fromisoformat(_pr_last_raw.replace("Z", "+00:00"))
                     _sgt2 = _utc2 + _dt2.timedelta(hours=8)
                     _pr_last = _sgt2.strftime("%Y-%m-%d %H:%M 新加坡时间（SGT）")
                 except Exception:
