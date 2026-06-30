@@ -1714,7 +1714,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     # ── NAV history ──────────────────────────────────────────────────────────
     if _m1_history:
-        st.subheader("七、NAV 走势")
+        st.subheader("八、NAV 走势")
         _nh = pd.DataFrame(_m1_history)
         _nh["date"] = pd.to_datetime(_nh["date"])
         _nh = _nh.sort_values("date").reset_index(drop=True)
