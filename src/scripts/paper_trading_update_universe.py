@@ -35,12 +35,6 @@ POSITIONS_PATH = _root / "results" / "paper_trading" / "positions.json"
 ACTIVE_WINDOW_DAYS = 45
 
 _EXCL_TICKERS = {"FXI", "GDX", "KWEB", "VXX", "EMB", "ASHR", "ETH", "SPY", "SHY"}
-_YF_UNAVAILABLE = {
-    "SPLK", "SNCR", "WFC-P-L", "TTM", "TRUE",
-    "ZZK", "ZK", "VEDL", "TRML", "WFC-P-Y",
-    "SOVO", "T-P-A", "ZCZZT", "T-P-C", "WFC-P-Z",
-    "ZAZZT", "VBTX", "WFC-P-D",
-}
 
 
 def fetch_tiingo_ticker_map() -> dict[str, str | None]:
