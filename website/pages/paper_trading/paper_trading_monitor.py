@@ -1110,7 +1110,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.markdown("---")
 
     # ── Tomorrow's orders ────────────────────────────────────────────────────
-    st.subheader("三、明日要执行的交易")
+    st.subheader("四、明日要执行的交易")
     import datetime as _dt
 
     # New schema: pending_exits + pending_entries (both from today's close detections)
