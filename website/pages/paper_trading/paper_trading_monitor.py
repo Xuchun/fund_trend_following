@@ -2981,7 +2981,7 @@ with tab2:
         if _m2_rows:
             show_df(pd.DataFrame(_m2_rows), width="stretch", hide_index=True)
     else:
-        st.info("当前无持仓。Regime 允许时，下次运行脚本将扫描开仓信号。")
+        st.info("当前无持仓。Regime 允许时，下次运行程序将扫描开仓信号。")
 
     st.markdown("---")
 
