@@ -899,6 +899,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     # ═══════════════════════════════════════════════════════════════════════════
     st.subheader("二、策略状态概览")
+    st.markdown("**初始资金：** $200,000 USD（全新独立账户，调试期 2026-06-19 起，正式启动 2026-07-01）")
     st.markdown(f"上次更新：{_last_fetch_sgt} ｜ Yahoo Finance")
 
     # Current drawdown from all-time peak (nav_history + live nav)
