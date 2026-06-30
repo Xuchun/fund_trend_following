@@ -916,7 +916,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.markdown("---")
 
     # ── Today's trades (executions at today's open) ───────────────────────────
-    st.subheader("二、今日完成的交易")
+    st.subheader("三、今日完成的交易")
     _trade_rows = []
     if _m1_today_sig:
         _ts_trade_date     = _m1_today_sig.get("date", "N/A")
