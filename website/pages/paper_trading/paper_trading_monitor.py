@@ -825,7 +825,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.divider()
 
     # ═══════════════════════════════════════════════════════════════════════════
-    st.subheader("一、策略状态概览")
+    st.subheader("二、策略状态概览")
     st.markdown(f"上次更新：{_last_fetch_sgt} ｜ Yahoo Finance")
 
     # Current drawdown from all-time peak (nav_history + live nav)
