@@ -846,6 +846,13 @@ def run_retry() -> None:
     # ── Re-evaluate entry signals for recovered tickers ──────────────────────
     if recovered:
         log.info(f"  Recovered: {recovered}")
+        # Remove from yf_persistent_unavailable any tickers that recovered in retry
+        _yf_persist_r = set(state.get("yf_persistent_unavailable", []))
+        _recovered_from_persist_r = set(recovered) & _yf_persist_r
+        if _recovered_from_persist_r:
+            _yf_persist_r -= _recovered_from_persist_r
+            state["yf_persistent_unavailable"] = sorted(_yf_persist_r)
+            log.info(f"  Removed from yf_persistent_unavailable (recovered in retry): {sorted(_recovered_from_persist_r)}")
         last_nav = (
             state["nav_history"][-1]["nav"]
             if state.get("nav_history") else state.get("initial_nav", 200_000.0)
