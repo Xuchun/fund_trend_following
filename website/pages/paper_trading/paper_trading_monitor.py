@@ -1325,7 +1325,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             _n_heat_blocked = sum(1 for c in _cands_for_heat if c.get("rejection") == "heat_limit")
             _heat_tickers   = [c["ticker"] for c in _cands_for_heat if c.get("rejection") == "heat_limit"]
             _n_total_skipped = _n_heat_blocked + n_blocked
-            _heat_line = (f"其中 **{_n_heat_blocked} 笔**因组合热度上限已由每日脚本拒绝"
+            _heat_line = (f"其中 **{_n_heat_blocked} 笔**因组合热度上限已由每日程序拒绝"
                           f"（{', '.join(_heat_tickers)}）；" if _n_heat_blocked else "")
             st.warning(
                 f"⚠️ 共 **{_n_total_skipped} 笔**开仓不执行：{_heat_line}"
