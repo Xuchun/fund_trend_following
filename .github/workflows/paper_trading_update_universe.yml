@@ -1,0 +1,41 @@
+name: Paper Trading — Daily Universe Update (Tiingo)
+
+on:
+  schedule:
+    # 22:45 UTC = 06:45 SGT next day — after US market close, 15 min before paper trading (23:00 UTC)
+    - cron: '45 22 * * 1-5'
+  workflow_dispatch:   # allow manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  update-universe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install requests pandas
+
+      - name: Update universe from Tiingo supported_tickers.zip
+        run: python src/scripts/paper_trading_update_universe.py
+
+      - name: Commit and push results
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/tiingo_eligible_universe.csv results/paper_trading/positions.json
+          git diff --staged --quiet && echo "No changes to commit" || \
+            git commit -m "auto: update Tiingo universe $(date -u +%Y-%m-%d)" && git push
