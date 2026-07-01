@@ -865,6 +865,24 @@ def run_retry() -> None:
     attempt   = pending.get("attempt", 1)
     log.info(f"=== Retry mode: attempt {attempt} for {scan_date}: {retry_tickers} ===")
 
+    # Hard cap: after 8 hourly retries, the tickers are genuinely unavailable on YF.
+    # Flag them as persistent so the main daily run skips them; stop wasting CI minutes.
+    _MAX_RETRY_ATTEMPTS = 8
+    if attempt > _MAX_RETRY_ATTEMPTS:
+        _yf_persist = set(state.get("yf_persistent_unavailable", []))
+        _newly = set(retry_tickers) - _yf_persist
+        if _newly:
+            _yf_persist |= _newly
+            state["yf_persistent_unavailable"] = sorted(_yf_persist)
+            log.warning(
+                f"  Exceeded {_MAX_RETRY_ATTEMPTS} retry attempts — "
+                f"flagging {len(_newly)} tickers as YF-persistent-unavailable: {sorted(_newly)}"
+            )
+        state.pop("pending_retry", None)
+        save_state(state)
+        log.info("=== Retry abandoned: tickers flagged as permanently unavailable ===")
+        return
+
     # ── Download only the missing tickers ────────────────────────────────────
     retry_data    = fetch_price_data(retry_tickers, period="310d")
     still_missing = [t for t in retry_tickers if t not in retry_data]
