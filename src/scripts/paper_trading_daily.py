@@ -997,12 +997,13 @@ def main() -> None:
         return
 
     # ── Step 2: ① OPEN — execute yesterday's pending exits ───────────────────
-    exits_executed, remaining_exits = execute_pending_exits(state, pos_data, today)
+    _regime_str = "BULL" if regime_ok else "BEAR"
+    exits_executed, remaining_exits = execute_pending_exits(state, pos_data, today, regime=_regime_str)
     # Carry over any exits that couldn't execute (no data)
     # New exit signals will be appended later; don't overwrite remaining yet
 
     # ── Step 3: ① OPEN — execute yesterday's pending entries ─────────────────
-    entries_executed = execute_pending_entries(state, pos_data, today)
+    entries_executed = execute_pending_entries(state, pos_data, today, regime=_regime_str)
 
     # ── Step 3.5: ② CASH — apply SGOV return to uninvested cash ─────────────
     # Mirrors backtest engine step ②: portfolio.cash *= (1 + sgov_ret)
