@@ -2283,11 +2283,11 @@
   },
   "universe_stats": {
     "tiingo_eligible": 2182,
-    "yf_downloadable": 2177,
-    "yf_unavailable_in_pool": 5,
+    "yf_downloadable": 2144,
+    "yf_unavailable_in_pool": 38,
     "total_active": 3095,
     "total_delisted": 1382,
-    "updated_utc": "2026-06-30T23:32:31Z"
+    "updated_utc": "2026-07-01T09:46:57Z"
   },
   "yf_persistent_unavailable": [
     "AGR",
