@@ -447,11 +447,13 @@ def execute_pending_entries(
             "stop_loss":         stop_px,
             "trail_stop":        trail_px,
             "highest_high":      round(entry_px_slip, 4),    # init to entry_price (backtest convention)
+            "lowest_low":        round(entry_px_slip, 4),    # MAE proxy: init to entry_price, falls each day
             "atr_at_entry":      _atr,
             "R_at_backtest_end": 0.0,
             "last_known_price":  round(open_px, 4),
             "last_price_date":   str(today),
             "entry_commission":  round(commission, 2),        # stored for correct net_pnl at exit
+            "entry_regime":      regime,
         }
         state["positions"].append(new_pos)
         _held.add(ticker)
