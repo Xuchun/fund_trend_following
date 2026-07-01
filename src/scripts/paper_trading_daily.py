@@ -265,6 +265,7 @@ def execute_pending_exits(
             "stop_loss":          sig["stop_loss"],
             "stop_used":          sig.get("stop_used", 0.0),
             "highest_high":       sig.get("highest_high", sig["entry_price"]),  # MFE proxy; needed for overfitting Section 八
+            "lowest_low":         sig.get("lowest_low", sig["entry_price"]),    # MAE proxy
             "atr_at_entry":       sig.get("atr_at_entry", 0.0),
             "trail_stop_at_exit": sig.get("trail_stop_at_exit", 0.0),
             "atr_at_exit":        sig.get("atr_at_exit", 0.0),
@@ -275,6 +276,8 @@ def execute_pending_exits(
             "exit_reason":        sig["exit_reason"],
             "detected_date":      sig.get("detected_date", ""),
             "holding_days":       (bar_date - pd.to_datetime(sig.get("entry_date", str(bar_date))).date()).days,
+            "entry_regime":       sig.get("entry_regime", ""),
+            "exit_regime":        regime,
         }
         state["closed_trades"] = state.get("closed_trades", []) + [closed_record]
         exits_executed.append(closed_record)
