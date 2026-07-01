@@ -2334,12 +2334,12 @@
       "SGEN"
     ],
     "scan_date": "2026-06-30",
-    "attempt": 4,
+    "attempt": 5,
     "downloaded_count": 0,
     "total_scanned": 33,
-    "next_retry_utc": "2026-07-01T07:00:44Z",
-    "next_retry_sgt": "2026-07-01 15:00 SGT",
+    "next_retry_utc": "2026-07-01T08:56:21Z",
+    "next_retry_sgt": "2026-07-01 16:56 SGT",
     "created_utc": "2026-06-30T23:35:54Z",
-    "last_attempt_utc": "2026-07-01T06:00:44Z"
+    "last_attempt_utc": "2026-07-01T07:56:21Z"
   }
 }
