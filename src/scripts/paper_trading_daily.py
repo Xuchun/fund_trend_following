@@ -526,6 +526,13 @@ def detect_exit_signals(
         low_px   = float(today_rows["Low"].iloc[0])
         close_px = float(today_rows["Close"].iloc[0])
 
+        # MAE tracking: lowest intraday low since entry.
+        # Initialized to entry_price when position is opened; falls every day a new low is set.
+        _prev_low = pos.get("lowest_low")
+        if _prev_low is None:
+            _prev_low = pos.get("entry_price", float("inf"))
+        lowest_low = min(float(_prev_low), low_px)
+
         atr_s   = compute_atr(df["High"], df["Low"], df["Close"], PARAMS.atr_period)
         cur_atr = float(atr_s.iloc[-1])
         # Do NOT fall back to atr_at_entry when ATR is NaN — mirrors backtest
