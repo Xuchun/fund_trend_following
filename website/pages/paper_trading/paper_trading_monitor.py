@@ -3062,9 +3062,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             "包含（CSV + 完整JSON）：\n"
             "• m1_nav_history.csv — 每日 NAV\n"
             "• m1_entry_history.csv — 所有开仓记录（持仓中 + 已平仓）\n"
-            "• m1_closed_trades.csv — 已平仓记录（含 pnl_r、signal_strength 等）\n"
+            "• m1_closed_trades.csv — 已平仓记录（含 pnl_r、signal_strength、lowest_low/MAE、entry_regime、exit_regime）\n"
             "• m1_signals_history.csv — 每日信号漏斗计数\n"
-            "• m1_today_candidate_signals.csv — 最近一次运行的突破候选明细（含拒绝原因）\n"
+            "• m1_all_candidate_signals.csv — 历史每日突破候选明细（含拒绝原因，所有日期）\n"
+            "• m1_daily_entry_signals.csv — 历史每日通过热度筛选的入场信号\n"
             "• m1_open_positions.csv — 当前持仓\n"
             "• backtest_reference_metrics.json / trades.csv / nav.csv — 回测基准数据"
         ),
