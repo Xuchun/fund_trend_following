@@ -1054,12 +1054,17 @@ def main() -> None:
 
         # ── Dynamic YF-unavailable list ────────────────────────────────────────
         # If yesterday's pending_retry is still open when today's main run starts,
-        # all retries were exhausted. A small count (≤10) means truly unavailable
-        # (not a transient rate-limit event that affects many tickers at once).
+        # those tickers are permanently unavailable on YF. Two criteria to flag:
+        #   (a) ≤10 tickers:  safe to flag even on a single overnight failure —
+        #       unlikely to be transient YF rate-limiting at such a small scale.
+        #   (b) attempt ≥ 5:  5+ consecutive hourly retries all failed → genuinely
+        #       unavailable regardless of count (rate-limits resolve within hours,
+        #       not across multiple days of retries).
         _stale_retry = state.get("pending_retry", {})
         if _stale_retry and _stale_retry.get("scan_date", str(today)) != str(today):
             _stale_tickers = _stale_retry.get("tickers", [])
-            if 0 < len(_stale_tickers) <= 10:
+            _stale_attempts = _stale_retry.get("attempt", 1)
+            if 0 < len(_stale_tickers) and (len(_stale_tickers) <= 10 or _stale_attempts >= 5):
                 _yf_persist = set(state.get("yf_persistent_unavailable", []))
                 _newly_flagged = set(_stale_tickers) - _yf_persist
                 if _newly_flagged:
@@ -1067,7 +1072,8 @@ def main() -> None:
                     state["yf_persistent_unavailable"] = sorted(_yf_persist)
                     log.warning(
                         f"  Auto-flagged as YF-persistent-unavailable "
-                        f"(exhausted all retries): {sorted(_newly_flagged)}"
+                        f"({len(_stale_tickers)} tickers, attempt={_stale_attempts}): "
+                        f"{sorted(_newly_flagged)}"
                     )
 
         _YF_UNAVAILABLE = set(state.get("yf_persistent_unavailable", []))
