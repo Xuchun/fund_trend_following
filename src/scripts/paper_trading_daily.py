@@ -295,6 +295,7 @@ def execute_pending_entries(
     state: dict,
     data: dict[str, pd.DataFrame],
     today: date,
+    regime: str = "UNKNOWN",
 ) -> list[dict]:
     """
     Execute pending entry signals at today's open price.
