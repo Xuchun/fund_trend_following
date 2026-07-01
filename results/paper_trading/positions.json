@@ -2282,12 +2282,12 @@
     "updated_utc": "2026-06-30T23:35:54Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2182,
-    "yf_downloadable": 2144,
+    "tiingo_eligible": 2170,
+    "yf_downloadable": 2132,
     "yf_unavailable_in_pool": 38,
-    "total_active": 3095,
-    "total_delisted": 1382,
-    "updated_utc": "2026-07-01T09:46:57Z"
+    "total_active": 3077,
+    "total_delisted": 1400,
+    "updated_utc": "2026-07-01T23:11:32Z"
   },
   "yf_persistent_unavailable": [
     "AGR",
@@ -2329,5 +2329,5 @@
     "TTM",
     "WFC-P-L"
   ],
-  "tiingo_universe_synced_utc": "2026-06-30T23:11:12Z"
+  "tiingo_universe_synced_utc": "2026-07-01T23:11:32Z"
 }
