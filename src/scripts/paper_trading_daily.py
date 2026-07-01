@@ -184,6 +184,7 @@ def execute_pending_exits(
     state: dict,
     data: dict[str, pd.DataFrame],
     today: date,
+    regime: str = "UNKNOWN",
 ) -> tuple[list[dict], list[dict]]:
     """
     Execute pending exit signals at today's open price.
