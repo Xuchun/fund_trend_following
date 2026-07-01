@@ -577,10 +577,12 @@ def detect_exit_signals(
                 "stop_loss":        pos["stop_loss"],
                 "atr_at_entry":     pos.get("atr_at_entry", 0.0),
                 "highest_high":     round(highest_high, 4),  # MFE proxy at detection
+                "lowest_low":       round(lowest_low, 4),    # MAE proxy at detection
                 "trail_stop_at_exit": round(trail_stop, 6),  # trail level that triggered (or latest)
                 "atr_at_exit":      round(cur_atr, 4),
                 "detected_date":    str(bar_date),
                 "entry_commission": pos.get("entry_commission", 0.0),  # for net_pnl at exit
+                "entry_regime":     pos.get("entry_regime", ""),
             })
             log.info(f"  EXIT SIGNAL {ticker}  [{exit_reason}]  stop_used=${stop_used:.2f}")
 
