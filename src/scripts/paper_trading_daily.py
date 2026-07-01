@@ -557,6 +557,7 @@ def detect_exit_signals(
             **pos,
             "trail_stop":       round(trail_stop, 6),
             "highest_high":     round(highest_high, 4),
+            "lowest_low":       round(lowest_low, 4),
             "last_known_price": round(close_px, 4),
             "last_price_date":  str(bar_date),
         })
