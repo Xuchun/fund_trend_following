@@ -213,16 +213,19 @@ def _build_method_zip(data: dict, method: str) -> bytes:
                     "n_entries", "n_executed", "n_exits",
                 ]))
 
-        # Today's full breakout candidate list: all tickers that passed per-stock filters,
-        # with per-ticker rejection reason (None = approved, heat_limit, cash_limit, corr_reduced).
-        # This is the detailed view of the most recent day's signal funnel.
-        _ts = data.get("today_signals", {})
-        _cands = _ts.get("candidate_signals", [])
-        if _cands:
-            zf.writestr(f"{method}_today_candidate_signals.csv",
-                _rows_to_csv(_cands, [
-                    "ticker", "signal_price", "stop_price", "shares", "trade_risk",
-                    "strength", "rejection",
+        # Full breakout candidate list for EVERY historical day (all stored in signals_history).
+        # Each row is one ticker on one day: includes rejection reason, strength, and sizing.
+        # Supersedes the old today-only export; enables per-day funnel analysis over time.
+        _all_cands: list[dict] = []
+        for _sh_rec in data.get("signals_history", []):
+            _sh_date = _sh_rec.get("date", "")
+            for _c in _sh_rec.get("candidate_signals", []):
+                _all_cands.append({"date": _sh_date, **_c})
+        if _all_cands:
+            zf.writestr(f"{method}_all_candidate_signals.csv",
+                _rows_to_csv(_all_cands, [
+                    "date", "ticker", "signal_price", "stop_price", "shares",
+                    "trade_risk", "strength", "rejection", "corr_with",
                 ]))
 
         # Historical per-day entry signals with breakout strength
