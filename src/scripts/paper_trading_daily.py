@@ -1300,6 +1300,20 @@ def main() -> None:
     _sig_hist.append(_today_sig)
     state["signals_history"] = sorted(_sig_hist, key=lambda x: x["date"])
 
+    # ── Step 9: refresh sector labels for open positions ─────────────────────
+    # Done here (GitHub Actions, no rate-limit) so the monitor page can read
+    # sector directly from positions.json instead of calling yfinance live.
+    _need_sector = [p for p in state["positions"] if not p.get("sector")]
+    if _need_sector:
+        log.info(f"  Fetching sector for {len(_need_sector)} positions …")
+        for _p in _need_sector:
+            try:
+                _info = yf.Ticker(_p["ticker"]).info
+                _p["sector"] = _info.get("sector") or _info.get("quoteType") or "N/A"
+            except Exception:
+                _p["sector"] = "N/A"
+        log.info("  Sector labels updated")
+
     save_state(state)
 
     # ── Summary ───────────────────────────────────────────────────────────────

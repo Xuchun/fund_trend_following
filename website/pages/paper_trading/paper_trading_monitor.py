@@ -343,12 +343,22 @@ def _fetch_yf_chart_single(ticker: str) -> pd.DataFrame:
 
 
 @st.cache_data(ttl=86400)
-def _fetch_sector(ticker: str) -> str:
-    """返回 ticker 的 GICS 行业/板块字符串，缓存 24 小时。"""
+def _fetch_sector_cached(ticker: str) -> str:
+    """Fetch sector from Yahoo Finance; raises on failure so cache stays empty."""
+    import yfinance as yf
+    info = yf.Ticker(ticker).info
+    result = info.get("sector") or info.get("quoteType") or ""
+    if not result:
+        raise ValueError(f"No sector data for {ticker}")
+    return result
+
+
+def _fetch_sector(ticker: str, prefetched: str = "") -> str:
+    """返回 ticker 的行业/板块，优先用 positions.json 中预取的值（日程序写入）。"""
+    if prefetched and prefetched != "N/A":
+        return prefetched
     try:
-        import yfinance as yf
-        info = yf.Ticker(ticker).info
-        return info.get("sector") or info.get("quoteType") or "N/A"
+        return _fetch_sector_cached(ticker)
     except Exception:
         return "N/A"
 
@@ -1888,8 +1898,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     )
 
         # ── 持仓行业/板块集中度 ──────────────────────────────────────────────────
-        with st.spinner("加载行业数据（Yahoo Finance，缓存 24 小时）…"):
-            _sec_data = [(p["ticker"], _fetch_sector(p["ticker"]), p["mkt_value"]) for p in _m1_ok]
+        with st.spinner("加载行业数据…"):
+            _sec_data = [
+                (p["ticker"], _fetch_sector(p["ticker"], p.get("sector", "")), p["mkt_value"])
+                for p in _m1_ok
+            ]
         _sec_grp_dict: dict = {}
         for _stk, _ssec, _smv in _sec_data:
             _sec_grp_dict.setdefault(_ssec, {"tickers": [], "mkt_value": 0.0})
