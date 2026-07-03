@@ -862,9 +862,11 @@ def _fetch_market_news(
     date_lo = trade_date - timedelta(days=1)
     date_hi = trade_date + timedelta(days=1)
 
-    def _parse_item(item: dict) -> tuple[str, str, date | None]:
+    def _parse_item(item: dict) -> tuple[str, str, str, date | None]:
+        """返回 (title, url, summary, pub_date)。"""
         content = item.get("content") or item
-        title = (content.get("title") or "").strip()
+        title   = (content.get("title") or "").strip()
+        summary = (content.get("summary") or content.get("description") or "").strip()
         url = (
             content.get("previewUrl")
             or (content.get("canonicalUrl") or {}).get("url")
@@ -885,7 +887,7 @@ def _fetch_market_news(
                     pub_date = datetime.fromtimestamp(int(ts)).date()
                 except Exception:
                     pass
-        return title, url, pub_date
+        return title, url, summary, pub_date
 
     etf = _SECTOR_ETF.get(sector)
     search_tickers = ([etf] if etf else []) + list(tickers)[:3]
@@ -897,7 +899,7 @@ def _fetch_market_news(
             break
         try:
             for item in (yf.Ticker(t).news or [])[:10]:
-                title, url, pub_date = _parse_item(item)
+                title, url, summary, pub_date = _parse_item(item)
                 if not title or title in seen:
                     continue
                 if pub_date and date_lo <= pub_date <= date_hi:
@@ -905,6 +907,7 @@ def _fetch_market_news(
                     results.append({
                         "title":    title,
                         "url":      url,
+                        "summary":  summary,
                         "pub_date": str(pub_date),
                     })
                     if len(results) >= max_items:
@@ -912,6 +915,40 @@ def _fetch_market_news(
         except Exception:
             continue
     return results
+
+
+def _summarize_news_with_claude(
+    news_items: list[dict],
+    sector: str,
+    direction: str,
+) -> str:
+    """调用 Claude Haiku 把新闻标题+摘要综合成2-3句中文解释（板块涨跌原因）。
+    若 ANTHROPIC_API_KEY 未配置或调用失败，返回空字符串。
+    """
+    try:
+        import anthropic
+        client = anthropic.Anthropic()   # 读取 ANTHROPIC_API_KEY 环境变量
+
+        news_text = "\n\n".join(
+            f"标题：{n['title']}\n摘要：{n['summary'] or '（无摘要）'}"
+            for n in news_items[:3]
+        )
+        prompt = (
+            f"以下是 Yahoo Finance 关于 {sector} 板块的新闻（美股交易日收盘后）：\n\n"
+            f"{news_text}\n\n"
+            f"请用2-3句简体中文，简明解释 {sector} 板块当日{direction}的核心原因。"
+            f"要具体说明是什么事件或因素驱动，不要只复述标题，不要泛泛而谈。"
+            f"只输出中文解释，不要任何其他内容。"
+        )
+        msg = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=250,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        return msg.content[0].text.strip()
+    except Exception as e:
+        log.warning(f"  Claude news summarize failed: {e}")
+        return ""
 
 
 def _gen_daily_summary(
