@@ -1096,12 +1096,13 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         st.markdown(
             f"<div style='background:#f8f9fa;border-left:4px solid {_ds_color};"
             f"padding:10px 16px;border-radius:4px;margin:10px 0'>"
-            f"<div style='font-size:0.82em;color:#888;margin-bottom:4px'>"
+            f"<div style='font-weight:700;color:#0f1117;font-size:1em;margin-bottom:8px'>"
             f"最新交易日小结 · {_ds.get('updated_sgt','')}（每日收盘后自动更新）</div>",
             unsafe_allow_html=True,
         )
         for _b in _ds["bullets"]:
-            st.markdown(f"- {_b}")
+            _b_clean = _b.replace("<small>", "").replace("</small>", "")
+            st.markdown(f"- {_b_clean}")
         st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("---")
