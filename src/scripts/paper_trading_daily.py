@@ -940,12 +940,14 @@ def _summarize_news_with_claude(
             f"以下是 Yahoo Finance 今日（交易日当天）关于 {sector} 板块的新闻：\n\n"
             f"{news_text}\n\n"
             f"背景：今日策略净值变化 {nav_chg_pct:+.2f}%，SPY 变化 {spy_chg_pct:+.2f}%，"
-            f"策略持有较多 {sector} 板块股票，因此净值与SPY出现了较大分歧。\n\n"
-            f"请基于以上新闻，用2-4条简体中文 bullet points，解释今日 {sector} 板块{direction}的核心原因，"
-            f"以及这如何导致策略净值与 SPY 出现分歧。"
-            f"要具体说明是什么事件或因素驱动，不要只复述标题，不要泛泛而谈。"
-            f"每条 bullet 一句话，直接输出文字（不要以 - 或 * 或数字开头，不要任何其他格式），"
-            f"用换行分隔各条。只输出中文 bullet 内容，不要任何其他文字。"
+            f"策略重仓 {sector} 板块，因此净值与 SPY 出现了显著分歧。\n\n"
+            f"任务：基于以上新闻内容，写 3-4 条简体中文分析，解释：\n"
+            f"① {sector} 板块今日为何{direction}（背后的驱动逻辑，不是事件描述）\n"
+            f"② 为什么这导致策略净值与 SPY 出现分歧\n\n"
+            f"要求：\n"
+            f"- 分析因果逻辑（为什么），不要只复述标题说了什么\n"
+            f"- 每条一句话，直接输出文字，不要以 - 或 * 或数字开头\n"
+            f"- 用换行分隔各条，只输出中文分析内容，不要任何其他文字"
         )
         msg = client.messages.create(
             model="claude-haiku-4-5-20251001",
