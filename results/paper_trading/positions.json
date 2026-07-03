@@ -2737,5 +2737,20 @@
     "TTM",
     "WFC-P-L"
   ],
-  "tiingo_universe_synced_utc": "2026-07-02T23:10:33Z"
+  "tiingo_universe_synced_utc": "2026-07-02T23:10:33Z",
+  "daily_summary": {
+    "date": "2026-07-02",
+    "updated_sgt": "2026-07-03 14:23 SGT",
+    "nav_change_pct": -2.95,
+    "spy_change_pct": -0.13,
+    "vs_spy_pct": -2.82,
+    "bullets": [
+      "\u51c0\u503c \u4e0b\u8dcc **-2.95%**\uff08$190,363\uff09\uff0cSPY \u4e0b\u8dcc -0.13%\uff0c\u76f8\u5bf9 SPY \u8dd1\u8f93 **-2.82%**",
+      "\u4e3b\u8981\u62d6\u7d2f\uff1aICHR\uff08-12.1%\uff0c-1,369$\uff09 \u00b7 ALGM\uff08-12.2%\uff0c-1,304$\uff09 \u00b7 MKSI\uff08-11.1%\uff0c-1,092$\uff09",
+      "\u4e3b\u8981\u8d21\u732e\uff1aABBV\uff08+4.0%\uff0c+380$\uff09 \u00b7 LTH\uff08+1.9%\uff0c+208$\uff09",
+      "\u677f\u5757\u5f52\u56e0\uff1aTechnology \u5408\u8ba1 -4,820$\uff08ICHR, ALGM, MKSI, ALAB, INTC, CWAN\uff09\uff1bHealthcare \u5408\u8ba1 +268$\uff08BTSG, CNTA, APGE, ABBV\uff09",
+      "\u4eca\u65e5\u64cd\u4f5c\uff1a\u5e73\u4ed3 AROC\uff08\u6b62\u635f\uff0c-651$\uff09\u3001AEE\uff08\u6b62\u635f\uff0c-291$\uff09\uff1b\u5f00\u4ed3 GH\u3001MSM",
+      "\u660e\u65e5\u5f00\u76d8\u5c06\u5e73\u4ed3\uff1aMKSI\uff08\u6b62\u635f\uff09\u3001ALGM\uff08\u8ffd\u8e2a\u6b62\u635f\uff09\u3001GVA\uff08\u8ffd\u8e2a\u6b62\u635f\uff09"
+    ]
+  }
 }
