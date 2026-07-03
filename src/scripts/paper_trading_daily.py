@@ -853,36 +853,29 @@ def _fetch_market_news(
     sector: str,
     trade_date: date,
     max_items: int = 3,
-) -> list[tuple[str, str]]:
-    """抓取 Yahoo Finance 新闻标题，为关键持仓及板块 ETF 提供市场背景。
-    返回 [(title, url), ...] 列表，仅包含 trade_date 前后 48 小时内发布的条目。
+) -> list[dict]:
+    """抓取 Yahoo Finance 新闻，为关键持仓及板块 ETF 提供市场背景。
+    返回 [{"title": ..., "url": ..., "pub_date": "YYYY-MM-DD"}, ...] 列表，
+    仅包含 trade_date 前后 48 小时内发布的条目。
     兼容 yfinance 新 API（字段在 item['content'] 中）和旧 API（字段在 item 顶层）。
     """
     date_lo = trade_date - timedelta(days=1)
     date_hi = trade_date + timedelta(days=1)
 
     def _parse_item(item: dict) -> tuple[str, str, date | None]:
-        """从新旧两种 yfinance 新闻结构中提取 (title, url, pub_date)。"""
-        content = item.get("content") or item  # 新 API 嵌套在 content 里
-
+        content = item.get("content") or item
         title = (content.get("title") or "").strip()
-
-        # URL：新 API 有 previewUrl / canonicalUrl / clickThroughUrl；旧 API 有 link
         url = (
             content.get("previewUrl")
             or (content.get("canonicalUrl") or {}).get("url")
             or content.get("link")
             or ""
         )
-
-        # 发布时间：新 API 是 ISO 字符串；旧 API 是 Unix 时间戳
         pub_date = None
         pub_raw = content.get("pubDate") or content.get("displayTime")
         if pub_raw:
             try:
-                pub_date = datetime.fromisoformat(
-                    pub_raw.replace("Z", "+00:00")
-                ).date()
+                pub_date = datetime.fromisoformat(pub_raw.replace("Z", "+00:00")).date()
             except Exception:
                 pass
         else:
@@ -892,27 +885,28 @@ def _fetch_market_news(
                     pub_date = datetime.fromtimestamp(int(ts)).date()
                 except Exception:
                     pass
-
         return title, url, pub_date
 
-    # 搜索顺序：板块 ETF 优先，再搜个股
     etf = _SECTOR_ETF.get(sector)
     search_tickers = ([etf] if etf else []) + list(tickers)[:3]
 
     seen: set[str] = set()
-    results: list[tuple[str, str]] = []
+    results: list[dict] = []
     for t in search_tickers:
         if len(results) >= max_items:
             break
         try:
-            news_list = yf.Ticker(t).news or []
-            for item in news_list[:10]:
+            for item in (yf.Ticker(t).news or [])[:10]:
                 title, url, pub_date = _parse_item(item)
                 if not title or title in seen:
                     continue
                 if pub_date and date_lo <= pub_date <= date_hi:
                     seen.add(title)
-                    results.append((title, url))
+                    results.append({
+                        "title":    title,
+                        "url":      url,
+                        "pub_date": str(pub_date),
+                    })
                     if len(results) >= max_items:
                         break
         except Exception:
