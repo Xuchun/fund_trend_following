@@ -1008,6 +1008,27 @@ def _gen_daily_summary(
                     f"单日累计贡献净值约 {sum(c for _, _, c in big_winners):+,.0f}$。"
                 )
 
+    # ── 市场新闻背景（分歧显著时抓取 Yahoo Finance 新闻） ────────────────────
+    news_items: list[tuple[str, str]] = []
+    focus_sec   = None
+    focus_tickers: list[str] = []
+    if abs(vs_spy) >= LARGE_DIV and sector_pnl:
+        if vs_spy < -LARGE_DIV:
+            focus_sec     = min(sector_pnl, key=sector_pnl.get)
+            focus_tickers = [t for t, _, _, s in movers if s == focus_sec][:3]
+        else:
+            focus_sec     = max(sector_pnl, key=sector_pnl.get)
+            focus_tickers = [t for t, _, _, s in movers[::-1] if s == focus_sec][:3]
+
+        log.info(f"  Fetching market news for sector={focus_sec}, tickers={focus_tickers}")
+        news_items = _fetch_market_news(focus_tickers, focus_sec, today, max_items=3)
+        if news_items:
+            titles = "；".join(f"《{t}》" for t, _ in news_items)
+            bullets.append(f"**市场新闻参考（Yahoo Finance）**：{titles}")
+            log.info(f"  Found {len(news_items)} news items")
+        else:
+            log.info("  No recent news found within 48h window")
+
     now_sgt = (datetime.now(timezone.utc) + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M SGT")
     return {
         "date":            str(today),
@@ -1016,6 +1037,7 @@ def _gen_daily_summary(
         "spy_change_pct":  round(spy_chg_pct, 2),
         "vs_spy_pct":      round(vs_spy, 2),
         "bullets":         bullets,
+        "news":            [{"title": t, "url": u} for t, u in news_items],
     }
 
 
