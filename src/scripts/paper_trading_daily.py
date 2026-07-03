@@ -1099,6 +1099,14 @@ def main() -> None:
     validate_pending_entries(state)
     log.info(f"  Open positions: {len(state['positions'])} | Cash: ${state.get('cash',0)/1e6:.2f}M")
 
+    # Snapshot yesterday's close prices before any updates (used for daily summary later)
+    _prev_prices: dict[str, float] = {
+        p["ticker"]: p.get("last_known_price", p["entry_price"])
+        for p in state.get("positions", [])
+    }
+    _prev_nav = state["nav_history"][-1]["nav"] if state.get("nav_history") else None
+    _prev_spy = state["nav_history"][-1].get("spy_close") if state.get("nav_history") else None
+
     # ── Step 1: fetch data for all tickers needed today ───────────────────────
     pos_tickers          = [p["ticker"] for p in state["positions"]]
     pending_exit_tickers = [s["ticker"] for s in state.get("pending_exits", [])]
