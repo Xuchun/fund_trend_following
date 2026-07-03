@@ -1359,6 +1359,21 @@ def main() -> None:
     state["last_update_date"] = str(today)
     state["last_update_utc"]  = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
+    # ── Step 7b: generate daily summary for monitor page ─────────────────────
+    state["daily_summary"] = _gen_daily_summary(
+        today            = today,
+        current_nav      = current_nav,
+        prev_nav         = _prev_nav,
+        spy_close        = spy_close,
+        prev_spy         = _prev_spy,
+        positions        = state["positions"],
+        prev_prices      = _prev_prices,
+        exits_executed   = exits_executed,
+        entries_executed = entries_executed,
+        new_exit_signals = new_exit_signals,
+    )
+    log.info(f"  Daily summary generated for {today}")
+
     # ── Step 8: build today_signals for website display ───────────────────────
     _today_sig = {
         "date":    str(today),
