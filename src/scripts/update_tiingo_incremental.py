@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.11
 """
 增量更新 Tiingo 缓存：只对 is_active=True 的标的下载最新缺失数据。
 已有缓存的文件只下载 last_cached_date+1 到 today 的增量。
