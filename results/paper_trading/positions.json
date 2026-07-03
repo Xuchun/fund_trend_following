@@ -2740,14 +2740,29 @@
   "tiingo_universe_synced_utc": "2026-07-02T23:10:33Z",
   "daily_summary": {
     "date": "2026-07-02",
-    "updated_sgt": "2026-07-03 15:38 SGT",
+    "updated_sgt": "2026-07-03 15:53 SGT",
     "nav_change_pct": -2.95,
     "spy_change_pct": -0.13,
     "vs_spy_pct": -2.82,
     "bullets": [
       "SPY \u57fa\u672c\u6301\u5e73\uff0c\u4f46\u7b56\u7565\u51c0\u503c\u5927\u5e45\u4e0b\u8dcc\u2014\u2014\u539f\u56e0\u662f\u7ec4\u5408\u96c6\u4e2d\u6301\u4ed3\u4e8e**Technology** \u677f\u5757\uff08\u5360 NAV \u7ea6 30%\uff09\uff0c\u800c\u8be5\u677f\u5757\u5f53\u65e5\u96c6\u4f53\u5927\u5e45\u56de\u8c03\u3002SPY \u4f5c\u4e3a 500 \u53ea\u80a1\u7968\u7684\u5206\u6563\u6307\u6570\uff0c\u5176\u4ed6\u677f\u5757\u7684\u6da8\u52bf\u62b5\u6d88\u4e86Technology \u7684\u8dcc\u5e45\uff0c\u6307\u6570\u6574\u4f53\u6301\u5e73\uff1b\u4f46\u7ec4\u5408\u7f3a\u4e4f\u8fd9\u79cd\u8de8\u677f\u5757\u5bf9\u51b2\u3002",
       "\u8dcc\u5e45\u6700\u5927\u7684\u6301\u4ed3\uff1aICHR\uff08-12.1%\uff09\u3001ALGM\uff08-12.2%\uff09\u3001MKSI\uff08-11.1%\uff09\uff0c\u96c6\u4e2d\u5728\u540c\u4e00\u677f\u5757\uff0c\u5355\u65e5\u7d2f\u8ba1\u62d6\u7d2f\u51c0\u503c\u7ea6 -3,764$\u3002",
-      "\u8fd9\u662f\u8d8b\u52bf\u8ddf\u8e2a\u7b56\u7565\u7684\u677f\u5757\u96c6\u4e2d\u6027\u98ce\u9669\uff1a\u8ffd\u5165\u5f3a\u52bf\u8d8b\u52bf\u610f\u5473\u7740\u7ec4\u5408\u5728\u5c11\u6570\u677f\u5757\u5f62\u6210\u7cfb\u7edf\u6027\u655e\u53e3\uff0c\u4e00\u65e6\u8be5\u677f\u5757\u6574\u4f53\u56de\u8c03\uff0c\u51c0\u503c\u8dcc\u5e45\u4f1a\u8fdc\u8d85\u5206\u6563\u5316\u6307\u6570\u3002"
+      "\u8fd9\u662f\u8d8b\u52bf\u8ddf\u8e2a\u7b56\u7565\u7684\u677f\u5757\u96c6\u4e2d\u6027\u98ce\u9669\uff1a\u8ffd\u5165\u5f3a\u52bf\u8d8b\u52bf\u610f\u5473\u7740\u7ec4\u5408\u5728\u5c11\u6570\u677f\u5757\u5f62\u6210\u7cfb\u7edf\u6027\u655e\u53e3\uff0c\u4e00\u65e6\u8be5\u677f\u5757\u6574\u4f53\u56de\u8c03\uff0c\u51c0\u503c\u8dcc\u5e45\u4f1a\u8fdc\u8d85\u5206\u6563\u5316\u6307\u6570\u3002",
+      "**\u5e02\u573a\u65b0\u95fb\u53c2\u8003\uff08Yahoo Finance\uff09**\uff1a\u300aChip stocks selloff extends on valuation, Meta's pivot fears\u300b\uff1b\u300aFormFactor and Allegro MicroSystems Shares Plummet, What You Need To Know\u300b\uff1b\u300aIntel Stock Fell 9% in a Day After Soaring About 270% in the First Half. Buy the Dip?\u300b"
+    ],
+    "news": [
+      {
+        "title": "Chip stocks selloff extends on valuation, Meta's pivot fears",
+        "url": "https://finance.yahoo.com/technology/articles/chip-stocks-selloff-extends-valuat"
+      },
+      {
+        "title": "FormFactor and Allegro MicroSystems Shares Plummet, What You Need To Know",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/formfactor-allegro-microsystem"
+      },
+      {
+        "title": "Intel Stock Fell 9% in a Day After Soaring About 270% in the First Half. Buy the Dip?",
+        "url": "https://www.fool.com/investing/2026/07/02/intel-stock-fell-9-in-a-day-after-soar"
+      }
     ]
   }
 }
