@@ -915,6 +915,9 @@ def _fetch_market_news(
                 if not title or title in seen:
                     continue
                 if pub_date and date_lo <= pub_date <= date_hi:
+                    if not _check_url(url):
+                        log.info(f"    Skipping inaccessible URL: {url[:60]}")
+                        continue
                     seen.add(title)
                     results.append({
                         "title":    title,
