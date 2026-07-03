@@ -1102,17 +1102,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         )
         for _b in _ds["bullets"]:
             st.markdown(f"- {_b}")
-        _ds_news = _ds.get("news", [])
-        if _ds_news:
-            _news_links = " · ".join(
-                f"[{_n['title']}]({_n['url']})" if _n.get("url") else f"《{_n['title']}》"
-                for _n in _ds_news
-            )
-            st.markdown(
-                f"<div style='font-size:0.80em;color:#666;margin-top:4px'>"
-                f"📰 相关新闻：{_news_links}</div>",
-                unsafe_allow_html=True,
-            )
         st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("---")
