@@ -831,6 +831,118 @@ def scan_entries(
     return signals, scan_stats
 
 
+# ── Daily summary generation ─────────────────────────────────────────────────
+
+def _gen_daily_summary(
+    today: date,
+    current_nav: float,
+    prev_nav: float | None,
+    spy_close: float | None,
+    prev_spy: float | None,
+    positions: list[dict],
+    prev_prices: dict[str, float],
+    exits_executed: list[dict],
+    entries_executed: list[dict],
+    new_exit_signals: list[dict],
+) -> dict:
+    """生成每日交易日小结，存入 positions.json 供网页展示。"""
+    nav_chg_pct = (current_nav / prev_nav - 1) * 100 if prev_nav else 0.0
+    spy_chg_pct = (spy_close / prev_spy - 1) * 100 if (spy_close and prev_spy) else 0.0
+    vs_spy      = nav_chg_pct - spy_chg_pct
+
+    # 持仓逐个当日涨跌（与昨收比较）
+    movers: list[tuple[str, float, float, str]] = []
+    sector_pnl: dict[str, float] = {}
+    for p in positions:
+        t       = p["ticker"]
+        curr_px = p.get("last_known_price", p["entry_price"])
+        prev_px = prev_prices.get(t)
+        if prev_px is None or prev_px <= 0:
+            continue
+        shares    = p["shares"]
+        dollar_chg = (curr_px - prev_px) * shares
+        pct_chg    = (curr_px / prev_px - 1) * 100
+        sec        = p.get("sector", "N/A")
+        movers.append((t, pct_chg, dollar_chg, sec))
+        sector_pnl[sec] = sector_pnl.get(sec, 0.0) + dollar_chg
+
+    movers.sort(key=lambda x: x[2])          # ascending by dollar change
+    top_losers  = [m for m in movers if m[2] < -50][:3]
+    top_winners = [m for m in movers if m[2] >  50][-3:][::-1]
+
+    bullets: list[str] = []
+
+    # ① 净值 vs SPY
+    nav_dir = "上涨" if nav_chg_pct >= 0 else "下跌"
+    spy_dir = "上涨" if spy_chg_pct >= 0 else ("下跌" if spy_chg_pct < 0 else "持平")
+    rel_word = "跑赢" if vs_spy > 0.1 else ("跑输" if vs_spy < -0.1 else "基本持平")
+    bullets.append(
+        f"净值 {nav_dir} **{nav_chg_pct:+.2f}%**（${current_nav:,.0f}），"
+        f"SPY {spy_dir} {spy_chg_pct:+.2f}%，"
+        f"相对 SPY {rel_word} **{vs_spy:+.2f}%**"
+    )
+
+    # ② 主要拖累
+    if top_losers:
+        parts = [f"{t}（{pct:+.1f}%，{chg:+,.0f}$）" for t, pct, chg, _ in top_losers]
+        bullets.append("主要拖累：" + " · ".join(parts))
+
+    # ③ 主要贡献（仅当有明显正贡献时显示）
+    if top_winners:
+        parts = [f"{t}（{pct:+.1f}%，{chg:+,.0f}$）" for t, pct, chg, _ in top_winners]
+        bullets.append("主要贡献：" + " · ".join(parts))
+
+    # ④ 板块归因（最差板块，损失 > $200）
+    if sector_pnl:
+        worst_sec = min(sector_pnl, key=sector_pnl.get)
+        best_sec  = max(sector_pnl, key=sector_pnl.get)
+        sec_parts = []
+        if sector_pnl[worst_sec] < -200:
+            tickers_in_sec = [t for t, _, _, s in movers if s == worst_sec]
+            sec_parts.append(
+                f"{worst_sec} 合计 {sector_pnl[worst_sec]:+,.0f}$（{', '.join(tickers_in_sec)}）"
+            )
+        if sector_pnl[best_sec] > 200 and best_sec != worst_sec:
+            tickers_in_sec = [t for t, _, _, s in movers if s == best_sec]
+            sec_parts.append(
+                f"{best_sec} 合计 {sector_pnl[best_sec]:+,.0f}$（{', '.join(tickers_in_sec)}）"
+            )
+        if sec_parts:
+            bullets.append("板块归因：" + "；".join(sec_parts))
+
+    # ⑤ 今日操作
+    if exits_executed or entries_executed:
+        parts = []
+        if exits_executed:
+            ex_str = "、".join(
+                f"{e['ticker']}（{e.get('exit_reason','').replace('stop_loss','止损').replace('trailing_stop','追踪止损')}，{e.get('net_pnl',0):+,.0f}$）"
+                for e in exits_executed
+            )
+            parts.append(f"平仓 {ex_str}")
+        if entries_executed:
+            en_str = "、".join(e["ticker"] for e in entries_executed)
+            parts.append(f"开仓 {en_str}")
+        bullets.append("今日操作：" + "；".join(parts))
+
+    # ⑥ 明日待平仓
+    if new_exit_signals:
+        pending = "、".join(
+            f"{s['ticker']}（{s.get('exit_reason','').replace('stop_loss','止损').replace('trailing_stop','追踪止损')}）"
+            for s in new_exit_signals
+        )
+        bullets.append(f"明日开盘将平仓：{pending}")
+
+    now_sgt = (datetime.now(timezone.utc) + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M SGT")
+    return {
+        "date":            str(today),
+        "updated_sgt":     now_sgt,
+        "nav_change_pct":  round(nav_chg_pct, 2),
+        "spy_change_pct":  round(spy_chg_pct, 2),
+        "vs_spy_pct":      round(vs_spy, 2),
+        "bullets":         bullets,
+    }
+
+
 # ── Retry mode ───────────────────────────────────────────────────────────────
 
 def run_retry() -> None:
