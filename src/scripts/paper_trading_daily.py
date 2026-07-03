@@ -1085,10 +1085,24 @@ def _gen_daily_summary(
         log.info(f"  Fetching market news for sector={focus_sec}, tickers={focus_tickers}")
         news_items = _fetch_market_news(focus_tickers, focus_sec, today, max_items=3)
         if news_items:
-            for _ni in news_items:
-                _link = f"[{_ni['title']}]({_ni['url']})" if _ni.get("url") else f"《{_ni['title']}》"
-                bullets.append(f"📰 {_link}（Yahoo Finance，{_ni['pub_date']}）")
-            log.info(f"  Found {len(news_items)} news items")
+            log.info(f"  Found {len(news_items)} news items, calling Claude to summarize …")
+            _direction = "下跌" if vs_spy < -LARGE_DIV else "上涨"
+            _claude_summary = _summarize_news_with_claude(news_items, focus_sec, _direction)
+            if _claude_summary:
+                # 附上新闻来源链接作为脚注
+                _src_links = "、".join(
+                    f"[{n['title'][:30]}…]({n['url']})" if n.get("url") else f"《{n['title'][:30]}…》"
+                    for n in news_items
+                )
+                bullets.append(
+                    f"**市场背景**：{_claude_summary}"
+                    f"\n  <small>📰 来源（Yahoo Finance）：{_src_links}</small>"
+                )
+            else:
+                # Claude 调用失败时退回显示新闻标题+日期
+                for _ni in news_items:
+                    _link = f"[{_ni['title']}]({_ni['url']})" if _ni.get("url") else f"《{_ni['title']}》"
+                    bullets.append(f"📰 {_link}（Yahoo Finance，{_ni['pub_date']}）")
         else:
             log.info("  No recent news found within 48h window")
 
