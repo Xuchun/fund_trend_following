@@ -28,9 +28,11 @@ jobs:
           cache: 'pip'
 
       - name: Install dependencies
-        run: pip install yfinance pandas numpy
+        run: pip install yfinance pandas numpy anthropic
 
       - name: Run paper trading daily update
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python src/scripts/paper_trading_daily.py
 
       - name: Commit and push results
