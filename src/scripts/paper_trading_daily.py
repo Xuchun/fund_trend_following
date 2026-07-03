@@ -859,7 +859,7 @@ def _fetch_market_news(
     仅包含 trade_date 前后 48 小时内发布的条目。
     兼容 yfinance 新 API（字段在 item['content'] 中）和旧 API（字段在 item 顶层）。
     """
-    date_lo = trade_date - timedelta(days=1)
+    date_lo = trade_date
     date_hi = trade_date + timedelta(days=1)
 
     def _parse_item(item: dict) -> tuple[str, str, str, date | None]:
