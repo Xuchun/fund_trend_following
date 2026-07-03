@@ -1050,7 +1050,7 @@ def _gen_daily_summary(
         "spy_change_pct":  round(spy_chg_pct, 2),
         "vs_spy_pct":      round(vs_spy, 2),
         "bullets":         bullets,
-        "news":            [{"title": t, "url": u} for t, u in news_items],
+        "news":            [{"title": n["title"], "url": n.get("url", "")} for n in news_items],
     }
 
 
