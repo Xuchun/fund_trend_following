@@ -833,6 +833,62 @@ def scan_entries(
 
 # ── Daily summary generation ─────────────────────────────────────────────────
 
+# Sector → representative ETF (for broader sector news context)
+_SECTOR_ETF = {
+    "Technology":             "SMH",   # semiconductors dominate our tech holdings
+    "Industrials":            "XLI",
+    "Healthcare":             "XLV",
+    "Financial Services":     "XLF",
+    "Consumer Cyclical":      "XLY",
+    "Communication Services": "XLC",
+    "Energy":                 "XLE",
+    "Utilities":              "XLU",
+    "Basic Materials":        "XLB",
+    "Real Estate":            "XLRE",
+}
+
+
+def _fetch_market_news(
+    tickers: list[str],
+    sector: str,
+    trade_date: date,
+    max_items: int = 3,
+) -> list[tuple[str, str]]:
+    """抓取 Yahoo Finance 新闻标题，为关键持仓及板块 ETF 提供市场背景。
+    返回 [(title, url), ...] 列表，仅包含 trade_date 前后 48 小时内发布的条目。
+    """
+    import time as _time
+
+    cutoff_lo  = _time.mktime((trade_date - timedelta(days=1)).timetuple())
+    cutoff_hi  = _time.mktime((trade_date + timedelta(days=1)).timetuple())
+
+    # 搜索顺序：板块 ETF 优先，再搜个股
+    etf = _SECTOR_ETF.get(sector)
+    search_tickers = ([etf] if etf else []) + list(tickers)[:3]
+
+    seen: set[str] = set()
+    results: list[tuple[str, str]] = []
+    for t in search_tickers:
+        if len(results) >= max_items:
+            break
+        try:
+            news_list = yf.Ticker(t).news or []
+            for item in news_list[:10]:
+                title = (item.get("title") or "").strip()
+                url   = item.get("link") or item.get("url") or ""
+                pub   = item.get("providerPublishTime") or 0
+                if not title or title in seen:
+                    continue
+                if cutoff_lo <= pub <= cutoff_hi:
+                    seen.add(title)
+                    results.append((title, url))
+                    if len(results) >= max_items:
+                        break
+        except Exception:
+            continue
+    return results
+
+
 def _gen_daily_summary(
     today: date,
     current_nav: float,
