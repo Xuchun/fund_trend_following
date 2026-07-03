@@ -921,34 +921,43 @@ def _summarize_news_with_claude(
     news_items: list[dict],
     sector: str,
     direction: str,
-) -> str:
-    """调用 Claude Haiku 把新闻标题+摘要综合成2-3句中文解释（板块涨跌原因）。
-    若 ANTHROPIC_API_KEY 未配置或调用失败，返回空字符串。
+    nav_chg_pct: float,
+    spy_chg_pct: float,
+) -> list[str]:
+    """调用 Claude Haiku 把当日新闻综合为解释净值vs SPY分歧的 bullet points。
+    返回 bullet 字符串列表（不含前缀符号），失败时返回空列表。
+    若 ANTHROPIC_API_KEY 未配置或调用失败，返回空列表。
     """
     try:
         import anthropic
-        client = anthropic.Anthropic()   # 读取 ANTHROPIC_API_KEY 环境变量
+        client = anthropic.Anthropic()
 
         news_text = "\n\n".join(
             f"标题：{n['title']}\n摘要：{n['summary'] or '（无摘要）'}"
-            for n in news_items[:3]
+            for n in news_items[:5]
         )
         prompt = (
-            f"以下是 Yahoo Finance 关于 {sector} 板块的新闻（美股交易日收盘后）：\n\n"
+            f"以下是 Yahoo Finance 今日（交易日当天）关于 {sector} 板块的新闻：\n\n"
             f"{news_text}\n\n"
-            f"请用2-3句简体中文，简明解释 {sector} 板块当日{direction}的核心原因。"
+            f"背景：今日策略净值变化 {nav_chg_pct:+.2f}%，SPY 变化 {spy_chg_pct:+.2f}%，"
+            f"策略持有较多 {sector} 板块股票，因此净值与SPY出现了较大分歧。\n\n"
+            f"请基于以上新闻，用2-4条简体中文 bullet points，解释今日 {sector} 板块{direction}的核心原因，"
+            f"以及这如何导致策略净值与 SPY 出现分歧。"
             f"要具体说明是什么事件或因素驱动，不要只复述标题，不要泛泛而谈。"
-            f"只输出中文解释，不要任何其他内容。"
+            f"每条 bullet 一句话，直接输出文字（不要以 - 或 * 或数字开头，不要任何其他格式），"
+            f"用换行分隔各条。只输出中文 bullet 内容，不要任何其他文字。"
         )
         msg = client.messages.create(
             model="claude-haiku-4-5-20251001",
-            max_tokens=250,
+            max_tokens=400,
             messages=[{"role": "user", "content": prompt}],
         )
-        return msg.content[0].text.strip()
+        raw = msg.content[0].text.strip()
+        bullets = [line.strip().lstrip("-•*· 0123456789.）)") for line in raw.split("\n") if line.strip()]
+        return [b for b in bullets if b]
     except Exception as e:
         log.warning(f"  Claude news summarize failed: {e}")
-        return ""
+        return []
 
 
 def _gen_daily_summary(
