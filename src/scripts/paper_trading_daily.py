@@ -1048,9 +1048,7 @@ def _gen_daily_summary(
                 for n in news_items
             )
             bullets.extend(_claude_bullets)
-            bullets.append(
-                f"<small>📰 来源（Yahoo Finance，{today}）：{_src_links}</small>"
-            )
+            bullets.append(f"📰 分析依据（Yahoo Finance，{today}）：{_src_links}")
         else:
             # Claude 调用失败时退回显示新闻标题
             for _ni in news_items:
