@@ -848,15 +848,27 @@ _SECTOR_ETF = {
 }
 
 
+def _check_url(url: str, timeout: int = 6) -> bool:
+    """返回 True 表示 URL 可正常访问（HTTP 2xx/3xx）。"""
+    if not url or not url.startswith("http"):
+        return False
+    try:
+        import urllib.request
+        req = urllib.request.Request(url, method="HEAD",
+                                     headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            return r.status < 400
+    except Exception:
+        return False
+
+
 def _fetch_market_news(
     tickers: list[str],
     sector: str,
     trade_date: date,
     max_items: int = 3,
 ) -> list[dict]:
-    """抓取 Yahoo Finance 新闻，为关键持仓及板块 ETF 提供市场背景。
-    返回 [{"title": ..., "url": ..., "pub_date": "YYYY-MM-DD"}, ...] 列表，
-    仅包含 trade_date 前后 48 小时内发布的条目。
+    """抓取 Yahoo Finance 新闻，仅返回 trade_date 当天（含次日）且 URL 可访问的条目。
     兼容 yfinance 新 API（字段在 item['content'] 中）和旧 API（字段在 item 顶层）。
     """
     date_lo = trade_date
