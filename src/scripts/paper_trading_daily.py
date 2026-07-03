@@ -1048,8 +1048,9 @@ def _gen_daily_summary(
         log.info(f"  Fetching market news for sector={focus_sec}, tickers={focus_tickers}")
         news_items = _fetch_market_news(focus_tickers, focus_sec, today, max_items=3)
         if news_items:
-            titles = "；".join(f"《{t}》" for t, _ in news_items)
-            bullets.append(f"**市场新闻参考（Yahoo Finance）**：{titles}")
+            for _ni in news_items:
+                _link = f"[{_ni['title']}]({_ni['url']})" if _ni.get("url") else f"《{_ni['title']}》"
+                bullets.append(f"📰 {_link}（Yahoo Finance，{_ni['pub_date']}）")
             log.info(f"  Found {len(news_items)} news items")
         else:
             log.info("  No recent news found within 48h window")
