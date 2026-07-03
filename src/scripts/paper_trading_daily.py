@@ -1000,120 +1000,47 @@ def _gen_daily_summary(
 
     bullets: list[str] = []
 
-    # ── 分析策略净值与 SPY 的分歧 ─────────────────────────────────────────────
-    LARGE_DIV = 1.5   # 分歧超过此阈值（%）才算"显著"
-
-    if abs(vs_spy) < LARGE_DIV:
-        # 分歧不大，一句话带过
-        if abs(nav_chg_pct) < 0.5:
-            bullets.append("策略净值与 SPY 今日表现基本一致，无显著分歧。")
-        else:
-            direction = "同步上涨" if nav_chg_pct > 0 else "同步下跌"
-            bullets.append(f"策略净值与 SPY 今日走势基本一致（{direction}），无显著分歧。")
-    else:
-        # 显著分歧 → 给出分析
-        nav_up   = nav_chg_pct >= 0
-        spy_flat = abs(spy_chg_pct) < 0.5
-
-        if vs_spy < -LARGE_DIV:
-            # 策略大幅跑输 SPY
-            # 找最大拖累板块
-            worst_sec     = min(sector_pnl, key=sector_pnl.get) if sector_pnl else None
-            worst_sec_wt  = sector_nav.get(worst_sec, 0) / total_mkt * 100 if worst_sec else 0
-            worst_sec_pnl = sector_pnl.get(worst_sec, 0)
-            worst_tickers = [t for t, _, _, s in movers if s == worst_sec and _ < -2]
-
-            # 主要拖累个股（跌幅最大的3只）
-            big_losers = [(t, pct, chg) for t, pct, chg, _ in movers if chg < -100][:3]
-
-            if spy_flat:
-                bullets.append(
-                    f"SPY 基本持平，但策略净值大幅下跌——原因是组合集中持仓于"
-                    f"**{worst_sec}** 板块（占 NAV 约 {worst_sec_wt:.0f}%），"
-                    f"而该板块当日集体大幅回调。"
-                    f"SPY 作为 500 只股票的分散指数，其他板块的涨势抵消了"
-                    f"{worst_sec} 的跌幅，指数整体持平；但组合缺乏这种跨板块对冲。"
-                )
-            else:
-                bullets.append(
-                    f"策略净值跌幅远超 SPY，主因是组合集中持仓于"
-                    f"**{worst_sec}** 板块（占 NAV 约 {worst_sec_wt:.0f}%），"
-                    f"该板块当日跌幅远超大盘平均水平。"
-                )
-
-            if big_losers:
-                names = "、".join(f"{t}（{pct:+.1f}%）" for t, pct, _ in big_losers)
-                bullets.append(
-                    f"跌幅最大的持仓：{names}，集中在同一板块，"
-                    f"单日累计拖累净值约 {sum(c for _, _, c in big_losers):+,.0f}$。"
-                )
-
-            bullets.append(
-                "这是趋势跟踪策略的板块集中性风险：追入强势趋势意味着组合在少数板块形成系统性敞口，"
-                "一旦该板块整体回调，净值跌幅会远超分散化指数。"
-            )
-
-        else:
-            # 策略大幅跑赢 SPY
-            best_sec    = max(sector_pnl, key=sector_pnl.get) if sector_pnl else None
-            best_sec_wt = sector_nav.get(best_sec, 0) / total_mkt * 100 if best_sec else 0
-            big_winners = [(t, pct, chg) for t, pct, chg, _ in movers if chg > 100][-3:][::-1]
-
-            if spy_flat:
-                bullets.append(
-                    f"SPY 基本持平，但策略净值大幅上涨——原因是组合集中持仓于"
-                    f"**{best_sec}** 板块（占 NAV 约 {best_sec_wt:.0f}%），"
-                    f"该板块当日集体大幅走强。"
-                    f"SPY 的分散化特性稀释了这一板块的涨幅，而组合对其有集中敞口，因此超额收益明显。"
-                )
-            else:
-                bullets.append(
-                    f"策略净值涨幅大幅超过 SPY，主因是组合重仓的"
-                    f"**{best_sec}** 板块（占 NAV 约 {best_sec_wt:.0f}%）当日强势领涨。"
-                )
-
-            if big_winners:
-                names = "、".join(f"{t}（{pct:+.1f}%）" for t, pct, _ in big_winners)
-                bullets.append(
-                    f"涨幅最大的持仓：{names}，"
-                    f"单日累计贡献净值约 {sum(c for _, _, c in big_winners):+,.0f}$。"
-                )
-
-    # ── 市场新闻背景（分歧显著时抓取 Yahoo Finance 新闻） ────────────────────
-    news_items: list[tuple[str, str]] = []
-    focus_sec   = None
+    # ── 确定关注板块（影响最大的板块） ──────────────────────────────────────────
+    focus_sec: str | None = None
     focus_tickers: list[str] = []
-    if abs(vs_spy) >= LARGE_DIV and sector_pnl:
-        if vs_spy < -LARGE_DIV:
+    _direction = "下跌"
+    if sector_pnl:
+        if vs_spy < 0:
             focus_sec     = min(sector_pnl, key=sector_pnl.get)
             focus_tickers = [t for t, _, _, s in movers if s == focus_sec][:3]
+            _direction    = "下跌"
         else:
             focus_sec     = max(sector_pnl, key=sector_pnl.get)
             focus_tickers = [t for t, _, _, s in movers[::-1] if s == focus_sec][:3]
+            _direction    = "上涨"
 
-        log.info(f"  Fetching market news for sector={focus_sec}, tickers={focus_tickers}")
-        news_items = _fetch_market_news(focus_tickers, focus_sec, today, max_items=3)
-        if news_items:
-            log.info(f"  Found {len(news_items)} news items, calling Claude to summarize …")
-            _direction = "下跌" if vs_spy < -LARGE_DIV else "上涨"
-            _claude_summary = _summarize_news_with_claude(news_items, focus_sec, _direction)
-            if _claude_summary:
-                # 附上新闻来源链接作为脚注
-                _src_links = "、".join(
-                    f"[{n['title'][:30]}…]({n['url']})" if n.get("url") else f"《{n['title'][:30]}…》"
-                    for n in news_items
-                )
-                bullets.append(
-                    f"**市场背景**：{_claude_summary}"
-                    f"\n  <small>📰 来源（Yahoo Finance）：{_src_links}</small>"
-                )
-            else:
-                # Claude 调用失败时退回显示新闻标题+日期
-                for _ni in news_items:
-                    _link = f"[{_ni['title']}]({_ni['url']})" if _ni.get("url") else f"《{_ni['title']}》"
-                    bullets.append(f"📰 {_link}（Yahoo Finance，{_ni['pub_date']}）")
+    # ── 抓取当日新闻并用 Claude 生成所有 bullet points ───────────────────────
+    news_items: list[dict] = []
+    if focus_sec:
+        log.info(f"  Fetching today's news for sector={focus_sec}, tickers={focus_tickers}")
+        news_items = _fetch_market_news(focus_tickers, focus_sec, today, max_items=5)
+
+    if news_items:
+        log.info(f"  Found {len(news_items)} news items, calling Claude for bullet points …")
+        _claude_bullets = _summarize_news_with_claude(
+            news_items, focus_sec or "", _direction, nav_chg_pct, spy_chg_pct
+        )
+        if _claude_bullets:
+            _src_links = "、".join(
+                f"[{n['title'][:30]}…]({n['url']})" if n.get("url") else f"《{n['title'][:30]}…》"
+                for n in news_items
+            )
+            bullets.extend(_claude_bullets)
+            bullets.append(
+                f"<small>📰 来源（Yahoo Finance，{today}）：{_src_links}</small>"
+            )
         else:
-            log.info("  No recent news found within 48h window")
+            # Claude 调用失败时退回显示新闻标题
+            for _ni in news_items:
+                _link = f"[{_ni['title']}]({_ni['url']})" if _ni.get("url") else f"《{_ni['title']}》"
+                bullets.append(f"📰 {_link}（Yahoo Finance，{_ni['pub_date']}）")
+    else:
+        log.info(f"  No news found for {today} — summary will be empty")
 
     now_sgt = (datetime.now(timezone.utc) + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M SGT")
     return {
