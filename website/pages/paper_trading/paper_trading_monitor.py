@@ -979,15 +979,23 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.markdown(f"上次更新：{_last_fetch_sgt} ｜ Yahoo Finance")
 
     # ── GitHub Actions 运行状态 ────────────────────────────────────────────────
-    if _m1_last_upd_raw:
+    if _m1_last_upd_raw or _m1_last_no_op_raw:
         try:
             import datetime as _dt_ga
-            _ga_last  = _dt_ga.datetime.strptime(_m1_last_upd_raw, "%Y-%m-%dT%H:%M:%SZ").replace(
-                tzinfo=_dt_ga.timezone.utc
-            )
+            # 取 last_update_utc 和 last_no_op_utc 中较新的一个作为"上次 GA 运行时间"
+            _ga_candidates = []
+            for _raw in (_m1_last_upd_raw, _m1_last_no_op_raw):
+                if _raw:
+                    _ga_candidates.append(
+                        _dt_ga.datetime.strptime(_raw, "%Y-%m-%dT%H:%M:%SZ").replace(
+                            tzinfo=_dt_ga.timezone.utc
+                        )
+                    )
+            _ga_last  = max(_ga_candidates)
             _ga_hours = (_dt_ga.datetime.now(_dt_ga.timezone.utc) - _ga_last).total_seconds() / 3600
+            _is_no_op = _m1_last_no_op_raw and (not _m1_last_upd_raw or _ga_last == _ga_candidates[1] if len(_ga_candidates) > 1 else False)
             if _ga_hours < 26:
-                _ga_color, _ga_icon, _ga_note = "#2ca02c", "🟢", "正常"
+                _ga_color, _ga_icon, _ga_note = "#2ca02c", "🟢", "正常（市场休市，无需更新）" if _is_no_op else "正常"
             elif _ga_hours < 48:
                 _ga_color, _ga_icon, _ga_note = "#ff7f0e", "🟡", "⚠️ 超过 26 小时未更新"
             else:
