@@ -722,6 +722,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _m1_cash       = _m1.get("cash", 0.0)
     _m1_init_nav   = _m1["initial_nav"]
     _m1_last_upd_raw = _m1.get("last_update_utc") or ""   # guard against JSON null
+    _m1_last_no_op_raw = _m1.get("last_no_op_utc") or ""  # set on holiday/weekend no-op runs
     if _m1_last_upd_raw:
         from datetime import datetime, timezone, timedelta
         _sgt = timezone(timedelta(hours=8))
