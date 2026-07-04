@@ -1009,9 +1009,8 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     )
                     _is_no_op = _no_op_dt > _upd_dt
                 if _is_no_op:
-                    # no-op 日期用 SGT 显示（UTC+8）
-                    _sgt8 = _dt_ga.timezone(_dt_ga.timedelta(hours=8))
-                    _no_op_date_str = _no_op_dt.astimezone(_sgt8).strftime("%Y-%m-%d")
+                    # 用 UTC 日期作为美股交易日日期（脚本在 23:00 UTC 运行，对应美股当日收盘后）
+                    _no_op_date_str = _no_op_dt.strftime("%Y-%m-%d")
 
             if _ga_hours < 26:
                 _ga_color, _ga_icon, _ga_note = "#2ca02c", "🟢", "正常（市场休市，无需更新）" if _is_no_op else "正常"
