@@ -993,7 +993,26 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     )
             _ga_last  = max(_ga_candidates)
             _ga_hours = (_dt_ga.datetime.now(_dt_ga.timezone.utc) - _ga_last).total_seconds() / 3600
-            _is_no_op = _m1_last_no_op_raw and (not _m1_last_upd_raw or _ga_last == _ga_candidates[1] if len(_ga_candidates) > 1 else False)
+
+            # 判断最新一次是否为节假日 no-op（last_no_op_utc 比 last_update_utc 更新）
+            _is_no_op = False
+            _no_op_date_str = ""
+            if _m1_last_no_op_raw:
+                _no_op_dt = _dt_ga.datetime.strptime(_m1_last_no_op_raw, "%Y-%m-%dT%H:%M:%SZ").replace(
+                    tzinfo=_dt_ga.timezone.utc
+                )
+                if not _m1_last_upd_raw:
+                    _is_no_op = True
+                else:
+                    _upd_dt = _dt_ga.datetime.strptime(_m1_last_upd_raw, "%Y-%m-%dT%H:%M:%SZ").replace(
+                        tzinfo=_dt_ga.timezone.utc
+                    )
+                    _is_no_op = _no_op_dt > _upd_dt
+                if _is_no_op:
+                    # no-op 日期用 SGT 显示（UTC+8）
+                    _sgt8 = _dt_ga.timezone(_dt_ga.timedelta(hours=8))
+                    _no_op_date_str = _no_op_dt.astimezone(_sgt8).strftime("%Y-%m-%d")
+
             if _ga_hours < 26:
                 _ga_color, _ga_icon, _ga_note = "#2ca02c", "🟢", "正常（市场休市，无需更新）" if _is_no_op else "正常"
             elif _ga_hours < 48:
@@ -1007,6 +1026,14 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 f"距今 <b>{_ga_hours:.1f} 小时</b>（{_ga_note}）</span></div>",
                 unsafe_allow_html=True,
             )
+
+            # 节假日说明
+            if _is_no_op and _no_op_date_str:
+                _last_trade_date = _m1.get("last_update_date", "")
+                st.info(
+                    f"📅 **{_no_op_date_str} 为美股节假日，市场休市，策略当日无操作。**"
+                    + (f"  当前显示的是上一个有效交易日（{_last_trade_date}）的数据。" if _last_trade_date else "")
+                )
         except Exception:
             pass
 
