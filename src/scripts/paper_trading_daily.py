@@ -1257,6 +1257,8 @@ def main() -> None:
             f"  No market data for {today} — pre-market, weekend, or holiday. "
             "State unchanged; website keeps showing last completed trading day."
         )
+        state["last_no_op_utc"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        save_state(state)
         log.info("=== Done (no-op — market not yet open) ===")
         return
 
