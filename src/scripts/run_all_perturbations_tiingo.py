@@ -44,7 +44,7 @@ EU_CSV       = ROOT / "data" / "tiingo_eligible_universe.csv"
 OUTPUT_DIR   = ROOT / "results" / "v1_unbiased_60m_2000" / "perturbation"
 
 START           = "2000-01-03"
-END             = "2026-06-15"
+END             = "2026-06-30"
 INITIAL_CAPITAL = 10_000_000.0
 MIN_ELIGIBLE_DAYS = 252
 
