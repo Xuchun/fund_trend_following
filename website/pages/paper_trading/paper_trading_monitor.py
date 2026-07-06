@@ -1306,22 +1306,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             f"净资金变动 {'−' if _net > 0 else '+'}\\${abs(_net):,.0f}，"
             f"执行后剩余现金 \\${_cash_after:,.0f}"
         )
-        if _blocked_entries:
-            # 热度拦截数：从今日信号的 candidate_signals 里统计
-            _cands_for_heat = (_m1_today_sig or {}).get("candidate_signals", [])
-            _n_heat_blocked = sum(1 for c in _cands_for_heat if c.get("rejection") == "heat_limit")
-            _heat_tickers   = [c["ticker"] for c in _cands_for_heat if c.get("rejection") == "heat_limit"]
-            _n_total_skipped = _n_heat_blocked + n_blocked
-            _heat_line = (f"其中 **{_n_heat_blocked} 笔**因组合热度上限已由每日程序拒绝"
-                          f"（{', '.join(_heat_tickers)}）；" if _n_heat_blocked else "")
-            st.warning(
-                f"⚠️ 共 **{_n_total_skipped} 笔**开仓不执行：{_heat_line}"
-                f"**{n_blocked} 笔**因现金不足从本表格移除（{', '.join(_blocked_entries)}）。\n\n"
-                f"预计T+1可用现金（当前现金 \\${_m1_cash:,.0f} + 平仓回款 \\${_exit_proceeds_proj:,.0f}"
-                f" = \\${_m1_cash + _exit_proceeds_proj:,.0f}）不够支付全部开仓，"
-                f"已按突破强度由高到低优先执行前 {n_buy} 笔。"
-            )
-
         # ── K线图（明日要执行交易的标的）────────────────────────────────────────
         _chart_sell_tks = [s["ticker"] for s in _pend_exits]
         _chart_buy_tks  = sorted(
