@@ -1201,22 +1201,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     st.markdown("---")
 
-    # ── 接近止损持仓预警 ─────────────────────────────────────────────────────────
-    _near_stop = [p for p in _m1_ok if not p.get("is_stopped") and p.get("stop_buffer_pct", 999) < 5.0]
-    if _near_stop:
-        _ns_sorted = sorted(_near_stop, key=lambda x: x["stop_buffer_pct"])
-        _ns_lines  = []
-        for _nsp in _ns_sorted:
-            _ns_lines.append(
-                f"- **{_nsp['ticker']}**：当前价 ${_nsp['current_price']:.2f}，"
-                f"有效止损 ${_nsp['current_stop']:.2f}，"
-                f"缓冲 **{_nsp['stop_buffer_pct']:.1f}%**"
-            )
-        st.warning(
-            f"**⚠️ 接近止损预警（缓冲 < 5%）：以下 {len(_near_stop)} 只持仓接近止损线，请关注**\n\n"
-            + "\n".join(_ns_lines)
-        )
-
     # ── Tomorrow's orders ────────────────────────────────────────────────────
     st.subheader("四、明日要执行的交易")
     import datetime as _dt
