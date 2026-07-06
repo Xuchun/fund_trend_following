@@ -825,7 +825,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             f"，共获取 **{len(_m1_tickers):,}** 个标的实时行情"
             f"（当前 {len(_m1_positions)} 只仓位 + SPY）"
         ) if _m1_tickers else ""
-        _scan_count_note  = f"，共扫描 **{_ds_dl_ok:,}** 个标的" if _ds_dl_ok else ""
+        _data_cutoff = _m1.get("last_update_date", "")
+        _scan_count_note = (
+            f"，共扫描 **{_ds_dl_ok:,}** 个标的"
+            + (f"（基于截止 **{_data_cutoff}** 收盘价的数据）" if _data_cutoff else "")
+        ) if _ds_dl_ok else ""
 
         st.markdown("**最新数据更新时间**")
         st.markdown(
