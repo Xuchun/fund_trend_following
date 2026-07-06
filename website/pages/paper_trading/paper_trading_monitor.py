@@ -832,7 +832,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 _cu = _ddt2.datetime.strptime(_m1_last_upd_raw, "%Y-%m-%dT%H:%M:%SZ").replace(
                     tzinfo=_ddt2.timezone.utc
                 ) + _ddt2.timedelta(hours=8)
-                _cutoff_sgt = _cu.strftime("%Y-%m-%d SGT")
+                _cutoff_sgt = _cu.strftime("%Y-%m-%d %H:%M SGT")
             except Exception:
                 pass
         _scan_count_note = (
