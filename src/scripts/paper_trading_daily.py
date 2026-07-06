@@ -1060,12 +1060,7 @@ def _gen_daily_summary(
             news_items, focus_sec or "", _direction, nav_chg_pct, spy_chg_pct
         )
         if _claude_bullets:
-            _src_links = "、".join(
-                f"[{n['title'][:30]}…]({n['url']})" if n.get("url") else f"《{n['title'][:30]}…》"
-                for n in news_items
-            )
             bullets.extend(_claude_bullets)
-            bullets.append(f"📰 分析依据（Yahoo Finance，{today}）：{_src_links}")
         else:
             # Claude 调用失败时退回显示新闻标题
             for _ni in news_items:
