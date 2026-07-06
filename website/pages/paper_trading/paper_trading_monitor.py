@@ -1012,12 +1012,28 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     # 用 UTC 日期作为美股交易日日期（脚本在 23:00 UTC 运行，对应美股当日收盘后）
                     _no_op_date_str = _no_op_dt.strftime("%Y-%m-%d")
 
-            if _ga_hours < 26:
-                _ga_color, _ga_icon, _ga_note = "#2ca02c", "🟢", "正常（市场休市，无需更新）" if _is_no_op else "正常"
-            elif _ga_hours < 48:
-                _ga_color, _ga_icon, _ga_note = "#ff7f0e", "🟡", "⚠️ 超过 26 小时未更新"
+            # 统计自上次运行以来"应跑却未跑"的工作日时间点数量
+            # 工作流每个工作日 23:05 UTC 运行；若当日 23:05 UTC 尚未到，则不计入"应跑"
+            def _missed_runs(last_dt, now_dt):
+                count = 0
+                cur = last_dt
+                while cur < now_dt:
+                    cur += _dt_ga.timedelta(days=1)
+                    if cur.weekday() < 5:  # 0=Mon … 4=Fri
+                        scheduled = cur.replace(hour=23, minute=5, second=0, microsecond=0)
+                        if scheduled < now_dt:
+                            count += 1
+                return count
+
+            _now_utc = _dt_ga.datetime.now(_dt_ga.timezone.utc)
+            _n_missed = _missed_runs(_ga_last, _now_utc)
+
+            if _n_missed == 0:
+                _ga_color, _ga_icon, _ga_note = "#2ca02c", "🟢", ("正常（市场休市，无需更新）" if _is_no_op else "正常")
+            elif _n_missed == 1:
+                _ga_color, _ga_icon, _ga_note = "#ff7f0e", "🟡", "⚠️ 有 1 个工作日运行缺失，请关注"
             else:
-                _ga_color, _ga_icon, _ga_note = "#d62728", "🔴", "❌ 超过 48 小时未更新，请检查 GitHub Actions 工作流"
+                _ga_color, _ga_icon, _ga_note = "#d62728", "🔴", f"❌ 连续 {_n_missed} 个工作日未更新，请检查 GitHub Actions 工作流"
             st.markdown(
                 f"<div style='padding:5px 14px;border-radius:6px;background:{_ga_color}18;"
                 f"border:1px solid {_ga_color}55;display:inline-block;margin:4px 0'>"
