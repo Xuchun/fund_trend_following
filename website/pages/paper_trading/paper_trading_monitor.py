@@ -1144,19 +1144,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
               delta=f"占 NAV {_m1_mkt/_m1_nav*100:.1f}%" if _m1_nav else None)
     c8.metric("现金", f"${_m1_cash/1e3:,.0f}K")
 
-    # Portfolio heat progress bar
-    _hfill   = min(_heat_pct / _heat_limit_pct, 1.0) * 100
-    _hcolor  = "#d62728" if _heat_pct > _heat_limit_pct * 0.85 else ("#ff7f0e" if _heat_pct > _heat_limit_pct * 0.6 else "#2ca02c")
-    st.markdown(
-        f"<div style='margin:10px 0 4px'>"
-        f"<span style='color:#111;font-size:0.88em'><b>组合热度（风险预算）</b>："
-        f"已用 <b>{_heat_pct:.1f}%</b> / 上限 {_heat_limit_pct:.0f}%，"
-        f"剩余 <b>{_heat_rem_pct:.1f}%</b>（约可新开 <b>{_slots_left}</b> 笔）</span>"
-        f"<div style='background:#e0e0e0;border-radius:4px;height:8px;margin-top:5px'>"
-        f"<div style='background:{_hcolor};width:{_hfill:.0f}%;height:8px;border-radius:4px'></div>"
-        f"</div></div>",
-        unsafe_allow_html=True,
-    )
 
     # ── 最新交易日小结 ────────────────────────────────────────────────────────────
     _ds = _m1.get("daily_summary", {})
