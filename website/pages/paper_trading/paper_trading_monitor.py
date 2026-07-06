@@ -767,6 +767,72 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _last_fetch_sgt = _m1_fetch_time
 
     # ═══════════════════════════════════════════════════════════════════════════
+    # ── 数据更新 ─────────────────────────────────────────────────────────────
+    # ═══════════════════════════════════════════════════════════════════════════
+    st.divider()
+    st.subheader("数据更新")
+
+    # ── 下载统计（计算部分，标的池 section 也会用到） ──────────────────────────
+    _ds_stats   = _m1.get("last_download_stats", {})
+    _ds_pending = _m1.get("pending_retry", {})
+    _ds_dl_ok    = _ds_stats.get("downloaded_count", 0) if _ds_stats else 0
+    _ds_dl_total = _ds_stats.get("total_scanned", 0)   if _ds_stats else 0
+    _ds_dl_fail  = _ds_dl_total - _ds_dl_ok
+
+    _fetch_count_note = (
+        f"，共获取 **{len(_m1_tickers):,}** 个标的实时行情"
+        f"（当前 {len(_m1_positions)} 只仓位 + SPY）"
+    ) if _m1_tickers else ""
+    _cutoff_sgt = ""
+    if _m1_last_upd_raw:
+        try:
+            import datetime as _ddt2
+            _cu = _ddt2.datetime.strptime(_m1_last_upd_raw, "%Y-%m-%dT%H:%M:%SZ").replace(
+                tzinfo=_ddt2.timezone.utc
+            ) + _ddt2.timedelta(hours=8)
+            _cutoff_sgt = _cu.strftime("%Y-%m-%d %H:%M SGT")
+        except Exception:
+            pass
+    _scan_count_note = (
+        f"共扫描 **{_ds_dl_ok:,}** 个标的"
+        + (f"（基于截止 **{_cutoff_sgt}** 收盘价的数据）" if _cutoff_sgt else "")
+    ) if _ds_dl_ok else ""
+
+    st.markdown("**最新数据更新时间**")
+    st.markdown(
+        f"- **价格数据（Yahoo Finance）**：{_last_fetch_sgt}{_fetch_count_note}\n"
+        f"- **策略信号计算**：{_scan_count_note}"
+    )
+
+    if _ds_stats:
+        _ds_upd_raw  = _ds_stats.get("updated_utc", "")
+        _ds_upd_sgt  = ""
+        if _ds_upd_raw:
+            try:
+                import datetime as _ddt
+                _u = _ddt.datetime.fromisoformat(_ds_upd_raw.replace("Z", "+00:00"))
+                _ds_upd_sgt = (_u + _ddt.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M SGT")
+            except Exception:
+                pass
+
+        if _ds_dl_fail == 0:
+            st.success(
+                f"上次下载（{_ds_upd_sgt}）：成功下载 **{_ds_dl_ok:,}** 个，"
+                f"扫描范围共 **{_ds_dl_total:,}** 个，**全部下载成功**。"
+                "（注：此为历史快照，与上方「每日YF可下载标的数」因更新时间不同可能略有差异）"
+            )
+        else:
+            _ds_retry_tks  = _ds_pending.get("tickers", [])
+            _ds_next_retry = _ds_pending.get("next_retry_sgt", "")
+            st.warning(
+                f"上次下载（{_ds_upd_sgt}）：成功下载 **{_ds_dl_ok:,}** 个，"
+                f"扫描范围共 **{_ds_dl_total:,}** 个，"
+                f"**{_ds_dl_fail}** 个下载失败"
+                + (f"（{'、'.join(_ds_retry_tks)}）" if _ds_retry_tks else "") + "。"
+                + (f"\n\n下次自动重试：**{_ds_next_retry}**。" if _ds_next_retry else "")
+            )
+
+    # ═══════════════════════════════════════════════════════════════════════════
     # ── 数据 & 标的池 ───────────────────────────────────────────────────────────
     # ═══════════════════════════════════════════════════════════════════════════
     st.divider()
@@ -774,8 +840,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     # ── 常量 ──────────────────────────────────────────────────────────────────
     _DS_EXCL = {"FXI", "GDX", "KWEB", "VXX", "EMB", "ASHR", "ETH", "SPY", "SHY"}
-    # Dynamic YF-unavailable list — read from positions.json (maintained automatically
-    # by paper_trading_daily.py; fallback to known initial set if not yet populated).
     _DS_YF_UNAVAIL = set(_m1.get("yf_persistent_unavailable", [
         "SPLK", "SNCR", "WFC-P-L", "TTM", "TRUE",
     ]))
@@ -805,75 +869,12 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _ds_active_all = _ds_delisted = _ds_n_etf = _ds_n_stock = _ds_n_total = _ds_n_tiingo = 0
 
     # ── 数据来源 ───────────────────────────────────────────────────────────────
-    _dsc1, _dsc2 = st.columns(2)
-    with _dsc1:
-        st.markdown("**数据来源**")
-        st.markdown(
-            "| 用途 | 来源 |\n|---|---|\n"
-            "| 每日价格数据（信号计算、止损更新） | **Yahoo Finance** |\n"
-            "| 标的池资格认定（历史价格 / 成交量筛选 + 是否仍在交易） | **Tiingo** |"
-        )
-    with _dsc2:
-        # ── 下载统计 ──────────────────────────────────────────────────────────
-        _ds_stats   = _m1.get("last_download_stats", {})
-        _ds_pending = _m1.get("pending_retry", {})
-        _ds_dl_ok    = _ds_stats.get("downloaded_count", 0) if _ds_stats else 0
-        _ds_dl_total = _ds_stats.get("total_scanned", 0)   if _ds_stats else 0
-        _ds_dl_fail  = _ds_dl_total - _ds_dl_ok
-
-        _fetch_count_note = (
-            f"，共获取 **{len(_m1_tickers):,}** 个标的实时行情"
-            f"（当前 {len(_m1_positions)} 只仓位 + SPY）"
-        ) if _m1_tickers else ""
-        _cutoff_sgt = ""
-        if _m1_last_upd_raw:
-            try:
-                import datetime as _ddt2
-                _cu = _ddt2.datetime.strptime(_m1_last_upd_raw, "%Y-%m-%dT%H:%M:%SZ").replace(
-                    tzinfo=_ddt2.timezone.utc
-                ) + _ddt2.timedelta(hours=8)
-                _cutoff_sgt = _cu.strftime("%Y-%m-%d %H:%M SGT")
-            except Exception:
-                pass
-        _scan_count_note = (
-            f"共扫描 **{_ds_dl_ok:,}** 个标的"
-            + (f"（基于截止 **{_cutoff_sgt}** 收盘价的数据）" if _cutoff_sgt else "")
-        ) if _ds_dl_ok else ""
-
-        st.markdown("**最新数据更新时间**")
-        st.markdown(
-            f"- **价格数据（Yahoo Finance）**：{_last_fetch_sgt}{_fetch_count_note}\n"
-            f"- **策略信号计算**：{_scan_count_note}"
-        )
-
-        if _ds_stats:
-            # 转换更新时间为 SGT
-            _ds_upd_raw  = _ds_stats.get("updated_utc", "")
-            _ds_upd_sgt  = ""
-            if _ds_upd_raw:
-                try:
-                    import datetime as _ddt
-                    _u = _ddt.datetime.fromisoformat(_ds_upd_raw.replace("Z", "+00:00"))
-                    _ds_upd_sgt = (_u + _ddt.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M SGT")
-                except Exception:
-                    pass
-
-            if _ds_dl_fail == 0:
-                st.success(
-                    f"上次下载（{_ds_upd_sgt}）：成功下载 **{_ds_dl_ok:,}** 个，"
-                    f"扫描范围共 **{_ds_dl_total:,}** 个，**全部下载成功**。"
-                    "（注：此为历史快照，与上方「每日YF可下载标的数」因更新时间不同可能略有差异）"
-                )
-            else:
-                _ds_retry_tks  = _ds_pending.get("tickers", [])
-                _ds_next_retry = _ds_pending.get("next_retry_sgt", "")
-                st.warning(
-                    f"上次下载（{_ds_upd_sgt}）：成功下载 **{_ds_dl_ok:,}** 个，"
-                    f"扫描范围共 **{_ds_dl_total:,}** 个，"
-                    f"**{_ds_dl_fail}** 个下载失败"
-                    + (f"（{'、'.join(_ds_retry_tks)}）" if _ds_retry_tks else "") + "。"
-                    + (f"\n\n下次自动重试：**{_ds_next_retry}**。" if _ds_next_retry else "")
-                )
+    st.markdown("**数据来源**")
+    st.markdown(
+        "| 用途 | 来源 |\n|---|---|\n"
+        "| 每日价格数据（信号计算、止损更新） | **Yahoo Finance** |\n"
+        "| 标的池资格认定（历史价格 / 成交量筛选 + 是否仍在交易） | **Tiingo** |"
+    )
 
     # ── 标的池数量统计 ─────────────────────────────────────────────────────────
     # 从 positions.json 读取每日脚本写入的最新统计（含时间戳）
