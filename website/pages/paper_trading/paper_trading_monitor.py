@@ -1222,8 +1222,12 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         while _next_td.weekday() >= 5:
             _next_td += _dt.timedelta(days=1)
     else:
-        _today_dt = _dt.date.today()
-        _next_td  = _today_dt + _dt.timedelta(days=1)
+        _next_td = _dt.date.today()
+
+    # 如果推算出的执行日已在过去，改为从今天起算下一个交易日
+    _today_dt = _dt.date.today()
+    if _next_td < _today_dt:
+        _next_td = _today_dt
         while _next_td.weekday() >= 5:
             _next_td += _dt.timedelta(days=1)
 
