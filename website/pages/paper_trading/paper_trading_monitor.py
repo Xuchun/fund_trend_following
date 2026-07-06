@@ -395,32 +395,48 @@ def _build_kline_fig(kdf, title, x_start, x_end, hlines=None, vlines=None):
     # 两者位于对立方向，贴近各自线条，与蓝色买入价标注距离一致
     # 当红线在下/橘线在上时（少见），方向互换
     _hl_list  = list(hlines or [])
-    _RED_C    = "#d62728"
-    _ORANGE_C = "#ff7f0e"
-    _ri = next((i for i, h in enumerate(_hl_list) if h.get("color") == _RED_C),    None)
-    _oi = next((i for i, h in enumerate(_hl_list) if h.get("color") == _ORANGE_C), None)
 
-    _red_pos, _orange_pos = "top left", "bottom left"   # 红上橘下（默认）
-    if _ri is not None and _oi is not None:
-        if _hl_list[_ri]["y"] < _hl_list[_oi]["y"]:
-            _red_pos, _orange_pos = "bottom left", "top left"  # 红下橘上
+    # 当只有两条横线时：高线标注在线上方，低线标注在线下方，避免重叠
+    if len(_hl_list) == 2:
+        _sorted_idx = sorted(range(2), key=lambda i: _hl_list[i]["y"])
+        _pos_by_idx = {_sorted_idx[0]: "bottom left", _sorted_idx[1]: "top left"}
+        for _idx, hl in enumerate(_hl_list):
+            fig.add_hline(
+                y=hl["y"], row=1, col=1,
+                line_color=hl["color"],
+                line_dash=hl.get("dash", "dash"),
+                line_width=hl.get("width", 1.5),
+                annotation_text=hl["label"],
+                annotation_position=_pos_by_idx[_idx],
+                annotation_font_color=hl["color"],
+            )
+    else:
+        _RED_C    = "#d62728"
+        _ORANGE_C = "#ff7f0e"
+        _ri = next((i for i, h in enumerate(_hl_list) if h.get("color") == _RED_C),    None)
+        _oi = next((i for i, h in enumerate(_hl_list) if h.get("color") == _ORANGE_C), None)
 
-    for _idx, hl in enumerate(_hl_list):
-        if _idx == _ri:
-            _pos = _red_pos
-        elif _idx == _oi:
-            _pos = _orange_pos
-        else:
-            _pos = "top left"   # 其他线（买入价等）默认在线上方
-        fig.add_hline(
-            y=hl["y"], row=1, col=1,
-            line_color=hl["color"],
-            line_dash=hl.get("dash", "dash"),
-            line_width=hl.get("width", 1.5),
-            annotation_text=hl["label"],
-            annotation_position=_pos,
-            annotation_font_color=hl["color"],
-        )
+        _red_pos, _orange_pos = "top left", "bottom left"   # 红上橘下（默认）
+        if _ri is not None and _oi is not None:
+            if _hl_list[_ri]["y"] < _hl_list[_oi]["y"]:
+                _red_pos, _orange_pos = "bottom left", "top left"  # 红下橘上
+
+        for _idx, hl in enumerate(_hl_list):
+            if _idx == _ri:
+                _pos = _red_pos
+            elif _idx == _oi:
+                _pos = _orange_pos
+            else:
+                _pos = "top left"   # 其他线（买入价等）默认在线上方
+            fig.add_hline(
+                y=hl["y"], row=1, col=1,
+                line_color=hl["color"],
+                line_dash=hl.get("dash", "dash"),
+                line_width=hl.get("width", 1.5),
+                annotation_text=hl["label"],
+                annotation_position=_pos,
+                annotation_font_color=hl["color"],
+            )
     for vl in (vlines or []):
         fig.add_vline(
             x=vl["x"],
