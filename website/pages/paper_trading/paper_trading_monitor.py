@@ -825,10 +825,19 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             f"，共获取 **{len(_m1_tickers):,}** 个标的实时行情"
             f"（当前 {len(_m1_positions)} 只仓位 + SPY）"
         ) if _m1_tickers else ""
-        _data_cutoff = _m1.get("last_update_date", "")
+        _cutoff_sgt = ""
+        if _m1_last_upd_raw:
+            try:
+                import datetime as _ddt2
+                _cu = _ddt2.datetime.strptime(_m1_last_upd_raw, "%Y-%m-%dT%H:%M:%SZ").replace(
+                    tzinfo=_ddt2.timezone.utc
+                ) + _ddt2.timedelta(hours=8)
+                _cutoff_sgt = _cu.strftime("%Y-%m-%d SGT")
+            except Exception:
+                pass
         _scan_count_note = (
             f"，共扫描 **{_ds_dl_ok:,}** 个标的"
-            + (f"（基于截止 **{_data_cutoff}** 收盘价的数据）" if _data_cutoff else "")
+            + (f"（基于截止 **{_cutoff_sgt}** 收盘价的数据）" if _cutoff_sgt else "")
         ) if _ds_dl_ok else ""
 
         st.markdown("**最新数据更新时间**")
