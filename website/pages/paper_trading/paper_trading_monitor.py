@@ -937,10 +937,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         unsafe_allow_html=True,
     )
     # ── Yahoo Finance 无法下载的标的明细（动态列表，来自 positions.json）────────
-    # All tickers in yf_persistent_unavailable are by construction in the Tiingo pool
-    # (eligible_days≥252), because they were only flagged after failing to download
-    # while they were part of active_set (which already filters eligible_days≥252).
-    _ds_yf_unavail_list = sorted(_DS_YF_UNAVAIL)
+    # 只展示仍在 Tiingo 现役标的池（eligible_days≥252）中的，与指标卡保持一致
+    _tiingo_pool_set = set(_ds_tiingo_eligible["ticker"].tolist()) if not _ds_df.empty else set()
+    _ds_yf_unavail_list = sorted(_DS_YF_UNAVAIL & _tiingo_pool_set)
 
     with st.expander(
         f"Tiingo 标的池中 Yahoo Finance 无法下载的 {len(_ds_yf_unavail_list)} 个标的"
