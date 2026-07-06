@@ -948,11 +948,11 @@ def _summarize_news_with_claude(
         client = anthropic.Anthropic()
 
         news_text = "\n\n".join(
-            f"标题：{n['title']}\n摘要：{n['summary'] or '（无摘要）'}"
-            for n in news_items[:5]
+            f"[{i+1}] 标题：{n['title']}\n    摘要：{n['summary'] or '（无摘要）'}"
+            for i, n in enumerate(news_items[:5])
         )
         prompt = (
-            f"以下是 Yahoo Finance 今日（交易日当天）关于 {sector} 板块的新闻：\n\n"
+            f"以下是 Yahoo Finance 今日（交易日当天）关于 {sector} 板块的新闻（已编号）：\n\n"
             f"{news_text}\n\n"
             f"背景：今日策略净值变化 {nav_chg_pct:+.2f}%，SPY 变化 {spy_chg_pct:+.2f}%，"
             f"策略重仓 {sector} 板块，因此净值与 SPY 出现了显著分歧。\n\n"
@@ -961,17 +961,34 @@ def _summarize_news_with_claude(
             f"② 为什么这导致策略净值与 SPY 出现分歧\n\n"
             f"要求：\n"
             f"- 分析因果逻辑（为什么），不要只复述标题说了什么\n"
-            f"- 每条一句话，直接输出文字，不要以 - 或 * 或数字开头\n"
+            f"- 每条一句话，句末用 [来源N] 标注所依据的新闻编号，如 [来源1] 或 [来源1,2]\n"
+            f"- 直接输出文字，不要以 - 或 * 或数字开头\n"
             f"- 用换行分隔各条，只输出中文分析内容，不要任何其他文字"
         )
         msg = client.messages.create(
             model="claude-haiku-4-5-20251001",
-            max_tokens=400,
+            max_tokens=500,
             messages=[{"role": "user", "content": prompt}],
         )
         raw = msg.content[0].text.strip()
         bullets = [line.strip().lstrip("-•*· 0123456789.）)") for line in raw.split("\n") if line.strip()]
-        return [b for b in bullets if b]
+        bullets = [b for b in bullets if b]
+
+        # 把 [来源N] 替换为实际 markdown 链接
+        import re as _re
+        def _replace_citations(bullet):
+            def _sub(m):
+                parts = [int(x.strip()) - 1 for x in m.group(1).split(",")]
+                links = []
+                for idx in parts:
+                    if 0 <= idx < len(news_items):
+                        n = news_items[idx]
+                        title = (n["title"][:28] + "…") if len(n["title"]) > 28 else n["title"]
+                        links.append(f"[{title}]({n['url']})" if n.get("url") else f"《{title}》")
+                return "（" + "、".join(links) + "）" if links else ""
+            return _re.sub(r"\[来源([\d,\s]+)\]", _sub, bullet)
+
+        return [_replace_citations(b) for b in bullets]
     except Exception as e:
         log.warning(f"  Claude news summarize failed: {e}")
         return []
