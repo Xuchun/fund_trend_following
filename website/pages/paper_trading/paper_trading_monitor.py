@@ -770,7 +770,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     # ── 数据更新 ─────────────────────────────────────────────────────────────
     # ═══════════════════════════════════════════════════════════════════════════
     st.divider()
-    st.subheader("数据更新")
+    st.subheader("一、数据更新")
 
     # ── 下载统计（计算部分，标的池 section 也会用到） ──────────────────────────
     _ds_stats   = _m1.get("last_download_stats", {})
