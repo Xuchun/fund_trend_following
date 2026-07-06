@@ -836,14 +836,14 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             except Exception:
                 pass
         _scan_count_note = (
-            f"，共扫描 **{_ds_dl_ok:,}** 个标的"
+            f"共扫描 **{_ds_dl_ok:,}** 个标的"
             + (f"（基于截止 **{_cutoff_sgt}** 收盘价的数据）" if _cutoff_sgt else "")
         ) if _ds_dl_ok else ""
 
         st.markdown("**最新数据更新时间**")
         st.markdown(
             f"- **价格数据（Yahoo Finance）**：{_last_fetch_sgt}{_fetch_count_note}\n"
-            f"- **策略信号计算**：{_m1_last_upd}{_scan_count_note}"
+            f"- **策略信号计算**：{_scan_count_note}"
         )
 
         if _ds_stats:
