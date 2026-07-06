@@ -1232,7 +1232,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             _next_td += _dt.timedelta(days=1)
 
     _next_td_sgt = _us_open_to_sgt(str(_next_td))
-    st.markdown(f"<span style='color:#111111'>执行日/时间：{_next_td_sgt} 开盘 ｜ 以下订单在开盘后按市价执行</span>", unsafe_allow_html=True)
+    st.markdown(f"<span style='color:#111111'>执行日/时间：{_next_td_sgt} 开盘</span>", unsafe_allow_html=True)
     _order_rows   = []
 
     # ① 平仓优先（策略描述：T+1 开盘先执行平仓，再执行开仓）
