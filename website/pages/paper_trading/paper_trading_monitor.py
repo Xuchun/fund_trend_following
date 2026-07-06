@@ -862,6 +862,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 st.success(
                     f"上次下载（{_ds_upd_sgt}）：成功下载 **{_ds_dl_ok:,}** 个，"
                     f"扫描范围共 **{_ds_dl_total:,}** 个，**全部下载成功**。"
+                    f"（注：此为历史快照，与上方"每日YF可下载标的数"因更新时间不同可能略有差异）"
                 )
             else:
                 _ds_retry_tks  = _ds_pending.get("tickers", [])
