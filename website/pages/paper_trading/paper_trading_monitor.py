@@ -3288,15 +3288,21 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         _dbg2_close = _dbg2_raw[["Close"]].dropna(how="all").tail(1)
 
                     _dbg2_last_date = _dbg2_close.index[-1].strftime("%Y-%m-%d")
-                    # 转置：行=ticker，列=日期
+                    # 转置：行=ticker，列=日期；过滤全 NaN 行
                     _dbg2_wide = _dbg2_close.T.copy()
                     _dbg2_wide.index.name = "ticker"
                     _dbg2_wide.columns = [_dbg2_last_date]
+                    _dbg2_n_before  = len(_dbg2_wide)
+                    _dbg2_wide      = _dbg2_wide.dropna(how="all")
+                    _dbg2_n_dropped = _dbg2_n_before - len(_dbg2_wide)
                     _dbg2_buf = _dbg_io2.StringIO()
                     _dbg2_wide.to_csv(_dbg2_buf)
                     st.session_state["debug_raw_csv"]      = _dbg2_buf.getvalue()
                     st.session_state["debug_raw_filename"] = f"universe_raw_close_{_dbg2_last_date}.csv"
-                    st.success(f"下载完成：{len(_dbg2_wide)} 个标的，最后交易日 {_dbg2_last_date}。")
+                    _dbg2_msg = f"下载完成：{len(_dbg2_wide)} 个标的，最后交易日 {_dbg2_last_date}。"
+                    if _dbg2_n_dropped:
+                        _dbg2_msg += f"（另有 {_dbg2_n_dropped} 个标的 YF 无数据，已自动过滤）"
+                    st.success(_dbg2_msg)
                 except Exception as _dbg2_e:
                     st.error(f"下载失败：{_dbg2_e}")
 
