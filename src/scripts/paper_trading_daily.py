@@ -1487,7 +1487,7 @@ def main() -> None:
         )
         _attempt_n = _prev_no_data + 1
 
-        _next_retry_utc = _now_utc + timedelta(hours=1)
+        _next_retry_utc = _next_retry_at(_now_utc)
         _append_attempt(_dl_log, {
             "time_sgt":       _sgt_str(_now_utc),
             "type":           "main_probe",
