@@ -1534,6 +1534,34 @@ def main() -> None:
     log.info(f"=== Strategy 1.0 Paper Trading: {today} ===")
 
     state = load_state()
+
+    # ── Non-trading day early exit ────────────────────────────────────────────
+    # If today (ET) differs from the target trading date, it is a weekday
+    # holiday.  Record a "market closed" notice in the daily summary so the
+    # monitor page always shows today's date, then exit without downloading.
+    if not args.date:
+        _et_today = _get_et_date()
+        if _et_today != today:
+            _is_hol, _hol_name, _ = _check_market_holiday(_et_today)
+            _closed_reason = _hol_name if _is_hol else "假日"
+            _now_utc_cl = datetime.now(timezone.utc)
+            state["daily_summary"] = {
+                "date":           str(_et_today),
+                "updated_sgt":    _sgt_str(_now_utc_cl),
+                "nav_change_pct": None,
+                "spy_change_pct": None,
+                "vs_spy_pct":     None,
+                "bullets":        [
+                    f"📅 今日（{_et_today}）美股市场不开盘（{_closed_reason}）。",
+                    f"最近交易日：{today}。",
+                ],
+                "news":           [],
+                "market_closed":  True,
+            }
+            state["last_no_op_utc"] = _now_utc_cl.strftime("%Y-%m-%dT%H:%M:%SZ")
+            save_state(state)
+            log.info(f"=== Done (market closed today: {_closed_reason}) ===")
+            return
     validate_pending_entries(state)
     log.info(f"  Open positions: {len(state['positions'])} | Cash: ${state.get('cash',0)/1e6:.2f}M")
 
