@@ -1257,15 +1257,19 @@ def run_retry() -> None:
 
                 state["download_log"] = _dl_log
                 state["last_no_op_utc"] = _now_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
-                save_state(state)
-                log.info("=== Retry done (no_data_probe) ===")
-                return
+                _probe_handled = True
+                log.info("  no_data_probe handled — checking pending_retry next")
+                # Fall through to pending_retry below (no return here)
 
     pending = state.get("pending_retry", {})
     retry_tickers = pending.get("tickers", [])
 
     if not retry_tickers:
-        log.info("=== Retry mode: no pending_retry — nothing to do ===")
+        if _probe_handled:
+            save_state(state)
+            log.info("=== Retry done (probe only, no pending_retry) ===")
+        else:
+            log.info("=== Retry mode: nothing to do ===")
         return
 
     # ── Timing check ─────────────────────────────────────────────────────────
