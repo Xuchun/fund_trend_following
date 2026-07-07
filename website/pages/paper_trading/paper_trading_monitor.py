@@ -848,7 +848,8 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     if _ds_upd_sgt and _ds_dl_ok:
         st.markdown(
             f"**上次成功全量下载**：{_ds_upd_sgt}，"
-            f"成功下载 **{_ds_dl_ok:,}** 个标的（共扫描 {_ds_dl_total:,} 个）"
+            f"成功下载 **{_ds_dl_ok:,}** 个标的（共扫描 {_ds_dl_total:,} 个）。"
+            f"下载的数据不保存，仅用于计算交易信号，计算完成后即丢弃。"
         )
 
     # ── 2. 当前持仓实时价格更新时间 ──────────────────────────────────────────
