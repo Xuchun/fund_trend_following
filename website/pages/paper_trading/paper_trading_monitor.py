@@ -902,17 +902,26 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             _att_time   = _att.get("time_sgt", "")
             _att_ok     = _att.get("success", 0)
             _att_fail   = _att.get("failed", 0)
-            _att_next   = _att.get("next_retry_sgt")
+            _att_cum    = _att.get("cumulative_success", _att_ok)
+            _att_total  = _att.get("total", 0)
             _att_note   = _att.get("note", "")
 
             _lbl = _type_labels.get(_att_type, _att_type)
             _ico = _status_icons.get(_att_status, _att_status)
 
             _line = f"- **{_att_time}**　{_lbl}　{_ico}"
-            if _att_type in ("main_download", "retry_download"):
-                _line += f"　成功：**{_att_ok:,}** 个，失败：**{_att_fail}** 个"
+            if _att_type == "main_download":
+                _line += f"\n  - 共 **{_att_total:,}** 个标的需要下载"
+                _line += f"\n  - 本次成功下载：**{_att_ok:,}** 个"
+                if _att_fail:
+                    _line += f"\n  - 仍需重试下载：**{_att_fail:,}** 个"
+            elif _att_type == "retry_download":
+                _line += f"\n  - 共 **{_att_total:,}** 个标的需要下载"
+                _line += f"\n  - 本次成功下载：**{_att_ok:,}** 个"
+                _line += f"\n  - 到目前为止已成功下载：**{_att_cum:,}** 个"
+                _line += f"\n  - 仍需重试下载：**{_att_fail:,}** 个"
             if _att_note:
-                _line += f"　（{_att_note}）"
+                _line += f"\n  - {_att_note}"
             _att_lines.append(_line)
 
         if _att_lines:
