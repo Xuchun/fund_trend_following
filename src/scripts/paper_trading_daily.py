@@ -1081,6 +1081,69 @@ def _gen_daily_summary(
     }
 
 
+# ── Download log helpers ─────────────────────────────────────────────────────
+
+_NYSE_CALENDAR_URL = "https://www.nyse.com/markets/hours-calendars"
+
+# Known NYSE holidays 2026 (static list for offline use)
+_NYSE_HOLIDAYS_2026: dict = {
+    date(2026, 1, 1):   "元旦（New Year's Day）",
+    date(2026, 1, 19):  "马丁·路德·金纪念日（MLK Day）",
+    date(2026, 2, 16):  "总统日（Presidents' Day）",
+    date(2026, 4, 3):   "耶稣受难日（Good Friday）",
+    date(2026, 5, 25):  "阵亡将士纪念日（Memorial Day）",
+    date(2026, 6, 19):  "六月节（Juneteenth）",
+    date(2026, 7, 3):   "独立日补休（Independence Day, observed）",
+    date(2026, 9, 7):   "劳动节（Labor Day）",
+    date(2026, 11, 26): "感恩节（Thanksgiving）",
+    date(2026, 12, 25): "圣诞节（Christmas）",
+}
+
+
+def _sgt_str(utc_dt: "datetime") -> str:
+    return (utc_dt + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M SGT")
+
+
+def _check_market_holiday(check_date: date) -> "tuple[bool | None, str, str]":
+    """Return (is_holiday, holiday_name, source_url).
+    True  = confirmed holiday.
+    False = confirmed trading day (SPY data found).
+    None  = cannot determine.
+    """
+    if check_date.weekday() >= 5:
+        return True, "周末（Weekend）", _NYSE_CALENDAR_URL
+
+    if check_date in _NYSE_HOLIDAYS_2026:
+        return True, _NYSE_HOLIDAYS_2026[check_date], _NYSE_CALENDAR_URL
+
+    # Attempt YF confirmation: if SPY has data for this date it was open
+    try:
+        import yfinance as _yf_hol
+        _spy = _yf_hol.download("SPY", period="10d", progress=False, auto_adjust=False)
+        if not _spy.empty:
+            _dates = {d.date() for d in _spy.index}
+            if check_date in _dates:
+                return False, "", ""
+    except Exception:
+        pass
+
+    # Cannot confirm either way
+    return None, "无法确认（YF 查询也失败）", _NYSE_CALENDAR_URL
+
+
+def _get_dl_log(state: dict, today: date) -> dict:
+    """Return today's download_log, resetting if date changed."""
+    log_obj = state.get("download_log", {})
+    if log_obj.get("date") != str(today):
+        log_obj = {"date": str(today), "attempts": [], "holiday": None}
+    return log_obj
+
+
+def _append_attempt(log_obj: dict, record: dict) -> None:
+    record.setdefault("seq", len(log_obj["attempts"]) + 1)
+    log_obj["attempts"].append(record)
+
+
 # ── Retry mode ───────────────────────────────────────────────────────────────
 
 def run_retry() -> None:
