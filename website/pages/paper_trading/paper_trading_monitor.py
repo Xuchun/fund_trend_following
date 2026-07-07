@@ -2041,6 +2041,23 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 unsafe_allow_html=True,
             )
 
+    # ── suspended 持仓警告（在 if _m1_ok 块外，始终显示）───────────────────────
+    _m1_suspended = [p for p in _m1_positions if p.get("suspended")]
+    for _sp in _m1_suspended:
+        _sp_reason = _sp.get("suspend_reason", "暂停交易，原因未知")
+        _sp_date   = _sp.get("suspend_date", "未知")
+        _sp_last   = _sp.get("last_data_date", "未知")
+        st.markdown(
+            f"<div style='border:2px solid #FF8C00; border-radius:6px; padding:12px 16px; "
+            f"background:#FFF8F0; margin:8px 0;'>"
+            f"<b style='color:#FF8C00; font-size:1.05em;'>⏸ {_sp['ticker']} — 目前暂停交易，等待确认</b><br>"
+            f"<span style='color:#555;'>原因：{_sp_reason}</span><br>"
+            f"<span style='color:#555;'>最后有效数据日期：{_sp_last} ｜ 暂停标记日期：{_sp_date}</span><br>"
+            f"<span style='color:#888; font-size:0.9em;'>系统每日自动检查 Yahoo Finance 及 Tiingo，数据恢复后将自动解除暂停。</span>"
+            f"</div>",
+            unsafe_allow_html=True,
+        )
+
     st.markdown("---")
 
     # ── Stop detail ──────────────────────────────────────────────────────────
