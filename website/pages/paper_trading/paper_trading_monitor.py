@@ -782,10 +782,47 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     except Exception:
         _last_fetch_sgt = _m1_fetch_time
 
+    # ── 目录 ─────────────────────────────────────────────────────────────────
+    st.markdown("### 📋 目录")
+    st.markdown("""
+<style>
+.toc-grid-pt {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 32px;
+    font-size: 15px;
+    line-height: 1.9;
+}
+.toc-grid-pt a { text-decoration: none; color: #1f77b4; }
+.toc-grid-pt a:hover { text-decoration: underline; }
+</style>
+<div class="toc-grid-pt">
+<div>一. <a href="#sec-pt-1">数据更新</a></div>
+<div>二. <a href="#sec-pt-2">策略状态概览</a></div>
+<div>三. <a href="#sec-pt-3">今日完成的交易</a></div>
+<div>四. <a href="#sec-pt-4">明日要执行的交易</a></div>
+<div>五. <a href="#sec-pt-5">今日开平仓信号</a></div>
+<div>六. <a href="#sec-pt-6">当前持仓实时状态</a></div>
+<div>七. <a href="#sec-pt-7">止损/移动止盈明细</a></div>
+<div>八. <a href="#sec-pt-8">NAV 走势</a></div>
+<div>九. <a href="#sec-pt-9">交易历史</a></div>
+<div>十. <a href="#sec-pt-10">已完成交易的分析</a></div>
+<div>十一. <a href="#sec-pt-11">信号漏斗历史趋势</a></div>
+<div>十二. <a href="#sec-pt-12">回测 vs 实盘对比</a></div>
+<div>十三. <a href="#sec-pt-13">月度 P&amp;L 汇总</a></div>
+<div>十四. <a href="#sec-pt-14">数据 &amp; 标的池</a></div>
+<div>十五. <a href="#sec-pt-15">Debug</a></div>
+<div>十六. <a href="#sec-pt-16">数据下载</a></div>
+</div>
+""", unsafe_allow_html=True)
+
+    st.markdown("---")
+
     # ═══════════════════════════════════════════════════════════════════════════
     # ── 数据更新 ─────────────────────────────────────────────────────────────
     # ═══════════════════════════════════════════════════════════════════════════
     st.divider()
+    st.markdown('<div id="sec-pt-1"></div>', unsafe_allow_html=True)
     st.subheader("一、数据更新")
 
     # ── 下载统计（计算部分，标的池 section 也会用到） ──────────────────────────
