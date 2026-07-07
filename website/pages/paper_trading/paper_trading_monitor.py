@@ -2989,6 +2989,71 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     st.divider()
 
+    # ── Debug ────────────────────────────────────────────────────────────────
+    st.subheader("Debug")
+
+    _dbg_tickers = sorted(_ds_pt["ticker"].tolist()) if not _ds_df.empty else []
+    st.markdown(
+        f"标的池共 **{len(_dbg_tickers):,}** 个标的（Yahoo Finance 可下载），"
+        f"点击下方按钮准备过去 250 个交易日的每日收盘价数据。"
+    )
+
+    if "debug_close_csv" not in st.session_state:
+        st.session_state["debug_close_csv"] = None
+        st.session_state["debug_close_filename"] = ""
+
+    if st.button("准备数据（从 Yahoo Finance 下载，约需 1-3 分钟）", key="debug_dl_btn"):
+        if not _dbg_tickers:
+            st.error("标的池为空，无法下载。")
+        else:
+            import datetime as _dbg_dt
+            import io as _dbg_io
+            import yfinance as _dbg_yf
+
+            _dbg_end   = _dbg_dt.date.today()
+            _dbg_start = _dbg_end - _dbg_dt.timedelta(days=420)  # 多取以确保满足250个交易日
+
+            with st.spinner(f"正在从 Yahoo Finance 下载 {len(_dbg_tickers):,} 个标的的数据，请稍候…"):
+                try:
+                    _dbg_raw = _dbg_yf.download(
+                        _dbg_tickers,
+                        start=str(_dbg_start),
+                        end=str(_dbg_end + _dbg_dt.timedelta(days=1)),
+                        auto_adjust=True,
+                        progress=False,
+                        threads=True,
+                    )
+                    # 取 Close，保留最近250个交易日
+                    if isinstance(_dbg_raw.columns, pd.MultiIndex):
+                        _dbg_close = _dbg_raw["Close"].tail(250)
+                    else:
+                        _dbg_close = _dbg_raw[["Close"]].tail(250)
+                    # 转置：行=ticker，列=日期
+                    _dbg_wide = _dbg_close.T.copy()
+                    _dbg_wide.index.name = "ticker"
+                    _dbg_wide.columns = [
+                        c.strftime("%Y-%m-%d") if hasattr(c, "strftime") else str(c)
+                        for c in _dbg_wide.columns
+                    ]
+                    _dbg_buf = _dbg_io.StringIO()
+                    _dbg_wide.to_csv(_dbg_buf)
+                    st.session_state["debug_close_csv"]      = _dbg_buf.getvalue()
+                    st.session_state["debug_close_filename"] = f"universe_close_{_dbg_end}.csv"
+                    st.success(f"下载完成：{len(_dbg_wide)} 个标的，{len(_dbg_wide.columns)} 个交易日。")
+                except Exception as _dbg_e:
+                    st.error(f"下载失败：{_dbg_e}")
+
+    if st.session_state.get("debug_close_csv"):
+        st.download_button(
+            label="点击下载 CSV",
+            data=st.session_state["debug_close_csv"],
+            file_name=st.session_state["debug_close_filename"],
+            mime="text/csv",
+            key="debug_dl_csv_btn",
+        )
+
+    st.divider()
+
     # ── 数据下载（方法一）────────────────────────────────────────────────────
     st.subheader("数据下载（用于未来策略1.0的过拟合分析）")
     st.markdown(
