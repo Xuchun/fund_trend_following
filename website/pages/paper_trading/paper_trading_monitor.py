@@ -3359,12 +3359,18 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         c.strftime("%Y-%m-%d") if hasattr(c, "strftime") else str(c)
                         for c in _dbg3_wide.columns
                     ]
+                    _dbg3_n_before  = len(_dbg3_wide)
+                    _dbg3_wide      = _dbg3_wide.dropna(how="all")
+                    _dbg3_n_dropped = _dbg3_n_before - len(_dbg3_wide)
                     _dbg3_last_date = _dbg3_wide.columns[-1]
                     _dbg3_buf = _dbg_io3.StringIO()
                     _dbg3_wide.to_csv(_dbg3_buf)
                     st.session_state["debug_dolvol_csv"]      = _dbg3_buf.getvalue()
                     st.session_state["debug_dolvol_filename"] = f"universe_dolvol60_{_dbg3_last_date}.csv"
-                    st.success(f"下载完成：{len(_dbg3_wide)} 个标的，{len(_dbg3_wide.columns)} 个交易日（截至 {_dbg3_last_date}）。")
+                    _dbg3_msg = f"下载完成：{len(_dbg3_wide)} 个标的，{len(_dbg3_wide.columns)} 个交易日（截至 {_dbg3_last_date}）。"
+                    if _dbg3_n_dropped:
+                        _dbg3_msg += f"（另有 {_dbg3_n_dropped} 个标的 YF 无数据，已自动过滤）"
+                    st.success(_dbg3_msg)
                 except Exception as _dbg3_e:
                     st.error(f"下载失败：{_dbg3_e}")
 
