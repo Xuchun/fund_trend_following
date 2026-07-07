@@ -1794,6 +1794,20 @@ def main() -> None:
                 state["yf_persistent_unavailable"] = sorted(_yf_persist_now)
                 log.info(f"  Recovered from yf_persistent_unavailable: {sorted(_recovered_persist)}")
 
+            # Auto-flag tickers with insufficient data density (< 50 rows in the
+            # download window).  These are effectively non-tradeable on YF even
+            # though the download technically succeeds (e.g. ZVZZT / ZXZZT with
+            # only 1 row per year).
+            _MIN_ROWS = 50
+            _sparse = [t for t, df in univ_data.items() if len(df) < _MIN_ROWS]
+            if _sparse:
+                _yf_persist_now = set(state.get("yf_persistent_unavailable", []))
+                _newly_sparse = set(_sparse) - _yf_persist_now
+                if _newly_sparse:
+                    _yf_persist_now |= _newly_sparse
+                    state["yf_persistent_unavailable"] = sorted(_yf_persist_now)
+                    log.warning(f"  Auto-flagged sparse tickers (<{_MIN_ROWS} rows): {sorted(_newly_sparse)}")
+
             # Track any tickers whose data was silently dropped (rate-limit) and
             # schedule them for an automatic retry 1 hour later via pending_retry.
             _missing_tickers = [t for t in scan_tickers if t not in univ_data]
