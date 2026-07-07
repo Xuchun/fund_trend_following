@@ -924,7 +924,13 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         if _dl_attempts:
             _last_att = _dl_attempts[-1]
             _last_st  = _last_att.get("status", "")
-            _last_nxt = _last_att.get("next_retry_sgt")
+            # 优先用 no_data_probe 里的下次重试时间（比 download_log 记录更新）
+            _ndp_state = _m1.get("no_data_probe", {}) or {}
+            _ndp_next  = (
+                _ndp_state.get("next_retry_sgt")
+                if _ndp_state.get("date") == _dl_date else None
+            )
+            _last_nxt = _ndp_next or _last_att.get("next_retry_sgt")
             if _last_st in ("no_data", "partial") and _last_nxt:
                 _pend_fail = _ds_pending.get("tickers", [])
                 _fail_n    = len(_pend_fail) if _pend_fail else _last_att.get("failed", 0)
