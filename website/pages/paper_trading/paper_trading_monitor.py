@@ -2041,8 +2041,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 unsafe_allow_html=True,
             )
 
-    # ── suspended 持仓警告（在 if _m1_ok 块外，始终显示）───────────────────────
-    _m1_suspended = [p for p in _m1_positions if p.get("suspended")]
+    # ── suspended 持仓警告（只对 YF 数据拉不到的 suspended 持仓显示）────────────
+    _m1_ok_tickers = {p["ticker"] for p in _m1_ok}
+    _m1_suspended = [p for p in _m1_positions if p.get("suspended") and p["ticker"] not in _m1_ok_tickers]
     for _sp in _m1_suspended:
         _sp_reason = _sp.get("suspend_reason", "暂停交易，原因未知")
         _sp_date   = _sp.get("suspend_date", "未知")
