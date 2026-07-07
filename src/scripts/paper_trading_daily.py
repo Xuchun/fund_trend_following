@@ -1149,11 +1149,116 @@ def _append_attempt(log_obj: dict, record: dict) -> None:
 def run_retry() -> None:
     """Retry downloading and re-evaluating tickers listed in state['pending_retry'].
 
+    Also handles `no_data_probe`: if the main run found no YF data for today (no-op),
+    this function retries the SPY probe hourly and performs a holiday check after 3
+    consecutive no-data attempts.
+
     Called by `--retry-mode`.  A dedicated GitHub Actions workflow runs this every
     hour so failed tickers are automatically re-evaluated without waiting for the
     next full daily run.
     """
     state   = load_state()
+
+    # ── no_data_probe: main run found no YF data for today ────────────────────
+    _ndp = state.get("no_data_probe", {})
+    _today = date.today()
+    if _ndp and _ndp.get("date") == str(_today):
+        _next_utc_str = _ndp.get("next_retry_utc", "")
+        _now_utc = datetime.now(timezone.utc)
+        if _next_utc_str:
+            _next_dt = datetime.fromisoformat(_next_utc_str.replace("Z", "+00:00"))
+            if _now_utc < _next_dt:
+                _rem = int((_next_dt - _now_utc).total_seconds() / 60)
+                log.info(f"=== Retry mode: {_rem}min until no_data_probe retry — skipping ===")
+                # Still fall through to check pending_retry below
+                pass
+            else:
+                log.info(f"=== Retry mode: no_data_probe attempt {_ndp.get('attempt', 2)} ===")
+                _dl_log = _get_dl_log(state, _today)
+                _attempt_n = _ndp.get("attempt", 2)
+
+                # Probe SPY
+                _spy_probe = fetch_price_data(["SPY"], period="5d")
+                _spy_df_p  = _spy_probe.get("SPY")
+                _spy_has_today = (
+                    not (_spy_df_p is None or _spy_df_p.empty) and
+                    not _spy_df_p[_spy_df_p.index.normalize() == pd.Timestamp(_today)].empty
+                )
+
+                if _spy_has_today:
+                    # Data is now available — clear probe, note in log
+                    log.info("  SPY data now available — clearing no_data_probe")
+                    _append_attempt(_dl_log, {
+                        "time_sgt": _sgt_str(_now_utc),
+                        "type": "retry_probe",
+                        "status": "data_available",
+                        "success": 1, "failed": 0,
+                        "note": "市场有数据，将在下次每日主程序运行时完整下载",
+                    })
+                    state.pop("no_data_probe", None)
+                else:
+                    # Still no data
+                    _no_data_total = _attempt_n  # this is the Nth no-data attempt
+
+                    if _no_data_total >= 3:
+                        # Holiday check
+                        log.info(f"  {_no_data_total} consecutive no-data — checking holiday")
+                        _is_hol, _hol_name, _hol_url = _check_market_holiday(_today)
+                        _append_attempt(_dl_log, {
+                            "time_sgt": _sgt_str(_now_utc),
+                            "type": "retry_probe",
+                            "status": "no_data",
+                            "success": 0, "failed": 0,
+                        })
+                        if _is_hol is True:
+                            _dl_log["holiday"] = {
+                                "is_holiday": True,
+                                "name": _hol_name,
+                                "source": _hol_url,
+                            }
+                            log.info(f"  Holiday confirmed: {_hol_name}")
+                            state.pop("no_data_probe", None)
+                        elif _is_hol is False:
+                            # Unexpectedly confirmed open — keep probing
+                            _next = _now_utc + timedelta(hours=1)
+                            _dl_log["holiday"] = None
+                            _ndp["attempt"] = _no_data_total + 1
+                            _ndp["next_retry_utc"] = _next.strftime("%Y-%m-%dT%H:%M:%SZ")
+                            _ndp["next_retry_sgt"] = _sgt_str(_next)
+                            state["no_data_probe"] = _ndp
+                        else:
+                            # Cannot confirm — keep probing with holiday=unknown
+                            _next = _now_utc + timedelta(hours=1)
+                            _dl_log["holiday"] = {
+                                "is_holiday": None,
+                                "name": "未能确认，持续重试中",
+                                "source": _hol_url,
+                            }
+                            _ndp["attempt"] = _no_data_total + 1
+                            _ndp["next_retry_utc"] = _next.strftime("%Y-%m-%dT%H:%M:%SZ")
+                            _ndp["next_retry_sgt"] = _sgt_str(_next)
+                            state["no_data_probe"] = _ndp
+                    else:
+                        # Schedule next probe
+                        _next = _now_utc + timedelta(hours=1)
+                        _append_attempt(_dl_log, {
+                            "time_sgt": _sgt_str(_now_utc),
+                            "type": "retry_probe",
+                            "status": "no_data",
+                            "success": 0, "failed": 0,
+                            "next_retry_sgt": _sgt_str(_next),
+                        })
+                        _ndp["attempt"] = _no_data_total + 1
+                        _ndp["next_retry_utc"] = _next.strftime("%Y-%m-%dT%H:%M:%SZ")
+                        _ndp["next_retry_sgt"] = _sgt_str(_next)
+                        state["no_data_probe"] = _ndp
+
+                state["download_log"] = _dl_log
+                state["last_no_op_utc"] = _now_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
+                save_state(state)
+                log.info("=== Retry done (no_data_probe) ===")
+                return
+
     pending = state.get("pending_retry", {})
     retry_tickers = pending.get("tickers", [])
 
