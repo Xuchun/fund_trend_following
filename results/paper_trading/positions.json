@@ -2768,5 +2768,21 @@
       }
     ]
   },
-  "last_no_op_utc": "2026-07-07T00:10:34Z"
+  "last_no_op_utc": "2026-07-07T00:10:34Z",
+  "download_log": {
+    "date": "2026-07-06",
+    "attempts": [
+      {
+        "seq": 1,
+        "time_sgt": "2026-07-07 08:10 SGT",
+        "type": "main_probe",
+        "status": "no_data",
+        "success": 0,
+        "failed": 0,
+        "attempt": 1,
+        "next_retry_sgt": "2026-07-07 09:10 SGT"
+      }
+    ],
+    "holiday": null
+  }
 }
