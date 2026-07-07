@@ -857,7 +857,68 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         f"- **策略信号计算**：{_scan_count_note}"
     )
 
-    if _ds_stats:
+    # ── download_log：显示所有尝试记录（新系统） ──────────────────────────────
+    _dl_log = _m1.get("download_log", {})
+    if _dl_log:
+        _dl_attempts = _dl_log.get("attempts", [])
+        _dl_holiday  = _dl_log.get("holiday")
+        _dl_date     = _dl_log.get("date", "")
+
+        st.markdown(f"**下载日志（{_dl_date}）**")
+
+        # 显示假日信息（如有）
+        if _dl_holiday is not None:
+            _hol_is = _dl_holiday.get("is_holiday")
+            _hol_nm = _dl_holiday.get("name", "")
+            _hol_url = _dl_holiday.get("source", "")
+            if _hol_is is True:
+                _hol_link = f"[来源链接]({_hol_url})" if _hol_url else ""
+                st.info(
+                    f"市场休市：**{_hol_nm}**　{_hol_link}",
+                    icon="🏖️"
+                )
+            elif _hol_is is False:
+                st.info("市场确认开盘但暂无数据，持续重试中。", icon="⏳")
+            else:
+                _hol_link = f"[NYSE 假日表]({_hol_url})" if _hol_url else ""
+                st.warning(f"连续3次无数据 — 无法确认是否休市 {_hol_link}，持续重试中。")
+
+        # 逐条显示尝试记录
+        _type_labels = {
+            "main_probe":     "每日探测（SPY）",
+            "main_download":  "每日下载（全标的池）",
+            "retry_probe":    "重试探测（SPY）",
+            "retry_download": "重试下载",
+        }
+        _status_icons = {
+            "no_data":       "⛔ 无数据",
+            "partial":       "⚠️ 部分成功",
+            "success":       "✅ 全部成功",
+            "data_available":"ℹ️ 数据已可用",
+        }
+        for _att in _dl_attempts:
+            _att_type   = _att.get("type", "")
+            _att_status = _att.get("status", "")
+            _att_time   = _att.get("time_sgt", "")
+            _att_ok     = _att.get("success", 0)
+            _att_fail   = _att.get("failed", 0)
+            _att_next   = _att.get("next_retry_sgt")
+            _att_note   = _att.get("note", "")
+
+            _lbl = _type_labels.get(_att_type, _att_type)
+            _ico = _status_icons.get(_att_status, _att_status)
+
+            _line = f"- **{_att_time}**　{_lbl}　{_ico}"
+            if _att_type in ("main_download", "retry_download"):
+                _line += f"　成功：{_att_ok:,}，失败：{_att_fail:,}"
+            if _att_next:
+                _line += f"　→ 下次重试：**{_att_next}**"
+            if _att_note:
+                _line += f"　（{_att_note}）"
+            st.markdown(_line)
+
+    elif _ds_stats:
+        # 旧系统 fallback（download_log 尚未生成时显示）
         _ds_upd_raw  = _ds_stats.get("updated_utc", "")
         _ds_upd_sgt  = ""
         if _ds_upd_raw:
@@ -872,7 +933,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             st.success(
                 f"上次下载（{_ds_upd_sgt}）：成功下载 **{_ds_dl_ok:,}** 个，"
                 f"扫描范围共 **{_ds_dl_total:,}** 个，**全部下载成功**。"
-                "（注：此为历史快照，与上方「每日YF可下载标的数」因更新时间不同可能略有差异）"
             )
         else:
             _ds_retry_tks  = _ds_pending.get("tickers", [])
