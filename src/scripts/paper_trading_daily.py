@@ -1184,6 +1184,58 @@ def _append_attempt(log_obj: dict, record: dict) -> None:
     log_obj["attempts"].append(record)
 
 
+def _update_daily_summary(state: dict, today: date) -> bool:
+    """Download current prices and regenerate today's daily summary.
+
+    Called by run_retry() when market data becomes available after the main
+    script's no-data early exit.  Returns True on success.
+    """
+    try:
+        pos_tickers   = [p["ticker"] for p in state.get("positions", [])]
+        pend_exits    = [s["ticker"] for s in state.get("pending_exits", [])]
+        pend_entries  = [s["ticker"] for s in state.get("pending_entries", [])]
+        needed        = list(set(pos_tickers + pend_exits + pend_entries + ["SPY", "SHY"]))
+        price_data    = fetch_price_data(needed, period="300d")
+
+        spy_df    = price_data.get("SPY")
+        spy_close = float(spy_df["Close"].iloc[-1]) if spy_df is not None and not spy_df.empty else None
+
+        cash      = state.get("cash", 0.0)
+        pos_value = 0.0
+        prev_prices: dict = {}
+        for pos in state.get("positions", []):
+            _t  = pos["ticker"]
+            _df = price_data.get(_t)
+            prev_prices[_t] = pos.get("last_known_price", pos["entry_price"])
+            if _df is not None and not _df.empty:
+                _px = float(_df["Close"].iloc[-1])
+                pos_value += _px * pos.get("shares", 0)
+                pos["last_known_price"] = _px
+        current_nav = cash + pos_value
+
+        prev_nav = state["nav_history"][-1]["nav"] if state.get("nav_history") else None
+        prev_spy = state["nav_history"][-1].get("spy_close") if state.get("nav_history") else None
+
+        state["daily_summary"] = _gen_daily_summary(
+            today            = today,
+            current_nav      = current_nav,
+            prev_nav         = prev_nav,
+            spy_close        = spy_close,
+            prev_spy         = prev_spy,
+            positions        = state.get("positions", []),
+            prev_prices      = prev_prices,
+            exits_executed   = [],
+            entries_executed = [],
+            new_exit_signals = [],
+        )
+        state["daily_summary"].pop("data_pending", None)
+        log.info(f"  Daily summary updated for {today} via retry")
+        return True
+    except Exception as _e:
+        log.warning(f"  _update_daily_summary failed: {_e}")
+        return False
+
+
 # ── Retry mode ───────────────────────────────────────────────────────────────
 
 def run_retry() -> None:
