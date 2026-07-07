@@ -1085,20 +1085,6 @@ def _gen_daily_summary(
 
 _NYSE_CALENDAR_URL = "https://www.nyse.com/markets/hours-calendars"
 
-# Known NYSE holidays 2026 (static list for offline use)
-_NYSE_HOLIDAYS_2026: dict = {
-    date(2026, 1, 1):   "元旦（New Year's Day）",
-    date(2026, 1, 19):  "马丁·路德·金纪念日（MLK Day）",
-    date(2026, 2, 16):  "总统日（Presidents' Day）",
-    date(2026, 4, 3):   "耶稣受难日（Good Friday）",
-    date(2026, 5, 25):  "阵亡将士纪念日（Memorial Day）",
-    date(2026, 6, 19):  "六月节（Juneteenth）",
-    date(2026, 7, 3):   "独立日补休（Independence Day, observed）",
-    date(2026, 9, 7):   "劳动节（Labor Day）",
-    date(2026, 11, 26): "感恩节（Thanksgiving）",
-    date(2026, 12, 25): "圣诞节（Christmas）",
-}
-
 
 def _sgt_str(utc_dt: "datetime") -> str:
     return (utc_dt + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M SGT")
