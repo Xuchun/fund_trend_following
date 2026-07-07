@@ -1379,20 +1379,26 @@ def run_retry() -> None:
         log.warning("  No tickers recovered on this attempt")
 
     # ── Update or clear pending_retry ─────────────────────────────────────────
-    _now_retry_utc = datetime.now(timezone.utc)
+    _now_retry_utc   = datetime.now(timezone.utc)
+    _orig_total      = pending.get("original_total_scanned", len(retry_tickers))
+    # tickers successfully downloaded BEFORE this retry = orig_total - len(retry_tickers)
+    _prev_success    = _orig_total - len(retry_tickers)
+    _cum_success     = _prev_success + len(recovered)   # cumulative after this retry
+
     if still_missing:
         log.warning(f"  Still missing: {still_missing}")
-        _next      = _next_retry_at(_now_retry_utc)
+        _next = _next_retry_at(_now_retry_utc)
         state["pending_retry"] = {
-            "tickers":           still_missing,
-            "scan_date":         str(scan_date),
-            "attempt":           attempt + 1,
-            "downloaded_count":  len(retry_data),
-            "total_scanned":     len(retry_tickers),
-            "next_retry_utc":    _next.strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "next_retry_sgt":    _sgt_str(_next),
-            "created_utc":       pending.get("created_utc", _now_retry_utc.strftime("%Y-%m-%dT%H:%M:%SZ")),
-            "last_attempt_utc":  _now_retry_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "tickers":                still_missing,
+            "scan_date":              str(scan_date),
+            "attempt":                attempt + 1,
+            "downloaded_count":       len(retry_data),
+            "total_scanned":          len(retry_tickers),
+            "original_total_scanned": _orig_total,   # carry through
+            "next_retry_utc":         _next.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "next_retry_sgt":         _sgt_str(_next),
+            "created_utc":            pending.get("created_utc", _now_retry_utc.strftime("%Y-%m-%dT%H:%M:%SZ")),
+            "last_attempt_utc":       _now_retry_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
         }
         log.info(f"  Next retry scheduled: {state['pending_retry']['next_retry_sgt']}")
         _retry_dl_status = "partial"
@@ -1401,8 +1407,8 @@ def run_retry() -> None:
         log.info("  All tickers recovered — clearing pending_retry")
         state.pop("pending_retry", None)
         state["last_download_stats"] = {
-            "downloaded_count": len(retry_tickers),
-            "total_scanned":    len(retry_tickers),
+            "downloaded_count": _cum_success,
+            "total_scanned":    _orig_total,
             "updated_utc":      _now_retry_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
         }
         _retry_dl_status = "success"
@@ -1411,12 +1417,14 @@ def run_retry() -> None:
     # Record to download_log
     _dl_log_retry = _get_dl_log(state, scan_date)
     _append_attempt(_dl_log_retry, {
-        "time_sgt":       _sgt_str(_now_retry_utc),
-        "type":           "retry_download",
-        "status":         _retry_dl_status,
-        "success":        len(recovered),
-        "failed":         len(still_missing),
-        "next_retry_sgt": _next_sgt_val,
+        "time_sgt":           _sgt_str(_now_retry_utc),
+        "type":               "retry_download",
+        "status":             _retry_dl_status,
+        "total":              _orig_total,
+        "success":            len(recovered),
+        "cumulative_success": _cum_success,
+        "failed":             len(still_missing),
+        "next_retry_sgt":     _next_sgt_val,
     })
     state["download_log"] = _dl_log_retry
 
