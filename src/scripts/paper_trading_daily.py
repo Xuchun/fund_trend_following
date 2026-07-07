@@ -15,7 +15,7 @@ Signals generated on day T are executed on day T+1 (no look-ahead).
 Requirements:  yfinance >= 1.0,  pandas,  src/ on PYTHONPATH
 """
 
-import sys, json, argparse, logging, math, time
+import sys, os, json, argparse, logging, math, time
 from pathlib import Path
 from datetime import date, datetime, timezone, timedelta
 
