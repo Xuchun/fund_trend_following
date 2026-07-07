@@ -1115,24 +1115,31 @@ def _check_market_holiday(check_date: date) -> "tuple[bool | None, str, str]":
     None  = cannot determine (library unavailable).
     """
     try:
+        import pandas as _pd
         import pandas_market_calendars as mcal
-        nyse = mcal.get_calendar("NYSE")
-        _cd  = str(check_date)
+        nyse     = mcal.get_calendar("NYSE")
+        _cd      = str(check_date)
         schedule = nyse.schedule(start_date=_cd, end_date=_cd)
-        if schedule.empty:
-            # weekend or holiday — get the name from the holiday list
-            _hols = nyse.holidays().holidays
-            if check_date in _hols.index:
-                _name = str(_hols[check_date]) if _hols[check_date] else "NYSE 假日"
-            elif check_date.weekday() >= 5:
-                _name = "周末（Weekend）"
-            else:
-                _name = "NYSE 假日"
-            return True, _name, _NYSE_CALENDAR_URL
-        else:
+        if not schedule.empty:
             return False, "", ""
+        # Market closed — determine the reason
+        if check_date.weekday() >= 5:
+            return True, "周末（Weekend）", _NYSE_CALENDAR_URL
+        # Build name map from regular_holidays rules
+        _yr      = check_date.year
+        _yr_s    = f"{_yr}-01-01"
+        _yr_e    = f"{_yr}-12-31"
+        _named   = {}
+        for _r in nyse.regular_holidays.rules:
+            try:
+                _dates = _r.dates(start_date=_yr_s, end_date=_yr_e, return_name=True)
+                for _ts, _rn in _dates.items():
+                    _named[_ts.date()] = str(_rn)
+            except Exception:
+                pass
+        _name = _named.get(check_date, "NYSE 假日")
+        return True, _name, _NYSE_CALENDAR_URL
     except Exception:
-        # Fallback: cannot determine
         return None, "无法确认（pandas_market_calendars 不可用）", _NYSE_CALENDAR_URL
 
 
