@@ -3162,6 +3162,70 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             key="debug_raw_csv_btn",
         )
 
+    st.markdown("---")
+
+    # ── 过去60个交易日每日成交额 ──────────────────────────────────────────────
+    st.markdown(
+        f"**过去 60 个交易日每日成交额**（美元，= Volume × 原始收盘价），标的池共 **{len(_dbg_tickers):,}** 个标的。"
+    )
+
+    if "debug_dolvol_csv" not in st.session_state:
+        st.session_state["debug_dolvol_csv"] = None
+        st.session_state["debug_dolvol_filename"] = ""
+
+    if st.button("准备数据（从 Yahoo Finance 下载过去 60 个交易日成交额）", key="debug_dolvol_btn"):
+        if not _dbg_tickers:
+            st.error("标的池为空，无法下载。")
+        else:
+            import datetime as _dbg_dt3
+            import io as _dbg_io3
+            import yfinance as _dbg_yf3
+
+            _dbg3_end   = _dbg_dt3.date.today()
+            _dbg3_start = _dbg3_end - _dbg_dt3.timedelta(days=120)  # 多取以确保满足60个交易日
+
+            with st.spinner(f"正在从 Yahoo Finance 下载 {len(_dbg_tickers):,} 个标的的成交额数据…"):
+                try:
+                    _dbg3_raw = _dbg_yf3.download(
+                        _dbg_tickers,
+                        start=str(_dbg3_start),
+                        end=str(_dbg3_end + _dbg_dt3.timedelta(days=1)),
+                        auto_adjust=False,
+                        progress=False,
+                        threads=True,
+                    )
+                    if isinstance(_dbg3_raw.columns, pd.MultiIndex):
+                        _dbg3_close  = _dbg3_raw["Close"].tail(60)
+                        _dbg3_volume = _dbg3_raw["Volume"].tail(60)
+                    else:
+                        _dbg3_close  = _dbg3_raw[["Close"]].tail(60)
+                        _dbg3_volume = _dbg3_raw[["Volume"]].tail(60)
+
+                    _dbg3_dolvol = (_dbg3_close * _dbg3_volume).dropna(how="all")
+                    _dbg3_wide = _dbg3_dolvol.T.copy()
+                    _dbg3_wide.index.name = "ticker"
+                    _dbg3_wide.columns = [
+                        c.strftime("%Y-%m-%d") if hasattr(c, "strftime") else str(c)
+                        for c in _dbg3_wide.columns
+                    ]
+                    _dbg3_last_date = _dbg3_wide.columns[-1]
+                    _dbg3_buf = _dbg_io3.StringIO()
+                    _dbg3_wide.to_csv(_dbg3_buf)
+                    st.session_state["debug_dolvol_csv"]      = _dbg3_buf.getvalue()
+                    st.session_state["debug_dolvol_filename"] = f"universe_dolvol60_{_dbg3_last_date}.csv"
+                    st.success(f"下载完成：{len(_dbg3_wide)} 个标的，{len(_dbg3_wide.columns)} 个交易日（截至 {_dbg3_last_date}）。")
+                except Exception as _dbg3_e:
+                    st.error(f"下载失败：{_dbg3_e}")
+
+    if st.session_state.get("debug_dolvol_csv"):
+        st.download_button(
+            label="点击下载 CSV（成交额）",
+            data=st.session_state["debug_dolvol_csv"],
+            file_name=st.session_state["debug_dolvol_filename"],
+            mime="text/csv",
+            key="debug_dolvol_csv_btn",
+        )
+
     st.divider()
 
     # ── 数据下载（方法一）────────────────────────────────────────────────────
