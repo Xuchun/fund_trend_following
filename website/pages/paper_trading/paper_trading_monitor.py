@@ -1035,7 +1035,22 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             _n_missed = _missed_runs(_ga_last, _now_utc)
 
             if _n_missed == 0:
-                _ga_color, _ga_icon, _ga_note = "#2ca02c", "🟢", ("正常（市场休市，无需更新）" if _is_no_op else "正常")
+                if _is_no_op:
+                    # 区分三种情况：假日确认 / 等待今日收盘数据 / 原因不明
+                    _dl_log_ga = _m1.get("download_log", {}) or {}
+                    _ndp_ga    = _m1.get("no_data_probe", {}) or {}
+                    _hol_ga    = _dl_log_ga.get("holiday")
+                    _today_str = _dt_ga.date.today().isoformat()
+                    if _hol_ga and _hol_ga.get("is_holiday") is True:
+                        _hol_ga_name = _hol_ga.get("name", "假日")
+                        _ga_note = f"正常（市场休市：{_hol_ga_name}）"
+                    elif _ndp_ga and _ndp_ga.get("date") == _today_str:
+                        _ga_note = "正常（今日市场数据尚未就绪，持续重试中）"
+                    else:
+                        _ga_note = "正常（市场休市，无需更新）"
+                else:
+                    _ga_note = "正常"
+                _ga_color, _ga_icon = "#2ca02c", "🟢"
             elif _n_missed == 1:
                 _ga_color, _ga_icon, _ga_note = "#ff7f0e", "🟡", "⚠️ 有 1 个工作日运行缺失，请关注"
             else:
