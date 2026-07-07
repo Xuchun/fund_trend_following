@@ -1355,9 +1355,10 @@ def run_retry() -> None:
         log.warning("  No tickers recovered on this attempt")
 
     # ── Update or clear pending_retry ─────────────────────────────────────────
+    _now_retry_utc = datetime.now(timezone.utc)
     if still_missing:
         log.warning(f"  Still missing: {still_missing}")
-        _next      = datetime.now(timezone.utc) + timedelta(hours=1)
+        _next      = _now_retry_utc + timedelta(hours=1)
         _sgt_off   = timedelta(hours=8)
         state["pending_retry"] = {
             "tickers":           still_missing,
@@ -1367,18 +1368,34 @@ def run_retry() -> None:
             "total_scanned":     len(retry_tickers),
             "next_retry_utc":    _next.strftime("%Y-%m-%dT%H:%M:%SZ"),
             "next_retry_sgt":    (_next + _sgt_off).strftime("%Y-%m-%d %H:%M SGT"),
-            "created_utc":       pending.get("created_utc", datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")),
-            "last_attempt_utc":  datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "created_utc":       pending.get("created_utc", _now_retry_utc.strftime("%Y-%m-%dT%H:%M:%SZ")),
+            "last_attempt_utc":  _now_retry_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
         }
         log.info(f"  Next retry scheduled: {state['pending_retry']['next_retry_sgt']}")
+        _retry_dl_status = "partial"
+        _next_sgt_val    = state["pending_retry"]["next_retry_sgt"]
     else:
         log.info("  All tickers recovered — clearing pending_retry")
         state.pop("pending_retry", None)
         state["last_download_stats"] = {
             "downloaded_count": len(retry_tickers),
             "total_scanned":    len(retry_tickers),
-            "updated_utc":      datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "updated_utc":      _now_retry_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
         }
+        _retry_dl_status = "success"
+        _next_sgt_val    = None
+
+    # Record to download_log
+    _dl_log_retry = _get_dl_log(state, scan_date)
+    _append_attempt(_dl_log_retry, {
+        "time_sgt":       _sgt_str(_now_retry_utc),
+        "type":           "retry_download",
+        "status":         _retry_dl_status,
+        "success":        len(recovered),
+        "failed":         len(still_missing),
+        "next_retry_sgt": _next_sgt_val,
+    })
+    state["download_log"] = _dl_log_retry
 
     save_state(state)
     log.info("=== Retry done ===")
