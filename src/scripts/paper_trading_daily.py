@@ -1468,7 +1468,7 @@ def main() -> None:
         run_retry()
         return
 
-    today = date.fromisoformat(args.date) if args.date else date.today()
+    today = date.fromisoformat(args.date) if args.date else _get_target_date()
     log.info(f"=== Strategy 1.0 Paper Trading: {today} ===")
 
     state = load_state()
