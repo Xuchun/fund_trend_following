@@ -890,10 +890,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             "retry_download": "重试下载失败标的",
         }
         _status_icons = {
-            "no_data":        "⛔ 无数据",
-            "partial":        "⚠️ 部分成功",
+            "no_data":        "— 市场暂无当日收盘数据",
+            "partial":        "⚠️ 部分标的下载失败",
             "success":        "✅ 全部成功",
-            "data_available": "ℹ️ 数据已可用",
+            "data_available": "ℹ️ 数据已可用，等待下次全量下载",
         }
         _att_lines = []
         for _att in _dl_attempts:
