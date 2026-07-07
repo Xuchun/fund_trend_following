@@ -1240,7 +1240,7 @@ def run_retry() -> None:
                             state.pop("no_data_probe", None)
                         elif _is_hol is False:
                             # Unexpectedly confirmed open — keep probing
-                            _next = _now_utc + timedelta(hours=1)
+                            _next = _next_retry_at(_now_utc)
                             _dl_log["holiday"] = None
                             _ndp["attempt"] = _no_data_total + 1
                             _ndp["next_retry_utc"] = _next.strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -1248,7 +1248,7 @@ def run_retry() -> None:
                             state["no_data_probe"] = _ndp
                         else:
                             # Cannot confirm — keep probing with holiday=unknown
-                            _next = _now_utc + timedelta(hours=1)
+                            _next = _next_retry_at(_now_utc)
                             _dl_log["holiday"] = {
                                 "is_holiday": None,
                                 "name": "未能确认，持续重试中",
@@ -1260,7 +1260,7 @@ def run_retry() -> None:
                             state["no_data_probe"] = _ndp
                     else:
                         # Schedule next probe
-                        _next = _now_utc + timedelta(hours=1)
+                        _next = _next_retry_at(_now_utc)
                         _append_attempt(_dl_log, {
                             "time_sgt": _sgt_str(_now_utc),
                             "type": "retry_probe",
