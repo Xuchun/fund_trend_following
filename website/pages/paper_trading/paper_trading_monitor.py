@@ -3103,6 +3103,65 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             key="debug_dl_csv_btn",
         )
 
+    st.markdown("---")
+
+    # ── 最后一个交易日原始收盘价 ──────────────────────────────────────────────
+    st.markdown(
+        f"**最后一个交易日原始收盘价**（raw close，未复权），标的池共 **{len(_dbg_tickers):,}** 个标的。"
+    )
+
+    if "debug_raw_csv" not in st.session_state:
+        st.session_state["debug_raw_csv"] = None
+        st.session_state["debug_raw_filename"] = ""
+
+    if st.button("准备数据（从 Yahoo Finance 下载最后一个交易日原始收盘价）", key="debug_raw_btn"):
+        if not _dbg_tickers:
+            st.error("标的池为空，无法下载。")
+        else:
+            import datetime as _dbg_dt2
+            import io as _dbg_io2
+            import yfinance as _dbg_yf2
+
+            _dbg2_end   = _dbg_dt2.date.today()
+            _dbg2_start = _dbg2_end - _dbg_dt2.timedelta(days=10)  # 多取几天确保拿到最后一个交易日
+
+            with st.spinner(f"正在从 Yahoo Finance 下载 {len(_dbg_tickers):,} 个标的的原始收盘价…"):
+                try:
+                    _dbg2_raw = _dbg_yf2.download(
+                        _dbg_tickers,
+                        start=str(_dbg2_start),
+                        end=str(_dbg2_end + _dbg_dt2.timedelta(days=1)),
+                        auto_adjust=False,
+                        progress=False,
+                        threads=True,
+                    )
+                    if isinstance(_dbg2_raw.columns, pd.MultiIndex):
+                        _dbg2_close = _dbg2_raw["Close"].dropna(how="all").tail(1)
+                    else:
+                        _dbg2_close = _dbg2_raw[["Close"]].dropna(how="all").tail(1)
+
+                    _dbg2_last_date = _dbg2_close.index[-1].strftime("%Y-%m-%d")
+                    # 转置：行=ticker，列=日期
+                    _dbg2_wide = _dbg2_close.T.copy()
+                    _dbg2_wide.index.name = "ticker"
+                    _dbg2_wide.columns = [_dbg2_last_date]
+                    _dbg2_buf = _dbg_io2.StringIO()
+                    _dbg2_wide.to_csv(_dbg2_buf)
+                    st.session_state["debug_raw_csv"]      = _dbg2_buf.getvalue()
+                    st.session_state["debug_raw_filename"] = f"universe_raw_close_{_dbg2_last_date}.csv"
+                    st.success(f"下载完成：{len(_dbg2_wide)} 个标的，最后交易日 {_dbg2_last_date}。")
+                except Exception as _dbg2_e:
+                    st.error(f"下载失败：{_dbg2_e}")
+
+    if st.session_state.get("debug_raw_csv"):
+        st.download_button(
+            label="点击下载 CSV（原始收盘价）",
+            data=st.session_state["debug_raw_csv"],
+            file_name=st.session_state["debug_raw_filename"],
+            mime="text/csv",
+            key="debug_raw_csv_btn",
+        )
+
     st.divider()
 
     # ── 数据下载（方法一）────────────────────────────────────────────────────
