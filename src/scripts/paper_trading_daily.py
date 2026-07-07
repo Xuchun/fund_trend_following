@@ -1662,9 +1662,8 @@ def main() -> None:
             # schedule them for an automatic retry 1 hour later via pending_retry.
             _missing_tickers = [t for t in scan_tickers if t not in univ_data]
             if _missing_tickers:
-                _retry_at   = datetime.now(timezone.utc) + timedelta(hours=1)
-                _sgt_offset = timedelta(hours=8)
-                _now_utc = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+                _retry_at   = _next_retry_at(datetime.now(timezone.utc))
+                _now_utc_str = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
                 state["pending_retry"] = {
                     "tickers":           _missing_tickers,
                     "scan_date":         str(today),
@@ -1672,9 +1671,9 @@ def main() -> None:
                     "downloaded_count":  len(univ_data),
                     "total_scanned":     len(scan_tickers),
                     "next_retry_utc":    _retry_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
-                    "next_retry_sgt":    (_retry_at + _sgt_offset).strftime("%Y-%m-%d %H:%M SGT"),
-                    "created_utc":       _now_utc,
-                    "last_attempt_utc":  _now_utc,
+                    "next_retry_sgt":    _sgt_str(_retry_at),
+                    "created_utc":       _now_utc_str,
+                    "last_attempt_utc":  _now_utc_str,
                 }
                 log.warning(
                     f"  {len(_missing_tickers)} tickers missing → pending_retry "
