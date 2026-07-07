@@ -3040,6 +3040,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.divider()
 
     # ── Debug ────────────────────────────────────────────────────────────────
+    st.markdown('<div id="sec-pt-15"></div>', unsafe_allow_html=True)
     st.subheader("Debug")
 
     _dbg_tickers = sorted(_ds_pt["ticker"].tolist()) if not _ds_df.empty else []
