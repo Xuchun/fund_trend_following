@@ -1143,6 +1143,34 @@ def _check_market_holiday(check_date: date) -> "tuple[bool | None, str, str]":
         return None, "无法确认（pandas_market_calendars 不可用）", _NYSE_CALENDAR_URL
 
 
+def _get_target_date() -> date:
+    """Return the NYSE trading date whose closing data should be available now.
+
+    The main script is scheduled at 23:00 UTC (19:00 ET), but GitHub Actions
+    queue delays can push it past midnight UTC (e.g., 00:10 UTC = 20:10 ET).
+    Using date.today() in UTC would then return the wrong date.
+
+    We use US Eastern Time instead: data is considered available 30 minutes
+    after the 16:00 ET close (i.e., >= 16:30 ET = today's data; < 16:30 ET =
+    yesterday's data). We then walk back to the most recent NYSE trading day.
+    """
+    try:
+        from zoneinfo import ZoneInfo
+        import pandas_market_calendars as mcal
+        _et      = ZoneInfo("America/New_York")
+        _now_et  = datetime.now(_et)
+        _cutoff  = _now_et.replace(hour=16, minute=30, second=0, microsecond=0)
+        _cand    = _now_et.date() if _now_et >= _cutoff else _now_et.date() - timedelta(days=1)
+        nyse     = mcal.get_calendar("NYSE")
+        for _ in range(10):
+            if not nyse.schedule(start_date=str(_cand), end_date=str(_cand)).empty:
+                return _cand
+            _cand -= timedelta(days=1)
+    except Exception:
+        pass
+    return date.today()
+
+
 def _get_dl_log(state: dict, today: date) -> dict:
     """Return today's download_log, resetting if date changed."""
     log_obj = state.get("download_log", {})
