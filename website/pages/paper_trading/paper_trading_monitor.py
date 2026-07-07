@@ -3045,8 +3045,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     _dbg_tickers = sorted(_ds_pt["ticker"].tolist()) if not _ds_df.empty else []
     st.markdown(
-        f"标的池共 **{len(_dbg_tickers):,}** 个标的（Yahoo Finance 可下载），"
-        f"点击下方按钮准备过去 250 个交易日的每日**复权收盘价**数据（adjusted close，已调整股息和拆股）。"
+        f"**过去 250 个交易日的每日复权收盘价**，标的池共 **{len(_dbg_tickers):,}** 个标的。"
     )
 
     if "debug_close_csv" not in st.session_state:
