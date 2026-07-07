@@ -1063,11 +1063,16 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 unsafe_allow_html=True,
             )
 
-            # 节假日说明
-            if _is_no_op and _no_op_date_str:
+            # 节假日说明：仅在 download_log 明确确认为假日时显示
+            _dl_log_hol = _m1.get("download_log", {}) or {}
+            _hol_info   = _dl_log_hol.get("holiday") or {}
+            if _hol_info.get("is_holiday") is True:
                 _last_trade_date = _m1.get("last_update_date", "")
+                _hol_nm  = _hol_info.get("name", "假日")
+                _hol_src = _hol_info.get("source", "")
+                _hol_link = f"　[来源]({_hol_src})" if _hol_src else ""
                 st.info(
-                    f"📅 **{_no_op_date_str} 为美股节假日，市场休市，策略当日无操作。**"
+                    f"📅 **{_dl_log_hol.get('date', '')} 为美股节假日（{_hol_nm}），市场休市，策略当日无操作。**{_hol_link}"
                     + (f"  当前显示的是上一个有效交易日（{_last_trade_date}）的数据。" if _last_trade_date else "")
                 )
         except Exception:
