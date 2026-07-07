@@ -3106,6 +3106,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.divider()
 
     # ── 数据下载（方法一）────────────────────────────────────────────────────
+    st.markdown('<div id="sec-pt-16"></div>', unsafe_allow_html=True)
     st.subheader("数据下载（用于未来策略1.0的过拟合分析）")
     st.markdown(
         "包含所有模拟交易数据：NAV 历史、开仓记录、平仓记录、"
