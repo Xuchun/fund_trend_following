@@ -1143,6 +1143,15 @@ def _check_market_holiday(check_date: date) -> "tuple[bool | None, str, str]":
         return None, "无法确认（pandas_market_calendars 不可用）", _NYSE_CALENDAR_URL
 
 
+def _get_et_date() -> date:
+    """Return the current calendar date in US Eastern Time."""
+    try:
+        from zoneinfo import ZoneInfo
+        return datetime.now(ZoneInfo("America/New_York")).date()
+    except Exception:
+        return date.today()
+
+
 def _get_target_date() -> date:
     """Return the NYSE trading date whose closing data should be available now.
 
