@@ -1437,7 +1437,45 @@ def main() -> None:
             f"  No market data for {today} — pre-market, weekend, or holiday. "
             "State unchanged; website keeps showing last completed trading day."
         )
-        state["last_no_op_utc"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        _now_utc = datetime.now(timezone.utc)
+        _dl_log  = _get_dl_log(state, today)
+
+        # Count previous no-data attempts today
+        _prev_no_data = sum(
+            1 for a in _dl_log.get("attempts", [])
+            if a.get("type") == "main_probe" and a.get("status") == "no_data"
+        )
+        _attempt_n = _prev_no_data + 1
+
+        _next_retry_utc = _now_utc + timedelta(hours=1)
+        _append_attempt(_dl_log, {
+            "time_sgt":       _sgt_str(_now_utc),
+            "type":           "main_probe",
+            "status":         "no_data",
+            "success":        0,
+            "failed":         0,
+            "attempt":        _attempt_n,
+            "next_retry_sgt": _sgt_str(_next_retry_utc),
+        })
+
+        if _attempt_n >= 3 and _dl_log.get("holiday") is None:
+            _is_hol, _hol_name, _hol_url = _check_market_holiday(today)
+            if _is_hol is True:
+                _dl_log["holiday"] = {"is_holiday": True, "name": _hol_name, "source": _hol_url}
+                log.info(f"  Holiday confirmed: {_hol_name}")
+            elif _is_hol is False:
+                _dl_log["holiday"] = {"is_holiday": False, "name": "", "source": ""}
+            else:
+                _dl_log["holiday"] = {"is_holiday": None, "name": "未能确认", "source": _hol_url}
+
+        state["download_log"] = _dl_log
+        state["no_data_probe"] = {
+            "date":            str(today),
+            "attempt":         _attempt_n + 1,
+            "next_retry_utc":  _next_retry_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "next_retry_sgt":  _sgt_str(_next_retry_utc),
+        }
+        state["last_no_op_utc"] = _now_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
         save_state(state)
         log.info("=== Done (no-op — market not yet open) ===")
         return
