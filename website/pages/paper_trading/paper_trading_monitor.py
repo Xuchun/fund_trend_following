@@ -832,58 +832,57 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     _ds_dl_total = _ds_stats.get("total_scanned", 0)   if _ds_stats else 0
     _ds_dl_fail  = _ds_dl_total - _ds_dl_ok
 
+    # ── 共用时间转换工具 ──────────────────────────────────────────────────────
+    import datetime as _dt_ds
+    def _utc_to_sgt(raw: str) -> str:
+        if not raw:
+            return ""
+        try:
+            _u = _dt_ds.datetime.fromisoformat(raw.replace("Z", "+00:00"))
+            return (_u + _dt_ds.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M SGT")
+        except Exception:
+            return raw
+
+    # ── 1. 上次成功全量下载（last_download_stats） ────────────────────────────
+    _ds_upd_sgt = _utc_to_sgt(_ds_stats.get("updated_utc", "")) if _ds_stats else ""
+    if _ds_upd_sgt and _ds_dl_ok:
+        st.markdown(
+            f"**上次成功全量下载**：{_ds_upd_sgt}，"
+            f"成功下载 **{_ds_dl_ok:,}** 个标的（共扫描 {_ds_dl_total:,} 个）"
+        )
+
+    # ── 2. 当前持仓实时价格更新时间 ──────────────────────────────────────────
     _fetch_count_note = (
         f"，共获取 **{len(_m1_tickers):,}** 个标的实时行情"
         f"（当前 {len(_m1_positions)} 只仓位 + SPY）"
     ) if _m1_tickers else ""
-    _cutoff_sgt = ""
-    if _m1_last_upd_raw:
-        try:
-            import datetime as _ddt2
-            _cu = _ddt2.datetime.strptime(_m1_last_upd_raw, "%Y-%m-%dT%H:%M:%SZ").replace(
-                tzinfo=_ddt2.timezone.utc
-            ) + _ddt2.timedelta(hours=8)
-            _cutoff_sgt = _cu.strftime("%Y-%m-%d %H:%M SGT")
-        except Exception:
-            pass
-    _scan_count_note = (
-        f"共扫描 **{_ds_dl_ok:,}** 个标的"
-        + (f"（基于截止 **{_cutoff_sgt}** 收盘价的数据）" if _cutoff_sgt else "")
-    ) if _ds_dl_ok else ""
+    if _last_fetch_sgt:
+        st.markdown(f"**持仓实时价格**：{_last_fetch_sgt}{_fetch_count_note}")
 
-    st.markdown("**最新数据更新时间**")
-    st.markdown(
-        f"- **价格数据（Yahoo Finance）**：{_last_fetch_sgt}{_fetch_count_note}\n"
-        f"- **策略信号计算**：{_scan_count_note}"
-    )
-
-    # ── download_log：显示所有尝试记录（新系统） ──────────────────────────────
+    # ── 3. download_log：每日下载尝试记录（新系统） ───────────────────────────
     _dl_log = _m1.get("download_log", {})
     if _dl_log:
         _dl_attempts = _dl_log.get("attempts", [])
         _dl_holiday  = _dl_log.get("holiday")
         _dl_date     = _dl_log.get("date", "")
 
-        st.markdown(f"**下载日志（{_dl_date}）**")
+        st.markdown(f"**每日下载日志（交易日 {_dl_date}）**")
 
-        # 显示假日信息（如有）
+        # 假日确认结果
         if _dl_holiday is not None:
-            _hol_is = _dl_holiday.get("is_holiday")
-            _hol_nm = _dl_holiday.get("name", "")
+            _hol_is  = _dl_holiday.get("is_holiday")
+            _hol_nm  = _dl_holiday.get("name", "")
             _hol_url = _dl_holiday.get("source", "")
             if _hol_is is True:
-                _hol_link = f"[来源链接]({_hol_url})" if _hol_url else ""
-                st.info(
-                    f"市场休市：**{_hol_nm}**　{_hol_link}",
-                    icon="🏖️"
-                )
+                _hol_link = f"　[来源]({_hol_url})" if _hol_url else ""
+                st.info(f"**市场休市**：{_hol_nm}{_hol_link}", icon="🏖️")
             elif _hol_is is False:
                 st.info("市场确认开盘但暂无数据，持续重试中。", icon="⏳")
             else:
-                _hol_link = f"[NYSE 假日表]({_hol_url})" if _hol_url else ""
-                st.warning(f"连续3次无数据 — 无法确认是否休市 {_hol_link}，持续重试中。")
+                _hol_link = f"　[NYSE 假日表]({_hol_url})" if _hol_url else ""
+                st.warning(f"连续3次无数据，无法确认是否休市{_hol_link}，持续重试中。")
 
-        # 逐条显示尝试记录
+        # 逐条尝试记录
         _type_labels = {
             "main_probe":     "每日探测（SPY）",
             "main_download":  "每日下载（全标的池）",
@@ -891,11 +890,12 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             "retry_download": "重试下载",
         }
         _status_icons = {
-            "no_data":       "⛔ 无数据",
-            "partial":       "⚠️ 部分成功",
-            "success":       "✅ 全部成功",
-            "data_available":"ℹ️ 数据已可用",
+            "no_data":        "⛔ 无数据",
+            "partial":        "⚠️ 部分成功",
+            "success":        "✅ 全部成功",
+            "data_available": "ℹ️ 数据已可用",
         }
+        _att_lines = []
         for _att in _dl_attempts:
             _att_type   = _att.get("type", "")
             _att_status = _att.get("status", "")
@@ -910,25 +910,37 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
             _line = f"- **{_att_time}**　{_lbl}　{_ico}"
             if _att_type in ("main_download", "retry_download"):
-                _line += f"　成功：{_att_ok:,}，失败：{_att_fail:,}"
+                _line += f"　成功：**{_att_ok:,}** 个，失败：**{_att_fail}** 个"
             if _att_next:
                 _line += f"　→ 下次重试：**{_att_next}**"
             if _att_note:
                 _line += f"　（{_att_note}）"
-            st.markdown(_line)
+            _att_lines.append(_line)
+
+        if _att_lines:
+            st.markdown("\n".join(_att_lines))
+
+        # 如果最后一次尝试是 partial/no_data，显示当前状态摘要
+        if _dl_attempts:
+            _last_att = _dl_attempts[-1]
+            _last_st  = _last_att.get("status", "")
+            _last_nxt = _last_att.get("next_retry_sgt")
+            if _last_st in ("no_data", "partial") and _last_nxt:
+                _pend_fail = _ds_pending.get("tickers", [])
+                _fail_n    = len(_pend_fail) if _pend_fail else _last_att.get("failed", 0)
+                if _last_st == "partial" and _fail_n:
+                    st.warning(
+                        f"当前仍有 **{_fail_n}** 个标的未下载成功，"
+                        f"将于 **{_last_nxt}** 自动重试。"
+                    )
+                elif _last_st == "no_data":
+                    st.warning(
+                        f"暂未获取到 {_dl_date} 市场数据，"
+                        f"将于 **{_last_nxt}** 再次尝试。"
+                    )
 
     elif _ds_stats:
-        # 旧系统 fallback（download_log 尚未生成时显示）
-        _ds_upd_raw  = _ds_stats.get("updated_utc", "")
-        _ds_upd_sgt  = ""
-        if _ds_upd_raw:
-            try:
-                import datetime as _ddt
-                _u = _ddt.datetime.fromisoformat(_ds_upd_raw.replace("Z", "+00:00"))
-                _ds_upd_sgt = (_u + _ddt.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M SGT")
-            except Exception:
-                pass
-
+        # 旧系统 fallback（download_log 尚未生成时）
         if _ds_dl_fail == 0:
             st.success(
                 f"上次下载（{_ds_upd_sgt}）：成功下载 **{_ds_dl_ok:,}** 个，"
