@@ -1645,11 +1645,29 @@ def main() -> None:
                 log.info("  All tickers downloaded — cleared previous pending_retry")
 
             # Always persist download stats for the monitor page
+            _now_dl_utc = datetime.now(timezone.utc)
             state["last_download_stats"] = {
                 "downloaded_count": len(univ_data),
                 "total_scanned":    len(scan_tickers),
-                "updated_utc":      datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "updated_utc":      _now_dl_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
             }
+
+            # Record to download_log
+            _dl_log_main = _get_dl_log(state, today)
+            _dl_status   = "success" if not _missing_tickers else "partial"
+            _append_attempt(_dl_log_main, {
+                "time_sgt": _sgt_str(_now_dl_utc),
+                "type":     "main_download",
+                "status":   _dl_status,
+                "success":  len(univ_data),
+                "failed":   len(_missing_tickers) if _missing_tickers else 0,
+                "next_retry_sgt": (
+                    state["pending_retry"]["next_retry_sgt"] if _missing_tickers else None
+                ),
+            })
+            state["download_log"] = _dl_log_main
+            # Clear no_data_probe since we have data now
+            state.pop("no_data_probe", None)
 
             # Auto-clean data_error_log: drop tickers that succeeded this run
             if state.get("data_error_log"):
