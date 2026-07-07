@@ -2718,6 +2718,7 @@
     "KRTX",
     "LSXMA",
     "LSXMK",
+    "MASI",
     "MBT",
     "MRTX",
     "NKLA",
@@ -2735,7 +2736,10 @@
     "SPLK",
     "TRUE",
     "TTM",
-    "WFC-P-L"
+    "WFC-P-L",
+    "ZBZZT",
+    "ZVZZT",
+    "ZXZZT"
   ],
   "tiingo_universe_synced_utc": "2026-07-06T23:46:31Z",
   "daily_summary": {
