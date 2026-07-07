@@ -270,7 +270,11 @@
       "last_price_date": "2026-07-01",
       "entry_commission": 2.92,
       "lowest_low": 24.56,
-      "sector": "Technology"
+      "sector": "Technology",
+      "suspended": true,
+      "suspend_reason": "疑似被收购，7月6日起无交易数据，等待确认实际收购价格",
+      "suspend_date": "2026-07-07",
+      "last_data_date": "2026-07-02"
     },
     {
       "ticker": "SPHR",
@@ -2691,18 +2695,20 @@
   },
   "universe_stats": {
     "tiingo_eligible": 2175,
-    "yf_downloadable": 2134,
-    "yf_unavailable_in_pool": 41,
+    "yf_downloadable": 2127,
+    "yf_unavailable_in_pool": 48,
     "total_active": 3075,
     "total_delisted": 1402,
-    "updated_utc": "2026-07-07T07:53:39Z"
+    "updated_utc": "2026-07-07T08:10:10Z"
   },
   "yf_persistent_unavailable": [
     "AGR",
     "AL",
     "ALE",
     "ANSS",
+    "ASRT",
     "BA-P-A",
+    "BLD",
     "CEO",
     "CHL",
     "CHU",
@@ -2715,6 +2721,7 @@
     "ICPT",
     "IMGN",
     "INFA",
+    "JHG",
     "KRTX",
     "LSXMA",
     "LSXMK",
@@ -2731,7 +2738,11 @@
     "RDUS",
     "REVG",
     "RVNC",
+    "SATS",
+    "SEM",
     "SGEN",
+    "SKLZ",
+    "SNBR",
     "SNCR",
     "SPLK",
     "TRUE",
