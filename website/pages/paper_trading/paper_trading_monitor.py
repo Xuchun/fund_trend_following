@@ -2702,6 +2702,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     # ── 十、信号漏斗历史趋势 ───────────────────────────────────────────────────
     _sig_hist = _m1.get("signals_history", [])
     if _sig_hist:
+        st.markdown('<div id="sec-pt-11"></div>', unsafe_allow_html=True)
         st.subheader("十一、信号漏斗历史趋势")
         _sh_df = pd.DataFrame(_sig_hist)
         _sh_df["date"] = pd.to_datetime(_sh_df["date"])
