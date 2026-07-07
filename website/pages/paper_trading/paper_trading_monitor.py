@@ -2432,6 +2432,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.markdown("---")
 
     # ── Closed trades + 平仓深度分析 ──────────────────────────────────────────
+    st.markdown('<div id="sec-pt-10"></div>', unsafe_allow_html=True)
     st.subheader("十、已完成交易的分析")
 
     # 统一在此计算平仓指标（供本节 + 后续对比面板复用）
