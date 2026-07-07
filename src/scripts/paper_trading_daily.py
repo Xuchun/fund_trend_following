@@ -1383,7 +1383,6 @@ def run_retry() -> None:
     if still_missing:
         log.warning(f"  Still missing: {still_missing}")
         _next      = _next_retry_at(_now_retry_utc)
-        _sgt_off   = timedelta(hours=8)
         state["pending_retry"] = {
             "tickers":           still_missing,
             "scan_date":         str(scan_date),
@@ -1391,7 +1390,7 @@ def run_retry() -> None:
             "downloaded_count":  len(retry_data),
             "total_scanned":     len(retry_tickers),
             "next_retry_utc":    _next.strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "next_retry_sgt":    (_next + _sgt_off).strftime("%Y-%m-%d %H:%M SGT"),
+            "next_retry_sgt":    _sgt_str(_next),
             "created_utc":       pending.get("created_utc", _now_retry_utc.strftime("%Y-%m-%dT%H:%M:%SZ")),
             "last_attempt_utc":  _now_retry_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
         }
