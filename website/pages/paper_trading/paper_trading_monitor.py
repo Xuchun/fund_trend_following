@@ -2759,6 +2759,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     # ── 十一、回测 vs 实盘对比面板 ─────────────────────────────────────────────
     if _bt_metrics:
+        st.markdown('<div id="sec-pt-12"></div>', unsafe_allow_html=True)
         st.subheader("十二、回测 vs 实盘对比")
         # 实盘最大回撤：覆盖 nav_history + 当前实时 NAV
         _nh_nav_vals_cmp = pd.Series(
