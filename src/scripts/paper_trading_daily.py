@@ -1656,6 +1656,42 @@ def main() -> None:
         log.info("=== Done (no-op — market not yet open) ===")
         return
 
+    # ── Step 1b: check suspended positions (YF + Tiingo) ─────────────────────
+    _suspended = [p for p in state.get("positions", []) if p.get("suspended")]
+    if _suspended:
+        _tiingo_token = os.environ.get("TIINGO_API_TOKEN", "")
+        for _sp in _suspended:
+            _st = _sp["ticker"]
+            _resumed = False
+            # Check YF
+            _yf_check = fetch_price_data([_st], period="5d")
+            if _yf_check.get(_st) is not None and not _yf_check[_st].empty:
+                _sp["suspended"] = False
+                _sp.pop("suspend_reason", None)
+                _sp.pop("suspend_date", None)
+                _sp.pop("last_data_date", None)
+                log.info(f"  {_st}: resumed trading (YF data found) — suspension cleared")
+                _resumed = True
+            # Check Tiingo if YF still empty
+            if not _resumed and _tiingo_token:
+                try:
+                    import requests as _req
+                    _url = (f"https://api.tiingo.com/tiingo/daily/{_st}/prices"
+                            f"?startDate={today}&endDate={today}")
+                    _r = _req.get(_url, headers={"Authorization": f"Token {_tiingo_token}"},
+                                  timeout=10)
+                    if _r.status_code == 200 and _r.json():
+                        _sp["suspended"] = False
+                        _sp.pop("suspend_reason", None)
+                        _sp.pop("suspend_date", None)
+                        _sp.pop("last_data_date", None)
+                        log.info(f"  {_st}: resumed trading (Tiingo data found) — suspension cleared")
+                        _resumed = True
+                except Exception as _e:
+                    log.warning(f"  {_st}: Tiingo check failed: {_e}")
+            if not _resumed:
+                log.info(f"  {_st}: still suspended — no data from YF or Tiingo for {today}")
+
     # ── Step 2: ① OPEN — execute yesterday's pending exits ───────────────────
     _regime_str = "BULL" if regime_ok else "BEAR"
     exits_executed, remaining_exits = execute_pending_exits(state, pos_data, today, regime=_regime_str)
