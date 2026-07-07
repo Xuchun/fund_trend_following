@@ -1987,6 +1987,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     # ── NAV history ──────────────────────────────────────────────────────────
     if _m1_history:
+        st.markdown('<div id="sec-pt-8"></div>', unsafe_allow_html=True)
         st.subheader("八、NAV 走势")
         _nh = pd.DataFrame(_m1_history)
         _nh["date"] = pd.to_datetime(_nh["date"])
