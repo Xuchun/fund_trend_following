@@ -3222,18 +3222,24 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         _dbg_close = _dbg_raw["Close"].tail(250)
                     else:
                         _dbg_close = _dbg_raw[["Close"]].tail(250)
-                    # 转置：行=ticker，列=日期
+                    # 转置：行=ticker，列=日期；过滤全 NaN 行（YF 无数据的标的）
                     _dbg_wide = _dbg_close.T.copy()
                     _dbg_wide.index.name = "ticker"
                     _dbg_wide.columns = [
                         c.strftime("%Y-%m-%d") if hasattr(c, "strftime") else str(c)
                         for c in _dbg_wide.columns
                     ]
+                    _dbg_n_before = len(_dbg_wide)
+                    _dbg_wide = _dbg_wide.dropna(how="all")
+                    _dbg_n_dropped = _dbg_n_before - len(_dbg_wide)
                     _dbg_buf = _dbg_io.StringIO()
                     _dbg_wide.to_csv(_dbg_buf)
                     st.session_state["debug_close_csv"]      = _dbg_buf.getvalue()
                     st.session_state["debug_close_filename"] = f"universe_close_{_dbg_end}.csv"
-                    st.success(f"下载完成：{len(_dbg_wide)} 个标的，{len(_dbg_wide.columns)} 个交易日。")
+                    _dbg_msg = f"下载完成：{len(_dbg_wide)} 个标的，{len(_dbg_wide.columns)} 个交易日。"
+                    if _dbg_n_dropped:
+                        _dbg_msg += f"（另有 {_dbg_n_dropped} 个标的 YF 无数据，已自动过滤）"
+                    st.success(_dbg_msg)
                 except Exception as _dbg_e:
                     st.error(f"下载失败：{_dbg_e}")
 
