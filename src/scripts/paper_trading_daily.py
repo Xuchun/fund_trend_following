@@ -1110,29 +1110,30 @@ def _next_retry_at(from_utc: "datetime") -> "datetime":
 
 def _check_market_holiday(check_date: date) -> "tuple[bool | None, str, str]":
     """Return (is_holiday, holiday_name, source_url).
-    True  = confirmed holiday.
-    False = confirmed trading day (SPY data found).
-    None  = cannot determine.
+    True  = confirmed holiday or weekend.
+    False = confirmed trading day.
+    None  = cannot determine (library unavailable).
     """
-    if check_date.weekday() >= 5:
-        return True, "周末（Weekend）", _NYSE_CALENDAR_URL
-
-    if check_date in _NYSE_HOLIDAYS_2026:
-        return True, _NYSE_HOLIDAYS_2026[check_date], _NYSE_CALENDAR_URL
-
-    # Attempt YF confirmation: if SPY has data for this date it was open
     try:
-        import yfinance as _yf_hol
-        _spy = _yf_hol.download("SPY", period="10d", progress=False, auto_adjust=False)
-        if not _spy.empty:
-            _dates = {d.date() for d in _spy.index}
-            if check_date in _dates:
-                return False, "", ""
+        import pandas_market_calendars as mcal
+        nyse = mcal.get_calendar("NYSE")
+        _cd  = str(check_date)
+        schedule = nyse.schedule(start_date=_cd, end_date=_cd)
+        if schedule.empty:
+            # weekend or holiday — get the name from the holiday list
+            _hols = nyse.holidays().holidays
+            if check_date in _hols.index:
+                _name = str(_hols[check_date]) if _hols[check_date] else "NYSE 假日"
+            elif check_date.weekday() >= 5:
+                _name = "周末（Weekend）"
+            else:
+                _name = "NYSE 假日"
+            return True, _name, _NYSE_CALENDAR_URL
+        else:
+            return False, "", ""
     except Exception:
-        pass
-
-    # Cannot confirm either way
-    return None, "无法确认（YF 查询也失败）", _NYSE_CALENDAR_URL
+        # Fallback: cannot determine
+        return None, "无法确认（pandas_market_calendars 不可用）", _NYSE_CALENDAR_URL
 
 
 def _get_dl_log(state: dict, today: date) -> dict:
