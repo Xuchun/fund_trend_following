@@ -1822,6 +1822,31 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.subheader("六、当前持仓实时状态")
     if _m1_date and _m1_date != "N/A":
         st.markdown(f"上次更新：{_last_fetch_sgt} ｜ Yahoo Finance（数据截至 {_m1_date} 收盘）")
+
+    # ── suspended 持仓警告（紧接"上次更新"行显示，始终显示）────────────────────
+    _m1_ok_tickers = {p["ticker"] for p in _m1_ok}
+    _m1_suspended = [p for p in _m1_positions if p.get("suspended")]
+    for _sp in _m1_suspended:
+        _sp_reason   = _sp.get("suspend_reason", "暂停交易，原因未知")
+        _sp_date     = _sp.get("suspend_date", "未知")
+        _sp_last     = _sp.get("last_data_date", "未知")
+        _sp_has_data = _sp["ticker"] in _m1_ok_tickers
+        _sp_data_note = (
+            f"<br><span style='color:#d62728; font-size:0.9em;'>⚠️ 下方持仓表格中显示的价格可能为旧数据（最后有效数据截至 {_sp_last}），并非最新成交价。</span>"
+            if _sp_has_data else ""
+        )
+        st.markdown(
+            f"<div style='border:2px solid #FF8C00; border-radius:6px; padding:12px 16px; "
+            f"background:#FFF8F0; margin:8px 0;'>"
+            f"<b style='color:#FF8C00; font-size:1.05em;'>⏸ {_sp['ticker']} — 目前暂停交易，等待确认</b><br>"
+            f"<span style='color:#555;'>原因：{_sp_reason}</span><br>"
+            f"<span style='color:#555;'>最后有效数据日期：{_sp_last} ｜ 暂停标记日期：{_sp_date}</span>"
+            f"{_sp_data_note}<br>"
+            f"<span style='color:#888; font-size:0.9em;'>系统每日自动检查 Yahoo Finance 及 Tiingo，数据恢复后将自动解除暂停。</span>"
+            f"</div>",
+            unsafe_allow_html=True,
+        )
+
     if _m1_stop:
         st.warning(f"⚠️ **{len(_m1_stop)} 只已触及止损** — 建议执行止损出场")
 
