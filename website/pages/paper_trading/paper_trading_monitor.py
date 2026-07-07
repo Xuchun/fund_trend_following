@@ -1153,10 +1153,12 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     # ── 最新交易日小结 ────────────────────────────────────────────────────────────
     _ds = _m1.get("daily_summary", {})
     if _ds and _ds.get("bullets"):
-        _ds_nav_pct = _ds.get("nav_change_pct", 0)
-        _ds_spy_pct = _ds.get("spy_change_pct", 0)
-        _ds_vs      = _ds.get("vs_spy_pct", 0)
-        _ds_color   = "#d62728" if _ds_nav_pct < -1 else ("#ff7f0e" if _ds_nav_pct < 0 else "#2ca02c")
+        _ds_pending = _ds.get("data_pending", False)
+        if _ds_pending:
+            _ds_color = "#888888"
+        else:
+            _ds_nav_pct = _ds.get("nav_change_pct", 0) or 0
+            _ds_color   = "#d62728" if _ds_nav_pct < -1 else ("#ff7f0e" if _ds_nav_pct < 0 else "#2ca02c")
         st.markdown(
             f"<div style='background:#f8f9fa;border-left:4px solid {_ds_color};"
             f"padding:10px 16px;border-radius:4px;margin:10px 0'>"
