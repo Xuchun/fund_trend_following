@@ -1160,8 +1160,11 @@ def run_retry() -> None:
     state   = load_state()
 
     # ── no_data_probe: main run found no YF data for today ────────────────────
+    # Note: we do NOT return early here — always fall through to pending_retry
+    # so that previously-failed tickers are retried even while waiting for today's market.
     _ndp = state.get("no_data_probe", {})
     _today = date.today()
+    _probe_handled = False   # True when SPY probe actually ran this invocation
     if _ndp and _ndp.get("date") == str(_today):
         _next_utc_str = _ndp.get("next_retry_utc", "")
         _now_utc = datetime.now(timezone.utc)
@@ -1169,9 +1172,8 @@ def run_retry() -> None:
             _next_dt = datetime.fromisoformat(_next_utc_str.replace("Z", "+00:00"))
             if _now_utc < _next_dt:
                 _rem = int((_next_dt - _now_utc).total_seconds() / 60)
-                log.info(f"=== Retry mode: {_rem}min until no_data_probe retry — skipping ===")
-                # Still fall through to check pending_retry below
-                pass
+                log.info(f"=== Retry mode: {_rem}min until no_data_probe retry — skipping probe, checking pending_retry ===")
+                # Fall through to pending_retry below
             else:
                 log.info(f"=== Retry mode: no_data_probe attempt {_ndp.get('attempt', 2)} ===")
                 _dl_log = _get_dl_log(state, _today)
