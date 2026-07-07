@@ -1665,15 +1665,16 @@ def main() -> None:
                 _retry_at   = _next_retry_at(datetime.now(timezone.utc))
                 _now_utc_str = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
                 state["pending_retry"] = {
-                    "tickers":           _missing_tickers,
-                    "scan_date":         str(today),
-                    "attempt":           1,
-                    "downloaded_count":  len(univ_data),
-                    "total_scanned":     len(scan_tickers),
-                    "next_retry_utc":    _retry_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
-                    "next_retry_sgt":    _sgt_str(_retry_at),
-                    "created_utc":       _now_utc_str,
-                    "last_attempt_utc":  _now_utc_str,
+                    "tickers":                _missing_tickers,
+                    "scan_date":              str(today),
+                    "attempt":                1,
+                    "downloaded_count":       len(univ_data),
+                    "total_scanned":          len(scan_tickers),
+                    "original_total_scanned": len(scan_tickers),  # carried through all retries
+                    "next_retry_utc":         _retry_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    "next_retry_sgt":         _sgt_str(_retry_at),
+                    "created_utc":            _now_utc_str,
+                    "last_attempt_utc":       _now_utc_str,
                 }
                 log.warning(
                     f"  {len(_missing_tickers)} tickers missing → pending_retry "
