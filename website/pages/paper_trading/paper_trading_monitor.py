@@ -911,8 +911,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             _line = f"- **{_att_time}**　{_lbl}　{_ico}"
             if _att_type in ("main_download", "retry_download"):
                 _line += f"　成功：**{_att_ok:,}** 个，失败：**{_att_fail}** 个"
-            if _att_next:
-                _line += f"　→ 下次重试：**{_att_next}**"
             if _att_note:
                 _line += f"　（{_att_note}）"
             _att_lines.append(_line)
