@@ -1280,14 +1280,15 @@ def run_retry() -> None:
                 )
 
                 if _spy_has_today:
-                    # Data is now available — clear probe, note in log
-                    log.info("  SPY data now available — clearing no_data_probe")
+                    # Data is now available — generate real summary, clear probe
+                    log.info("  SPY data now available — generating daily summary")
+                    _update_daily_summary(state, _today)
                     _append_attempt(_dl_log, {
                         "time_sgt": _sgt_str(_now_utc),
                         "type": "retry_probe",
                         "status": "data_available",
                         "success": 1, "failed": 0,
-                        "note": "市场有数据，将在下次每日主程序运行时完整下载",
+                        "note": "市场有数据，已生成今日小结",
                     })
                     state.pop("no_data_probe", None)
                 else:
