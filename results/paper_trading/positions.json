@@ -2770,7 +2770,7 @@
   },
   "last_no_op_utc": "2026-07-07T00:10:34Z",
   "download_log": {
-    "date": "2026-07-06",
+    "date": "2026-07-07",
     "attempts": [
       {
         "seq": 1,
@@ -2780,9 +2780,15 @@
         "success": 0,
         "failed": 0,
         "attempt": 1,
-        "next_retry_sgt": "2026-07-07 09:10 SGT"
+        "next_retry_sgt": "2026-07-07 08:30 SGT"
       }
     ],
     "holiday": null
+  },
+  "no_data_probe": {
+    "date": "2026-07-07",
+    "attempt": 2,
+    "next_retry_utc": "2026-07-07T04:29:00Z",
+    "next_retry_sgt": "2026-07-07 12:29 SGT"
   }
 }
