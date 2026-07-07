@@ -884,10 +884,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
         # 逐条尝试记录
         _type_labels = {
-            "main_probe":     "每日探测（SPY）",
-            "main_download":  "每日下载（全标的池）",
-            "retry_probe":    "重试探测（SPY）",
-            "retry_download": "重试下载",
+            "main_probe":     "检查市场是否有数据（SPY）",
+            "main_download":  "下载全标的池数据（约2,149个）",
+            "retry_probe":    "重试检查市场数据（SPY）",
+            "retry_download": "重试下载失败标的",
         }
         _status_icons = {
             "no_data":        "⛔ 无数据",
