@@ -3103,8 +3103,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             key="debug_dl_csv_btn",
         )
 
-    st.markdown("---")
-
     # ── 最后一个交易日原始收盘价 ──────────────────────────────────────────────
     st.markdown(
         f"**最后一个交易日原始收盘价**（raw close，未复权），标的池共 **{len(_dbg_tickers):,}** 个标的。"
