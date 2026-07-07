@@ -1104,6 +1104,24 @@ def _sgt_str(utc_dt: "datetime") -> str:
     return (utc_dt + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M SGT")
 
 
+def _next_retry_at(from_utc: "datetime") -> "datetime":
+    """Return the next :30-past-the-hour UTC time at or after from_utc.
+
+    The retry workflow cron is '30 * * * 1-5', so it fires at :30 every hour.
+    We add a 2-minute buffer so the workflow has time to start before the
+    timing check inside run_retry() passes.
+    """
+    # Round up to the next :30
+    if from_utc.minute < 30:
+        candidate = from_utc.replace(minute=30, second=0, microsecond=0)
+    else:
+        candidate = (from_utc + timedelta(hours=1)).replace(minute=30, second=0, microsecond=0)
+    # If we're already past the candidate (e.g. we ARE at :30 exactly), add an hour
+    if candidate <= from_utc:
+        candidate += timedelta(hours=1)
+    return candidate
+
+
 def _check_market_holiday(check_date: date) -> "tuple[bool | None, str, str]":
     """Return (is_holiday, holiday_name, source_url).
     True  = confirmed holiday.
