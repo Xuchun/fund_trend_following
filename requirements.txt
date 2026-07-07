@@ -9,4 +9,4 @@ pypdf>=3.0.0
 yfinance>=1.0.0
 scipy>=1.10.0
 mplfinance
-pandas-market-calendars>=4.4.0
+pandas-market-calendars>=4.4.0,<5.0
