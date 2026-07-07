@@ -942,8 +942,12 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 _pend_fail = _ds_pending.get("tickers", [])
                 _fail_n    = len(_pend_fail) if _pend_fail else _last_att.get("failed", 0)
                 if _last_st == "partial" and _fail_n:
+                    _last_total = _last_att.get("total", 0)
+                    _last_cum   = _last_att.get("cumulative_success", 0)
                     st.warning(
-                        f"当前仍有 **{_fail_n}** 个标的未下载成功，"
+                        f"共 **{_last_total:,}** 个标的需要下载，"
+                        f"已成功下载 **{_last_cum:,}** 个，"
+                        f"仍有 **{_fail_n:,}** 个未成功，"
                         f"将于 **{_last_nxt}** 自动重试。"
                     )
                 elif _last_st == "no_data":
