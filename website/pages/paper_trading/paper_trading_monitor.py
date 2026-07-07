@@ -1925,6 +1925,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.markdown("---")
 
     # ── Stop detail ──────────────────────────────────────────────────────────
+    st.markdown('<div id="sec-pt-7"></div>', unsafe_allow_html=True)
     st.subheader("七、止损/移动止盈明细")
     if _m1_ok:
         _sd_sorted = sorted(_m1_ok, key=lambda x: (
