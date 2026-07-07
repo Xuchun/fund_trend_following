@@ -1382,7 +1382,7 @@ def run_retry() -> None:
     _now_retry_utc = datetime.now(timezone.utc)
     if still_missing:
         log.warning(f"  Still missing: {still_missing}")
-        _next      = _now_retry_utc + timedelta(hours=1)
+        _next      = _next_retry_at(_now_retry_utc)
         _sgt_off   = timedelta(hours=8)
         state["pending_retry"] = {
             "tickers":           still_missing,
