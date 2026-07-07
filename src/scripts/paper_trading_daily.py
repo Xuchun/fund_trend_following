@@ -1598,6 +1598,22 @@ def main() -> None:
             "next_retry_sgt":  _sgt_str(_next_retry_utc),
         }
         state["last_no_op_utc"] = _now_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+        # Write a placeholder summary so the monitor page shows today's date
+        # even while we wait for Yahoo Finance data.  Will be overwritten with
+        # real data as soon as run_retry() confirms data is available.
+        if state.get("daily_summary", {}).get("date") != str(today):
+            state["daily_summary"] = {
+                "date":           str(today),
+                "updated_sgt":    _sgt_str(_now_utc),
+                "nav_change_pct": None,
+                "spy_change_pct": None,
+                "vs_spy_pct":     None,
+                "bullets":        [f"📊 {today} 收盘数据尚未获取到，正在持续重试，获取成功后将自动更新。"],
+                "news":           [],
+                "data_pending":   True,
+            }
+
         save_state(state)
         log.info("=== Done (no-op — market not yet open) ===")
         return
