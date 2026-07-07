@@ -1036,13 +1036,17 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
             if _n_missed == 0:
                 if _is_no_op:
-                    # 区分三种情况：假日确认 / 等待今日收盘数据 / 原因不明
-                    _dl_log_ga = _m1.get("download_log", {}) or {}
+                    # 区分四种情况：假日确认 / 今日不开盘（daily_summary）/ 等待收盘数据 / 原因不明
+                    _dl_log_ga = _m1.get("daily_summary", {}) or {}
                     _ndp_ga    = _m1.get("no_data_probe", {}) or {}
-                    _hol_ga    = _dl_log_ga.get("holiday")
+                    _hol_dl    = (_m1.get("download_log", {}) or {}).get("holiday")
                     _today_str = _dt_ga.date.today().isoformat()
-                    if _hol_ga and _hol_ga.get("is_holiday") is True:
-                        _hol_ga_name = _hol_ga.get("name", "假日")
+                    if _dl_log_ga.get("market_closed") and _dl_log_ga.get("date") == _today_str:
+                        _closed_bullets = _dl_log_ga.get("bullets", [])
+                        _closed_reason  = _closed_bullets[0] if _closed_bullets else "今日市场不开盘"
+                        _ga_note = f"正常（{_closed_reason.replace('📅 ', '').rstrip('。')}）"
+                    elif _hol_dl and _hol_dl.get("is_holiday") is True:
+                        _hol_ga_name = _hol_dl.get("name", "假日")
                         _ga_note = f"正常（市场休市：{_hol_ga_name}）"
                     elif _ndp_ga and _ndp_ga.get("date") == _today_str:
                         _ga_note = "正常（今日市场数据尚未就绪，持续重试中）"
