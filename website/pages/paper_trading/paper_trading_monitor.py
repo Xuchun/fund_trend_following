@@ -1257,6 +1257,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
     st.markdown("---")
 
     # ── Tomorrow's orders ────────────────────────────────────────────────────
+    st.markdown('<div id="sec-pt-4"></div>', unsafe_allow_html=True)
     st.subheader("四、明日要执行的交易")
     import datetime as _dt
 
