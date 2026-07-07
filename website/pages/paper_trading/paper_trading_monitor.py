@@ -2092,6 +2092,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         st.plotly_chart(_fig_nav, width="stretch")
 
     # ── Trade history (open + closed) ────────────────────────────────────────
+    st.markdown('<div id="sec-pt-9"></div>', unsafe_allow_html=True)
     st.subheader("九、交易历史")
     _all_trades = []
     for p in sorted(_m1_positions, key=lambda x: x["entry_date"]):
