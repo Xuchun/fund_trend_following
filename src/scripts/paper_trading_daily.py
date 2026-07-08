@@ -2071,6 +2071,37 @@ def main() -> None:
                 _p["sector"] = "N/A"
         log.info("  Sector labels updated")
 
+    # ── Step 10: 用最终 yf_persistent_unavailable 重新计算 universe_stats ────
+    # 保证网页指标卡与 Debug 标的数一致（稀疏过滤可能在 Step 6 后新增黑名单条目）
+    try:
+        _final_yf_unavail = set(state.get("yf_persistent_unavailable", []))
+        _final_active_set = set(
+            universe_df[
+                (universe_df["is_active"] == True) &
+                (universe_df["eligible_days"] >= 252) &
+                (~universe_df["ticker"].isin(_EXCL_TICKERS | _final_yf_unavail))
+            ]["ticker"].tolist()
+        )
+        _final_tiingo = universe_df[
+            (universe_df["is_active"] == True) &
+            (universe_df["eligible_days"] >= 252) &
+            (~universe_df["ticker"].isin(_EXCL_TICKERS))
+        ]
+        state["universe_stats"] = {
+            "tiingo_eligible":        len(_final_tiingo),
+            "yf_downloadable":        len(_final_active_set),
+            "yf_unavailable_in_pool": len(_final_tiingo) - len(_final_active_set),
+            "total_active":           int((universe_df["is_active"] == True).sum()),
+            "total_delisted":         int((universe_df["is_active"] == False).sum()),
+            "updated_utc":            datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        }
+        log.info(
+            f"  Universe stats (final): yf_downloadable={len(_final_active_set)}, "
+            f"yf_unavailable_in_pool={len(_final_tiingo) - len(_final_active_set)}"
+        )
+    except Exception as _e:
+        log.warning(f"  Failed to update final universe_stats: {_e}")
+
     save_state(state)
 
     # ── Summary ───────────────────────────────────────────────────────────────
