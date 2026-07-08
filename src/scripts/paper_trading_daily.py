@@ -938,6 +938,7 @@ def _summarize_news_with_claude(
     direction: str,
     nav_chg_pct: float,
     spy_chg_pct: float,
+    movers: "list[tuple[str, float, float, str]] | None" = None,
 ) -> list[str]:
     """调用 Claude Haiku 把当日新闻综合为解释净值vs SPY分歧的 bullet points。
     返回 bullet 字符串列表（不含前缀符号），失败时返回空列表。
@@ -951,16 +952,44 @@ def _summarize_news_with_claude(
             f"[{i+1}] 标题：{n['title']}\n    摘要：{n['summary'] or '（无摘要）'}"
             for i, n in enumerate(news_items[:5])
         )
+
+        # 构建持仓涨跌明细（按美元影响排序，最多10个）
+        vs_spy = nav_chg_pct - spy_chg_pct
+        movers_text = ""
+        if movers:
+            _sorted_movers = sorted(movers, key=lambda x: x[2])  # 按美元涨跌升序（跌幅最大在前）
+            _top = _sorted_movers[:5] + _sorted_movers[-3:]       # 跌幅最大5个 + 涨幅最大3个
+            _seen = set()
+            _lines = []
+            for tk, pct, dol, sec in _top:
+                if tk in _seen:
+                    continue
+                _seen.add(tk)
+                _lines.append(f"  - {tk}（{sec}）：{pct:+.1f}%，对净值影响 ${dol:+,.0f}")
+            movers_text = "今日持仓涨跌明细（对净值影响最大的标的）：\n" + "\n".join(_lines) + "\n\n"
+
+        _diverge_note = ""
+        if abs(vs_spy) >= 1.5:
+            _diverge_note = (
+                f"【重要】净值与 SPY 偏差达 {vs_spy:+.2f}%，属于显著分歧。"
+                f"分析中必须明确点名造成偏差的具体持仓标的（写出 ticker 代码），"
+                f"并说明它们今日的涨跌幅（上方明细中有数据），不得只泛泛说'某板块'。\n"
+            )
+
         prompt = (
             f"以下是 Yahoo Finance 今日（交易日当天）关于 {sector} 板块的新闻（已编号）：\n\n"
             f"{news_text}\n\n"
             f"背景：今日策略净值变化 {nav_chg_pct:+.2f}%，SPY 变化 {spy_chg_pct:+.2f}%，"
-            f"策略重仓 {sector} 板块，因此净值与 SPY 出现了显著分歧。\n\n"
+            f"策略净值 vs SPY 偏差 {vs_spy:+.2f}%。\n"
+            f"策略重仓 {sector} 板块，因此净值与 SPY 出现了分歧。\n\n"
+            f"{movers_text}"
+            f"{_diverge_note}\n"
             f"任务：基于以上新闻内容，写 3-4 条简体中文分析，解释：\n"
             f"① {sector} 板块今日为何{direction}（背后的驱动逻辑，不是事件描述）\n"
             f"② 为什么这导致策略净值与 SPY 出现分歧\n\n"
             f"要求：\n"
             f"- 分析因果逻辑（为什么），不要只复述标题说了什么\n"
+            f"- 如净值与大盘偏差显著（|偏差| ≥ 1.5%），必须在分析中具体指出是哪些持仓标的（ticker代码）拉开了差距，以及它们各自的涨跌幅\n"
             f"- 每条一句话，句末用 [来源N] 标注所依据的新闻编号，如 [来源1] 或 [来源1,2]\n"
             f"- 直接输出文字，不要以 - 或 * 或数字开头\n"
             f"- 用换行分隔各条，只输出中文分析内容，不要任何其他文字"
