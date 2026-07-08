@@ -870,7 +870,12 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         st.markdown(f"**每日下载日志（交易日 {_dl_date}）**")
 
         # 假日确认结果
-        if _dl_holiday is not None:
+        # 只要后续 attempt 已经找到数据（data_available / success），就不再显示警告
+        _later_found = any(
+            a.get("status") in ("data_available", "success")
+            for a in _dl_attempts
+        )
+        if _dl_holiday is not None and not _later_found:
             _hol_is  = _dl_holiday.get("is_holiday")
             _hol_nm  = _dl_holiday.get("name", "")
             _hol_url = _dl_holiday.get("source", "")
