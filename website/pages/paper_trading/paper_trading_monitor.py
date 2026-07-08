@@ -3071,12 +3071,12 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     # ── 标的池数量统计 ─────────────────────────────────────────────────────────
     # 从 positions.json 读取每日脚本写入的最新统计（含时间戳）
+    # _ds_n_tiingo 和 _ds_n_total 直接用 CSV 实时算出的值，不从 positions.json 覆盖
+    # （避免 Tiingo CSV 更新后与 Debug 标的数不一致）
     _ds_univ_stats = _m1.get("universe_stats", {})
     if _ds_univ_stats:
-        _ds_n_tiingo   = _ds_univ_stats.get("tiingo_eligible",  _ds_n_tiingo)
-        _ds_n_total    = _ds_univ_stats.get("yf_downloadable",  _ds_n_total)
-        _ds_active_all = _ds_univ_stats.get("total_active",     _ds_active_all)
-        _ds_delisted   = _ds_univ_stats.get("total_delisted",   _ds_delisted)
+        _ds_active_all = _ds_univ_stats.get("total_active",  _ds_active_all)
+        _ds_delisted   = _ds_univ_stats.get("total_delisted", _ds_delisted)
 
     # 优先显示 Tiingo 同步时间；若无则回退到 universe_stats.updated_utc
     def _to_sgt(utc_str: str) -> str:
