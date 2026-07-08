@@ -1086,7 +1086,8 @@ def _gen_daily_summary(
     if news_items:
         log.info(f"  Found {len(news_items)} news items, calling Claude for bullet points …")
         _claude_bullets = _summarize_news_with_claude(
-            news_items, focus_sec or "", _direction, nav_chg_pct, spy_chg_pct
+            news_items, focus_sec or "", _direction, nav_chg_pct, spy_chg_pct,
+            movers=movers,
         )
         if _claude_bullets:
             bullets.extend(_claude_bullets)
