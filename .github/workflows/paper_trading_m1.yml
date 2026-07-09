@@ -38,7 +38,12 @@ jobs:
       - name: Run paper trading daily update
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python src/scripts/paper_trading_daily.py
+        run: |
+          if [ -n "${{ github.event.inputs.date }}" ]; then
+            python src/scripts/paper_trading_daily.py --date "${{ github.event.inputs.date }}"
+          else
+            python src/scripts/paper_trading_daily.py
+          fi
 
       - name: Commit and push results
         run: |
