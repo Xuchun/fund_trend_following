@@ -1566,14 +1566,15 @@ def main() -> None:
     state = load_state()
 
     # ── Non-trading day early exit ────────────────────────────────────────────
-    # If today (ET) differs from the target trading date, it is a weekday
-    # holiday.  Record a "market closed" notice in the daily summary so the
-    # monitor page always shows today's date, then exit without downloading.
+    # Exit early only when NYSE is genuinely closed today (holiday/weekend).
+    # NOTE: Do NOT use "_et_today != today" — that comparison fires every time
+    # the script runs after midnight ET (e.g., 02:00 AM), causing a false
+    # "market closed" exit even when today is a normal trading day.
     if not args.date:
         _et_today = _get_et_date()
-        if _et_today != today:
-            _is_hol, _hol_name, _ = _check_market_holiday(_et_today)
-            _closed_reason = _hol_name if _is_hol else "假日"
+        _is_hol, _hol_name, _ = _check_market_holiday(_et_today)
+        if _is_hol is True:
+            _closed_reason = _hol_name or "假日"
             _now_utc_cl = datetime.now(timezone.utc)
             state["daily_summary"] = {
                 "date":           str(_et_today),
