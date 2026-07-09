@@ -2914,7 +2914,7 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
+  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
     "downloaded_count": 2133,
     "total_scanned": 2133,
@@ -2989,41 +2989,19 @@
   ],
   "tiingo_universe_synced_utc": "2026-07-08T23:46:55Z",
   "daily_summary": {
-    "date": "2026-07-07",
-    "updated_sgt": "2026-07-08 08:02 SGT",
-    "nav_change_pct": -2.43,
-    "spy_change_pct": 0.39,
-    "vs_spy_pct": -2.82,
+    "date": "2026-07-08",
+    "updated_sgt": "2026-07-09 08:13 SGT",
+    "nav_change_pct": null,
+    "spy_change_pct": null,
+    "vs_spy_pct": null,
     "bullets": [
-      "\u5b8f\u89c2\u6760\u6746\u98ce\u9669\u7684\u8b66\u793a\u6253\u538b\u4e86\u5e02\u573a\u98ce\u9669\u504f\u597d\uff0c\u867d\u7136\u5927\u76d8\u5fae\u5e45\u4e0a\u6da8\u4f46\u533b\u7597\u5065\u5eb7\u7b49\u9632\u5b88\u6027\u677f\u5757\u5931\u53bb\u4e86\u8d44\u91d1\u652f\u6491\uff0c\u5bfc\u81f4\u7b56\u7565\u51c0\u503c\u8dcc\u5e45\u8fdc\u8d85\u5927\u76d8\u3002\uff08[Goldman\u2019s Top Strategist See\u2026](https://247wallst.com/investing/2026/07/07/goldmans-top-strategist-sees-a-dangerous-amount-of-leverage-piling-up/)\uff09",
-      "Healthcare\u677f\u5757\u5185\u90e8\u5206\u5316\u660e\u663e\uff0c\u867d\u7136UNH\u7b49\u4fdd\u9669\u9f99\u5934\u901a\u8fc7\u521b\u65b0\u670d\u52a1\u6269\u5927\u7ade\u4e89\u4f18\u52bf\u83b7\u5f97\u652f\u6491\uff0c\u4f46\u6574\u4f53\u677f\u5757\u4e2d\u5c0f\u516c\u53f8\u9762\u4e34\u6760\u6746\u6324\u538b\u548c\u98ce\u9669\u538c\u6076\u60c5\u7eea\u7684\u51b2\u51fb\uff0c\u4f7f\u5f97\u677f\u5757\u52a0\u6743\u6536\u76ca\u88ab\u62d6\u7d2f\u3002\uff08[Goldman\u2019s Top Strategist See\u2026](https://247wallst.com/investing/2026/07/07/goldmans-top-strategist-sees-a-dangerous-amount-of-leverage-piling-up/)\u3001[UnitedHealth Group (UNH) Ope\u2026](https://finance.yahoo.com/healthcare/articles/unitedhealth-group-unh-opens-shield-001950311.html)\uff09",
-      "\u7b56\u7565\u91cd\u4ed3Healthcare\u5bfc\u81f4\u5bf9\u4e2a\u80a1\u9009\u62e9\u6027\u4e0b\u8dcc\u7684\u654f\u611f\u5ea6\u8fc7\u9ad8\uff0c\u5f53PTGX\u7b49\u867d\u6709\u589e\u957f\u9a71\u52a8\u4f46\u6d41\u52a8\u6027\u6709\u9650\u7684\u4e2a\u80a1\u4e5f\u627f\u538b\u65f6\uff0c\u7b56\u7565\u51c0\u503c\u635f\u5931\u88ab\u653e\u5927\uff0c\u800cSPY\u4f5c\u4e3a\u5bbd\u57fa\u6307\u6570\u53d7\u76ca\u4e8e\u79d1\u6280\u7b49\u5176\u4ed6\u677f\u5757\u7684\u76f8\u5bf9\u7a33\u5b9a\u3002\uff08[Goldman\u2019s Top Strategist See\u2026](https://247wallst.com/investing/2026/07/07/goldmans-top-strategist-sees-a-dangerous-amount-of-leverage-piling-up/)\u3001[PTGX Stock Surges 64% in Six\u2026](https://finance.yahoo.com/healthcare/articles/ptgx-stock-surges-64-six-151500362.html)\uff09",
-      "\u5e02\u573a\u98ce\u9669\u504f\u597d\u5207\u6362\u6253\u51fb\u4e86\u4e2d\u5c0f\u5e02\u503c\u533b\u7597\u516c\u53f8\u7684\u4f30\u503c\uff0c\u6295\u8d44\u8005\u5728\u6760\u6746\u98ce\u9669\u5347\u6e29\u7684\u80cc\u666f\u4e0b\u66f4\u503e\u5411\u4e8e\u51cf\u6301\u9ad8\u98ce\u9669\u533b\u7597\u80a1\uff0c\u8f6c\u5411\u4f4e\u98ce\u9669\u8d44\u4ea7\u6216\u5927\u5e02\u503c\u79d1\u6280\u80a1\uff0c\u8fd9\u6b63\u597d\u662f\u7b56\u7565\u91cd\u4ed3Healthcare\u7684\u53cd\u5411\u8fd0\u52a8\u3002\uff08[Goldman\u2019s Top Strategist See\u2026](https://247wallst.com/investing/2026/07/07/goldmans-top-strategist-sees-a-dangerous-amount-of-leverage-piling-up/)\u3001[Exchange-Traded Funds Lower,\u2026](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-lower-equity-132222461.html)\uff09"
+      "📅 今日（2026-07-08）美股市场不开盘（假日）。",
+      "最近交易日：2026-07-09。"
     ],
-    "news": [
-      {
-        "title": "Sector Update: Healthcare Stocks Gain Late Afternoon",
-        "url": "https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-gain-afternoon-195146677.html"
-      },
-      {
-        "title": "Goldman\u2019s Top Strategist Sees a Dangerous Amount of Leverage Piling Up",
-        "url": "https://247wallst.com/investing/2026/07/07/goldmans-top-strategist-sees-a-dangerous-amount-of-leverage-piling-up/"
-      },
-      {
-        "title": "Exchange-Traded Funds Lower, Equity Futures Mixed Amid Caution Over Chip Sector Outlook",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-lower-equity-132222461.html"
-      },
-      {
-        "title": "UnitedHealth Group (UNH) Opens Shield Blood Test Coverage For Adults 45 And Older",
-        "url": "https://finance.yahoo.com/healthcare/articles/unitedhealth-group-unh-opens-shield-001950311.html"
-      },
-      {
-        "title": "PTGX Stock Surges 64% in Six Months: What Is Driving the Rally?",
-        "url": "https://finance.yahoo.com/healthcare/articles/ptgx-stock-surges-64-six-151500362.html"
-      }
-    ]
+    "news": [],
+    "market_closed": true
   },
-  "last_no_op_utc": "2026-07-07T15:22:43Z",
+  "last_no_op_utc": "2026-07-09T00:13:15Z",
   "download_log": {
     "date": "2026-07-07",
     "attempts": [
@@ -3068,7 +3046,7 @@
         "status": "data_available",
         "success": 1,
         "failed": 0,
-        "note": "\u5e02\u573a\u6709\u6570\u636e\uff0c\u5df2\u751f\u6210\u4eca\u65e5\u5c0f\u7ed3",
+        "note": "市场有数据，已生成今日小结",
         "seq": 5
       },
       {
@@ -3085,7 +3063,7 @@
     ],
     "holiday": {
       "is_holiday": null,
-      "name": "\u672a\u80fd\u786e\u8ba4\uff0c\u6301\u7eed\u91cd\u8bd5\u4e2d",
+      "name": "未能确认，持续重试中",
       "source": "https://www.nyse.com/markets/hours-calendars"
     }
   }
