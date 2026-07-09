@@ -6,6 +6,11 @@ on:
     # 2+ hours after US market close (4:00 PM ET) — ensures Yahoo Finance EOD data is available
     - cron: '0 23 * * 1-5'
   workflow_dispatch:   # allow manual trigger from GitHub Actions UI
+    inputs:
+      date:
+        description: '目标日期 YYYY-MM-DD（留空则自动检测最新交易日）'
+        required: false
+        default: ''
 
 permissions:
   contents: write    # needed to push positions.json back to repo
