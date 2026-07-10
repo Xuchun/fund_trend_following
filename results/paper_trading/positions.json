@@ -3111,7 +3111,7 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
+  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
     "downloaded_count": 2133,
     "total_scanned": 2133,
@@ -3188,56 +3188,38 @@
   ],
   "tiingo_universe_synced_utc": "2026-07-09T23:51:01Z",
   "daily_summary": {
-    "date": "2026-07-08",
-    "updated_sgt": "2026-07-09 21:13 SGT",
-    "nav_change_pct": -0.87,
-    "spy_change_pct": -0.31,
-    "vs_spy_pct": -0.56,
+    "date": "2026-07-10",
+    "updated_sgt": "2026-07-10 08:07 SGT",
+    "nav_change_pct": null,
+    "spy_change_pct": null,
+    "vs_spy_pct": null,
     "bullets": [
-      "Healthcare\u677f\u5757\u4eca\u65e5\u4e0b\u8dcc\u7684\u6839\u672c\u539f\u56e0\u662f\u5e02\u573a\u98ce\u9669\u60c5\u7eea\u6076\u5316\uff0c\u53d7\u5230\u7279\u6717\u666e\u5ba3\u5e03\u7f8e\u56fd\u9000\u51fa\u4f0a\u6717\u534f\u8bae\u7b49\u5730\u7f18\u653f\u6cbb\u4e8b\u4ef6\u51b2\u51fb\uff0c\u5bfc\u81f4\u5305\u62ecHealthcare\u5728\u5185\u7684\u5404\u677f\u5757\u666e\u904d\u627f\u538b\u3002\uff08[Exchange-Traded Funds, Equit\u2026](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-130428931.html)\uff09",
-      "\u7b56\u7565\u51c0\u503c\u76f8\u6bd4SPY\u4e0b\u8dcc\u5e45\u5ea6\u66f4\u5927\uff08\u504f\u5dee-0.56%\uff09\u7684\u4e3b\u8981\u539f\u56e0\u662f\u91cd\u4ed3Healthcare\u677f\u5757\u5728\u4eca\u65e5\u906d\u9047\u96c6\u4e2d\u629b\u552e\uff0c\u5176\u4e2dGH\u4e0b\u8dcc4.1%\u62d6\u7d2f\u51c0\u503c$-385\uff0cBTSG\u867d\u5c0f\u5e45\u4e0a\u6da80.5%\u4f46\u8d21\u732e\u6709\u9650\uff0c\u800cIBB\uff08\u751f\u7269\u79d1\u6280ETF\uff09\u4e0b\u8dcc1.0%\u4e5f\u53cd\u6620\u51faHealthcare\u5185\u90e8\u7684\u5e7f\u6cdb\u4e0b\u538b\u3002\uff08[Sector Update: Healthcare St\u2026](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-decline-afternoon-194112083.html)\u3001[Sector Update: Healthcare St\u2026](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-lower-wednesday-174815162.html)\uff09",
-      "\u5c3d\u7ba1\u65b0\u95fb\u4e2d\u51fa\u73b0\u4e86\u79ef\u6781\u4fe1\u606f\u5982Align Technology\u5373\u5c06\u53d1\u5e03\u597d\u4e8e\u9884\u671f\u7684\u5b63\u5ea6\u6536\u76ca\uff0c\u4f46\u8fd9\u7c7b\u4e2a\u80a1\u5c42\u9762\u7684\u6b63\u9762\u6d88\u606f\u65e0\u6cd5\u62b5\u6d88\u677f\u5757\u7ea7\u522b\u7684\u7cfb\u7edf\u6027\u629b\u552e\u538b\u529b\uff0cHealthcare\u6574\u4f53\u8dcc\u5e45\u6700\u7ec8\u8d85\u8fc7\u5927\u76d8\u3002\uff08[What to Expect From Align Te\u2026](https://www.barchart.com/story/news/3198127/what-to-expect-from-align-technologys-next-quarterly-earnings-report)\u3001[Sector Update: Healthcare St\u2026](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-decline-afternoon-194112083.html)\u3001[Sector Update: Healthcare St\u2026](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-lower-wednesday-174815162.html)\uff09",
-      "\u76f8\u6bd4\u4e4b\u4e0bSPY\u4f5c\u4e3a\u7efc\u5408\u6027\u5bbd\u57fa\u6307\u6570\uff0cHealthcare\u677f\u5757\u6743\u91cd\u6709\u9650\uff0c\u5176\u4ed6\u677f\u5757\uff08\u5982Financial Services\u4e2dZION\u8dcc2.9%\uff09\u7684\u8868\u73b0\u76f8\u5bf9\u6297\u8dcc\uff0c\u56e0\u6b64\u5927\u76d8\u8dcc\u5e45\u4ec5\u4e3a0.31%\uff0c\u800c\u7b56\u7565\u56e0\u8fc7\u5ea6\u914d\u7f6eHealthcare\u6700\u7ec8\u51c0\u503c\u8dcc\u5e45\u8fbe0.87%\u3002\uff08[Exchange-Traded Funds, Equit\u2026](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-130428931.html)\uff09"
+      "📊 2026-07-10 收盘数据尚未获取到，正在持续重试，获取成功后将自动更新。"
     ],
-    "news": [
-      {
-        "title": "What to Expect From Align Technology\u2019s Next Quarterly Earnings Report",
-        "url": "https://www.barchart.com/story/news/3198127/what-to-expect-from-align-technologys-next-quarterly-earnings-report"
-      },
-      {
-        "title": "Sector Update: Healthcare Stocks Decline Late Afternoon",
-        "url": "https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-decline-afternoon-194112083.html"
-      },
-      {
-        "title": "Sector Update: Healthcare Stocks Lower Wednesday Afternoon",
-        "url": "https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-lower-wednesday-174815162.html"
-      },
-      {
-        "title": "Exchange-Traded Funds, Equity Futures Lower Pre-Bell Wednesday as Trump Declares US-Iran Agreement Over",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-130428931.html"
-      },
-      {
-        "title": "SLS Stock Snaps 2-Day Slide: Sellas\u2019 SLS009 AML Trial Spotlights Big Pharma Drug Combo From ABBV, RHHBY And BMY",
-        "url": "https://stocktwits.com/news-articles/markets/equity/sls-aml-trial-big-pharma-abbv-rhhby-bmy-drug-combo/cZmomx9R7Vl"
-      }
-    ]
+    "news": [],
+    "data_pending": true
   },
-  "last_no_op_utc": "2026-07-09T00:13:15Z",
+  "last_no_op_utc": "2026-07-10T00:07:31Z",
   "download_log": {
-    "date": "2026-07-08",
+    "date": "2026-07-10",
     "attempts": [
       {
-        "time_sgt": "2026-07-09 21:13 SGT",
-        "type": "main_download",
-        "status": "success",
-        "total": 2133,
-        "success": 2133,
-        "cumulative_success": 2133,
+        "time_sgt": "2026-07-10 08:07 SGT",
+        "type": "main_probe",
+        "status": "no_data",
+        "success": 0,
         "failed": 0,
-        "next_retry_sgt": null,
+        "attempt": 1,
+        "next_retry_sgt": "2026-07-10 08:30 SGT",
         "seq": 1
       }
     ],
     "holiday": null
+  },
+  "no_data_probe": {
+    "date": "2026-07-10",
+    "attempt": 2,
+    "next_retry_utc": "2026-07-10T00:30:00Z",
+    "next_retry_sgt": "2026-07-10 08:30 SGT"
   }
 }
