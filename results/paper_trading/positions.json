@@ -14,7 +14,7 @@
       "shares": 270,
       "atr_at_entry": 1.2762,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 41.5,
+      "last_known_price": 41.834999084472656,
       "last_price_date": "2026-07-08",
       "stop_loss": 34.3677,
       "trail_stop": 38.14097,
@@ -29,7 +29,7 @@
       "shares": 150,
       "atr_at_entry": 2.0177,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 70.5,
+      "last_known_price": 70.91500091552734,
       "last_price_date": "2026-07-08",
       "stop_loss": 62.2145,
       "trail_stop": 64.943994,
@@ -44,7 +44,7 @@
       "shares": 7,
       "atr_at_entry": 28.1791,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 1349.74,
+      "last_known_price": 1376.489990234375,
       "last_price_date": "2026-07-08",
       "stop_loss": 1309.0517,
       "trail_stop": 1309.0517,
@@ -59,7 +59,7 @@
       "shares": 17,
       "atr_at_entry": 20.0817,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 587.63,
+      "last_known_price": 580.5050048828125,
       "last_price_date": "2026-07-08",
       "stop_loss": 546.3066,
       "trail_stop": 561.870484,
@@ -81,7 +81,7 @@
       "highest_high": 133.845,
       "atr_at_entry": 6.529,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 133.25,
+      "last_known_price": 133.38999938964844,
       "last_price_date": "2026-07-08",
       "entry_commission": 3.03,
       "lowest_low": 132.695,
@@ -101,7 +101,7 @@
       "highest_high": 71.26,
       "atr_at_entry": 1.4817,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 68.64,
+      "last_known_price": 70.6500015258789,
       "last_price_date": "2026-07-08",
       "entry_commission": 2.92,
       "lowest_low": 68.02,
@@ -141,7 +141,7 @@
       "highest_high": 24.5745,
       "atr_at_entry": 0.085,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 24.56,
+      "last_known_price": 24.559999465942383,
       "last_price_date": "2026-07-02",
       "entry_commission": 2.92,
       "lowest_low": 24.56,
@@ -162,7 +162,7 @@
       "highest_high": 261.635,
       "atr_at_entry": 6.2907,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 252.74,
+      "last_known_price": 246.22999572753906,
       "last_price_date": "2026-07-08",
       "entry_commission": 2.89,
       "lowest_low": 247.59,
@@ -183,7 +183,7 @@
       "lowest_low": 155.75,
       "atr_at_entry": 7.3264,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 156.17,
+      "last_known_price": 158.89999389648438,
       "last_price_date": "2026-07-08",
       "entry_commission": 2.93,
       "entry_regime": "BULL",
@@ -204,7 +204,7 @@
       "lowest_low": 117.31,
       "atr_at_entry": 3.4626,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 118.99,
+      "last_known_price": 122.69999694824219,
       "last_price_date": "2026-07-08",
       "entry_commission": 2.94,
       "entry_regime": "BULL",
@@ -225,7 +225,7 @@
       "lowest_low": 194.4,
       "atr_at_entry": 3.7043,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 196.34,
+      "last_known_price": 190.84629821777344,
       "last_price_date": "2026-07-08",
       "entry_commission": 2.85,
       "entry_regime": "BULL",
@@ -246,7 +246,7 @@
       "lowest_low": 54.01,
       "atr_at_entry": 1.4912,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 54.62,
+      "last_known_price": 52.77000045776367,
       "last_price_date": "2026-07-08",
       "entry_commission": 2.86,
       "entry_regime": "BULL",
@@ -267,7 +267,7 @@
       "lowest_low": 136.08,
       "atr_at_entry": 5.1348,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 140.07,
+      "last_known_price": 131.83999633789062,
       "last_price_date": "2026-07-08",
       "entry_commission": 2.81,
       "entry_regime": "BULL",
@@ -3189,17 +3189,31 @@
   "tiingo_universe_synced_utc": "2026-07-09T23:51:01Z",
   "daily_summary": {
     "date": "2026-07-10",
-    "updated_sgt": "2026-07-10 08:07 SGT",
-    "nav_change_pct": null,
-    "spy_change_pct": null,
-    "vs_spy_pct": null,
+    "updated_sgt": "2026-07-10 23:07 SGT",
+    "nav_change_pct": -0.23,
+    "spy_change_pct": 0.81,
+    "vs_spy_pct": -1.04,
     "bullets": [
-      "📊 2026-07-10 收盘数据尚未获取到，正在持续重试，获取成功后将自动更新。"
+      "📰 [Exchange-Traded Funds, Equity Futures Mixed Pre-Bell Friday Amid Renewed US-Iran Tensions Ahead of Q2 Earnings Season](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-130717862.html)（Yahoo Finance，2026-07-10）",
+      "📰 [Zacks Investment Ideas feature highlights: XLV, XBI, LLY, EXEL, PTCT, FTRE and ILMN](https://finance.yahoo.com/healthcare/articles/zacks-investment-ideas-feature-highlights-063700181.html)（Yahoo Finance，2026-07-10）",
+      "📰 [3 Psychedelic Stocks With Potential Clinical Trial Catalysts](https://finance.yahoo.com/healthcare/articles/3-psychedelic-stocks-potential-clinical-062113318.html)（Yahoo Finance，2026-07-10）"
     ],
-    "news": [],
-    "data_pending": true
+    "news": [
+      {
+        "title": "Exchange-Traded Funds, Equity Futures Mixed Pre-Bell Friday Amid Renewed US-Iran Tensions Ahead of Q2 Earnings Season",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-130717862.html"
+      },
+      {
+        "title": "Zacks Investment Ideas feature highlights: XLV, XBI, LLY, EXEL, PTCT, FTRE and ILMN",
+        "url": "https://finance.yahoo.com/healthcare/articles/zacks-investment-ideas-feature-highlights-063700181.html"
+      },
+      {
+        "title": "3 Psychedelic Stocks With Potential Clinical Trial Catalysts",
+        "url": "https://finance.yahoo.com/healthcare/articles/3-psychedelic-stocks-potential-clinical-062113318.html"
+      }
+    ]
   },
-  "last_no_op_utc": "2026-07-10T12:11:39Z",
+  "last_no_op_utc": "2026-07-10T15:07:39Z",
   "download_log": {
     "date": "2026-07-10",
     "attempts": [
@@ -3245,6 +3259,15 @@
         "success": 0,
         "failed": 0,
         "seq": 5
+      },
+      {
+        "time_sgt": "2026-07-10 23:07 SGT",
+        "type": "retry_probe",
+        "status": "data_available",
+        "success": 1,
+        "failed": 0,
+        "note": "市场有数据，已生成今日小结",
+        "seq": 6
       }
     ],
     "holiday": {
@@ -3252,11 +3275,5 @@
       "name": "未能确认，持续重试中",
       "source": "https://www.nyse.com/markets/hours-calendars"
     }
-  },
-  "no_data_probe": {
-    "date": "2026-07-10",
-    "attempt": 6,
-    "next_retry_utc": "2026-07-10T12:30:00Z",
-    "next_retry_sgt": "2026-07-10 20:30 SGT"
   }
 }
