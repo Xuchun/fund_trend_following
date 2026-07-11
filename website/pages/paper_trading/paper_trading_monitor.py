@@ -2513,8 +2513,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                             _bfig_mpf.suptitle(_b_title, fontsize=12)
 
                         # Entry date vline (blue dotted)
-                        if _b_edt in _bkdf2.index:
-                            _b_edt_pos = _bkdf2.index.get_loc(_b_edt)
+                        # Use nearest trading day on/after entry_date to handle market holidays
+                        _b_edt_cands = _bkdf2.index[_bkdf2.index >= _b_edt]
+                        if len(_b_edt_cands) > 0:
+                            _b_edt_pos = _bkdf2.index.get_loc(_b_edt_cands[0])
                             _ax_price.axvline(x=_b_edt_pos, color="#1f77b4",
                                               linestyle=":", linewidth=1.5)
                             _ax_price.text(_b_edt_pos, _ax_price.get_ylim()[0],
@@ -2522,14 +2524,17 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                                            va="bottom", ha="left",
                                            fontproperties=_cn_fp8)
                         # Exit date vline (orange dashed)
-                        if _b_xdt is not None and _b_xdt in _bkdf2.index:
-                            _b_xdt_pos = _bkdf2.index.get_loc(_b_xdt)
-                            _ax_price.axvline(x=_b_xdt_pos, color="#ff7f0e",
-                                              linestyle="--", linewidth=2)
-                            _ax_price.text(_b_xdt_pos, _ax_price.get_ylim()[1],
-                                           " 出场日", color="#ff7f0e", fontsize=8,
-                                           va="top", ha="left",
-                                           fontproperties=_cn_fp8)
+                        # Use nearest trading day on/after exit_date to handle market holidays
+                        if _b_xdt is not None:
+                            _b_xdt_cands = _bkdf2.index[_bkdf2.index >= _b_xdt]
+                            if len(_b_xdt_cands) > 0:
+                                _b_xdt_pos = _bkdf2.index.get_loc(_b_xdt_cands[0])
+                                _ax_price.axvline(x=_b_xdt_pos, color="#ff7f0e",
+                                                  linestyle="--", linewidth=2)
+                                _ax_price.text(_b_xdt_pos, _ax_price.get_ylim()[1],
+                                               " 出场日", color="#ff7f0e", fontsize=8,
+                                               va="top", ha="left",
+                                               fontproperties=_cn_fp8)
                         # Entry price / stop price / trailing stop labels
                         # 规则：红（止损价）与橘（移动止盈）标注始终朝对立方向
                         #   红线在上 → 红标注在线上方(va=bottom)，橘标注在线下方(va=top)
