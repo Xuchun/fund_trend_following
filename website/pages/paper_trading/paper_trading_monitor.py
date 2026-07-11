@@ -2452,6 +2452,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         # mplfinance 需要 DatetimeIndex 且含 OHLCV 列
                         _bkdf2.index = pd.DatetimeIndex(_bkdf2.index)
                         _bkdf2 = _bkdf2[["Open", "High", "Low", "Close", "Volume"]].dropna()
+                        # 数据不足则跳过（如停牌/新股无历史数据）
+                        if len(_bkdf2) < 2:
+                            continue
 
                         # 获取移动止盈价
                         _b_trl = (
@@ -2459,6 +2462,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                             else _bt.get("trail_stop_at_exit")
                         )
                         _b_show_trl = bool(_b_trl and _b_sp and abs(_b_trl - _b_sp) > 0.01)
+
+                        # 成交量全为 0 时隐藏成交量面板（避免坐标轴显示负数）
+                        _b_show_vol = bool(_bkdf2["Volume"].sum() > 0)
 
                         # 水平线附加图
                         _add_plots = []
@@ -2480,7 +2486,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
                         _mpf_kwargs = dict(
                             type="candle",
-                            volume=True,
+                            volume=_b_show_vol,
                             style=_mpf_style,
                             figsize=(16, 7),
                             returnfig=True,
@@ -2492,9 +2498,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         _bfig_mpf, _baxes_mpf = _mpf.plot(_bkdf2, **_mpf_kwargs)
                         _ax_price = _baxes_mpf[0]
                         # Fix volume axis: ensure y starts at 0 (prevents negative display when volume≈0)
-                        _ax_vol = _baxes_mpf[-1]
-                        if _ax_vol.get_ylim()[0] < 0:
-                            _ax_vol.set_ylim(bottom=0)
+                        if _b_show_vol:
+                            _ax_vol = _baxes_mpf[-1]
+                            if _ax_vol.get_ylim()[0] < 0:
+                                _ax_vol.set_ylim(bottom=0)
 
                         # 标题（直接指定字体文件，绕过 font cache）
                         _b_title_info = f"  |  开仓 {_b_edt.date()}" + (f"  ${_b_ep:.2f}" if _b_ep else "")
