@@ -1193,6 +1193,258 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     st.markdown("---")
 
+
+    # ── Live positions ───────────────────────────────────────────────────────
+    st.markdown('<div id="sec-pt-6"></div>', unsafe_allow_html=True)
+    st.subheader("六、当前持仓实时状态")
+    if _m1_date and _m1_date != "N/A":
+        st.markdown(f"上次更新：{_last_fetch_sgt} ｜ Yahoo Finance（数据截至 {_m1_date} 收盘）")
+
+    # ── suspended 持仓警告（紧接"上次更新"行显示，始终显示）────────────────────
+    _m1_ok_tickers = {p["ticker"] for p in _m1_ok}
+    _m1_suspended = [p for p in _m1_positions if p.get("suspended")]
+    for _sp in _m1_suspended:
+        _sp_reason   = _sp.get("suspend_reason", "暂停交易，原因未知")
+        _sp_date     = _sp.get("suspend_date", "未知")
+        _sp_last     = _sp.get("last_data_date", "未知")
+        _sp_has_data = _sp["ticker"] in _m1_ok_tickers
+        _sp_data_note = (
+            f"<br><span style='color:#d62728; font-size:0.9em;'>⚠️ 下方持仓表格中显示的价格可能为旧数据（最后有效数据截至 {_sp_last}），并非最新成交价。</span>"
+            if _sp_has_data else ""
+        )
+        st.markdown(
+            f"<div style='border:2px solid #FF8C00; border-radius:6px; padding:12px 16px; "
+            f"background:#FFF8F0; margin:8px 0;'>"
+            f"<b style='color:#FF8C00; font-size:1.05em;'>⏸ {_sp['ticker']} — 目前暂停交易，等待确认</b><br>"
+            f"<span style='color:#555;'>原因：{_sp_reason}</span><br>"
+            f"<span style='color:#555;'>最后有效数据日期：{_sp_last} ｜ 暂停标记日期：{_sp_date}</span>"
+            f"{_sp_data_note}<br>"
+            f"<span style='color:#888; font-size:0.9em;'>系统每日自动检查 Yahoo Finance 及 Tiingo，数据恢复后将自动解除暂停。</span>"
+            f"</div>",
+            unsafe_allow_html=True,
+        )
+
+    if _m1_stop:
+        st.warning(f"⚠️ **{len(_m1_stop)} 只已触及止损** — 建议执行止损出场")
+
+    if _m1_ok:
+        def _status_label(p: dict) -> str:
+            sr = p.get("stop_reason")
+            if sr == "stop_loss":      return "🔴 触止损"
+            if sr == "trailing_stop":  return "🔴 触移动止盈"
+            return "🟢 持有"
+
+        # Default sort: 触止损/触移动止盈 first, then stop_buffer ascending within each group
+        import datetime as _dt_pos
+        _today_pos = _dt_pos.date.today()
+        def _status_sort_key(p):
+            sr = p.get("stop_reason")
+            if sr == "stop_loss":     return (0, p["stop_buffer_pct"])
+            if sr == "trailing_stop": return (1, p["stop_buffer_pct"])
+            return (2, p["stop_buffer_pct"])
+        _pos_sorted = sorted(_m1_ok, key=_status_sort_key)
+        _pos_df = pd.DataFrame([{
+            "标的":              p["ticker"],
+            "状态":              _status_label(p),
+            "最新交易日涨跌(%)": p.get("daily_chg_pct", 0.0),
+            "当前价":            p["current_price"],
+            "止损":              p["stop_loss"],
+            "移动止盈":          p["trail_stop_live"],
+            "浮盈(R)":           p["R"],
+            "浮盈($)":           p["unreal_pnl"],
+            "风险%NAV":          round((p["entry_price"] - p["stop_loss"]) * p["shares"] / _m1_nav * 100, 3) if _m1_nav else 0,
+            "持仓天数":          (_today_pos - _dt_pos.date.fromisoformat(p["entry_date"])).days,
+            "当前市值":          p["mkt_value"] / 1000,
+            "入场日":            p["entry_date"],
+            "入场价":            p["entry_price"],
+        } for p in _pos_sorted])
+
+        def _style_pos(df):
+            s = pd.DataFrame('', index=df.index, columns=df.columns)
+            for i, p in enumerate(_pos_sorted):
+                s.at[i, "止损" if p["stop_loss"] >= p["trail_stop_live"] else "移动止盈"] = "font-weight: bold"
+                chg = p.get("daily_chg_pct", 0.0)
+                s.at[i, "最新交易日涨跌(%)"] = "color: #d62728" if chg < 0 else ("color: #2ca02c" if chg > 0 else "")
+                s.at[i, "当前价"] = (
+                    "color: #d62728" if p["current_price"] < p["entry_price"]
+                    else "color: #2ca02c"
+                )
+            return s
+
+        show_df(
+            _pos_df.style.apply(_style_pos, axis=None),
+            column_config={
+                "最新交易日涨跌(%)": st.column_config.NumberColumn(label="最新交易日涨跌(%)", format="%+.2f%%"),
+                "当前价":   st.column_config.NumberColumn(format="$%.2f"),
+                "止损":     st.column_config.NumberColumn(format="$%.2f"),
+                "移动止盈": st.column_config.NumberColumn(format="$%.2f"),
+                "浮盈(R)":  st.column_config.NumberColumn(label="浮盈（R）", format="%+.2fR"),
+                "浮盈($)":  st.column_config.NumberColumn(label="浮盈（$）", format="$%+.0f"),
+                "风险%NAV": st.column_config.NumberColumn(label="风险% NAV", format="%.3f%%"),
+                "持仓天数": st.column_config.NumberColumn(format="%d 天"),
+                "当前市值": st.column_config.NumberColumn(format="$%.0fK"),
+                "入场价":   st.column_config.NumberColumn(format="$%.2f"),
+            },
+        )
+        st.markdown(
+            "<span style='color:#111111'>**最新交易日涨跌(%)** = (最新收盘价 − 前一交易日收盘价) / 前一交易日收盘价 × 100%</span><br>"
+            "<span style='color:#111111'>**浮盈（R）** = (当前价 − 入场价) / (入场价 − 止损价)，其中分母 = 2 × ATR = 初始每股风险</span>",
+            unsafe_allow_html=True,
+        )
+
+        _sorted = sorted(_m1_ok, key=lambda x: x.get("R", 0), reverse=True)
+        _fig = go.Figure(go.Bar(
+            y=[p["ticker"] for p in _sorted],
+            x=[p["R"] for p in _sorted],
+            orientation="h",
+            marker_color=["#d62728" if p["is_stopped"] else ("#2ca02c" if p["R"] >= 0 else "#ff7f0e")
+                          for p in _sorted],
+            text=[f"{p['R']:+.2f}R" for p in _sorted],
+            textposition="outside",
+            hovertemplate="<b>%{y}</b><br>R = %{x:+.2f}<extra></extra>",
+        ))
+        _fig.update_layout(
+            title="持仓浮盈（R 倍数，红色 = 触及止损）",
+            xaxis_title="R 倍数", height=max(380, len(_sorted) * 26),
+            margin=dict(l=70, r=100, t=50, b=40),
+            template="plotly_white", showlegend=False,
+        )
+        st.plotly_chart(_fig, width="stretch")
+
+        # ── 组合相关性热力图 ─────────────────────────────────────────────────────
+        _corr_tickers = [p["ticker"] for p in _m1_ok]
+        if len(_corr_tickers) >= 2:
+            _corr_closes: dict = {}
+            for _ct_tk in _corr_tickers:
+                _ct_df = _get_df(_m1_raw, _ct_tk)
+                if _ct_df is not None and len(_ct_df) >= 20:
+                    _corr_closes[_ct_tk] = _ct_df["Close"].rename(_ct_tk)
+            if len(_corr_closes) >= 2:
+                _corr_price_df = pd.concat(list(_corr_closes.values()), axis=1).dropna()
+                _corr_rets     = _corr_price_df.pct_change().dropna()
+                _corr_mat      = _corr_rets.corr()
+                _n_corr        = len(_corr_mat)
+                _fig_corr = go.Figure(go.Heatmap(
+                    z=_corr_mat.values,
+                    x=_corr_mat.columns.tolist(),
+                    y=_corr_mat.index.tolist(),
+                    colorscale="RdYlGn",
+                    zmin=-1, zmax=1,
+                    text=[[f"{v:.2f}" for v in row] for row in _corr_mat.values],
+                    texttemplate="%{text}",
+                    hovertemplate="<b>%{y} × %{x}</b><br>相关性 = %{z:.2f}<extra></extra>",
+                ))
+                _fig_corr.update_layout(
+                    title=f"持仓相关性热力图（{_n_corr} 只，基于最近 300 日日收益率，绿=低相关/分散，红=高相关/集中）",
+                    height=max(340, _n_corr * 42 + 120),
+                    margin=dict(l=70, r=30, t=60, b=50),
+                    template="plotly_white",
+                )
+                st.plotly_chart(_fig_corr, width="stretch")
+
+                # 相关性解读
+                _corr_pairs = [
+                    (_corr_mat.columns[_ci], _corr_mat.columns[_cj], float(_corr_mat.iloc[_ci, _cj]))
+                    for _ci in range(_n_corr) for _cj in range(_ci + 1, _n_corr)
+                ]
+                if _corr_pairs:
+                    _avg_corr = sum(p[2] for p in _corr_pairs) / len(_corr_pairs)
+                    _max_pair = max(_corr_pairs, key=lambda x: x[2])
+                    if _avg_corr > 0.6:
+                        _corr_verdict = f"⚠️ 平均相关 **{_avg_corr:.2f}**（偏高）——组合多数持仓在押注同一方向，回撤时会同步下跌，分散化效果有限"
+                    elif _avg_corr > 0.35:
+                        _corr_verdict = f"平均相关 **{_avg_corr:.2f}**（中等）——有一定分散效果，但高相关对需关注"
+                    else:
+                        _corr_verdict = f"✅ 平均相关 **{_avg_corr:.2f}**（低）——持仓分散化较好，各标的走势独立"
+                    _max_note = (f"；最高对 **{_max_pair[0]} × {_max_pair[1]}** = **{_max_pair[2]:.2f}**"
+                                 + ("，二者实质押注同一行情，若市场转向将同步触损" if _max_pair[2] > 0.7 else ""))
+                    st.markdown(f"<span style='color:#111111'>**解读：** {_corr_verdict}{_max_note}。</span>", unsafe_allow_html=True)
+                    st.markdown(
+                        "<span style='color:#111111;font-size:0.85em'>"
+                        "判断标准：两两相关均值 **< 0.35** = 分散化良好；**0.35 – 0.60** = 中等，须关注高相关对；**> 0.60** = 偏高，组合实质同向。"
+                        "相关性基于最近 300 个交易日的日收益率计算，反映当前市场环境下各标的的历史同步程度。"
+                        "</span>",
+                        unsafe_allow_html=True,
+                    )
+
+        # ── 持仓行业/板块集中度 ──────────────────────────────────────────────────
+        with st.spinner("加载行业数据…"):
+            _sec_data = [
+                (p["ticker"], _fetch_sector(p["ticker"], p.get("sector", "")), p["mkt_value"])
+                for p in _m1_ok
+            ]
+        _sec_grp_dict: dict = {}
+        for _stk, _ssec, _smv in _sec_data:
+            _sec_grp_dict.setdefault(_ssec, {"tickers": [], "mkt_value": 0.0})
+            _sec_grp_dict[_ssec]["tickers"].append(_stk)
+            _sec_grp_dict[_ssec]["mkt_value"] += _smv
+        _sec_grp_rows = [
+            {"行业/板块": k, "持仓数量": len(v["tickers"]), "市值合计": v["mkt_value"],
+             "占NAV(%)": round(v["mkt_value"] / _m1_nav * 100, 1) if _m1_nav else 0.0,
+             "标的列表": "、".join(sorted(v["tickers"]))}
+            for k, v in sorted(_sec_grp_dict.items(), key=lambda x: -x[1]["mkt_value"])
+        ]
+        _sec_grp_df = pd.DataFrame(_sec_grp_rows)
+        _fig_sec = go.Figure(go.Bar(
+            x=_sec_grp_df["行业/板块"],
+            y=_sec_grp_df["市值合计"] / 1000,
+            text=[f"{v:.1f}%" for v in _sec_grp_df["占NAV(%)"]],
+            textposition="auto",
+            marker_color="#1f77b4",
+            hovertemplate="<b>%{x}</b><br>市值 $%{y:.0f}K<extra></extra>",
+        ))
+        _fig_sec.update_layout(
+            title="持仓行业/板块集中度（市值加权）",
+            xaxis_title="行业/板块", yaxis_title="市值（$K）",
+            height=320, template="plotly_white",
+            margin=dict(l=60, r=20, t=60, b=100),
+            xaxis_tickangle=-30,
+        )
+        st.plotly_chart(_fig_sec, width="stretch")
+        show_df(
+            _sec_grp_df,
+            column_config={
+                "市值合计": st.column_config.NumberColumn(format="$%.0f"),
+                "占NAV(%)": st.column_config.NumberColumn(format="%.1f%%"),
+            },
+            hide_index=True,
+        )
+
+        # 板块集中度解读
+        if not _sec_grp_df.empty:
+            _sec_top   = _sec_grp_df.iloc[0]
+            _sec_top_pct = float(_sec_top["占NAV(%)"])
+            _sec_top_name = str(_sec_top["行业/板块"])
+            _sec_n     = len(_sec_grp_df)
+            _sec_hhi   = sum((float(w) / 100) ** 2 for w in _sec_grp_df["占NAV(%)"])
+            if _sec_top_pct > 30:
+                _sec_verdict = (
+                    f"⚠️ **{_sec_top_name}** 占 NAV **{_sec_top_pct:.1f}%**——"
+                    f"若该板块整体回调，组合实际跌幅会远超单只止损预期，须关注行业层面的尾部风险"
+                )
+            elif _sec_hhi > 0.25:
+                _sec_verdict = (
+                    f"集中度偏高（HHI={_sec_hhi:.2f}），**{_sec_top_name}** 主导组合风险——"
+                    f"考虑是否补充非相关板块标的来分散"
+                )
+            else:
+                _sec_verdict = (
+                    f"✅ {_sec_n} 个板块均衡分布（HHI={_sec_hhi:.2f}），"
+                    f"无单一行业主导，板块层面分散化合理"
+                )
+            st.markdown(f"<span style='color:#111111'>**解读：** {_sec_verdict}。</span>", unsafe_allow_html=True)
+            st.markdown(
+                "<span style='color:#111111;font-size:0.85em'>"
+                "判断标准：最大单一板块占 NAV **> 30%** = 敞口过高，板块系统性回撤时损失超出单只止损预期；"
+                "**HHI（赫芬达尔指数）> 0.25** = 集中度偏高，少数板块主导组合风险；"
+                "**HHI ≤ 0.25** = 集中度合理，各板块均衡分布。"
+                "HHI = 各板块占 NAV 权重的平方和，完全集中于单一板块时 HHI = 1，完全均匀分布时 HHI = 1/板块数。"
+                "</span>",
+                unsafe_allow_html=True,
+            )
+
+    st.markdown("---")
+
     # ── Today's trades (executions at today's open) ───────────────────────────
     st.markdown('<div id="sec-pt-3"></div>', unsafe_allow_html=True)
     st.subheader("三、今日完成的交易")
@@ -1829,258 +2081,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             st.info("无入场信号")
 
     st.markdown("---")
-
-    # ── Live positions ───────────────────────────────────────────────────────
-    st.markdown('<div id="sec-pt-6"></div>', unsafe_allow_html=True)
-    st.subheader("六、当前持仓实时状态")
-    if _m1_date and _m1_date != "N/A":
-        st.markdown(f"上次更新：{_last_fetch_sgt} ｜ Yahoo Finance（数据截至 {_m1_date} 收盘）")
-
-    # ── suspended 持仓警告（紧接"上次更新"行显示，始终显示）────────────────────
-    _m1_ok_tickers = {p["ticker"] for p in _m1_ok}
-    _m1_suspended = [p for p in _m1_positions if p.get("suspended")]
-    for _sp in _m1_suspended:
-        _sp_reason   = _sp.get("suspend_reason", "暂停交易，原因未知")
-        _sp_date     = _sp.get("suspend_date", "未知")
-        _sp_last     = _sp.get("last_data_date", "未知")
-        _sp_has_data = _sp["ticker"] in _m1_ok_tickers
-        _sp_data_note = (
-            f"<br><span style='color:#d62728; font-size:0.9em;'>⚠️ 下方持仓表格中显示的价格可能为旧数据（最后有效数据截至 {_sp_last}），并非最新成交价。</span>"
-            if _sp_has_data else ""
-        )
-        st.markdown(
-            f"<div style='border:2px solid #FF8C00; border-radius:6px; padding:12px 16px; "
-            f"background:#FFF8F0; margin:8px 0;'>"
-            f"<b style='color:#FF8C00; font-size:1.05em;'>⏸ {_sp['ticker']} — 目前暂停交易，等待确认</b><br>"
-            f"<span style='color:#555;'>原因：{_sp_reason}</span><br>"
-            f"<span style='color:#555;'>最后有效数据日期：{_sp_last} ｜ 暂停标记日期：{_sp_date}</span>"
-            f"{_sp_data_note}<br>"
-            f"<span style='color:#888; font-size:0.9em;'>系统每日自动检查 Yahoo Finance 及 Tiingo，数据恢复后将自动解除暂停。</span>"
-            f"</div>",
-            unsafe_allow_html=True,
-        )
-
-    if _m1_stop:
-        st.warning(f"⚠️ **{len(_m1_stop)} 只已触及止损** — 建议执行止损出场")
-
-    if _m1_ok:
-        def _status_label(p: dict) -> str:
-            sr = p.get("stop_reason")
-            if sr == "stop_loss":      return "🔴 触止损"
-            if sr == "trailing_stop":  return "🔴 触移动止盈"
-            return "🟢 持有"
-
-        # Default sort: 触止损/触移动止盈 first, then 缓冲 ascending within each group
-        import datetime as _dt_pos
-        _today_pos = _dt_pos.date.today()
-        def _status_sort_key(p):
-            sr = p.get("stop_reason")
-            if sr == "stop_loss":     return (0, p["stop_buffer_pct"])
-            if sr == "trailing_stop": return (1, p["stop_buffer_pct"])
-            return (2, p["stop_buffer_pct"])
-        _pos_sorted = sorted(_m1_ok, key=_status_sort_key)
-        _pos_df = pd.DataFrame([{
-            "标的":              p["ticker"],
-            "状态":              _status_label(p),
-            "最新交易日涨跌(%)": p.get("daily_chg_pct", 0.0),
-            "当前价":            p["current_price"],
-            "止损":              p["stop_loss"],
-            "移动止盈":          p["trail_stop_live"],
-            "浮盈(R)":           p["R"],
-            "浮盈($)":           p["unreal_pnl"],
-            "风险%NAV":          round((p["entry_price"] - p["stop_loss"]) * p["shares"] / _m1_nav * 100, 3) if _m1_nav else 0,
-            "持仓天数":          (_today_pos - _dt_pos.date.fromisoformat(p["entry_date"])).days,
-            "当前市值":          p["mkt_value"] / 1000,
-            "入场日":            p["entry_date"],
-            "入场价":            p["entry_price"],
-        } for p in _pos_sorted])
-
-        def _style_pos(df):
-            s = pd.DataFrame('', index=df.index, columns=df.columns)
-            for i, p in enumerate(_pos_sorted):
-                s.at[i, "止损" if p["stop_loss"] >= p["trail_stop_live"] else "移动止盈"] = "font-weight: bold"
-                chg = p.get("daily_chg_pct", 0.0)
-                s.at[i, "最新交易日涨跌(%)"] = "color: #d62728" if chg < 0 else ("color: #2ca02c" if chg > 0 else "")
-                s.at[i, "当前价"] = (
-                    "color: #d62728" if p["current_price"] < p["entry_price"]
-                    else "color: #2ca02c"
-                )
-            return s
-
-        show_df(
-            _pos_df.style.apply(_style_pos, axis=None),
-            column_config={
-                "最新交易日涨跌(%)": st.column_config.NumberColumn(label="最新交易日涨跌(%)", format="%+.2f%%"),
-                "当前价":   st.column_config.NumberColumn(format="$%.2f"),
-                "止损":     st.column_config.NumberColumn(format="$%.2f"),
-                "移动止盈": st.column_config.NumberColumn(format="$%.2f"),
-                "浮盈(R)":  st.column_config.NumberColumn(label="浮盈（R）", format="%+.2fR"),
-                "浮盈($)":  st.column_config.NumberColumn(label="浮盈（$）", format="$%+.0f"),
-                "风险%NAV": st.column_config.NumberColumn(label="风险% NAV", format="%.3f%%"),
-                "持仓天数": st.column_config.NumberColumn(format="%d 天"),
-                "当前市值": st.column_config.NumberColumn(format="$%.0fK"),
-                "入场价":   st.column_config.NumberColumn(format="$%.2f"),
-            },
-        )
-        st.markdown(
-            "<span style='color:#111111'>**最新交易日涨跌(%)** = (最新收盘价 − 前一交易日收盘价) / 前一交易日收盘价 × 100%</span><br>"
-            "<span style='color:#111111'>**浮盈（R）** = (当前价 − 入场价) / (入场价 − 止损价)，其中分母 = 2 × ATR = 初始每股风险</span>",
-            unsafe_allow_html=True,
-        )
-
-        _sorted = sorted(_m1_ok, key=lambda x: x.get("R", 0), reverse=True)
-        _fig = go.Figure(go.Bar(
-            y=[p["ticker"] for p in _sorted],
-            x=[p["R"] for p in _sorted],
-            orientation="h",
-            marker_color=["#d62728" if p["is_stopped"] else ("#2ca02c" if p["R"] >= 0 else "#ff7f0e")
-                          for p in _sorted],
-            text=[f"{p['R']:+.2f}R" for p in _sorted],
-            textposition="outside",
-            hovertemplate="<b>%{y}</b><br>R = %{x:+.2f}<extra></extra>",
-        ))
-        _fig.update_layout(
-            title="持仓浮盈（R 倍数，红色 = 触及止损）",
-            xaxis_title="R 倍数", height=max(380, len(_sorted) * 26),
-            margin=dict(l=70, r=100, t=50, b=40),
-            template="plotly_white", showlegend=False,
-        )
-        st.plotly_chart(_fig, width="stretch")
-
-        # ── 组合相关性热力图 ─────────────────────────────────────────────────────
-        _corr_tickers = [p["ticker"] for p in _m1_ok]
-        if len(_corr_tickers) >= 2:
-            _corr_closes: dict = {}
-            for _ct_tk in _corr_tickers:
-                _ct_df = _get_df(_m1_raw, _ct_tk)
-                if _ct_df is not None and len(_ct_df) >= 20:
-                    _corr_closes[_ct_tk] = _ct_df["Close"].rename(_ct_tk)
-            if len(_corr_closes) >= 2:
-                _corr_price_df = pd.concat(list(_corr_closes.values()), axis=1).dropna()
-                _corr_rets     = _corr_price_df.pct_change().dropna()
-                _corr_mat      = _corr_rets.corr()
-                _n_corr        = len(_corr_mat)
-                _fig_corr = go.Figure(go.Heatmap(
-                    z=_corr_mat.values,
-                    x=_corr_mat.columns.tolist(),
-                    y=_corr_mat.index.tolist(),
-                    colorscale="RdYlGn",
-                    zmin=-1, zmax=1,
-                    text=[[f"{v:.2f}" for v in row] for row in _corr_mat.values],
-                    texttemplate="%{text}",
-                    hovertemplate="<b>%{y} × %{x}</b><br>相关性 = %{z:.2f}<extra></extra>",
-                ))
-                _fig_corr.update_layout(
-                    title=f"持仓相关性热力图（{_n_corr} 只，基于最近 300 日日收益率，绿=低相关/分散，红=高相关/集中）",
-                    height=max(340, _n_corr * 42 + 120),
-                    margin=dict(l=70, r=30, t=60, b=50),
-                    template="plotly_white",
-                )
-                st.plotly_chart(_fig_corr, width="stretch")
-
-                # 相关性解读
-                _corr_pairs = [
-                    (_corr_mat.columns[_ci], _corr_mat.columns[_cj], float(_corr_mat.iloc[_ci, _cj]))
-                    for _ci in range(_n_corr) for _cj in range(_ci + 1, _n_corr)
-                ]
-                if _corr_pairs:
-                    _avg_corr = sum(p[2] for p in _corr_pairs) / len(_corr_pairs)
-                    _max_pair = max(_corr_pairs, key=lambda x: x[2])
-                    if _avg_corr > 0.6:
-                        _corr_verdict = f"⚠️ 平均相关 **{_avg_corr:.2f}**（偏高）——组合多数持仓在押注同一方向，回撤时会同步下跌，分散化效果有限"
-                    elif _avg_corr > 0.35:
-                        _corr_verdict = f"平均相关 **{_avg_corr:.2f}**（中等）——有一定分散效果，但高相关对需关注"
-                    else:
-                        _corr_verdict = f"✅ 平均相关 **{_avg_corr:.2f}**（低）——持仓分散化较好，各标的走势独立"
-                    _max_note = (f"；最高对 **{_max_pair[0]} × {_max_pair[1]}** = **{_max_pair[2]:.2f}**"
-                                 + ("，二者实质押注同一行情，若市场转向将同步触损" if _max_pair[2] > 0.7 else ""))
-                    st.markdown(f"<span style='color:#111111'>**解读：** {_corr_verdict}{_max_note}。</span>", unsafe_allow_html=True)
-                    st.markdown(
-                        "<span style='color:#111111;font-size:0.85em'>"
-                        "判断标准：两两相关均值 **< 0.35** = 分散化良好；**0.35 – 0.60** = 中等，须关注高相关对；**> 0.60** = 偏高，组合实质同向。"
-                        "相关性基于最近 300 个交易日的日收益率计算，反映当前市场环境下各标的的历史同步程度。"
-                        "</span>",
-                        unsafe_allow_html=True,
-                    )
-
-        # ── 持仓行业/板块集中度 ──────────────────────────────────────────────────
-        with st.spinner("加载行业数据…"):
-            _sec_data = [
-                (p["ticker"], _fetch_sector(p["ticker"], p.get("sector", "")), p["mkt_value"])
-                for p in _m1_ok
-            ]
-        _sec_grp_dict: dict = {}
-        for _stk, _ssec, _smv in _sec_data:
-            _sec_grp_dict.setdefault(_ssec, {"tickers": [], "mkt_value": 0.0})
-            _sec_grp_dict[_ssec]["tickers"].append(_stk)
-            _sec_grp_dict[_ssec]["mkt_value"] += _smv
-        _sec_grp_rows = [
-            {"行业/板块": k, "持仓数量": len(v["tickers"]), "市值合计": v["mkt_value"],
-             "占NAV(%)": round(v["mkt_value"] / _m1_nav * 100, 1) if _m1_nav else 0.0,
-             "标的列表": "、".join(sorted(v["tickers"]))}
-            for k, v in sorted(_sec_grp_dict.items(), key=lambda x: -x[1]["mkt_value"])
-        ]
-        _sec_grp_df = pd.DataFrame(_sec_grp_rows)
-        _fig_sec = go.Figure(go.Bar(
-            x=_sec_grp_df["行业/板块"],
-            y=_sec_grp_df["市值合计"] / 1000,
-            text=[f"{v:.1f}%" for v in _sec_grp_df["占NAV(%)"]],
-            textposition="auto",
-            marker_color="#1f77b4",
-            hovertemplate="<b>%{x}</b><br>市值 $%{y:.0f}K<extra></extra>",
-        ))
-        _fig_sec.update_layout(
-            title="持仓行业/板块集中度（市值加权）",
-            xaxis_title="行业/板块", yaxis_title="市值（$K）",
-            height=320, template="plotly_white",
-            margin=dict(l=60, r=20, t=60, b=100),
-            xaxis_tickangle=-30,
-        )
-        st.plotly_chart(_fig_sec, width="stretch")
-        show_df(
-            _sec_grp_df,
-            column_config={
-                "市值合计": st.column_config.NumberColumn(format="$%.0f"),
-                "占NAV(%)": st.column_config.NumberColumn(format="%.1f%%"),
-            },
-            hide_index=True,
-        )
-
-        # 板块集中度解读
-        if not _sec_grp_df.empty:
-            _sec_top   = _sec_grp_df.iloc[0]
-            _sec_top_pct = float(_sec_top["占NAV(%)"])
-            _sec_top_name = str(_sec_top["行业/板块"])
-            _sec_n     = len(_sec_grp_df)
-            _sec_hhi   = sum((float(w) / 100) ** 2 for w in _sec_grp_df["占NAV(%)"])
-            if _sec_top_pct > 30:
-                _sec_verdict = (
-                    f"⚠️ **{_sec_top_name}** 占 NAV **{_sec_top_pct:.1f}%**——"
-                    f"若该板块整体回调，组合实际跌幅会远超单只止损预期，须关注行业层面的尾部风险"
-                )
-            elif _sec_hhi > 0.25:
-                _sec_verdict = (
-                    f"集中度偏高（HHI={_sec_hhi:.2f}），**{_sec_top_name}** 主导组合风险——"
-                    f"考虑是否补充非相关板块标的来分散"
-                )
-            else:
-                _sec_verdict = (
-                    f"✅ {_sec_n} 个板块均衡分布（HHI={_sec_hhi:.2f}），"
-                    f"无单一行业主导，板块层面分散化合理"
-                )
-            st.markdown(f"<span style='color:#111111'>**解读：** {_sec_verdict}。</span>", unsafe_allow_html=True)
-            st.markdown(
-                "<span style='color:#111111;font-size:0.85em'>"
-                "判断标准：最大单一板块占 NAV **> 30%** = 敞口过高，板块系统性回撤时损失超出单只止损预期；"
-                "**HHI（赫芬达尔指数）> 0.25** = 集中度偏高，少数板块主导组合风险；"
-                "**HHI ≤ 0.25** = 集中度合理，各板块均衡分布。"
-                "HHI = 各板块占 NAV 权重的平方和，完全集中于单一板块时 HHI = 1，完全均匀分布时 HHI = 1/板块数。"
-                "</span>",
-                unsafe_allow_html=True,
-            )
-
-    st.markdown("---")
-
     # ── Stop detail ──────────────────────────────────────────────────────────
     st.markdown('<div id="sec-pt-7"></div>', unsafe_allow_html=True)
     st.subheader("七、止损/移动止盈明细")
