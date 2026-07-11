@@ -647,6 +647,13 @@ def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
     # Display R: unrealized gain in units of initial risk (uses current close, not peak)
     R = (cur_price - pos["entry_price"]) / R_base if R_base > 0 else 0.0
 
+    # Daily change vs previous close
+    _daily_chg_pct = 0.0
+    if len(df) >= 2:
+        _prev_close = float(df["Close"].iloc[-2])
+        if _prev_close > 0:
+            _daily_chg_pct = (cur_price / _prev_close - 1) * 100
+
     return {
         **pos,
         "_ok":             True,
@@ -663,6 +670,7 @@ def _enrich_position(pos: dict, raw_yf: pd.DataFrame) -> dict:
         "stop_buffer_pct": (cur_price - eff_stop) / cur_price * 100,
         "is_stopped":      is_stopped,
         "stop_reason":     stop_reason,
+        "daily_chg_pct":   _daily_chg_pct,
     }
 
 
