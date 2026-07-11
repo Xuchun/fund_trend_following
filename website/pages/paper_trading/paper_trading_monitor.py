@@ -2491,6 +2491,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
                         _bfig_mpf, _baxes_mpf = _mpf.plot(_bkdf2, **_mpf_kwargs)
                         _ax_price = _baxes_mpf[0]
+                        # Fix volume axis: ensure y starts at 0 (prevents negative display when volume≈0)
+                        _ax_vol = _baxes_mpf[-1]
+                        if _ax_vol.get_ylim()[0] < 0:
+                            _ax_vol.set_ylim(bottom=0)
 
                         # 标题（直接指定字体文件，绕过 font cache）
                         _b_title_info = f"  |  开仓 {_b_edt.date()}" + (f"  ${_b_ep:.2f}" if _b_ep else "")
