@@ -1234,15 +1234,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             if sr == "trailing_stop":  return "🔴 触移动止盈"
             return "🟢 持有"
 
-        # Default sort: 触止损/触移动止盈 first, then stop_buffer ascending within each group
+        # Default sort: 最新交易日涨跌(%) 升序（最低排最前）
         import datetime as _dt_pos
         _today_pos = _dt_pos.date.today()
-        def _status_sort_key(p):
-            sr = p.get("stop_reason")
-            if sr == "stop_loss":     return (0, p["stop_buffer_pct"])
-            if sr == "trailing_stop": return (1, p["stop_buffer_pct"])
-            return (2, p["stop_buffer_pct"])
-        _pos_sorted = sorted(_m1_ok, key=_status_sort_key)
+        _pos_sorted = sorted(_m1_ok, key=lambda p: p.get("daily_chg_pct", 0.0))
         _pos_df = pd.DataFrame([{
             "标的":              p["ticker"],
             "状态":              _status_label(p),
