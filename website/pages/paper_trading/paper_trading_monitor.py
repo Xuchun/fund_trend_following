@@ -1281,11 +1281,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "入场价":   st.column_config.NumberColumn(format="$%.2f"),
             },
         )
-        st.markdown(
-            "<span style='color:#111111'>**最新交易日涨跌(%)** = (最新收盘价 − 前一交易日收盘价) / 前一交易日收盘价 × 100%</span><br>"
-            "<span style='color:#111111'>**浮盈（R）** = (当前价 − 入场价) / (入场价 − 止损价)，其中分母 = 2 × ATR = 初始每股风险</span>",
-            unsafe_allow_html=True,
-        )
 
         _sorted = sorted(_m1_ok, key=lambda x: x.get("R", 0), reverse=True)
         _fig = go.Figure(go.Bar(
