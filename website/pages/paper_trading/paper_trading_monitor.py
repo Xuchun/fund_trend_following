@@ -1196,7 +1196,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     # ── Live positions ───────────────────────────────────────────────────────
     st.markdown('<div id="sec-pt-6"></div>', unsafe_allow_html=True)
-    st.subheader("六、当前持仓实时状态")
+    st.subheader("三、当前持仓实时状态")
     if _m1_date and _m1_date != "N/A":
         st.markdown(f"上次更新：{_last_fetch_sgt} ｜ Yahoo Finance（数据截至 {_m1_date} 收盘）")
 
