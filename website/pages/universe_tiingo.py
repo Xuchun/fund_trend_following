@@ -550,7 +550,7 @@ with _adv_analysis_col1:
 | Tiingo 下载尝试 | 21,384 | 全量历史 Ticker |
 | 成功下载（有价格数据）| 15,275 | |
 | Tiingo 无数据跳过 | {_no_data_cnt:,} | 极度冷门票、权证、OTC 壳公司 |
-| 有数据但从未满足流动性条件 | {15_255 - len(_eu_all):,} | 价格或 ADV 从未同时达标（\$10 / \$20M），未进入候选池 |
+| 有数据但从未满足流动性条件 | {15_275 - len(_eu_all):,} | 价格或 ADV 从未同时达标（\$10 / \$20M），未进入候选池 |
 | eligible_days < 252（不足 1 年）| {len(_eu_under252):,} | SPAC、超短命公司、刚上市新股 |
 | 满足条件标的（≥252 天，含误入的非策略ETF） | {len(_eu_over252):,} | 活跃 {_eu_over252["is_active"].sum():,} + 退市 {(~_eu_over252["is_active"]).sum():,}；注：其中 {_n_excl_in_cands} 只为结构性排除的 ETF（{_excl_in_cands_str}），因其不在策略ETF清单中，被"非ETF过滤"误放入此候选范围 |
 | 减去：结构性排除的 ETF | -{_n_excl_in_cands} | {_excl_in_cands_str}——属于 ETF，由 EXCL\_ALL 过滤器从策略池移除 |
