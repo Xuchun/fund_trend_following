@@ -131,7 +131,7 @@ st.markdown(f"""
 | **原始下载范围** | {_TIINGO_DOWNLOAD_START} → {_data_latest}（约 {_download_yrs} 年） |
 | **回测使用范围** | {_backtest_start} → {_backtest_end}（约 {_backtest_yrs} 年） |
 | **覆盖标的** | NYSE / NASDAQ / AMEX 全量历史股票 + {len(_ETF_SET)} 只跨资产 ETF |
-| **下载 Ticker 总数** | 21,384（含 14,805 活跃 + 7,402 已退市/被收购）；成功下载 15,255 个，6,129 个因 Tiingo 无数据跳过 |
+| **下载 Ticker 总数** | 21,384（NYSE / NASDAQ / AMEX 全量历史 Ticker）；成功下载 15,275 个，6,109 个因 Tiingo 无数据跳过 |
 | **字段** | 开/高/低/收、复权收盘价、成交量（日度） |
 | **含退市标的** | 是 — Tiingo 保留已退市、被收购、破产公司的完整历史数据 |
 """, unsafe_allow_html=True)
