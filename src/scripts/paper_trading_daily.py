@@ -1207,7 +1207,14 @@ def _get_target_date() -> date:
             _cand -= timedelta(days=1)
     except Exception:
         pass
-    return date.today()
+    # Fallback: use ET-based date to avoid UTC-midnight issues on GitHub Actions
+    try:
+        from zoneinfo import ZoneInfo
+        _now_et = datetime.now(ZoneInfo("America/New_York"))
+        _cutoff = _now_et.replace(hour=16, minute=30, second=0, microsecond=0)
+        return _now_et.date() if _now_et >= _cutoff else (_now_et.date() - timedelta(days=1))
+    except Exception:
+        return date.today()
 
 
 def _get_dl_log(state: dict, today: date) -> dict:
