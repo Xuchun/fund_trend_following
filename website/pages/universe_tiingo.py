@@ -534,7 +534,7 @@ with _adv_analysis_col1:
     _eu_all        = eu[~eu["ticker"].isin(_ETF_SET)]
     _eu_under252   = _eu_all[_eu_all["eligible_days"] < MIN_ELIGIBLE_DAYS]
     _eu_over252    = _eu_all[_eu_all["eligible_days"] >= MIN_ELIGIBLE_DAYS]
-    _no_data_cnt   = 21_384 - 15_255   # Tiingo 无数据（已知固定值）
+    _no_data_cnt   = 21_384 - 15_275   # Tiingo 无数据（已知固定值）
     # 被结构性排除的 ETF（不在 ETF_SET 中，因此通过了"非 ETF"过滤，出现在候选池里，但被 EXCL_ALL 从策略池排除）
     _excl_in_cands     = sorted(_eu_over252[_eu_over252["ticker"].isin(_EXCL_ALL)]["ticker"].tolist())
     _n_excl_in_cands   = len(_excl_in_cands)
