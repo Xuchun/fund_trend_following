@@ -1860,7 +1860,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     # ── Today's signals (detected at close, pending for tomorrow) ────────────
     st.markdown('<div id="sec-pt-5"></div>', unsafe_allow_html=True)
-    st.subheader("五、今日开平仓信号")
+    st.subheader("六、今日开平仓信号")
     if _m1_today_sig:
         _ts_date   = _m1_today_sig.get("date", "N/A")
         _ts_regime = _m1_today_sig.get("regime", "N/A")
