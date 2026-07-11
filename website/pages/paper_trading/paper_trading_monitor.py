@@ -1880,27 +1880,27 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             return (2, p["stop_buffer_pct"])
         _pos_sorted = sorted(_m1_ok, key=_status_sort_key)
         _pos_df = pd.DataFrame([{
-            "标的":      p["ticker"],
-            "状态":      _status_label(p),
-            "当前价":    p["current_price"],
-            "止损":      p["stop_loss"],
-            "移动止盈":  p["trail_stop_live"],
-            "缓冲":      p["stop_buffer_pct"],
-            "浮盈(R)":   p["R"],
-            "浮盈($)":   p["unreal_pnl"],
-            "风险%NAV":  round((p["entry_price"] - p["stop_loss"]) * p["shares"] / _m1_nav * 100, 3) if _m1_nav else 0,
-            "持仓天数":  (_today_pos - _dt_pos.date.fromisoformat(p["entry_date"])).days,
-            "当前市值":  p["mkt_value"] / 1000,
-            "入场日":    p["entry_date"],
-            "入场价":    p["entry_price"],
+            "标的":              p["ticker"],
+            "状态":              _status_label(p),
+            "最新交易日涨跌(%)": p.get("daily_chg_pct", 0.0),
+            "当前价":            p["current_price"],
+            "止损":              p["stop_loss"],
+            "移动止盈":          p["trail_stop_live"],
+            "浮盈(R)":           p["R"],
+            "浮盈($)":           p["unreal_pnl"],
+            "风险%NAV":          round((p["entry_price"] - p["stop_loss"]) * p["shares"] / _m1_nav * 100, 3) if _m1_nav else 0,
+            "持仓天数":          (_today_pos - _dt_pos.date.fromisoformat(p["entry_date"])).days,
+            "当前市值":          p["mkt_value"] / 1000,
+            "入场日":            p["entry_date"],
+            "入场价":            p["entry_price"],
         } for p in _pos_sorted])
 
         def _style_pos(df):
             s = pd.DataFrame('', index=df.index, columns=df.columns)
             for i, p in enumerate(_pos_sorted):
                 s.at[i, "止损" if p["stop_loss"] >= p["trail_stop_live"] else "移动止盈"] = "font-weight: bold"
-                if p["stop_buffer_pct"] <= 3.0:
-                    s.at[i, "缓冲"] = "color: #d62728; font-weight: bold"
+                chg = p.get("daily_chg_pct", 0.0)
+                s.at[i, "最新交易日涨跌(%)"] = "color: #d62728" if chg < 0 else ("color: #2ca02c" if chg > 0 else "")
                 s.at[i, "当前价"] = (
                     "color: #d62728" if p["current_price"] < p["entry_price"]
                     else "color: #2ca02c"
@@ -1910,10 +1910,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         show_df(
             _pos_df.style.apply(_style_pos, axis=None),
             column_config={
+                "最新交易日涨跌(%)": st.column_config.NumberColumn(label="最新交易日涨跌(%)", format="%+.2f%%"),
                 "当前价":   st.column_config.NumberColumn(format="$%.2f"),
                 "止损":     st.column_config.NumberColumn(format="$%.2f"),
                 "移动止盈": st.column_config.NumberColumn(format="$%.2f"),
-                "缓冲":     st.column_config.NumberColumn(format="%.1f%%"),
                 "浮盈(R)":  st.column_config.NumberColumn(label="浮盈（R）", format="%+.2fR"),
                 "浮盈($)":  st.column_config.NumberColumn(label="浮盈（$）", format="$%+.0f"),
                 "风险%NAV": st.column_config.NumberColumn(label="风险% NAV", format="%.3f%%"),
@@ -1923,7 +1923,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             },
         )
         st.markdown(
-            "<span style='color:#111111'>**缓冲** = (当前价 − 有效止损) / 当前价 × 100%，其中有效止损 = max(止损, 移动止盈)（即粗体显示的那个）</span><br>"
+            "<span style='color:#111111'>**最新交易日涨跌(%)** = (最新收盘价 − 前一交易日收盘价) / 前一交易日收盘价 × 100%</span><br>"
             "<span style='color:#111111'>**浮盈（R）** = (当前价 − 入场价) / (入场价 − 止损价)，其中分母 = 2 × ATR = 初始每股风险</span>",
             unsafe_allow_html=True,
         )
