@@ -33,7 +33,7 @@ jobs:
           cache: 'pip'
 
       - name: Install dependencies
-        run: pip install yfinance pandas numpy anthropic
+        run: pip install yfinance pandas numpy anthropic "pandas-market-calendars>=4.4.0,<5.0"
 
       - name: Run paper trading daily update
         env:
