@@ -2513,7 +2513,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                                 + (f"  ${_b_exit_px:.2f}" if _b_exit_px else "")
                                 + (f"  R={_b_r:+.2f}" if _b_r is not None else "")
                             )
-                        _b_title = f"{_btk}  {_b_lbl}{_b_title_info}  （最近 {_b_n} 根日K线）"
+                        _b_title = f"{_btk}  {_b_lbl}{_b_title_info}  （最近 {len(_bkdf2)} 根日K线）"
                         if _cn_fp:
                             _bfig_mpf.suptitle(_b_title, fontproperties=_cn_fp, fontsize=12)
                         else:
