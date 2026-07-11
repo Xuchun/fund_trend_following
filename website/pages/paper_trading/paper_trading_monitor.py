@@ -807,10 +807,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 <div class="toc-grid-pt">
 <div>一. <a href="#sec-pt-1">数据更新</a></div>
 <div>二. <a href="#sec-pt-2">策略状态概览</a></div>
-<div>三. <a href="#sec-pt-3">今日完成的交易</a></div>
-<div>四. <a href="#sec-pt-4">明日要执行的交易</a></div>
-<div>五. <a href="#sec-pt-5">今日开平仓信号</a></div>
-<div>六. <a href="#sec-pt-6">当前持仓实时状态</a></div>
+<div>三. <a href="#sec-pt-6">当前持仓实时状态</a></div>
+<div>四. <a href="#sec-pt-3">今日完成的交易</a></div>
+<div>五. <a href="#sec-pt-4">明日要执行的交易</a></div>
+<div>六. <a href="#sec-pt-5">今日开平仓信号</a></div>
 <div>七. <a href="#sec-pt-7">止损/移动止盈明细</a></div>
 <div>八. <a href="#sec-pt-8">NAV 走势</a></div>
 <div>九. <a href="#sec-pt-9">交易历史</a></div>
