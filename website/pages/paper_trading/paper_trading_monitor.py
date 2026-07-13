@@ -206,10 +206,12 @@ def _build_method_zip(data: dict, method: str) -> bytes:
         if sh:
             zf.writestr(f"{method}_signals_history.csv",
                 _rows_to_csv(sh, [
-                    "date", "regime", "spy_close",
+                    "date", "regime", "spy_close", "spy_pct_above_sma200",
                     "n_raw_breakouts",              # raw breakouts before portfolio constraints
                     "n_candidates",                 # passed all portfolio constraints (approved)
                     "n_heat_blocked", "n_cash_blocked", "n_corr_reduced",
+                    "n_price_filtered", "n_adv_filtered", "n_breakout_filtered",
+                    "n_atr_filtered", "n_stop_dist_filtered", "n_volume_filtered",
                     "n_entries", "n_executed", "n_exits",
                 ]))
 
