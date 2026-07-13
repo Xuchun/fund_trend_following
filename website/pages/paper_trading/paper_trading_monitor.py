@@ -3646,10 +3646,14 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         )
         if _dl1_cands:
             show_df(pd.DataFrame([{
-                "标的":         c["ticker"],
-                "突破强度":     (f"{(c['strength']-1)*100:+.3f}%" if c.get("strength") else "—"),
+                "标的":          c["ticker"],
+                "突破强度":      (f"{(c['strength']-1)*100:+.3f}%" if c.get("strength") else "—"),
                 "信号价（今收）": f"${c.get('signal_price', 0):.2f}" if c.get("signal_price") else "",
                 "参考止损":      f"${c.get('stop_price', 0):.2f}"   if c.get("stop_price")   else "",
+                "止损距离%":     f"{c['stop_distance_pct']*100:.2f}%" if c.get("stop_distance_pct") else "—",
+                "ATR%":          f"{c['atr_pct']*100:.2f}%"          if c.get("atr_pct")           else "—",
+                "ADV₆₀（M）":   f"${c['adv60_m']:.1f}M"             if c.get("adv60_m")           else "—",
+                "量比（今/均）":  f"{c['vol_ratio']:.2f}x"           if c.get("vol_ratio")          else "—",
                 "股数":          c.get("shares", ""),
                 "风险% NAV":     f"{c['trade_risk']*100:.2f}%" if c.get("trade_risk") else "",
                 "状态":          _dl1_rejection_label.get(c.get("rejection"), c.get("rejection", "✅ 已选入")),
