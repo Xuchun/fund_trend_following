@@ -3590,7 +3590,7 @@ with tab2:
         st.info("ℹ️ ib_state.json 尚未生成，显示初始状态（$200K，0 持仓）。")
         _m2 = {
             "schema_version": 1, "method": "ib_paper_trading",
-            "debug_start_date": "2026-06-19", "live_start_date": "2026-07-01",
+            "debug_start_date": "2026-06-19", "live_start_date": "2026-08-01",
             "initial_capital": 200000.0, "currency": "USD",
             "last_update_date": None, "nav": 200000.0, "cash": 200000.0,
             "account_summary": {}, "positions": [], "closed_trades": [],
