@@ -2005,15 +2005,15 @@ def main() -> None:
             # cash for the next signal in line without needing a separate backup list.
             for sig in candidates:
                 new_pending.append({
-                    "ticker":       sig["ticker"],
-                    "signal_date":  str(today),
-                    "signal_price": sig["signal_price"],
-                    "stop_price":   sig["stop_loss"],
-                    "shares":       sig["shares"],
-                    "atr":          sig["atr"],
-                    "strength":     sig["strength"],
-                    "trade_risk":   sig["trade_risk"],
-                    "notional":     sig["notional"],
+                    "ticker":          sig["ticker"],
+                    "signal_date":     str(today),
+                    "signal_price":    sig["signal_price"],
+                    "stop_price":      sig["stop_loss"],
+                    "shares":          sig["shares"],
+                    "atr":             sig["atr"],
+                    "signal_strength": sig["strength"],
+                    "trade_risk":      sig["trade_risk"],
+                    "notional":        sig["notional"],
                 })
                 log.info(f"  PENDING {sig['ticker']} @ signal ${sig['signal_price']:.2f}  "
                          f"stop=${sig['stop_loss']:.2f}  shares={sig['shares']:,}  "
