@@ -1519,15 +1519,15 @@ def run_retry() -> None:
         for sig in retry_candidates:
             if sig["ticker"] not in existing_tickers:
                 state.setdefault("pending_entries", []).append({
-                    "ticker":       sig["ticker"],
-                    "signal_date":  str(scan_date),
-                    "signal_price": sig["signal_price"],
-                    "stop_price":   sig["stop_loss"],
-                    "shares":       sig["shares"],
-                    "atr":          round(sig["atr"], 4),
-                    "strength":     round(sig["strength"], 4),
-                    "trade_risk":   round(sig["trade_risk"], 4),
-                    "notional":     round(sig["notional"], 2),
+                    "ticker":          sig["ticker"],
+                    "signal_date":     str(scan_date),
+                    "signal_price":    sig["signal_price"],
+                    "stop_price":      sig["stop_loss"],
+                    "shares":          sig["shares"],
+                    "atr":             round(sig["atr"], 4),
+                    "signal_strength": round(sig["strength"], 4),
+                    "trade_risk":      round(sig["trade_risk"], 4),
+                    "notional":        round(sig["notional"], 2),
                 })
                 log.info(
                     f"  RETRY ENTRY added: {sig['ticker']} @ ${sig['signal_price']:.2f} "
