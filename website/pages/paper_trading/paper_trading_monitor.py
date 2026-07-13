@@ -3606,7 +3606,7 @@ with tab2:
     _m2_cash       = _m2.get("cash", _m2_init_cap)
     _m2_orders_hist = _m2.get("orders_history", [])
     _m2_today_sig  = _m2.get("today_signals", {})
-    _m2_live_start = _m2.get("live_start_date", "2026-07-01")
+    _m2_live_start = _m2.get("live_start_date", "2026-08-01")
     _m2_debug_start = _m2.get("debug_start_date", "2026-06-19")
     _m2_ib_summary = _m2.get("account_summary", {})
 
