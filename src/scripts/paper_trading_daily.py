@@ -267,6 +267,9 @@ def execute_pending_exits(
             "highest_high":       sig.get("highest_high", sig["entry_price"]),  # MFE proxy; needed for overfitting Section 八
             "lowest_low":         sig.get("lowest_low", sig["entry_price"]),    # MAE proxy
             "atr_at_entry":       sig.get("atr_at_entry", 0.0),
+            "stop_distance_pct":  round(
+                (sig["entry_price"] - sig["stop_loss"]) / sig["entry_price"], 6
+            ) if sig["entry_price"] > 0 else 0.0,
             "trail_stop_at_exit": sig.get("trail_stop_at_exit", 0.0),
             "atr_at_exit":        sig.get("atr_at_exit", 0.0),
             "exit_commission":    round(exit_commission, 2),
