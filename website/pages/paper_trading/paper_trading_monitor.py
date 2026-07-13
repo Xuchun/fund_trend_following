@@ -3611,17 +3611,24 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         )
         if _dl1_sig:
             show_df(pd.DataFrame([{
-                "日期":           s["date"],
-                "Regime":         s.get("regime", ""),
-                "SPY收盘":        s.get("spy_close"),
-                "原始突破数":     s.get("n_raw_breakouts"),  # 通过个股过滤器的总突破数
-                "热度拦截":       s.get("n_heat_blocked"),   # 被组合热度限制拦截
-                "现金拦截":       s.get("n_cash_blocked"),   # 被现金不足拦截
-                "相关性减仓":     s.get("n_corr_reduced"),   # 触发相关性减半（仍执行）
-                "候选信号数":     s.get("n_candidates"),     # 通过全部约束的信号数
-                "当日开仓信号":   s.get("n_entries"),        # 保存为 pending
-                "当日已执行":     s.get("n_executed"),       # T+1 开盘实际成交
-                "平仓数":         s.get("n_exits"),
+                "日期":              s["date"],
+                "Regime":            s.get("regime", ""),
+                "SPY收盘":           s.get("spy_close"),
+                "SPY%偏离SMA200":    s.get("spy_pct_above_sma200"),
+                "价格过滤":          s.get("n_price_filtered"),    # 未达到 min_price
+                "ADV过滤":           s.get("n_adv_filtered"),      # ADV₆₀ < $60M
+                "无突破信号":        s.get("n_breakout_filtered"), # 未突破200日高
+                "ATR无效":           s.get("n_atr_filtered"),      # ATR为零或NaN
+                "止损距离不足":      s.get("n_stop_dist_filtered"),# 止损距离 < min
+                "成交量不足":        s.get("n_volume_filtered"),   # 量 < 1.5×均量
+                "原始突破数":        s.get("n_raw_breakouts"),     # 通过全部个股过滤器
+                "热度拦截":          s.get("n_heat_blocked"),      # 被组合热度限制拦截
+                "现金拦截":          s.get("n_cash_blocked"),      # 被现金不足拦截
+                "相关性减仓":        s.get("n_corr_reduced"),      # 触发相关性减半（仍执行）
+                "候选信号数":        s.get("n_candidates"),        # 通过全部约束的信号数
+                "当日开仓信号":      s.get("n_entries"),           # 保存为 pending
+                "当日已执行":        s.get("n_executed"),          # T+1 开盘实际成交
+                "平仓数":            s.get("n_exits"),
             } for s in reversed(_dl1_sig)]), width="stretch", hide_index=True)
         else:
             st.info("暂无数据")
