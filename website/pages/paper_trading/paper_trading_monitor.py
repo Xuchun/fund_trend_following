@@ -1142,7 +1142,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         unsafe_allow_html=True,
     )
 
-    c1, c2, c3, c4, c5, c6, c7, c8 = st.columns(8)
+    c1, c2, c3, c4, c5, c6, c7, c8, c9 = st.columns(9)
 
     def _colored_metric(col, label, value_str, is_positive, sub=None):
         if is_positive is None:
