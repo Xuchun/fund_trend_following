@@ -1131,6 +1131,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         _latest_date      = "—"
     _daily_chg_pct = (_latest_close_nav / _prev_nav - 1) * 100 if _prev_nav > 0 else 0.0
 
+    # SPY 每日变化
+    _spy_daily_chg_pct = 0.0
+    if _spy_df is not None and len(_spy_df) >= 2:
+        _spy_daily_chg_pct = (float(_spy_df["Close"].iloc[-1]) / float(_spy_df["Close"].iloc[-2]) - 1) * 100
+
     # 去掉 st.metric() 数值的粗体，与自定义指标保持一致
     st.markdown(
         "<style>[data-testid='stMetricValue']{font-weight:400!important;}</style>",
