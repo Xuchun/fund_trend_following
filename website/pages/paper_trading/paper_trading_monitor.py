@@ -3703,17 +3703,17 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         data=_build_method_zip(_m1, "m1"),
         file_name=f"m1_paper_trading_{_date_cls.today().isoformat()}.zip",
         mime="application/zip",
-        help=(
-            "包含（CSV + 完整JSON）：\n"
-            "• m1_nav_history.csv — 每日 NAV\n"
-            "• m1_entry_history.csv — 所有开仓记录（持仓中 + 已平仓）\n"
-            "• m1_closed_trades.csv — 已平仓记录（含 pnl_r、signal_strength、stop_distance_pct、lowest_low/MAE、entry_regime、exit_regime）\n"
-            "• m1_signals_history.csv — 每日信号漏斗计数（含各过滤器拒绝数、spy_pct_above_sma200）\n"
-            "• m1_all_candidate_signals.csv — 历史每日突破候选明细（含拒绝原因、止损距离%、ATR%、ADV₆₀、量比）\n"
-            "• m1_daily_entry_signals.csv — 历史每日通过热度筛选的入场信号\n"
-            "• m1_open_positions.csv — 当前持仓\n"
-            "• backtest_reference_metrics.json / trades.csv / nav.csv — 回测基准数据"
-        ),
+    )
+    st.caption(
+        "ZIP 包含（CSV + 完整 JSON）：\n\n"
+        "• **m1_nav_history.csv** — 每日 NAV\n\n"
+        "• **m1_entry_history.csv** — 所有开仓记录（持仓中 + 已平仓）\n\n"
+        "• **m1_closed_trades.csv** — 已平仓记录（含 pnl_r、signal_strength、**stop_distance_pct**、lowest_low/MAE、entry_regime、exit_regime）\n\n"
+        "• **m1_signals_history.csv** — 每日信号漏斗计数（含各过滤器拒绝数：价格/ADV/突破/ATR/止损距离/成交量，及 **spy_pct_above_sma200**）\n\n"
+        "• **m1_all_candidate_signals.csv** — 历史每日突破候选明细（含拒绝原因、**止损距离%**、**ATR%**、**ADV₆₀**、**量比**）\n\n"
+        "• **m1_daily_entry_signals.csv** — 历史每日通过热度筛选的入场信号\n\n"
+        "• **m1_open_positions.csv** — 当前持仓\n\n"
+        "• **backtest_reference_metrics.json / trades.csv / nav.csv** — 回测基准数据"
     )
 
 
