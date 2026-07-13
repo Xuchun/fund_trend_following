@@ -228,6 +228,7 @@ def _build_method_zip(data: dict, method: str) -> bytes:
                 _rows_to_csv(_all_cands, [
                     "date", "ticker", "signal_price", "stop_price", "shares",
                     "trade_risk", "strength", "rejection", "corr_with",
+                    "stop_distance_pct", "atr_pct", "adv60_m", "vol_ratio",
                 ]))
 
         # Historical per-day entry signals with breakout strength
