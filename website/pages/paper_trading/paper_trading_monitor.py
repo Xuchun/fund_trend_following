@@ -1288,9 +1288,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             },
         )
         st.markdown(
-            "<span style='color:#111111'>💡 **风险% NAV**：若该持仓触及止损被迫平仓，预计亏损金额占当前总净值（NAV）的百分比。"
+            "<p style='color:#111111;margin-top:6px'>💡 <b>风险% NAV</b>：若该持仓触及止损被迫平仓，预计亏损金额占当前总净值（NAV）的百分比。"
             "计算方式 = （入场价 − 止损价）× 持股数量 ÷ NAV。"
-            "策略目标每笔不超过 **1% NAV**，组合总风险不超过 **10% NAV**。</span>",
+            "策略目标每笔不超过 <b>1% NAV</b>，组合总风险不超过 <b>10% NAV</b>。</p>",
             unsafe_allow_html=True,
         )
 
