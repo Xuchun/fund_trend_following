@@ -3449,7 +3449,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     _dbg3_buf = _dbg_io3.StringIO()
                     _dbg3_wide.to_csv(_dbg3_buf)
                     st.session_state["debug_dolvol_csv"]      = _dbg3_buf.getvalue()
-                    st.session_state["debug_dolvol_filename"] = f"universe_dolvol60_{_dbg3_last_date}.csv"
+                    st.session_state["debug_dolvol_filename"] = f"universe_dolvol61_{_dbg3_last_date}.csv"
                     _dbg3_msg = f"下载完成：{len(_dbg3_wide)} 个标的，{len(_dbg3_wide.columns)} 个交易日（截至 {_dbg3_last_date}）。"
                     if _dbg3_n_dropped:
                         _dbg3_msg += f"（另有 {_dbg3_n_dropped} 个标的 YF 无数据，已自动过滤）"
