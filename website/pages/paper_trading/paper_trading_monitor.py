@@ -3704,7 +3704,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         file_name=f"m1_paper_trading_{_date_cls.today().isoformat()}.zip",
         mime="application/zip",
     )
-    st.caption(
+    st.markdown(
         "ZIP 包含（CSV + 完整 JSON）：\n\n"
         "• **m1_nav_history.csv** — 每日 NAV\n\n"
         "• **m1_entry_history.csv** — 所有开仓记录（持仓中 + 已平仓）\n\n"
