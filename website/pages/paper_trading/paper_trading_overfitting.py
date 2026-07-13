@@ -60,10 +60,14 @@ if not ct.empty:
     for _col in ["entry_date", "exit_date", "signal_date", "detected_date"]:
         if _col in ct.columns:
             ct[_col] = pd.to_datetime(ct[_col], errors="coerce")
-    if "pnl_r" in ct.columns:
-        ct["pnl_r"] = pd.to_numeric(ct["pnl_r"], errors="coerce")
-    if "holding_days" in ct.columns:
-        ct["holding_days"] = pd.to_numeric(ct["holding_days"], errors="coerce")
+    for _col in ["pnl_r", "holding_days", "signal_strength", "atr_at_entry",
+                 "entry_price", "stop_loss", "highest_high", "lowest_low"]:
+        if _col in ct.columns:
+            ct[_col] = pd.to_numeric(ct[_col], errors="coerce")
+    # 如果 stop_distance_pct 未存入（旧版本数据），在页面里动态计算
+    if "stop_distance_pct" not in ct.columns and "entry_price" in ct.columns and "stop_loss" in ct.columns:
+        _ep = ct["entry_price"].replace(0, np.nan)
+        ct["stop_distance_pct"] = (ct["entry_price"] - ct["stop_loss"]) / _ep
 
 nav_df = pd.DataFrame()
 if _nav_h:
@@ -78,7 +82,10 @@ if _sig_h:
     sig_df = (pd.DataFrame(_sig_h)
               .assign(date=lambda d: pd.to_datetime(d["date"]))
               .sort_values("date"))
-    for _c in ["n_raw_breakouts","n_candidates","n_heat_blocked","n_cash_blocked","n_corr_reduced"]:
+    for _c in ["n_raw_breakouts","n_candidates","n_heat_blocked","n_cash_blocked","n_corr_reduced",
+               "n_price_filtered","n_adv_filtered","n_breakout_filtered",
+               "n_atr_filtered","n_stop_dist_filtered","n_volume_filtered",
+               "spy_pct_above_sma200"]:
         if _c in sig_df.columns:
             sig_df[_c] = pd.to_numeric(sig_df[_c], errors="coerce")
 
