@@ -3400,7 +3400,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     # ── 过去60个交易日每日成交额 ──────────────────────────────────────────────
     st.markdown(
-        f"**过去 60 个交易日每日成交额**（美元，= Volume × 原始收盘价），标的池共 **{len(_dbg_tickers):,}** 个标的。"
+        f"**过去 61 个交易日每日成交额**（美元，= Volume × 原始收盘价），标的池共 **{len(_dbg_tickers):,}** 个标的。"
     )
 
     if "debug_dolvol_csv" not in st.session_state:
