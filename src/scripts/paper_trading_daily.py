@@ -686,23 +686,27 @@ def scan_entries(
 
         # Min-price filter uses Raw_Close (unadjusted) — mirrors backtest entry.py row["close"]
         if float(today_df["Raw_Close"].iloc[-1]) < PARAMS.min_price:
+            n_price_filtered += 1
             continue
 
         # ADV filter — Raw_Close (unadjusted) × volume, shift(1), no look-ahead bias.
         # Mirrors backtest: compute_adv_from_ohlcv(df["close"], volume) uses raw close.
         adv = (today_df["Raw_Close"] * volume).shift(1).rolling(60).mean().iloc[-1]
         if pd.isna(adv) or adv < PARAMS.min_adv_m * 1e6:
+            n_adv_filtered += 1
             continue
 
         # Breakout signal — mirrors backtest entry.py
         rolling_high = compute_rolling_high(high, PARAMS.breakout_window)
         if not compute_breakout_signal(close, rolling_high).iloc[-1]:
+            n_breakout_filtered += 1
             continue
 
         # ATR
         atr_s   = compute_atr(high, low, close, PARAMS.atr_period)
         cur_atr = float(atr_s.iloc[-1])
         if pd.isna(cur_atr) or cur_atr <= 0:
+            n_atr_filtered += 1
             continue
 
         entry_px  = float(close.iloc[-1])
@@ -710,13 +714,16 @@ def scan_entries(
         stop_dist = entry_px - stop_px
 
         if stop_dist / entry_px < PARAMS.min_stop_distance_pct:
+            n_stop_dist_filtered += 1
             continue
 
         # Volume confirmation — shift(1) mirrors backtest indicators/adv.py compute_volume_ma:
         # volume_ma[t] = mean(volume[t-60:t-1]), excludes today
+        # Always compute _vol_ma so vol_ratio is available for overfitting analysis.
+        _vol_ma = volume.shift(1).rolling(60).mean().iloc[-1]
         if PARAMS.volume_filter_multiplier > 0:
-            vol_ma = volume.shift(1).rolling(60).mean().iloc[-1]
-            if not pd.isna(vol_ma) and float(volume.iloc[-1]) < PARAMS.volume_filter_multiplier * float(vol_ma):
+            if not pd.isna(_vol_ma) and float(volume.iloc[-1]) < PARAMS.volume_filter_multiplier * float(_vol_ma):
+                n_volume_filtered += 1
                 continue
 
         # ── All per-stock filters passed — count as a raw breakout candidate ──
