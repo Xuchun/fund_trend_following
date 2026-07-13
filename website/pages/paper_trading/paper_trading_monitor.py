@@ -3305,7 +3305,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         st.session_state["debug_raw_csv"] = None
         st.session_state["debug_raw_filename"] = ""
 
-    if st.button("准备数据（从 Yahoo Finance 下载最后一个交易日原始收盘价）", key="debug_raw_btn"):
+    if st.button("准备数据（从 Yahoo Finance 下载，约需 1-3 分钟）", key="debug_raw_btn"):
         if not _dbg_tickers:
             st.error("标的池为空，无法下载。")
         else:
@@ -3314,36 +3314,75 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             import yfinance as _dbg_yf2
 
             _dbg2_end   = _dbg_dt2.date.today()
-            _dbg2_start = _dbg2_end - _dbg_dt2.timedelta(days=10)  # 多取几天确保拿到最后一个交易日
+            _dbg2_start_long  = _dbg2_end - _dbg_dt2.timedelta(days=330)  # 确保201个交易日
+            _dbg2_start_short = _dbg2_end - _dbg_dt2.timedelta(days=10)   # 仅取最后一日
 
-            with st.spinner(f"正在从 Yahoo Finance 下载 {len(_dbg_tickers):,} 个标的的原始收盘价…"):
+            with st.spinner(f"正在从 Yahoo Finance 下载 {len(_dbg_tickers):,} 个标的的数据，请稍候…"):
                 try:
+                    # ── 复权数据：201日最高价 + 最后1日复权收盘价 ──────────────
+                    _dbg2_adj = _dbg_yf2.download(
+                        _dbg_tickers,
+                        start=str(_dbg2_start_long),
+                        end=str(_dbg2_end + _dbg_dt2.timedelta(days=1)),
+                        auto_adjust=True,
+                        progress=False,
+                        threads=True,
+                    )
+                    if isinstance(_dbg2_adj.columns, pd.MultiIndex):
+                        _dbg2_high201     = _dbg2_adj["High"].tail(201)
+                        _dbg2_adj_close1  = _dbg2_adj["Close"].tail(1)
+                    else:
+                        _dbg2_high201     = _dbg2_adj[["High"]].tail(201)
+                        _dbg2_adj_close1  = _dbg2_adj[["Close"]].tail(1)
+
+                    # ── 未复权数据：最后1日原始收盘价 ──────────────────────────
                     _dbg2_raw = _dbg_yf2.download(
                         _dbg_tickers,
-                        start=str(_dbg2_start),
+                        start=str(_dbg2_start_short),
                         end=str(_dbg2_end + _dbg_dt2.timedelta(days=1)),
                         auto_adjust=False,
                         progress=False,
                         threads=True,
                     )
                     if isinstance(_dbg2_raw.columns, pd.MultiIndex):
-                        _dbg2_close = _dbg2_raw["Close"].dropna(how="all").tail(1)
+                        _dbg2_raw_close1 = _dbg2_raw["Close"].dropna(how="all").tail(1)
                     else:
-                        _dbg2_close = _dbg2_raw[["Close"]].dropna(how="all").tail(1)
+                        _dbg2_raw_close1 = _dbg2_raw[["Close"]].dropna(how="all").tail(1)
 
-                    _dbg2_last_date = _dbg2_close.index[-1].strftime("%Y-%m-%d")
-                    # 转置：行=ticker，列=日期；过滤全 NaN 行
-                    _dbg2_wide = _dbg2_close.T.copy()
+                    # ── 最后交易日日期 ──────────────────────────────────────────
+                    _dbg2_last_date = (
+                        _dbg2_adj_close1.index[-1].strftime("%Y-%m-%d")
+                        if hasattr(_dbg2_adj_close1.index[-1], "strftime")
+                        else str(_dbg2_adj_close1.index[-1])
+                    )
+
+                    # ── 构建宽表：行=ticker，列=High日期×201 + adj_close + raw_close ──
+                    _dbg2_wide = _dbg2_high201.T.copy()
                     _dbg2_wide.index.name = "ticker"
-                    _dbg2_wide.columns = [_dbg2_last_date]
+                    _dbg2_wide.columns = [
+                        c.strftime("%Y-%m-%d") if hasattr(c, "strftime") else str(c)
+                        for c in _dbg2_wide.columns
+                    ]
+                    # 追加复权收盘价列
+                    _dbg2_ac_wide = _dbg2_adj_close1.T.copy()
+                    _dbg2_ac_wide.index.name = "ticker"
+                    _dbg2_wide[f"adj_close_{_dbg2_last_date}"] = _dbg2_ac_wide.iloc[:, 0]
+                    # 追加原始收盘价列
+                    _dbg2_rc_wide = _dbg2_raw_close1.T.copy()
+                    _dbg2_rc_wide.index.name = "ticker"
+                    _dbg2_wide[f"raw_close_{_dbg2_last_date}"] = _dbg2_rc_wide.iloc[:, 0]
+
                     _dbg2_n_before  = len(_dbg2_wide)
                     _dbg2_wide      = _dbg2_wide.dropna(how="all")
                     _dbg2_n_dropped = _dbg2_n_before - len(_dbg2_wide)
                     _dbg2_buf = _dbg_io2.StringIO()
                     _dbg2_wide.to_csv(_dbg2_buf)
                     st.session_state["debug_raw_csv"]      = _dbg2_buf.getvalue()
-                    st.session_state["debug_raw_filename"] = f"universe_raw_close_{_dbg2_last_date}.csv"
-                    _dbg2_msg = f"下载完成：{len(_dbg2_wide)} 个标的，最后交易日 {_dbg2_last_date}。"
+                    st.session_state["debug_raw_filename"] = f"universe_high_close_{_dbg2_last_date}.csv"
+                    _dbg2_msg = (
+                        f"下载完成：{len(_dbg2_wide)} 个标的，"
+                        f"{len(_dbg2_wide.columns)-2} 个交易日最高价 + 复权收盘价 + 原始收盘价（{_dbg2_last_date}）。"
+                    )
                     if _dbg2_n_dropped:
                         _dbg2_msg += f"（另有 {_dbg2_n_dropped} 个标的 YF 无数据，已自动过滤）"
                     st.success(_dbg2_msg)
@@ -3352,7 +3391,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     if st.session_state.get("debug_raw_csv"):
         st.download_button(
-            label="点击下载 CSV（原始收盘价）",
+            label="点击下载 CSV",
             data=st.session_state["debug_raw_csv"],
             file_name=st.session_state["debug_raw_filename"],
             mime="text/csv",
