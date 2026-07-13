@@ -852,10 +852,16 @@ def scan_entries(
 
     # signals is already in strength order (pre_candidates was sorted by strength)
     scan_stats = {
-        "n_raw_breakouts":    n_raw_breakouts,
-        "n_heat_blocked":     n_heat_blocked,
-        "n_corr_reduced":     n_corr_reduced,
-        "all_raw_candidates": all_raw_candidates,   # full funnel; displayed in 四
+        "n_raw_breakouts":     n_raw_breakouts,
+        "n_heat_blocked":      n_heat_blocked,
+        "n_corr_reduced":      n_corr_reduced,
+        "n_price_filtered":    n_price_filtered,
+        "n_adv_filtered":      n_adv_filtered,
+        "n_breakout_filtered": n_breakout_filtered,
+        "n_atr_filtered":      n_atr_filtered,
+        "n_stop_dist_filtered": n_stop_dist_filtered,
+        "n_volume_filtered":   n_volume_filtered,
+        "all_raw_candidates":  all_raw_candidates,   # full funnel; displayed in 四
     }
     return signals, scan_stats
 
