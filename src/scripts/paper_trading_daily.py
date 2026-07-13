@@ -471,7 +471,6 @@ def execute_pending_entries(
             "entry_price": round(entry_px_slip, 4),
             "stop_price":  stop_px,
             "atr":         _atr,
-            "strength":    sig.get("strength", 0.0),
             "shares":      shares,
             "commission":  round(commission, 2),
             "trade_risk":  round(_trade_risk_pct, 4),
