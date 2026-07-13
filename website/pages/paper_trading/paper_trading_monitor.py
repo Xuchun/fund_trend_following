@@ -3429,11 +3429,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         threads=True,
                     )
                     if isinstance(_dbg3_raw.columns, pd.MultiIndex):
-                        _dbg3_close  = _dbg3_raw["Close"].tail(60)
-                        _dbg3_volume = _dbg3_raw["Volume"].tail(60)
+                        _dbg3_close  = _dbg3_raw["Close"].tail(61)
+                        _dbg3_volume = _dbg3_raw["Volume"].tail(61)
                     else:
-                        _dbg3_close  = _dbg3_raw[["Close"]].tail(60)
-                        _dbg3_volume = _dbg3_raw[["Volume"]].tail(60)
+                        _dbg3_close  = _dbg3_raw[["Close"]].tail(61)
+                        _dbg3_volume = _dbg3_raw[["Volume"]].tail(61)
 
                     _dbg3_dolvol = (_dbg3_close * _dbg3_volume).dropna(how="all")
                     _dbg3_wide = _dbg3_dolvol.T.copy()
