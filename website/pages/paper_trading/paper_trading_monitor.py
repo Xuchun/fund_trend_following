@@ -3237,7 +3237,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             import yfinance as _dbg_yf
 
             _dbg_end   = _dbg_dt.date.today()
-            _dbg_start = _dbg_end - _dbg_dt.timedelta(days=420)  # 多取以确保满足250个交易日
+            _dbg_start = _dbg_end - _dbg_dt.timedelta(days=330)  # 多取以确保满足201个交易日
 
             with st.spinner(f"正在从 Yahoo Finance 下载 {len(_dbg_tickers):,} 个标的的数据，请稍候…"):
                 try:
