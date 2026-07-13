@@ -766,18 +766,26 @@ def scan_entries(
         trade_risk = stop_dist * shares / nav
         strength   = float(compute_breakout_strength(close, rolling_high).iloc[-1])
 
+        _vol_ratio = (
+            float(volume.iloc[-1]) / float(_vol_ma)
+            if not pd.isna(_vol_ma) and float(_vol_ma) > 0 else None
+        )
         pre_candidates.append({
-            "ticker":          ticker,
-            "entry_px":        entry_px,
-            "stop_px":         stop_px,
-            "stop_dist":       stop_dist,
-            "shares":          shares,
-            "cur_atr":         cur_atr,
-            "notional":        notional,
-            "trade_risk":      trade_risk,
-            "strength":        strength,
-            "_corr_triggered": _corr_triggered,
-            "_corr_with":      _corr_with_ticker,
+            "ticker":              ticker,
+            "entry_px":            entry_px,
+            "stop_px":             stop_px,
+            "stop_dist":           stop_dist,
+            "shares":              shares,
+            "cur_atr":             cur_atr,
+            "notional":            notional,
+            "trade_risk":          trade_risk,
+            "strength":            strength,
+            "_corr_triggered":     _corr_triggered,
+            "_corr_with":          _corr_with_ticker,
+            "stop_distance_pct":   stop_dist / entry_px,
+            "atr_pct":             cur_atr / entry_px,
+            "adv60_m":             adv / 1e6,
+            "vol_ratio":           _vol_ratio,
         })
 
     # ── Phase 2: sort by breakout strength, then apply heat check ─────────────
