@@ -3249,11 +3249,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         progress=False,
                         threads=True,
                     )
-                    # 取 Close，保留最近250个交易日
+                    # 取 High，保留最近201个交易日
                     if isinstance(_dbg_raw.columns, pd.MultiIndex):
-                        _dbg_close = _dbg_raw["Close"].tail(250)
+                        _dbg_close = _dbg_raw["High"].tail(201)
                     else:
-                        _dbg_close = _dbg_raw[["Close"]].tail(250)
+                        _dbg_close = _dbg_raw[["High"]].tail(201)
                     # 转置：行=ticker，列=日期；过滤全 NaN 行（YF 无数据的标的）
                     _dbg_wide = _dbg_close.T.copy()
                     _dbg_wide.index.name = "ticker"
@@ -3267,7 +3267,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     _dbg_buf = _dbg_io.StringIO()
                     _dbg_wide.to_csv(_dbg_buf)
                     st.session_state["debug_close_csv"]      = _dbg_buf.getvalue()
-                    st.session_state["debug_close_filename"] = f"universe_close_{_dbg_end}.csv"
+                    st.session_state["debug_close_filename"] = f"universe_high_{_dbg_end}.csv"
                     _dbg_msg = f"下载完成：{len(_dbg_wide)} 个标的，{len(_dbg_wide.columns)} 个交易日。"
                     if _dbg_n_dropped:
                         _dbg_msg += f"（另有 {_dbg_n_dropped} 个标的 YF 无数据，已自动过滤）"
