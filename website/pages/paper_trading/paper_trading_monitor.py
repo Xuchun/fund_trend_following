@@ -1159,17 +1159,18 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         )
 
     _colored_metric(c1, "每日净值变化（%）", f"{_daily_chg_pct:+.2f}%", _daily_chg_pct >= 0)
-    _colored_metric(c2, "最新净值", f"${_m1_nav/1e3:,.0f}K", None)
-    _colored_metric(c3, "净值浮盈/亏（%）", f"{_nav_pnl_pct:+.2f}%", _nav_pnl_pct >= 0)
-    _colored_metric(c4, "净值浮盈/亏（$）", f"${_nav_pnl_usd:+,.0f}", _nav_pnl_usd >= 0)
+    _colored_metric(c2, "每日SPY变化（%）", f"{_spy_daily_chg_pct:+.2f}%", _spy_daily_chg_pct >= 0)
+    _colored_metric(c3, "最新净值", f"${_m1_nav/1e3:,.0f}K", None)
+    _colored_metric(c4, "净值浮盈/亏（%）", f"{_nav_pnl_pct:+.2f}%", _nav_pnl_pct >= 0)
+    _colored_metric(c5, "净值浮盈/亏（$）", f"${_nav_pnl_usd:+,.0f}", _nav_pnl_usd >= 0)
     _dd_sub = "当前在历史高点" if _cur_dd >= -0.01 else f"峰值 ${_peak_nav/1e3:,.0f}K"
-    _colored_metric(c5, "净值从峰值回撤", f"{_cur_dd:.2f}%", _cur_dd >= -0.01, sub=_dd_sub)
-    c6.metric("持仓数量", f"{len(_m1_ok)} 只",
+    _colored_metric(c6, "净值从峰值回撤", f"{_cur_dd:.2f}%", _cur_dd >= -0.01, sub=_dd_sub)
+    c7.metric("持仓数量", f"{len(_m1_ok)} 只",
               delta=f"其中 {len(_m1_stop)} 只触止损" if _m1_stop else None,
               delta_color="inverse" if _m1_stop else "normal")
-    c7.metric("持仓市值", f"${_m1_mkt/1e3:,.0f}K",
+    c8.metric("持仓市值", f"${_m1_mkt/1e3:,.0f}K",
               delta=f"占 NAV {_m1_mkt/_m1_nav*100:.1f}%" if _m1_nav else None)
-    c8.metric("现金", f"${_m1_cash/1e3:,.0f}K")
+    c9.metric("现金", f"${_m1_cash/1e3:,.0f}K")
 
 
     # ── 最新交易日小结 ────────────────────────────────────────────────────────────
