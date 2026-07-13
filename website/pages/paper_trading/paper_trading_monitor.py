@@ -3407,7 +3407,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         st.session_state["debug_dolvol_csv"] = None
         st.session_state["debug_dolvol_filename"] = ""
 
-    if st.button("准备数据（从 Yahoo Finance 下载过去 60 个交易日成交额）", key="debug_dolvol_btn"):
+    if st.button("准备数据（从 Yahoo Finance 下载过去 61 个交易日成交额）", key="debug_dolvol_btn"):
         if not _dbg_tickers:
             st.error("标的池为空，无法下载。")
         else:
