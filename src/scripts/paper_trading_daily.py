@@ -55,7 +55,7 @@ def save_state(state: dict) -> None:
     log.info(f"State saved → {_PT_STATE}")
 
 
-_REQUIRED_PENDING_FIELDS = {"ticker", "signal_price", "atr", "signal_date", "strength"}
+_REQUIRED_PENDING_FIELDS = {"ticker", "signal_price", "atr", "signal_date", "signal_strength"}
 
 def validate_pending_entries(state: dict) -> None:
     """Raise ValueError if any pending_entry is missing required fields."""
