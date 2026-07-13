@@ -1657,6 +1657,14 @@ def main() -> None:
     spy_df    = pos_data.get("SPY")
     regime_ok = is_bull_regime(spy_df)
     spy_close = float(spy_df["Close"].iloc[-1]) if spy_df is not None and not spy_df.empty else None
+    _spy_sma200 = (
+        float(spy_df["Close"].rolling(PARAMS.regime_sma_window).mean().iloc[-1])
+        if spy_df is not None and len(spy_df) >= PARAMS.regime_sma_window else None
+    )
+    spy_pct_above_sma200 = (
+        round((spy_close / _spy_sma200 - 1) * 100, 4)
+        if (spy_close and _spy_sma200) else None
+    )
     log.info(f"  Regime: {'BULL ✅' if regime_ok else 'BEAR 🚫'}  SPY close: {f'${spy_close:.2f}' if spy_close else 'N/A'}")
 
     # Guard: if today has no market data (pre-market, weekend, holiday), abort without
