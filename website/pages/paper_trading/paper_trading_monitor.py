@@ -1253,7 +1253,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             "移动止盈":          p["trail_stop_live"],
             "浮盈(R)":           p["R"],
             "浮盈($)":           p["unreal_pnl"],
-            "风险%NAV":          round((p["entry_price"] - p["stop_loss"]) * p["shares"] / _m1_nav * 100, 3) if _m1_nav else 0,
+            "风险%NAV":          round(max(0.0, p["entry_price"] - max(p["stop_loss"], p["trail_stop_live"])) * p["shares"] / _m1_nav * 100, 3) if _m1_nav else 0,
             "持仓天数":          (_today_pos - _dt_pos.date.fromisoformat(p["entry_date"])).days,
             "当前市值":          p["mkt_value"] / 1000,
             "入场日":            p["entry_date"],
