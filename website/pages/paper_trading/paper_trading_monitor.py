@@ -1272,6 +1272,11 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 )
             return s
 
+        st.markdown(
+            "💡 **风险% NAV**：若该持仓触及止损被迫平仓，预计亏损金额占当前总净值（NAV）的百分比。"
+            "计算方式 = （入场价 − 止损价）× 持股数量 ÷ NAV。"
+            "策略目标每笔不超过 **1% NAV**，组合总风险不超过 **10% NAV**。"
+        )
         show_df(
             _pos_df.style.apply(_style_pos, axis=None),
             column_config={
@@ -1286,11 +1291,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 "当前市值": st.column_config.NumberColumn(format="$%.0fK"),
                 "入场价":   st.column_config.NumberColumn(format="$%.2f"),
             },
-        )
-        st.markdown(
-            "💡 **风险% NAV**：若该持仓触及止损被迫平仓，预计亏损金额占当前总净值（NAV）的百分比。"
-            "计算方式 = （入场价 − 止损价）× 持股数量 ÷ NAV。"
-            "策略目标每笔不超过 **1% NAV**，组合总风险不超过 **10% NAV**。"
         )
 
         _sorted = sorted(_m1_ok, key=lambda x: x.get("R", 0), reverse=True)
