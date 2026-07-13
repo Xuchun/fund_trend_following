@@ -3251,16 +3251,28 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     )
                     # 取 High，保留最近201个交易日
                     if isinstance(_dbg_raw.columns, pd.MultiIndex):
-                        _dbg_close = _dbg_raw["High"].tail(201)
+                        _dbg_high  = _dbg_raw["High"].tail(201)
+                        _dbg_close_last = _dbg_raw["Close"].tail(1)
                     else:
-                        _dbg_close = _dbg_raw[["High"]].tail(201)
+                        _dbg_high  = _dbg_raw[["High"]].tail(201)
+                        _dbg_close_last = _dbg_raw[["Close"]].tail(1)
                     # 转置：行=ticker，列=日期；过滤全 NaN 行（YF 无数据的标的）
-                    _dbg_wide = _dbg_close.T.copy()
+                    _dbg_wide = _dbg_high.T.copy()
                     _dbg_wide.index.name = "ticker"
                     _dbg_wide.columns = [
                         c.strftime("%Y-%m-%d") if hasattr(c, "strftime") else str(c)
                         for c in _dbg_wide.columns
                     ]
+                    # 追加最后一个交易日收盘价到最后一列
+                    _dbg_last_date = (
+                        _dbg_close_last.index[-1].strftime("%Y-%m-%d")
+                        if hasattr(_dbg_close_last.index[-1], "strftime")
+                        else str(_dbg_close_last.index[-1])
+                    )
+                    _dbg_last_col = f"last_close_{_dbg_last_date}"
+                    _dbg_close_wide = _dbg_close_last.T.copy()
+                    _dbg_close_wide.index.name = "ticker"
+                    _dbg_wide[_dbg_last_col] = _dbg_close_wide.iloc[:, 0]
                     _dbg_n_before = len(_dbg_wide)
                     _dbg_wide = _dbg_wide.dropna(how="all")
                     _dbg_n_dropped = _dbg_n_before - len(_dbg_wide)
@@ -3268,7 +3280,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     _dbg_wide.to_csv(_dbg_buf)
                     st.session_state["debug_close_csv"]      = _dbg_buf.getvalue()
                     st.session_state["debug_close_filename"] = f"universe_high_{_dbg_end}.csv"
-                    _dbg_msg = f"下载完成：{len(_dbg_wide)} 个标的，{len(_dbg_wide.columns)} 个交易日。"
+                    _dbg_msg = f"下载完成：{len(_dbg_wide)} 个标的，{len(_dbg_wide.columns)-1} 个交易日最高价 + 1 列收盘价。"
                     if _dbg_n_dropped:
                         _dbg_msg += f"（另有 {_dbg_n_dropped} 个标的 YF 无数据，已自动过滤）"
                     st.success(_dbg_msg)
