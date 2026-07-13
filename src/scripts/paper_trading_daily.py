@@ -639,9 +639,15 @@ def scan_entries(
     signals: list[dict] = []
 
     # Rejection counters — stored in today_signals for future overfitting analysis
-    n_raw_breakouts = 0   # passed all per-stock filters; before portfolio constraints
-    n_corr_reduced  = 0   # correlation triggered size reduction (signal still accepted)
-    n_heat_blocked  = 0   # blocked by portfolio heat limit
+    n_raw_breakouts      = 0   # passed all per-stock filters; before portfolio constraints
+    n_corr_reduced       = 0   # correlation triggered size reduction (signal still accepted)
+    n_heat_blocked       = 0   # blocked by portfolio heat limit
+    n_price_filtered     = 0   # filtered by min_price
+    n_adv_filtered       = 0   # filtered by ADV₆₀
+    n_breakout_filtered  = 0   # no 200-day breakout signal
+    n_atr_filtered       = 0   # ATR invalid or zero
+    n_stop_dist_filtered = 0   # stop distance too small (< min_stop_distance_pct)
+    n_volume_filtered    = 0   # volume below 1.5× 60-day average
     # Note: no cash pre-filtering at signal time (mirrors backtest). Cash is checked
     # at T+1 execution so gap-filter failures free cash for the next signal in line.
 
