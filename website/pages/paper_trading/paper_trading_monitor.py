@@ -3298,7 +3298,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
 
     # ── 最后一个交易日原始收盘价 ──────────────────────────────────────────────
     st.markdown(
-        f"**最后一个交易日原始收盘价**（raw close，未复权），标的池共 **{len(_dbg_tickers):,}** 个标的。"
+        f"**过去 201 个交易日的每日复权最高价**，和**最后一个交易日的复权收盘价**，和**最后一个交易日原始收盘价**（raw close，未复权），标的池共 **{len(_dbg_tickers):,}** 个标的。"
     )
 
     if "debug_raw_csv" not in st.session_state:
