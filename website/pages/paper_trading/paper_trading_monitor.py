@@ -1437,7 +1437,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 )
             st.markdown(f"<span style='color:#111111'>**解读：** {_sec_verdict}。</span>", unsafe_allow_html=True)
             st.markdown(
-                "<span style='color:#111111;font-size:0.85em'>"
+                "<span style='color:#111111'>"
                 "判断标准：最大单一板块占 NAV **> 30%** = 敞口过高，板块系统性回撤时损失超出单只止损预期；"
                 "**HHI（赫芬达尔指数）> 0.25** = 集中度偏高，少数板块主导组合风险；"
                 "**HHI ≤ 0.25** = 集中度合理，各板块均衡分布。"
