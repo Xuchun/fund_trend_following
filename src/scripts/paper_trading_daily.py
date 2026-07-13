@@ -835,14 +835,18 @@ def scan_entries(
             "notional":     round(notional, 2),
         })
         all_raw_candidates.append({
-            "ticker":       ticker,
-            "signal_price": round(entry_px, 4),
-            "stop_price":   round(stop_px, 4),
-            "shares":       shares,
-            "trade_risk":   round(trade_risk, 4),
-            "strength":     round(strength, 4),
-            "rejection":    "corr_reduced" if _corr_triggered else None,
-            "corr_with":    _corr_with_ticker if _corr_triggered else None,
+            "ticker":            ticker,
+            "signal_price":      round(entry_px, 4),
+            "stop_price":        round(stop_px, 4),
+            "shares":            shares,
+            "trade_risk":        round(trade_risk, 4),
+            "strength":          round(strength, 4),
+            "rejection":         "corr_reduced" if _corr_triggered else None,
+            "corr_with":         _corr_with_ticker if _corr_triggered else None,
+            "stop_distance_pct": round(cand.get("stop_distance_pct", 0), 6),
+            "atr_pct":           round(cand.get("atr_pct", 0), 6),
+            "adv60_m":           round(cand.get("adv60_m", 0), 3),
+            "vol_ratio":         round(cand["vol_ratio"], 4) if cand.get("vol_ratio") is not None else None,
         })
         heat_used += trade_risk
 
