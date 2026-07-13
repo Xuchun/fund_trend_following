@@ -736,3 +736,261 @@ _score_caption = (
     f"已积累 {n_closed} 笔平仓，统计功效较强，以上评估可作为过拟合判断的主要依据。"
 )
 st.caption(_score_caption)
+
+st.markdown("---")
+
+# ── 十一、持仓天数深度分析 ──────────────────────────────────────────────────────
+st.subheader("十一、持仓天数深度分析")
+st.caption(
+    "趋势跟踪策略的盈利逻辑依赖「让利润奔跑」——回测平均持仓 **42 天**。"
+    "若模拟交易被显著更快地止损出场，说明策略在当前市场环境中无法建立趋势头寸，是过拟合或市场环境不匹配的重要信号。"
+)
+
+_bt_avg_hold = _bt_m.get("avg_holding_days")
+
+if n_closed >= _MIN_CHART and "holding_days" in ct.columns:
+    _hd = ct["holding_days"].dropna()
+
+    _hd_cols = st.columns(3)
+    _hd_cols[0].metric("模拟平均持仓", f"{_hd.mean():.1f} 天")
+    _hd_cols[1].metric("回测平均持仓", f"{_bt_avg_hold:.1f} 天" if _bt_avg_hold else "—")
+    _hd_cols[2].metric(
+        "速度差异",
+        f"{_hd.mean() / _bt_avg_hold:.1f}× 更快出场" if _bt_avg_hold and _hd.mean() < _bt_avg_hold else "—",
+        delta="⚠️ 止损更快" if _bt_avg_hold and _hd.mean() < _bt_avg_hold else None,
+        delta_color="inverse" if _bt_avg_hold and _hd.mean() < _bt_avg_hold else "off",
+    )
+
+    # Histogram: 模拟 vs 回测
+    _fig_hd = go.Figure()
+    if _bt_avg_hold and not _bt_trades.empty and "holding_days" in _bt_trades.columns:
+        _bt_hd = _bt_trades["holding_days"].dropna()
+        _fig_hd.add_trace(go.Histogram(
+            x=_bt_hd, name="回测（样本内）",
+            nbinsx=50, histnorm="probability density",
+            marker_color="rgba(31,119,180,0.4)",
+        ))
+    _fig_hd.add_trace(go.Histogram(
+        x=_hd, name="模拟（样本外）",
+        nbinsx=20, histnorm="probability density",
+        marker_color="rgba(214,39,40,0.7)",
+    ))
+    if _bt_avg_hold:
+        _fig_hd.add_vline(x=_bt_avg_hold, line_dash="dot", line_color="rgba(31,119,180,0.9)",
+                          line_width=2, annotation_text=f"回测均值 {_bt_avg_hold:.0f}天",
+                          annotation_position="top right")
+    _fig_hd.add_vline(x=float(_hd.mean()), line_dash="dot", line_color="rgba(214,39,40,0.9)",
+                      line_width=2, annotation_text=f"模拟均值 {_hd.mean():.0f}天",
+                      annotation_position="top left")
+    _fig_hd.update_layout(
+        barmode="overlay", height=320,
+        xaxis_title="持仓天数", yaxis_title="概率密度",
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        template="plotly_white", margin=dict(l=50, r=20, t=50, b=50),
+    )
+    st.plotly_chart(_fig_hd, width="stretch")
+
+    # By exit reason
+    if "exit_reason" in ct.columns:
+        _hd_by_er = (ct.groupby("exit_reason")["holding_days"]
+                       .agg(笔数="count", 均值="mean", 最短="min", 最长="max")
+                       .round(1).reset_index().rename(columns={"exit_reason": "退出原因"}))
+        show_df(_hd_by_er, width="stretch", hide_index=True)
+        st.caption(
+            "止损（stop_loss）出场的平均持仓天数远低于回测均值，说明当前市场波动超出策略ATR的预期范围，"
+            "价格在建立趋势前就触发了初始止损。"
+        )
+else:
+    st.info(f"需 ≥ {_MIN_CHART} 笔平仓且包含 holding_days 字段。")
+
+st.markdown("---")
+
+# ── 十二、入场集中度（批量建仓风险） ────────────────────────────────────────────
+st.subheader("十二、入场集中度（批量建仓风险）")
+st.caption(
+    "若多笔交易在同一天建仓，一旦当天市场开始下跌，所有仓位将同时承受亏损并同时止损出场。"
+    "这会使实盘资金曲线的波动远大于回测（回测假设信号均匀分布在历史时间轴上）。"
+    "高度集中的建仓日期是导致短期内累计亏损放大的重要因素。"
+)
+
+if n_closed >= _MIN_CHART and "entry_date" in ct.columns:
+    _entry_counts = (ct.groupby(ct["entry_date"].dt.date)
+                       .agg(入场笔数=("ticker", "count"),
+                            均值R=("pnl_r", "mean"))
+                       .reset_index()
+                       .rename(columns={"entry_date": "入场日期"}))
+    _entry_counts["均值R"] = _entry_counts["均值R"].round(3)
+
+    _fig_ec = go.Figure()
+    _colors_ec = ["#d62728" if r < 0 else "#2ca02c" for r in _entry_counts["均值R"]]
+    _fig_ec.add_trace(go.Bar(
+        x=_entry_counts["入场日期"].astype(str),
+        y=_entry_counts["入场笔数"],
+        marker_color=_colors_ec,
+        text=_entry_counts["均值R"].apply(lambda v: f"均值R {v:+.2f}"),
+        textposition="outside",
+        name="入场笔数",
+    ))
+    _fig_ec.update_layout(
+        xaxis_title="建仓日期", yaxis_title="入场笔数",
+        height=300, template="plotly_white",
+        margin=dict(l=50, r=20, t=40, b=60),
+        showlegend=False,
+    )
+    st.plotly_chart(_fig_ec, width="stretch")
+
+    _max_day_count = _entry_counts["入场笔数"].max()
+    _max_day = _entry_counts.loc[_entry_counts["入场笔数"].idxmax(), "入场日期"]
+    _conc_pct = _max_day_count / n_closed * 100
+
+    _conc_cols = st.columns(3)
+    _conc_cols[0].metric("集中度最高日",     str(_max_day))
+    _conc_cols[1].metric("当日建仓笔数",     f"{_max_day_count} 笔")
+    _conc_cols[2].metric("占全部平仓比",     f"{_conc_pct:.0f}%",
+                         delta="⚠️ 高度集中" if _conc_pct > 40 else "✅ 分散",
+                         delta_color="inverse" if _conc_pct > 40 else "normal")
+
+    show_df(_entry_counts, width="stretch", hide_index=True)
+    st.caption(
+        "回测中信号均匀分布在 20+ 年的历史区间，单日集中建仓的情况极少。"
+        "模拟交易启动初期大量信号同日触发，是造成短期亏损集中的结构性因素，"
+        "不完全等同于策略失效——但需要持续观察后续信号是否依然有效。"
+    )
+else:
+    st.info(f"需 ≥ {_MIN_CHART} 笔平仓数据。")
+
+st.markdown("---")
+
+# ── 十三、止损距离 vs 后续表现 ──────────────────────────────────────────────────
+st.subheader("十三、止损距离（ATR%）vs 后续表现")
+st.caption(
+    "止损距离% = (入场价 - 初始止损价) / 入场价 = stop_loss_multiplier × ATR / 价格。"
+    "若止损距离更大的信号反而获得更好的R，说明过紧的止损设置导致被市场噪声打出；"
+    "若止损距离大小与R无关，说明亏损来自方向性判断错误而非止损过紧。"
+)
+
+_has_sdc = (not ct.empty and "stop_distance_pct" in ct.columns
+            and ct["stop_distance_pct"].notna().any())
+
+if _has_sdc and n_closed >= _MIN_CHART:
+    _sdc = ct[["stop_distance_pct", "pnl_r", "exit_reason"]].dropna(subset=["stop_distance_pct", "pnl_r"])
+
+    if len(_sdc) >= _MIN_CHART:
+        # Scatter plot
+        _colors_sdc = [{"stop_loss": "#d62728", "trailing_stop": "#ff7f0e"}.get(r, "#2ca02c")
+                       for r in _sdc["exit_reason"]]
+        _fig_sdc = go.Figure()
+        _fig_sdc.add_trace(go.Scatter(
+            x=_sdc["stop_distance_pct"] * 100,
+            y=_sdc["pnl_r"],
+            mode="markers",
+            marker=dict(color=_colors_sdc, size=9, opacity=0.75,
+                        line=dict(color="white", width=0.5)),
+            hovertemplate="止损距离: %{x:.2f}%<br>R: %{y:+.3f}<extra></extra>",
+            showlegend=False,
+        ))
+        if len(_sdc) >= 5:
+            _sl_s, _int_s, _rv_s, _pv_s, _ = _stats.linregress(
+                _sdc["stop_distance_pct"], _sdc["pnl_r"])
+            _xs = np.linspace(_sdc["stop_distance_pct"].min(), _sdc["stop_distance_pct"].max(), 40)
+            _fig_sdc.add_trace(go.Scatter(
+                x=_xs * 100, y=_sl_s * _xs + _int_s,
+                mode="lines", name=f"趋势线（r={_rv_s:.2f}, p={_pv_s:.3f}）",
+                line=dict(color="#1f77b4", width=2, dash="dash"),
+            ))
+        _fig_sdc.add_hline(y=0, line_dash="dash", line_color="gray", opacity=0.4)
+        _fig_sdc.update_layout(
+            xaxis_title="止损距离（%）", yaxis_title="最终 R 倍数",
+            height=340, template="plotly_white",
+            margin=dict(l=50, r=20, t=40, b=50),
+        )
+        st.plotly_chart(_fig_sdc, width="stretch")
+
+        # Quartile table
+        if len(_sdc) >= 8:
+            try:
+                _sdc["q"] = pd.qcut(_sdc["stop_distance_pct"], q=4,
+                                    labels=["Q1小", "Q2", "Q3", "Q4大"], duplicates="drop")
+                _q_sdc = (_sdc.groupby("q", observed=True)["pnl_r"]
+                            .agg(笔数="count", 均值R="mean", 胜率=lambda x: (x > 0).mean())
+                            .reset_index().rename(columns={"q": "止损距离分组"}))
+                _q_sdc["均值R"] = _q_sdc["均值R"].round(3)
+                _q_sdc["胜率"]  = (_q_sdc["胜率"] * 100).round(1).astype(str) + "%"
+                show_df(_q_sdc, width="stretch", hide_index=True)
+            except Exception:
+                pass
+    else:
+        st.info(f"需至少 {_MIN_CHART} 笔有效数据，当前 {len(_sdc)} 笔。")
+else:
+    st.info(f"需 ≥ {_MIN_CHART} 笔平仓且包含 stop_distance_pct 字段。")
+
+st.markdown("---")
+
+# ── 十四、极端不利表现的统计解析 ────────────────────────────────────────────────
+st.subheader("十四、极端不利表现的统计解析")
+st.caption(
+    "当模拟交易表现远差于回测时，需要区分两种情况：**坏运气（随机波动）** vs **策略过拟合（系统性退化）**。"
+    "二项分布检验可量化「假设策略真实有效，当前糟糕表现出现的概率」。"
+    "概率越低，说明纯粹靠运气解释的可能性越小，过拟合风险越高。"
+)
+
+if n_closed >= 3 and "pnl_r" in ct.columns:
+    _r_ser  = ct["pnl_r"].dropna()
+    _n_n    = len(_r_ser)
+    _n_wins = int((_r_ser > 0).sum())
+    _bt_wr_val = _bt_m.get("win_rate", 0.391)
+
+    # Binomial probability: P(X <= n_wins | n, p_bt)
+    _p_binom = _stats.binom.cdf(_n_wins, _n_n, _bt_wr_val)
+    _expected_wins = _n_n * _bt_wr_val
+
+    _binom_cols = st.columns(4)
+    _binom_cols[0].metric("实际胜出笔数", f"{_n_wins} / {_n_n}")
+    _binom_cols[1].metric("回测期望胜出", f"{_expected_wins:.1f} 笔",
+                          help=f"在 {_n_n} 笔交易中，若回测胜率 {_bt_wr_val*100:.1f}% 成立，期望胜出 {_expected_wins:.1f} 笔")
+    _binom_cols[2].metric("二项概率 P(X ≤ 实际胜出)",
+                          f"{_p_binom*100:.4f}%",
+                          delta="⚠️ 极低概率" if _p_binom < 0.01 else "❌ 不可能是运气" if _p_binom < 0.001 else "尚在统计范围",
+                          delta_color="inverse" if _p_binom < 0.05 else "off",
+                          help="此概率越低，说明表现越难用「坏运气」解释，过拟合或系统性退化的可能性越高")
+    _binom_cols[3].metric("解读",
+                          "❌ 系统性问题" if _p_binom < 0.001 else
+                          "⚠️ 极度异常" if _p_binom < 0.01 else
+                          "⚠️ 低概率事件" if _p_binom < 0.05 else
+                          "📊 正常随机范围")
+
+    # Simulation: show the full binomial distribution
+    _k_range = list(range(0, _n_n + 1))
+    _binom_pmf = [_stats.binom.pmf(k, _n_n, _bt_wr_val) for k in _k_range]
+    _fig_binom = go.Figure()
+    _bar_colors = ["#d62728" if k <= _n_wins else "rgba(31,119,180,0.5)" for k in _k_range]
+    _fig_binom.add_trace(go.Bar(
+        x=_k_range, y=_binom_pmf,
+        marker_color=_bar_colors,
+        name="概率分布",
+        hovertemplate="胜出 %{x} 笔<br>概率: %{y:.4f}<extra></extra>",
+    ))
+    _fig_binom.add_vline(x=_n_wins, line_dash="solid", line_color="#d62728",
+                         line_width=2,
+                         annotation_text=f"实际 {_n_wins} 胜",
+                         annotation_position="top right")
+    _fig_binom.add_vline(x=_expected_wins, line_dash="dot", line_color="rgba(31,119,180,0.9)",
+                         line_width=2,
+                         annotation_text=f"期望 {_expected_wins:.1f} 胜",
+                         annotation_position="top left")
+    _fig_binom.update_layout(
+        xaxis_title=f"胜出笔数（共 {_n_n} 笔）",
+        yaxis_title="概率",
+        height=320, template="plotly_white",
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        margin=dict(l=50, r=20, t=50, b=50),
+    )
+    st.plotly_chart(_fig_binom, width="stretch")
+    st.caption(
+        f"蓝色柱：若策略真实有效（回测胜率 {_bt_wr_val*100:.1f}%），在 {_n_n} 笔交易中各胜出笔数的概率分布。"
+        f"红色柱：实际胜出 {_n_wins} 笔及更差情况的累计概率 = **{_p_binom*100:.4f}%**。"
+        "红色区域越小，说明当前表现越难以用「运气不好」来解释。"
+        "**重要提醒**：即使概率极低，在样本量不足 50 笔时，仍不宜做出策略彻底失效的最终判断。"
+    )
+else:
+    st.info(f"需 ≥ 3 笔平仓记录，当前 {n_closed} 笔。")
