@@ -1609,6 +1609,22 @@ def main() -> None:
 
     state = load_state()
 
+    # ── Duplicate-run guard ───────────────────────────────────────────────────
+    # Prevent re-downloading the full universe when the same target date was
+    # already fully processed. Only applies to auto-detected dates so that
+    # manual --date backfills are never blocked.
+    if not args.date:
+        _last_upd = state.get("last_update_date", "2000-01-01")
+        if today <= date.fromisoformat(_last_upd):
+            _now_utc_dup = datetime.now(timezone.utc)
+            state["last_no_op_utc"] = _now_utc_dup.strftime("%Y-%m-%dT%H:%M:%SZ")
+            save_state(state)
+            log.info(
+                f"=== Done (already processed {today}, "
+                f"last_update_date={_last_upd} — no-op) ==="
+            )
+            return
+
     # ── Non-trading day early exit ────────────────────────────────────────────
     # Exit early only when NYSE is genuinely closed today (holiday/weekend).
     # NOTE: Do NOT use "_et_today != today" — that comparison fires every time
