@@ -2108,7 +2108,7 @@ def main() -> None:
             "stop_price":   p["stop_price"],
             "shares":       p["shares"],
             "trade_risk":   p["trade_risk"],
-            "strength":     p.get("signal_strength"),
+            "strength":     p.get("signal_strength", p.get("strength")),
         } for p in new_pending],
     }
     state["today_signals"] = _today_sig
