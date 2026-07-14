@@ -1917,8 +1917,20 @@ def main() -> None:
             scan_tickers = []
             log.info("  BEAR regime — no new entry signals (no bear-exempt tickers configured)")
 
+        _univ_data: dict = {}
         if scan_tickers:
-            univ_data = fetch_price_data(scan_tickers, period=args.universe_period)
+            try:
+                _univ_data = fetch_price_data(scan_tickers, period=args.universe_period)
+            except Exception as _univ_dl_exc:
+                log.error(
+                    f"  Universe download failed "
+                    f"({type(_univ_dl_exc).__name__}: {_univ_dl_exc}). "
+                    "Skipping signal scan — exits and pending entries already complete."
+                )
+                scan_tickers = []  # prevent the scan block below from running
+
+        if scan_tickers:
+            univ_data = _univ_data
 
             # Remove from yf_persistent_unavailable any tickers that just succeeded
             # (auto-recovery: previously flagged but now downloadable again).
