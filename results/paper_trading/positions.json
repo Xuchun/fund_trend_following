@@ -4,8 +4,8 @@
   "start_date": "2026-06-19",
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
-  "last_update_date": "2026-07-10",
-  "cash": 57323.59671384,
+  "last_update_date": "2026-07-14",
+  "cash": 38973.84839095594,
   "positions": [
     {
       "ticker": "LTH",
@@ -14,11 +14,11 @@
       "shares": 270,
       "atr_at_entry": 1.2762,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 41.89,
-      "last_price_date": "2026-07-10",
+      "last_known_price": 41.57,
+      "last_price_date": "2026-07-14",
       "stop_loss": 34.3677,
-      "trail_stop": 38.54725,
-      "highest_high": 42.3,
+      "trail_stop": 38.778967,
+      "highest_high": 42.51,
       "lowest_low": 36.92,
       "sector": "Consumer Cyclical"
     },
@@ -29,8 +29,8 @@
       "shares": 150,
       "atr_at_entry": 2.0177,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 71.43,
-      "last_price_date": "2026-07-10",
+      "last_known_price": 69.67,
+      "last_price_date": "2026-07-14",
       "stop_loss": 62.2145,
       "trail_stop": 65.748603,
       "highest_high": 72.055,
@@ -44,11 +44,11 @@
       "shares": 7,
       "atr_at_entry": 28.1791,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 1375.76,
-      "last_price_date": "2026-07-10",
+      "last_known_price": 1371.0699,
+      "last_price_date": "2026-07-14",
       "stop_loss": 1309.0517,
-      "trail_stop": 1309.0517,
-      "highest_high": 1390.96,
+      "trail_stop": 1312.26387,
+      "highest_high": 1403.505,
       "lowest_low": 1328.95,
       "sector": "Industrials"
     },
@@ -59,8 +59,8 @@
       "shares": 17,
       "atr_at_entry": 20.0817,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 578.61,
-      "last_price_date": "2026-07-10",
+      "last_known_price": 576.87,
+      "last_price_date": "2026-07-14",
       "stop_loss": 546.3066,
       "trail_stop": 561.870484,
       "highest_high": 624.49,
@@ -77,12 +77,12 @@
       "entry_price": 132.7526,
       "shares": 76,
       "stop_loss": 119.6946,
-      "trail_stop": 123.104598,
-      "highest_high": 133.845,
+      "trail_stop": 124.34034,
+      "highest_high": 134.13,
       "atr_at_entry": 6.529,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 133.65,
-      "last_price_date": "2026-07-10",
+      "last_known_price": 133.96,
+      "last_price_date": "2026-07-14",
       "entry_commission": 3.03,
       "lowest_low": 132.695,
       "sector": "Healthcare"
@@ -101,8 +101,8 @@
       "highest_high": 71.26,
       "atr_at_entry": 1.4817,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 70.66,
-      "last_price_date": "2026-07-10",
+      "last_known_price": 70.42,
+      "last_price_date": "2026-07-14",
       "entry_commission": 2.92,
       "lowest_low": 68.02,
       "sector": "Financial Services"
@@ -117,14 +117,14 @@
       "entry_price": 253.3031,
       "shares": 38,
       "stop_loss": 240.7217,
-      "trail_stop": 242.485448,
+      "trail_stop": 242.824691,
       "highest_high": 261.635,
       "atr_at_entry": 6.2907,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 248.08,
-      "last_price_date": "2026-07-10",
+      "last_known_price": 244.78,
+      "last_price_date": "2026-07-14",
       "entry_commission": 2.89,
-      "lowest_low": 245.05,
+      "lowest_low": 243.31,
       "sector": "Healthcare"
     },
     {
@@ -137,13 +137,13 @@
       "entry_price": 197.9878,
       "shares": 48,
       "stop_loss": 190.5792,
-      "trail_stop": 187.663951,
+      "trail_stop": 187.842189,
       "highest_high": 199.05,
-      "lowest_low": 190.62,
+      "lowest_low": 187.56,
       "atr_at_entry": 3.7043,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 192.06,
-      "last_price_date": "2026-07-10",
+      "last_known_price": 188.67,
+      "last_price_date": "2026-07-14",
       "entry_commission": 2.85,
       "entry_regime": "BULL",
       "sector": "ETF"
@@ -158,13 +158,13 @@
       "entry_price": 54.2342,
       "shares": 176,
       "stop_loss": 51.2518,
-      "trail_stop": 51.060544,
+      "trail_stop": 51.224809,
       "highest_high": 55.61,
       "lowest_low": 52.49,
       "atr_at_entry": 1.4912,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 53.57,
-      "last_price_date": "2026-07-10",
+      "last_known_price": 54.73,
+      "last_price_date": "2026-07-14",
       "entry_commission": 2.86,
       "entry_regime": "BULL",
       "sector": "Real Estate"
@@ -179,13 +179,13 @@
       "entry_price": 139.6395,
       "shares": 67,
       "stop_loss": 129.3699,
-      "trail_stop": 125.597114,
+      "trail_stop": 125.749317,
       "highest_high": 141.1,
-      "lowest_low": 130.64,
+      "lowest_low": 128.68,
       "atr_at_entry": 5.1348,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 131.42,
-      "last_price_date": "2026-07-10",
+      "last_known_price": 131.27,
+      "last_price_date": "2026-07-14",
       "entry_commission": 2.81,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -202,11 +202,11 @@
       "stop_loss": 66.1751,
       "trail_stop": 65.677238,
       "highest_high": 72.66,
-      "lowest_low": 67.21,
+      "lowest_low": 66.47,
       "atr_at_entry": 2.1827,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 68.92,
-      "last_price_date": "2026-07-10",
+      "last_known_price": 67.3,
+      "last_price_date": "2026-07-14",
       "entry_commission": 2.77,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -221,13 +221,13 @@
       "entry_price": 64.8648,
       "shares": 142,
       "stop_loss": 62.2602,
-      "trail_stop": 61.696612,
+      "trail_stop": 61.751993,
       "highest_high": 65.53,
       "lowest_low": 64.19,
       "atr_at_entry": 1.3023,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 65.01,
-      "last_price_date": "2026-07-10",
+      "last_known_price": 64.75,
+      "last_price_date": "2026-07-14",
       "entry_commission": 2.76,
       "entry_regime": "BULL",
       "sector": "Real Estate"
@@ -244,14 +244,56 @@
       "stop_loss": 84.2766,
       "trail_stop": 80.9645,
       "highest_high": 91.0,
-      "lowest_low": 84.86,
+      "lowest_low": 81.5,
       "atr_at_entry": 3.3121,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 85.89,
-      "last_price_date": "2026-07-10",
+      "last_known_price": 84.09,
+      "last_price_date": "2026-07-14",
       "entry_commission": 2.75,
       "entry_regime": "BULL",
       "sector": "Healthcare"
+    },
+    {
+      "ticker": "CAKE",
+      "signal_date": "2026-07-10",
+      "signal_price": 82.76,
+      "signal_strength": 1.0226,
+      "entry_date": "2026-07-14",
+      "open_price": 82.49,
+      "entry_price": 82.5725,
+      "shares": 111,
+      "stop_loss": 77.2839,
+      "trail_stop": 74.6396,
+      "highest_high": 82.615,
+      "lowest_low": 80.28,
+      "atr_at_entry": 2.6443,
+      "R_at_backtest_end": 0.0,
+      "last_known_price": 80.44,
+      "last_price_date": "2026-07-14",
+      "entry_commission": 2.75,
+      "entry_regime": "BULL",
+      "sector": "Consumer Cyclical"
+    },
+    {
+      "ticker": "GTLS",
+      "signal_date": "2026-07-10",
+      "signal_price": 209.87,
+      "signal_strength": 1.0004,
+      "entry_date": "2026-07-14",
+      "open_price": 209.91,
+      "entry_price": 210.1199,
+      "shares": 44,
+      "stop_loss": 209.0095,
+      "trail_stop": 208.562936,
+      "highest_high": 210.1199,
+      "lowest_low": 209.91,
+      "atr_at_entry": 0.5552,
+      "R_at_backtest_end": 0.0,
+      "last_known_price": 209.91,
+      "last_price_date": "2026-07-14",
+      "entry_commission": 2.77,
+      "entry_regime": "BULL",
+      "sector": "Industrials"
     }
   ],
   "closed_trades": [
@@ -925,31 +967,112 @@
       "nav": 182826.26,
       "regime": "BULL",
       "spy_close": 754.95
-    }
-  ],
-  "pending_exits": [],
-  "pending_entries": [
-    {
-      "ticker": "CAKE",
-      "signal_date": "2026-07-10",
-      "signal_price": 82.76,
-      "stop_price": 77.4714,
-      "shares": 110,
-      "atr": 2.6443,
-      "trade_risk": 0.0032,
-      "notional": 9103.6,
-      "signal_strength": 1.0226
     },
     {
-      "ticker": "GTLS",
-      "signal_date": "2026-07-10",
-      "signal_price": 209.87,
-      "stop_price": 208.7597,
-      "shares": 44,
-      "atr": 0.5552,
-      "trade_risk": 0.0003,
-      "notional": 9234.28,
-      "signal_strength": 1.0004
+      "date": "2026-07-14",
+      "nav": 181687.27,
+      "regime": "BULL",
+      "spy_close": 751.83
+    }
+  ],
+  "pending_exits": [
+    {
+      "ticker": "IBB",
+      "exit_reason": "stop_loss",
+      "stop_used": 190.5792,
+      "shares": 48,
+      "open_price": 197.79,
+      "entry_price": 197.9878,
+      "entry_date": "2026-07-07",
+      "signal_date": "2026-07-02",
+      "signal_price": 195.7,
+      "signal_strength": 1.0238,
+      "stop_loss": 190.5792,
+      "atr_at_entry": 3.7043,
+      "highest_high": 199.05,
+      "lowest_low": 187.56,
+      "trail_stop_at_exit": 187.842189,
+      "atr_at_exit": 3.7359,
+      "detected_date": "2026-07-14",
+      "entry_commission": 2.85,
+      "entry_regime": "BULL"
+    },
+    {
+      "ticker": "PTGX",
+      "exit_reason": "stop_loss",
+      "stop_used": 129.3699,
+      "shares": 67,
+      "open_price": 139.5,
+      "entry_price": 139.6395,
+      "entry_date": "2026-07-08",
+      "signal_date": "2026-07-07",
+      "signal_price": 140.85,
+      "signal_strength": 1.0607,
+      "stop_loss": 129.3699,
+      "atr_at_entry": 5.1348,
+      "highest_high": 141.1,
+      "lowest_low": 128.68,
+      "trail_stop_at_exit": 125.749317,
+      "atr_at_exit": 5.1169,
+      "detected_date": "2026-07-14",
+      "entry_commission": 2.81,
+      "entry_regime": "BULL"
+    },
+    {
+      "ticker": "BBIO",
+      "exit_reason": "stop_loss",
+      "stop_used": 84.2766,
+      "shares": 101,
+      "open_price": 90.81,
+      "entry_price": 90.9008,
+      "entry_date": "2026-07-10",
+      "signal_date": "2026-07-09",
+      "signal_price": 90.17,
+      "signal_strength": 1.0616,
+      "stop_loss": 84.2766,
+      "atr_at_entry": 3.3121,
+      "highest_high": 91.0,
+      "lowest_low": 81.5,
+      "trail_stop_at_exit": 80.9645,
+      "atr_at_exit": 3.485,
+      "detected_date": "2026-07-14",
+      "entry_commission": 2.75,
+      "entry_regime": "BULL"
+    }
+  ],
+  "pending_entries": [
+    {
+      "ticker": "S",
+      "signal_date": "2026-07-14",
+      "signal_price": 19.92,
+      "stop_price": 17.9937,
+      "shares": 456,
+      "atr": 0.9632,
+      "signal_strength": 1.0457,
+      "trade_risk": 0.0048,
+      "notional": 9083.52
+    },
+    {
+      "ticker": "MUFG",
+      "signal_date": "2026-07-14",
+      "signal_price": 22.5,
+      "stop_price": 21.6464,
+      "shares": 404,
+      "atr": 0.4268,
+      "signal_strength": 1.0199,
+      "trade_risk": 0.0019,
+      "notional": 9090.0
+    },
+    {
+      "ticker": "GS",
+      "signal_date": "2026-07-14",
+      "signal_price": 1140.0,
+      "stop_price": 1073.2541,
+      "shares": 8,
+      "atr": 33.373,
+      "signal_strength": 1.0133,
+      "trade_risk": 0.0029,
+      "notional": 9120.0
     }
   ],
   "signals_history": [
@@ -3166,83 +3289,282 @@
           "strength": 1.0004
         }
       ]
+    },
+    {
+      "date": "2026-07-14",
+      "regime": "BULL",
+      "spy_close": 751.83,
+      "n_candidates": 3,
+      "n_entries": 3,
+      "n_executed": 2,
+      "n_exits": 3,
+      "n_raw_breakouts": 3,
+      "n_heat_blocked": 0,
+      "n_cash_blocked": 0,
+      "n_corr_reduced": 0,
+      "n_price_filtered": 228,
+      "n_adv_filtered": 552,
+      "n_breakout_filtered": 1290,
+      "n_atr_filtered": 0,
+      "n_stop_dist_filtered": 2,
+      "n_volume_filtered": 28,
+      "spy_pct_above_sma200": 8.6409,
+      "exits_executed": [],
+      "entries_executed": [
+        {
+          "ticker": "CAKE",
+          "signal_date": "2026-07-10",
+          "signal_price": 82.76,
+          "open_price": 82.49,
+          "entry_price": 82.5725,
+          "shares": 111,
+          "stop_price": 77.2839,
+          "trade_risk": 0.0032
+        },
+        {
+          "ticker": "GTLS",
+          "signal_date": "2026-07-10",
+          "signal_price": 209.87,
+          "open_price": 209.91,
+          "entry_price": 210.1199,
+          "shares": 44,
+          "stop_price": 209.0095,
+          "trade_risk": 0.0003
+        }
+      ],
+      "exit_signals": [
+        {
+          "ticker": "IBB",
+          "exit_reason": "stop_loss",
+          "stop_used": 190.5792,
+          "shares": 48
+        },
+        {
+          "ticker": "PTGX",
+          "exit_reason": "stop_loss",
+          "stop_used": 129.3699,
+          "shares": 67
+        },
+        {
+          "ticker": "BBIO",
+          "exit_reason": "stop_loss",
+          "stop_used": 84.2766,
+          "shares": 101
+        }
+      ],
+      "candidate_signals": [
+        {
+          "ticker": "S",
+          "signal_price": 19.92,
+          "stop_price": 17.9937,
+          "shares": 456,
+          "trade_risk": 0.0048,
+          "strength": 1.0457,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.096704,
+          "atr_pct": 0.048352,
+          "adv60_m": 129.111,
+          "vol_ratio": 1.7108
+        },
+        {
+          "ticker": "MUFG",
+          "signal_price": 22.5,
+          "stop_price": 21.6464,
+          "shares": 404,
+          "trade_risk": 0.0019,
+          "strength": 1.0199,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.037938,
+          "atr_pct": 0.018969,
+          "adv60_m": 61.569,
+          "vol_ratio": 1.6124
+        },
+        {
+          "ticker": "GS",
+          "signal_price": 1140.0,
+          "stop_price": 1073.2541,
+          "shares": 8,
+          "trade_risk": 0.0029,
+          "strength": 1.0133,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.058549,
+          "atr_pct": 0.029275,
+          "adv60_m": 2088.013,
+          "vol_ratio": 1.823
+        }
+      ],
+      "entry_signals": [
+        {
+          "ticker": "S",
+          "signal_price": 19.92,
+          "stop_price": 17.9937,
+          "shares": 456,
+          "trade_risk": 0.0048,
+          "strength": 1.0457
+        },
+        {
+          "ticker": "MUFG",
+          "signal_price": 22.5,
+          "stop_price": 21.6464,
+          "shares": 404,
+          "trade_risk": 0.0019,
+          "strength": 1.0199
+        },
+        {
+          "ticker": "GS",
+          "signal_price": 1140.0,
+          "stop_price": 1073.2541,
+          "shares": 8,
+          "trade_risk": 0.0029,
+          "strength": 1.0133
+        }
+      ]
     }
   ],
-  "last_update_utc": "2026-07-11T07:28:35Z",
+  "last_update_utc": "2026-07-14T23:59:00Z",
   "today_signals": {
-    "date": "2026-07-10",
+    "date": "2026-07-14",
     "regime": "BULL",
-    "spy_close": 754.95,
-    "n_candidates": 2,
-    "n_entries": 2,
-    "n_executed": 1,
-    "n_exits": 0,
-    "n_raw_breakouts": 2,
+    "spy_close": 751.83,
+    "n_candidates": 3,
+    "n_entries": 3,
+    "n_executed": 2,
+    "n_exits": 3,
+    "n_raw_breakouts": 3,
     "n_heat_blocked": 0,
     "n_cash_blocked": 0,
     "n_corr_reduced": 0,
+    "n_price_filtered": 228,
+    "n_adv_filtered": 552,
+    "n_breakout_filtered": 1290,
+    "n_atr_filtered": 0,
+    "n_stop_dist_filtered": 2,
+    "n_volume_filtered": 28,
+    "spy_pct_above_sma200": 8.6409,
     "exits_executed": [],
     "entries_executed": [
       {
-        "ticker": "BBIO",
-        "signal_date": "2026-07-09",
-        "signal_price": 90.17,
-        "open_price": 90.81,
-        "entry_price": 90.9008,
-        "shares": 101,
-        "stop_price": 84.2766,
-        "trade_risk": 0.0036
-      }
-    ],
-    "exit_signals": [],
-    "candidate_signals": [
-      {
         "ticker": "CAKE",
+        "signal_date": "2026-07-10",
         "signal_price": 82.76,
-        "stop_price": 77.4714,
-        "shares": 110,
-        "trade_risk": 0.0032,
-        "strength": 1.0226,
-        "rejection": null,
-        "corr_with": null
+        "open_price": 82.49,
+        "entry_price": 82.5725,
+        "shares": 111,
+        "stop_price": 77.2839,
+        "trade_risk": 0.0032
       },
       {
         "ticker": "GTLS",
+        "signal_date": "2026-07-10",
         "signal_price": 209.87,
-        "stop_price": 208.7597,
+        "open_price": 209.91,
+        "entry_price": 210.1199,
         "shares": 44,
-        "trade_risk": 0.0003,
-        "strength": 1.0004,
+        "stop_price": 209.0095,
+        "trade_risk": 0.0003
+      }
+    ],
+    "exit_signals": [
+      {
+        "ticker": "IBB",
+        "exit_reason": "stop_loss",
+        "stop_used": 190.5792,
+        "shares": 48
+      },
+      {
+        "ticker": "PTGX",
+        "exit_reason": "stop_loss",
+        "stop_used": 129.3699,
+        "shares": 67
+      },
+      {
+        "ticker": "BBIO",
+        "exit_reason": "stop_loss",
+        "stop_used": 84.2766,
+        "shares": 101
+      }
+    ],
+    "candidate_signals": [
+      {
+        "ticker": "S",
+        "signal_price": 19.92,
+        "stop_price": 17.9937,
+        "shares": 456,
+        "trade_risk": 0.0048,
+        "strength": 1.0457,
         "rejection": null,
-        "corr_with": null
+        "corr_with": null,
+        "stop_distance_pct": 0.096704,
+        "atr_pct": 0.048352,
+        "adv60_m": 129.111,
+        "vol_ratio": 1.7108
+      },
+      {
+        "ticker": "MUFG",
+        "signal_price": 22.5,
+        "stop_price": 21.6464,
+        "shares": 404,
+        "trade_risk": 0.0019,
+        "strength": 1.0199,
+        "rejection": null,
+        "corr_with": null,
+        "stop_distance_pct": 0.037938,
+        "atr_pct": 0.018969,
+        "adv60_m": 61.569,
+        "vol_ratio": 1.6124
+      },
+      {
+        "ticker": "GS",
+        "signal_price": 1140.0,
+        "stop_price": 1073.2541,
+        "shares": 8,
+        "trade_risk": 0.0029,
+        "strength": 1.0133,
+        "rejection": null,
+        "corr_with": null,
+        "stop_distance_pct": 0.058549,
+        "atr_pct": 0.029275,
+        "adv60_m": 2088.013,
+        "vol_ratio": 1.823
       }
     ],
     "entry_signals": [
       {
-        "ticker": "CAKE",
-        "signal_price": 82.76,
-        "stop_price": 77.4714,
-        "shares": 110,
-        "trade_risk": 0.0032,
-        "strength": 1.0226
+        "ticker": "S",
+        "signal_price": 19.92,
+        "stop_price": 17.9937,
+        "shares": 456,
+        "trade_risk": 0.0048,
+        "strength": 1.0457
       },
       {
-        "ticker": "GTLS",
-        "signal_price": 209.87,
-        "stop_price": 208.7597,
-        "shares": 44,
-        "trade_risk": 0.0003,
-        "strength": 1.0004
+        "ticker": "MUFG",
+        "signal_price": 22.5,
+        "stop_price": 21.6464,
+        "shares": 404,
+        "trade_risk": 0.0019,
+        "strength": 1.0199
+      },
+      {
+        "ticker": "GS",
+        "signal_price": 1140.0,
+        "stop_price": 1073.2541,
+        "shares": 8,
+        "trade_risk": 0.0029,
+        "strength": 1.0133
       }
     ]
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
+  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
-    "downloaded_count": 2134,
-    "total_scanned": 2134,
-    "updated_utc": "2026-07-11T07:28:33Z"
+    "downloaded_count": 2123,
+    "total_scanned": 2123,
+    "updated_utc": "2026-07-14T23:58:59Z"
   },
   "universe_stats": {
     "tiingo_eligible": 2184,
@@ -3250,7 +3572,7 @@
     "yf_unavailable_in_pool": 61,
     "total_active": 3086,
     "total_delisted": 1391,
-    "updated_utc": "2026-07-14T23:35:12Z"
+    "updated_utc": "2026-07-14T23:59:08Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -3318,38 +3640,52 @@
   ],
   "tiingo_universe_synced_utc": "2026-07-14T23:35:12Z",
   "daily_summary": {
-    "date": "2026-07-11",
-    "updated_sgt": "2026-07-14 10:55 SGT",
-    "nav_change_pct": null,
-    "spy_change_pct": null,
-    "vs_spy_pct": null,
+    "date": "2026-07-14",
+    "updated_sgt": "2026-07-15 07:59 SGT",
+    "nav_change_pct": -0.62,
+    "spy_change_pct": -0.41,
+    "vs_spy_pct": -0.21,
     "bullets": [
-      "\ud83d\udcca 2026-07-11 \u6536\u76d8\u6570\u636e\u5c1a\u672a\u83b7\u53d6\u5230\uff0c\u6b63\u5728\u6301\u7eed\u91cd\u8bd5\uff0c\u83b7\u53d6\u6210\u529f\u540e\u5c06\u81ea\u52a8\u66f4\u65b0\u3002"
+      "Healthcare板块今日下跌主要源于市场风险偏好下降，虽然JNJ等龙头公司因FDA批准获得支撑，但这种利好无法抵消板块整体的卖压，导致NYSE Healthcare Index下跌1.7%。（[Sector Update: Healthcare St…](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-fall-afternoon-194638659.html)、[Healthcare ETFs to Buy as JN…](https://finance.yahoo.com/healthcare/articles/healthcare-etfs-buy-jnj-beats-135400002.html)）",
+      "策略净值相比SPY下跌幅度更大（-0.62% vs -0.41%，偏差-0.21%）的直接原因是Healthcare重仓股票普遍表现不佳，其中BTSG、XENE、BBIO三只核心持仓分别下跌2.5%、2.4%、2.1%，累计拖累净值约$658，远超IBB ETF单日-1.8%的跌幅。（[Sector Update: Healthcare St…](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-fall-afternoon-194638659.html)）",
+      "与此同时，策略在非Healthcare板块的配置（如Real Estate中的AHR上涨2.2%贡献$204）无法充分对冲Healthcare板块的系统性下跌，暴露了策略在Healthcare板块上的高度集中风险。（[Sector Update: Healthcare St…](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-fall-afternoon-194638659.html)）",
+      "虽然FDA对BMRN Voxzogo的审批进展提供了板块积极信号，但这类微观利好事件无法改变市场对整个生物医药板块估值的宏观调整，说明今日Healthcare的下跌更多反映的是板块轮动而非公司基本面恶化。（[FDA Accepts BMRN's sNDA Seek…](https://finance.yahoo.com/healthcare/articles/fda-accepts-bmrns-snda-seeking-144200614.html)）"
     ],
-    "news": [],
-    "data_pending": true
+    "news": [
+      {
+        "title": "Sector Update: Healthcare Stocks Fall Late Afternoon",
+        "url": "https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-fall-afternoon-194638659.html"
+      },
+      {
+        "title": "Healthcare ETFs to Buy as JNJ Beats the Market With a 25% YTD Surge",
+        "url": "https://finance.yahoo.com/healthcare/articles/healthcare-etfs-buy-jnj-beats-135400002.html"
+      },
+      {
+        "title": "Exchange-Traded Funds Higher, Equity Futures Mixed Pre-Bell Tuesday Ahead of Warsh Testimony",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-higher-equity-130421454.html"
+      },
+      {
+        "title": "FDA Accepts BMRN's sNDA Seeking Full Approval for Voxzogo",
+        "url": "https://finance.yahoo.com/healthcare/articles/fda-accepts-bmrns-snda-seeking-144200614.html"
+      }
+    ]
   },
   "last_no_op_utc": "2026-07-14T02:55:28Z",
   "download_log": {
-    "date": "2026-07-11",
+    "date": "2026-07-14",
     "attempts": [
       {
-        "time_sgt": "2026-07-14 10:55 SGT",
-        "type": "main_probe",
-        "status": "no_data",
-        "success": 0,
+        "time_sgt": "2026-07-15 07:58 SGT",
+        "type": "main_download",
+        "status": "success",
+        "total": 2123,
+        "success": 2123,
+        "cumulative_success": 2123,
         "failed": 0,
-        "attempt": 1,
-        "next_retry_sgt": "2026-07-14 11:30 SGT",
+        "next_retry_sgt": null,
         "seq": 1
       }
     ],
     "holiday": null
-  },
-  "no_data_probe": {
-    "date": "2026-07-11",
-    "attempt": 2,
-    "next_retry_utc": "2026-07-14T03:30:00Z",
-    "next_retry_sgt": "2026-07-14 11:30 SGT"
   }
 }
