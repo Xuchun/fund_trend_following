@@ -1188,17 +1188,23 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
         else:
             _ds_nav_pct = _ds.get("nav_change_pct", 0) or 0
             _ds_color   = "#d62728" if _ds_nav_pct < -1 else ("#ff7f0e" if _ds_nav_pct < 0 else "#2ca02c")
+        def _md_links_to_html(text: str) -> str:
+            return re.sub(r'\[([^\]]+)\]\(([^)]+)\)',
+                          r'<a href="\2" target="_blank">\1</a>', text)
+
+        _bullets_html = ""
+        for _b in _ds["bullets"]:
+            _b_clean = _b.replace("<small>", "").replace("</small>", "")
+            _bullets_html += f"<li style='margin:0 0 6px 0'>{_md_links_to_html(_b_clean)}</li>"
         st.markdown(
             f"<div style='background:#f8f9fa;border-left:4px solid {_ds_color};"
             f"padding:10px 16px;border-radius:4px;margin:10px 0'>"
             f"<div style='font-weight:700;color:#0f1117;font-size:1em;margin-bottom:8px'>"
-            f"最新交易日小结 · {_ds.get('updated_sgt','')}（每日收盘后自动更新）</div>",
+            f"最新交易日小结 · {_ds.get('updated_sgt','')}（每日收盘后自动更新）</div>"
+            f"<ul style='padding-left:20px;margin:0'>{_bullets_html}</ul>"
+            f"</div>",
             unsafe_allow_html=True,
         )
-        for _b in _ds["bullets"]:
-            _b_clean = _b.replace("<small>", "").replace("</small>", "")
-            st.markdown(f"- {_b_clean}")
-        st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("---")
 
