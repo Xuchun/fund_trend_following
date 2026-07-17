@@ -1,6 +1,6 @@
 """策略1.0模拟交易监控"""
 
-import sys, json
+import sys, json, re
 from pathlib import Path
 _root = Path(__file__).resolve().parents[3]
 if str(_root) not in sys.path:
