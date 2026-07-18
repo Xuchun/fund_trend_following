@@ -924,6 +924,8 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             _att_note   = _att.get("note", "")
 
             _lbl = _type_labels.get(_att_type, _att_type)
+            if _att_type == "main_download" and _att_total:
+                _lbl = f"下载全标的池数据（共{_att_total:,}个）"
             _ico = _status_icons.get(_att_status, _att_status)
 
             _line = f"- **{_att_time}**　{_lbl}　{_ico}"
