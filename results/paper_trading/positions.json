@@ -4395,19 +4395,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2127,
     "total_scanned": 2127,
     "updated_utc": "2026-07-17T23:57:30Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2186,
-    "yf_downloadable": 2127,
-    "yf_unavailable_in_pool": 59,
-    "total_active": 3084,
-    "total_delisted": 1393,
-    "updated_utc": "2026-07-17T23:57:39Z"
+    "tiingo_eligible": 2181,
+    "yf_downloadable": 2124,
+    "yf_unavailable_in_pool": 57,
+    "total_active": 3075,
+    "total_delisted": 1402,
+    "updated_utc": "2026-07-20T23:41:28Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -4473,7 +4473,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-07-17T23:35:46Z",
+  "tiingo_universe_synced_utc": "2026-07-20T23:41:28Z",
   "daily_summary": {
     "date": "2026-07-17",
     "updated_sgt": "2026-07-18 07:57 SGT",
@@ -4481,10 +4481,10 @@
     "spy_change_pct": -0.99,
     "vs_spy_pct": 0.84,
     "bullets": [
-      "Financial板块（包括MUFG -3.7%、GS -2.8%、ZION -1.4%）整体承压下跌，而策略重仓的Real Estate板块（FR +4.5%）逆势上涨，两个板块的相反走势直接拉开了+0.84%的超额收益。（[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-softer-afternoon-195507210.html)、[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-decline-friday-173117432.html)）",
-      "Financial stocks在周五午盘后持续走弱导致大盘下跌0.99%，但这种风险厌恶环境下投资者转向防守性更强的Real Estate等板块寻求避险，使得持仓中的FR等地产股获得相对收益。（[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-softer-afternoon-195507210.html)、[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-decline-friday-173117432.html)）",
-      "策略净值-0.14%跑赢SPY -0.99%的核心原因是持仓结构的板块错配优势：Financial Services和Banking相关标的（MUFG、GS等）跌幅超过3%拖累大盘，而Real Estate标的FR的+4.5%涨幅与BTSG的+3.7%涨幅共同抵消了下跌标的的负面影响。（[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-softer-afternoon-195507210.html)、[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-decline-friday-173117432.html)）",
-      "尽管策略在Financial板块的敞口导致净值绝对值下跌，但Real Estate板块的意外强势与Healthcare板块（BTSG）的同步上涨，共为策略贡献了超过800元的正向收益，最终形成了相对SPY的超额收益表现。（[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-softer-afternoon-195507210.html)、[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-decline-friday-173117432.html)）"
+      "Financial\u677f\u5757\uff08\u5305\u62ecMUFG -3.7%\u3001GS -2.8%\u3001ZION -1.4%\uff09\u6574\u4f53\u627f\u538b\u4e0b\u8dcc\uff0c\u800c\u7b56\u7565\u91cd\u4ed3\u7684Real Estate\u677f\u5757\uff08FR +4.5%\uff09\u9006\u52bf\u4e0a\u6da8\uff0c\u4e24\u4e2a\u677f\u5757\u7684\u76f8\u53cd\u8d70\u52bf\u76f4\u63a5\u62c9\u5f00\u4e86+0.84%\u7684\u8d85\u989d\u6536\u76ca\u3002\uff08[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-softer-afternoon-195507210.html)\u3001[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-decline-friday-173117432.html)\uff09",
+      "Financial stocks\u5728\u5468\u4e94\u5348\u76d8\u540e\u6301\u7eed\u8d70\u5f31\u5bfc\u81f4\u5927\u76d8\u4e0b\u8dcc0.99%\uff0c\u4f46\u8fd9\u79cd\u98ce\u9669\u538c\u6076\u73af\u5883\u4e0b\u6295\u8d44\u8005\u8f6c\u5411\u9632\u5b88\u6027\u66f4\u5f3a\u7684Real Estate\u7b49\u677f\u5757\u5bfb\u6c42\u907f\u9669\uff0c\u4f7f\u5f97\u6301\u4ed3\u4e2d\u7684FR\u7b49\u5730\u4ea7\u80a1\u83b7\u5f97\u76f8\u5bf9\u6536\u76ca\u3002\uff08[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-softer-afternoon-195507210.html)\u3001[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-decline-friday-173117432.html)\uff09",
+      "\u7b56\u7565\u51c0\u503c-0.14%\u8dd1\u8d62SPY -0.99%\u7684\u6838\u5fc3\u539f\u56e0\u662f\u6301\u4ed3\u7ed3\u6784\u7684\u677f\u5757\u9519\u914d\u4f18\u52bf\uff1aFinancial Services\u548cBanking\u76f8\u5173\u6807\u7684\uff08MUFG\u3001GS\u7b49\uff09\u8dcc\u5e45\u8d85\u8fc73%\u62d6\u7d2f\u5927\u76d8\uff0c\u800cReal Estate\u6807\u7684FR\u7684+4.5%\u6da8\u5e45\u4e0eBTSG\u7684+3.7%\u6da8\u5e45\u5171\u540c\u62b5\u6d88\u4e86\u4e0b\u8dcc\u6807\u7684\u7684\u8d1f\u9762\u5f71\u54cd\u3002\uff08[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-softer-afternoon-195507210.html)\u3001[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-decline-friday-173117432.html)\uff09",
+      "\u5c3d\u7ba1\u7b56\u7565\u5728Financial\u677f\u5757\u7684\u655e\u53e3\u5bfc\u81f4\u51c0\u503c\u7edd\u5bf9\u503c\u4e0b\u8dcc\uff0c\u4f46Real Estate\u677f\u5757\u7684\u610f\u5916\u5f3a\u52bf\u4e0eHealthcare\u677f\u5757\uff08BTSG\uff09\u7684\u540c\u6b65\u4e0a\u6da8\uff0c\u5171\u4e3a\u7b56\u7565\u8d21\u732e\u4e86\u8d85\u8fc7800\u5143\u7684\u6b63\u5411\u6536\u76ca\uff0c\u6700\u7ec8\u5f62\u6210\u4e86\u76f8\u5bf9SPY\u7684\u8d85\u989d\u6536\u76ca\u8868\u73b0\u3002\uff08[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-softer-afternoon-195507210.html)\u3001[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-decline-friday-173117432.html)\uff09"
     ],
     "news": [
       {
