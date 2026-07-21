@@ -4440,19 +4440,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2146,
     "total_scanned": 2181,
     "updated_utc": "2026-07-21T00:01:48Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2181,
-    "yf_downloadable": 2127,
-    "yf_unavailable_in_pool": 54,
-    "total_active": 3075,
-    "total_delisted": 1402,
-    "updated_utc": "2026-07-21T00:01:59Z"
+    "tiingo_eligible": 2179,
+    "yf_downloadable": 2124,
+    "yf_unavailable_in_pool": 55,
+    "total_active": 3071,
+    "total_delisted": 1406,
+    "updated_utc": "2026-07-21T23:42:38Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -4515,7 +4515,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-07-20T23:41:28Z",
+  "tiingo_universe_synced_utc": "2026-07-21T23:42:38Z",
   "daily_summary": {
     "date": "2026-07-20",
     "updated_sgt": "2026-07-21 08:01 SGT",
@@ -4523,10 +4523,10 @@
     "spy_change_pct": -0.16,
     "vs_spy_pct": -0.19,
     "bullets": [
-      "Industrials板块今日下跌的核心原因在于市场对该板块公司近期盈利增长和边际改善的预期产生了动摇，特别是在宏观经济增速放缓背景下，投资者对工业品需求和利润率的担忧加剧。（[Will W.W. Grainger (GWW) Bea…](https://finance.yahoo.com/markets/stocks/articles/w-w-grainger-gww-beat-161003802.html)、[Otis to Report Q2 Earnings: …](https://finance.yahoo.com/markets/stocks/articles/otis-report-q2-earnings-heres-131800610.html)）",
-      "策略净值相比SPY下跌幅度更大（偏差-0.19%），直接原因是重仓Industrials板块的龙头标的GWW和CHRW同时承压，其中GWW跌幅-1.7%、CHRW跌幅-1.3%，两只股票的负贡献合计$-286，远超同期SPY的抗跌表现。（[Will W.W. Grainger (GWW) Bea…](https://finance.yahoo.com/markets/stocks/articles/w-w-grainger-gww-beat-161003802.html)、[Otis to Report Q2 Earnings: …](https://finance.yahoo.com/markets/stocks/articles/otis-report-q2-earnings-heres-131800610.html)）",
-      "虽然新闻显示GWW具有持续超预期的盈利历史和基本面优势，但市场似乎在消化某种季节性或宏观面的负面信号，导致即便是基本面良好的工业企业也难以逃脱板块性下跌的压力。（[Will W.W. Grainger (GWW) Bea…](https://finance.yahoo.com/markets/stocks/articles/w-w-grainger-gww-beat-161003802.html)）",
-      "策略在Consumer Cyclical板块（CAKE +0.4%、LTH +0.9%）的部分对冲收益总计$+135，但仍不足以弥补Industrials核心持仓的$-286损失，这反映出策略当前的板块配置结构使其对Industrials下跌风险的暴露度过高。"
+      "Industrials\u677f\u5757\u4eca\u65e5\u4e0b\u8dcc\u7684\u6838\u5fc3\u539f\u56e0\u5728\u4e8e\u5e02\u573a\u5bf9\u8be5\u677f\u5757\u516c\u53f8\u8fd1\u671f\u76c8\u5229\u589e\u957f\u548c\u8fb9\u9645\u6539\u5584\u7684\u9884\u671f\u4ea7\u751f\u4e86\u52a8\u6447\uff0c\u7279\u522b\u662f\u5728\u5b8f\u89c2\u7ecf\u6d4e\u589e\u901f\u653e\u7f13\u80cc\u666f\u4e0b\uff0c\u6295\u8d44\u8005\u5bf9\u5de5\u4e1a\u54c1\u9700\u6c42\u548c\u5229\u6da6\u7387\u7684\u62c5\u5fe7\u52a0\u5267\u3002\uff08[Will W.W. Grainger (GWW) Bea\u2026](https://finance.yahoo.com/markets/stocks/articles/w-w-grainger-gww-beat-161003802.html)\u3001[Otis to Report Q2 Earnings: \u2026](https://finance.yahoo.com/markets/stocks/articles/otis-report-q2-earnings-heres-131800610.html)\uff09",
+      "\u7b56\u7565\u51c0\u503c\u76f8\u6bd4SPY\u4e0b\u8dcc\u5e45\u5ea6\u66f4\u5927\uff08\u504f\u5dee-0.19%\uff09\uff0c\u76f4\u63a5\u539f\u56e0\u662f\u91cd\u4ed3Industrials\u677f\u5757\u7684\u9f99\u5934\u6807\u7684GWW\u548cCHRW\u540c\u65f6\u627f\u538b\uff0c\u5176\u4e2dGWW\u8dcc\u5e45-1.7%\u3001CHRW\u8dcc\u5e45-1.3%\uff0c\u4e24\u53ea\u80a1\u7968\u7684\u8d1f\u8d21\u732e\u5408\u8ba1$-286\uff0c\u8fdc\u8d85\u540c\u671fSPY\u7684\u6297\u8dcc\u8868\u73b0\u3002\uff08[Will W.W. Grainger (GWW) Bea\u2026](https://finance.yahoo.com/markets/stocks/articles/w-w-grainger-gww-beat-161003802.html)\u3001[Otis to Report Q2 Earnings: \u2026](https://finance.yahoo.com/markets/stocks/articles/otis-report-q2-earnings-heres-131800610.html)\uff09",
+      "\u867d\u7136\u65b0\u95fb\u663e\u793aGWW\u5177\u6709\u6301\u7eed\u8d85\u9884\u671f\u7684\u76c8\u5229\u5386\u53f2\u548c\u57fa\u672c\u9762\u4f18\u52bf\uff0c\u4f46\u5e02\u573a\u4f3c\u4e4e\u5728\u6d88\u5316\u67d0\u79cd\u5b63\u8282\u6027\u6216\u5b8f\u89c2\u9762\u7684\u8d1f\u9762\u4fe1\u53f7\uff0c\u5bfc\u81f4\u5373\u4fbf\u662f\u57fa\u672c\u9762\u826f\u597d\u7684\u5de5\u4e1a\u4f01\u4e1a\u4e5f\u96be\u4ee5\u9003\u8131\u677f\u5757\u6027\u4e0b\u8dcc\u7684\u538b\u529b\u3002\uff08[Will W.W. Grainger (GWW) Bea\u2026](https://finance.yahoo.com/markets/stocks/articles/w-w-grainger-gww-beat-161003802.html)\uff09",
+      "\u7b56\u7565\u5728Consumer Cyclical\u677f\u5757\uff08CAKE +0.4%\u3001LTH +0.9%\uff09\u7684\u90e8\u5206\u5bf9\u51b2\u6536\u76ca\u603b\u8ba1$+135\uff0c\u4f46\u4ecd\u4e0d\u8db3\u4ee5\u5f25\u8865Industrials\u6838\u5fc3\u6301\u4ed3\u7684$-286\u635f\u5931\uff0c\u8fd9\u53cd\u6620\u51fa\u7b56\u7565\u5f53\u524d\u7684\u677f\u5757\u914d\u7f6e\u7ed3\u6784\u4f7f\u5176\u5bf9Industrials\u4e0b\u8dcc\u98ce\u9669\u7684\u66b4\u9732\u5ea6\u8fc7\u9ad8\u3002"
     ],
     "news": [
       {
