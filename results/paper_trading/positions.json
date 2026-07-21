@@ -4579,6 +4579,17 @@
         "failed": 35,
         "next_retry_sgt": "2026-07-21 13:30 SGT",
         "seq": 3
+      },
+      {
+        "time_sgt": "2026-07-21 15:45 SGT",
+        "type": "retry_download",
+        "status": "partial",
+        "total": 2181,
+        "success": 0,
+        "cumulative_success": 2146,
+        "failed": 35,
+        "next_retry_sgt": "2026-07-21 16:30 SGT",
+        "seq": 4
       }
     ],
     "holiday": null
@@ -4622,13 +4633,13 @@
       "WFC-P-L"
     ],
     "scan_date": "2026-07-20",
-    "attempt": 3,
+    "attempt": 4,
     "downloaded_count": 0,
     "total_scanned": 35,
     "original_total_scanned": 2181,
-    "next_retry_utc": "2026-07-21T05:30:00Z",
-    "next_retry_sgt": "2026-07-21 13:30 SGT",
+    "next_retry_utc": "2026-07-21T08:30:00Z",
+    "next_retry_sgt": "2026-07-21 16:30 SGT",
     "created_utc": "2026-07-21T00:01:48Z",
-    "last_attempt_utc": "2026-07-21T04:40:09Z"
+    "last_attempt_utc": "2026-07-21T07:45:02Z"
   }
 }
