@@ -4431,19 +4431,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2124,
     "total_scanned": 2124,
     "updated_utc": "2026-07-21T23:59:18Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2179,
-    "yf_downloadable": 2123,
-    "yf_unavailable_in_pool": 56,
-    "total_active": 3071,
-    "total_delisted": 1406,
-    "updated_utc": "2026-07-21T23:59:29Z"
+    "tiingo_eligible": 2186,
+    "yf_downloadable": 2131,
+    "yf_unavailable_in_pool": 55,
+    "total_active": 3083,
+    "total_delisted": 1394,
+    "updated_utc": "2026-07-22T23:43:04Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -4507,7 +4507,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-07-21T23:42:38Z",
+  "tiingo_universe_synced_utc": "2026-07-22T23:43:04Z",
   "daily_summary": {
     "date": "2026-07-21",
     "updated_sgt": "2026-07-22 07:59 SGT",
@@ -4515,10 +4515,10 @@
     "spy_change_pct": 0.83,
     "vs_spy_pct": -0.81,
     "bullets": [
-      "尽管新闻声称金融板块估值被低估且基本面稳健，但市场实际交易中 ZION(-4.0%)和 SEIC(-1.7%)等金融服务类个股遭抛售，反映投资者对该板块的实际配置意愿与媒体叙述存在重大脱节。（[Is This the Most Undervalued…](https://247wallst.com/investing/etf/2026/07/21/is-this-the-most-undervalued-sector-etf-on-the-market/)、[State Street's XLF or First …](https://www.fool.com/coverage/etfs/2026/07/21/state-street-s-xlf-or-first-trust-s-ftxo-which-financial-etf-is-the-better-long-term-buy/)）",
-      "策略因重仓 Financial Services 板块而与 SPY 产生-0.81%的超额跌幅，其中 ZION 单只标的的-$403净值影响占比最大，该股-4.0%的跌幅远超大盘涨幅+0.83%，构成了策略相对表现恶化的主要拖累。（[Is This the Most Undervalued…](https://247wallst.com/investing/etf/2026/07/21/is-this-the-most-undervalued-sector-etf-on-the-market/)、[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-advance-afternoon-194226663.html)、[State Street's XLF or First …](https://www.fool.com/coverage/etfs/2026/07/21/state-street-s-xlf-or-first-trust-s-ftxo-which-financial-etf-is-the-better-long-term-buy/)）",
-      "广义市场（SPY/IVV）上行而金融板块下行的板块分化格局，说明今日资金呈现\"轮动特征\"而非整体上升，市场对金融股的风险偏好明显下降，这与新闻中关于\"金融板块保持上升\"的描述形成反差，暴露出板块内部个股差异化下跌的现实。（[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-advance-afternoon-194226663.html)、[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-rise-afternoon-174051634.html)、[Exchange-Traded Funds Higher…](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-higher-us-171046850.html)）",
-      "策略净值的相对滞后主要源于持仓结构的非平衡性：金融板块的ZION(-4.0%)和SEIC(-1.7%)双双重挫，而策略在其他板块的正向贡献（如 BTSG+2.9%的$+309和 AHR+1.7%的$+165）未能充分对冲金融重仓的亏损，导致总体表现被拖累至仅+0.02%。（[Is This the Most Undervalued…](https://247wallst.com/investing/etf/2026/07/21/is-this-the-most-undervalued-sector-etf-on-the-market/)、[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-advance-afternoon-194226663.html)、[State Street's XLF or First …](https://www.fool.com/coverage/etfs/2026/07/21/state-street-s-xlf-or-first-trust-s-ftxo-which-financial-etf-is-the-better-long-term-buy/)）"
+      "\u5c3d\u7ba1\u65b0\u95fb\u58f0\u79f0\u91d1\u878d\u677f\u5757\u4f30\u503c\u88ab\u4f4e\u4f30\u4e14\u57fa\u672c\u9762\u7a33\u5065\uff0c\u4f46\u5e02\u573a\u5b9e\u9645\u4ea4\u6613\u4e2d ZION(-4.0%)\u548c SEIC(-1.7%)\u7b49\u91d1\u878d\u670d\u52a1\u7c7b\u4e2a\u80a1\u906d\u629b\u552e\uff0c\u53cd\u6620\u6295\u8d44\u8005\u5bf9\u8be5\u677f\u5757\u7684\u5b9e\u9645\u914d\u7f6e\u610f\u613f\u4e0e\u5a92\u4f53\u53d9\u8ff0\u5b58\u5728\u91cd\u5927\u8131\u8282\u3002\uff08[Is This the Most Undervalued\u2026](https://247wallst.com/investing/etf/2026/07/21/is-this-the-most-undervalued-sector-etf-on-the-market/)\u3001[State Street's XLF or First \u2026](https://www.fool.com/coverage/etfs/2026/07/21/state-street-s-xlf-or-first-trust-s-ftxo-which-financial-etf-is-the-better-long-term-buy/)\uff09",
+      "\u7b56\u7565\u56e0\u91cd\u4ed3 Financial Services \u677f\u5757\u800c\u4e0e SPY \u4ea7\u751f-0.81%\u7684\u8d85\u989d\u8dcc\u5e45\uff0c\u5176\u4e2d ZION \u5355\u53ea\u6807\u7684\u7684-$403\u51c0\u503c\u5f71\u54cd\u5360\u6bd4\u6700\u5927\uff0c\u8be5\u80a1-4.0%\u7684\u8dcc\u5e45\u8fdc\u8d85\u5927\u76d8\u6da8\u5e45+0.83%\uff0c\u6784\u6210\u4e86\u7b56\u7565\u76f8\u5bf9\u8868\u73b0\u6076\u5316\u7684\u4e3b\u8981\u62d6\u7d2f\u3002\uff08[Is This the Most Undervalued\u2026](https://247wallst.com/investing/etf/2026/07/21/is-this-the-most-undervalued-sector-etf-on-the-market/)\u3001[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-advance-afternoon-194226663.html)\u3001[State Street's XLF or First \u2026](https://www.fool.com/coverage/etfs/2026/07/21/state-street-s-xlf-or-first-trust-s-ftxo-which-financial-etf-is-the-better-long-term-buy/)\uff09",
+      "\u5e7f\u4e49\u5e02\u573a\uff08SPY/IVV\uff09\u4e0a\u884c\u800c\u91d1\u878d\u677f\u5757\u4e0b\u884c\u7684\u677f\u5757\u5206\u5316\u683c\u5c40\uff0c\u8bf4\u660e\u4eca\u65e5\u8d44\u91d1\u5448\u73b0\"\u8f6e\u52a8\u7279\u5f81\"\u800c\u975e\u6574\u4f53\u4e0a\u5347\uff0c\u5e02\u573a\u5bf9\u91d1\u878d\u80a1\u7684\u98ce\u9669\u504f\u597d\u660e\u663e\u4e0b\u964d\uff0c\u8fd9\u4e0e\u65b0\u95fb\u4e2d\u5173\u4e8e\"\u91d1\u878d\u677f\u5757\u4fdd\u6301\u4e0a\u5347\"\u7684\u63cf\u8ff0\u5f62\u6210\u53cd\u5dee\uff0c\u66b4\u9732\u51fa\u677f\u5757\u5185\u90e8\u4e2a\u80a1\u5dee\u5f02\u5316\u4e0b\u8dcc\u7684\u73b0\u5b9e\u3002\uff08[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-advance-afternoon-194226663.html)\u3001[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-rise-afternoon-174051634.html)\u3001[Exchange-Traded Funds Higher\u2026](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-higher-us-171046850.html)\uff09",
+      "\u7b56\u7565\u51c0\u503c\u7684\u76f8\u5bf9\u6ede\u540e\u4e3b\u8981\u6e90\u4e8e\u6301\u4ed3\u7ed3\u6784\u7684\u975e\u5e73\u8861\u6027\uff1a\u91d1\u878d\u677f\u5757\u7684ZION(-4.0%)\u548cSEIC(-1.7%)\u53cc\u53cc\u91cd\u632b\uff0c\u800c\u7b56\u7565\u5728\u5176\u4ed6\u677f\u5757\u7684\u6b63\u5411\u8d21\u732e\uff08\u5982 BTSG+2.9%\u7684$+309\u548c AHR+1.7%\u7684$+165\uff09\u672a\u80fd\u5145\u5206\u5bf9\u51b2\u91d1\u878d\u91cd\u4ed3\u7684\u4e8f\u635f\uff0c\u5bfc\u81f4\u603b\u4f53\u8868\u73b0\u88ab\u62d6\u7d2f\u81f3\u4ec5+0.02%\u3002\uff08[Is This the Most Undervalued\u2026](https://247wallst.com/investing/etf/2026/07/21/is-this-the-most-undervalued-sector-etf-on-the-market/)\u3001[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-advance-afternoon-194226663.html)\u3001[State Street's XLF or First \u2026](https://www.fool.com/coverage/etfs/2026/07/21/state-street-s-xlf-or-first-trust-s-ftxo-which-financial-etf-is-the-better-long-term-buy/)\uff09"
     ],
     "news": [
       {
