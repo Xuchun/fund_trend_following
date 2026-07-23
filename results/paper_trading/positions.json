@@ -4668,19 +4668,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2131,
     "total_scanned": 2131,
     "updated_utc": "2026-07-23T00:57:49Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2186,
-    "yf_downloadable": 2130,
-    "yf_unavailable_in_pool": 56,
-    "total_active": 3083,
-    "total_delisted": 1394,
-    "updated_utc": "2026-07-23T00:05:26Z"
+    "tiingo_eligible": 2180,
+    "yf_downloadable": 2125,
+    "yf_unavailable_in_pool": 55,
+    "total_active": 3078,
+    "total_delisted": 1399,
+    "updated_utc": "2026-07-23T23:40:44Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -4745,7 +4745,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-07-22T23:43:04Z",
+  "tiingo_universe_synced_utc": "2026-07-23T23:40:44Z",
   "daily_summary": {
     "date": "2026-07-22",
     "updated_sgt": "2026-07-23 08:05 SGT",
@@ -4753,10 +4753,10 @@
     "spy_change_pct": -0.12,
     "vs_spy_pct": -0.7,
     "bullets": [
-      "N/A 板块今日整体下跌的根本原因在于市场对互联网和软件公司盈利前景的预期调整，尽管新闻强调了AI、云采纳等积极因素，但投资者对这些趋势是否能真正转化为可持续增长仍存疑虑，导致板块承压。（[4 Internet Stocks Poised to …](https://finance.yahoo.com/markets/stocks/articles/4-internet-stocks-poised-top-151400877.html)、[The Zacks Analyst Blog Highl…](https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-unity-142000631.html)）",
-      "Block（XYZ）和其他N/A板块核心持仓下跌幅度（XYZ -3.6%，S -3.1%）超过大盘跌幅（SPY -0.12%），这反映出市场对互联网平台企业增长动能的担忧，尤其是在宏观环境不确定性下，即使有Square/Honolulu Cookie等实际应用案例支撑，短期动能也难以抵抗板块性下行压力。（[Block (XYZ) Gets A Real Worl…](https://finance.yahoo.com/markets/stocks/articles/block-xyz-gets-real-world-121156656.html)）",
-      "策略净值较SPY出现-0.70%的偏差，主要源于重仓N/A板块的XYZ（-3.6%，影响-$321）和S（-3.1%，影响-$265）两个标的跌幅显著，这两只股票的跌幅远超大盘，集中拖累了策略表现，而金融服务板块的SEIC（+1.1%）和ZION（+1.5%）的小幅上涨无法对冲这一缺口。（[4 Internet Stocks Poised to …](https://finance.yahoo.com/markets/stocks/articles/4-internet-stocks-poised-top-151400877.html)、[The Zacks Analyst Blog Highl…](https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-unity-142000631.html)、[Block (XYZ) Gets A Real Worl…](https://finance.yahoo.com/markets/stocks/articles/block-xyz-gets-real-world-121156656.html)）",
-      "虽然新闻报道了Toast AI策略的早期销售增长和多家软件公司的积极基本面，但市场当日的实际表现显示投资者对\"AI驱动增长\"这一叙述的兑现能力持谨慎态度，导致N/A板块遭到"
+      "N/A \u677f\u5757\u4eca\u65e5\u6574\u4f53\u4e0b\u8dcc\u7684\u6839\u672c\u539f\u56e0\u5728\u4e8e\u5e02\u573a\u5bf9\u4e92\u8054\u7f51\u548c\u8f6f\u4ef6\u516c\u53f8\u76c8\u5229\u524d\u666f\u7684\u9884\u671f\u8c03\u6574\uff0c\u5c3d\u7ba1\u65b0\u95fb\u5f3a\u8c03\u4e86AI\u3001\u4e91\u91c7\u7eb3\u7b49\u79ef\u6781\u56e0\u7d20\uff0c\u4f46\u6295\u8d44\u8005\u5bf9\u8fd9\u4e9b\u8d8b\u52bf\u662f\u5426\u80fd\u771f\u6b63\u8f6c\u5316\u4e3a\u53ef\u6301\u7eed\u589e\u957f\u4ecd\u5b58\u7591\u8651\uff0c\u5bfc\u81f4\u677f\u5757\u627f\u538b\u3002\uff08[4 Internet Stocks Poised to \u2026](https://finance.yahoo.com/markets/stocks/articles/4-internet-stocks-poised-top-151400877.html)\u3001[The Zacks Analyst Blog Highl\u2026](https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-unity-142000631.html)\uff09",
+      "Block\uff08XYZ\uff09\u548c\u5176\u4ed6N/A\u677f\u5757\u6838\u5fc3\u6301\u4ed3\u4e0b\u8dcc\u5e45\u5ea6\uff08XYZ -3.6%\uff0cS -3.1%\uff09\u8d85\u8fc7\u5927\u76d8\u8dcc\u5e45\uff08SPY -0.12%\uff09\uff0c\u8fd9\u53cd\u6620\u51fa\u5e02\u573a\u5bf9\u4e92\u8054\u7f51\u5e73\u53f0\u4f01\u4e1a\u589e\u957f\u52a8\u80fd\u7684\u62c5\u5fe7\uff0c\u5c24\u5176\u662f\u5728\u5b8f\u89c2\u73af\u5883\u4e0d\u786e\u5b9a\u6027\u4e0b\uff0c\u5373\u4f7f\u6709Square/Honolulu Cookie\u7b49\u5b9e\u9645\u5e94\u7528\u6848\u4f8b\u652f\u6491\uff0c\u77ed\u671f\u52a8\u80fd\u4e5f\u96be\u4ee5\u62b5\u6297\u677f\u5757\u6027\u4e0b\u884c\u538b\u529b\u3002\uff08[Block (XYZ) Gets A Real Worl\u2026](https://finance.yahoo.com/markets/stocks/articles/block-xyz-gets-real-world-121156656.html)\uff09",
+      "\u7b56\u7565\u51c0\u503c\u8f83SPY\u51fa\u73b0-0.70%\u7684\u504f\u5dee\uff0c\u4e3b\u8981\u6e90\u4e8e\u91cd\u4ed3N/A\u677f\u5757\u7684XYZ\uff08-3.6%\uff0c\u5f71\u54cd-$321\uff09\u548cS\uff08-3.1%\uff0c\u5f71\u54cd-$265\uff09\u4e24\u4e2a\u6807\u7684\u8dcc\u5e45\u663e\u8457\uff0c\u8fd9\u4e24\u53ea\u80a1\u7968\u7684\u8dcc\u5e45\u8fdc\u8d85\u5927\u76d8\uff0c\u96c6\u4e2d\u62d6\u7d2f\u4e86\u7b56\u7565\u8868\u73b0\uff0c\u800c\u91d1\u878d\u670d\u52a1\u677f\u5757\u7684SEIC\uff08+1.1%\uff09\u548cZION\uff08+1.5%\uff09\u7684\u5c0f\u5e45\u4e0a\u6da8\u65e0\u6cd5\u5bf9\u51b2\u8fd9\u4e00\u7f3a\u53e3\u3002\uff08[4 Internet Stocks Poised to \u2026](https://finance.yahoo.com/markets/stocks/articles/4-internet-stocks-poised-top-151400877.html)\u3001[The Zacks Analyst Blog Highl\u2026](https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-unity-142000631.html)\u3001[Block (XYZ) Gets A Real Worl\u2026](https://finance.yahoo.com/markets/stocks/articles/block-xyz-gets-real-world-121156656.html)\uff09",
+      "\u867d\u7136\u65b0\u95fb\u62a5\u9053\u4e86Toast AI\u7b56\u7565\u7684\u65e9\u671f\u9500\u552e\u589e\u957f\u548c\u591a\u5bb6\u8f6f\u4ef6\u516c\u53f8\u7684\u79ef\u6781\u57fa\u672c\u9762\uff0c\u4f46\u5e02\u573a\u5f53\u65e5\u7684\u5b9e\u9645\u8868\u73b0\u663e\u793a\u6295\u8d44\u8005\u5bf9\"AI\u9a71\u52a8\u589e\u957f\"\u8fd9\u4e00\u53d9\u8ff0\u7684\u5151\u73b0\u80fd\u529b\u6301\u8c28\u614e\u6001\u5ea6\uff0c\u5bfc\u81f4N/A\u677f\u5757\u906d\u5230"
     ],
     "news": [
       {
