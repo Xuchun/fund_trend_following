@@ -4,8 +4,8 @@
   "start_date": "2026-06-19",
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
-  "last_update_date": "2026-07-21",
-  "cash": 90.00233549196169,
+  "last_update_date": "2026-07-22",
+  "cash": 4477.56519933165,
   "positions": [
     {
       "ticker": "LTH",
@@ -14,8 +14,8 @@
       "shares": 270,
       "atr_at_entry": 1.2762,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 42.28,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 42.06,
+      "last_price_date": "2026-07-22",
       "stop_loss": 34.3677,
       "trail_stop": 40.147126,
       "highest_high": 43.96,
@@ -29,8 +29,8 @@
       "shares": 150,
       "atr_at_entry": 2.0177,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 72.56,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 69.74,
+      "last_price_date": "2026-07-22",
       "stop_loss": 62.2145,
       "trail_stop": 66.146426,
       "highest_high": 73.4,
@@ -44,8 +44,8 @@
       "shares": 7,
       "atr_at_entry": 28.1791,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 1361.61,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 1354.01,
+      "last_price_date": "2026-07-22",
       "stop_loss": 1309.0517,
       "trail_stop": 1329.615104,
       "highest_high": 1419.675,
@@ -62,12 +62,12 @@
       "entry_price": 132.7526,
       "shares": 76,
       "stop_loss": 119.6946,
-      "trail_stop": 126.567594,
-      "highest_high": 134.35,
+      "trail_stop": 126.951954,
+      "highest_high": 134.4,
       "atr_at_entry": 6.529,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 134.2,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 134.08,
+      "last_price_date": "2026-07-22",
       "entry_commission": 3.03,
       "lowest_low": 132.695,
       "sector": "Healthcare"
@@ -86,8 +86,8 @@
       "highest_high": 73.34,
       "atr_at_entry": 1.4817,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 69.05,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 70.07,
+      "last_price_date": "2026-07-22",
       "entry_commission": 2.92,
       "lowest_low": 67.7506,
       "sector": "Financial Services"
@@ -102,12 +102,12 @@
       "entry_price": 253.3031,
       "shares": 38,
       "stop_loss": 240.7217,
-      "trail_stop": 243.108531,
+      "trail_stop": 243.215843,
       "highest_high": 261.635,
       "atr_at_entry": 6.2907,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 256.1,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 253.3,
+      "last_price_date": "2026-07-22",
       "entry_commission": 2.89,
       "lowest_low": 243.07,
       "sector": "Healthcare"
@@ -122,13 +122,13 @@
       "entry_price": 54.2342,
       "shares": 176,
       "stop_loss": 51.2518,
-      "trail_stop": 53.60315,
+      "trail_stop": 53.657743,
       "highest_high": 57.995,
       "lowest_low": 52.49,
       "atr_at_entry": 1.4912,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 57.6,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 57.08,
+      "last_price_date": "2026-07-22",
       "entry_commission": 2.86,
       "entry_regime": "BULL",
       "sector": "Real Estate"
@@ -148,8 +148,8 @@
       "lowest_low": 64.19,
       "atr_at_entry": 1.3023,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 68.46,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 67.71,
+      "last_price_date": "2026-07-22",
       "entry_commission": 2.76,
       "entry_regime": "BULL",
       "sector": "Real Estate"
@@ -164,13 +164,13 @@
       "entry_price": 82.5725,
       "shares": 111,
       "stop_loss": 77.2839,
-      "trail_stop": 79.697202,
+      "trail_stop": 79.756698,
       "highest_high": 87.9,
       "lowest_low": 79.585,
       "atr_at_entry": 2.6443,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 87.07,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 85.68,
+      "last_price_date": "2026-07-22",
       "entry_commission": 2.75,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -185,7 +185,7 @@
       "entry_price": 210.1199,
       "shares": 44,
       "stop_loss": 209.0095,
-      "trail_stop": 208.692932,
+      "trail_stop": 208.692933,
       "highest_high": 210.1199,
       "lowest_low": 209.81,
       "atr_at_entry": 0.5552,
@@ -206,13 +206,13 @@
       "entry_price": 20.2102,
       "shares": 449,
       "stop_loss": 18.2838,
-      "trail_stop": 17.875638,
+      "trail_stop": 17.897513,
       "highest_high": 20.71,
-      "lowest_low": 18.39,
+      "lowest_low": 18.13,
       "atr_at_entry": 0.9632,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 18.81,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 18.22,
+      "last_price_date": "2026-07-22",
       "entry_commission": 2.72,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -227,13 +227,13 @@
       "entry_price": 251.1309,
       "shares": 18,
       "stop_loss": 241.7063,
-      "trail_stop": 240.820162,
+      "trail_stop": 240.922854,
       "highest_high": 255.0,
       "lowest_low": 246.23,
       "atr_at_entry": 4.7123,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 248.66,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 250.73,
+      "last_price_date": "2026-07-22",
       "entry_commission": 1.36,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -248,13 +248,13 @@
       "entry_price": 207.7175,
       "shares": 44,
       "stop_loss": 205.7989,
-      "trail_stop": 206.59918,
+      "trail_stop": 206.635774,
       "highest_high": 209.3325,
       "lowest_low": 207.17,
       "atr_at_entry": 0.9593,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 209.04,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 208.95,
+      "last_price_date": "2026-07-22",
       "entry_commission": 2.74,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -271,35 +271,14 @@
       "stop_loss": 76.0405,
       "trail_stop": 73.934347,
       "highest_high": 82.71,
-      "lowest_low": 78.175,
+      "lowest_low": 76.9904,
       "atr_at_entry": 3.0758,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 80.38,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 77.46,
+      "last_price_date": "2026-07-22",
       "entry_commission": 2.71,
       "entry_regime": "BULL",
       "sector": "N/A"
-    },
-    {
-      "ticker": "ONB",
-      "signal_date": "2026-07-16",
-      "signal_price": 27.29,
-      "signal_strength": 1.0221,
-      "entry_date": "2026-07-17",
-      "open_price": 27.08,
-      "entry_price": 27.1071,
-      "shares": 168,
-      "stop_loss": 26.0439,
-      "trail_stop": 25.663415,
-      "highest_high": 27.26,
-      "lowest_low": 25.96,
-      "atr_at_entry": 0.5316,
-      "R_at_backtest_end": 0.0,
-      "last_known_price": 26.17,
-      "last_price_date": "2026-07-21",
-      "entry_commission": 1.37,
-      "entry_regime": "BULL",
-      "sector": "Financial Services"
     },
     {
       "ticker": "CFG",
@@ -316,8 +295,8 @@
       "lowest_low": 70.8,
       "atr_at_entry": 1.6563,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 72.0,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 72.44,
+      "last_price_date": "2026-07-22",
       "entry_commission": 1.38,
       "entry_regime": "BULL",
       "sector": "Financial Services"
@@ -332,13 +311,13 @@
       "entry_price": 204.8446,
       "shares": 44,
       "stop_loss": 193.3654,
-      "trail_stop": 193.468662,
-      "highest_high": 210.27,
+      "trail_stop": 193.755228,
+      "highest_high": 210.33,
       "lowest_low": 203.97,
       "atr_at_entry": 5.7396,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 209.42,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 207.35,
+      "last_price_date": "2026-07-22",
       "entry_commission": 2.7,
       "entry_regime": "BULL",
       "sector": "Industrials"
@@ -353,13 +332,13 @@
       "entry_price": 100.0299,
       "shares": 91,
       "stop_loss": 95.4797,
-      "trail_stop": 94.082526,
+      "trail_stop": 94.136956,
       "highest_high": 100.745,
-      "lowest_low": 97.35,
+      "lowest_low": 97.125,
       "atr_at_entry": 2.2751,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 97.65,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 98.75,
+      "last_price_date": "2026-07-22",
       "entry_commission": 2.73,
       "entry_regime": "BULL",
       "sector": "Financial Services"
@@ -376,11 +355,11 @@
       "stop_loss": 143.6809,
       "trail_stop": 143.380158,
       "highest_high": 153.35,
-      "lowest_low": 146.47,
+      "lowest_low": 144.1,
       "atr_at_entry": 3.2596,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 149.94,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 144.7,
+      "last_price_date": "2026-07-22",
       "entry_commission": 1.35,
       "entry_regime": "BULL",
       "sector": "Real Estate"
@@ -395,13 +374,13 @@
       "entry_price": 367.9676,
       "shares": 25,
       "stop_loss": 350.9718,
-      "trail_stop": 346.400843,
-      "highest_high": 371.94,
+      "trail_stop": 348.614734,
+      "highest_high": 374.0,
       "lowest_low": 362.3258,
       "atr_at_entry": 8.4979,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 369.63,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 372.08,
+      "last_price_date": "2026-07-22",
       "entry_commission": 2.76,
       "entry_regime": "BULL",
       "sector": "Financial Services"
@@ -416,13 +395,13 @@
       "entry_price": 124.8547,
       "shares": 73,
       "stop_loss": 120.3645,
-      "trail_stop": 118.559145,
+      "trail_stop": 118.64665,
       "highest_high": 125.05,
       "lowest_low": 122.425,
       "atr_at_entry": 2.2451,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 123.59,
-      "last_price_date": "2026-07-21",
+      "last_known_price": 123.58,
+      "last_price_date": "2026-07-22",
       "entry_commission": 2.73,
       "entry_regime": "BULL",
       "sector": "Financial Services"
@@ -1225,6 +1204,36 @@
       "holding_days": 5,
       "entry_regime": "BULL",
       "exit_regime": "BULL"
+    },
+    {
+      "ticker": "ONB",
+      "signal_date": "2026-07-16",
+      "signal_price": 27.29,
+      "signal_strength": 1.0221,
+      "entry_date": "2026-07-17",
+      "exit_date": "2026-07-22",
+      "open_price": 27.08,
+      "entry_price": 27.1071,
+      "exit_open": 26.17,
+      "exit_price": 26.1438,
+      "shares": 168,
+      "stop_loss": 26.0439,
+      "stop_used": 26.0439,
+      "highest_high": 27.26,
+      "lowest_low": 25.96,
+      "atr_at_entry": 0.5316,
+      "stop_distance_pct": 0.039222,
+      "trail_stop_at_exit": 25.663415,
+      "atr_at_exit": 0.5386,
+      "exit_commission": 1.32,
+      "entry_commission": 1.37,
+      "pnl_r": -0.906,
+      "net_pnl": -164.52,
+      "exit_reason": "stop_loss",
+      "detected_date": "2026-07-21",
+      "holding_days": 5,
+      "entry_regime": "BULL",
+      "exit_regime": "BULL"
     }
   ],
   "nav_history": [
@@ -1345,32 +1354,72 @@
       "nav": 181099.6,
       "regime": "BULL",
       "spy_close": 748.28
+    },
+    {
+      "date": "2026-07-22",
+      "nav": 179618.83,
+      "regime": "BULL",
+      "spy_close": 747.41
     }
   ],
   "pending_exits": [
     {
-      "ticker": "ONB",
+      "ticker": "S",
       "exit_reason": "stop_loss",
-      "stop_used": 26.0439,
-      "shares": 168,
-      "open_price": 27.08,
-      "entry_price": 27.1071,
-      "entry_date": "2026-07-17",
-      "signal_date": "2026-07-16",
-      "signal_price": 27.29,
-      "signal_strength": 1.0221,
-      "stop_loss": 26.0439,
-      "atr_at_entry": 0.5316,
-      "highest_high": 27.26,
-      "lowest_low": 25.96,
-      "trail_stop_at_exit": 25.663415,
-      "atr_at_exit": 0.5386,
-      "detected_date": "2026-07-21",
-      "entry_commission": 1.37,
+      "stop_used": 18.2838,
+      "shares": 449,
+      "open_price": 20.19,
+      "entry_price": 20.2102,
+      "entry_date": "2026-07-15",
+      "signal_date": "2026-07-14",
+      "signal_price": 19.92,
+      "signal_strength": 1.0457,
+      "stop_loss": 18.2838,
+      "atr_at_entry": 0.9632,
+      "highest_high": 20.71,
+      "lowest_low": 18.13,
+      "trail_stop_at_exit": 17.897513,
+      "atr_at_exit": 0.9375,
+      "detected_date": "2026-07-22",
+      "entry_commission": 2.72,
       "entry_regime": "BULL"
     }
   ],
-  "pending_entries": [],
+  "pending_entries": [
+    {
+      "ticker": "LQDA",
+      "signal_date": "2026-07-22",
+      "signal_price": 87.04,
+      "stop_price": 77.4152,
+      "shares": 103,
+      "atr": 4.8124,
+      "signal_strength": 1.0492,
+      "trade_risk": 0.0055,
+      "notional": 8965.12
+    },
+    {
+      "ticker": "WAB",
+      "signal_date": "2026-07-22",
+      "signal_price": 290.0,
+      "stop_price": 273.7986,
+      "shares": 31,
+      "atr": 8.1007,
+      "signal_strength": 1.0179,
+      "trade_risk": 0.0028,
+      "notional": 8990.0
+    },
+    {
+      "ticker": "ARWR",
+      "signal_date": "2026-07-22",
+      "signal_price": 88.7,
+      "stop_price": 79.061,
+      "shares": 101,
+      "atr": 4.8195,
+      "signal_strength": 1.0099,
+      "trade_risk": 0.0054,
+      "notional": 8958.7
+    }
+  ],
   "signals_history": [
     {
       "date": "2026-06-22",
@@ -4394,56 +4443,244 @@
       ],
       "candidate_signals": [],
       "entry_signals": []
+    },
+    {
+      "date": "2026-07-22",
+      "regime": "BULL",
+      "spy_close": 747.41,
+      "n_candidates": 3,
+      "n_entries": 3,
+      "n_executed": 0,
+      "n_exits": 1,
+      "n_raw_breakouts": 3,
+      "n_heat_blocked": 0,
+      "n_cash_blocked": 0,
+      "n_corr_reduced": 0,
+      "n_price_filtered": 230,
+      "n_adv_filtered": 547,
+      "n_breakout_filtered": 1314,
+      "n_atr_filtered": 0,
+      "n_stop_dist_filtered": 1,
+      "n_volume_filtered": 5,
+      "spy_pct_above_sma200": 7.5887,
+      "exits_executed": [
+        {
+          "ticker": "ONB",
+          "shares": 168,
+          "exit_open": 26.17,
+          "exit_price": 26.1438,
+          "net_pnl": -164.52,
+          "pnl_r": -0.906,
+          "exit_reason": "stop_loss"
+        }
+      ],
+      "entries_executed": [],
+      "exit_signals": [
+        {
+          "ticker": "S",
+          "exit_reason": "stop_loss",
+          "stop_used": 18.2838,
+          "shares": 449
+        }
+      ],
+      "candidate_signals": [
+        {
+          "ticker": "LQDA",
+          "signal_price": 87.04,
+          "stop_price": 77.4152,
+          "shares": 103,
+          "trade_risk": 0.0055,
+          "strength": 1.0492,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.110579,
+          "atr_pct": 0.05529,
+          "adv60_m": 125.055,
+          "vol_ratio": 1.7387
+        },
+        {
+          "ticker": "WAB",
+          "signal_price": 290.0,
+          "stop_price": 273.7986,
+          "shares": 31,
+          "trade_risk": 0.0028,
+          "strength": 1.0179,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.055867,
+          "atr_pct": 0.027933,
+          "adv60_m": 230.791,
+          "vol_ratio": 3.7403
+        },
+        {
+          "ticker": "ARWR",
+          "signal_price": 88.7,
+          "stop_price": 79.061,
+          "shares": 101,
+          "trade_risk": 0.0054,
+          "strength": 1.0099,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.108669,
+          "atr_pct": 0.054335,
+          "adv60_m": 162.111,
+          "vol_ratio": 3.3286
+        }
+      ],
+      "entry_signals": [
+        {
+          "ticker": "LQDA",
+          "signal_price": 87.04,
+          "stop_price": 77.4152,
+          "shares": 103,
+          "trade_risk": 0.0055,
+          "strength": 1.0492
+        },
+        {
+          "ticker": "WAB",
+          "signal_price": 290.0,
+          "stop_price": 273.7986,
+          "shares": 31,
+          "trade_risk": 0.0028,
+          "strength": 1.0179
+        },
+        {
+          "ticker": "ARWR",
+          "signal_price": 88.7,
+          "stop_price": 79.061,
+          "shares": 101,
+          "trade_risk": 0.0054,
+          "strength": 1.0099
+        }
+      ]
     }
   ],
-  "last_update_utc": "2026-07-21T23:59:19Z",
+  "last_update_utc": "2026-07-23T00:05:16Z",
   "today_signals": {
-    "date": "2026-07-21",
+    "date": "2026-07-22",
     "regime": "BULL",
-    "spy_close": 748.28,
-    "n_candidates": 0,
-    "n_entries": 0,
+    "spy_close": 747.41,
+    "n_candidates": 3,
+    "n_entries": 3,
     "n_executed": 0,
     "n_exits": 1,
-    "n_raw_breakouts": 0,
+    "n_raw_breakouts": 3,
     "n_heat_blocked": 0,
     "n_cash_blocked": 0,
     "n_corr_reduced": 0,
     "n_price_filtered": 230,
-    "n_adv_filtered": 543,
-    "n_breakout_filtered": 1302,
+    "n_adv_filtered": 547,
+    "n_breakout_filtered": 1314,
     "n_atr_filtered": 0,
-    "n_stop_dist_filtered": 2,
-    "n_volume_filtered": 17,
-    "spy_pct_above_sma200": 7.7788,
-    "exits_executed": [],
+    "n_stop_dist_filtered": 1,
+    "n_volume_filtered": 5,
+    "spy_pct_above_sma200": 7.5887,
+    "exits_executed": [
+      {
+        "ticker": "ONB",
+        "shares": 168,
+        "exit_open": 26.17,
+        "exit_price": 26.1438,
+        "net_pnl": -164.52,
+        "pnl_r": -0.906,
+        "exit_reason": "stop_loss"
+      }
+    ],
     "entries_executed": [],
     "exit_signals": [
       {
-        "ticker": "ONB",
+        "ticker": "S",
         "exit_reason": "stop_loss",
-        "stop_used": 26.0439,
-        "shares": 168
+        "stop_used": 18.2838,
+        "shares": 449
       }
     ],
-    "candidate_signals": [],
-    "entry_signals": []
+    "candidate_signals": [
+      {
+        "ticker": "LQDA",
+        "signal_price": 87.04,
+        "stop_price": 77.4152,
+        "shares": 103,
+        "trade_risk": 0.0055,
+        "strength": 1.0492,
+        "rejection": null,
+        "corr_with": null,
+        "stop_distance_pct": 0.110579,
+        "atr_pct": 0.05529,
+        "adv60_m": 125.055,
+        "vol_ratio": 1.7387
+      },
+      {
+        "ticker": "WAB",
+        "signal_price": 290.0,
+        "stop_price": 273.7986,
+        "shares": 31,
+        "trade_risk": 0.0028,
+        "strength": 1.0179,
+        "rejection": null,
+        "corr_with": null,
+        "stop_distance_pct": 0.055867,
+        "atr_pct": 0.027933,
+        "adv60_m": 230.791,
+        "vol_ratio": 3.7403
+      },
+      {
+        "ticker": "ARWR",
+        "signal_price": 88.7,
+        "stop_price": 79.061,
+        "shares": 101,
+        "trade_risk": 0.0054,
+        "strength": 1.0099,
+        "rejection": null,
+        "corr_with": null,
+        "stop_distance_pct": 0.108669,
+        "atr_pct": 0.054335,
+        "adv60_m": 162.111,
+        "vol_ratio": 3.3286
+      }
+    ],
+    "entry_signals": [
+      {
+        "ticker": "LQDA",
+        "signal_price": 87.04,
+        "stop_price": 77.4152,
+        "shares": 103,
+        "trade_risk": 0.0055,
+        "strength": 1.0492
+      },
+      {
+        "ticker": "WAB",
+        "signal_price": 290.0,
+        "stop_price": 273.7986,
+        "shares": 31,
+        "trade_risk": 0.0028,
+        "strength": 1.0179
+      },
+      {
+        "ticker": "ARWR",
+        "signal_price": 88.7,
+        "stop_price": 79.061,
+        "shares": 101,
+        "trade_risk": 0.0054,
+        "strength": 1.0099
+      }
+    ]
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
+  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
-    "downloaded_count": 2124,
-    "total_scanned": 2124,
-    "updated_utc": "2026-07-21T23:59:18Z"
+    "downloaded_count": 2129,
+    "total_scanned": 2131,
+    "updated_utc": "2026-07-23T00:05:15Z"
   },
   "universe_stats": {
     "tiingo_eligible": 2186,
-    "yf_downloadable": 2131,
-    "yf_unavailable_in_pool": 55,
+    "yf_downloadable": 2130,
+    "yf_unavailable_in_pool": 56,
     "total_active": 3083,
     "total_delisted": 1394,
-    "updated_utc": "2026-07-22T23:43:04Z"
+    "updated_utc": "2026-07-23T00:05:26Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -4464,6 +4701,7 @@
     "CWAN",
     "DCPH",
     "EQC",
+    "ESPR",
     "EVBG",
     "HBI",
     "ICPT",
@@ -4509,56 +4747,71 @@
   ],
   "tiingo_universe_synced_utc": "2026-07-22T23:43:04Z",
   "daily_summary": {
-    "date": "2026-07-21",
-    "updated_sgt": "2026-07-22 07:59 SGT",
-    "nav_change_pct": 0.02,
-    "spy_change_pct": 0.83,
-    "vs_spy_pct": -0.81,
+    "date": "2026-07-22",
+    "updated_sgt": "2026-07-23 08:05 SGT",
+    "nav_change_pct": -0.82,
+    "spy_change_pct": -0.12,
+    "vs_spy_pct": -0.7,
     "bullets": [
-      "\u5c3d\u7ba1\u65b0\u95fb\u58f0\u79f0\u91d1\u878d\u677f\u5757\u4f30\u503c\u88ab\u4f4e\u4f30\u4e14\u57fa\u672c\u9762\u7a33\u5065\uff0c\u4f46\u5e02\u573a\u5b9e\u9645\u4ea4\u6613\u4e2d ZION(-4.0%)\u548c SEIC(-1.7%)\u7b49\u91d1\u878d\u670d\u52a1\u7c7b\u4e2a\u80a1\u906d\u629b\u552e\uff0c\u53cd\u6620\u6295\u8d44\u8005\u5bf9\u8be5\u677f\u5757\u7684\u5b9e\u9645\u914d\u7f6e\u610f\u613f\u4e0e\u5a92\u4f53\u53d9\u8ff0\u5b58\u5728\u91cd\u5927\u8131\u8282\u3002\uff08[Is This the Most Undervalued\u2026](https://247wallst.com/investing/etf/2026/07/21/is-this-the-most-undervalued-sector-etf-on-the-market/)\u3001[State Street's XLF or First \u2026](https://www.fool.com/coverage/etfs/2026/07/21/state-street-s-xlf-or-first-trust-s-ftxo-which-financial-etf-is-the-better-long-term-buy/)\uff09",
-      "\u7b56\u7565\u56e0\u91cd\u4ed3 Financial Services \u677f\u5757\u800c\u4e0e SPY \u4ea7\u751f-0.81%\u7684\u8d85\u989d\u8dcc\u5e45\uff0c\u5176\u4e2d ZION \u5355\u53ea\u6807\u7684\u7684-$403\u51c0\u503c\u5f71\u54cd\u5360\u6bd4\u6700\u5927\uff0c\u8be5\u80a1-4.0%\u7684\u8dcc\u5e45\u8fdc\u8d85\u5927\u76d8\u6da8\u5e45+0.83%\uff0c\u6784\u6210\u4e86\u7b56\u7565\u76f8\u5bf9\u8868\u73b0\u6076\u5316\u7684\u4e3b\u8981\u62d6\u7d2f\u3002\uff08[Is This the Most Undervalued\u2026](https://247wallst.com/investing/etf/2026/07/21/is-this-the-most-undervalued-sector-etf-on-the-market/)\u3001[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-advance-afternoon-194226663.html)\u3001[State Street's XLF or First \u2026](https://www.fool.com/coverage/etfs/2026/07/21/state-street-s-xlf-or-first-trust-s-ftxo-which-financial-etf-is-the-better-long-term-buy/)\uff09",
-      "\u5e7f\u4e49\u5e02\u573a\uff08SPY/IVV\uff09\u4e0a\u884c\u800c\u91d1\u878d\u677f\u5757\u4e0b\u884c\u7684\u677f\u5757\u5206\u5316\u683c\u5c40\uff0c\u8bf4\u660e\u4eca\u65e5\u8d44\u91d1\u5448\u73b0\"\u8f6e\u52a8\u7279\u5f81\"\u800c\u975e\u6574\u4f53\u4e0a\u5347\uff0c\u5e02\u573a\u5bf9\u91d1\u878d\u80a1\u7684\u98ce\u9669\u504f\u597d\u660e\u663e\u4e0b\u964d\uff0c\u8fd9\u4e0e\u65b0\u95fb\u4e2d\u5173\u4e8e\"\u91d1\u878d\u677f\u5757\u4fdd\u6301\u4e0a\u5347\"\u7684\u63cf\u8ff0\u5f62\u6210\u53cd\u5dee\uff0c\u66b4\u9732\u51fa\u677f\u5757\u5185\u90e8\u4e2a\u80a1\u5dee\u5f02\u5316\u4e0b\u8dcc\u7684\u73b0\u5b9e\u3002\uff08[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-advance-afternoon-194226663.html)\u3001[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-rise-afternoon-174051634.html)\u3001[Exchange-Traded Funds Higher\u2026](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-higher-us-171046850.html)\uff09",
-      "\u7b56\u7565\u51c0\u503c\u7684\u76f8\u5bf9\u6ede\u540e\u4e3b\u8981\u6e90\u4e8e\u6301\u4ed3\u7ed3\u6784\u7684\u975e\u5e73\u8861\u6027\uff1a\u91d1\u878d\u677f\u5757\u7684ZION(-4.0%)\u548cSEIC(-1.7%)\u53cc\u53cc\u91cd\u632b\uff0c\u800c\u7b56\u7565\u5728\u5176\u4ed6\u677f\u5757\u7684\u6b63\u5411\u8d21\u732e\uff08\u5982 BTSG+2.9%\u7684$+309\u548c AHR+1.7%\u7684$+165\uff09\u672a\u80fd\u5145\u5206\u5bf9\u51b2\u91d1\u878d\u91cd\u4ed3\u7684\u4e8f\u635f\uff0c\u5bfc\u81f4\u603b\u4f53\u8868\u73b0\u88ab\u62d6\u7d2f\u81f3\u4ec5+0.02%\u3002\uff08[Is This the Most Undervalued\u2026](https://247wallst.com/investing/etf/2026/07/21/is-this-the-most-undervalued-sector-etf-on-the-market/)\u3001[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-advance-afternoon-194226663.html)\u3001[State Street's XLF or First \u2026](https://www.fool.com/coverage/etfs/2026/07/21/state-street-s-xlf-or-first-trust-s-ftxo-which-financial-etf-is-the-better-long-term-buy/)\uff09"
+      "N/A 板块今日整体下跌的根本原因在于市场对互联网和软件公司盈利前景的预期调整，尽管新闻强调了AI、云采纳等积极因素，但投资者对这些趋势是否能真正转化为可持续增长仍存疑虑，导致板块承压。（[4 Internet Stocks Poised to …](https://finance.yahoo.com/markets/stocks/articles/4-internet-stocks-poised-top-151400877.html)、[The Zacks Analyst Blog Highl…](https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-unity-142000631.html)）",
+      "Block（XYZ）和其他N/A板块核心持仓下跌幅度（XYZ -3.6%，S -3.1%）超过大盘跌幅（SPY -0.12%），这反映出市场对互联网平台企业增长动能的担忧，尤其是在宏观环境不确定性下，即使有Square/Honolulu Cookie等实际应用案例支撑，短期动能也难以抵抗板块性下行压力。（[Block (XYZ) Gets A Real Worl…](https://finance.yahoo.com/markets/stocks/articles/block-xyz-gets-real-world-121156656.html)）",
+      "策略净值较SPY出现-0.70%的偏差，主要源于重仓N/A板块的XYZ（-3.6%，影响-$321）和S（-3.1%，影响-$265）两个标的跌幅显著，这两只股票的跌幅远超大盘，集中拖累了策略表现，而金融服务板块的SEIC（+1.1%）和ZION（+1.5%）的小幅上涨无法对冲这一缺口。（[4 Internet Stocks Poised to …](https://finance.yahoo.com/markets/stocks/articles/4-internet-stocks-poised-top-151400877.html)、[The Zacks Analyst Blog Highl…](https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-unity-142000631.html)、[Block (XYZ) Gets A Real Worl…](https://finance.yahoo.com/markets/stocks/articles/block-xyz-gets-real-world-121156656.html)）",
+      "虽然新闻报道了Toast AI策略的早期销售增长和多家软件公司的积极基本面，但市场当日的实际表现显示投资者对\"AI驱动增长\"这一叙述的兑现能力持谨慎态度，导致N/A板块遭到"
     ],
     "news": [
       {
-        "title": "Is This the Most Undervalued Sector ETF on the Market?",
-        "url": "https://247wallst.com/investing/etf/2026/07/21/is-this-the-most-undervalued-sector-etf-on-the-market/"
+        "title": "Toast AI Strategy: Will Agents Drive Restaurant Growth?",
+        "url": "https://finance.yahoo.com/technology/ai/articles/toast-ai-strategy-agents-drive-164600798.html"
       },
       {
-        "title": "Sector Update: Financial Stocks Advance Late Afternoon",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-advance-afternoon-194226663.html"
+        "title": "4 Internet Stocks Poised to Top Estimates This Earnings Season",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/4-internet-stocks-poised-top-151400877.html"
       },
       {
-        "title": "State Street's XLF or First Trust's FTXO: Which Financial ETF Is the Better Long-Term Buy?",
-        "url": "https://www.fool.com/coverage/etfs/2026/07/21/state-street-s-xlf-or-first-trust-s-ftxo-which-financial-etf-is-the-better-long-term-buy/"
+        "title": "The Zacks Analyst Blog Highlights Unity Software, HubSpot, Arista Networks and Block",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-unity-142000631.html"
       },
       {
-        "title": "Sector Update: Financial Stocks Rise in Afternoon Trading",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-rise-afternoon-174051634.html"
+        "title": "Best Momentum Stocks to Buy for July 22nd",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/best-momentum-stocks-buy-july-141500095.html"
       },
       {
-        "title": "Exchange-Traded Funds Higher as US Equities Advance After Midday",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-higher-us-171046850.html"
+        "title": "Block (XYZ) Gets A Real World Test As Square Expands While Undervalued Narrative Holds",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/block-xyz-gets-real-world-121156656.html"
       }
     ]
   },
   "last_no_op_utc": "2026-07-14T02:55:28Z",
   "download_log": {
-    "date": "2026-07-21",
+    "date": "2026-07-22",
     "attempts": [
       {
-        "time_sgt": "2026-07-22 07:59 SGT",
+        "time_sgt": "2026-07-23 08:05 SGT",
         "type": "main_download",
-        "status": "success",
-        "total": 2124,
-        "success": 2124,
-        "cumulative_success": 2124,
-        "failed": 0,
-        "next_retry_sgt": null,
+        "status": "partial",
+        "total": 2131,
+        "success": 2129,
+        "cumulative_success": 2129,
+        "failed": 2,
+        "next_retry_sgt": "2026-07-23 08:30 SGT",
         "seq": 1
       }
     ],
     "holiday": null
+  },
+  "pending_retry": {
+    "tickers": [
+      "ADMA",
+      "EWJ"
+    ],
+    "scan_date": "2026-07-22",
+    "attempt": 1,
+    "downloaded_count": 2129,
+    "total_scanned": 2131,
+    "original_total_scanned": 2131,
+    "next_retry_utc": "2026-07-23T00:30:00Z",
+    "next_retry_sgt": "2026-07-23 08:30 SGT",
+    "created_utc": "2026-07-23T00:05:15Z",
+    "last_attempt_utc": "2026-07-23T00:05:15Z"
   }
 }
