@@ -4670,9 +4670,9 @@
   "universe_size": 2194,
   "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
-    "downloaded_count": 2129,
+    "downloaded_count": 2131,
     "total_scanned": 2131,
-    "updated_utc": "2026-07-23T00:05:15Z"
+    "updated_utc": "2026-07-23T00:57:49Z"
   },
   "universe_stats": {
     "tiingo_eligible": 2186,
@@ -4795,23 +4795,19 @@
         "failed": 2,
         "next_retry_sgt": "2026-07-23 08:30 SGT",
         "seq": 1
+      },
+      {
+        "time_sgt": "2026-07-23 08:57 SGT",
+        "type": "retry_download",
+        "status": "success",
+        "total": 2131,
+        "success": 2,
+        "cumulative_success": 2131,
+        "failed": 0,
+        "next_retry_sgt": null,
+        "seq": 2
       }
     ],
     "holiday": null
-  },
-  "pending_retry": {
-    "tickers": [
-      "ADMA",
-      "EWJ"
-    ],
-    "scan_date": "2026-07-22",
-    "attempt": 1,
-    "downloaded_count": 2129,
-    "total_scanned": 2131,
-    "original_total_scanned": 2131,
-    "next_retry_utc": "2026-07-23T00:30:00Z",
-    "next_retry_sgt": "2026-07-23 08:30 SGT",
-    "created_utc": "2026-07-23T00:05:15Z",
-    "last_attempt_utc": "2026-07-23T00:05:15Z"
   }
 }
