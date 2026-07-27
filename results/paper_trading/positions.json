@@ -5207,19 +5207,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2128,
     "total_scanned": 2128,
     "updated_utc": "2026-07-25T00:08:38Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2185,
-    "yf_downloadable": 2126,
-    "yf_unavailable_in_pool": 59,
-    "total_active": 3081,
-    "total_delisted": 1396,
-    "updated_utc": "2026-07-25T00:08:49Z"
+    "tiingo_eligible": 2172,
+    "yf_downloadable": 2117,
+    "yf_unavailable_in_pool": 55,
+    "total_active": 3073,
+    "total_delisted": 1404,
+    "updated_utc": "2026-07-27T23:46:12Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -5286,7 +5286,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-07-24T23:44:29Z",
+  "tiingo_universe_synced_utc": "2026-07-27T23:46:12Z",
   "daily_summary": {
     "date": "2026-07-24",
     "updated_sgt": "2026-07-25 08:08 SGT",
@@ -5294,10 +5294,10 @@
     "spy_change_pct": 0.1,
     "vs_spy_pct": 0.18,
     "bullets": [
-      "Financial Services板块今日上涨的核心驱动是风险偏好回升，美国股市在新关税政策发布后仍实现反弹，表明市场对经济前景的担忧程度有限，这种乐观情绪对金融股形成支撑。（[Exchange-Traded Funds Higher…](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-higher-us-171116480.html)、[Exchange-Traded Funds, Equit…](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-132354336.html)）",
-      "策略净值相比SPY超额收益+0.18%的主要原因是Financial Services板块表现优于大盘，其中TRV上涨2.9%贡献了+272美元，体现了重仓该板块的策略捕捉到了金融股的上涨机会。（[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-advance-afternoon-195216013.html)、[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-advance-friday-172613364.html)）",
-      "策略净值涨幅未能更大的关键制约因素是非金融板块的重仓拖累，特别是Industrials板块中CHRW暴跌9.2%造成-836美元的巨大损失，以及Healthcare板块中LQDA下跌3.2%造成-292美元的损失，这两只标的的跌幅远超大盘，完全抵消了Financial Services板块的涨幅收益。[来源无]",
-      "American Express虽然财报超预期但股价反而下跌6%的现象说明金融股并非全面上涨，而是市场在选择性定价，这种分化表明策略如果过度集中在Financial Services可能面临结构性风险，需要警惕单一板块内的个股分化。（[American Express Sinks 6% Af…](https://247wallst.com/investing/2026/07/24/american-express-sinks-6-after-q2-earnings-beat-as-visa-mastercard-hold-steady/)）"
+      "Financial Services\u677f\u5757\u4eca\u65e5\u4e0a\u6da8\u7684\u6838\u5fc3\u9a71\u52a8\u662f\u98ce\u9669\u504f\u597d\u56de\u5347\uff0c\u7f8e\u56fd\u80a1\u5e02\u5728\u65b0\u5173\u7a0e\u653f\u7b56\u53d1\u5e03\u540e\u4ecd\u5b9e\u73b0\u53cd\u5f39\uff0c\u8868\u660e\u5e02\u573a\u5bf9\u7ecf\u6d4e\u524d\u666f\u7684\u62c5\u5fe7\u7a0b\u5ea6\u6709\u9650\uff0c\u8fd9\u79cd\u4e50\u89c2\u60c5\u7eea\u5bf9\u91d1\u878d\u80a1\u5f62\u6210\u652f\u6491\u3002\uff08[Exchange-Traded Funds Higher\u2026](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-higher-us-171116480.html)\u3001[Exchange-Traded Funds, Equit\u2026](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-132354336.html)\uff09",
+      "\u7b56\u7565\u51c0\u503c\u76f8\u6bd4SPY\u8d85\u989d\u6536\u76ca+0.18%\u7684\u4e3b\u8981\u539f\u56e0\u662fFinancial Services\u677f\u5757\u8868\u73b0\u4f18\u4e8e\u5927\u76d8\uff0c\u5176\u4e2dTRV\u4e0a\u6da82.9%\u8d21\u732e\u4e86+272\u7f8e\u5143\uff0c\u4f53\u73b0\u4e86\u91cd\u4ed3\u8be5\u677f\u5757\u7684\u7b56\u7565\u6355\u6349\u5230\u4e86\u91d1\u878d\u80a1\u7684\u4e0a\u6da8\u673a\u4f1a\u3002\uff08[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-advance-afternoon-195216013.html)\u3001[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-advance-friday-172613364.html)\uff09",
+      "\u7b56\u7565\u51c0\u503c\u6da8\u5e45\u672a\u80fd\u66f4\u5927\u7684\u5173\u952e\u5236\u7ea6\u56e0\u7d20\u662f\u975e\u91d1\u878d\u677f\u5757\u7684\u91cd\u4ed3\u62d6\u7d2f\uff0c\u7279\u522b\u662fIndustrials\u677f\u5757\u4e2dCHRW\u66b4\u8dcc9.2%\u9020\u6210-836\u7f8e\u5143\u7684\u5de8\u5927\u635f\u5931\uff0c\u4ee5\u53caHealthcare\u677f\u5757\u4e2dLQDA\u4e0b\u8dcc3.2%\u9020\u6210-292\u7f8e\u5143\u7684\u635f\u5931\uff0c\u8fd9\u4e24\u53ea\u6807\u7684\u7684\u8dcc\u5e45\u8fdc\u8d85\u5927\u76d8\uff0c\u5b8c\u5168\u62b5\u6d88\u4e86Financial Services\u677f\u5757\u7684\u6da8\u5e45\u6536\u76ca\u3002[\u6765\u6e90\u65e0]",
+      "American Express\u867d\u7136\u8d22\u62a5\u8d85\u9884\u671f\u4f46\u80a1\u4ef7\u53cd\u800c\u4e0b\u8dcc6%\u7684\u73b0\u8c61\u8bf4\u660e\u91d1\u878d\u80a1\u5e76\u975e\u5168\u9762\u4e0a\u6da8\uff0c\u800c\u662f\u5e02\u573a\u5728\u9009\u62e9\u6027\u5b9a\u4ef7\uff0c\u8fd9\u79cd\u5206\u5316\u8868\u660e\u7b56\u7565\u5982\u679c\u8fc7\u5ea6\u96c6\u4e2d\u5728Financial Services\u53ef\u80fd\u9762\u4e34\u7ed3\u6784\u6027\u98ce\u9669\uff0c\u9700\u8981\u8b66\u60d5\u5355\u4e00\u677f\u5757\u5185\u7684\u4e2a\u80a1\u5206\u5316\u3002\uff08[American Express Sinks 6% Af\u2026](https://247wallst.com/investing/2026/07/24/american-express-sinks-6-after-q2-earnings-beat-as-visa-mastercard-hold-steady/)\uff09"
     ],
     "news": [
       {
