@@ -1996,7 +1996,7 @@ def main() -> None:
 
             # Record to download_log
             _dl_log_main = _get_dl_log(state, today)
-            _dl_status   = "success" if not _missing_tickers else "partial"
+            _dl_status   = "success" if not _retry_tickers else "partial"
             _append_attempt(_dl_log_main, {
                 "time_sgt":          _sgt_str(_now_dl_utc),
                 "type":              "main_download",
@@ -2004,9 +2004,9 @@ def main() -> None:
                 "total":             len(scan_tickers),
                 "success":           len(univ_data),
                 "cumulative_success": len(univ_data),
-                "failed":            len(_missing_tickers) if _missing_tickers else 0,
+                "failed":            len(_retry_tickers),
                 "next_retry_sgt": (
-                    state["pending_retry"]["next_retry_sgt"] if _missing_tickers else None
+                    state["pending_retry"]["next_retry_sgt"] if _retry_tickers else None
                 ),
             })
             state["download_log"] = _dl_log_main
