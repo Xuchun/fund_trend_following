@@ -5304,19 +5304,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2138,
     "total_scanned": 2172,
     "updated_utc": "2026-07-28T00:06:16Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2172,
-    "yf_downloadable": 2115,
-    "yf_unavailable_in_pool": 57,
-    "total_active": 3073,
-    "total_delisted": 1404,
-    "updated_utc": "2026-07-28T00:06:26Z"
+    "tiingo_eligible": 2184,
+    "yf_downloadable": 2123,
+    "yf_unavailable_in_pool": 61,
+    "total_active": 3083,
+    "total_delisted": 1394,
+    "updated_utc": "2026-07-28T23:42:02Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -5385,7 +5385,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-07-27T23:46:12Z",
+  "tiingo_universe_synced_utc": "2026-07-28T23:42:02Z",
   "daily_summary": {
     "date": "2026-07-27",
     "updated_sgt": "2026-07-28 08:06 SGT",
@@ -5393,10 +5393,10 @@
     "spy_change_pct": 0.02,
     "vs_spy_pct": -0.09,
     "bullets": [
-      "UnitedHealth（UNH）发布强劲业绩指引后仍出现回调，反映市场对Medicaid压力的持续担忧，这种收益后获利了结的现象打压了整个Healthcare板块的情绪。（[UnitedHealth Pulls Back Post…](https://finance.yahoo.com/healthcare/articles/unitedhealth-pulls-back-post-52-192800440.html)）",
-      "Healthcare板块内部分化显现，防御性较强的DGX上涨1.7%，而LQDA、BTSG等标的分别下跌2.1%和1.3%，说明市场在重新评估医疗保健细分领域的风险溢价，而非板块整体下跌。（[Zacks.com featured highlight…](https://finance.yahoo.com/markets/stocks/articles/zacks-com-featured-highlights-liquidia-101900870.html)）",
-      "策略净值相对SPY下跌0.09%的关键在于，重仓Healthcare的LQDA、BTSG累计拖累净值326美元，而非Healthcare的CAKE（+2.7%、+256美元）和LTH（+3.4%、+386美元）等Consumer Cyclical标的大幅上涨，两个板块的相对表现错配导致了净值与大盘的分歧。（[UnitedHealth Pulls Back Post…](https://finance.yahoo.com/healthcare/articles/unitedhealth-pulls-back-post-52-192800440.html)、[Zacks.com featured highlight…](https://finance.yahoo.com/markets/stocks/articles/zacks-com-featured-highlights-liquidia-101900870.html)）",
-      "Medicaid业务面临的结构性压力成为了Healthcare板块估值重新定价的核心触发点，投资者在强劲指引的掩盖下更加谨慎，而Consumer Cyclical板块在同一交易日的强势表现凸显了策略配置偏向Healthcare所带来的配置风险。（[UnitedHealth Pulls Back Post…](https://finance.yahoo.com/healthcare/articles/unitedhealth-pulls-back-post-52-192800440.html)、[Zacks.com featured highlight…](https://finance.yahoo.com/markets/stocks/articles/zacks-com-featured-highlights-liquidia-101900870.html)）"
+      "UnitedHealth\uff08UNH\uff09\u53d1\u5e03\u5f3a\u52b2\u4e1a\u7ee9\u6307\u5f15\u540e\u4ecd\u51fa\u73b0\u56de\u8c03\uff0c\u53cd\u6620\u5e02\u573a\u5bf9Medicaid\u538b\u529b\u7684\u6301\u7eed\u62c5\u5fe7\uff0c\u8fd9\u79cd\u6536\u76ca\u540e\u83b7\u5229\u4e86\u7ed3\u7684\u73b0\u8c61\u6253\u538b\u4e86\u6574\u4e2aHealthcare\u677f\u5757\u7684\u60c5\u7eea\u3002\uff08[UnitedHealth Pulls Back Post\u2026](https://finance.yahoo.com/healthcare/articles/unitedhealth-pulls-back-post-52-192800440.html)\uff09",
+      "Healthcare\u677f\u5757\u5185\u90e8\u5206\u5316\u663e\u73b0\uff0c\u9632\u5fa1\u6027\u8f83\u5f3a\u7684DGX\u4e0a\u6da81.7%\uff0c\u800cLQDA\u3001BTSG\u7b49\u6807\u7684\u5206\u522b\u4e0b\u8dcc2.1%\u548c1.3%\uff0c\u8bf4\u660e\u5e02\u573a\u5728\u91cd\u65b0\u8bc4\u4f30\u533b\u7597\u4fdd\u5065\u7ec6\u5206\u9886\u57df\u7684\u98ce\u9669\u6ea2\u4ef7\uff0c\u800c\u975e\u677f\u5757\u6574\u4f53\u4e0b\u8dcc\u3002\uff08[Zacks.com featured highlight\u2026](https://finance.yahoo.com/markets/stocks/articles/zacks-com-featured-highlights-liquidia-101900870.html)\uff09",
+      "\u7b56\u7565\u51c0\u503c\u76f8\u5bf9SPY\u4e0b\u8dcc0.09%\u7684\u5173\u952e\u5728\u4e8e\uff0c\u91cd\u4ed3Healthcare\u7684LQDA\u3001BTSG\u7d2f\u8ba1\u62d6\u7d2f\u51c0\u503c326\u7f8e\u5143\uff0c\u800c\u975eHealthcare\u7684CAKE\uff08+2.7%\u3001+256\u7f8e\u5143\uff09\u548cLTH\uff08+3.4%\u3001+386\u7f8e\u5143\uff09\u7b49Consumer Cyclical\u6807\u7684\u5927\u5e45\u4e0a\u6da8\uff0c\u4e24\u4e2a\u677f\u5757\u7684\u76f8\u5bf9\u8868\u73b0\u9519\u914d\u5bfc\u81f4\u4e86\u51c0\u503c\u4e0e\u5927\u76d8\u7684\u5206\u6b67\u3002\uff08[UnitedHealth Pulls Back Post\u2026](https://finance.yahoo.com/healthcare/articles/unitedhealth-pulls-back-post-52-192800440.html)\u3001[Zacks.com featured highlight\u2026](https://finance.yahoo.com/markets/stocks/articles/zacks-com-featured-highlights-liquidia-101900870.html)\uff09",
+      "Medicaid\u4e1a\u52a1\u9762\u4e34\u7684\u7ed3\u6784\u6027\u538b\u529b\u6210\u4e3a\u4e86Healthcare\u677f\u5757\u4f30\u503c\u91cd\u65b0\u5b9a\u4ef7\u7684\u6838\u5fc3\u89e6\u53d1\u70b9\uff0c\u6295\u8d44\u8005\u5728\u5f3a\u52b2\u6307\u5f15\u7684\u63a9\u76d6\u4e0b\u66f4\u52a0\u8c28\u614e\uff0c\u800cConsumer Cyclical\u677f\u5757\u5728\u540c\u4e00\u4ea4\u6613\u65e5\u7684\u5f3a\u52bf\u8868\u73b0\u51f8\u663e\u4e86\u7b56\u7565\u914d\u7f6e\u504f\u5411Healthcare\u6240\u5e26\u6765\u7684\u914d\u7f6e\u98ce\u9669\u3002\uff08[UnitedHealth Pulls Back Post\u2026](https://finance.yahoo.com/healthcare/articles/unitedhealth-pulls-back-post-52-192800440.html)\u3001[Zacks.com featured highlight\u2026](https://finance.yahoo.com/markets/stocks/articles/zacks-com-featured-highlights-liquidia-101900870.html)\uff09"
     ],
     "news": [
       {
