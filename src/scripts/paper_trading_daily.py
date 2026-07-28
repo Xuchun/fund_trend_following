@@ -1958,11 +1958,13 @@ def main() -> None:
             # Track any tickers whose data was silently dropped (rate-limit) and
             # schedule them for an automatic retry 1 hour later via pending_retry.
             _missing_tickers = [t for t in scan_tickers if t not in univ_data]
-            if _missing_tickers:
+            _yf_unavail_now  = set(state.get("yf_persistent_unavailable", []))
+            _retry_tickers   = [t for t in _missing_tickers if t not in _yf_unavail_now]
+            if _retry_tickers:
                 _retry_at   = _next_retry_at(datetime.now(timezone.utc))
                 _now_utc_str = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
                 state["pending_retry"] = {
-                    "tickers":                _missing_tickers,
+                    "tickers":                _retry_tickers,
                     "scan_date":              str(today),
                     "attempt":                1,
                     "downloaded_count":       len(univ_data),
