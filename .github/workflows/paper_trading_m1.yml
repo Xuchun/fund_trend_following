@@ -12,6 +12,10 @@ on:
         required: false
         default: ''
 
+concurrency:
+  group: paper-trading-m1
+  cancel-in-progress: false
+
 permissions:
   contents: write    # needed to push positions.json back to repo
 
