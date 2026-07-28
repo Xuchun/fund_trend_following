@@ -1975,9 +1975,12 @@ def main() -> None:
                     "created_utc":            _now_utc_str,
                     "last_attempt_utc":       _now_utc_str,
                 }
+                _skipped_persist = len(_missing_tickers) - len(_retry_tickers)
                 log.warning(
-                    f"  {len(_missing_tickers)} tickers missing → pending_retry "
-                    f"at {state['pending_retry']['next_retry_sgt']}: {_missing_tickers}"
+                    f"  {len(_missing_tickers)} tickers missing "
+                    f"({_skipped_persist} skipped — already in yf_persistent_unavailable) "
+                    f"→ {len(_retry_tickers)} queued for retry "
+                    f"at {state['pending_retry']['next_retry_sgt']}: {_retry_tickers}"
                 )
             elif state.get("pending_retry"):
                 state.pop("pending_retry")
