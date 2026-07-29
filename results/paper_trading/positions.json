@@ -5957,6 +5957,7 @@
     "ODP",
     "OS",
     "OZON",
+    "PSA-P-T",
     "PTEST-A",
     "PVG",
     "RCM",
@@ -6120,19 +6121,5 @@
       }
     ],
     "holiday": null
-  },
-  "pending_retry": {
-    "tickers": [
-      "PSA-P-T"
-    ],
-    "scan_date": "2026-07-28",
-    "attempt": 9,
-    "downloaded_count": 0,
-    "total_scanned": 1,
-    "original_total_scanned": 2123,
-    "next_retry_utc": "2026-07-29T20:30:00Z",
-    "next_retry_sgt": "2026-07-30 04:30 SGT",
-    "created_utc": "2026-07-29T00:02:42Z",
-    "last_attempt_utc": "2026-07-29T19:52:32Z"
   }
 }
