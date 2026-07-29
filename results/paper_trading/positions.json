@@ -6073,6 +6073,17 @@
         "failed": 1,
         "next_retry_sgt": "2026-07-29 20:30 SGT",
         "seq": 5
+      },
+      {
+        "time_sgt": "2026-07-29 22:38 SGT",
+        "type": "retry_download",
+        "status": "partial",
+        "total": 2123,
+        "success": 0,
+        "cumulative_success": 2122,
+        "failed": 1,
+        "next_retry_sgt": "2026-07-29 23:30 SGT",
+        "seq": 6
       }
     ],
     "holiday": null
@@ -6082,13 +6093,13 @@
       "PSA-P-T"
     ],
     "scan_date": "2026-07-28",
-    "attempt": 5,
+    "attempt": 6,
     "downloaded_count": 0,
     "total_scanned": 1,
     "original_total_scanned": 2123,
-    "next_retry_utc": "2026-07-29T12:30:00Z",
-    "next_retry_sgt": "2026-07-29 20:30 SGT",
+    "next_retry_utc": "2026-07-29T15:30:00Z",
+    "next_retry_sgt": "2026-07-29 23:30 SGT",
     "created_utc": "2026-07-29T00:02:42Z",
-    "last_attempt_utc": "2026-07-29T12:26:58Z"
+    "last_attempt_utc": "2026-07-29T14:38:38Z"
   }
 }
