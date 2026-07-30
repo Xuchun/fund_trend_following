@@ -6289,7 +6289,7 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2121,
     "total_scanned": 2121,
@@ -6297,11 +6297,11 @@
   },
   "universe_stats": {
     "tiingo_eligible": 2181,
-    "yf_downloadable": 2121,
-    "yf_unavailable_in_pool": 60,
-    "total_active": 3076,
-    "total_delisted": 1401,
-    "updated_utc": "2026-07-30T00:06:35Z"
+    "yf_downloadable": 2120,
+    "yf_unavailable_in_pool": 61,
+    "total_active": 3069,
+    "total_delisted": 1408,
+    "updated_utc": "2026-07-30T23:42:47Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -6371,7 +6371,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-07-29T23:43:44Z",
+  "tiingo_universe_synced_utc": "2026-07-30T23:42:47Z",
   "daily_summary": {
     "date": "2026-07-29",
     "updated_sgt": "2026-07-30 08:06 SGT",
@@ -6379,10 +6379,10 @@
     "spy_change_pct": -1.54,
     "vs_spy_pct": 1.38,
     "bullets": [
-      "Cheesecake Factory等餐饮企业的业绩超预期表现带动了整个餐饮及消费板块的投资热情回升，使得消费周期类股票获得关注和资金流入。（[Shake Shack (SHAK) Following…](https://finance.yahoo.com/markets/stocks/articles/shake-shack-shak-following-restaurant-210950838.html)）",
-      "策略中的CAKE（Cheesecake Factory）今日涨幅高达13.6%，单只股票贡献净值+1,346元，远超其他持仓标的跌幅，这是策略净值逆势上涨的核心驱动力。（[Shake Shack (SHAK) Following…](https://finance.yahoo.com/markets/stocks/articles/shake-shack-shak-following-restaurant-210950838.html)）",
-      "虽然大盘SPY整体下跌1.54%，但策略通过重仓Consumer Cyclical板块中表现强势的餐饮股CAKE实现了+1.38%的相对超额收益，说明餐饮企业基本面改善为该板块提供了估值支撑，而市场对此的认可度高于对整体市场的悲观预期。（[Shake Shack (SHAK) Following…](https://finance.yahoo.com/markets/stocks/articles/shake-shack-shak-following-restaurant-210950838.html)）",
-      "策略的持仓结构中，Healthcare和Industrials板块的BTSG、GWW、ABBV等非重点板块标的连续下跌（跌幅-4.3%至-2.9%），但这些跌幅被Consumer Cyclical中CAKE的强势表现（+13.6%）充分对冲，最终导致策略净值抗跌能力明显强于SPY。（[Shake Shack (SHAK) Following…](https://finance.yahoo.com/markets/stocks/articles/shake-shack-shak-following-restaurant-210950838.html)）"
+      "Cheesecake Factory\u7b49\u9910\u996e\u4f01\u4e1a\u7684\u4e1a\u7ee9\u8d85\u9884\u671f\u8868\u73b0\u5e26\u52a8\u4e86\u6574\u4e2a\u9910\u996e\u53ca\u6d88\u8d39\u677f\u5757\u7684\u6295\u8d44\u70ed\u60c5\u56de\u5347\uff0c\u4f7f\u5f97\u6d88\u8d39\u5468\u671f\u7c7b\u80a1\u7968\u83b7\u5f97\u5173\u6ce8\u548c\u8d44\u91d1\u6d41\u5165\u3002\uff08[Shake Shack (SHAK) Following\u2026](https://finance.yahoo.com/markets/stocks/articles/shake-shack-shak-following-restaurant-210950838.html)\uff09",
+      "\u7b56\u7565\u4e2d\u7684CAKE\uff08Cheesecake Factory\uff09\u4eca\u65e5\u6da8\u5e45\u9ad8\u8fbe13.6%\uff0c\u5355\u53ea\u80a1\u7968\u8d21\u732e\u51c0\u503c+1,346\u5143\uff0c\u8fdc\u8d85\u5176\u4ed6\u6301\u4ed3\u6807\u7684\u8dcc\u5e45\uff0c\u8fd9\u662f\u7b56\u7565\u51c0\u503c\u9006\u52bf\u4e0a\u6da8\u7684\u6838\u5fc3\u9a71\u52a8\u529b\u3002\uff08[Shake Shack (SHAK) Following\u2026](https://finance.yahoo.com/markets/stocks/articles/shake-shack-shak-following-restaurant-210950838.html)\uff09",
+      "\u867d\u7136\u5927\u76d8SPY\u6574\u4f53\u4e0b\u8dcc1.54%\uff0c\u4f46\u7b56\u7565\u901a\u8fc7\u91cd\u4ed3Consumer Cyclical\u677f\u5757\u4e2d\u8868\u73b0\u5f3a\u52bf\u7684\u9910\u996e\u80a1CAKE\u5b9e\u73b0\u4e86+1.38%\u7684\u76f8\u5bf9\u8d85\u989d\u6536\u76ca\uff0c\u8bf4\u660e\u9910\u996e\u4f01\u4e1a\u57fa\u672c\u9762\u6539\u5584\u4e3a\u8be5\u677f\u5757\u63d0\u4f9b\u4e86\u4f30\u503c\u652f\u6491\uff0c\u800c\u5e02\u573a\u5bf9\u6b64\u7684\u8ba4\u53ef\u5ea6\u9ad8\u4e8e\u5bf9\u6574\u4f53\u5e02\u573a\u7684\u60b2\u89c2\u9884\u671f\u3002\uff08[Shake Shack (SHAK) Following\u2026](https://finance.yahoo.com/markets/stocks/articles/shake-shack-shak-following-restaurant-210950838.html)\uff09",
+      "\u7b56\u7565\u7684\u6301\u4ed3\u7ed3\u6784\u4e2d\uff0cHealthcare\u548cIndustrials\u677f\u5757\u7684BTSG\u3001GWW\u3001ABBV\u7b49\u975e\u91cd\u70b9\u677f\u5757\u6807\u7684\u8fde\u7eed\u4e0b\u8dcc\uff08\u8dcc\u5e45-4.3%\u81f3-2.9%\uff09\uff0c\u4f46\u8fd9\u4e9b\u8dcc\u5e45\u88abConsumer Cyclical\u4e2dCAKE\u7684\u5f3a\u52bf\u8868\u73b0\uff08+13.6%\uff09\u5145\u5206\u5bf9\u51b2\uff0c\u6700\u7ec8\u5bfc\u81f4\u7b56\u7565\u51c0\u503c\u6297\u8dcc\u80fd\u529b\u660e\u663e\u5f3a\u4e8eSPY\u3002\uff08[Shake Shack (SHAK) Following\u2026](https://finance.yahoo.com/markets/stocks/articles/shake-shack-shak-following-restaurant-210950838.html)\uff09"
     ],
     "news": [
       {
@@ -6402,7 +6402,7 @@
         "url": "https://www.barchart.com/story/news/3519047/norwegian-cruise-line-stock-analyst-estimates-ratings"
       },
       {
-        "title": "Shake Shack (SHAK) Following Restaurant Earnings Optimism Still Looks Undervaluedաի",
+        "title": "Shake Shack (SHAK) Following Restaurant Earnings Optimism Still Looks Undervalued\u0561\u056b",
         "url": "https://finance.yahoo.com/markets/stocks/articles/shake-shack-shak-following-restaurant-210950838.html"
       }
     ]
