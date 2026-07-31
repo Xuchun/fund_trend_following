@@ -6670,19 +6670,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2120,
     "total_scanned": 2120,
     "updated_utc": "2026-07-31T00:06:10Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2181,
-    "yf_downloadable": 2119,
-    "yf_unavailable_in_pool": 62,
-    "total_active": 3069,
-    "total_delisted": 1408,
-    "updated_utc": "2026-07-31T00:06:21Z"
+    "tiingo_eligible": 2175,
+    "yf_downloadable": 2115,
+    "yf_unavailable_in_pool": 60,
+    "total_active": 3064,
+    "total_delisted": 1413,
+    "updated_utc": "2026-07-31T23:43:06Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -6753,7 +6753,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-07-30T23:42:47Z",
+  "tiingo_universe_synced_utc": "2026-07-31T23:43:06Z",
   "daily_summary": {
     "date": "2026-07-30",
     "updated_sgt": "2026-07-31 08:06 SGT",
@@ -6761,10 +6761,10 @@
     "spy_change_pct": 1.68,
     "vs_spy_pct": -2.17,
     "bullets": [
-      "LTH虽然财报指引上调但营收增速放缓（可比中心收入仅9.1%增长），且战略性削减医疗会员数，市场对其增长前景存疑导致股价下跌3.3%，成为拖累策略净值的最大单个因素，影响达-$405。（[Life Time Group Holdings Inc…](https://finance.yahoo.com/markets/stocks/articles/life-time-group-holdings-inc-230315730.html)）",
-      "邮轮和度假板块虽然报告了营收和盈利亮点，但Norwegian Cruise（NCLH）财报超预期反而股价下跌、MGM Resorts虽然创纪录营收却因中国和区域利润压力导致盈利不及预期，反映出市场对消费周期板块盈利质量的担忧而非增长本身。（[Norwegian Cruise Q2 Earnings…](https://finance.yahoo.com/markets/stocks/articles/norwegian-cruise-q2-earnings-revenues-155800304.html)、[MGM Resorts Q2 Earnings Miss…](https://finance.yahoo.com/markets/stocks/articles/mgm-resorts-q2-earnings-miss-155200971.html)）",
-      "策略持仓中LTH（-3.3%）、TRV（-3.3%）、AHR（-3.1%）等核心标的集体承压，累计对净值影响超-$1000，而仅BTSG（+5.1%）、ENVA（+3.5%）的上涨无法对冲，导致策略净值-0.49%远低于SPY的+1.68%，偏差达-2.17%。（[Life Time Group Holdings Inc…](https://finance.yahoo.com/markets/stocks/articles/life-time-group-holdings-inc-230315730.html)、[Norwegian Cruise Q2 Earnings…](https://finance.yahoo.com/markets/stocks/articles/norwegian-cruise-q2-earnings-revenues-155800304.html)、[MGM Resorts Q2 Earnings Miss…](https://finance.yahoo.com/markets/stocks/articles/mgm-resorts-q2-earnings-miss-155200971.html)）",
-      "消费周期板块今日面临的是市场对后续盈利可持续性的质疑，而非宏观需求崩溃，这种选择性抛售与大盘整体上涨形成对立，特别是策略重仓Consumer Cyclical导致beta暴露过高被错杀。（[Exchange-Traded Funds, Equit…](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131132369.html)、[Life Time Group Holdings Inc…](https://finance.yahoo.com/markets/stocks/articles/life-time-group-holdings-inc-230315730.html)、[Norwegian Cruise Q2 Earnings…](https://finance.yahoo.com/markets/stocks/articles/norwegian-cruise-q2-earnings-revenues-155800304.html)、[MGM Resorts Q2 Earnings Miss…](https://finance.yahoo.com/markets/stocks/articles/mgm-resorts-q2-earnings-miss-155200971.html)）"
+      "LTH\u867d\u7136\u8d22\u62a5\u6307\u5f15\u4e0a\u8c03\u4f46\u8425\u6536\u589e\u901f\u653e\u7f13\uff08\u53ef\u6bd4\u4e2d\u5fc3\u6536\u5165\u4ec59.1%\u589e\u957f\uff09\uff0c\u4e14\u6218\u7565\u6027\u524a\u51cf\u533b\u7597\u4f1a\u5458\u6570\uff0c\u5e02\u573a\u5bf9\u5176\u589e\u957f\u524d\u666f\u5b58\u7591\u5bfc\u81f4\u80a1\u4ef7\u4e0b\u8dcc3.3%\uff0c\u6210\u4e3a\u62d6\u7d2f\u7b56\u7565\u51c0\u503c\u7684\u6700\u5927\u5355\u4e2a\u56e0\u7d20\uff0c\u5f71\u54cd\u8fbe-$405\u3002\uff08[Life Time Group Holdings Inc\u2026](https://finance.yahoo.com/markets/stocks/articles/life-time-group-holdings-inc-230315730.html)\uff09",
+      "\u90ae\u8f6e\u548c\u5ea6\u5047\u677f\u5757\u867d\u7136\u62a5\u544a\u4e86\u8425\u6536\u548c\u76c8\u5229\u4eae\u70b9\uff0c\u4f46Norwegian Cruise\uff08NCLH\uff09\u8d22\u62a5\u8d85\u9884\u671f\u53cd\u800c\u80a1\u4ef7\u4e0b\u8dcc\u3001MGM Resorts\u867d\u7136\u521b\u7eaa\u5f55\u8425\u6536\u5374\u56e0\u4e2d\u56fd\u548c\u533a\u57df\u5229\u6da6\u538b\u529b\u5bfc\u81f4\u76c8\u5229\u4e0d\u53ca\u9884\u671f\uff0c\u53cd\u6620\u51fa\u5e02\u573a\u5bf9\u6d88\u8d39\u5468\u671f\u677f\u5757\u76c8\u5229\u8d28\u91cf\u7684\u62c5\u5fe7\u800c\u975e\u589e\u957f\u672c\u8eab\u3002\uff08[Norwegian Cruise Q2 Earnings\u2026](https://finance.yahoo.com/markets/stocks/articles/norwegian-cruise-q2-earnings-revenues-155800304.html)\u3001[MGM Resorts Q2 Earnings Miss\u2026](https://finance.yahoo.com/markets/stocks/articles/mgm-resorts-q2-earnings-miss-155200971.html)\uff09",
+      "\u7b56\u7565\u6301\u4ed3\u4e2dLTH\uff08-3.3%\uff09\u3001TRV\uff08-3.3%\uff09\u3001AHR\uff08-3.1%\uff09\u7b49\u6838\u5fc3\u6807\u7684\u96c6\u4f53\u627f\u538b\uff0c\u7d2f\u8ba1\u5bf9\u51c0\u503c\u5f71\u54cd\u8d85-$1000\uff0c\u800c\u4ec5BTSG\uff08+5.1%\uff09\u3001ENVA\uff08+3.5%\uff09\u7684\u4e0a\u6da8\u65e0\u6cd5\u5bf9\u51b2\uff0c\u5bfc\u81f4\u7b56\u7565\u51c0\u503c-0.49%\u8fdc\u4f4e\u4e8eSPY\u7684+1.68%\uff0c\u504f\u5dee\u8fbe-2.17%\u3002\uff08[Life Time Group Holdings Inc\u2026](https://finance.yahoo.com/markets/stocks/articles/life-time-group-holdings-inc-230315730.html)\u3001[Norwegian Cruise Q2 Earnings\u2026](https://finance.yahoo.com/markets/stocks/articles/norwegian-cruise-q2-earnings-revenues-155800304.html)\u3001[MGM Resorts Q2 Earnings Miss\u2026](https://finance.yahoo.com/markets/stocks/articles/mgm-resorts-q2-earnings-miss-155200971.html)\uff09",
+      "\u6d88\u8d39\u5468\u671f\u677f\u5757\u4eca\u65e5\u9762\u4e34\u7684\u662f\u5e02\u573a\u5bf9\u540e\u7eed\u76c8\u5229\u53ef\u6301\u7eed\u6027\u7684\u8d28\u7591\uff0c\u800c\u975e\u5b8f\u89c2\u9700\u6c42\u5d29\u6e83\uff0c\u8fd9\u79cd\u9009\u62e9\u6027\u629b\u552e\u4e0e\u5927\u76d8\u6574\u4f53\u4e0a\u6da8\u5f62\u6210\u5bf9\u7acb\uff0c\u7279\u522b\u662f\u7b56\u7565\u91cd\u4ed3Consumer Cyclical\u5bfc\u81f4beta\u66b4\u9732\u8fc7\u9ad8\u88ab\u9519\u6740\u3002\uff08[Exchange-Traded Funds, Equit\u2026](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131132369.html)\u3001[Life Time Group Holdings Inc\u2026](https://finance.yahoo.com/markets/stocks/articles/life-time-group-holdings-inc-230315730.html)\u3001[Norwegian Cruise Q2 Earnings\u2026](https://finance.yahoo.com/markets/stocks/articles/norwegian-cruise-q2-earnings-revenues-155800304.html)\u3001[MGM Resorts Q2 Earnings Miss\u2026](https://finance.yahoo.com/markets/stocks/articles/mgm-resorts-q2-earnings-miss-155200971.html)\uff09"
     ],
     "news": [
       {
