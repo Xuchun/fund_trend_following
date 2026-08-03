@@ -367,6 +367,70 @@ if fwd_rows3:
         "三年内几乎必然亏损（样本量有限，但方向性结论鲜明）。"
     )
 
+    # 收益分布图
+    _fwd_label_map = {
+        "1 个月": "fwd_1m", "3 个月": "fwd_3m", "6 个月": "fwd_6m",
+        "12 个月": "fwd_12m", "24 个月": "fwd_24m", "36 个月": "fwd_36m",
+    }
+    _sel_period = st.selectbox(
+        "选择持有期，查看各样本收益分布：",
+        list(_fwd_label_map.keys()),
+        index=5,
+        key="cape40_dist_sel",
+    )
+    _dist_col  = _fwd_label_map[_sel_period]
+    _dist_vals = above40_df[_dist_col].dropna() * 100
+
+    if len(_dist_vals) > 1:
+        _cuts = pd.cut(_dist_vals, bins=max(8, min(14, len(_dist_vals))))
+        _bin_counts = _cuts.value_counts().sort_index()
+        _bar_x   = [iv.mid for iv in _bin_counts.index]
+        _bar_w   = [iv.right - iv.left for iv in _bin_counts.index]
+        _bar_clr = ["#d62728" if x < 0 else "#2ca02c" for x in _bar_x]
+        _med  = _dist_vals.median()
+        _mean = _dist_vals.mean()
+        _n    = len(_dist_vals)
+        _npos = (_dist_vals > 0).sum()
+
+        fig_dist = go.Figure()
+        fig_dist.add_trace(go.Bar(
+            x=_bar_x, y=_bin_counts.values,
+            width=_bar_w,
+            marker_color=_bar_clr,
+            marker_line_width=0.8,
+            marker_line_color="white",
+            hovertemplate="收益区间中点：%{x:.1f}%<br>样本数：%{y}<extra></extra>",
+        ))
+        fig_dist.add_vline(x=0, line_color="black", line_width=1.5,
+                           annotation_text="盈亏平衡（0%）",
+                           annotation_position="top right",
+                           annotation_font_size=11)
+        fig_dist.add_vline(x=_med, line_dash="dash", line_color="#1f77b4",
+                           line_width=1.5,
+                           annotation_text=f"中位数 {_med:+.1f}%",
+                           annotation_position="top left",
+                           annotation_font_size=11)
+        fig_dist.add_vline(x=_mean, line_dash="dot", line_color="#ff7f0e",
+                           line_width=1.5,
+                           annotation_text=f"均值 {_mean:+.1f}%",
+                           annotation_position="bottom left",
+                           annotation_font_size=11)
+        fig_dist.update_layout(
+            height=300,
+            xaxis_title=f"持有 {_sel_period} 收益率（%）",
+            yaxis_title="样本数",
+            showlegend=False,
+            margin=dict(l=0, r=0, t=40, b=0),
+            bargap=0.06,
+        )
+        st.plotly_chart(fig_dist, use_container_width=True)
+        st.markdown(
+            f"持有期 **{_sel_period}**：共 **{_n}** 个样本，"
+            f"正收益 **{_npos}** 个（胜率 **{_npos/_n:.0%}**），"
+            f"中位数 **{_med:+.1f}%**，均值 **{_mean:+.1f}%**。"
+            f"绿色柱 = 正收益，红色柱 = 负收益。"
+        )
+
 # ── 3.4 定投策略对比：不同停止买入规则 ──────────────────────────────────────
 st.markdown("**3.4 定投策略对比：不同「暂停买入」规则的最终组合价值**")
 st.markdown(
