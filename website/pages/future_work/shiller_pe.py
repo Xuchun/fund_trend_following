@@ -441,26 +441,30 @@ st.markdown(
 )
 
 def _dca_sim(df_: pd.DataFrame, stop_cape: float, resume_cape: float):
-    shares = 0.0; cash = 0.0; n_in = 0; n_out = 0; buying = True
-    port_vals = []
+    shares = 0.0; cash = 0.0; n_in = 0; n_out = 0
+    buying = True; port_vals = []; total_contrib = 0.0
     _monthly_r = 0.04 / 12  # 4%/年，按月计复利
-    for _, row in df_.dropna(subset=["cape", "spy_close"]).iterrows():
+    _df_clean = df_.dropna(subset=["cape", "spy_close"])
+    for _m_idx, (_, row) in enumerate(_df_clean.iterrows()):
         c = row["cape"]; p = row["spy_close"]
+        # 每 12 个月投入金额递增 3%（第 1 年 base=1.00，第 2 年 base=1.03，…）
+        base = 1.0 * (1.03 ** (_m_idx // 12))
         if buying and c > stop_cape:
             buying = False
         elif not buying and c < resume_cape:
             buying = True
         if buying:
-            # 每月固定投入 $1；若仍有积累现金，额外再追加 $1（catch-up）
-            extra = min(1.0, cash)
-            invest = 1.0 + extra
+            # catch-up：额外从现金中追加最多 base 元
+            extra = min(base, cash)
+            invest = base + extra
             cash  -= extra
             shares += invest / p
             n_in   += 1
         else:
-            cash  += 1.0
+            cash  += base
             n_out += 1
-        # 每月末对剩余现金计利息（含 catch-up 阶段的剩余现金）
+        total_contrib += base
+        # 每月末对剩余现金计利息
         cash *= (1 + _monthly_r)
         port_vals.append(shares * p + cash)
     # 计算最大历史回撤
@@ -468,7 +472,7 @@ def _dca_sim(df_: pd.DataFrame, stop_cape: float, resume_cape: float):
     roll_max = pv.cummax()
     max_dd = ((pv - roll_max) / roll_max).min()
     latest = df_["spy_close"].dropna().iloc[-1]
-    return shares, cash, n_in, n_out, shares * latest + cash, max_dd
+    return shares, cash, n_in, n_out, shares * latest + cash, max_dd, total_contrib
 
 _dca_strats = [
     ("始终买入（基准）",         999, 0),
