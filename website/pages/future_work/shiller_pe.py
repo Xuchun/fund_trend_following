@@ -210,9 +210,280 @@ fig.update_yaxes(title_text="SPY 月收盘价（$）", secondary_y=True)
 st.plotly_chart(fig, use_container_width=True)
 st.markdown("橙色阴影区域为 CAPE > 35 的时期。橙色虚线 = 35，红色虚线 = 40。")
 
-# ── 三、前向收益率分析 ────────────────────────────────────────────────────────
+# ── 三、CAPE > 40 深度分析 ────────────────────────────────────────────────────
 st.markdown("---")
-st.subheader("三、不同 CAPE 区间下 SPY 的未来收益率")
+st.subheader("三、CAPE > 40 深度分析：历史极端高估期全景")
+st.markdown(
+    "CAPE 超过 40 极为罕见——在 SPY 成立（1993 年）以来仅出现过两次："
+    "**① 1999–2001 年互联网泡沫**（唯一完整历史案例）"
+    "和 **② 2026 年当前时点**（进行中）。"
+    "以下从多个角度深入分析，探讨最优停止买入与重新买入策略。"
+)
+
+def _find_eps40(df_: pd.DataFrame, threshold: float):
+    """返回所有连续超过 threshold 的时期列表 [(start, end), ...]"""
+    eps = []; in_ep = False; ep_s = None
+    for dt in sorted(df_.index):
+        v = df_.loc[dt, "cape"]
+        if v > threshold:
+            if not in_ep: in_ep = True; ep_s = dt
+        else:
+            if in_ep: eps.append((ep_s, dt)); in_ep = False
+    if in_ep: eps.append((ep_s, df_.index[-1]))
+    return eps
+
+eps40 = _find_eps40(df.dropna(subset=["cape"]), 40)
+
+# ── 3.1 各时期概览 ────────────────────────────────────────────────────────────
+st.markdown("**3.1 各时期概览**")
+ep_rows = []
+for s, e in eps40:
+    sub      = df.loc[(df.index >= s) & (df.index <= e)]
+    spy_s    = sub["spy_close"].iloc[0]
+    spy_e    = sub["spy_close"].iloc[-1]
+    cape_pk  = sub["cape"].max()
+    cape_pk_dt = sub["cape"].idxmax()
+    ongoing  = (e == df.index[-1])
+
+    after_s   = df.loc[df.index >= s, "spy_close"]
+    spy_pk    = after_s.max(); spy_pk_dt = after_s.idxmax()
+    gain_pk   = spy_pk / spy_s - 1
+
+    idx_s  = df.index.get_loc(s)
+    e36    = df.index[min(idx_s + 36, len(df.index) - 1)]
+    sub36  = df.loc[(df.index >= s) & (df.index <= e36), "spy_close"]
+    spy_dd = sub36.min() / spy_s - 1
+    spy_dd_dt = sub36.idxmin()
+
+    ep_rows.append({
+        "时期":               f"{s.strftime('%Y-%m')} → {'进行中' if ongoing else e.strftime('%Y-%m')}",
+        "持续月数":           str(len(sub)) + ("（进行中）" if ongoing else ""),
+        "CAPE 峰值":          f"{cape_pk:.1f}（{cape_pk_dt.strftime('%Y-%m')}）",
+        "期间 SPY 涨跌":      "进行中" if ongoing else f"{spy_e/spy_s-1:+.0%}",
+        "入场后 SPY 历史最高": f"+{gain_pk:.0%}（{spy_pk_dt.strftime('%Y-%m')}）",
+        "入场后 36 月最大跌幅": "进行中" if ongoing else f"{spy_dd:+.0%}（{spy_dd_dt.strftime('%Y-%m')}）",
+    })
+
+st.dataframe(pd.DataFrame(ep_rows), use_container_width=True, hide_index=True)
+st.markdown(
+    "**关键观察**：即使在 CAPE 刚突破 40 后，SPY 仍可能继续上涨数月（1999 年续涨约 +14% 才见顶），"
+    "但 36 个月内最大跌幅达到约 −40%，表明极高估值下持续买入的风险极大。"
+)
+
+# ── 3.2 互联网泡沫案例 SPY 走势（指数化）────────────────────────────────────
+if eps40:
+    s0     = eps40[0][0]
+    idx_s0 = df.index.get_loc(s0)
+    w_s    = df.index[max(0, idx_s0 - 6)]
+    w_e    = df.index[min(len(df.index) - 1, idx_s0 + 48)]
+    w_df   = df.loc[(df.index >= w_s) & (df.index <= w_e), ["spy_close", "cape"]].copy()
+    base_p = df.loc[s0, "spy_close"]
+    w_df["spy_idx"] = w_df["spy_close"] / base_p * 100
+
+    st.markdown(
+        f"**3.2 互联网泡沫案例（{s0.strftime('%Y-%m')} 首次超过 40）：SPY 指数化走势（入场月 = 100）**"
+    )
+    fig_ep = make_subplots(specs=[[{"secondary_y": True}]])
+    fig_ep.add_trace(go.Scatter(
+        x=w_df.index, y=w_df["spy_idx"], name="SPY（入场=100）",
+        line=dict(color="#1f77b4", width=2.5),
+        fill="tozeroy", fillcolor="rgba(31,119,180,0.07)",
+    ), secondary_y=False)
+    fig_ep.add_trace(go.Scatter(
+        x=w_df.index, y=w_df["cape"], name="CAPE",
+        line=dict(color="#d62728", width=1.5, dash="dot"),
+    ), secondary_y=True)
+
+    for s_ep, e_ep in eps40:
+        x0 = max(s_ep, w_s); x1 = min(e_ep, w_e)
+        if x0 <= x1:
+            fig_ep.add_vrect(x0=x0, x1=x1, fillcolor="#d62728",
+                             opacity=0.10, layer="below", line_width=0)
+
+    spy_pk_idx = w_df["spy_idx"].max(); spy_pk_dt = w_df["spy_idx"].idxmax()
+    spy_mn_idx = w_df["spy_idx"].min(); spy_mn_dt = w_df["spy_idx"].idxmin()
+
+    fig_ep.add_annotation(
+        x=spy_pk_dt, y=spy_pk_idx,
+        text=f"峰值 {spy_pk_idx:.0f}<br>（+{spy_pk_idx-100:.0f}%）",
+        showarrow=True, arrowhead=2, ay=-35, font=dict(color="#1f77b4", size=11),
+    )
+    fig_ep.add_annotation(
+        x=spy_mn_dt, y=spy_mn_idx,
+        text=f"谷值 {spy_mn_idx:.0f}<br>（{spy_mn_idx-100:.0f}%）",
+        showarrow=True, arrowhead=2, ay=35, font=dict(color="#d62728", size=11),
+    )
+    fig_ep.add_hline(y=100, line_dash="dot", line_color="gray",
+                     line_width=1, secondary_y=False,
+                     annotation_text="入场基准（100）", annotation_position="right")
+    fig_ep.update_layout(
+        height=380, hovermode="x unified",
+        margin=dict(l=0, r=0, t=30, b=0),
+        legend=dict(orientation="h", y=1.1),
+    )
+    fig_ep.update_yaxes(title_text="SPY 指数（入场=100）", secondary_y=False)
+    fig_ep.update_yaxes(title_text="CAPE", secondary_y=True)
+    st.plotly_chart(fig_ep, use_container_width=True)
+    st.markdown("红色阴影 = CAPE > 40 月份；灰色虚线 = 入场基准位（100）。")
+
+# ── 3.3 CAPE > 40 各月买入的前向收益率 ──────────────────────────────────────
+st.markdown("**3.3 在 CAPE > 40 的任意月份买入 SPY，后续收益如何？**")
+above40_df = df[df["cape"] > 40].copy()
+fwd_cfg3 = [
+    ("fwd_1m",  "1 个月"),
+    ("fwd_3m",  "3 个月"),
+    ("fwd_6m",  "6 个月"),
+    ("fwd_12m", "12 个月"),
+    ("fwd_24m", "24 个月"),
+    ("fwd_36m", "36 个月"),
+]
+fwd_rows3 = []
+for col, lbl in fwd_cfg3:
+    vals = above40_df[col].dropna()
+    if len(vals) == 0:
+        continue
+    fwd_rows3.append({
+        "持有期":     lbl,
+        "样本月数":   len(vals),
+        "中位数收益": f"{vals.median():+.1%}",
+        "平均收益":   f"{vals.mean():+.1%}",
+        "最差":       f"{vals.min():+.1%}",
+        "最优":       f"{vals.max():+.1%}",
+        "正收益胜率": f"{(vals > 0).mean():.0%}",
+    })
+
+if fwd_rows3:
+    def _style_fwd3(row):
+        wr = float(row["正收益胜率"].rstrip("%")) / 100
+        c = "#d4edda" if wr >= 0.6 else ("#fff3cd" if wr >= 0.4 else "#f8d7da")
+        return [f"background-color:{c}" if col == "正收益胜率" else "" for col in row.index]
+    st.dataframe(
+        pd.DataFrame(fwd_rows3).style.apply(_style_fwd3, axis=1),
+        use_container_width=True, hide_index=True,
+    )
+    st.markdown(
+        "**解读**：随着持有时间拉长，正收益胜率急剧下降。"
+        "36 个月维度接近 0% 胜率，意味着历史上在 CAPE > 40 期间买入后，"
+        "三年内几乎必然亏损（样本量有限，但方向性结论鲜明）。"
+    )
+
+# ── 3.4 定投策略对比：不同停止买入规则 ──────────────────────────────────────
+st.markdown("**3.4 定投策略对比：不同「暂停买入」规则的最终组合价值**")
+st.markdown(
+    "假设从 1993 年 1 月起每月投入 1 美元；暂停期间持有现金（零利息，偏保守假设）。"
+    "最终价值 = 持有 SPY 份额 × 当前价格 + 保留现金。"
+)
+
+def _dca_sim(df_: pd.DataFrame, stop_cape: float, resume_cape: float):
+    shares = 0.0; cash = 0.0; n_in = 0; n_out = 0; buying = True
+    for _, row in df_.dropna(subset=["cape", "spy_close"]).iterrows():
+        c = row["cape"]; p = row["spy_close"]
+        if buying and c > stop_cape:
+            buying = False
+        elif not buying and c < resume_cape:
+            buying = True
+        if buying:
+            shares += 1.0 / p; n_in  += 1
+        else:
+            cash   += 1.0;     n_out += 1
+    latest = df_["spy_close"].dropna().iloc[-1]
+    return shares, cash, n_in, n_out, shares * latest + cash
+
+_dca_strats = [
+    ("始终买入（基准）",         999, 0),
+    ("CAPE>40 停，CAPE<35 恢复",  40, 35),
+    ("CAPE>40 停，CAPE<30 恢复",  40, 30),
+    ("CAPE>35 停，CAPE<30 恢复",  35, 30),
+]
+dca_rows = []
+latest_spy = df["spy_close"].dropna().iloc[-1]
+for name, stop, resume in _dca_strats:
+    sh, ca, n_in, n_out, total = _dca_sim(df, stop, resume)
+    dca_rows.append({
+        "策略":              name,
+        "买入月数":          n_in,
+        "暂停月数":          n_out,
+        "总投入（$）":       n_in + n_out,
+        "SPY 份额价值（$）": f"{sh * latest_spy:,.0f}",
+        "保留现金（$）":     f"{ca:,.0f}",
+        "最终总价值（$）":   f"{total:,.0f}",
+    })
+
+st.dataframe(pd.DataFrame(dca_rows), use_container_width=True, hide_index=True)
+st.markdown(
+    "暂停期间若按短债利率（约 4%/年）计息，暂停策略的相对优势会进一步提升。"
+    "本表零利息假设为保守估计，实际效果更好。"
+)
+
+# ── 3.5 最优重新买入时机分析（互联网泡沫案例）────────────────────────────────
+st.markdown("**3.5 CAPE > 40 结束后：何时重新买入最优？（互联网泡沫案例）**")
+st.markdown(
+    "以 1999–2001 年案例为基础，分析「等到 CAPE 跌至不同阈值后再重新买入」的实际效果。"
+    "停止买入时间点 = CAPE 首次超过 40 的月份（入场参考价）。"
+)
+
+if eps40 and eps40[0][1] != df.index[-1]:
+    s0_ep, e0_ep = eps40[0]
+    spy_at_stop  = df.loc[s0_ep, "spy_close"]
+
+    reentry_rows = []
+    for target in [38, 35, 32, 30, 27, 25]:
+        after_e0   = df.loc[df.index >= e0_ep]
+        below_mask = after_e0["cape"] < target
+        if below_mask.any():
+            re_dt    = after_e0[below_mask].index[0]
+            spy_re   = df.loc[re_dt, "spy_close"]
+            vs_stop  = spy_re / spy_at_stop - 1
+            gain_now = df["spy_close"].iloc[-1] / spy_re - 1
+            wait_mo  = len(df.loc[(df.index >= e0_ep) & (df.index <= re_dt)])
+            reentry_rows.append({
+                "重新买入信号":             f"CAPE < {target}",
+                "信号触发":                 re_dt.strftime("%Y-%m"),
+                "等待月数（从 CAPE 出 40）": wait_mo,
+                "重新买入时 SPY（$）":      f"{spy_re:.0f}",
+                "vs 停止买入时 SPY 价格":   f"{vs_stop:+.0%}",
+                "重买至今涨幅":             f"+{gain_now:.0%}",
+            })
+        else:
+            reentry_rows.append({
+                "重新买入信号":             f"CAPE < {target}",
+                "信号触发":                 "尚未触发",
+                "等待月数（从 CAPE 出 40）": "–",
+                "重新买入时 SPY（$）":      "–",
+                "vs 停止买入时 SPY 价格":   "–",
+                "重买至今涨幅":             "–",
+            })
+
+    st.dataframe(pd.DataFrame(reentry_rows), use_container_width=True, hide_index=True)
+    st.markdown(
+        "**关键发现**：等待 CAPE < 30 重新买入，可以在明显低于停止买入时的价格入场；"
+        "等待 CAPE < 25–27 则可以以更低价格入场，但时间等待成本更长。"
+        "综合看，**CAPE 在 25–30 区间分批重新买入**是历史上最优策略区间。"
+    )
+
+# ── 3.6 对当前 2026 年时点的启示 ─────────────────────────────────────────────
+st.markdown(
+    f"<div style='background:#fff5f5;border-left:4px solid #d62728;"
+    f"padding:12px 16px;border-radius:4px;margin:10px 0'>"
+    f"<b>对当前（2026 年）时点的启示</b><br><br>"
+    f"当前 CAPE = {latest_cape:.1f}，正处于历史第二次 CAPE > 40 时期（2026-05 起，已持续 {_months40} 个月）。"
+    f"基于 1999–2001 年唯一完整历史案例，以下为参考性推断（非投资建议）：<br>"
+    f"<ul style='margin:8px 0 0 0;padding-left:18px'>"
+    f"<li>CAPE 突破 40 后，SPY 曾继续上涨约 +14% 后才见顶，时间约 3 个月。"
+    f"市场顶点时间难以预测，不应以此为押注依据。</li>"
+    f"<li>历史上在 CAPE > 40 期间任意月份买入 SPY，持有 24–36 个月出现亏损的概率极高。</li>"
+    f"<li>建议：<b>暂停新增买入 SPY</b>（被动定投场景），等待 CAPE 回落至 30 以下后分批重新入场。</li>"
+    f"<li>历史最优重新买入区间：<b>CAPE 介于 25–30</b>，此时 SPY 价格往往已从峰值下跌 20–40%。</li>"
+    f"<li><b>重要局限</b>：CAPE > 40 的历史样本仅一次，不能保证历史重演。"
+    f"市场可能因政策刺激、技术革命等因素在高 CAPE 下维持更长时间。</li>"
+    f"</ul>"
+    f"</div>",
+    unsafe_allow_html=True,
+)
+
+# ── 四、前向收益率分析 ────────────────────────────────────────────────────────
+st.markdown("---")
+st.subheader("四、不同 CAPE 区间下 SPY 的未来收益率")
 st.markdown("以下统计基于 **1993 年 SPY 成立**至今的月度数据。"
             "每个 CAPE 区间内，计算该月后 12 / 24 / 36 个月的 SPY 总收益率。")
 
