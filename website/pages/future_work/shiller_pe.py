@@ -652,6 +652,76 @@ st.markdown(
     "missed 机会成本最小，是最接近「微调」而非「大幅偏离」基准的选项。"
 )
 
+# ── 3.4b 一次性持仓：CAPE 择时全仓卖出/买回 vs 持有不卖 ─────────────────────
+st.markdown("---")
+st.markdown("**3.4b 一次性持仓：CAPE 择时全仓卖出 & 买回 vs 持有不卖**")
+st.markdown(
+    "假设以 **1,000 美元**一次性买入 SPY，此后**不再追加资金**。"
+    "择时策略：当 CAPE 超过卖出阈值时**全部卖出 SPY**，持有现金（4%/年计息）；"
+    "当 CAPE 跌回买入阈值时**用全部现金重新买回 SPY**。"
+    "「持有不卖」为基准，现金余额始终为 0。"
+)
+
+def _timing_sim(df_: pd.DataFrame, sell_cape: float, buy_cape: float,
+                start_val: float = 1000.0):
+    _monthly_r = 0.04 / 12
+    _df_c = df_.dropna(subset=["cape", "spy_close"])
+    shares = start_val / _df_c["spy_close"].iloc[0]
+    cash = 0.0; in_mkt = True; port_vals = []
+    for _, row in _df_c.iterrows():
+        c = row["cape"]; p = row["spy_close"]
+        if in_mkt and c > sell_cape:
+            cash = shares * p; shares = 0.0; in_mkt = False
+        elif not in_mkt and c < buy_cape:
+            shares = cash / p; cash = 0.0; in_mkt = True
+        cash *= (1 + _monthly_r)
+        port_vals.append(shares * p + cash)
+    pv = pd.Series(port_vals)
+    max_dd = ((pv - pv.cummax()) / pv.cummax()).min()
+    lp = _df_c["spy_close"].iloc[-1]
+    return shares * lp + cash, max_dd, shares * lp, cash
+
+_timing_strats = [
+    ("持有不卖（基准）",           999, 0),
+    ("CAPE>40 卖出，CAPE<35 买回",  40, 35),
+    ("CAPE>40 卖出，CAPE<30 买回",  40, 30),
+    ("CAPE>35 卖出，CAPE<30 买回",  35, 30),
+]
+
+def _build_timing_rows(df_: pd.DataFrame) -> list:
+    _raw = {}
+    for _n, _s, _b in _timing_strats:
+        _raw[_n] = _timing_sim(df_, _s, _b)
+    _base_t = _raw["持有不卖（基准）"][0]
+    _rows = []
+    for _n, _s, _b in _timing_strats:
+        tot, mdd, spy_v, cash_v = _raw[_n]
+        _vs = None if _n == "持有不卖（基准）" else (tot - _base_t) / _base_t
+        _rows.append({
+            "策略":              _n,
+            "最终总价值（$）":   f"{tot:,.0f}",
+            "SPY 份额价值（$）": f"{spy_v:,.0f}",
+            "保留现金（$）":     f"{cash_v:,.0f}",
+            "vs 持有不卖":       "基准" if _vs is None else f"{_vs:+.1%}",
+            "最大历史回撤":      f"{mdd:.1%}",
+        })
+    return _rows
+
+for _t_lbl, _t_df in [
+    ("1993 年 1 月起（初始 $1,000）", df),
+    ("1995 年 1 月起（初始 $1,000）", _df_95),
+    ("1997 年 1 月起（初始 $1,000）", _df_97),
+]:
+    st.markdown(f"**{_t_lbl}**")
+    st.dataframe(pd.DataFrame(_build_timing_rows(_t_df)),
+                 use_container_width=True, hide_index=True)
+
+st.markdown(
+    "**注意**：择时策略会在 CAPE 触发阈值时一次性卖出/买回所有持仓，"
+    "未持仓期间按 4%/年 计息。「vs 持有不卖」= 最终总价值与基准的百分比差异。"
+    "现金仍有余额意味着当前正处于「已卖出、等待 CAPE 回落」的状态。"
+)
+
 # ── 3.5 最优重新买入时机分析（互联网泡沫案例）────────────────────────────────
 st.markdown("**3.5 CAPE > 40 结束后：何时重新买入最优？（互联网泡沫案例）**")
 st.markdown(
