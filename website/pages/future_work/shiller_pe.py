@@ -480,60 +480,48 @@ _dca_strats = [
     ("CAPE>40 停，CAPE<30 恢复",  40, 30),
     ("CAPE>35 停，CAPE<30 恢复",  35, 30),
 ]
-dca_rows = []
 latest_spy = df["spy_close"].dropna().iloc[-1]
-for name, stop, resume in _dca_strats:
-    sh, ca, n_in, n_out, total, max_dd, tc = _dca_sim(df, stop, resume)
-    dca_rows.append({
-        "策略":              name,
-        "买入月数":          n_in,
-        "暂停月数":          n_out,
-        "总投入（$）":       f"{tc:,.0f}",
-        "SPY 份额价值（$）": f"{sh * latest_spy:,.0f}",
-        "保留现金（$）":     f"{ca:,.0f}",
-        "最终总价值（$）":   f"{total:,.0f}",
-        "最大历史回撤":      f"{max_dd:.1%}",
-    })
 
+def _build_dca_rows(df_: pd.DataFrame) -> list:
+    """运行所有策略模拟，返回含「vs 始终买入」列的行列表。"""
+    _raw = {}
+    for _n, _s, _r in _dca_strats:
+        _raw[_n] = _dca_sim(df_, _s, _r)
+    _base_total = _raw["始终买入（基准）"][4]
+    _rows = []
+    for _n, _s, _r in _dca_strats:
+        sh, ca, ni, no, tot, mdd, tc = _raw[_n]
+        _vs = None if _n == "始终买入（基准）" else (tot - _base_total) / _base_total
+        _rows.append({
+            "策略":              _n,
+            "买入月数":          ni,
+            "暂停月数":          no,
+            "总投入（$）":       f"{tc:,.0f}",
+            "SPY 份额价值（$）": f"{sh * latest_spy:,.0f}",
+            "保留现金（$）":     f"{ca:,.0f}",
+            "最终总价值（$）":   f"{tot:,.0f}",
+            "vs 始终买入":       "基准" if _vs is None else f"{_vs:+.1%}",
+            "最大历史回撤":      f"{mdd:.1%}",
+        })
+    return _rows
+
+dca_rows = _build_dca_rows(df)
 st.dataframe(pd.DataFrame(dca_rows), use_container_width=True, hide_index=True)
 st.markdown(
     "「保留现金（$）」= 截至最新月份尚未 catch-up 完毕的剩余现金（已含 4%/年利息）。"
     "若接近 0，说明暂停期间积累的资金已全部通过 catch-up 重新投入 SPY。"
     "基准策略现金始终为 0，故利息对其无影响。"
+    "「vs 始终买入」= 该策略最终总价值与基准的百分比差异（正数 = 优于基准，负数 = 低于基准）。"
 )
 
 st.markdown("**从 1995 年 1 月起（其他条件不变）**")
 _df_95 = df[df.index >= "1995-01-01"]
-_dca_rows_95 = []
-for _name95, _stop95, _resume95 in _dca_strats:
-    _sh, _ca, _ni, _no, _tot, _mdd, _tc = _dca_sim(_df_95, _stop95, _resume95)
-    _dca_rows_95.append({
-        "策略":              _name95,
-        "买入月数":          _ni,
-        "暂停月数":          _no,
-        "总投入（$）":       f"{_tc:,.0f}",
-        "SPY 份额价值（$）": f"{_sh * latest_spy:,.0f}",
-        "保留现金（$）":     f"{_ca:,.0f}",
-        "最终总价值（$）":   f"{_tot:,.0f}",
-        "最大历史回撤":      f"{_mdd:.1%}",
-    })
+_dca_rows_95 = _build_dca_rows(_df_95)
 st.dataframe(pd.DataFrame(_dca_rows_95), use_container_width=True, hide_index=True)
 
 st.markdown("**从 1997 年 1 月起（其他条件不变）**")
 _df_97 = df[df.index >= "1997-01-01"]
-_dca_rows_97 = []
-for _name97, _stop97, _resume97 in _dca_strats:
-    _sh, _ca, _ni, _no, _tot, _mdd, _tc = _dca_sim(_df_97, _stop97, _resume97)
-    _dca_rows_97.append({
-        "策略":              _name97,
-        "买入月数":          _ni,
-        "暂停月数":          _no,
-        "总投入（$）":       f"{_tc:,.0f}",
-        "SPY 份额价值（$）": f"{_sh * latest_spy:,.0f}",
-        "保留现金（$）":     f"{_ca:,.0f}",
-        "最终总价值（$）":   f"{_tot:,.0f}",
-        "最大历史回撤":      f"{_mdd:.1%}",
-    })
+_dca_rows_97 = _build_dca_rows(_df_97)
 st.dataframe(pd.DataFrame(_dca_rows_97), use_container_width=True, hide_index=True)
 
 # ── 综合分析小结（完全数据驱动）─────────────────────────────────────────────
