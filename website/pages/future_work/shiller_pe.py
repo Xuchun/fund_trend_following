@@ -546,7 +546,7 @@ _ad: dict = {}
 for _lbl, _dfy in _yr_configs:
     _ad[_lbl] = {}
     for _nm, _st, _re in _dca_strats:
-        _, _, _, _, _tot, _mdd = _dca_sim(_dfy, _st, _re)
+        _, _, _, _, _tot, _mdd, _ = _dca_sim(_dfy, _st, _re)
         _ad[_lbl][_nm] = (_tot, _mdd)
 
 # ① 哪个起始年份对暂停策略最有利（最终价值相对基准最接近）
