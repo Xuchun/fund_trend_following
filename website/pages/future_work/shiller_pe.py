@@ -506,12 +506,12 @@ st.markdown("**从 1995 年 1 月起（其他条件不变）**")
 _df_95 = df[df.index >= "1995-01-01"]
 _dca_rows_95 = []
 for _name95, _stop95, _resume95 in _dca_strats:
-    _sh, _ca, _ni, _no, _tot, _mdd = _dca_sim(_df_95, _stop95, _resume95)
+    _sh, _ca, _ni, _no, _tot, _mdd, _tc = _dca_sim(_df_95, _stop95, _resume95)
     _dca_rows_95.append({
         "策略":              _name95,
         "买入月数":          _ni,
         "暂停月数":          _no,
-        "总投入（$）":       _ni + _no,
+        "总投入（$）":       f"{_tc:,.0f}",
         "SPY 份额价值（$）": f"{_sh * latest_spy:,.0f}",
         "保留现金（$）":     f"{_ca:,.0f}",
         "最终总价值（$）":   f"{_tot:,.0f}",
