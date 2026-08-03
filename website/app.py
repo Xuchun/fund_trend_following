@@ -74,6 +74,7 @@ try:
             st.Page(_fw / "reduce_deep_drawdown.py",      title="如何减少深度回撤幅度",    icon="🔻"),
             st.Page(_fw / "improve_capital_utilization.py", title="如何提高熊市资金使用率", icon="📈"),
             st.Page(_fw / "filter_low_volatility.py",      title="如何过滤极低波动率的开仓信号", icon="🔍"),
+            st.Page(_fw / "shiller_pe.py",                 title="Shiller PE Ratio vs SPY", icon="📐"),
             st.Page(_fw / "second_data_source.py",         title="是否购买第二家数据源",   icon="🗄️"),
         ],
         "策略2.0（开发中）": [
