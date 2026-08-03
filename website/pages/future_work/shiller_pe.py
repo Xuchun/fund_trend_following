@@ -101,6 +101,25 @@ def _months_since(start, end):
 _months35 = _months_since(_streak35_start, latest_date)
 _months40 = _months_since(_streak40_start, latest_date)
 
+def _max_streak(df_: pd.DataFrame, threshold: float):
+    """遍历全部历史数据，找出连续超过阈值的最长连续段（月数 + 起止月）。"""
+    best_len, best_start, best_end = 0, None, None
+    cur_len, cur_start = 0, None
+    for dt in sorted(df_.index):
+        if df_.loc[dt, "cape"] > threshold:
+            if cur_len == 0:
+                cur_start = dt
+            cur_len += 1
+            if cur_len > best_len:
+                best_len, best_start, best_end = cur_len, cur_start, dt
+        else:
+            cur_len, cur_start = 0, None
+    return best_len, best_start, best_end
+
+_cape_full = cape_df.dropna()  # 使用完整 CAPE 历史（1871年起）
+_max35_len, _max35_start, _max35_end = _max_streak(_cape_full, 35)
+_max40_len, _max40_start, _max40_end = _max_streak(_cape_full, 40)
+
 # ── 一、当前估值状态 ───────────────────────────────────────────────────────────
 st.subheader("一、当前估值状态")
 c1, c2, c3, c4 = st.columns(4)
@@ -112,12 +131,24 @@ c3.metric("SPY 最新月收盘", f"${df['spy_close'].iloc[-1]:.0f}")
 c4.metric("数据截至", latest_date.strftime("%Y-%m"),
           help="SPY 成立于 1993 年，本分析基于 SPY 数据段")
 
-# 连续高估时长
+# 连续高估时长（当前 vs 历史最长）
 ca, cb = st.columns(2)
 _str35 = f"{_streak35_start.strftime('%Y-%m')} 起，已持续 {_months35} 个月" if _streak35_start else "当前未超过 35"
 _str40 = f"{_streak40_start.strftime('%Y-%m')} 起，已持续 {_months40} 个月" if _streak40_start else "当前未超过 40"
-ca.metric("CAPE 连续高于 35", _str35)
-cb.metric("CAPE 连续高于 40", _str40)
+ca.metric("当前：CAPE 连续高于 35", _str35)
+cb.metric("当前：CAPE 连续高于 40", _str40)
+
+cc, cd = st.columns(2)
+_max35_str = (
+    f"{_max35_len} 个月（{_max35_start.strftime('%Y-%m')} — {_max35_end.strftime('%Y-%m')}）"
+    if _max35_start else "历史上从未超过 35"
+)
+_max40_str = (
+    f"{_max40_len} 个月（{_max40_start.strftime('%Y-%m')} — {_max40_end.strftime('%Y-%m')}）"
+    if _max40_start else "历史上从未超过 40"
+)
+cc.metric("历史最长：CAPE 连续高于 35", _max35_str)
+cd.metric("历史最长：CAPE 连续高于 40", _max40_str)
 
 _color = "#d62728" if latest_cape > 40 else ("#ff7f0e" if latest_cape > 35 else "#2ca02c")
 _label = "极度高估（历史罕见）" if latest_cape > 40 else ("明显高估" if latest_cape > 35 else "中等估值")
