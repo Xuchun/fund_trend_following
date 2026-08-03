@@ -679,7 +679,8 @@ def _timing_sim(df_: pd.DataFrame, sell_cape: float, buy_cape: float,
     pv = pd.Series(port_vals)
     max_dd = ((pv - pv.cummax()) / pv.cummax()).min()
     lp = _df_c["spy_close"].iloc[-1]
-    return shares * lp + cash, max_dd, shares * lp, cash
+    n_months = len(_df_c)
+    return shares * lp + cash, max_dd, shares * lp, cash, n_months
 
 _timing_strats = [
     ("持有不卖（基准）",           999, 0),
@@ -692,17 +693,18 @@ def _build_timing_rows(df_: pd.DataFrame) -> list:
     _raw = {}
     for _n, _s, _b in _timing_strats:
         _raw[_n] = _timing_sim(df_, _s, _b)
-    _base_t = _raw["持有不卖（基准）"][0]
     _rows = []
     for _n, _s, _b in _timing_strats:
-        tot, mdd, spy_v, cash_v = _raw[_n]
-        _vs = None if _n == "持有不卖（基准）" else (tot - _base_t) / _base_t
+        tot, mdd, spy_v, cash_v, n_mo = _raw[_n]
+        yrs = n_mo / 12
+        cagr = (tot / 1000.0) ** (1 / yrs) - 1
         _rows.append({
             "策略":              _n,
             "最终总价值（$）":   f"{tot:,.0f}",
+            "总收益":            f"{tot/1000-1:+.0%}",
+            "年化收益（CAGR）":  f"{cagr:+.2%}",
             "SPY 份额价值（$）": f"{spy_v:,.0f}",
             "保留现金（$）":     f"{cash_v:,.0f}",
-            "vs 持有不卖":       "基准" if _vs is None else f"{_vs:+.1%}",
             "最大历史回撤":      f"{mdd:.1%}",
         })
     return _rows
@@ -717,9 +719,11 @@ for _t_lbl, _t_df in [
                  use_container_width=True, hide_index=True)
 
 st.markdown(
-    "**注意**：择时策略会在 CAPE 触发阈值时一次性卖出/买回所有持仓，"
-    "未持仓期间按 4%/年 计息。「vs 持有不卖」= 最终总价值与基准的百分比差异。"
-    "现金仍有余额意味着当前正处于「已卖出、等待 CAPE 回落」的状态。"
+    "**注**：「总收益」和「年化收益（CAGR）」基于初始 $1,000 计算，随起始年份不同而不同。"
+    "「vs 持有不卖」的百分比差异在所有起始年份下数学上相同"
+    "（因为卖出/买回均发生在同一日历日期，两策略的起始价格约掉后只剩 P_卖 / P_买 的比值），"
+    "故改用 CAGR 作为跨起始年份的比较指标。"
+    "保留现金非零 = 当前处于「已卖出 SPY、等待 CAPE 回落买回」状态。"
 )
 
 # ── 3.5 最优重新买入时机分析（互联网泡沫案例）────────────────────────────────
