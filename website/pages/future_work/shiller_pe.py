@@ -448,9 +448,15 @@ def _dca_sim(df_: pd.DataFrame, stop_cape: float, resume_cape: float):
         elif not buying and c < resume_cape:
             buying = True
         if buying:
-            shares += 1.0 / p; n_in  += 1
+            # 每月固定投入 $1；若仍有暂停期间积累的现金，额外再追加 $1（catch-up）
+            extra = min(1.0, cash)
+            invest = 1.0 + extra
+            cash  -= extra
+            shares += invest / p
+            n_in   += 1
         else:
-            cash   += 1.0;     n_out += 1
+            cash  += 1.0
+            n_out += 1
         port_vals.append(shares * p + cash)
     # 计算最大历史回撤
     pv = pd.Series(port_vals)
