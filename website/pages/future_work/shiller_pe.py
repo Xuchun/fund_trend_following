@@ -79,6 +79,28 @@ latest_cape = df["cape"].dropna().iloc[-1]
 latest_date = df["cape"].dropna().index[-1]
 pct_rank    = (df["cape"].dropna() < latest_cape).mean()
 
+# ── 计算当前连续高估时长 ──────────────────────────────────────────────────────
+def _streak_start(df_: pd.DataFrame, threshold: float):
+    """从最新月份往前找连续超过阈值的起始月。"""
+    start = None
+    for dt in sorted(df_.index, reverse=True):
+        if df_.loc[dt, "cape"] > threshold:
+            start = dt
+        else:
+            break
+    return start
+
+_streak35_start = _streak_start(df.dropna(subset=["cape"]), 35)
+_streak40_start = _streak_start(df.dropna(subset=["cape"]), 40)
+
+def _months_since(start, end):
+    if start is None:
+        return 0
+    return len(df.loc[(df.index >= start) & (df.index <= end)])
+
+_months35 = _months_since(_streak35_start, latest_date)
+_months40 = _months_since(_streak40_start, latest_date)
+
 # ── 一、当前估值状态 ───────────────────────────────────────────────────────────
 st.subheader("一、当前估值状态")
 c1, c2, c3, c4 = st.columns(4)
@@ -86,9 +108,16 @@ c1.metric("当前 Shiller PE（CAPE）", f"{latest_cape:.2f}",
           help="数据来源：multpl.com")
 c2.metric("历史百分位（1871年至今）", f"{pct_rank:.0%}",
           help="仅有约 5% 的历史月份比当前更贵")
-c3.metric("数据覆盖", f"1993–{latest_date.year}",
+c3.metric("SPY 最新月收盘", f"${df['spy_close'].iloc[-1]:.0f}")
+c4.metric("数据截至", latest_date.strftime("%Y-%m"),
           help="SPY 成立于 1993 年，本分析基于 SPY 数据段")
-c4.metric("SPY 最新月收盘", f"${df['spy_close'].iloc[-1]:.0f}")
+
+# 连续高估时长
+ca, cb = st.columns(2)
+_str35 = f"{_streak35_start.strftime('%Y-%m')} 起，已持续 {_months35} 个月" if _streak35_start else "当前未超过 35"
+_str40 = f"{_streak40_start.strftime('%Y-%m')} 起，已持续 {_months40} 个月" if _streak40_start else "当前未超过 40"
+ca.metric("CAPE 连续高于 35", _str35)
+cb.metric("CAPE 连续高于 40", _str40)
 
 _color = "#d62728" if latest_cape > 40 else ("#ff7f0e" if latest_cape > 35 else "#2ca02c")
 _label = "极度高估（历史罕见）" if latest_cape > 40 else ("明显高估" if latest_cape > 35 else "中等估值")
