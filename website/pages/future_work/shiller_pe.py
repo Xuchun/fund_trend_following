@@ -545,9 +545,9 @@ fig2.update_layout(
 )
 st.plotly_chart(fig2, use_container_width=True)
 
-# ── 四、CAPE > 35 历史区间详情 ───────────────────────────────────────────────
+# ── 五、CAPE > 35 历史区间详情 ───────────────────────────────────────────────
 st.markdown("---")
-st.subheader("四、历史上 CAPE > 35 的各段时期")
+st.subheader("五、历史上 CAPE > 35 的各段时期")
 
 episodes_data = []
 above35 = df["cape"] > 35
