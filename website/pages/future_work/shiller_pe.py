@@ -557,29 +557,34 @@ for _lbl, _ in _yr_configs:
 
 st.markdown("**综合分析**")
 
-# ① 最终价值对比
+# ① 最终价值对比（含各策略 vs 基准的百分比差异）
 _tot_lines = []
 for _lbl in ["1993 年起", "1995 年起", "1997 年起"]:
     f = _yr_facts[_lbl]
+    # 每个暂停策略的百分比差异
+    _vs_lines = []
+    for _nm in _pause_nms:
+        _t = _ad[_lbl][_nm][0]
+        _diff = (_t - f["base_tot"]) / f["base_tot"]
+        _sign = "优于" if _diff > 0 else "低于"
+        _vs_lines.append(f"「{_nm}」{_diff:+.1%}（{_sign}基准）")
+
     if f["n_beat_tot"] == len(_pause_nms):
-        _tot_lines.append(
-            f"**{_lbl}**：所有暂停策略最终价值均**高于**基准"
-            f"（最优：「{f['best_tot_nm']}」${f['best_tot_val']:,.0f}"
-            f" vs 基准 ${f['base_tot']:,.0f}，领先 {(f['best_tot_val']-f['base_tot'])/f['base_tot']:+.1%}）"
-        )
+        _header = f"**{_lbl}：所有暂停策略最终价值均高于基准**"
     elif f["n_beat_tot"] == 0:
-        _tot_lines.append(
-            f"**{_lbl}**：基准最终价值**高于**所有暂停策略"
-            f"（基准 ${f['base_tot']:,.0f} vs 最优暂停 ${f['best_tot_val']:,.0f}，"
-            f"领先 {(f['base_tot']-f['best_tot_val'])/f['base_tot']:+.1%}）"
-        )
+        _header = f"**{_lbl}：基准最终价值高于所有暂停策略**"
     else:
-        _tot_lines.append(
-            f"**{_lbl}**：{f['n_beat_tot']} 个暂停策略最终价值高于基准，{len(_pause_nms)-f['n_beat_tot']} 个低于基准"
-        )
+        _header = f"**{_lbl}：部分暂停策略高于基准**"
+
+    _tot_lines.append(_header + "；各策略 vs 基准：" + "，".join(_vs_lines))
+
 st.markdown(
-    "① **最终组合价值对比**\n\n"
+    "① **最终组合价值 vs 始终买入（百分比差异）**\n\n"
     + "\n\n".join(f"  - {l}" for l in _tot_lines)
+    + "\n\n"
+    + "  **规律**：起始年份越接近泡沫顶峰（1997 年），暂停策略的相对优势越大——"
+    "因为在高估值期间暂停买入并积累现金，随后在低估值期间通过 catch-up 以更低价格补仓，"
+    "可以有效规避在泡沫顶部高价买入的损失。"
 )
 
 # ② 最大历史回撤对比
