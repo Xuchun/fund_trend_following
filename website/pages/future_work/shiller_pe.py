@@ -490,8 +490,9 @@ for name, stop, resume in _dca_strats:
 
 st.dataframe(pd.DataFrame(dca_rows), use_container_width=True, hide_index=True)
 st.markdown(
-    "暂停期间若按短债利率（约 4%/年）计息，暂停策略的相对优势会进一步提升。"
-    "本表零利息假设为保守估计，实际效果更好。"
+    "「保留现金（$）」= 截至最新月份尚未 catch-up 完毕的剩余现金；"
+    "若三个暂停策略的剩余现金接近 0，说明积累的资金已全部通过 catch-up 重新投入 SPY。"
+    "暂停期间现金若按短债利率（约 4%/年）计息，暂停策略的优势会进一步扩大。"
 )
 
 st.markdown("**从 1995 年 1 月起（其他条件不变）**")
