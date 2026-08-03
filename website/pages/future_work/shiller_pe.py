@@ -443,6 +443,7 @@ st.markdown(
 def _dca_sim(df_: pd.DataFrame, stop_cape: float, resume_cape: float):
     shares = 0.0; cash = 0.0; n_in = 0; n_out = 0; buying = True
     port_vals = []
+    _monthly_r = 0.04 / 12  # 4%/年，按月计复利
     for _, row in df_.dropna(subset=["cape", "spy_close"]).iterrows():
         c = row["cape"]; p = row["spy_close"]
         if buying and c > stop_cape:
@@ -450,7 +451,7 @@ def _dca_sim(df_: pd.DataFrame, stop_cape: float, resume_cape: float):
         elif not buying and c < resume_cape:
             buying = True
         if buying:
-            # 每月固定投入 $1；若仍有暂停期间积累的现金，额外再追加 $1（catch-up）
+            # 每月固定投入 $1；若仍有积累现金，额外再追加 $1（catch-up）
             extra = min(1.0, cash)
             invest = 1.0 + extra
             cash  -= extra
@@ -459,6 +460,8 @@ def _dca_sim(df_: pd.DataFrame, stop_cape: float, resume_cape: float):
         else:
             cash  += 1.0
             n_out += 1
+        # 每月末对剩余现金计利息（含 catch-up 阶段的剩余现金）
+        cash *= (1 + _monthly_r)
         port_vals.append(shares * p + cash)
     # 计算最大历史回撤
     pv = pd.Series(port_vals)
