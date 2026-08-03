@@ -483,12 +483,12 @@ _dca_strats = [
 dca_rows = []
 latest_spy = df["spy_close"].dropna().iloc[-1]
 for name, stop, resume in _dca_strats:
-    sh, ca, n_in, n_out, total, max_dd = _dca_sim(df, stop, resume)
+    sh, ca, n_in, n_out, total, max_dd, tc = _dca_sim(df, stop, resume)
     dca_rows.append({
         "策略":              name,
         "买入月数":          n_in,
         "暂停月数":          n_out,
-        "总投入（$）":       n_in + n_out,
+        "总投入（$）":       f"{tc:,.0f}",
         "SPY 份额价值（$）": f"{sh * latest_spy:,.0f}",
         "保留现金（$）":     f"{ca:,.0f}",
         "最终总价值（$）":   f"{total:,.0f}",
