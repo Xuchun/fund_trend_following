@@ -376,6 +376,7 @@ st.markdown(
 
 def _dca_sim(df_: pd.DataFrame, stop_cape: float, resume_cape: float):
     shares = 0.0; cash = 0.0; n_in = 0; n_out = 0; buying = True
+    port_vals = []
     for _, row in df_.dropna(subset=["cape", "spy_close"]).iterrows():
         c = row["cape"]; p = row["spy_close"]
         if buying and c > stop_cape:
@@ -386,8 +387,13 @@ def _dca_sim(df_: pd.DataFrame, stop_cape: float, resume_cape: float):
             shares += 1.0 / p; n_in  += 1
         else:
             cash   += 1.0;     n_out += 1
+        port_vals.append(shares * p + cash)
+    # 计算最大历史回撤
+    pv = pd.Series(port_vals)
+    roll_max = pv.cummax()
+    max_dd = ((pv - roll_max) / roll_max).min()
     latest = df_["spy_close"].dropna().iloc[-1]
-    return shares, cash, n_in, n_out, shares * latest + cash
+    return shares, cash, n_in, n_out, shares * latest + cash, max_dd
 
 _dca_strats = [
     ("始终买入（基准）",         999, 0),
@@ -398,7 +404,7 @@ _dca_strats = [
 dca_rows = []
 latest_spy = df["spy_close"].dropna().iloc[-1]
 for name, stop, resume in _dca_strats:
-    sh, ca, n_in, n_out, total = _dca_sim(df, stop, resume)
+    sh, ca, n_in, n_out, total, max_dd = _dca_sim(df, stop, resume)
     dca_rows.append({
         "策略":              name,
         "买入月数":          n_in,
@@ -407,6 +413,7 @@ for name, stop, resume in _dca_strats:
         "SPY 份额价值（$）": f"{sh * latest_spy:,.0f}",
         "保留现金（$）":     f"{ca:,.0f}",
         "最终总价值（$）":   f"{total:,.0f}",
+        "最大历史回撤":      f"{max_dd:.1%}",
     })
 
 st.dataframe(pd.DataFrame(dca_rows), use_container_width=True, hide_index=True)
