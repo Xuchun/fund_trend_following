@@ -21,7 +21,7 @@ _pio.templates.default = "plotly_white"
 st.title("Shiller PE Ratio vs SPY 历史关系分析")
 st.markdown(
     "基于 1993 年至今的 SPY 月度价格与 Shiller PE Ratio（CAPE）历史数据，"
-    "分析高估值环境下 SPY 的未来表现，探讨是否存在"应停止买入"的估值阈值。"
+    "分析高估值环境下 SPY 的未来表现，探讨是否存在「应停止买入」的估值阈值。"
 )
 st.markdown("---")
 
