@@ -486,6 +486,40 @@ st.markdown(
     "本表零利息假设为保守估计，实际效果更好。"
 )
 
+st.markdown("**从 1995 年 1 月起（其他条件不变）**")
+_df_95 = df[df.index >= "1995-01-01"]
+_dca_rows_95 = []
+for _name95, _stop95, _resume95 in _dca_strats:
+    _sh, _ca, _ni, _no, _tot, _mdd = _dca_sim(_df_95, _stop95, _resume95)
+    _dca_rows_95.append({
+        "策略":              _name95,
+        "买入月数":          _ni,
+        "暂停月数":          _no,
+        "总投入（$）":       _ni + _no,
+        "SPY 份额价值（$）": f"{_sh * latest_spy:,.0f}",
+        "保留现金（$）":     f"{_ca:,.0f}",
+        "最终总价值（$）":   f"{_tot:,.0f}",
+        "最大历史回撤":      f"{_mdd:.1%}",
+    })
+st.dataframe(pd.DataFrame(_dca_rows_95), use_container_width=True, hide_index=True)
+
+st.markdown("**从 1997 年 1 月起（其他条件不变）**")
+_df_97 = df[df.index >= "1997-01-01"]
+_dca_rows_97 = []
+for _name97, _stop97, _resume97 in _dca_strats:
+    _sh, _ca, _ni, _no, _tot, _mdd = _dca_sim(_df_97, _stop97, _resume97)
+    _dca_rows_97.append({
+        "策略":              _name97,
+        "买入月数":          _ni,
+        "暂停月数":          _no,
+        "总投入（$）":       _ni + _no,
+        "SPY 份额价值（$）": f"{_sh * latest_spy:,.0f}",
+        "保留现金（$）":     f"{_ca:,.0f}",
+        "最终总价值（$）":   f"{_tot:,.0f}",
+        "最大历史回撤":      f"{_mdd:.1%}",
+    })
+st.dataframe(pd.DataFrame(_dca_rows_97), use_container_width=True, hide_index=True)
+
 # ── 3.5 最优重新买入时机分析（互联网泡沫案例）────────────────────────────────
 st.markdown("**3.5 CAPE > 40 结束后：何时重新买入最优？（互联网泡沫案例）**")
 st.markdown(
