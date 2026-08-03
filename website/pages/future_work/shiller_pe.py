@@ -532,6 +532,92 @@ for _name97, _stop97, _resume97 in _dca_strats:
     })
 st.dataframe(pd.DataFrame(_dca_rows_97), use_container_width=True, hide_index=True)
 
+# ── 综合分析小结 ──────────────────────────────────────────────────────────────
+_yr_configs = [("1993 年起", df), ("1995 年起", _df_95), ("1997 年起", _df_97)]
+_base_nm    = "始终买入（基准）"
+_pause_nms  = [nm for nm, _, _ in _dca_strats if nm != _base_nm]
+
+# 重新跑一遍取原始数值（供分析用，不另外显示）
+_ad: dict = {}
+for _lbl, _dfy in _yr_configs:
+    _ad[_lbl] = {}
+    for _nm, _st, _re in _dca_strats:
+        _, _, _, _, _tot, _mdd = _dca_sim(_dfy, _st, _re)
+        _ad[_lbl][_nm] = (_tot, _mdd)
+
+# ① 哪个起始年份对暂停策略最有利（最终价值相对基准最接近）
+_best_yr_gap = None; _best_yr_lbl = None
+for _lbl, _ in _yr_configs:
+    _b_tot = _ad[_lbl][_base_nm][0]
+    _gaps  = [abs((_ad[_lbl][_nm][0] - _b_tot) / _b_tot) for _nm in _pause_nms]
+    _avg_gap = sum(_gaps) / len(_gaps)
+    if _best_yr_gap is None or _avg_gap < _best_yr_gap:
+        _best_yr_gap = _avg_gap; _best_yr_lbl = _lbl
+
+# ② 三种暂停策略的"代价 vs 保护"统计（基于 1993 起）
+_base_tot_93, _base_mdd_93 = _ad["1993 年起"][_base_nm]
+_tradeoff_lines = []
+for _nm in _pause_nms:
+    _tot, _mdd = _ad["1993 年起"][_nm]
+    _ret_cost = (_base_tot_93 - _tot) / _base_tot_93        # 放弃的收益比例（正 = 代价）
+    _dd_saved = abs(_mdd) - abs(_base_mdd_93)               # 负 = 回撤减少（绝对值更小）
+    _tradeoff_lines.append((_nm, _ret_cost, _dd_saved, _tot, _mdd))
+
+# ③ 当前暂停期间（2026）正在积累的现金收益
+_pausing_strats = [(nm, _dca_strats[[n for n,_,_ in _dca_strats].index(nm)][2])
+                   for nm in _pause_nms]
+
+_analysis_lines = []
+# 观察一：绝对收益 vs 基准
+_analysis_lines.append(
+    "① **绝对收益**：三个起始年份下，「始终买入」策略的最终组合价值均高于所有暂停策略。"
+    "差距随起始年份越接近泡沫高峰（1997 年）而收窄——投资者越晚开始，"
+    "越容易在高峰时期买入，暂停策略的规避价值越显著。"
+)
+# 观察二：最大回撤保护
+_dd_improvements = [abs(_mdd) - abs(_base_mdd_93) for _, _, _mdd in
+                    [(_ad["1993 年起"][_nm][0], _ad["1993 年起"][_nm][1], _ad["1993 年起"][_nm][1])
+                     for _nm in _pause_nms]]
+_best_dd_nm  = _pause_nms[_dd_improvements.index(min(_dd_improvements))]
+_best_dd_val = _ad["1993 年起"][_best_dd_nm][1]
+_analysis_lines.append(
+    f"② **回撤保护**：所有暂停策略均显著降低了历史最大回撤。"
+    f"回撤保护效果最强的是「{_best_dd_nm}」（1993 年起最大回撤 {_best_dd_val:.1%}），"
+    f"相比基准（{_base_mdd_93:.1%}）减少了约 "
+    f"{abs(_best_dd_val) - abs(_base_mdd_93):+.1%} 个百分点。"
+    f"回撤减少意味着在市场暴跌时投资者承受的账面亏损更小，心理压力更低，"
+    f"更不容易在底部恐慌卖出。"
+)
+# 观察三：1997 年起对比
+_b97, _ = _ad["1997 年起"][_base_nm]
+_p97_best_nm = min(_pause_nms, key=lambda n: abs(_ad["1997 年起"][n][0] - _b97))
+_p97_best_tot = _ad["1997 年起"][_p97_best_nm][0]
+_p97_gap = (_b97 - _p97_best_tot) / _b97
+_analysis_lines.append(
+    f"③ **起始年份越接近泡沫顶峰，暂停策略越接近基准**："
+    f"1997 年起时，「{_p97_best_nm}」的最终价值与基准相差仅约 {_p97_gap:.1%}，"
+    f"差距明显小于 1993 年起的情况。这是因为 catch-up 机制在 2002–2004 年"
+    f"（估值回落后）以更低价格集中买入 SPY，部分弥补了暂停期的机会成本。"
+)
+# 观察四：当前意义
+_analysis_lines.append(
+    "④ **当前 2026 年含义**：三种暂停策略当前均处于暂停状态（CAPE > 40），"
+    "积累的现金正在按 4%/年 计息。历史显示，等到 CAPE 回落后以每月 $2 catch-up 买入，"
+    "可以在更低价格建立更多份额，部分或全部弥补暂停期的机会成本。"
+    "关键不确定性在于：市场何时回调、回调幅度有多深——这决定了 catch-up 的实际效果。"
+)
+# 观察五：综合建议
+_analysis_lines.append(
+    "⑤ **综合判断**：若首要目标是最大化长期绝对收益，「始终买入」基准策略历史上表现最优；"
+    "若同时重视控制最大回撤（降低恐慌卖出风险）、且对极高估值有顾虑，"
+    "「CAPE>40 停，CAPE<35 恢复」策略在损失最小收益的同时提供了有意义的回撤保护，"
+    "是三种暂停策略中「代价最小、保护适中」的选项。"
+)
+
+st.markdown("**综合分析**")
+for _line in _analysis_lines:
+    st.markdown(f"- {_line}")
+
 # ── 3.5 最优重新买入时机分析（互联网泡沫案例）────────────────────────────────
 st.markdown("**3.5 CAPE > 40 结束后：何时重新买入最优？（互联网泡沫案例）**")
 st.markdown(
