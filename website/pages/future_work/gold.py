@@ -303,3 +303,48 @@ else:
                 f"约 {_d['d_tot'] / 365:.1f} 年",
                 delta_color="off",
             )
+
+# ─── 四、年度收益柱状图 ─────────────────────────────────────────────
+st.subheader("四、黄金年度收益历史（1969–2026）")
+st.markdown("数据来源：Macrotrends，名义价格年度收益率。")
+
+_ann_csv = _root / "data" / "gold" / "gold_annual_returns.csv"
+_ann = pd.read_csv(_ann_csv)
+_ann = _ann.sort_values("year").reset_index(drop=True)
+_ann["pct"] = _ann["annual_return"] * 100
+_ann["color"] = _ann["annual_return"].apply(
+    lambda x: "#2E7D32" if x >= 0 else "#C62828"
+)
+
+_fig4 = go.Figure()
+_fig4.add_trace(go.Bar(
+    x=_ann["year"],
+    y=_ann["pct"],
+    marker_color=_ann["color"],
+    text=_ann["pct"].apply(lambda v: f"{v:+.1f}%"),
+    textposition="outside",
+    textfont=dict(size=9),
+    hovertemplate="%{x}年：%{y:+.2f}%<extra></extra>",
+))
+_fig4.add_hline(y=0, line_color="white", line_width=1)
+_fig4.update_layout(
+    xaxis_title="年份",
+    yaxis_title="年度收益率（%）",
+    yaxis=dict(ticksuffix="%", zeroline=True),
+    height=480,
+    bargap=0.25,
+    margin=dict(t=40, b=40, l=60, r=20),
+    hovermode="x unified",
+)
+st.plotly_chart(_fig4, use_container_width=True)
+
+# 统计摘要
+_pos = _ann[_ann["annual_return"] >= 0]
+_neg = _ann[_ann["annual_return"] < 0]
+_c1, _c2, _c3, _c4 = st.columns(4)
+_c1.metric("上涨年数", f"{len(_pos)} 年", f"共 {len(_ann)} 年")
+_c2.metric("下跌年数", f"{len(_neg)} 年")
+_c3.metric("最大涨幅", f"{_ann['pct'].max():+.1f}%",
+           f"{int(_ann.loc[_ann['pct'].idxmax(), 'year'])} 年")
+_c4.metric("最大跌幅", f"{_ann['pct'].min():+.1f}%",
+           f"{int(_ann.loc[_ann['pct'].idxmin(), 'year'])} 年")
