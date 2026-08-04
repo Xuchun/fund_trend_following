@@ -637,7 +637,7 @@ for _fdt, _fdv in _yr_dd.items():
             "买入年均价（$/oz）": f"{_fep:,.2f}",
             "当时回撤": f"{_fdv:.1f}%",
         }
-        for _fy in [1, 2, 3, 5]:
+        for _fy in [1, 2, 3, 5, 10, 20]:
             _ffd = _yr_px[_yr_px.index >= _fdt + pd.DateOffset(years=_fy)]
             _frow[f"{_fy}年后收益"] = f"{(_ffd.iloc[0] / _fep - 1):+.1%}" if len(_ffd) else "—"
         _yr_fwd_rows.append(_frow)
