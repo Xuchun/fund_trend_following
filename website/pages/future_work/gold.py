@@ -62,9 +62,10 @@ def _load_gold() -> tuple:
     return s.sort_index().rename("gold"), "Yahoo Finance — GC=F 黄金期货连续合约（2000 年起）"
 
 with st.spinner("正在加载黄金价格数据…"):
-    _prices = _load_gold()
+    _prices, _src_label = _load_gold()
 
 st.markdown(
+    f"数据来源：**{_src_label}**  \n"
     f"数据范围：**{_prices.index[0].strftime('%Y-%m-%d')}** 至 **{_prices.index[-1].strftime('%Y-%m-%d')}**，"
     f"共 **{len(_prices):,}** 个交易日。"
 )
