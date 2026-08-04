@@ -626,6 +626,29 @@ _ym3.metric(
 )
 _ym4.metric("最低点→复原", _yr_ttr_val, _yr_ttr_sub, delta_color="off")
 
+st.markdown("**各次年均价格首次跌破 −30%（相对历史高点）时买入，后续收益：**")
+_yr_fwd_above = True
+_yr_fwd_rows = []
+for _fdt, _fdv in _yr_dd.items():
+    if _yr_fwd_above and _fdv <= -30:
+        _fep = float(_yr_px[_fdt])
+        _frow = {
+            "买入年份": _fdt.year,
+            "买入年均价（$/oz）": f"{_fep:,.2f}",
+            "当时回撤": f"{_fdv:.1f}%",
+        }
+        for _fy in [1, 2, 3, 5]:
+            _ffd = _yr_px[_yr_px.index >= _fdt + pd.DateOffset(years=_fy)]
+            _frow[f"{_fy}年后收益"] = f"{(_ffd.iloc[0] / _fep - 1):+.1%}" if len(_ffd) else "—"
+        _yr_fwd_rows.append(_frow)
+        _yr_fwd_above = False
+    elif _fdv > -30:
+        _yr_fwd_above = True
+if _yr_fwd_rows:
+    st.dataframe(pd.DataFrame(_yr_fwd_rows), use_container_width=True, hide_index=True)
+else:
+    st.markdown("数据范围内无跌破 −30% 的时间点。")
+
 # 5a 年均价格走势（对数坐标）
 _fig_yr1 = go.Figure()
 _fig_yr1.add_trace(go.Scatter(
