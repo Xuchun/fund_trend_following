@@ -764,6 +764,29 @@ if _yr_fwd40_rows:
 else:
     st.markdown("数据范围内无跌破 −40% 的时间点。")
 
+st.markdown("**各次年均价格首次跌破 −50%（相对历史高点）时买入，后续收益：**")
+_yr_fwd50_in_event = False
+_yr_fwd50_rows = []
+for _fdt, _fdv in _yr_dd.items():
+    if not _yr_fwd50_in_event and _fdv <= -50:
+        _fep = float(_yr_px[_fdt])
+        _frow = {
+            "买入年份": _fdt.year,
+            "买入年均价（$/oz）": f"{_fep:,.2f}",
+            "当时回撤": f"{_fdv:.1f}%",
+        }
+        for _fy in [1, 2, 3, 5, 10, 20]:
+            _ffd = _yr_px[_yr_px.index >= _fdt + pd.DateOffset(years=_fy)]
+            _frow[f"{_fy}年后收益"] = f"{(_ffd.iloc[0] / _fep - 1):+.1%}" if len(_ffd) else "—"
+        _yr_fwd50_rows.append(_frow)
+        _yr_fwd50_in_event = True
+    elif _yr_fwd50_in_event and _fdv >= 0:
+        _yr_fwd50_in_event = False
+if _yr_fwd50_rows:
+    st.dataframe(pd.DataFrame(_yr_fwd50_rows), use_container_width=True, hide_index=True)
+else:
+    st.markdown("数据范围内无跌破 −50% 的时间点。")
+
 # 5a 年均价格走势（对数坐标）
 _fig_yr1 = go.Figure()
 _fig_yr1.add_trace(go.Scatter(
