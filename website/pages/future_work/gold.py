@@ -211,6 +211,29 @@ if _fwd40_rows:
 else:
     st.markdown("数据范围内无跌破 −40% 的时间点。")
 
+st.markdown("**各次价格首次跌破 −50%（相对历史高点）时买入，后续收益：**")
+_fwd50_in_event = False
+_fwd50_rows = []
+for _fdt, _fdv in _dd.items():
+    if not _fwd50_in_event and _fdv <= -50:
+        _fep = float(_prices[_fdt])
+        _frow = {
+            "买入时间": _fdt.strftime("%Y-%m"),
+            "买入价（$/oz）": f"{_fep:,.0f}",
+            "当时回撤": f"{_fdv:.1f}%",
+        }
+        for _fy in [1, 2, 3, 5, 10, 20]:
+            _ffd = _prices[_prices.index >= _fdt + pd.DateOffset(years=_fy)]
+            _frow[f"{_fy}年后收益"] = f"{(_ffd.iloc[0] / _fep - 1):+.1%}" if len(_ffd) else "—"
+        _fwd50_rows.append(_frow)
+        _fwd50_in_event = True
+    elif _fwd50_in_event and _fdv >= 0:
+        _fwd50_in_event = False
+if _fwd50_rows:
+    st.dataframe(pd.DataFrame(_fwd50_rows), use_container_width=True, hide_index=True)
+else:
+    st.markdown("数据范围内无跌破 −50% 的时间点。")
+
 # ─── 二、回撤时序图 ─────────────────────────────────────────────────
 st.subheader("二、黄金价格回撤时序图（相对历史高点）")
 
