@@ -434,7 +434,7 @@ _mm2.metric("历史最大回撤", f"{_mo_max_dd_val:.1f}%")
 _mm3.metric(
     "最大水下时间",
     f"{_mo_max_uw_days / 365:.1f} 年",
-    f"约 {round(_mo_max_uw_days / 30)} 个月",
+    _mo_uw_range,
     delta_color="off",
 )
 _mm4.metric("最低点→复原", _mo_ttr_val, _mo_ttr_sub, delta_color="off")
