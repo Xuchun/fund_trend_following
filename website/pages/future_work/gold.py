@@ -165,6 +165,29 @@ _km3.metric(
 )
 _km4.metric("最低点→复原", _ttr_val, _ttr_sub, delta_color="off")
 
+st.markdown("**各次价格首次跌破 −30%（相对历史高点）时买入，后续收益：**")
+_fwd_above = True
+_fwd_rows = []
+for _fdt, _fdv in _dd.items():
+    if _fwd_above and _fdv <= -30:
+        _fep = float(_prices[_fdt])
+        _frow = {
+            "买入时间": _fdt.strftime("%Y-%m"),
+            "买入价（$/oz）": f"{_fep:,.0f}",
+            "当时回撤": f"{_fdv:.1f}%",
+        }
+        for _fy in [1, 2, 3, 5]:
+            _ffd = _prices[_prices.index >= _fdt + pd.DateOffset(years=_fy)]
+            _frow[f"{_fy}年后收益"] = f"{(_ffd.iloc[0] / _fep - 1):+.1%}" if len(_ffd) else "—"
+        _fwd_rows.append(_frow)
+        _fwd_above = False
+    elif _fdv > -30:
+        _fwd_above = True
+if _fwd_rows:
+    st.dataframe(pd.DataFrame(_fwd_rows), use_container_width=True, hide_index=True)
+else:
+    st.markdown("数据范围内无跌破 −30% 的时间点。")
+
 # ─── 二、回撤时序图 ─────────────────────────────────────────────────
 st.subheader("二、黄金价格回撤时序图（相对历史高点）")
 
