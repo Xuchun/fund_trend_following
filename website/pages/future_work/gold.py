@@ -102,6 +102,42 @@ _fig1.update_layout(
 st.plotly_chart(_fig1, use_container_width=True)
 st.markdown("纵轴使用**对数刻度**，使 $100 量级（1970s）与 $3,000+ 量级（2020s）均清晰可见。")
 
+# 日线数据三项关键指标
+_n_cal_days = (_prices.index[-1] - _prices.index[0]).days
+_cagr = (_prices.iloc[-1] / _prices.iloc[0]) ** (365.0 / _n_cal_days) - 1
+_max_dd_val = _dd.min()
+
+# 最大水下时间：连续处于历史高点以下的最长日历天数
+_underwater = _dd < 0
+_max_uw_days = 0
+_uw_start = None
+for _dt, _is_uw in _underwater.items():
+    if _is_uw:
+        if _uw_start is None:
+            _uw_start = _dt
+    else:
+        if _uw_start is not None:
+            _dur = (_dt - _uw_start).days
+            _max_uw_days = max(_max_uw_days, _dur)
+            _uw_start = None
+if _uw_start is not None:
+    _max_uw_days = max(_max_uw_days, (_prices.index[-1] - _uw_start).days)
+
+_km1, _km2, _km3 = st.columns(3)
+_km1.metric(
+    "年化收益（CAGR）",
+    f"{_cagr:+.2%}",
+    f"{_prices.index[0].strftime('%Y-%m-%d')} 至 {_prices.index[-1].strftime('%Y-%m-%d')}",
+    delta_color="off",
+)
+_km2.metric("历史最大回撤", f"{_max_dd_val:.1%}")
+_km3.metric(
+    "最大水下时间",
+    f"{_max_uw_days / 365:.1f} 年",
+    f"{_max_uw_days:,} 天",
+    delta_color="off",
+)
+
 # ─── 二、回撤时序图 ─────────────────────────────────────────────────
 st.subheader("二、黄金价格回撤时序图（相对历史高点）")
 
