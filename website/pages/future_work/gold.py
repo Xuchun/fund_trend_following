@@ -111,6 +111,8 @@ _max_dd_val = _dd.min()
 _underwater = _dd < 0
 _max_uw_days = 0
 _uw_start = None
+_uw_best_start = None
+_uw_best_end = None
 for _dt, _is_uw in _underwater.items():
     if _is_uw:
         if _uw_start is None:
@@ -118,10 +120,22 @@ for _dt, _is_uw in _underwater.items():
     else:
         if _uw_start is not None:
             _dur = (_dt - _uw_start).days
-            _max_uw_days = max(_max_uw_days, _dur)
+            if _dur > _max_uw_days:
+                _max_uw_days = _dur
+                _uw_best_start = _uw_start
+                _uw_best_end = _dt
             _uw_start = None
 if _uw_start is not None:
-    _max_uw_days = max(_max_uw_days, (_prices.index[-1] - _uw_start).days)
+    _dur = (_prices.index[-1] - _uw_start).days
+    if _dur > _max_uw_days:
+        _max_uw_days = _dur
+        _uw_best_start = _uw_start
+        _uw_best_end = None
+_uw_range = (
+    f"{_uw_best_start.strftime('%Y-%m')} 至今"
+    if _uw_best_end is None
+    else f"{_uw_best_start.strftime('%Y-%m')} 至 {_uw_best_end.strftime('%Y-%m')}"
+)
 
 _mdd_trough_dt = _dd.idxmin()
 _after_trough = _dd.loc[_mdd_trough_dt:]
