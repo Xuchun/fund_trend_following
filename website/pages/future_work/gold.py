@@ -524,7 +524,19 @@ _yr_uw_range = (
     else f"{_yr_max_uw_start_dt.year} 至 {_yr_max_uw_end_dt.year}"
 )
 
-_ym1, _ym2, _ym3 = st.columns(3)
+_yr_mdd_trough_dt = _yr_dd.idxmin()
+_yr_after_trough = _yr_dd.loc[_yr_mdd_trough_dt:]
+_yr_recovery_after_trough = _yr_after_trough[_yr_after_trough >= 0]
+if len(_yr_recovery_after_trough) > 0:
+    _yr_ttr_recovery_dt = _yr_recovery_after_trough.index[0]
+    _yr_ttr_days = (_yr_ttr_recovery_dt - _yr_mdd_trough_dt).days
+    _yr_ttr_val = f"{_yr_ttr_days / 365:.1f} 年"
+    _yr_ttr_sub = f"{_yr_mdd_trough_dt.year} → {_yr_ttr_recovery_dt.year}"
+else:
+    _yr_ttr_val = "至今未恢复"
+    _yr_ttr_sub = f"最低点 {_yr_mdd_trough_dt.year}"
+
+_ym1, _ym2, _ym3, _ym4 = st.columns(4)
 _ym1.metric(
     "年化收益（CAGR）",
     f"{_yr_cagr:+.2%}",
@@ -538,6 +550,7 @@ _ym3.metric(
     _yr_uw_range,
     delta_color="off",
 )
+_ym4.metric("最低点→复原", _yr_ttr_val, _yr_ttr_sub, delta_color="off")
 
 # 5a 年均价格走势（对数坐标）
 _fig_yr1 = go.Figure()
