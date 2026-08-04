@@ -385,6 +385,8 @@ _mo_max_dd_val = _mo_dd.min()
 _mo_underwater = _mo_dd < 0
 _mo_max_uw_days = 0
 _mo_uw_start = None
+_mo_uw_best_start = None
+_mo_uw_best_end = None
 for _dt, _is_uw in _mo_underwater.items():
     if _is_uw:
         if _mo_uw_start is None:
@@ -392,10 +394,22 @@ for _dt, _is_uw in _mo_underwater.items():
     else:
         if _mo_uw_start is not None:
             _dur = (_dt - _mo_uw_start).days
-            _mo_max_uw_days = max(_mo_max_uw_days, _dur)
+            if _dur > _mo_max_uw_days:
+                _mo_max_uw_days = _dur
+                _mo_uw_best_start = _mo_uw_start
+                _mo_uw_best_end = _dt
             _mo_uw_start = None
 if _mo_uw_start is not None:
-    _mo_max_uw_days = max(_mo_max_uw_days, (_mo_px.index[-1] - _mo_uw_start).days)
+    _dur = (_mo_px.index[-1] - _mo_uw_start).days
+    if _dur > _mo_max_uw_days:
+        _mo_max_uw_days = _dur
+        _mo_uw_best_start = _mo_uw_start
+        _mo_uw_best_end = None
+_mo_uw_range = (
+    f"{_mo_uw_best_start.strftime('%Y-%m')} 至今"
+    if _mo_uw_best_end is None
+    else f"{_mo_uw_best_start.strftime('%Y-%m')} 至 {_mo_uw_best_end.strftime('%Y-%m')}"
+)
 
 _mo_mdd_trough_dt = _mo_dd.idxmin()
 _mo_after_trough = _mo_dd.loc[_mo_mdd_trough_dt:]
