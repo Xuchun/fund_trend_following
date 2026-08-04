@@ -725,6 +725,25 @@ st.markdown(
     "故改用 CAGR 作为跨起始年份的比较指标。"
     "保留现金非零 = 当前处于「已卖出 SPY、等待 CAPE 回落买回」状态。"
 )
+st.markdown(
+    """
+    <div style="
+        border: 2px solid #1565C0;
+        border-radius: 8px;
+        background-color: #E3F2FD;
+        padding: 16px 20px;
+        margin-top: 12px;
+    ">
+    <span style="color: #000000; font-weight: bold; font-size: 15px;">我的结论：</span>
+    <span style="color: #000000; font-size: 15px;">
+    由于不同 CAPE 的择时方案，跟持有不变策略，也就好 0.5%～1% 的年化收益，而 CAPE 大于 40
+    的历史情况也就是 1 次，所以非常没有统计意义，因此未来我的投资策略：当 CAPE 小于 35
+    的时候，把当前持有美国国债的资金投入到我的策略，达到股票占比 60%，然后就不再基于 CAPE 择时了。
+    </span>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 # ── 3.5 最优重新买入时机分析（互联网泡沫案例）────────────────────────────────
 st.markdown("**3.5 CAPE > 40 结束后：何时重新买入最优？（互联网泡沫案例）**")
