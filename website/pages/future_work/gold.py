@@ -130,7 +130,7 @@ _km1.metric(
     f"{_prices.index[0].strftime('%Y-%m-%d')} 至 {_prices.index[-1].strftime('%Y-%m-%d')}",
     delta_color="off",
 )
-_km2.metric("历史最大回撤", f"{_max_dd_val:.1%}")
+_km2.metric("历史最大回撤", f"{_max_dd_val:.1f}%")
 _km3.metric(
     "最大水下时间",
     f"{_max_uw_days / 365:.1f} 年",
