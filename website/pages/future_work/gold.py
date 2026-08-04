@@ -508,6 +508,29 @@ if _mo_fwd_rows:
 else:
     st.markdown("数据范围内无跌破 −30% 的时间点。")
 
+st.markdown("**各次价格首次跌破 −40%（相对历史高点）时买入，后续收益：**")
+_mo_fwd40_in_event = False
+_mo_fwd40_rows = []
+for _fdt, _fdv in _mo_dd.items():
+    if not _mo_fwd40_in_event and _fdv <= -40:
+        _fep = float(_mo_px[_fdt])
+        _frow = {
+            "买入时间": _fdt.strftime("%Y-%m"),
+            "买入价（$/oz）": f"{_fep:,.0f}",
+            "当时回撤": f"{_fdv:.1f}%",
+        }
+        for _fy in [1, 2, 3, 5, 10, 20]:
+            _ffd = _mo_px[_mo_px.index >= _fdt + pd.DateOffset(years=_fy)]
+            _frow[f"{_fy}年后收益"] = f"{(_ffd.iloc[0] / _fep - 1):+.1%}" if len(_ffd) else "—"
+        _mo_fwd40_rows.append(_frow)
+        _mo_fwd40_in_event = True
+    elif _mo_fwd40_in_event and _fdv >= 0:
+        _mo_fwd40_in_event = False
+if _mo_fwd40_rows:
+    st.dataframe(pd.DataFrame(_mo_fwd40_rows), use_container_width=True, hide_index=True)
+else:
+    st.markdown("数据范围内无跌破 −40% 的时间点。")
+
 # 4a 价格走势（对数坐标）
 _fig_mo1 = go.Figure()
 _fig_mo1.add_trace(go.Scatter(
