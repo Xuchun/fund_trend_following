@@ -166,10 +166,10 @@ _km3.metric(
 _km4.metric("最低点→复原", _ttr_val, _ttr_sub, delta_color="off")
 
 st.markdown("**各次价格首次跌破 −30%（相对历史高点）时买入，后续收益：**")
-_fwd_above = True
+_fwd_in_event = False
 _fwd_rows = []
 for _fdt, _fdv in _dd.items():
-    if _fwd_above and _fdv <= -30:
+    if not _fwd_in_event and _fdv <= -30:
         _fep = float(_prices[_fdt])
         _frow = {
             "买入时间": _fdt.strftime("%Y-%m"),
@@ -180,9 +180,9 @@ for _fdt, _fdv in _dd.items():
             _ffd = _prices[_prices.index >= _fdt + pd.DateOffset(years=_fy)]
             _frow[f"{_fy}年后收益"] = f"{(_ffd.iloc[0] / _fep - 1):+.1%}" if len(_ffd) else "—"
         _fwd_rows.append(_frow)
-        _fwd_above = False
-    elif _fdv > -30:
-        _fwd_above = True
+        _fwd_in_event = True
+    elif _fwd_in_event and _fdv >= 0:
+        _fwd_in_event = False
 if _fwd_rows:
     st.dataframe(pd.DataFrame(_fwd_rows), use_container_width=True, hide_index=True)
 else:
