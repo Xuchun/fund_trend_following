@@ -380,8 +380,88 @@ if _mo_dds:
         })
     st.dataframe(pd.DataFrame(_mo_rows), use_container_width=True, hide_index=True)
 
-# ─── 五、年度收益柱状图 ─────────────────────────────────────────────
-st.subheader("五、黄金年度收益历史（1969–2026）")
+# ─── 五、年均价格走势与回撤 ────────────────────────────────────────
+st.subheader("五、黄金年均价格走势与回撤（1967–2026）")
+st.markdown("数据来源：Macrotrends，年度平均价格，美元/盎司。覆盖最完整的长期历史（近 60 年）。")
+
+_yr_csv = _root / "data" / "gold" / "gold_annual_avg_price.csv"
+_yr     = pd.read_csv(_yr_csv)
+_yr["date"] = pd.to_datetime(_yr["year"].astype(str) + "-12-31")
+_yr = _yr.set_index("date").sort_index()
+_yr_px  = _yr["price_usd"]
+_yr_ath = _yr_px.expanding().max()
+_yr_dd  = (_yr_px - _yr_ath) / _yr_ath * 100
+
+# 5a 年均价格走势（对数坐标）
+_fig_yr1 = go.Figure()
+_fig_yr1.add_trace(go.Scatter(
+    x=_yr_px.index, y=_yr_px.values,
+    mode="lines+markers", name="年均价格",
+    line=dict(color="#FFD700", width=2),
+    marker=dict(size=5, color="#FFD700"),
+    hovertemplate="%{x|%Y}  $%{y:,.2f}<extra></extra>",
+))
+_fig_yr1.add_trace(go.Scatter(
+    x=_yr_ath.index, y=_yr_ath.values,
+    mode="lines", name="历史高点（ATH）",
+    line=dict(color="#B8860B", width=1, dash="dot"),
+    hovertemplate="%{x|%Y} ATH $%{y:,.2f}<extra></extra>",
+))
+_fig_yr1.update_layout(
+    xaxis_title="年份", yaxis_title="年均价格（USD/oz）",
+    yaxis_type="log",
+    height=420, hovermode="x unified",
+    legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0),
+    margin=dict(t=40, b=40, l=70),
+)
+st.plotly_chart(_fig_yr1, use_container_width=True)
+
+# 5b 年均价格回撤走势
+_fig_yr2 = go.Figure()
+_fig_yr2.add_trace(go.Scatter(
+    x=_yr_dd.index, y=_yr_dd.values,
+    mode="lines+markers", name="回撤幅度",
+    line=dict(color="#EF5350", width=1.5),
+    marker=dict(size=5, color="#EF5350"),
+    fill="tozeroy", fillcolor="rgba(239,83,80,0.12)",
+    hovertemplate="%{x|%Y}  %{y:.1f}%<extra></extra>",
+))
+for _lvl, _col in [(-30, "#E65100"), (-50, "#B71C1C"), (-70, "#4A148C")]:
+    _fig_yr2.add_hline(
+        y=_lvl, line_dash="dash", line_color=_col,
+        annotation_text=f"{_lvl}%", annotation_position="left",
+        annotation_font_color=_col, annotation_font_size=11,
+    )
+_fig_yr2.update_layout(
+    xaxis_title="年份", yaxis_title="回撤（%）",
+    yaxis=dict(ticksuffix="%", range=[min(_yr_dd.min() * 1.1, -75), 5]),
+    height=350, hovermode="x unified",
+    margin=dict(t=30, b=40, l=70),
+)
+st.plotly_chart(_fig_yr2, use_container_width=True)
+
+# 年均价格回撤事件 >30%
+_yr_dds = _find_drawdowns(_yr_px, 0.30)
+if _yr_dds:
+    st.markdown("**年均价格识别的超过 30% 回撤事件：**")
+    _yr_rows = []
+    for _i, _d in enumerate(_yr_dds, 1):
+        _yr_rows.append({
+            "#": _i,
+            "峰值年份": _d["peak_dt"].year,
+            "峰值年均价": f"${_d['peak_px']:,.2f}",
+            "低谷年份": _d["trough_dt"].year,
+            "低谷年均价": f"${_d['trough_px']:,.2f}",
+            "最大回撤": f"{_d['mdd']:.1%}",
+            "峰→谷（年）": round(_d["d_pt"] / 365),
+            "谷→复原（年）": round(_d["d_tr"] / 365) if _d["d_tr"] else "—",
+            "总持续（年）": round(_d["d_tot"] / 365),
+            "复原年份": _d["recovery_dt"].year if _d["recovery_dt"] else "至今未恢复",
+        })
+    st.dataframe(pd.DataFrame(_yr_rows), use_container_width=True, hide_index=True)
+
+# ─── 六、年度收益柱状图 ─────────────────────────────────────────────
+st.subheader("六、黄金年度收益历史（1969–2026）")
 st.markdown("数据来源：Macrotrends，名义价格年度收益率。")
 
 _ann_csv = _root / "data" / "gold" / "gold_annual_returns.csv"
