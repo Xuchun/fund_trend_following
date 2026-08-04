@@ -123,7 +123,19 @@ for _dt, _is_uw in _underwater.items():
 if _uw_start is not None:
     _max_uw_days = max(_max_uw_days, (_prices.index[-1] - _uw_start).days)
 
-_km1, _km2, _km3 = st.columns(3)
+_mdd_trough_dt = _dd.idxmin()
+_after_trough = _dd.loc[_mdd_trough_dt:]
+_recovery_after_trough = _after_trough[_after_trough >= 0]
+if len(_recovery_after_trough) > 0:
+    _ttr_recovery_dt = _recovery_after_trough.index[0]
+    _ttr_days = (_ttr_recovery_dt - _mdd_trough_dt).days
+    _ttr_val = f"{_ttr_days / 365:.1f} 年"
+    _ttr_sub = f"{_mdd_trough_dt.strftime('%Y-%m')} → {_ttr_recovery_dt.strftime('%Y-%m')}"
+else:
+    _ttr_val = "至今未恢复"
+    _ttr_sub = f"最低点 {_mdd_trough_dt.strftime('%Y-%m')}"
+
+_km1, _km2, _km3, _km4 = st.columns(4)
 _km1.metric(
     "年化收益（CAGR）",
     f"{_cagr:+.2%}",
@@ -137,6 +149,7 @@ _km3.metric(
     f"{_max_uw_days:,} 天",
     delta_color="off",
 )
+_km4.metric("最低点→复原", _ttr_val, _ttr_sub, delta_color="off")
 
 # ─── 二、回撤时序图 ─────────────────────────────────────────────────
 st.subheader("二、黄金价格回撤时序图（相对历史高点）")
