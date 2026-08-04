@@ -350,6 +350,41 @@ _mo_px  = _mo["price_usd"]
 _mo_ath = _mo_px.expanding().max()
 _mo_dd  = (_mo_px - _mo_ath) / _mo_ath * 100
 
+# 月线三项关键指标
+_mo_n_days = (_mo_px.index[-1] - _mo_px.index[0]).days
+_mo_cagr = (_mo_px.iloc[-1] / _mo_px.iloc[0]) ** (365.0 / _mo_n_days) - 1
+_mo_max_dd_val = _mo_dd.min()
+
+_mo_underwater = _mo_dd < 0
+_mo_max_uw_days = 0
+_mo_uw_start = None
+for _dt, _is_uw in _mo_underwater.items():
+    if _is_uw:
+        if _mo_uw_start is None:
+            _mo_uw_start = _dt
+    else:
+        if _mo_uw_start is not None:
+            _dur = (_dt - _mo_uw_start).days
+            _mo_max_uw_days = max(_mo_max_uw_days, _dur)
+            _mo_uw_start = None
+if _mo_uw_start is not None:
+    _mo_max_uw_days = max(_mo_max_uw_days, (_mo_px.index[-1] - _mo_uw_start).days)
+
+_mm1, _mm2, _mm3 = st.columns(3)
+_mm1.metric(
+    "年化收益（CAGR）",
+    f"{_mo_cagr:+.2%}",
+    f"{_mo_px.index[0].strftime('%Y-%m')} 至 {_mo_px.index[-1].strftime('%Y-%m')}",
+    delta_color="off",
+)
+_mm2.metric("历史最大回撤", f"{_mo_max_dd_val:.1f}%")
+_mm3.metric(
+    "最大水下时间",
+    f"{_mo_max_uw_days / 365:.1f} 年",
+    f"约 {round(_mo_max_uw_days / 30)} 个月",
+    delta_color="off",
+)
+
 # 4a 价格走势（对数坐标）
 _fig_mo1 = go.Figure()
 _fig_mo1.add_trace(go.Scatter(
