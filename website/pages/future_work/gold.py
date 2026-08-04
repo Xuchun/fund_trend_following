@@ -8,36 +8,28 @@ if str(_root) not in sys.path:
     sys.path.insert(0, str(_root))
 
 import streamlit as st
-import yfinance as yf
 import pandas as pd
 import plotly.graph_objects as go
-from datetime import date as _date
 
 st.title("黄金价格历史分析")
 st.markdown(
-    "数据来源：Yahoo Finance（`GC=F`，黄金期货连续合约），日线收盘价，美元/金衡盎司（USD/troy oz）。"
-    "COMEX 黄金期货于 1974 年底正式开始交易，故数据起始于 1975 年前后。"
+    "数据来源：[FRED（美联储经济数据库）](https://fred.stlouisfed.org/series/GOLDAMGBD228NLBM)"
+    " — 伦敦金银市场协会（LBMA）黄金下午定盘价，日线，美元/金衡盎司（USD/troy oz），无需 API key。"
 )
 
 # ─── 数据加载 ──────────────────────────────────────────────────────
+_FRED_URL = (
+    "https://fred.stlouisfed.org/graph/fredgraph.csv"
+    "?id=GOLDAMGBD228NLBM"
+)
+
 @st.cache_data(ttl=86400)
 def _load_gold() -> pd.Series:
-    raw = yf.download(
-        "GC=F",
-        start="1970-01-01",
-        end=_date.today().isoformat(),
-        interval="1d",
-        auto_adjust=True,
-        progress=False,
-    )
-    if isinstance(raw.columns, pd.MultiIndex):
-        raw.columns = raw.columns.get_level_values(0)
-    s = raw["Close"].dropna()
+    df = pd.read_csv(_FRED_URL, index_col=0, parse_dates=True, na_values=".")
+    s = df.iloc[:, 0].dropna().astype(float)
     s.index = pd.to_datetime(s.index)
     if s.index.tz is not None:
         s.index = s.index.tz_convert(None)
-    else:
-        s.index = s.index.tz_localize(None)
     return s.sort_index().rename("gold")
 
 with st.spinner("正在加载黄金价格数据…"):
