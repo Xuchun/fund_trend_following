@@ -160,7 +160,7 @@ _km2.metric("历史最大回撤", f"{_max_dd_val:.1f}%")
 _km3.metric(
     "最大水下时间",
     f"{_max_uw_days / 365:.1f} 年",
-    f"{_max_uw_days:,} 天",
+    _uw_range,
     delta_color="off",
 )
 _km4.metric("最低点→复原", _ttr_val, _ttr_sub, delta_color="off")
