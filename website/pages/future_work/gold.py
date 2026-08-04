@@ -383,7 +383,19 @@ for _dt, _is_uw in _mo_underwater.items():
 if _mo_uw_start is not None:
     _mo_max_uw_days = max(_mo_max_uw_days, (_mo_px.index[-1] - _mo_uw_start).days)
 
-_mm1, _mm2, _mm3 = st.columns(3)
+_mo_mdd_trough_dt = _mo_dd.idxmin()
+_mo_after_trough = _mo_dd.loc[_mo_mdd_trough_dt:]
+_mo_recovery_after_trough = _mo_after_trough[_mo_after_trough >= 0]
+if len(_mo_recovery_after_trough) > 0:
+    _mo_ttr_recovery_dt = _mo_recovery_after_trough.index[0]
+    _mo_ttr_days = (_mo_ttr_recovery_dt - _mo_mdd_trough_dt).days
+    _mo_ttr_val = f"{_mo_ttr_days / 365:.1f} 年"
+    _mo_ttr_sub = f"{_mo_mdd_trough_dt.strftime('%Y-%m')} → {_mo_ttr_recovery_dt.strftime('%Y-%m')}"
+else:
+    _mo_ttr_val = "至今未恢复"
+    _mo_ttr_sub = f"最低点 {_mo_mdd_trough_dt.strftime('%Y-%m')}"
+
+_mm1, _mm2, _mm3, _mm4 = st.columns(4)
 _mm1.metric(
     "年化收益（CAGR）",
     f"{_mo_cagr:+.2%}",
@@ -397,6 +409,7 @@ _mm3.metric(
     f"约 {round(_mo_max_uw_days / 30)} 个月",
     delta_color="off",
 )
+_mm4.metric("最低点→复原", _mo_ttr_val, _mo_ttr_sub, delta_color="off")
 
 # 4a 价格走势（对数坐标）
 _fig_mo1 = go.Figure()
