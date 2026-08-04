@@ -10,27 +10,56 @@ if str(_root) not in sys.path:
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
+import requests
+import io
 
 st.title("黄金价格历史分析")
-st.markdown(
-    "数据来源：[FRED（美联储经济数据库）](https://fred.stlouisfed.org/series/GOLDAMGBD228NLBM)"
-    " — 伦敦金银市场协会（LBMA）黄金下午定盘价，日线，美元/金衡盎司（USD/troy oz），无需 API key。"
-)
 
-# ─── 数据加载 ──────────────────────────────────────────────────────
-_FRED_URL = (
-    "https://fred.stlouisfed.org/graph/fredgraph.csv"
-    "?id=GOLDAMGBD228NLBM"
-)
-
+# ─── 数据加载（优先 FRED 1968年起，降级到 yfinance 2000年起）──────
 @st.cache_data(ttl=86400)
-def _load_gold() -> pd.Series:
-    df = pd.read_csv(_FRED_URL, index_col=0, parse_dates=True, na_values=".")
-    s = df.iloc[:, 0].dropna().astype(float)
+def _load_gold() -> tuple:
+    """Returns (pd.Series, source_label)"""
+    # 1) 尝试 FRED：LBMA 黄金下午定盘价，1968年起
+    try:
+        url = (
+            "https://fred.stlouisfed.org/graph/fredgraph.csv"
+            "?id=GOLDAMGBD228NLBM"
+        )
+        r = requests.get(
+            url, timeout=20,
+            headers={"User-Agent": "Mozilla/5.0 (compatible; gold-analysis/1.0)"},
+        )
+        if r.status_code == 200 and "Date" in r.text[:200]:
+            df = pd.read_csv(
+                io.StringIO(r.text), index_col=0,
+                parse_dates=True, na_values=".",
+            )
+            s = df.iloc[:, 0].dropna().astype(float).sort_index()
+            s.index = pd.to_datetime(s.index)
+            if s.index.tz is not None:
+                s.index = s.index.tz_convert(None)
+            if len(s) > 5000:   # 合理性校验
+                return s.rename("gold"), "FRED — LBMA 伦敦黄金下午定盘价（1968 年起）"
+    except Exception:
+        pass
+
+    # 2) 降级到 yfinance GC=F（COMEX 黄金期货连续合约，2000年起）
+    import yfinance as yf
+    from datetime import date as _date
+    raw = yf.download(
+        "GC=F", start="2000-01-01",
+        end=_date.today().isoformat(),
+        interval="1d", auto_adjust=True, progress=False,
+    )
+    if isinstance(raw.columns, pd.MultiIndex):
+        raw.columns = raw.columns.get_level_values(0)
+    s = raw["Close"].dropna()
     s.index = pd.to_datetime(s.index)
     if s.index.tz is not None:
         s.index = s.index.tz_convert(None)
-    return s.sort_index().rename("gold")
+    else:
+        s.index = s.index.tz_localize(None)
+    return s.sort_index().rename("gold"), "Yahoo Finance — GC=F 黄金期货连续合约（2000 年起）"
 
 with st.spinner("正在加载黄金价格数据…"):
     _prices = _load_gold()
