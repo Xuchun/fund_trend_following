@@ -463,6 +463,56 @@ _yr_px  = _yr["price_usd"]
 _yr_ath = _yr_px.expanding().max()
 _yr_dd  = (_yr_px - _yr_ath) / _yr_ath * 100
 
+# 年均三项关键指标
+_yr_n_days = (_yr_px.index[-1] - _yr_px.index[0]).days
+_yr_cagr = (_yr_px.iloc[-1] / _yr_px.iloc[0]) ** (365.0 / _yr_n_days) - 1
+_yr_max_dd_val = _yr_dd.min()
+
+_yr_underwater = _yr_dd < 0
+_yr_max_uw_days = 0
+_yr_max_uw_start_dt = None
+_yr_max_uw_end_dt = None
+_yr_uw_start_cur = None
+for _dt, _is_uw in _yr_underwater.items():
+    if _is_uw:
+        if _yr_uw_start_cur is None:
+            _yr_uw_start_cur = _dt
+    else:
+        if _yr_uw_start_cur is not None:
+            _dur = (_dt - _yr_uw_start_cur).days
+            if _dur > _yr_max_uw_days:
+                _yr_max_uw_days = _dur
+                _yr_max_uw_start_dt = _yr_uw_start_cur
+                _yr_max_uw_end_dt = _dt
+            _yr_uw_start_cur = None
+if _yr_uw_start_cur is not None:
+    _dur = (_yr_px.index[-1] - _yr_uw_start_cur).days
+    if _dur > _yr_max_uw_days:
+        _yr_max_uw_days = _dur
+        _yr_max_uw_start_dt = _yr_uw_start_cur
+        _yr_max_uw_end_dt = None
+
+_yr_uw_range = (
+    f"{_yr_max_uw_start_dt.year} 至今"
+    if _yr_max_uw_end_dt is None
+    else f"{_yr_max_uw_start_dt.year} 至 {_yr_max_uw_end_dt.year}"
+)
+
+_ym1, _ym2, _ym3 = st.columns(3)
+_ym1.metric(
+    "年化收益（CAGR）",
+    f"{_yr_cagr:+.2%}",
+    f"{_yr_px.index[0].year} 至 {_yr_px.index[-1].year}",
+    delta_color="off",
+)
+_ym2.metric("历史最大回撤", f"{_yr_max_dd_val:.1f}%")
+_ym3.metric(
+    "最大水下时间",
+    f"{_yr_max_uw_days / 365:.1f} 年",
+    _yr_uw_range,
+    delta_color="off",
+)
+
 # 5a 年均价格走势（对数坐标）
 _fig_yr1 = go.Figure()
 _fig_yr1.add_trace(go.Scatter(
