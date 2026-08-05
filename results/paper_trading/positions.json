@@ -7112,19 +7112,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2113,
     "total_scanned": 2113,
     "updated_utc": "2026-08-05T00:07:40Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2174,
-    "yf_downloadable": 2113,
-    "yf_unavailable_in_pool": 61,
-    "total_active": 3070,
-    "total_delisted": 1407,
-    "updated_utc": "2026-08-05T00:07:50Z"
+    "tiingo_eligible": 2189,
+    "yf_downloadable": 2130,
+    "yf_unavailable_in_pool": 59,
+    "total_active": 3083,
+    "total_delisted": 1394,
+    "updated_utc": "2026-08-05T23:39:30Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -7196,7 +7196,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-08-04T23:43:30Z",
+  "tiingo_universe_synced_utc": "2026-08-05T23:39:30Z",
   "daily_summary": {
     "date": "2026-08-04",
     "updated_sgt": "2026-08-05 08:07 SGT",
@@ -7204,10 +7204,10 @@
     "spy_change_pct": 1.8,
     "vs_spy_pct": -1.75,
     "bullets": [
-      "GWW 作为 Industrials 板块的核心重仓，虽然公布了超预期的 Q2 业绩（13.7% 有机销售增长、利润率扩张）并上调全年指引，但股价仍然下跌 5.2%，反映出市场对其项目混合和运费成本的边际压力存在担忧，这种\"好消息坏价格\"现象拖累了整个板块 （[W.W. Grainger Inc (GWW) (Q2 …](https://finance.yahoo.com/markets/stocks/articles/w-w-grainger-inc-gww-230209371.html)、[Grainger Beats Q2 Earnings E…](https://finance.yahoo.com/markets/stocks/articles/grainger-beats-q2-earnings-estimates-151100549.html)）。",
-      "策略净值 +0.05% vs SPY +1.80% 产生 -1.75% 的显著偏差，主要源于 GWW（-5.2%，影响 $-496）这一单只重仓股的超额跌幅，其负面贡献几乎抵消了 LQDA（+5.4%，影响 $+471）和 PKG/LTH 等其他持仓的正面表现。",
-      "虽然 Wall Street 对 3M 等 Industrials 龙头维持\"谨慎乐观\"的态度，但 GWW 的股价表现反映出市场对于工业品流通企业的盈利质量仍存疑虑，即使基本面改善也难以吸引增量资金 （[Are Wall Street Analysts Bul…](https://www.barchart.com/story/news/3632533/are-wall-street-analysts-bullish-on-3m-company-stock)）。",
-      "策略对 Industrials 板块的重仓配置在今日成为拖累因素，因为虽然 SPY 整体受到荷尔木兹海峡重启等宏观利好推动上涨 1.80%，但以 GWW 为代表的板块龙头股却逆势下行，打破了板块与大盘的同步性 （[Exchange-Traded Funds, Equit…](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131439491.html)）。"
+      "GWW \u4f5c\u4e3a Industrials \u677f\u5757\u7684\u6838\u5fc3\u91cd\u4ed3\uff0c\u867d\u7136\u516c\u5e03\u4e86\u8d85\u9884\u671f\u7684 Q2 \u4e1a\u7ee9\uff0813.7% \u6709\u673a\u9500\u552e\u589e\u957f\u3001\u5229\u6da6\u7387\u6269\u5f20\uff09\u5e76\u4e0a\u8c03\u5168\u5e74\u6307\u5f15\uff0c\u4f46\u80a1\u4ef7\u4ecd\u7136\u4e0b\u8dcc 5.2%\uff0c\u53cd\u6620\u51fa\u5e02\u573a\u5bf9\u5176\u9879\u76ee\u6df7\u5408\u548c\u8fd0\u8d39\u6210\u672c\u7684\u8fb9\u9645\u538b\u529b\u5b58\u5728\u62c5\u5fe7\uff0c\u8fd9\u79cd\"\u597d\u6d88\u606f\u574f\u4ef7\u683c\"\u73b0\u8c61\u62d6\u7d2f\u4e86\u6574\u4e2a\u677f\u5757 \uff08[W.W. Grainger Inc (GWW) (Q2 \u2026](https://finance.yahoo.com/markets/stocks/articles/w-w-grainger-inc-gww-230209371.html)\u3001[Grainger Beats Q2 Earnings E\u2026](https://finance.yahoo.com/markets/stocks/articles/grainger-beats-q2-earnings-estimates-151100549.html)\uff09\u3002",
+      "\u7b56\u7565\u51c0\u503c +0.05% vs SPY +1.80% \u4ea7\u751f -1.75% \u7684\u663e\u8457\u504f\u5dee\uff0c\u4e3b\u8981\u6e90\u4e8e GWW\uff08-5.2%\uff0c\u5f71\u54cd $-496\uff09\u8fd9\u4e00\u5355\u53ea\u91cd\u4ed3\u80a1\u7684\u8d85\u989d\u8dcc\u5e45\uff0c\u5176\u8d1f\u9762\u8d21\u732e\u51e0\u4e4e\u62b5\u6d88\u4e86 LQDA\uff08+5.4%\uff0c\u5f71\u54cd $+471\uff09\u548c PKG/LTH \u7b49\u5176\u4ed6\u6301\u4ed3\u7684\u6b63\u9762\u8868\u73b0\u3002",
+      "\u867d\u7136 Wall Street \u5bf9 3M \u7b49 Industrials \u9f99\u5934\u7ef4\u6301\"\u8c28\u614e\u4e50\u89c2\"\u7684\u6001\u5ea6\uff0c\u4f46 GWW \u7684\u80a1\u4ef7\u8868\u73b0\u53cd\u6620\u51fa\u5e02\u573a\u5bf9\u4e8e\u5de5\u4e1a\u54c1\u6d41\u901a\u4f01\u4e1a\u7684\u76c8\u5229\u8d28\u91cf\u4ecd\u5b58\u7591\u8651\uff0c\u5373\u4f7f\u57fa\u672c\u9762\u6539\u5584\u4e5f\u96be\u4ee5\u5438\u5f15\u589e\u91cf\u8d44\u91d1 \uff08[Are Wall Street Analysts Bul\u2026](https://www.barchart.com/story/news/3632533/are-wall-street-analysts-bullish-on-3m-company-stock)\uff09\u3002",
+      "\u7b56\u7565\u5bf9 Industrials \u677f\u5757\u7684\u91cd\u4ed3\u914d\u7f6e\u5728\u4eca\u65e5\u6210\u4e3a\u62d6\u7d2f\u56e0\u7d20\uff0c\u56e0\u4e3a\u867d\u7136 SPY \u6574\u4f53\u53d7\u5230\u8377\u5c14\u6728\u5179\u6d77\u5ce1\u91cd\u542f\u7b49\u5b8f\u89c2\u5229\u597d\u63a8\u52a8\u4e0a\u6da8 1.80%\uff0c\u4f46\u4ee5 GWW \u4e3a\u4ee3\u8868\u7684\u677f\u5757\u9f99\u5934\u80a1\u5374\u9006\u52bf\u4e0b\u884c\uff0c\u6253\u7834\u4e86\u677f\u5757\u4e0e\u5927\u76d8\u7684\u540c\u6b65\u6027 \uff08[Exchange-Traded Funds, Equit\u2026](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131439491.html)\uff09\u3002"
     ],
     "news": [
       {
