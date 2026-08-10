@@ -8062,19 +8062,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2132,
     "total_scanned": 2132,
     "updated_utc": "2026-08-07T23:37:37Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2193,
-    "yf_downloadable": 2132,
-    "yf_unavailable_in_pool": 61,
-    "total_active": 3084,
-    "total_delisted": 1393,
-    "updated_utc": "2026-08-07T23:37:48Z"
+    "tiingo_eligible": 2179,
+    "yf_downloadable": 2119,
+    "yf_unavailable_in_pool": 60,
+    "total_active": 3076,
+    "total_delisted": 1401,
+    "updated_utc": "2026-08-10T23:19:04Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -8147,7 +8147,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-08-07T23:18:08Z",
+  "tiingo_universe_synced_utc": "2026-08-10T23:19:04Z",
   "daily_summary": {
     "date": "2026-08-07",
     "updated_sgt": "2026-08-08 07:37 SGT",
@@ -8155,10 +8155,10 @@
     "spy_change_pct": 0.61,
     "vs_spy_pct": 0.08,
     "bullets": [
-      "Technology 板块今日上涨的核心驱动是市场对芯片产业中长期增长前景的重新评估，特别是 AI 和数据中心领域的强劲需求预期，即使个别公司（如 AMD）短期股价承压，但整个板块仍因结构性增长机会获得资金青睐。（[ETFs to Buy as AMD Shares Si…](https://finance.yahoo.com/markets/stocks/articles/etfs-buy-amd-shares-sink-145000490.html)、[S&P 500 Posts Weekly Gain as…](https://finance.yahoo.com/markets/stocks/articles/p-500-posts-weekly-gain-205341016.html)）",
-      "策略净值（+0.70%）相比 SPY（+0.61%）的 +0.08% 正偏差主要源于 ZBRA（+3.4%，贡献 +$294）和 AHR（+3.7%，贡献 +$357）的强势表现，这两只非 SPY 500 权重股的大幅上涨为策略增加了超额收益。（[Zacks Investment Ideas featu…](https://finance.yahoo.com/markets/stocks/articles/zacks-investment-ideas-feature-highlights-102800931.html)）",
-      "偏差幅度虽然较小（0.08%），但若剔除 ZBRA 和 AHR 的贡献，策略的其他持仓（包括 Financial Services 中的 AFL、ENVA、TRV 的跌幅合计 -$308）实际上拖累了整体表现，恰恰被这两只标的的超预期涨幅所弥补，反映出策略在 Technology 及小盘成长股的配置优势。（[Zacks Investment Ideas featu…](https://finance.yahoo.com/markets/stocks/articles/zacks-investment-ideas-feature-highlights-102800931.html)）",
-      "市场对 Technology 板块的结构性看好（AI、数据中心增长）与策略重仓该板块的决策相符，但净值与 SPY 的分歧更多来自于持仓个股选择能力（尤其是 ZBRA 的 3.4% 涨幅表现）而非板块配置层面的差异。（[ETFs to Buy as AMD Shares Si…](https://finance.yahoo.com/markets/stocks/articles/etfs-buy-amd-shares-sink-145000490.html)、[S&P 500 Posts Weekly Gain as…](https://finance.yahoo.com/markets/stocks/articles/p-500-posts-weekly-gain-205341016.html)、[Zacks Investment Ideas featu…](https://finance.yahoo.com/markets/stocks/articles/zacks-investment-ideas-feature-highlights-102800931.html)）"
+      "Technology \u677f\u5757\u4eca\u65e5\u4e0a\u6da8\u7684\u6838\u5fc3\u9a71\u52a8\u662f\u5e02\u573a\u5bf9\u82af\u7247\u4ea7\u4e1a\u4e2d\u957f\u671f\u589e\u957f\u524d\u666f\u7684\u91cd\u65b0\u8bc4\u4f30\uff0c\u7279\u522b\u662f AI \u548c\u6570\u636e\u4e2d\u5fc3\u9886\u57df\u7684\u5f3a\u52b2\u9700\u6c42\u9884\u671f\uff0c\u5373\u4f7f\u4e2a\u522b\u516c\u53f8\uff08\u5982 AMD\uff09\u77ed\u671f\u80a1\u4ef7\u627f\u538b\uff0c\u4f46\u6574\u4e2a\u677f\u5757\u4ecd\u56e0\u7ed3\u6784\u6027\u589e\u957f\u673a\u4f1a\u83b7\u5f97\u8d44\u91d1\u9752\u7750\u3002\uff08[ETFs to Buy as AMD Shares Si\u2026](https://finance.yahoo.com/markets/stocks/articles/etfs-buy-amd-shares-sink-145000490.html)\u3001[S&P 500 Posts Weekly Gain as\u2026](https://finance.yahoo.com/markets/stocks/articles/p-500-posts-weekly-gain-205341016.html)\uff09",
+      "\u7b56\u7565\u51c0\u503c\uff08+0.70%\uff09\u76f8\u6bd4 SPY\uff08+0.61%\uff09\u7684 +0.08% \u6b63\u504f\u5dee\u4e3b\u8981\u6e90\u4e8e ZBRA\uff08+3.4%\uff0c\u8d21\u732e +$294\uff09\u548c AHR\uff08+3.7%\uff0c\u8d21\u732e +$357\uff09\u7684\u5f3a\u52bf\u8868\u73b0\uff0c\u8fd9\u4e24\u53ea\u975e SPY 500 \u6743\u91cd\u80a1\u7684\u5927\u5e45\u4e0a\u6da8\u4e3a\u7b56\u7565\u589e\u52a0\u4e86\u8d85\u989d\u6536\u76ca\u3002\uff08[Zacks Investment Ideas featu\u2026](https://finance.yahoo.com/markets/stocks/articles/zacks-investment-ideas-feature-highlights-102800931.html)\uff09",
+      "\u504f\u5dee\u5e45\u5ea6\u867d\u7136\u8f83\u5c0f\uff080.08%\uff09\uff0c\u4f46\u82e5\u5254\u9664 ZBRA \u548c AHR \u7684\u8d21\u732e\uff0c\u7b56\u7565\u7684\u5176\u4ed6\u6301\u4ed3\uff08\u5305\u62ec Financial Services \u4e2d\u7684 AFL\u3001ENVA\u3001TRV \u7684\u8dcc\u5e45\u5408\u8ba1 -$308\uff09\u5b9e\u9645\u4e0a\u62d6\u7d2f\u4e86\u6574\u4f53\u8868\u73b0\uff0c\u6070\u6070\u88ab\u8fd9\u4e24\u53ea\u6807\u7684\u7684\u8d85\u9884\u671f\u6da8\u5e45\u6240\u5f25\u8865\uff0c\u53cd\u6620\u51fa\u7b56\u7565\u5728 Technology \u53ca\u5c0f\u76d8\u6210\u957f\u80a1\u7684\u914d\u7f6e\u4f18\u52bf\u3002\uff08[Zacks Investment Ideas featu\u2026](https://finance.yahoo.com/markets/stocks/articles/zacks-investment-ideas-feature-highlights-102800931.html)\uff09",
+      "\u5e02\u573a\u5bf9 Technology \u677f\u5757\u7684\u7ed3\u6784\u6027\u770b\u597d\uff08AI\u3001\u6570\u636e\u4e2d\u5fc3\u589e\u957f\uff09\u4e0e\u7b56\u7565\u91cd\u4ed3\u8be5\u677f\u5757\u7684\u51b3\u7b56\u76f8\u7b26\uff0c\u4f46\u51c0\u503c\u4e0e SPY \u7684\u5206\u6b67\u66f4\u591a\u6765\u81ea\u4e8e\u6301\u4ed3\u4e2a\u80a1\u9009\u62e9\u80fd\u529b\uff08\u5c24\u5176\u662f ZBRA \u7684 3.4% \u6da8\u5e45\u8868\u73b0\uff09\u800c\u975e\u677f\u5757\u914d\u7f6e\u5c42\u9762\u7684\u5dee\u5f02\u3002\uff08[ETFs to Buy as AMD Shares Si\u2026](https://finance.yahoo.com/markets/stocks/articles/etfs-buy-amd-shares-sink-145000490.html)\u3001[S&P 500 Posts Weekly Gain as\u2026](https://finance.yahoo.com/markets/stocks/articles/p-500-posts-weekly-gain-205341016.html)\u3001[Zacks Investment Ideas featu\u2026](https://finance.yahoo.com/markets/stocks/articles/zacks-investment-ideas-feature-highlights-102800931.html)\uff09"
     ],
     "news": [
       {
