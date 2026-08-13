@@ -8280,19 +8280,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2114,
     "total_scanned": 2114,
     "updated_utc": "2026-08-12T23:46:10Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2175,
-    "yf_downloadable": 2114,
-    "yf_unavailable_in_pool": 61,
-    "total_active": 3066,
-    "total_delisted": 1411,
-    "updated_utc": "2026-08-12T23:46:20Z"
+    "tiingo_eligible": 2189,
+    "yf_downloadable": 2129,
+    "yf_unavailable_in_pool": 60,
+    "total_active": 3087,
+    "total_delisted": 1390,
+    "updated_utc": "2026-08-13T23:25:00Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -8366,7 +8366,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-08-12T23:23:09Z",
+  "tiingo_universe_synced_utc": "2026-08-13T23:25:00Z",
   "daily_summary": {
     "date": "2026-08-12",
     "updated_sgt": "2026-08-13 07:46 SGT",
@@ -8374,9 +8374,9 @@
     "spy_change_pct": 0.25,
     "vs_spy_pct": -0.2,
     "bullets": [
-      "Healthcare板块今日虽整体微幅上涨（NYSE Healthcare Index +0.2%），但个股分化明显，其中LQDA因Q2财报指引虽强劲但市场可能对其高估值进行重新定价，暴跌10.5%成为拖累主力，反映出成长型医疗股在宏观流动性环境下的脆弱性。（[Liquidia Corp (LQDA) (Q2 202…](https://finance.yahoo.com/healthcare/articles/liquidia-corp-lqda-q2-2026-230301107.html)、[Liquidia Corporation Q2 2026…](https://app.moby.co/home/research/tools/earningsCalendar/earnings-liquidia-corporation-q2-2026-earnings-call-summary?utm_source=yahoo_finance&utm_medium=rss)）",
-      "策略净值+0.05%远低于SPY的+0.25%，偏差-0.20%的核心原因在于重仓Healthcare板块遭遇个股杀跌，其中LQDA单只股票就造成$-963的净值损失，BAX亦下跌2.4%贡献$-220损失，两只Healthcare重仓股合计损失超过$1100，而同期CAKE和EAT等Consumer Cyclical持仓的强势反弹（分别+3.7%和+11.1%）无法完全弥补Healthcare板块的跌幅缺口。（[Sector Update: Healthcare St…](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-advance-afternoon-195841095.html)、[Is Wall Street Bullish or Be…](https://www.barchart.com/story/news/3803438/is-wall-street-bullish-or-bearish-on-edwards-lifesciences-stock)、[Liquidia Corp (LQDA) (Q2 202…](https://finance.yahoo.com/healthcare/articles/liquidia-corp-lqda-q2-2026-230301107.html)、[Liquidia Corporation Q2 2026…](https://app.moby.co/home/research/tools/earningsCalendar/earnings-liquidia-corporation-q2-2026-earnings-call-summary?utm_source=yahoo_finance&utm_medium=rss)）",
-      "LQDA的暴跌虽源于公司公布了积极的Q2业绩和2027年营收指引，但市场反应负面暗示投资者对其当前估值存在顾虑，或市场整体对高增长医疗股的风险偏好在下降，这种个股基本面与股价表现的背离进一步放大了策略与大盘的净值差异。（[Liquidia Corp (LQDA) (Q2 202…](https://finance.yahoo.com/healthcare/articles/liquidia-corp-lqda-q2-2026-230301107.html)、[Liquidia Corporation Q2 2026…](https://app.moby.co/home/research/tools/earningsCalendar/earnings-liquidia-corporation-q2-2026-earnings-call-summary?utm_source=yahoo_finance&utm_medium=rss)）"
+      "Healthcare\u677f\u5757\u4eca\u65e5\u867d\u6574\u4f53\u5fae\u5e45\u4e0a\u6da8\uff08NYSE Healthcare Index +0.2%\uff09\uff0c\u4f46\u4e2a\u80a1\u5206\u5316\u660e\u663e\uff0c\u5176\u4e2dLQDA\u56e0Q2\u8d22\u62a5\u6307\u5f15\u867d\u5f3a\u52b2\u4f46\u5e02\u573a\u53ef\u80fd\u5bf9\u5176\u9ad8\u4f30\u503c\u8fdb\u884c\u91cd\u65b0\u5b9a\u4ef7\uff0c\u66b4\u8dcc10.5%\u6210\u4e3a\u62d6\u7d2f\u4e3b\u529b\uff0c\u53cd\u6620\u51fa\u6210\u957f\u578b\u533b\u7597\u80a1\u5728\u5b8f\u89c2\u6d41\u52a8\u6027\u73af\u5883\u4e0b\u7684\u8106\u5f31\u6027\u3002\uff08[Liquidia Corp (LQDA) (Q2 202\u2026](https://finance.yahoo.com/healthcare/articles/liquidia-corp-lqda-q2-2026-230301107.html)\u3001[Liquidia Corporation Q2 2026\u2026](https://app.moby.co/home/research/tools/earningsCalendar/earnings-liquidia-corporation-q2-2026-earnings-call-summary?utm_source=yahoo_finance&utm_medium=rss)\uff09",
+      "\u7b56\u7565\u51c0\u503c+0.05%\u8fdc\u4f4e\u4e8eSPY\u7684+0.25%\uff0c\u504f\u5dee-0.20%\u7684\u6838\u5fc3\u539f\u56e0\u5728\u4e8e\u91cd\u4ed3Healthcare\u677f\u5757\u906d\u9047\u4e2a\u80a1\u6740\u8dcc\uff0c\u5176\u4e2dLQDA\u5355\u53ea\u80a1\u7968\u5c31\u9020\u6210$-963\u7684\u51c0\u503c\u635f\u5931\uff0cBAX\u4ea6\u4e0b\u8dcc2.4%\u8d21\u732e$-220\u635f\u5931\uff0c\u4e24\u53eaHealthcare\u91cd\u4ed3\u80a1\u5408\u8ba1\u635f\u5931\u8d85\u8fc7$1100\uff0c\u800c\u540c\u671fCAKE\u548cEAT\u7b49Consumer Cyclical\u6301\u4ed3\u7684\u5f3a\u52bf\u53cd\u5f39\uff08\u5206\u522b+3.7%\u548c+11.1%\uff09\u65e0\u6cd5\u5b8c\u5168\u5f25\u8865Healthcare\u677f\u5757\u7684\u8dcc\u5e45\u7f3a\u53e3\u3002\uff08[Sector Update: Healthcare St\u2026](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-advance-afternoon-195841095.html)\u3001[Is Wall Street Bullish or Be\u2026](https://www.barchart.com/story/news/3803438/is-wall-street-bullish-or-bearish-on-edwards-lifesciences-stock)\u3001[Liquidia Corp (LQDA) (Q2 202\u2026](https://finance.yahoo.com/healthcare/articles/liquidia-corp-lqda-q2-2026-230301107.html)\u3001[Liquidia Corporation Q2 2026\u2026](https://app.moby.co/home/research/tools/earningsCalendar/earnings-liquidia-corporation-q2-2026-earnings-call-summary?utm_source=yahoo_finance&utm_medium=rss)\uff09",
+      "LQDA\u7684\u66b4\u8dcc\u867d\u6e90\u4e8e\u516c\u53f8\u516c\u5e03\u4e86\u79ef\u6781\u7684Q2\u4e1a\u7ee9\u548c2027\u5e74\u8425\u6536\u6307\u5f15\uff0c\u4f46\u5e02\u573a\u53cd\u5e94\u8d1f\u9762\u6697\u793a\u6295\u8d44\u8005\u5bf9\u5176\u5f53\u524d\u4f30\u503c\u5b58\u5728\u987e\u8651\uff0c\u6216\u5e02\u573a\u6574\u4f53\u5bf9\u9ad8\u589e\u957f\u533b\u7597\u80a1\u7684\u98ce\u9669\u504f\u597d\u5728\u4e0b\u964d\uff0c\u8fd9\u79cd\u4e2a\u80a1\u57fa\u672c\u9762\u4e0e\u80a1\u4ef7\u8868\u73b0\u7684\u80cc\u79bb\u8fdb\u4e00\u6b65\u653e\u5927\u4e86\u7b56\u7565\u4e0e\u5927\u76d8\u7684\u51c0\u503c\u5dee\u5f02\u3002\uff08[Liquidia Corp (LQDA) (Q2 202\u2026](https://finance.yahoo.com/healthcare/articles/liquidia-corp-lqda-q2-2026-230301107.html)\u3001[Liquidia Corporation Q2 2026\u2026](https://app.moby.co/home/research/tools/earningsCalendar/earnings-liquidia-corporation-q2-2026-earnings-call-summary?utm_source=yahoo_finance&utm_medium=rss)\uff09"
     ],
     "news": [
       {
