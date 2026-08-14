@@ -8365,19 +8365,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2129,
     "total_scanned": 2129,
     "updated_utc": "2026-08-13T23:44:41Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2189,
-    "yf_downloadable": 2128,
-    "yf_unavailable_in_pool": 61,
-    "total_active": 3087,
-    "total_delisted": 1390,
-    "updated_utc": "2026-08-13T23:44:51Z"
+    "tiingo_eligible": 2179,
+    "yf_downloadable": 2115,
+    "yf_unavailable_in_pool": 64,
+    "total_active": 3077,
+    "total_delisted": 1400,
+    "updated_utc": "2026-08-14T23:00:19Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -8452,7 +8452,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-08-13T23:25:00Z",
+  "tiingo_universe_synced_utc": "2026-08-14T23:00:19Z",
   "daily_summary": {
     "date": "2026-08-13",
     "updated_sgt": "2026-08-14 07:44 SGT",
@@ -8460,10 +8460,10 @@
     "spy_change_pct": 0.7,
     "vs_spy_pct": -1.1,
     "bullets": [
-      "Consumer Cyclical板块今日承压的根本原因在于市场风险偏好下降，投资者在宏观数据不确定性面前倾向于回避周期性较强的消费类股票，而这种避险情绪在生产者通胀数据公布前后尤为明显。（[Exchange-Traded Funds, Equit…](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131321660.html)）",
-      "策略净值相比SPY下跌1.10%的主要拉动因素是重仓Consumer Cyclical板块中的CAKE（-4.6%，净值影响-601元）和EAT（-3.0%，净值影响-291元）两只标的大幅下跌，这两只餐饮消费股的跌幅远超大盘平均水平，直接侵蚀了策略收益。（[Sector Update: Consumer Stoc…](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-advance-afternoon-193514616.html)、[Sector Update: Consumer Stoc…](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-rise-afternoon-173751918.html)）",
-      "虽然新闻头条显示Consumer Cyclical板块午间有所上升，但这种反弹未能持续，最终板块收盘仍为负值，说明市场对消费类公司的乐观情绪（如Smurfit Westrock和Rollins的分析师看好评价）并未能转化为股价上涨动力，反映出基本面预期与市场实际交易情绪的错位。（[Are Wall Street Analysts Bul…](https://www.barchart.com/story/news/3827891/are-wall-street-analysts-bullish-on-smurfit-westrock-stock)、[Rollins Stock: Is Wall Stree…](https://www.barchart.com/story/news/3823847/rollins-stock-is-wall-street-bullish-or-bearish)）",
-      "策略的少数正贡献标的（ARMK +1.3%、LTH +1.1%）因权重较小，无法弥补CAKE和EAT的重创，加之整体大盘仅小幅上涨0.70%，最终导致策略跑输SPY超过1个百分点。"
+      "Consumer Cyclical\u677f\u5757\u4eca\u65e5\u627f\u538b\u7684\u6839\u672c\u539f\u56e0\u5728\u4e8e\u5e02\u573a\u98ce\u9669\u504f\u597d\u4e0b\u964d\uff0c\u6295\u8d44\u8005\u5728\u5b8f\u89c2\u6570\u636e\u4e0d\u786e\u5b9a\u6027\u9762\u524d\u503e\u5411\u4e8e\u56de\u907f\u5468\u671f\u6027\u8f83\u5f3a\u7684\u6d88\u8d39\u7c7b\u80a1\u7968\uff0c\u800c\u8fd9\u79cd\u907f\u9669\u60c5\u7eea\u5728\u751f\u4ea7\u8005\u901a\u80c0\u6570\u636e\u516c\u5e03\u524d\u540e\u5c24\u4e3a\u660e\u663e\u3002\uff08[Exchange-Traded Funds, Equit\u2026](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131321660.html)\uff09",
+      "\u7b56\u7565\u51c0\u503c\u76f8\u6bd4SPY\u4e0b\u8dcc1.10%\u7684\u4e3b\u8981\u62c9\u52a8\u56e0\u7d20\u662f\u91cd\u4ed3Consumer Cyclical\u677f\u5757\u4e2d\u7684CAKE\uff08-4.6%\uff0c\u51c0\u503c\u5f71\u54cd-601\u5143\uff09\u548cEAT\uff08-3.0%\uff0c\u51c0\u503c\u5f71\u54cd-291\u5143\uff09\u4e24\u53ea\u6807\u7684\u5927\u5e45\u4e0b\u8dcc\uff0c\u8fd9\u4e24\u53ea\u9910\u996e\u6d88\u8d39\u80a1\u7684\u8dcc\u5e45\u8fdc\u8d85\u5927\u76d8\u5e73\u5747\u6c34\u5e73\uff0c\u76f4\u63a5\u4fb5\u8680\u4e86\u7b56\u7565\u6536\u76ca\u3002\uff08[Sector Update: Consumer Stoc\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-advance-afternoon-193514616.html)\u3001[Sector Update: Consumer Stoc\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-rise-afternoon-173751918.html)\uff09",
+      "\u867d\u7136\u65b0\u95fb\u5934\u6761\u663e\u793aConsumer Cyclical\u677f\u5757\u5348\u95f4\u6709\u6240\u4e0a\u5347\uff0c\u4f46\u8fd9\u79cd\u53cd\u5f39\u672a\u80fd\u6301\u7eed\uff0c\u6700\u7ec8\u677f\u5757\u6536\u76d8\u4ecd\u4e3a\u8d1f\u503c\uff0c\u8bf4\u660e\u5e02\u573a\u5bf9\u6d88\u8d39\u7c7b\u516c\u53f8\u7684\u4e50\u89c2\u60c5\u7eea\uff08\u5982Smurfit Westrock\u548cRollins\u7684\u5206\u6790\u5e08\u770b\u597d\u8bc4\u4ef7\uff09\u5e76\u672a\u80fd\u8f6c\u5316\u4e3a\u80a1\u4ef7\u4e0a\u6da8\u52a8\u529b\uff0c\u53cd\u6620\u51fa\u57fa\u672c\u9762\u9884\u671f\u4e0e\u5e02\u573a\u5b9e\u9645\u4ea4\u6613\u60c5\u7eea\u7684\u9519\u4f4d\u3002\uff08[Are Wall Street Analysts Bul\u2026](https://www.barchart.com/story/news/3827891/are-wall-street-analysts-bullish-on-smurfit-westrock-stock)\u3001[Rollins Stock: Is Wall Stree\u2026](https://www.barchart.com/story/news/3823847/rollins-stock-is-wall-street-bullish-or-bearish)\uff09",
+      "\u7b56\u7565\u7684\u5c11\u6570\u6b63\u8d21\u732e\u6807\u7684\uff08ARMK +1.3%\u3001LTH +1.1%\uff09\u56e0\u6743\u91cd\u8f83\u5c0f\uff0c\u65e0\u6cd5\u5f25\u8865CAKE\u548cEAT\u7684\u91cd\u521b\uff0c\u52a0\u4e4b\u6574\u4f53\u5927\u76d8\u4ec5\u5c0f\u5e45\u4e0a\u6da80.70%\uff0c\u6700\u7ec8\u5bfc\u81f4\u7b56\u7565\u8dd1\u8f93SPY\u8d85\u8fc71\u4e2a\u767e\u5206\u70b9\u3002"
     ],
     "news": [
       {
