@@ -4,8 +4,8 @@
   "start_date": "2026-06-19",
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
-  "last_update_date": "2026-08-17",
-  "cash": 6658.816510881653,
+  "last_update_date": "2026-08-18",
+  "cash": 6660.440339869613,
   "positions": [
     {
       "ticker": "LTH",
@@ -14,8 +14,8 @@
       "shares": 270,
       "atr_at_entry": 1.2762,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 45.26,
-      "last_price_date": "2026-08-14",
+      "last_known_price": 45.4,
+      "last_price_date": "2026-08-18",
       "stop_loss": 34.3677,
       "trail_stop": 40.432394,
       "highest_high": 47.235,
@@ -36,8 +36,8 @@
       "highest_high": 134.88,
       "atr_at_entry": 6.529,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 134.59,
-      "last_price_date": "2026-08-17",
+      "last_known_price": 134.57,
+      "last_price_date": "2026-08-18",
       "entry_commission": 3.03,
       "lowest_low": 132.695,
       "sector": "Healthcare"
@@ -57,8 +57,8 @@
       "lowest_low": 79.585,
       "atr_at_entry": 2.6443,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 109.07,
-      "last_price_date": "2026-08-17",
+      "last_known_price": 106.36,
+      "last_price_date": "2026-08-18",
       "entry_commission": 2.75,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -94,13 +94,13 @@
       "entry_price": 251.1309,
       "shares": 18,
       "stop_loss": 241.7063,
-      "trail_stop": 243.466249,
+      "trail_stop": 243.524939,
       "highest_high": 255.95,
       "lowest_low": 244.285,
       "atr_at_entry": 4.7123,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 252.86,
-      "last_price_date": "2026-08-17",
+      "last_known_price": 251.5,
+      "last_price_date": "2026-08-18",
       "entry_commission": 1.36,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -136,13 +136,13 @@
       "entry_price": 228.228,
       "shares": 39,
       "stop_loss": 216.1272,
-      "trail_stop": 224.145407,
+      "trail_stop": 224.366103,
       "highest_high": 240.025,
       "lowest_low": 223.42,
       "atr_at_entry": 6.0504,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 235.52,
-      "last_price_date": "2026-08-17",
+      "last_known_price": 236.25,
+      "last_price_date": "2026-08-18",
       "entry_commission": 2.67,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -157,13 +157,13 @@
       "entry_price": 255.7855,
       "shares": 35,
       "stop_loss": 241.1349,
-      "trail_stop": 241.155654,
+      "trail_stop": 241.56437,
       "highest_high": 259.98,
       "lowest_low": 243.26,
       "atr_at_entry": 7.3253,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 252.97,
-      "last_price_date": "2026-08-17",
+      "last_known_price": 250.3,
+      "last_price_date": "2026-08-18",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -178,13 +178,13 @@
       "entry_price": 253.3431,
       "shares": 35,
       "stop_loss": 235.4483,
-      "trail_stop": 243.249309,
+      "trail_stop": 243.659911,
       "highest_high": 267.4499,
       "lowest_low": 243.2801,
       "atr_at_entry": 8.9474,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 263.91,
-      "last_price_date": "2026-08-17",
+      "last_known_price": 262.0,
+      "last_price_date": "2026-08-18",
       "entry_commission": 2.66,
       "entry_regime": "BULL",
       "sector": "Financial Services"
@@ -204,8 +204,8 @@
       "lowest_low": 285.965,
       "atr_at_entry": 8.923,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 307.5,
-      "last_price_date": "2026-08-17",
+      "last_known_price": 297.44,
+      "last_price_date": "2026-08-18",
       "entry_commission": 1.32,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -220,13 +220,13 @@
       "entry_price": 26.9469,
       "shares": 334,
       "stop_loss": 24.9007,
-      "trail_stop": 25.329336,
+      "trail_stop": 25.360311,
       "highest_high": 28.375,
-      "lowest_low": 25.865,
+      "lowest_low": 25.75,
       "atr_at_entry": 1.0231,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 25.91,
-      "last_price_date": "2026-08-17",
+      "last_known_price": 25.94,
+      "last_price_date": "2026-08-18",
       "entry_commission": 2.7,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -241,13 +241,13 @@
       "entry_price": 85.3853,
       "shares": 104,
       "stop_loss": 79.3291,
-      "trail_stop": 83.405768,
+      "trail_stop": 83.421708,
       "highest_high": 91.93,
       "lowest_low": 82.09,
       "atr_at_entry": 3.0281,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 88.76,
-      "last_price_date": "2026-08-17",
+      "last_known_price": 89.6,
+      "last_price_date": "2026-08-18",
       "entry_commission": 2.66,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -267,8 +267,8 @@
       "lowest_low": 217.09,
       "atr_at_entry": 8.003,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 241.71,
-      "last_price_date": "2026-08-17",
+      "last_known_price": 235.65,
+      "last_price_date": "2026-08-18",
       "entry_commission": 2.67,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -285,11 +285,11 @@
       "stop_loss": 340.6657,
       "trail_stop": 347.313867,
       "highest_high": 386.22,
-      "lowest_low": 361.83,
+      "lowest_low": 358.68,
       "atr_at_entry": 14.1715,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 371.26,
-      "last_price_date": "2026-08-17",
+      "last_known_price": 366.42,
+      "last_price_date": "2026-08-18",
       "entry_commission": 2.66,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -304,13 +304,13 @@
       "entry_price": 223.4732,
       "shares": 40,
       "stop_loss": 204.1418,
-      "trail_stop": 215.778844,
+      "trail_stop": 216.053873,
       "highest_high": 243.5694,
       "lowest_low": 221.83,
       "atr_at_entry": 9.6657,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 231.78,
-      "last_price_date": "2026-08-17",
+      "last_known_price": 226.46,
+      "last_price_date": "2026-08-18",
       "entry_commission": 2.68,
       "entry_regime": "BULL",
       "sector": "Industrials"
@@ -327,11 +327,11 @@
       "stop_loss": 52.1019,
       "trail_stop": 51.10509,
       "highest_high": 60.69,
-      "lowest_low": 55.62,
+      "lowest_low": 55.25,
       "atr_at_entry": 3.2283,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 57.99,
-      "last_price_date": "2026-08-17",
+      "last_known_price": 55.63,
+      "last_price_date": "2026-08-18",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -351,8 +351,8 @@
       "lowest_low": 59.6649,
       "atr_at_entry": 1.2765,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 61.8,
-      "last_price_date": "2026-08-17",
+      "last_known_price": 60.5,
+      "last_price_date": "2026-08-18",
       "entry_commission": 2.68,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -372,8 +372,8 @@
       "lowest_low": 50.12,
       "atr_at_entry": 2.1341,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 50.13,
-      "last_price_date": "2026-08-17",
+      "last_known_price": 50.94,
+      "last_price_date": "2026-08-18",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -388,13 +388,13 @@
       "entry_price": 418.418,
       "shares": 21,
       "stop_loss": 395.6644,
-      "trail_stop": 402.711595,
+      "trail_stop": 402.836516,
       "highest_high": 438.93,
-      "lowest_low": 401.23,
+      "lowest_low": 401.155,
       "atr_at_entry": 11.3768,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 411.94,
-      "last_price_date": "2026-08-17",
+      "last_known_price": 401.24,
+      "last_price_date": "2026-08-18",
       "entry_commission": 2.64,
       "entry_regime": "BULL",
       "sector": "Communication Services"
@@ -2091,20 +2091,59 @@
       "nav": 176731.17,
       "regime": "BULL",
       "spy_close": 772.67
+    },
+    {
+      "date": "2026-08-18",
+      "nav": 175043.84,
+      "regime": "BULL",
+      "spy_close": 767.45
     }
   ],
-  "pending_exits": [],
+  "pending_exits": [
+    {
+      "ticker": "MSGS",
+      "exit_reason": "trailing_stop",
+      "stop_used": 402.8365,
+      "shares": 21,
+      "open_price": 418.0,
+      "entry_price": 418.418,
+      "entry_date": "2026-08-13",
+      "signal_date": "2026-08-12",
+      "signal_price": 414.12,
+      "signal_strength": 1.0058,
+      "stop_loss": 395.6644,
+      "atr_at_entry": 11.3768,
+      "highest_high": 438.93,
+      "lowest_low": 401.155,
+      "trail_stop_at_exit": 402.836516,
+      "atr_at_exit": 12.0312,
+      "detected_date": "2026-08-18",
+      "entry_commission": 2.64,
+      "entry_regime": "BULL"
+    }
+  ],
   "pending_entries": [
     {
-      "ticker": "ARGX",
-      "signal_date": "2026-08-17",
-      "signal_price": 987.84,
-      "stop_price": 921.2955,
-      "shares": 9,
-      "atr": 33.2723,
-      "signal_strength": 1.0359,
+      "ticker": "HAE",
+      "signal_date": "2026-08-18",
+      "signal_price": 104.65,
+      "stop_price": 97.5417,
+      "shares": 84,
+      "atr": 3.5541,
+      "signal_strength": 1.1344,
       "trade_risk": 0.0034,
-      "notional": 8890.56
+      "notional": 8790.6
+    },
+    {
+      "ticker": "TRGP",
+      "signal_date": "2026-08-18",
+      "signal_price": 297.77,
+      "stop_price": 280.9992,
+      "shares": 29,
+      "atr": 8.3854,
+      "signal_strength": 1.0279,
+      "trade_risk": 0.0028,
+      "notional": 8635.33
     }
   ],
   "signals_history": [
@@ -8357,73 +8396,180 @@
           "strength": 1.0359
         }
       ]
+    },
+    {
+      "date": "2026-08-18",
+      "regime": "BULL",
+      "spy_close": 767.45,
+      "n_candidates": 2,
+      "n_entries": 2,
+      "n_executed": 0,
+      "n_exits": 1,
+      "n_raw_breakouts": 2,
+      "n_heat_blocked": 0,
+      "n_cash_blocked": 0,
+      "n_corr_reduced": 0,
+      "n_price_filtered": 223,
+      "n_adv_filtered": 559,
+      "n_breakout_filtered": 1286,
+      "n_atr_filtered": 0,
+      "n_stop_dist_filtered": 3,
+      "n_volume_filtered": 18,
+      "spy_pct_above_sma200": 9.0689,
+      "exits_executed": [],
+      "entries_executed": [],
+      "exit_signals": [
+        {
+          "ticker": "MSGS",
+          "exit_reason": "trailing_stop",
+          "stop_used": 402.8365,
+          "shares": 21
+        }
+      ],
+      "candidate_signals": [
+        {
+          "ticker": "HAE",
+          "signal_price": 104.65,
+          "stop_price": 97.5417,
+          "shares": 84,
+          "trade_risk": 0.0034,
+          "strength": 1.1344,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.067924,
+          "atr_pct": 0.033962,
+          "adv60_m": 65.827,
+          "vol_ratio": 2.6903
+        },
+        {
+          "ticker": "TRGP",
+          "signal_price": 297.77,
+          "stop_price": 280.9992,
+          "shares": 29,
+          "trade_risk": 0.0028,
+          "strength": 1.0279,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.056321,
+          "atr_pct": 0.028161,
+          "adv60_m": 321.204,
+          "vol_ratio": 1.8155
+        }
+      ],
+      "entry_signals": [
+        {
+          "ticker": "HAE",
+          "signal_price": 104.65,
+          "stop_price": 97.5417,
+          "shares": 84,
+          "trade_risk": 0.0034,
+          "strength": 1.1344
+        },
+        {
+          "ticker": "TRGP",
+          "signal_price": 297.77,
+          "stop_price": 280.9992,
+          "shares": 29,
+          "trade_risk": 0.0028,
+          "strength": 1.0279
+        }
+      ]
     }
   ],
-  "last_update_utc": "2026-08-17T23:28:25Z",
+  "last_update_utc": "2026-08-18T23:25:52Z",
   "today_signals": {
-    "date": "2026-08-17",
+    "date": "2026-08-18",
     "regime": "BULL",
-    "spy_close": 772.67,
-    "n_candidates": 1,
-    "n_entries": 1,
+    "spy_close": 767.45,
+    "n_candidates": 2,
+    "n_entries": 2,
     "n_executed": 0,
-    "n_exits": 0,
-    "n_raw_breakouts": 1,
+    "n_exits": 1,
+    "n_raw_breakouts": 2,
     "n_heat_blocked": 0,
     "n_cash_blocked": 0,
     "n_corr_reduced": 0,
-    "n_price_filtered": 222,
-    "n_adv_filtered": 563,
-    "n_breakout_filtered": 1288,
+    "n_price_filtered": 223,
+    "n_adv_filtered": 559,
+    "n_breakout_filtered": 1286,
     "n_atr_filtered": 0,
-    "n_stop_dist_filtered": 1,
-    "n_volume_filtered": 16,
-    "spy_pct_above_sma200": 9.8777,
+    "n_stop_dist_filtered": 3,
+    "n_volume_filtered": 18,
+    "spy_pct_above_sma200": 9.0689,
     "exits_executed": [],
     "entries_executed": [],
-    "exit_signals": [],
+    "exit_signals": [
+      {
+        "ticker": "MSGS",
+        "exit_reason": "trailing_stop",
+        "stop_used": 402.8365,
+        "shares": 21
+      }
+    ],
     "candidate_signals": [
       {
-        "ticker": "ARGX",
-        "signal_price": 987.84,
-        "stop_price": 921.2955,
-        "shares": 9,
+        "ticker": "HAE",
+        "signal_price": 104.65,
+        "stop_price": 97.5417,
+        "shares": 84,
         "trade_risk": 0.0034,
-        "strength": 1.0359,
+        "strength": 1.1344,
         "rejection": null,
         "corr_with": null,
-        "stop_distance_pct": 0.067364,
-        "atr_pct": 0.033682,
-        "adv60_m": 283.305,
-        "vol_ratio": 2.0895
+        "stop_distance_pct": 0.067924,
+        "atr_pct": 0.033962,
+        "adv60_m": 65.827,
+        "vol_ratio": 2.6903
+      },
+      {
+        "ticker": "TRGP",
+        "signal_price": 297.77,
+        "stop_price": 280.9992,
+        "shares": 29,
+        "trade_risk": 0.0028,
+        "strength": 1.0279,
+        "rejection": null,
+        "corr_with": null,
+        "stop_distance_pct": 0.056321,
+        "atr_pct": 0.028161,
+        "adv60_m": 321.204,
+        "vol_ratio": 1.8155
       }
     ],
     "entry_signals": [
       {
-        "ticker": "ARGX",
-        "signal_price": 987.84,
-        "stop_price": 921.2955,
-        "shares": 9,
+        "ticker": "HAE",
+        "signal_price": 104.65,
+        "stop_price": 97.5417,
+        "shares": 84,
         "trade_risk": 0.0034,
-        "strength": 1.0359
+        "strength": 1.1344
+      },
+      {
+        "ticker": "TRGP",
+        "signal_price": 297.77,
+        "stop_price": 280.9992,
+        "shares": 29,
+        "trade_risk": 0.0028,
+        "strength": 1.0279
       }
     ]
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
+  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
-    "downloaded_count": 2134,
-    "total_scanned": 2172,
-    "updated_utc": "2026-08-17T23:28:24Z"
+    "downloaded_count": 2117,
+    "total_scanned": 2117,
+    "updated_utc": "2026-08-18T23:25:50Z"
   },
   "universe_stats": {
     "tiingo_eligible": 2170,
-    "yf_downloadable": 2117,
-    "yf_unavailable_in_pool": 53,
+    "yf_downloadable": 2116,
+    "yf_unavailable_in_pool": 54,
     "total_active": 3059,
     "total_delisted": 1418,
-    "updated_utc": "2026-08-18T23:00:48Z"
+    "updated_utc": "2026-08-18T23:25:59Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -8461,6 +8607,7 @@
     "JHG",
     "KRTX",
     "LC",
+    "LPRO",
     "LSXMA",
     "LSXMK",
     "MASI",
@@ -8500,51 +8647,42 @@
   ],
   "tiingo_universe_synced_utc": "2026-08-18T23:00:48Z",
   "daily_summary": {
-    "date": "2026-08-17",
-    "updated_sgt": "2026-08-18 07:28 SGT",
-    "nav_change_pct": -0.64,
-    "spy_change_pct": -0.47,
-    "vs_spy_pct": -0.16,
+    "date": "2026-08-18",
+    "updated_sgt": "2026-08-19 07:25 SGT",
+    "nav_change_pct": -0.95,
+    "spy_change_pct": -0.68,
+    "vs_spy_pct": -0.28,
     "bullets": [
-      "\u6d88\u8d39\u5468\u671f\u6027\u80a1\u7968\u4eca\u65e5\u4e0b\u8dcc\u7684\u6839\u672c\u539f\u56e0\u5728\u4e8e\u5e02\u573a\u98ce\u9669\u504f\u597d\u4e0b\u964d\uff0c\u6295\u8d44\u8005\u5728\u80a1\u5e02\u6574\u4f53\u627f\u538b\u7684\u80cc\u666f\u4e0b\u66f4\u503e\u5411\u4e8e\u89c4\u907f\u9ad8beta\u7684\u5468\u671f\u6027\u6d88\u8d39\u677f\u5757\uff0c\u800c\u66f4\u9752\u7750\u9632\u5b88\u6027\u8f83\u5f3a\u7684\u6d88\u8d39\u5fc5\u9700\u54c1\u548c\u533b\u7597\u4fdd\u5065\u7b49\u677f\u5757\u3002\uff08[Sector Update: Consumer Stoc\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-decline-afternoon-195816510.html)\u3001[Sector Update: Consumer Stoc\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-decline-afternoon-173354410.html)\u3001[Stock Market News for Aug 17\u2026](https://finance.yahoo.com/markets/stocks/articles/stock-market-news-aug-17-133800376.html)\uff09",
-      "\u7b56\u7565\u91cd\u4ed3Consumer Cyclical\u677f\u5757\u5bfc\u81f4\u51c0\u503c\u8dcc\u5e45\uff08-0.64%\uff09\u663e\u8457\u8d85\u8fc7SPY\uff08-0.47%\uff09\uff0c\u5176\u4e2dHRB\u548cCAKE\u4e24\u53ea\u6838\u5fc3\u6d88\u8d39\u5468\u671f\u6027\u6301\u4ed3\u5206\u522b\u4e0b\u8dcc7.0%\u548c3.8%\uff0c\u5408\u8ba1\u62d6\u7d2f\u7b56\u7565\u51c0\u503c\u8d85\u8fc71100\u7f8e\u5143\uff0c\u8fd9\u4e24\u53ea\u6807\u7684\u7684\u8d85\u989d\u4e0b\u8dcc\u5e45\u5ea6\u8fdc\u8d85\u5927\u76d8\u8dcc\u5e45\uff0c\u76f4\u63a5\u9020\u6210\u4e86-0.16%\u7684\u76f8\u5bf9\u504f\u5dee\u3002\uff08[Sector Update: Consumer Stoc\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-decline-afternoon-195816510.html)\u3001[Sector Update: Consumer Stoc\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-decline-afternoon-173354410.html)\uff09",
-      "\u5229\u7387\u9884\u671f\u4e0b\u964d\u867d\u7136\u901a\u5e38\u5bf9\u6d88\u8d39\u5468\u671f\u6027\u6709\u5229\uff0c\u4f46\u5f53\u524d\u5e02\u573a\u53ef\u80fd\u66f4\u5173\u6ce8\u7ecf\u6d4e\u589e\u957f\u653e\u7f13\u7684\u98ce\u9669\uff0c\u4f7f\u5f97\u6d88\u8d39\u5468\u671f\u7c7b\u516c\u53f8\u7684\u76c8\u5229\u524d\u666f\u53d7\u5230\u538b\u529b\uff0c\u6295\u8d44\u8005\u56e0\u6b64\u9009\u62e9\u51cf\u4ed3\u8fd9\u7c7b\u9ad8\u654f\u611f\u6027\u4e2a\u80a1\u3002\uff08[Exchange-Traded Funds Higher\u2026](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-higher-equity-131346618.html)\uff09",
-      "\u7b56\u7565\u51c0\u503c\u4e0eSPY\u7684\u504f\u5dee\u867d\u7136\u7edd\u5bf9\u503c\u4e0d\u7b97\u7279\u522b\u5927\uff08-0.16%\uff09\uff0c\u4f46\u8fd9\u53cd\u6620\u51fa\u7b56\u7565\u7684\u884c\u4e1a\u96c6\u4e2d\u5ea6\u914d\u7f6e\u4f7f\u5176\u5bf9Consumer Cyclical\u677f\u5757\u7684\u8d1f\u9762\u8868\u73b0\u66f4\u4e3a\u654f\u611f\uff0c\u800cSPY\u4f5c\u4e3a\u5bbd\u57fa\u6307\u6570\u53d7\u5355\u4e00\u677f\u5757\u5f71\u54cd\u76f8\u5bf9\u6709\u9650\u3002"
+      "TXG股价下跌4.1%的核心原因是市场对其Q2增长动能的担忧——剔除一次性的1.6百万美元结算后，收入环比仅增长3%，虽然新产品Atera的预订订单表现强劲，但这无法掩盖当期增长乏力的现实，投资者对其短期业绩可持续性产生质疑。（[10x Genomics (TXG) Sees Stro…](https://finance.yahoo.com/healthcare/articles/10x-genomics-txg-sees-strong-074449509.html)）",
+      "策略净值跌幅-0.95%相比SPY的-0.68%产生了-0.28%的负向偏差，主要是因为重仓持股TXG（-4.1%）单日就产生了-361美元的拖累，这远超其他个股的单日影响，而同为N/A板块的DXCM仅上涨0.9%的涨幅无法有效对冲TXG的跌幅。（[10x Genomics (TXG) Sees Stro…](https://finance.yahoo.com/healthcare/articles/10x-genomics-txg-sees-strong-074449509.html)）",
+      "虽然消费周期类股票CAKE、EAT、LTH等也均出现下跌，但策略对N/A板块的集中重仓配置（特别是TXG的权重），导致单个标的的负面驱动被放大，进而使策略相对大盘的跌幅显著扩大。（[10x Genomics (TXG) Sees Stro…](https://finance.yahoo.com/healthcare/articles/10x-genomics-txg-sees-strong-074449509.html)）"
     ],
     "news": [
       {
-        "title": "Sector Update: Consumer Stocks Decline Late Afternoon",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-decline-afternoon-195816510.html"
+        "title": "10x Genomics (TXG) Sees Strong Early Orders for New Atera Platform",
+        "url": "https://finance.yahoo.com/healthcare/articles/10x-genomics-txg-sees-strong-074449509.html"
       },
       {
-        "title": "Sector Update: Consumer Stocks Decline in Afternoon Trading",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-decline-afternoon-173354410.html"
+        "title": "Aramark (ARMK) Q3 2026 Earnings Call Transcript",
+        "url": "https://www.fool.com/earnings/call-transcripts/2026/08/18/aramark-armk-q3-2026-earnings-call-transcript/"
       },
       {
-        "title": "Stock Market News for Aug 17, 2026",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-aug-17-133800376.html"
-      },
-      {
-        "title": "Exchange-Traded Funds Higher, Equity Futures Mixed Pre-Bell Monday Amid Lower Rate Hike Expectations",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-higher-equity-131346618.html"
-      },
-      {
-        "title": "What Are Wall Street Analysts' Target Price for Lennar Stock?",
-        "url": "https://www.barchart.com/story/news/3885461/what-are-wall-street-analysts-target-price-for-lennar-stock"
+        "title": "5 Revealing Analyst Questions From Aramark’s Q2 Earnings Call",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/5-revealing-analyst-questions-aramark-080533984.html"
       }
     ]
   },
   "last_no_op_utc": "2026-07-14T02:55:28Z",
   "download_log": {
-    "date": "2026-08-17",
+    "date": "2026-08-18",
     "attempts": [
       {
-        "time_sgt": "2026-08-18 07:28 SGT",
+        "time_sgt": "2026-08-19 07:25 SGT",
         "type": "main_download",
         "status": "success",
-        "total": 2172,
-        "success": 2134,
-        "cumulative_success": 2134,
+        "total": 2117,
+        "success": 2117,
+        "cumulative_success": 2117,
         "failed": 0,
         "next_retry_sgt": null,
         "seq": 1
