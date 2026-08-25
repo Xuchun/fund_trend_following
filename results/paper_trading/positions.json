@@ -4,8 +4,8 @@
   "start_date": "2026-06-19",
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
-  "last_update_date": "2026-08-24",
-  "cash": 5773.275821637784,
+  "last_update_date": "2026-08-25",
+  "cash": 5778.908414770892,
   "positions": [
     {
       "ticker": "LTH",
@@ -14,8 +14,8 @@
       "shares": 270,
       "atr_at_entry": 1.2762,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 45.73,
-      "last_price_date": "2026-08-24",
+      "last_known_price": 44.55,
+      "last_price_date": "2026-08-25",
       "stop_loss": 34.3677,
       "trail_stop": 40.60861,
       "highest_high": 47.235,
@@ -32,12 +32,12 @@
       "entry_price": 132.7526,
       "shares": 76,
       "stop_loss": 119.6946,
-      "trail_stop": 132.190734,
+      "trail_stop": 132.311846,
       "highest_high": 134.88,
       "atr_at_entry": 6.529,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 134.79,
-      "last_price_date": "2026-08-24",
+      "last_known_price": 134.85,
+      "last_price_date": "2026-08-25",
       "entry_commission": 3.03,
       "lowest_low": 132.695,
       "sector": "Healthcare"
@@ -57,8 +57,8 @@
       "lowest_low": 79.585,
       "atr_at_entry": 2.6443,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 114.61,
-      "last_price_date": "2026-08-24",
+      "last_known_price": 113.485,
+      "last_price_date": "2026-08-25",
       "entry_commission": 2.75,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -115,13 +115,13 @@
       "entry_price": 228.228,
       "shares": 39,
       "stop_loss": 216.1272,
-      "trail_stop": 230.006519,
+      "trail_stop": 230.195124,
       "highest_high": 245.931,
       "lowest_low": 223.42,
       "atr_at_entry": 6.0504,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 243.87,
-      "last_price_date": "2026-08-24",
+      "last_known_price": 244.51,
+      "last_price_date": "2026-08-25",
       "entry_commission": 2.67,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -136,13 +136,13 @@
       "entry_price": 255.7855,
       "shares": 35,
       "stop_loss": 241.1349,
-      "trail_stop": 241.676652,
+      "trail_stop": 241.808861,
       "highest_high": 259.98,
       "lowest_low": 243.26,
       "atr_at_entry": 7.3253,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 248.88,
-      "last_price_date": "2026-08-24",
+      "last_known_price": 246.54,
+      "last_price_date": "2026-08-25",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -162,8 +162,8 @@
       "lowest_low": 285.965,
       "atr_at_entry": 8.923,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 291.25,
-      "last_price_date": "2026-08-24",
+      "last_known_price": 288.45,
+      "last_price_date": "2026-08-25",
       "entry_commission": 1.32,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -178,13 +178,13 @@
       "entry_price": 26.9469,
       "shares": 334,
       "stop_loss": 24.9007,
-      "trail_stop": 25.550866,
+      "trail_stop": 25.618573,
       "highest_high": 28.375,
       "lowest_low": 25.75,
       "atr_at_entry": 1.0231,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 26.49,
-      "last_price_date": "2026-08-24",
+      "last_known_price": 26.29,
+      "last_price_date": "2026-08-25",
       "entry_commission": 2.7,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -199,13 +199,13 @@
       "entry_price": 85.3853,
       "shares": 104,
       "stop_loss": 79.3291,
-      "trail_stop": 84.316821,
+      "trail_stop": 84.376483,
       "highest_high": 92.59,
       "lowest_low": 82.09,
       "atr_at_entry": 3.0281,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 91.06,
-      "last_price_date": "2026-08-24",
+      "last_known_price": 89.16,
+      "last_price_date": "2026-08-25",
       "entry_commission": 2.66,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -220,13 +220,13 @@
       "entry_price": 222.3421,
       "shares": 40,
       "stop_loss": 206.3361,
-      "trail_stop": 225.944533,
-      "highest_high": 254.94,
+      "trail_stop": 226.080884,
+      "highest_high": 254.99,
       "lowest_low": 217.09,
       "atr_at_entry": 8.003,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 253.94,
-      "last_price_date": "2026-08-24",
+      "last_known_price": 248.7,
+      "last_price_date": "2026-08-25",
       "entry_commission": 2.67,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -241,13 +241,13 @@
       "entry_price": 369.0087,
       "shares": 24,
       "stop_loss": 340.6657,
-      "trail_stop": 347.313867,
+      "trail_stop": 348.138952,
       "highest_high": 386.22,
       "lowest_low": 350.36,
       "atr_at_entry": 14.1715,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 363.3,
-      "last_price_date": "2026-08-24",
+      "last_known_price": 360.52,
+      "last_price_date": "2026-08-25",
       "entry_commission": 2.66,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -262,13 +262,13 @@
       "entry_price": 58.5585,
       "shares": 153,
       "stop_loss": 52.1019,
-      "trail_stop": 55.190919,
-      "highest_high": 65.47,
+      "trail_stop": 56.401982,
+      "highest_high": 66.94,
       "lowest_low": 55.25,
       "atr_at_entry": 3.2283,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 63.8,
-      "last_price_date": "2026-08-24",
+      "last_known_price": 64.72,
+      "last_price_date": "2026-08-25",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -283,13 +283,13 @@
       "entry_price": 60.8808,
       "shares": 147,
       "stop_loss": 58.3278,
-      "trail_stop": 58.807013,
+      "trail_stop": 58.882334,
       "highest_high": 62.6475,
       "lowest_low": 58.89,
       "atr_at_entry": 1.2765,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 59.28,
-      "last_price_date": "2026-08-24",
+      "last_known_price": 59.08,
+      "last_price_date": "2026-08-25",
       "entry_commission": 2.68,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -304,13 +304,13 @@
       "entry_price": 54.2742,
       "shares": 165,
       "stop_loss": 50.006,
-      "trail_stop": 48.555009,
+      "trail_stop": 48.713059,
       "highest_high": 54.71,
       "lowest_low": 50.12,
       "atr_at_entry": 2.1341,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 53.68,
-      "last_price_date": "2026-08-24",
+      "last_known_price": 53.19,
+      "last_price_date": "2026-08-25",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -325,13 +325,13 @@
       "entry_price": 105.3052,
       "shares": 83,
       "stop_loss": 98.197,
-      "trail_stop": 99.291867,
+      "trail_stop": 99.531887,
       "highest_high": 109.5707,
       "lowest_low": 105.01,
       "atr_at_entry": 3.5541,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 108.4,
-      "last_price_date": "2026-08-24",
+      "last_known_price": 108.32,
+      "last_price_date": "2026-08-25",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -346,13 +346,13 @@
       "entry_price": 150.9308,
       "shares": 58,
       "stop_loss": 142.9074,
-      "trail_stop": 142.273695,
-      "highest_high": 154.49,
+      "trail_stop": 144.375432,
+      "highest_high": 156.9199,
       "lowest_low": 148.516,
       "atr_at_entry": 4.0117,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 150.66,
-      "last_price_date": "2026-08-24",
+      "last_known_price": 156.45,
+      "last_price_date": "2026-08-25",
       "entry_commission": 2.63,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -367,13 +367,13 @@
       "entry_price": 174.3642,
       "shares": 25,
       "stop_loss": 168.5328,
-      "trail_stop": 166.867012,
-      "highest_high": 175.6,
+      "trail_stop": 167.241951,
+      "highest_high": 175.8,
       "lowest_low": 171.84,
       "atr_at_entry": 2.9157,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 174.7,
-      "last_price_date": "2026-08-24",
+      "last_known_price": 175.29,
+      "last_price_date": "2026-08-25",
       "entry_commission": 1.31,
       "entry_regime": "BULL",
       "sector": "ETF"
@@ -388,13 +388,13 @@
       "entry_price": 338.388,
       "shares": 26,
       "stop_loss": 323.7384,
-      "trail_stop": 316.982415,
+      "trail_stop": 317.451797,
       "highest_high": 338.4,
       "lowest_low": 328.8695,
       "atr_at_entry": 7.3248,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 333.93,
-      "last_price_date": "2026-08-24",
+      "last_known_price": 333.58,
+      "last_price_date": "2026-08-25",
       "entry_commission": 2.64,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -2241,31 +2241,48 @@
       "nav": 177451.63,
       "regime": "BULL",
       "spy_close": 763.47
-    }
-  ],
-  "pending_exits": [],
-  "pending_entries": [
-    {
-      "ticker": "FIVE",
-      "signal_date": "2026-08-24",
-      "signal_price": 262.72,
-      "stop_price": 245.416,
-      "shares": 34,
-      "atr": 8.652,
-      "signal_strength": 1.0441,
-      "trade_risk": 0.0033,
-      "notional": 8932.48
     },
     {
-      "ticker": "FCFS",
-      "signal_date": "2026-08-24",
-      "signal_price": 236.43,
-      "stop_price": 219.0473,
-      "shares": 38,
-      "atr": 8.6913,
-      "signal_strength": 1.0058,
-      "trade_risk": 0.0037,
-      "notional": 8984.34
+      "date": "2026-08-25",
+      "nav": 176744.02,
+      "regime": "BULL",
+      "spy_close": 765.91
+    }
+  ],
+  "pending_exits": [
+    {
+      "ticker": "GRMN",
+      "exit_reason": "trailing_stop",
+      "stop_used": 290.0267,
+      "shares": 15,
+      "open_price": 292.96,
+      "entry_price": 293.253,
+      "entry_date": "2026-07-30",
+      "signal_date": "2026-07-29",
+      "signal_price": 294.83,
+      "signal_strength": 1.0835,
+      "stop_loss": 275.407,
+      "atr_at_entry": 8.923,
+      "highest_high": 314.28,
+      "lowest_low": 285.965,
+      "trail_stop_at_exit": 290.026695,
+      "atr_at_exit": 8.1678,
+      "detected_date": "2026-08-25",
+      "entry_commission": 1.32,
+      "entry_regime": "BULL"
+    }
+  ],
+  "pending_entries": [
+    {
+      "ticker": "BNS",
+      "signal_date": "2026-08-25",
+      "signal_price": 93.1,
+      "stop_price": 89.6406,
+      "shares": 95,
+      "atr": 1.7297,
+      "signal_strength": 1.0115,
+      "trade_risk": 0.0019,
+      "notional": 8844.5
     }
   ],
   "signals_history": [
@@ -9114,95 +9131,136 @@
           "strength": 1.0058
         }
       ]
+    },
+    {
+      "date": "2026-08-25",
+      "regime": "BULL",
+      "spy_close": 765.91,
+      "n_candidates": 1,
+      "n_entries": 1,
+      "n_executed": 0,
+      "n_exits": 1,
+      "n_raw_breakouts": 1,
+      "n_heat_blocked": 0,
+      "n_cash_blocked": 0,
+      "n_corr_reduced": 0,
+      "n_price_filtered": 217,
+      "n_adv_filtered": 563,
+      "n_breakout_filtered": 1272,
+      "n_atr_filtered": 0,
+      "n_stop_dist_filtered": 6,
+      "n_volume_filtered": 27,
+      "spy_pct_above_sma200": 8.498,
+      "exits_executed": [],
+      "entries_executed": [],
+      "exit_signals": [
+        {
+          "ticker": "GRMN",
+          "exit_reason": "trailing_stop",
+          "stop_used": 290.0267,
+          "shares": 15
+        }
+      ],
+      "candidate_signals": [
+        {
+          "ticker": "BNS",
+          "signal_price": 93.1,
+          "stop_price": 89.6406,
+          "shares": 95,
+          "trade_risk": 0.0019,
+          "strength": 1.0115,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.037158,
+          "atr_pct": 0.018579,
+          "adv60_m": 217.445,
+          "vol_ratio": 1.6121
+        }
+      ],
+      "entry_signals": [
+        {
+          "ticker": "BNS",
+          "signal_price": 93.1,
+          "stop_price": 89.6406,
+          "shares": 95,
+          "trade_risk": 0.0019,
+          "strength": 1.0115
+        }
+      ]
     }
   ],
-  "last_update_utc": "2026-08-24T23:27:00Z",
+  "last_update_utc": "2026-08-25T23:28:05Z",
   "today_signals": {
-    "date": "2026-08-24",
+    "date": "2026-08-25",
     "regime": "BULL",
-    "spy_close": 763.47,
-    "n_candidates": 2,
-    "n_entries": 2,
+    "spy_close": 765.91,
+    "n_candidates": 1,
+    "n_entries": 1,
     "n_executed": 0,
-    "n_exits": 0,
-    "n_raw_breakouts": 2,
+    "n_exits": 1,
+    "n_raw_breakouts": 1,
     "n_heat_blocked": 0,
     "n_cash_blocked": 0,
     "n_corr_reduced": 0,
-    "n_price_filtered": 225,
-    "n_adv_filtered": 555,
-    "n_breakout_filtered": 1281,
+    "n_price_filtered": 217,
+    "n_adv_filtered": 563,
+    "n_breakout_filtered": 1272,
     "n_atr_filtered": 0,
-    "n_stop_dist_filtered": 3,
+    "n_stop_dist_filtered": 6,
     "n_volume_filtered": 27,
-    "spy_pct_above_sma200": 8.2243,
+    "spy_pct_above_sma200": 8.498,
     "exits_executed": [],
     "entries_executed": [],
-    "exit_signals": [],
+    "exit_signals": [
+      {
+        "ticker": "GRMN",
+        "exit_reason": "trailing_stop",
+        "stop_used": 290.0267,
+        "shares": 15
+      }
+    ],
     "candidate_signals": [
       {
-        "ticker": "FIVE",
-        "signal_price": 262.72,
-        "stop_price": 245.416,
-        "shares": 34,
-        "trade_risk": 0.0033,
-        "strength": 1.0441,
+        "ticker": "BNS",
+        "signal_price": 93.1,
+        "stop_price": 89.6406,
+        "shares": 95,
+        "trade_risk": 0.0019,
+        "strength": 1.0115,
         "rejection": null,
         "corr_with": null,
-        "stop_distance_pct": 0.065865,
-        "atr_pct": 0.032932,
-        "adv60_m": 255.046,
-        "vol_ratio": 1.6333
-      },
-      {
-        "ticker": "FCFS",
-        "signal_price": 236.43,
-        "stop_price": 219.0473,
-        "shares": 38,
-        "trade_risk": 0.0037,
-        "strength": 1.0058,
-        "rejection": null,
-        "corr_with": null,
-        "stop_distance_pct": 0.073521,
-        "atr_pct": 0.036761,
-        "adv60_m": 98.561,
-        "vol_ratio": 2.2764
+        "stop_distance_pct": 0.037158,
+        "atr_pct": 0.018579,
+        "adv60_m": 217.445,
+        "vol_ratio": 1.6121
       }
     ],
     "entry_signals": [
       {
-        "ticker": "FIVE",
-        "signal_price": 262.72,
-        "stop_price": 245.416,
-        "shares": 34,
-        "trade_risk": 0.0033,
-        "strength": 1.0441
-      },
-      {
-        "ticker": "FCFS",
-        "signal_price": 236.43,
-        "stop_price": 219.0473,
-        "shares": 38,
-        "trade_risk": 0.0037,
-        "strength": 1.0058
+        "ticker": "BNS",
+        "signal_price": 93.1,
+        "stop_price": 89.6406,
+        "shares": 95,
+        "trade_risk": 0.0019,
+        "strength": 1.0115
       }
     ]
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
+  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
-    "downloaded_count": 2136,
-    "total_scanned": 2173,
-    "updated_utc": "2026-08-24T23:26:59Z"
+    "downloaded_count": 2113,
+    "total_scanned": 2113,
+    "updated_utc": "2026-08-25T23:28:04Z"
   },
   "universe_stats": {
     "tiingo_eligible": 2169,
-    "yf_downloadable": 2113,
-    "yf_unavailable_in_pool": 56,
+    "yf_downloadable": 2111,
+    "yf_unavailable_in_pool": 58,
     "total_active": 3052,
     "total_delisted": 1425,
-    "updated_utc": "2026-08-25T23:03:56Z"
+    "updated_utc": "2026-08-25T23:28:13Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -9213,6 +9271,7 @@
     "ARCP",
     "ARIA",
     "ASRT",
+    "AVB",
     "AVNS",
     "BA-P-A",
     "BBBY",
@@ -9230,6 +9289,7 @@
     "DCPH",
     "EA",
     "EQC",
+    "EQR",
     "ESPR",
     "EVBG",
     "GTLS",
@@ -9281,50 +9341,51 @@
   ],
   "tiingo_universe_synced_utc": "2026-08-25T23:03:56Z",
   "daily_summary": {
-    "date": "2026-08-24",
-    "updated_sgt": "2026-08-25 07:27 SGT",
-    "nav_change_pct": -0.09,
-    "spy_change_pct": -0.29,
-    "vs_spy_pct": 0.2,
+    "date": "2026-08-25",
+    "updated_sgt": "2026-08-26 07:28 SGT",
+    "nav_change_pct": -0.4,
+    "spy_change_pct": 0.32,
+    "vs_spy_pct": -0.72,
     "bullets": [
-      "\u9910\u996e\u670d\u52a1\u7c7b\u6d88\u8d39\u80a1\uff08\u5982EAT\u3001LTH\u3001CAKE\uff09\u56e0\u76c8\u5229\u524d\u666f\u6539\u5584\u800c\u96c6\u4f53\u4e0a\u6da8\uff0c\u5176\u4e2dEAT\u6da8\u5e45\u6700\u5927\uff08+3.2%\uff09\uff0cLTH\u6b21\u4e4b\uff08+1.4%\uff09\uff0cCAKE\u4e5f\u5b9e\u73b0\u6b63\u6536\u76ca\uff08+1.1%\uff09\uff0c\u5171\u540c\u63a8\u52a8Consumer Cyclical\u677f\u5757\u8dd1\u8d62\u5927\u76d8\u3002\uff08[Chipotle downgraded, Darden \u2026](https://finance.yahoo.com/markets/stocks/articles/chipotle-downgraded-darden-upgraded-wall-135442374.html)\u3001[Is The Cheesecake Factory (C\u2026](https://finance.yahoo.com/markets/stocks/articles/cheesecake-factory-cake-stock-outpacing-134002326.html)\uff09",
-      "\u7b56\u7565\u7684Consumer Cyclical\u91cd\u4ed3\u914d\u7f6e\u4f7f\u5176\u80fd\u591f\u5145\u5206\u53d7\u76ca\u4e8e\u9910\u996e\u80a1\u7684\u5f3a\u52b2\u8868\u73b0\uff0c\u4f46\u8fd9\u79cd\u677f\u5757\u96c6\u4e2d\u5ea6\u4f18\u52bf\u4e5f\u5e26\u6765\u4e86\u4e0eSPY\u7684\u5206\u5316\u2014\u2014\u7b56\u7565\u901a\u8fc7EAT\u3001LTH\u3001CAKE\u7684\u6da8\u5e45\u83b7\u5f97\u4e86+624\u5143\u7684\u51c0\u6b63\u8d21\u732e\uff0c\u8db3\u4ee5\u62b5\u6d88PKG\uff08-1.5%\uff0c-137\u5143\uff09\u7b49\u5176\u4ed6\u6301\u4ed3\u7684\u8dcc\u5e45\u3002\uff08[Chipotle downgraded, Darden \u2026](https://finance.yahoo.com/markets/stocks/articles/chipotle-downgraded-darden-upgraded-wall-135442374.html)\u3001[Is The Cheesecake Factory (C\u2026](https://finance.yahoo.com/markets/stocks/articles/cheesecake-factory-cake-stock-outpacing-134002326.html)\uff09",
-      "\u7b56\u7565\u51c0\u503c-0.09%\u76f8\u5bf9SPY\u7684-0.29%\u5b9e\u73b0\u4e86+0.20%\u7684\u8d85\u989d\u6536\u76ca\uff0c\u4e3b\u8981\u6e90\u4e8e\u9910\u996e\u6d88\u8d39\u80a1\u7684\u9009\u62e9\u6027\u4e0a\u6da8\u800c\u975e\u6574\u4f53\u7ecf\u6d4e\u57fa\u672c\u9762\u6539\u5584\uff0c\u8fd9\u53cd\u6620\u51fa\u6295\u8d44\u8005\u5bf9\u7279\u5b9a\u6d88\u8d39\u670d\u52a1\u4f01\u4e1a\u7684\u5dee\u5f02\u5316\u5b9a\u4ef7\uff0c\u800c\u975e\u884c\u4e1a\u6216\u5927\u76d8\u7684\u666e\u904d\u4e50\u89c2\u60c5\u7eea\u3002\uff08[Exchange-Traded Funds, Equit\u2026](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131908789.html)\u3001[Chipotle downgraded, Darden \u2026](https://finance.yahoo.com/markets/stocks/articles/chipotle-downgraded-darden-upgraded-wall-135442374.html)\u3001[Is The Cheesecake Factory (C\u2026](https://finance.yahoo.com/markets/stocks/articles/cheesecake-factory-cake-stock-outpacing-134002326.html)\uff09"
+      "Consumer Cyclical板块今日承压的根本原因在于消费者需求和消费意愿的整体走弱，这导致包括零售、餐饮等周期性消费类个股普遍下跌，其中LTH下跌2.6%、EAT下跌2.1%对净值造成了最大的负面冲击。（[Sector Update: Consumer Stoc…](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-decline-afternoon-195236693.html)、[Sector Update: Consumer Stoc…](https://finance.yahoo.com/economy/articles/sector-consumer-stocks-decline-tuesday-173010514.html)）",
+      "策略净值相比SPY偏差-0.72%主要源于持仓结构的行业集中度差异——策略重仓Consumer Cyclical板块的LTH（-2.6%，影响-$319）、EAT（-2.1%，影响-$210）等个股大幅下跌，而SPY作为宽基指数受到了芯片股反弹等其他板块上涨的平衡支撑。（[Sector Update: Consumer Stoc…](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-decline-afternoon-195236693.html)、[Sector Update: Consumer Stoc…](https://finance.yahoo.com/economy/articles/sector-consumer-stocks-decline-tuesday-173010514.html)、[Exchange-Traded Funds, Equit…](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-130924933.html)）",
+      "从持仓表现来看，策略的Consumer Cyclical重仓持仓（LTH、EAT、CAKE、PKG等）集体承压而同期Healthcare板块的MRK上涨3.8%（影响+$336）无法完全对冲，这种板块间的收益差异扩大了策略与大盘的跑输幅度。（[Are Wall Street Analysts Pre…](https://www.barchart.com/story/news/4023869/are-wall-street-analysts-predicting-genuine-parts-stock-will-climb-or-sink)、[Is Planet Fitness a Buy as L…](https://finance.yahoo.com/markets/stocks/articles/planet-fitness-buy-low-valuation-161200612.html)）",
+      "Consumer Cyclical板块今日的下跌反映了市场对消费类上市公司成长性的担忧——如Planet Fitness虽然估值便宜但会员增长乏力，这类执行力不足的信号蔓延到整个板块，导致投资者风险偏好下降，进而加剧了周期性消费股的抛售压力。（[Is Planet Fitness a Buy as L…](https://finance.yahoo.com/markets/stocks/articles/planet-fitness-buy-low-valuation-161200612.html)）"
     ],
     "news": [
       {
-        "title": "Sector Update: Consumer Stocks Rise Late Afternoon",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-rise-afternoon-194430140.html"
+        "title": "Sector Update: Consumer Stocks Decline Late Afternoon",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-decline-afternoon-195236693.html"
       },
       {
-        "title": "Sector Update: Consumer Stocks Rise Monday Afternoon",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-rise-monday-173704859.html"
+        "title": "Sector Update: Consumer Stocks Decline Tuesday Afternoon",
+        "url": "https://finance.yahoo.com/economy/articles/sector-consumer-stocks-decline-tuesday-173010514.html"
       },
       {
-        "title": "Exchange-Traded Funds, Equity Futures Fall Pre-Bell Monday as Investors Await Details on US Sanctions Against Iran",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131908789.html"
+        "title": "Are Wall Street Analysts Predicting Genuine Parts Stock Will Climb or Sink?",
+        "url": "https://www.barchart.com/story/news/4023869/are-wall-street-analysts-predicting-genuine-parts-stock-will-climb-or-sink"
       },
       {
-        "title": "Chipotle downgraded, Darden upgraded: Wall Street's top analyst calls",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/chipotle-downgraded-darden-upgraded-wall-135442374.html"
+        "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Tuesday as Chip Stocks Recover",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-130924933.html"
       },
       {
-        "title": "Is The Cheesecake Factory (CAKE) Stock Outpacing Its Retail-Wholesale Peers This Year?",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/cheesecake-factory-cake-stock-outpacing-134002326.html"
+        "title": "Is Planet Fitness a Buy as Low Valuation Meets Slower Member Growth?",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/planet-fitness-buy-low-valuation-161200612.html"
       }
     ]
   },
   "last_no_op_utc": "2026-07-14T02:55:28Z",
   "download_log": {
-    "date": "2026-08-24",
+    "date": "2026-08-25",
     "attempts": [
       {
-        "time_sgt": "2026-08-25 07:26 SGT",
+        "time_sgt": "2026-08-26 07:28 SGT",
         "type": "main_download",
         "status": "success",
-        "total": 2173,
-        "success": 2136,
-        "cumulative_success": 2136,
+        "total": 2113,
+        "success": 2113,
+        "cumulative_success": 2113,
         "failed": 0,
         "next_retry_sgt": null,
         "seq": 1
