@@ -9190,19 +9190,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2136,
     "total_scanned": 2173,
     "updated_utc": "2026-08-24T23:26:59Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2173,
-    "yf_downloadable": 2118,
-    "yf_unavailable_in_pool": 55,
-    "total_active": 3064,
-    "total_delisted": 1413,
-    "updated_utc": "2026-08-24T23:27:08Z"
+    "tiingo_eligible": 2169,
+    "yf_downloadable": 2113,
+    "yf_unavailable_in_pool": 56,
+    "total_active": 3052,
+    "total_delisted": 1425,
+    "updated_utc": "2026-08-25T23:03:56Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -9279,7 +9279,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-08-24T23:02:04Z",
+  "tiingo_universe_synced_utc": "2026-08-25T23:03:56Z",
   "daily_summary": {
     "date": "2026-08-24",
     "updated_sgt": "2026-08-25 07:27 SGT",
@@ -9287,9 +9287,9 @@
     "spy_change_pct": -0.29,
     "vs_spy_pct": 0.2,
     "bullets": [
-      "餐饮服务类消费股（如EAT、LTH、CAKE）因盈利前景改善而集体上涨，其中EAT涨幅最大（+3.2%），LTH次之（+1.4%），CAKE也实现正收益（+1.1%），共同推动Consumer Cyclical板块跑赢大盘。（[Chipotle downgraded, Darden …](https://finance.yahoo.com/markets/stocks/articles/chipotle-downgraded-darden-upgraded-wall-135442374.html)、[Is The Cheesecake Factory (C…](https://finance.yahoo.com/markets/stocks/articles/cheesecake-factory-cake-stock-outpacing-134002326.html)）",
-      "策略的Consumer Cyclical重仓配置使其能够充分受益于餐饮股的强劲表现，但这种板块集中度优势也带来了与SPY的分化——策略通过EAT、LTH、CAKE的涨幅获得了+624元的净正贡献，足以抵消PKG（-1.5%，-137元）等其他持仓的跌幅。（[Chipotle downgraded, Darden …](https://finance.yahoo.com/markets/stocks/articles/chipotle-downgraded-darden-upgraded-wall-135442374.html)、[Is The Cheesecake Factory (C…](https://finance.yahoo.com/markets/stocks/articles/cheesecake-factory-cake-stock-outpacing-134002326.html)）",
-      "策略净值-0.09%相对SPY的-0.29%实现了+0.20%的超额收益，主要源于餐饮消费股的选择性上涨而非整体经济基本面改善，这反映出投资者对特定消费服务企业的差异化定价，而非行业或大盘的普遍乐观情绪。（[Exchange-Traded Funds, Equit…](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131908789.html)、[Chipotle downgraded, Darden …](https://finance.yahoo.com/markets/stocks/articles/chipotle-downgraded-darden-upgraded-wall-135442374.html)、[Is The Cheesecake Factory (C…](https://finance.yahoo.com/markets/stocks/articles/cheesecake-factory-cake-stock-outpacing-134002326.html)）"
+      "\u9910\u996e\u670d\u52a1\u7c7b\u6d88\u8d39\u80a1\uff08\u5982EAT\u3001LTH\u3001CAKE\uff09\u56e0\u76c8\u5229\u524d\u666f\u6539\u5584\u800c\u96c6\u4f53\u4e0a\u6da8\uff0c\u5176\u4e2dEAT\u6da8\u5e45\u6700\u5927\uff08+3.2%\uff09\uff0cLTH\u6b21\u4e4b\uff08+1.4%\uff09\uff0cCAKE\u4e5f\u5b9e\u73b0\u6b63\u6536\u76ca\uff08+1.1%\uff09\uff0c\u5171\u540c\u63a8\u52a8Consumer Cyclical\u677f\u5757\u8dd1\u8d62\u5927\u76d8\u3002\uff08[Chipotle downgraded, Darden \u2026](https://finance.yahoo.com/markets/stocks/articles/chipotle-downgraded-darden-upgraded-wall-135442374.html)\u3001[Is The Cheesecake Factory (C\u2026](https://finance.yahoo.com/markets/stocks/articles/cheesecake-factory-cake-stock-outpacing-134002326.html)\uff09",
+      "\u7b56\u7565\u7684Consumer Cyclical\u91cd\u4ed3\u914d\u7f6e\u4f7f\u5176\u80fd\u591f\u5145\u5206\u53d7\u76ca\u4e8e\u9910\u996e\u80a1\u7684\u5f3a\u52b2\u8868\u73b0\uff0c\u4f46\u8fd9\u79cd\u677f\u5757\u96c6\u4e2d\u5ea6\u4f18\u52bf\u4e5f\u5e26\u6765\u4e86\u4e0eSPY\u7684\u5206\u5316\u2014\u2014\u7b56\u7565\u901a\u8fc7EAT\u3001LTH\u3001CAKE\u7684\u6da8\u5e45\u83b7\u5f97\u4e86+624\u5143\u7684\u51c0\u6b63\u8d21\u732e\uff0c\u8db3\u4ee5\u62b5\u6d88PKG\uff08-1.5%\uff0c-137\u5143\uff09\u7b49\u5176\u4ed6\u6301\u4ed3\u7684\u8dcc\u5e45\u3002\uff08[Chipotle downgraded, Darden \u2026](https://finance.yahoo.com/markets/stocks/articles/chipotle-downgraded-darden-upgraded-wall-135442374.html)\u3001[Is The Cheesecake Factory (C\u2026](https://finance.yahoo.com/markets/stocks/articles/cheesecake-factory-cake-stock-outpacing-134002326.html)\uff09",
+      "\u7b56\u7565\u51c0\u503c-0.09%\u76f8\u5bf9SPY\u7684-0.29%\u5b9e\u73b0\u4e86+0.20%\u7684\u8d85\u989d\u6536\u76ca\uff0c\u4e3b\u8981\u6e90\u4e8e\u9910\u996e\u6d88\u8d39\u80a1\u7684\u9009\u62e9\u6027\u4e0a\u6da8\u800c\u975e\u6574\u4f53\u7ecf\u6d4e\u57fa\u672c\u9762\u6539\u5584\uff0c\u8fd9\u53cd\u6620\u51fa\u6295\u8d44\u8005\u5bf9\u7279\u5b9a\u6d88\u8d39\u670d\u52a1\u4f01\u4e1a\u7684\u5dee\u5f02\u5316\u5b9a\u4ef7\uff0c\u800c\u975e\u884c\u4e1a\u6216\u5927\u76d8\u7684\u666e\u904d\u4e50\u89c2\u60c5\u7eea\u3002\uff08[Exchange-Traded Funds, Equit\u2026](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131908789.html)\u3001[Chipotle downgraded, Darden \u2026](https://finance.yahoo.com/markets/stocks/articles/chipotle-downgraded-darden-upgraded-wall-135442374.html)\u3001[Is The Cheesecake Factory (C\u2026](https://finance.yahoo.com/markets/stocks/articles/cheesecake-factory-cake-stock-outpacing-134002326.html)\uff09"
     ],
     "news": [
       {
