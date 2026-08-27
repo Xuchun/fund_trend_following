@@ -9248,19 +9248,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2113,
     "total_scanned": 2113,
     "updated_utc": "2026-08-25T23:28:04Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2169,
-    "yf_downloadable": 2111,
-    "yf_unavailable_in_pool": 58,
-    "total_active": 3052,
-    "total_delisted": 1425,
-    "updated_utc": "2026-08-25T23:28:13Z"
+    "tiingo_eligible": 2176,
+    "yf_downloadable": 2115,
+    "yf_unavailable_in_pool": 61,
+    "total_active": 3061,
+    "total_delisted": 1416,
+    "updated_utc": "2026-08-27T03:35:13Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -9339,7 +9339,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-08-25T23:03:56Z",
+  "tiingo_universe_synced_utc": "2026-08-27T03:35:13Z",
   "daily_summary": {
     "date": "2026-08-25",
     "updated_sgt": "2026-08-26 07:28 SGT",
@@ -9347,10 +9347,10 @@
     "spy_change_pct": 0.32,
     "vs_spy_pct": -0.72,
     "bullets": [
-      "Consumer Cyclical板块今日承压的根本原因在于消费者需求和消费意愿的整体走弱，这导致包括零售、餐饮等周期性消费类个股普遍下跌，其中LTH下跌2.6%、EAT下跌2.1%对净值造成了最大的负面冲击。（[Sector Update: Consumer Stoc…](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-decline-afternoon-195236693.html)、[Sector Update: Consumer Stoc…](https://finance.yahoo.com/economy/articles/sector-consumer-stocks-decline-tuesday-173010514.html)）",
-      "策略净值相比SPY偏差-0.72%主要源于持仓结构的行业集中度差异——策略重仓Consumer Cyclical板块的LTH（-2.6%，影响-$319）、EAT（-2.1%，影响-$210）等个股大幅下跌，而SPY作为宽基指数受到了芯片股反弹等其他板块上涨的平衡支撑。（[Sector Update: Consumer Stoc…](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-decline-afternoon-195236693.html)、[Sector Update: Consumer Stoc…](https://finance.yahoo.com/economy/articles/sector-consumer-stocks-decline-tuesday-173010514.html)、[Exchange-Traded Funds, Equit…](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-130924933.html)）",
-      "从持仓表现来看，策略的Consumer Cyclical重仓持仓（LTH、EAT、CAKE、PKG等）集体承压而同期Healthcare板块的MRK上涨3.8%（影响+$336）无法完全对冲，这种板块间的收益差异扩大了策略与大盘的跑输幅度。（[Are Wall Street Analysts Pre…](https://www.barchart.com/story/news/4023869/are-wall-street-analysts-predicting-genuine-parts-stock-will-climb-or-sink)、[Is Planet Fitness a Buy as L…](https://finance.yahoo.com/markets/stocks/articles/planet-fitness-buy-low-valuation-161200612.html)）",
-      "Consumer Cyclical板块今日的下跌反映了市场对消费类上市公司成长性的担忧——如Planet Fitness虽然估值便宜但会员增长乏力，这类执行力不足的信号蔓延到整个板块，导致投资者风险偏好下降，进而加剧了周期性消费股的抛售压力。（[Is Planet Fitness a Buy as L…](https://finance.yahoo.com/markets/stocks/articles/planet-fitness-buy-low-valuation-161200612.html)）"
+      "Consumer Cyclical\u677f\u5757\u4eca\u65e5\u627f\u538b\u7684\u6839\u672c\u539f\u56e0\u5728\u4e8e\u6d88\u8d39\u8005\u9700\u6c42\u548c\u6d88\u8d39\u610f\u613f\u7684\u6574\u4f53\u8d70\u5f31\uff0c\u8fd9\u5bfc\u81f4\u5305\u62ec\u96f6\u552e\u3001\u9910\u996e\u7b49\u5468\u671f\u6027\u6d88\u8d39\u7c7b\u4e2a\u80a1\u666e\u904d\u4e0b\u8dcc\uff0c\u5176\u4e2dLTH\u4e0b\u8dcc2.6%\u3001EAT\u4e0b\u8dcc2.1%\u5bf9\u51c0\u503c\u9020\u6210\u4e86\u6700\u5927\u7684\u8d1f\u9762\u51b2\u51fb\u3002\uff08[Sector Update: Consumer Stoc\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-decline-afternoon-195236693.html)\u3001[Sector Update: Consumer Stoc\u2026](https://finance.yahoo.com/economy/articles/sector-consumer-stocks-decline-tuesday-173010514.html)\uff09",
+      "\u7b56\u7565\u51c0\u503c\u76f8\u6bd4SPY\u504f\u5dee-0.72%\u4e3b\u8981\u6e90\u4e8e\u6301\u4ed3\u7ed3\u6784\u7684\u884c\u4e1a\u96c6\u4e2d\u5ea6\u5dee\u5f02\u2014\u2014\u7b56\u7565\u91cd\u4ed3Consumer Cyclical\u677f\u5757\u7684LTH\uff08-2.6%\uff0c\u5f71\u54cd-$319\uff09\u3001EAT\uff08-2.1%\uff0c\u5f71\u54cd-$210\uff09\u7b49\u4e2a\u80a1\u5927\u5e45\u4e0b\u8dcc\uff0c\u800cSPY\u4f5c\u4e3a\u5bbd\u57fa\u6307\u6570\u53d7\u5230\u4e86\u82af\u7247\u80a1\u53cd\u5f39\u7b49\u5176\u4ed6\u677f\u5757\u4e0a\u6da8\u7684\u5e73\u8861\u652f\u6491\u3002\uff08[Sector Update: Consumer Stoc\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-decline-afternoon-195236693.html)\u3001[Sector Update: Consumer Stoc\u2026](https://finance.yahoo.com/economy/articles/sector-consumer-stocks-decline-tuesday-173010514.html)\u3001[Exchange-Traded Funds, Equit\u2026](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-130924933.html)\uff09",
+      "\u4ece\u6301\u4ed3\u8868\u73b0\u6765\u770b\uff0c\u7b56\u7565\u7684Consumer Cyclical\u91cd\u4ed3\u6301\u4ed3\uff08LTH\u3001EAT\u3001CAKE\u3001PKG\u7b49\uff09\u96c6\u4f53\u627f\u538b\u800c\u540c\u671fHealthcare\u677f\u5757\u7684MRK\u4e0a\u6da83.8%\uff08\u5f71\u54cd+$336\uff09\u65e0\u6cd5\u5b8c\u5168\u5bf9\u51b2\uff0c\u8fd9\u79cd\u677f\u5757\u95f4\u7684\u6536\u76ca\u5dee\u5f02\u6269\u5927\u4e86\u7b56\u7565\u4e0e\u5927\u76d8\u7684\u8dd1\u8f93\u5e45\u5ea6\u3002\uff08[Are Wall Street Analysts Pre\u2026](https://www.barchart.com/story/news/4023869/are-wall-street-analysts-predicting-genuine-parts-stock-will-climb-or-sink)\u3001[Is Planet Fitness a Buy as L\u2026](https://finance.yahoo.com/markets/stocks/articles/planet-fitness-buy-low-valuation-161200612.html)\uff09",
+      "Consumer Cyclical\u677f\u5757\u4eca\u65e5\u7684\u4e0b\u8dcc\u53cd\u6620\u4e86\u5e02\u573a\u5bf9\u6d88\u8d39\u7c7b\u4e0a\u5e02\u516c\u53f8\u6210\u957f\u6027\u7684\u62c5\u5fe7\u2014\u2014\u5982Planet Fitness\u867d\u7136\u4f30\u503c\u4fbf\u5b9c\u4f46\u4f1a\u5458\u589e\u957f\u4e4f\u529b\uff0c\u8fd9\u7c7b\u6267\u884c\u529b\u4e0d\u8db3\u7684\u4fe1\u53f7\u8513\u5ef6\u5230\u6574\u4e2a\u677f\u5757\uff0c\u5bfc\u81f4\u6295\u8d44\u8005\u98ce\u9669\u504f\u597d\u4e0b\u964d\uff0c\u8fdb\u800c\u52a0\u5267\u4e86\u5468\u671f\u6027\u6d88\u8d39\u80a1\u7684\u629b\u552e\u538b\u529b\u3002\uff08[Is Planet Fitness a Buy as L\u2026](https://finance.yahoo.com/markets/stocks/articles/planet-fitness-buy-low-valuation-161200612.html)\uff09"
     ],
     "news": [
       {
