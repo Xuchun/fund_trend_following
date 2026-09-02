@@ -10086,19 +10086,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2128,
     "total_scanned": 2170,
     "updated_utc": "2026-09-01T01:45:05Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2170,
-    "yf_downloadable": 2112,
-    "yf_unavailable_in_pool": 58,
-    "total_active": 3057,
-    "total_delisted": 1420,
-    "updated_utc": "2026-09-01T01:45:15Z"
+    "tiingo_eligible": 2173,
+    "yf_downloadable": 2113,
+    "yf_unavailable_in_pool": 60,
+    "total_active": 3059,
+    "total_delisted": 1418,
+    "updated_utc": "2026-09-02T00:33:14Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -10177,7 +10177,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-09-01T01:23:58Z",
+  "tiingo_universe_synced_utc": "2026-09-02T00:33:14Z",
   "daily_summary": {
     "date": "2026-08-31",
     "updated_sgt": "2026-09-01 09:45 SGT",
@@ -10185,10 +10185,10 @@
     "spy_change_pct": -0.53,
     "vs_spy_pct": -0.65,
     "bullets": [
-      "Consumer Cyclical板块的下跌源于市场风险偏好下降，当美国与伊朗局势升温导致大盘承压时，周期性消费品股票作为风险资产首当其冲被抛售。（[Exchange-Traded Funds, Equit…](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-132801663.html)）",
-      "Shopify、eBay等电商龙头股在8月涨幅高达18%后出现获利了结，投资者对估值高企的消费周期股信心不足，引发了板块整体的技术性回调。（[Shopify Falls 4% as Profit T…](https://247wallst.com/investing/2026/08/31/shopify-falls-4-as-profit-taking-follows-18-monthly-run-ebay-and-etsy-slip/)）",
-      "策略净值相对SPY下跌0.65%的偏差主要由重仓Consumer Cyclical板块的两只标的LTH（跌幅-5.3%，净值影响-629美元）和EAT（跌幅-2.0%，净值影响-189美元）造成，这两只股票的跌幅均明显超过大盘跌幅0.53%，而策略在Healthcare板块的持仓（BAX、APGE）表现相对抗跌，但无法充分对冲周期性消费股的超额跌幅。（[Shopify Falls 4% as Profit T…](https://247wallst.com/investing/2026/08/31/shopify-falls-4-as-profit-taking-follows-18-monthly-run-ebay-and-etsy-slip/)、[2 Reasons to Watch EAT and 1…](https://finance.yahoo.com/markets/stocks/articles/2-reasons-watch-eat-1-161424246.html)）",
-      "LTH作为策略净值影响最大的标的单日暴跌5.3%，远超行业平均水平，反映出消费周期股在市场风险事件冲击下的脆弱性远高于防御性板块，这正是策略因为高配置比例而承受超额回撤的根本原因。（[Sector Update: Consumer Stoc…](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-softer-afternoon-195906027.html)、[Sector Update: Consumer Stoc…](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-softer-afternoon-175730996.html)、[Shopify Falls 4% as Profit T…](https://247wallst.com/investing/2026/08/31/shopify-falls-4-as-profit-taking-follows-18-monthly-run-ebay-and-etsy-slip/)）"
+      "Consumer Cyclical\u677f\u5757\u7684\u4e0b\u8dcc\u6e90\u4e8e\u5e02\u573a\u98ce\u9669\u504f\u597d\u4e0b\u964d\uff0c\u5f53\u7f8e\u56fd\u4e0e\u4f0a\u6717\u5c40\u52bf\u5347\u6e29\u5bfc\u81f4\u5927\u76d8\u627f\u538b\u65f6\uff0c\u5468\u671f\u6027\u6d88\u8d39\u54c1\u80a1\u7968\u4f5c\u4e3a\u98ce\u9669\u8d44\u4ea7\u9996\u5f53\u5176\u51b2\u88ab\u629b\u552e\u3002\uff08[Exchange-Traded Funds, Equit\u2026](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-132801663.html)\uff09",
+      "Shopify\u3001eBay\u7b49\u7535\u5546\u9f99\u5934\u80a1\u57288\u6708\u6da8\u5e45\u9ad8\u8fbe18%\u540e\u51fa\u73b0\u83b7\u5229\u4e86\u7ed3\uff0c\u6295\u8d44\u8005\u5bf9\u4f30\u503c\u9ad8\u4f01\u7684\u6d88\u8d39\u5468\u671f\u80a1\u4fe1\u5fc3\u4e0d\u8db3\uff0c\u5f15\u53d1\u4e86\u677f\u5757\u6574\u4f53\u7684\u6280\u672f\u6027\u56de\u8c03\u3002\uff08[Shopify Falls 4% as Profit T\u2026](https://247wallst.com/investing/2026/08/31/shopify-falls-4-as-profit-taking-follows-18-monthly-run-ebay-and-etsy-slip/)\uff09",
+      "\u7b56\u7565\u51c0\u503c\u76f8\u5bf9SPY\u4e0b\u8dcc0.65%\u7684\u504f\u5dee\u4e3b\u8981\u7531\u91cd\u4ed3Consumer Cyclical\u677f\u5757\u7684\u4e24\u53ea\u6807\u7684LTH\uff08\u8dcc\u5e45-5.3%\uff0c\u51c0\u503c\u5f71\u54cd-629\u7f8e\u5143\uff09\u548cEAT\uff08\u8dcc\u5e45-2.0%\uff0c\u51c0\u503c\u5f71\u54cd-189\u7f8e\u5143\uff09\u9020\u6210\uff0c\u8fd9\u4e24\u53ea\u80a1\u7968\u7684\u8dcc\u5e45\u5747\u660e\u663e\u8d85\u8fc7\u5927\u76d8\u8dcc\u5e450.53%\uff0c\u800c\u7b56\u7565\u5728Healthcare\u677f\u5757\u7684\u6301\u4ed3\uff08BAX\u3001APGE\uff09\u8868\u73b0\u76f8\u5bf9\u6297\u8dcc\uff0c\u4f46\u65e0\u6cd5\u5145\u5206\u5bf9\u51b2\u5468\u671f\u6027\u6d88\u8d39\u80a1\u7684\u8d85\u989d\u8dcc\u5e45\u3002\uff08[Shopify Falls 4% as Profit T\u2026](https://247wallst.com/investing/2026/08/31/shopify-falls-4-as-profit-taking-follows-18-monthly-run-ebay-and-etsy-slip/)\u3001[2 Reasons to Watch EAT and 1\u2026](https://finance.yahoo.com/markets/stocks/articles/2-reasons-watch-eat-1-161424246.html)\uff09",
+      "LTH\u4f5c\u4e3a\u7b56\u7565\u51c0\u503c\u5f71\u54cd\u6700\u5927\u7684\u6807\u7684\u5355\u65e5\u66b4\u8dcc5.3%\uff0c\u8fdc\u8d85\u884c\u4e1a\u5e73\u5747\u6c34\u5e73\uff0c\u53cd\u6620\u51fa\u6d88\u8d39\u5468\u671f\u80a1\u5728\u5e02\u573a\u98ce\u9669\u4e8b\u4ef6\u51b2\u51fb\u4e0b\u7684\u8106\u5f31\u6027\u8fdc\u9ad8\u4e8e\u9632\u5fa1\u6027\u677f\u5757\uff0c\u8fd9\u6b63\u662f\u7b56\u7565\u56e0\u4e3a\u9ad8\u914d\u7f6e\u6bd4\u4f8b\u800c\u627f\u53d7\u8d85\u989d\u56de\u64a4\u7684\u6839\u672c\u539f\u56e0\u3002\uff08[Sector Update: Consumer Stoc\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-softer-afternoon-195906027.html)\u3001[Sector Update: Consumer Stoc\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-softer-afternoon-175730996.html)\u3001[Shopify Falls 4% as Profit T\u2026](https://247wallst.com/investing/2026/08/31/shopify-falls-4-as-profit-taking-follows-18-monthly-run-ebay-and-etsy-slip/)\uff09"
     ],
     "news": [
       {
