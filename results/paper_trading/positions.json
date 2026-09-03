@@ -10125,7 +10125,7 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
+  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
     "downloaded_count": 2113,
     "total_scanned": 2113,
@@ -10218,44 +10218,38 @@
   ],
   "tiingo_universe_synced_utc": "2026-09-03T00:42:41Z",
   "daily_summary": {
-    "date": "2026-09-01",
-    "updated_sgt": "2026-09-02 08:56 SGT",
-    "nav_change_pct": -1.16,
-    "spy_change_pct": -0.69,
-    "vs_spy_pct": -0.47,
+    "date": "2026-09-02",
+    "updated_sgt": "2026-09-03 09:00 SGT",
+    "nav_change_pct": null,
+    "spy_change_pct": null,
+    "vs_spy_pct": null,
     "bullets": [
-      "\u9ad8\u5229\u7387\u73af\u5883\u5bf9\u79d1\u6280\u80a1\u4f30\u503c\u5f62\u6210\u538b\u529b\uff0c\u56e0\u4e3a\u79d1\u6280\u516c\u53f8\u7684\u589e\u957f\u9884\u671f\u5bf9\u6298\u73b0\u7387\u66f4\u654f\u611f\uff0c\u5bfc\u81f4\u4ee5Technology\u4e3a\u4e3b\u7684\u6295\u8d44\u7ec4\u5408\u4eca\u65e5\u8dcc\u5e45\u6269\u5927\u3002\uff08[Oil, Interest Rate Outlooks \u2026](https://finance.yahoo.com/economy/articles/oil-interest-rate-outlooks-damp-111211212.html)\uff09",
-      "\u7b56\u7565\u91cd\u4ed3\u7684\u79d1\u6280\u7c7b\u6807\u7684DT\uff08-3.2%\uff09\u548cZBRA\uff08-2.8%\uff09\u53cc\u53cc\u4e0b\u8dcc\u4e14\u8dcc\u5e45\u8d85\u8fc7\u5927\u76d8\uff0c\u800cSPY\u4e2d\u79d1\u6280\u6743\u91cd\u867d\u9ad8\u4f46\u6574\u4f53\u8dcc\u5e45\u4ec5-0.69%\uff0c\u8fd9\u8bf4\u660e\u5e02\u573a\u5bf9\u4e2d\u5c0f\u578b\u79d1\u6280\u80a1\u7684\u629b\u552e\u529b\u5ea6\u66f4\u5927\u3002\uff08[Oil, Interest Rate Outlooks \u2026](https://finance.yahoo.com/economy/articles/oil-interest-rate-outlooks-damp-111211212.html)\uff09",
-      "\u4e0e\u6b64\u540c\u65f6\uff0c\u7b56\u7565\u4e2dHealthcare\u677f\u5757\u7684MRK\u9006\u5e02\u4e0a\u6da81.4%\u4e14\u5bf9\u51c0\u503c\u8d21\u732e+$122\uff0c\u4f46\u8fd9\u79cd\u9632\u5b88\u6027\u8d44\u4ea7\u7684\u6536\u76ca\u65e0\u6cd5\u62b5\u6d88DT\u548cZBRA\u5408\u8ba1-$282-$236\u7684\u62d6\u7d2f\uff0c\u5bfc\u81f4\u7b56\u7565\u51c0\u503c-1.16%\u76f8\u6bd4SPY -0.69%\u51fa\u73b0-0.47%\u7684\u8d1f\u504f\u5dee\u3002\uff08[Oil, Interest Rate Outlooks \u2026](https://finance.yahoo.com/economy/articles/oil-interest-rate-outlooks-damp-111211212.html)\uff09",
-      "Box\u7b49\u79d1\u6280\u4f01\u4e1a\u867d\u6709\u8425\u6536\u589e\u957f\u4fe1\u53f7\uff0c\u4f46\u5728\u9ad8\u5229\u7387\u80cc\u666f\u4e0b\u7684\u5e02\u573a\u98ce\u9669\u504f\u597d\u6574\u4f53\u4e0b\u964d\uff0c\u62b5\u6d88\u4e86\u4e2a\u522b\u4f01\u4e1a\u57fa\u672c\u9762\u7684\u5229\u597d\u5f71\u54cd\uff0c\u52a0\u5267\u4e86\u79d1\u6280\u677f\u5757\u7684\u7cfb\u7edf\u6027\u4e0b\u884c\u3002\uff08[Oil, Interest Rate Outlooks \u2026](https://finance.yahoo.com/economy/articles/oil-interest-rate-outlooks-damp-111211212.html)\u3001[Box (BOX) Q2 2027 Earnings C\u2026](https://www.fool.com/earnings/call-transcripts/2026/09/01/box-box-q2-2027-earnings-call-transcript/)\uff09"
+      "📊 2026-09-02 收盘数据尚未获取到，正在持续重试，获取成功后将自动更新。"
     ],
-    "news": [
-      {
-        "title": "Oil, Interest Rate Outlooks Damp Wall Street Pre-Bell; Asia Mixed, Europe Off",
-        "url": "https://finance.yahoo.com/economy/articles/oil-interest-rate-outlooks-damp-111211212.html"
-      },
-      {
-        "title": "Box (BOX) Q2 2027 Earnings Call Transcript",
-        "url": "https://www.fool.com/earnings/call-transcripts/2026/09/01/box-box-q2-2027-earnings-call-transcript/"
-      }
-    ]
+    "news": [],
+    "data_pending": true
   },
-  "last_no_op_utc": "2026-08-29T04:03:27Z",
+  "last_no_op_utc": "2026-09-03T01:00:04Z",
   "download_log": {
-    "date": "2026-09-01",
+    "date": "2026-09-02",
     "attempts": [
       {
-        "time_sgt": "2026-09-02 08:56 SGT",
-        "type": "main_download",
-        "status": "success",
-        "total": 2113,
-        "success": 2113,
-        "cumulative_success": 2113,
+        "time_sgt": "2026-09-03 09:00 SGT",
+        "type": "main_probe",
+        "status": "no_data",
+        "success": 0,
         "failed": 0,
-        "next_retry_sgt": null,
+        "attempt": 1,
+        "next_retry_sgt": "2026-09-03 09:30 SGT",
         "seq": 1
       }
     ],
     "holiday": null
+  },
+  "no_data_probe": {
+    "date": "2026-09-02",
+    "attempt": 2,
+    "next_retry_utc": "2026-09-03T01:30:00Z",
+    "next_retry_sgt": "2026-09-03 09:30 SGT"
   }
 }
