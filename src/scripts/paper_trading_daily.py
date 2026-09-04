@@ -1688,7 +1688,7 @@ def main() -> None:
     # Guard: if today has no market data (pre-market, weekend, holiday), abort without
     # touching state so the website continues to show the last completed trading day.
     _spy_today = (
-        spy_df[spy_df.index.normalize() == pd.Timestamp(today)]
+        spy_df[spy_df.index.date == today]
         if spy_df is not None and not spy_df.empty else pd.DataFrame()
     )
     if _spy_today.empty:
