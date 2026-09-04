@@ -1359,7 +1359,7 @@ def run_retry() -> None:
                 _spy_df_p  = _spy_probe.get("SPY")
                 _spy_has_today = (
                     not (_spy_df_p is None or _spy_df_p.empty) and
-                    not _spy_df_p[_spy_df_p.index.normalize() == pd.Timestamp(_today)].empty
+                    not _spy_df_p[_spy_df_p.index.date == _today].empty
                 )
 
                 if _spy_has_today:
