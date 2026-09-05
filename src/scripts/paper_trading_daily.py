@@ -1338,7 +1338,7 @@ def run_retry() -> None:
     # Note: we do NOT return early here — always fall through to pending_retry
     # so that previously-failed tickers are retried even while waiting for today's market.
     _ndp = state.get("no_data_probe", {})
-    _today = date.today()
+    _today = _get_et_date()   # 使用 ET 日期，与主函数写入 no_data_probe 的日期保持一致
     _probe_handled = False   # True when SPY probe actually ran this invocation
     if _ndp and _ndp.get("date") == str(_today):
         _next_utc_str = _ndp.get("next_retry_utc", "")
