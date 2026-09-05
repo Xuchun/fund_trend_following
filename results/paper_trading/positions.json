@@ -10125,7 +10125,7 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
+  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
     "downloaded_count": 2113,
     "total_scanned": 2113,
@@ -10218,38 +10218,38 @@
   ],
   "tiingo_universe_synced_utc": "2026-09-05T00:24:24Z",
   "daily_summary": {
-    "date": "2026-09-03",
-    "updated_sgt": "2026-09-04 08:50 SGT",
+    "date": "2026-09-04",
+    "updated_sgt": "2026-09-05 08:41 SGT",
     "nav_change_pct": null,
     "spy_change_pct": null,
     "vs_spy_pct": null,
     "bullets": [
-      "\ud83d\udcca 2026-09-03 \u6536\u76d8\u6570\u636e\u5c1a\u672a\u83b7\u53d6\u5230\uff0c\u6b63\u5728\u6301\u7eed\u91cd\u8bd5\uff0c\u83b7\u53d6\u6210\u529f\u540e\u5c06\u81ea\u52a8\u66f4\u65b0\u3002"
+      "📊 2026-09-04 收盘数据尚未获取到，正在持续重试，获取成功后将自动更新。"
     ],
     "news": [],
     "data_pending": true
   },
-  "last_no_op_utc": "2026-09-04T00:50:47Z",
+  "last_no_op_utc": "2026-09-05T00:41:48Z",
   "download_log": {
-    "date": "2026-09-03",
+    "date": "2026-09-04",
     "attempts": [
       {
-        "time_sgt": "2026-09-04 08:50 SGT",
+        "time_sgt": "2026-09-05 08:41 SGT",
         "type": "main_probe",
         "status": "no_data",
         "success": 0,
         "failed": 0,
         "attempt": 1,
-        "next_retry_sgt": "2026-09-04 09:30 SGT",
+        "next_retry_sgt": "2026-09-05 09:30 SGT",
         "seq": 1
       }
     ],
     "holiday": null
   },
   "no_data_probe": {
-    "date": "2026-09-03",
+    "date": "2026-09-04",
     "attempt": 2,
-    "next_retry_utc": "2026-09-04T01:30:00Z",
-    "next_retry_sgt": "2026-09-04 09:30 SGT"
+    "next_retry_utc": "2026-09-05T01:30:00Z",
+    "next_retry_sgt": "2026-09-05 09:30 SGT"
   }
 }
