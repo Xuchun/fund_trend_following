@@ -1340,7 +1340,13 @@ def run_retry() -> None:
     _ndp = state.get("no_data_probe", {})
     _today = _get_et_date()   # 使用 ET 日期，与主函数写入 no_data_probe 的日期保持一致
     _probe_handled = False   # True when SPY probe actually ran this invocation
-    if _ndp and _ndp.get("date") == str(_today):
+    # 允许重试 5 个日历日内的 probe，避免 ET 午夜翻日或 cron 延迟导致日期不匹配
+    _probe_date_str = _ndp.get("date", "") if _ndp else ""
+    _probe_active = (
+        bool(_probe_date_str) and
+        0 <= (_today - date.fromisoformat(_probe_date_str)).days <= 5
+    )
+    if _ndp and _probe_active:
         _next_utc_str = _ndp.get("next_retry_utc", "")
         _now_utc = datetime.now(timezone.utc)
         if _next_utc_str:
