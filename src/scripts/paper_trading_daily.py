@@ -1388,7 +1388,7 @@ def run_retry() -> None:
                     if _no_data_total >= 3:
                         # Holiday check
                         log.info(f"  {_no_data_total} consecutive no-data — checking holiday")
-                        _is_hol, _hol_name, _hol_url = _check_market_holiday(_today)
+                        _is_hol, _hol_name, _hol_url = _check_market_holiday(_probe_date)
                         _append_attempt(_dl_log, {
                             "time_sgt": _sgt_str(_now_utc),
                             "type": "retry_probe",
