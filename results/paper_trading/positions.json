@@ -14,7 +14,7 @@
       "shares": 270,
       "atr_at_entry": 1.2762,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 41.83,
+      "last_known_price": 43.22999954223633,
       "last_price_date": "2026-09-01",
       "stop_loss": 34.3677,
       "trail_stop": 40.705852,
@@ -36,7 +36,7 @@
       "highest_high": 135.09,
       "atr_at_entry": 6.529,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 135.08,
+      "last_known_price": 133.9600067138672,
       "last_price_date": "2026-09-01",
       "entry_commission": 3.03,
       "lowest_low": 132.695,
@@ -57,7 +57,7 @@
       "lowest_low": 79.585,
       "atr_at_entry": 2.6443,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 108.36,
+      "last_known_price": 107.58000183105469,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.75,
       "entry_regime": "BULL",
@@ -78,7 +78,7 @@
       "lowest_low": 209.81,
       "atr_at_entry": 0.5552,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 209.9,
+      "last_known_price": 209.89999389648438,
       "last_price_date": "2026-07-16",
       "entry_commission": 2.77,
       "entry_regime": "BULL",
@@ -99,7 +99,7 @@
       "lowest_low": 207.17,
       "atr_at_entry": 0.9593,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 209.7,
+      "last_known_price": 209.6999969482422,
       "last_price_date": "2026-08-10",
       "entry_commission": 2.74,
       "entry_regime": "BULL",
@@ -120,7 +120,7 @@
       "lowest_low": 223.42,
       "atr_at_entry": 6.0504,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 236.22,
+      "last_known_price": 237.13999938964844,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.67,
       "entry_regime": "BULL",
@@ -141,7 +141,7 @@
       "lowest_low": 25.17,
       "atr_at_entry": 1.0231,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 25.48,
+      "last_known_price": 25.829999923706055,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.7,
       "entry_regime": "BULL",
@@ -162,7 +162,7 @@
       "lowest_low": 82.09,
       "atr_at_entry": 3.0281,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 90.14,
+      "last_known_price": 87.9000015258789,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.66,
       "entry_regime": "BULL",
@@ -183,7 +183,7 @@
       "lowest_low": 217.09,
       "atr_at_entry": 8.003,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 233.98,
+      "last_known_price": 230.22000122070312,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.67,
       "entry_regime": "BULL",
@@ -204,7 +204,7 @@
       "lowest_low": 342.6,
       "atr_at_entry": 14.1715,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 343.7,
+      "last_known_price": 362.739990234375,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.66,
       "entry_regime": "BULL",
@@ -225,7 +225,7 @@
       "lowest_low": 55.25,
       "atr_at_entry": 3.2283,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 59.98,
+      "last_known_price": 62.650001525878906,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
@@ -246,7 +246,7 @@
       "lowest_low": 50.12,
       "atr_at_entry": 2.1341,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 50.92,
+      "last_known_price": 49.060001373291016,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
@@ -267,7 +267,7 @@
       "lowest_low": 101.39,
       "atr_at_entry": 3.5541,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 101.95,
+      "last_known_price": 102.91999816894531,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
@@ -288,7 +288,7 @@
       "lowest_low": 145.98,
       "atr_at_entry": 4.0117,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 149.86,
+      "last_known_price": 150.3300018310547,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.63,
       "entry_regime": "BULL",
@@ -309,7 +309,7 @@
       "lowest_low": 169.202,
       "atr_at_entry": 2.9157,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 171.67,
+      "last_known_price": 171.4499969482422,
       "last_price_date": "2026-09-01",
       "entry_commission": 1.31,
       "entry_regime": "BULL",
@@ -330,7 +330,7 @@
       "lowest_low": 90.84,
       "atr_at_entry": 1.7297,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 91.19,
+      "last_known_price": 93.81999969482422,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.64,
       "entry_regime": "BULL",
@@ -351,7 +351,7 @@
       "lowest_low": 34.72,
       "atr_at_entry": 1.1225,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 35.16,
+      "last_known_price": 35.189998626708984,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
@@ -372,7 +372,7 @@
       "lowest_low": 52.64,
       "atr_at_entry": 2.0107,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 52.86,
+      "last_known_price": 51.900001525878906,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
@@ -393,7 +393,7 @@
       "lowest_low": 57.07,
       "atr_at_entry": 1.7391,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 57.15,
+      "last_known_price": 57.5099983215332,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.59,
       "entry_regime": "BULL",
@@ -10219,17 +10219,41 @@
   "tiingo_universe_synced_utc": "2026-09-05T00:24:24Z",
   "daily_summary": {
     "date": "2026-09-04",
-    "updated_sgt": "2026-09-05 08:41 SGT",
-    "nav_change_pct": null,
-    "spy_change_pct": null,
-    "vs_spy_pct": null,
+    "updated_sgt": "2026-09-07 12:58 SGT",
+    "nav_change_pct": 0.46,
+    "spy_change_pct": 1.1,
+    "vs_spy_pct": -0.64,
     "bullets": [
-      "📊 2026-09-04 收盘数据尚未获取到，正在持续重试，获取成功后将自动更新。"
+      "📰 [Sector Update: Consumer Stocks Fall Late Afternoon](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-fall-afternoon-193633461.html)（Yahoo Finance，2026-09-04）",
+      "📰 [Exchange-Traded Funds Higher, Equity Futures Mixed Pre-Bell Friday After August Jobs Report Tops Estimates](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-higher-equity-133330774.html)（Yahoo Finance，2026-09-04）",
+      "📰 [Firing on All Cylinders: H&R Block (NYSE:HRB) Q2 Earnings Lead the Way](https://finance.yahoo.com/markets/stocks/articles/firing-cylinders-h-r-block-155010500.html)（Yahoo Finance，2026-09-04）",
+      "📰 [H&R Block (HRB) Stock Gets Fair Value Boost After Q4 Beat And FY27 Guidance](https://finance.yahoo.com/markets/stocks/articles/h-r-block-hrb-stock-090734987.html)（Yahoo Finance，2026-09-04）",
+      "📰 [Intuit Stock Still Carries The Same Swing It Just Delivered](https://www.trefis.com/articles/614219/intuit-stock-still-carries-the-same-swing-it-just-delivered/2026-09-03)（Yahoo Finance，2026-09-04）"
     ],
-    "news": [],
-    "data_pending": true
+    "news": [
+      {
+        "title": "Sector Update: Consumer Stocks Fall Late Afternoon",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-fall-afternoon-193633461.html"
+      },
+      {
+        "title": "Exchange-Traded Funds Higher, Equity Futures Mixed Pre-Bell Friday After August Jobs Report Tops Estimates",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-higher-equity-133330774.html"
+      },
+      {
+        "title": "Firing on All Cylinders: H&R Block (NYSE:HRB) Q2 Earnings Lead the Way",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/firing-cylinders-h-r-block-155010500.html"
+      },
+      {
+        "title": "H&R Block (HRB) Stock Gets Fair Value Boost After Q4 Beat And FY27 Guidance",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/h-r-block-hrb-stock-090734987.html"
+      },
+      {
+        "title": "Intuit Stock Still Carries The Same Swing It Just Delivered",
+        "url": "https://www.trefis.com/articles/614219/intuit-stock-still-carries-the-same-swing-it-just-delivered/2026-09-03"
+      }
+    ]
   },
-  "last_no_op_utc": "2026-09-05T00:41:48Z",
+  "last_no_op_utc": "2026-09-07T04:58:07Z",
   "download_log": {
     "date": "2026-09-04",
     "attempts": [
@@ -10242,14 +10266,17 @@
         "attempt": 1,
         "next_retry_sgt": "2026-09-05 09:30 SGT",
         "seq": 1
+      },
+      {
+        "time_sgt": "2026-09-07 12:58 SGT",
+        "type": "retry_probe",
+        "status": "data_available",
+        "success": 1,
+        "failed": 0,
+        "note": "市场有数据，已生成今日小结",
+        "seq": 2
       }
     ],
     "holiday": null
-  },
-  "no_data_probe": {
-    "date": "2026-09-04",
-    "attempt": 2,
-    "next_retry_utc": "2026-09-05T01:30:00Z",
-    "next_retry_sgt": "2026-09-05 09:30 SGT"
   }
 }
