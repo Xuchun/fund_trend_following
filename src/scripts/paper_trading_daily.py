@@ -1356,8 +1356,9 @@ def run_retry() -> None:
                 log.info(f"=== Retry mode: {_rem}min until no_data_probe retry — skipping probe, checking pending_retry ===")
                 # Fall through to pending_retry below
             else:
-                log.info(f"=== Retry mode: no_data_probe attempt {_ndp.get('attempt', 2)} ===")
-                _dl_log = _get_dl_log(state, _today)
+                _probe_date = date.fromisoformat(_probe_date_str)
+                log.info(f"=== Retry mode: no_data_probe attempt {_ndp.get('attempt', 2)} for {_probe_date} ===")
+                _dl_log = _get_dl_log(state, _probe_date)
                 _attempt_n = _ndp.get("attempt", 2)
 
                 # Probe SPY
@@ -1365,13 +1366,13 @@ def run_retry() -> None:
                 _spy_df_p  = _spy_probe.get("SPY")
                 _spy_has_today = (
                     not (_spy_df_p is None or _spy_df_p.empty) and
-                    not _spy_df_p[_spy_df_p.index.date == _today].empty
+                    not _spy_df_p[_spy_df_p.index.date == _probe_date].empty
                 )
 
                 if _spy_has_today:
                     # Data is now available — generate real summary, clear probe
                     log.info("  SPY data now available — generating daily summary")
-                    _update_daily_summary(state, _today)
+                    _update_daily_summary(state, _probe_date)
                     _append_attempt(_dl_log, {
                         "time_sgt": _sgt_str(_now_utc),
                         "type": "retry_probe",
