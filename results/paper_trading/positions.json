@@ -14,7 +14,7 @@
       "shares": 270,
       "atr_at_entry": 1.2762,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 41.75,
+      "last_known_price": 41.47999954223633,
       "last_price_date": "2026-09-01",
       "stop_loss": 34.3677,
       "trail_stop": 40.705852,
@@ -57,7 +57,7 @@
       "lowest_low": 79.585,
       "atr_at_entry": 2.6443,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 103.61000061035156,
+      "last_known_price": 101.16000366210938,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.75,
       "entry_regime": "BULL",
@@ -120,7 +120,7 @@
       "lowest_low": 223.42,
       "atr_at_entry": 6.0504,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 235.4600067138672,
+      "last_known_price": 231.13999938964844,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.67,
       "entry_regime": "BULL",
@@ -141,7 +141,7 @@
       "lowest_low": 25.17,
       "atr_at_entry": 1.0231,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 24.389999389648438,
+      "last_known_price": 24.18000030517578,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.7,
       "entry_regime": "BULL",
@@ -162,7 +162,7 @@
       "lowest_low": 82.09,
       "atr_at_entry": 3.0281,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 83.87999725341797,
+      "last_known_price": 84.51000213623047,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.66,
       "entry_regime": "BULL",
@@ -183,7 +183,7 @@
       "lowest_low": 217.09,
       "atr_at_entry": 8.003,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 215.30999755859375,
+      "last_known_price": 214.69000244140625,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.67,
       "entry_regime": "BULL",
@@ -204,7 +204,7 @@
       "lowest_low": 342.6,
       "atr_at_entry": 14.1715,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 344.8299865722656,
+      "last_known_price": 344.010009765625,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.66,
       "entry_regime": "BULL",
@@ -225,7 +225,7 @@
       "lowest_low": 55.25,
       "atr_at_entry": 3.2283,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 67.29000091552734,
+      "last_known_price": 66.37999725341797,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
@@ -246,7 +246,7 @@
       "lowest_low": 50.12,
       "atr_at_entry": 2.1341,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 45.13999938964844,
+      "last_known_price": 44.880001068115234,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
@@ -267,7 +267,7 @@
       "lowest_low": 101.39,
       "atr_at_entry": 3.5541,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 103.16000366210938,
+      "last_known_price": 101.05999755859375,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
@@ -288,7 +288,7 @@
       "lowest_low": 145.98,
       "atr_at_entry": 4.0117,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 147.52999877929688,
+      "last_known_price": 144.7100067138672,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.63,
       "entry_regime": "BULL",
@@ -309,7 +309,7 @@
       "lowest_low": 169.202,
       "atr_at_entry": 2.9157,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 166.5800018310547,
+      "last_known_price": 165.66000366210938,
       "last_price_date": "2026-09-01",
       "entry_commission": 1.31,
       "entry_regime": "BULL",
@@ -330,7 +330,7 @@
       "lowest_low": 90.84,
       "atr_at_entry": 1.7297,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 92.11000061035156,
+      "last_known_price": 92.83999633789062,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.64,
       "entry_regime": "BULL",
@@ -351,7 +351,7 @@
       "lowest_low": 34.72,
       "atr_at_entry": 1.1225,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 34.4900016784668,
+      "last_known_price": 34.119998931884766,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
@@ -372,7 +372,7 @@
       "lowest_low": 52.64,
       "atr_at_entry": 2.0107,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 50.599998474121094,
+      "last_known_price": 51.41999816894531,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
@@ -393,7 +393,7 @@
       "lowest_low": 57.07,
       "atr_at_entry": 1.7391,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 57.04999923706055,
+      "last_known_price": 56.0099983215332,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.59,
       "entry_regime": "BULL",
@@ -10219,17 +10219,41 @@
   "tiingo_universe_synced_utc": "2026-09-11T00:34:16Z",
   "daily_summary": {
     "date": "2026-09-10",
-    "updated_sgt": "2026-09-11 08:52 SGT",
-    "nav_change_pct": null,
-    "spy_change_pct": null,
-    "vs_spy_pct": null,
+    "updated_sgt": "2026-09-11 12:54 SGT",
+    "nav_change_pct": -2.35,
+    "spy_change_pct": -0.52,
+    "vs_spy_pct": -1.83,
     "bullets": [
-      "📊 2026-09-10 收盘数据尚未获取到，正在持续重试，获取成功后将自动更新。"
+      "📰 [Sector Update: Consumer Stocks Mixed Late Afternoon](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-mixed-afternoon-194557109.html)（Yahoo Finance，2026-09-10）",
+      "📰 [Sector Update: Consumer Stocks Mixed Thursday Afternoon](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-mixed-thursday-173543020.html)（Yahoo Finance，2026-09-10）",
+      "📰 [How Is Yum! Brands' Stock Performance Compared to Other Consumer Cyclical Stocks?](https://www.barchart.com/story/news/4539055/how-is-yum-brands-stock-performance-compared-to-other-consumer-cyclical-stocks)（Yahoo Finance，2026-09-10）",
+      "📰 [Stock Market News for Sep 10, 2026](https://finance.yahoo.com/markets/stocks/articles/stock-market-news-sep-10-132200642.html)（Yahoo Finance，2026-09-10）",
+      "📰 [Exchange-Traded Funds Lower, Equity Futures Mixed Pre-Bell Thursday Amid Producer Price Inflation Data Release](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-lower-equity-131756365.html)（Yahoo Finance，2026-09-10）"
     ],
-    "news": [],
-    "data_pending": true
+    "news": [
+      {
+        "title": "Sector Update: Consumer Stocks Mixed Late Afternoon",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-mixed-afternoon-194557109.html"
+      },
+      {
+        "title": "Sector Update: Consumer Stocks Mixed Thursday Afternoon",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-mixed-thursday-173543020.html"
+      },
+      {
+        "title": "How Is Yum! Brands' Stock Performance Compared to Other Consumer Cyclical Stocks?",
+        "url": "https://www.barchart.com/story/news/4539055/how-is-yum-brands-stock-performance-compared-to-other-consumer-cyclical-stocks"
+      },
+      {
+        "title": "Stock Market News for Sep 10, 2026",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-sep-10-132200642.html"
+      },
+      {
+        "title": "Exchange-Traded Funds Lower, Equity Futures Mixed Pre-Bell Thursday Amid Producer Price Inflation Data Release",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-lower-equity-131756365.html"
+      }
+    ]
   },
-  "last_no_op_utc": "2026-09-11T00:52:04Z",
+  "last_no_op_utc": "2026-09-11T04:54:29Z",
   "download_log": {
     "date": "2026-09-10",
     "attempts": [
@@ -10242,14 +10266,17 @@
         "attempt": 1,
         "next_retry_sgt": "2026-09-11 09:30 SGT",
         "seq": 1
+      },
+      {
+        "time_sgt": "2026-09-11 12:54 SGT",
+        "type": "retry_probe",
+        "status": "data_available",
+        "success": 1,
+        "failed": 0,
+        "note": "市场有数据，已生成今日小结",
+        "seq": 2
       }
     ],
     "holiday": null
-  },
-  "no_data_probe": {
-    "date": "2026-09-10",
-    "attempt": 2,
-    "next_retry_utc": "2026-09-11T01:30:00Z",
-    "next_retry_sgt": "2026-09-11 09:30 SGT"
   }
 }
