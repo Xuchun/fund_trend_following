@@ -10125,19 +10125,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2113,
     "total_scanned": 2113,
     "updated_utc": "2026-09-02T00:56:05Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2158,
-    "yf_downloadable": 2108,
-    "yf_unavailable_in_pool": 50,
-    "total_active": 3046,
-    "total_delisted": 1431,
-    "updated_utc": "2026-09-11T00:34:16Z"
+    "tiingo_eligible": 2169,
+    "yf_downloadable": 2115,
+    "yf_unavailable_in_pool": 54,
+    "total_active": 3058,
+    "total_delisted": 1419,
+    "updated_utc": "2026-09-12T00:40:26Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -10216,7 +10216,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-09-11T00:34:16Z",
+  "tiingo_universe_synced_utc": "2026-09-12T00:40:26Z",
   "daily_summary": {
     "date": "2026-09-10",
     "updated_sgt": "2026-09-11 12:54 SGT",
@@ -10224,11 +10224,11 @@
     "spy_change_pct": -0.52,
     "vs_spy_pct": -1.83,
     "bullets": [
-      "📰 [Sector Update: Consumer Stocks Mixed Late Afternoon](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-mixed-afternoon-194557109.html)（Yahoo Finance，2026-09-10）",
-      "📰 [Sector Update: Consumer Stocks Mixed Thursday Afternoon](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-mixed-thursday-173543020.html)（Yahoo Finance，2026-09-10）",
-      "📰 [How Is Yum! Brands' Stock Performance Compared to Other Consumer Cyclical Stocks?](https://www.barchart.com/story/news/4539055/how-is-yum-brands-stock-performance-compared-to-other-consumer-cyclical-stocks)（Yahoo Finance，2026-09-10）",
-      "📰 [Stock Market News for Sep 10, 2026](https://finance.yahoo.com/markets/stocks/articles/stock-market-news-sep-10-132200642.html)（Yahoo Finance，2026-09-10）",
-      "📰 [Exchange-Traded Funds Lower, Equity Futures Mixed Pre-Bell Thursday Amid Producer Price Inflation Data Release](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-lower-equity-131756365.html)（Yahoo Finance，2026-09-10）"
+      "\ud83d\udcf0 [Sector Update: Consumer Stocks Mixed Late Afternoon](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-mixed-afternoon-194557109.html)\uff08Yahoo Finance\uff0c2026-09-10\uff09",
+      "\ud83d\udcf0 [Sector Update: Consumer Stocks Mixed Thursday Afternoon](https://finance.yahoo.com/markets/stocks/articles/sector-consumer-stocks-mixed-thursday-173543020.html)\uff08Yahoo Finance\uff0c2026-09-10\uff09",
+      "\ud83d\udcf0 [How Is Yum! Brands' Stock Performance Compared to Other Consumer Cyclical Stocks?](https://www.barchart.com/story/news/4539055/how-is-yum-brands-stock-performance-compared-to-other-consumer-cyclical-stocks)\uff08Yahoo Finance\uff0c2026-09-10\uff09",
+      "\ud83d\udcf0 [Stock Market News for Sep 10, 2026](https://finance.yahoo.com/markets/stocks/articles/stock-market-news-sep-10-132200642.html)\uff08Yahoo Finance\uff0c2026-09-10\uff09",
+      "\ud83d\udcf0 [Exchange-Traded Funds Lower, Equity Futures Mixed Pre-Bell Thursday Amid Producer Price Inflation Data Release](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-lower-equity-131756365.html)\uff08Yahoo Finance\uff0c2026-09-10\uff09"
     ],
     "news": [
       {
@@ -10273,7 +10273,7 @@
         "status": "data_available",
         "success": 1,
         "failed": 0,
-        "note": "市场有数据，已生成今日小结",
+        "note": "\u5e02\u573a\u6709\u6570\u636e\uff0c\u5df2\u751f\u6210\u4eca\u65e5\u5c0f\u7ed3",
         "seq": 2
       }
     ],
