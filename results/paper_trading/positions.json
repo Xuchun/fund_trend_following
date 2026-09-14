@@ -14,7 +14,7 @@
       "shares": 270,
       "atr_at_entry": 1.2762,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 41.47999954223633,
+      "last_known_price": 41.5,
       "last_price_date": "2026-09-01",
       "stop_loss": 34.3677,
       "trail_stop": 40.705852,
@@ -57,7 +57,7 @@
       "lowest_low": 79.585,
       "atr_at_entry": 2.6443,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 101.16000366210938,
+      "last_known_price": 102.69999694824219,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.75,
       "entry_regime": "BULL",
@@ -120,7 +120,7 @@
       "lowest_low": 223.42,
       "atr_at_entry": 6.0504,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 231.13999938964844,
+      "last_known_price": 235.02000427246094,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.67,
       "entry_regime": "BULL",
@@ -141,7 +141,7 @@
       "lowest_low": 25.17,
       "atr_at_entry": 1.0231,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 24.18000030517578,
+      "last_known_price": 23.799999237060547,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.7,
       "entry_regime": "BULL",
@@ -162,7 +162,7 @@
       "lowest_low": 82.09,
       "atr_at_entry": 3.0281,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 84.51000213623047,
+      "last_known_price": 83.02999877929688,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.66,
       "entry_regime": "BULL",
@@ -183,7 +183,7 @@
       "lowest_low": 217.09,
       "atr_at_entry": 8.003,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 214.69000244140625,
+      "last_known_price": 212.49000549316406,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.67,
       "entry_regime": "BULL",
@@ -204,7 +204,7 @@
       "lowest_low": 342.6,
       "atr_at_entry": 14.1715,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 344.010009765625,
+      "last_known_price": 350.3699951171875,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.66,
       "entry_regime": "BULL",
@@ -225,7 +225,7 @@
       "lowest_low": 55.25,
       "atr_at_entry": 3.2283,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 66.37999725341797,
+      "last_known_price": 68.58999633789062,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
@@ -246,7 +246,7 @@
       "lowest_low": 50.12,
       "atr_at_entry": 2.1341,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 44.880001068115234,
+      "last_known_price": 45.119998931884766,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
@@ -267,7 +267,7 @@
       "lowest_low": 101.39,
       "atr_at_entry": 3.5541,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 101.05999755859375,
+      "last_known_price": 102.69000244140625,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
@@ -288,7 +288,7 @@
       "lowest_low": 145.98,
       "atr_at_entry": 4.0117,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 144.7100067138672,
+      "last_known_price": 143.92999267578125,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.63,
       "entry_regime": "BULL",
@@ -309,7 +309,7 @@
       "lowest_low": 169.202,
       "atr_at_entry": 2.9157,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 165.66000366210938,
+      "last_known_price": 165.36000061035156,
       "last_price_date": "2026-09-01",
       "entry_commission": 1.31,
       "entry_regime": "BULL",
@@ -330,7 +330,7 @@
       "lowest_low": 90.84,
       "atr_at_entry": 1.7297,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 92.83999633789062,
+      "last_known_price": 93.44999694824219,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.64,
       "entry_regime": "BULL",
@@ -351,7 +351,7 @@
       "lowest_low": 34.72,
       "atr_at_entry": 1.1225,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 34.119998931884766,
+      "last_known_price": 33.75,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
@@ -372,7 +372,7 @@
       "lowest_low": 52.64,
       "atr_at_entry": 2.0107,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 51.41999816894531,
+      "last_known_price": 51.06999969482422,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
@@ -393,7 +393,7 @@
       "lowest_low": 57.07,
       "atr_at_entry": 1.7391,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 56.0099983215332,
+      "last_known_price": 56.060001373291016,
       "last_price_date": "2026-09-01",
       "entry_commission": 2.59,
       "entry_regime": "BULL",
@@ -10219,17 +10219,41 @@
   "tiingo_universe_synced_utc": "2026-09-12T00:40:26Z",
   "daily_summary": {
     "date": "2026-09-11",
-    "updated_sgt": "2026-09-12 08:57 SGT",
-    "nav_change_pct": null,
-    "spy_change_pct": null,
-    "vs_spy_pct": null,
+    "updated_sgt": "2026-09-14 13:11 SGT",
+    "nav_change_pct": -2.06,
+    "spy_change_pct": 0.33,
+    "vs_spy_pct": -2.39,
     "bullets": [
-      "📊 2026-09-11 收盘数据尚未获取到，正在持续重试，获取成功后将自动更新。"
+      "📰 [Exchange-Traded Funds, Equity Futures Higher Pre-Bell Friday Amid Inflation Data Release](https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131424619.html)（Yahoo Finance，2026-09-11）",
+      "📰 [Midterm Takes Center Stage: What Does It Mean for Markets & ETFs?](https://finance.yahoo.com/markets/stocks/articles/midterm-takes-center-stage-does-120000598.html)（Yahoo Finance，2026-09-11）",
+      "📰 [Jim Cramer Explains Why Merck (MRK) Is His Fantasy Defense Stock](https://finance.yahoo.com/healthcare/articles/jim-cramer-explains-why-merck-164911925.html)（Yahoo Finance，2026-09-12）",
+      "📰 [2 Outstanding Dividend Stocks to Buy and Hold for 10 Years](https://www.fool.com/investing/2026/09/12/2-outstanding-dividend-stocks-to-buy-and-hold-for-10-years/)（Yahoo Finance，2026-09-12）",
+      "📰 [Is AbbVie Stock Actually Overpriced?](https://www.trefis.com/articles/615047/is-abbvie-stock-actually-overpriced/2026-09-11)（Yahoo Finance，2026-09-11）"
     ],
-    "news": [],
-    "data_pending": true
+    "news": [
+      {
+        "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Friday Amid Inflation Data Release",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131424619.html"
+      },
+      {
+        "title": "Midterm Takes Center Stage: What Does It Mean for Markets & ETFs?",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/midterm-takes-center-stage-does-120000598.html"
+      },
+      {
+        "title": "Jim Cramer Explains Why Merck (MRK) Is His Fantasy Defense Stock",
+        "url": "https://finance.yahoo.com/healthcare/articles/jim-cramer-explains-why-merck-164911925.html"
+      },
+      {
+        "title": "2 Outstanding Dividend Stocks to Buy and Hold for 10 Years",
+        "url": "https://www.fool.com/investing/2026/09/12/2-outstanding-dividend-stocks-to-buy-and-hold-for-10-years/"
+      },
+      {
+        "title": "Is AbbVie Stock Actually Overpriced?",
+        "url": "https://www.trefis.com/articles/615047/is-abbvie-stock-actually-overpriced/2026-09-11"
+      }
+    ]
   },
-  "last_no_op_utc": "2026-09-12T00:57:00Z",
+  "last_no_op_utc": "2026-09-14T05:11:21Z",
   "download_log": {
     "date": "2026-09-11",
     "attempts": [
@@ -10242,14 +10266,17 @@
         "attempt": 1,
         "next_retry_sgt": "2026-09-12 09:30 SGT",
         "seq": 1
+      },
+      {
+        "time_sgt": "2026-09-14 13:11 SGT",
+        "type": "retry_probe",
+        "status": "data_available",
+        "success": 1,
+        "failed": 0,
+        "note": "市场有数据，已生成今日小结",
+        "seq": 2
       }
     ],
     "holiday": null
-  },
-  "no_data_probe": {
-    "date": "2026-09-11",
-    "attempt": 2,
-    "next_retry_utc": "2026-09-12T01:30:00Z",
-    "next_retry_sgt": "2026-09-12 09:30 SGT"
   }
 }
