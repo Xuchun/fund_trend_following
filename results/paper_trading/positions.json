@@ -4,8 +4,8 @@
   "start_date": "2026-06-19",
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
-  "last_update_date": "2026-09-03",
-  "cash": 75.05825293663007,
+  "last_update_date": "2026-09-04",
+  "cash": 75.039884155453,
   "positions": [
     {
       "ticker": "LTH",
@@ -14,8 +14,8 @@
       "shares": 270,
       "atr_at_entry": 1.2762,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 43.09,
-      "last_price_date": "2026-09-03",
+      "last_known_price": 43.23,
+      "last_price_date": "2026-09-04",
       "stop_loss": 34.3677,
       "trail_stop": 40.771092,
       "highest_high": 47.235,
@@ -57,8 +57,8 @@
       "lowest_low": 79.585,
       "atr_at_entry": 2.6443,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 107.18,
-      "last_price_date": "2026-09-03",
+      "last_known_price": 107.58,
+      "last_price_date": "2026-09-04",
       "entry_commission": 2.75,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -120,8 +120,8 @@
       "lowest_low": 223.42,
       "atr_at_entry": 6.0504,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 239.4,
-      "last_price_date": "2026-09-03",
+      "last_known_price": 237.14,
+      "last_price_date": "2026-09-04",
       "entry_commission": 2.67,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -141,8 +141,8 @@
       "lowest_low": 82.09,
       "atr_at_entry": 3.0281,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 89.71,
-      "last_price_date": "2026-09-03",
+      "last_known_price": 87.9,
+      "last_price_date": "2026-09-04",
       "entry_commission": 2.66,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -162,8 +162,8 @@
       "lowest_low": 217.09,
       "atr_at_entry": 8.003,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 228.88,
-      "last_price_date": "2026-09-03",
+      "last_known_price": 230.22,
+      "last_price_date": "2026-09-04",
       "entry_commission": 2.67,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -183,8 +183,8 @@
       "lowest_low": 55.25,
       "atr_at_entry": 3.2283,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 63.22,
-      "last_price_date": "2026-09-03",
+      "last_known_price": 62.65,
+      "last_price_date": "2026-09-04",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -201,11 +201,11 @@
       "stop_loss": 50.006,
       "trail_stop": 49.368406,
       "highest_high": 54.71,
-      "lowest_low": 50.12,
+      "lowest_low": 48.63,
       "atr_at_entry": 2.1341,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 51.1,
-      "last_price_date": "2026-09-03",
+      "last_known_price": 49.06,
+      "last_price_date": "2026-09-04",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -225,8 +225,8 @@
       "lowest_low": 101.39,
       "atr_at_entry": 3.5541,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 102.85,
-      "last_price_date": "2026-09-03",
+      "last_known_price": 102.92,
+      "last_price_date": "2026-09-04",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -246,8 +246,8 @@
       "lowest_low": 145.98,
       "atr_at_entry": 4.0117,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 152.34,
-      "last_price_date": "2026-09-03",
+      "last_known_price": 150.33,
+      "last_price_date": "2026-09-04",
       "entry_commission": 2.63,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -267,8 +267,8 @@
       "lowest_low": 169.202,
       "atr_at_entry": 2.9157,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 173.26,
-      "last_price_date": "2026-09-03",
+      "last_known_price": 171.45,
+      "last_price_date": "2026-09-04",
       "entry_commission": 1.31,
       "entry_regime": "BULL",
       "sector": "ETF"
@@ -283,13 +283,13 @@
       "entry_price": 92.7427,
       "shares": 95,
       "stop_loss": 89.2833,
-      "trail_stop": 90.31099,
+      "trail_stop": 90.310994,
       "highest_high": 95.34,
       "lowest_low": 90.84,
       "atr_at_entry": 1.7297,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 94.92,
-      "last_price_date": "2026-09-03",
+      "last_known_price": 93.82,
+      "last_price_date": "2026-09-04",
       "entry_commission": 2.64,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -309,8 +309,8 @@
       "lowest_low": 34.58,
       "atr_at_entry": 1.1225,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 35.96,
-      "last_price_date": "2026-09-03",
+      "last_known_price": 35.19,
+      "last_price_date": "2026-09-04",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -330,8 +330,8 @@
       "lowest_low": 50.86,
       "atr_at_entry": 2.0107,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 52.76,
-      "last_price_date": "2026-09-03",
+      "last_known_price": 51.9,
+      "last_price_date": "2026-09-04",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -346,13 +346,13 @@
       "entry_price": 30.9709,
       "shares": 275,
       "stop_loss": 28.0521,
-      "trail_stop": 28.418267,
-      "highest_high": 32.75,
+      "trail_stop": 28.478269,
+      "highest_high": 32.81,
       "lowest_low": 30.337,
       "atr_at_entry": 1.4594,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 32.68,
-      "last_price_date": "2026-09-03",
+      "last_known_price": 31.35,
+      "last_price_date": "2026-09-04",
       "entry_commission": 2.56,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -393,8 +393,8 @@
       "lowest_low": 685.48,
       "atr_at_entry": 19.9395,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 694.41,
-      "last_price_date": "2026-09-03",
+      "last_known_price": 693.53,
+      "last_price_date": "2026-09-04",
       "entry_commission": 2.53,
       "entry_regime": "BULL",
       "sector": "Industrials"
@@ -2493,20 +2493,81 @@
       "nav": 172337.43,
       "regime": "BULL",
       "spy_close": 760.88
+    },
+    {
+      "date": "2026-09-04",
+      "nav": 170802.74,
+      "regime": "BULL",
+      "spy_close": 760.88
     }
   ],
-  "pending_exits": [],
+  "pending_exits": [
+    {
+      "ticker": "HRB",
+      "exit_reason": "stop_loss",
+      "stop_used": 50.006,
+      "shares": 165,
+      "open_price": 54.22,
+      "entry_price": 54.2742,
+      "entry_date": "2026-08-13",
+      "signal_date": "2026-08-12",
+      "signal_price": 54.18,
+      "signal_strength": 1.0617,
+      "stop_loss": 50.006,
+      "atr_at_entry": 2.1341,
+      "highest_high": 54.71,
+      "lowest_low": 48.63,
+      "trail_stop_at_exit": 49.368406,
+      "atr_at_exit": 1.7805,
+      "detected_date": "2026-09-04",
+      "entry_commission": 2.69,
+      "entry_regime": "BULL"
+    }
+  ],
   "pending_entries": [
     {
-      "ticker": "PFG",
-      "signal_date": "2026-09-03",
-      "signal_price": 118.51,
-      "stop_price": 113.2814,
-      "shares": 73,
-      "atr": 2.6143,
-      "signal_strength": 1.024,
-      "trade_risk": 0.0022,
-      "notional": 8651.23
+      "ticker": "TARS",
+      "signal_date": "2026-09-04",
+      "signal_price": 90.78,
+      "stop_price": 83.7698,
+      "shares": 94,
+      "atr": 3.5051,
+      "signal_strength": 1.0649,
+      "trade_risk": 0.0039,
+      "notional": 8533.32
+    },
+    {
+      "ticker": "CNH",
+      "signal_date": "2026-09-04",
+      "signal_price": 14.4,
+      "stop_price": 13.3364,
+      "shares": 297,
+      "atr": 0.5318,
+      "signal_strength": 1.0367,
+      "trade_risk": 0.0018,
+      "notional": 4276.8
+    },
+    {
+      "ticker": "DHT",
+      "signal_date": "2026-09-04",
+      "signal_price": 20.87,
+      "stop_price": 19.5427,
+      "shares": 409,
+      "atr": 0.6637,
+      "signal_strength": 1.0121,
+      "trade_risk": 0.0032,
+      "notional": 8535.83
+    },
+    {
+      "ticker": "ITGR",
+      "signal_date": "2026-09-04",
+      "signal_price": 126.5,
+      "stop_price": 123.6693,
+      "shares": 68,
+      "atr": 1.4154,
+      "signal_strength": 1.0029,
+      "trade_risk": 0.0011,
+      "notional": 8602.0
     }
   ],
   "signals_history": [
@@ -10240,76 +10301,250 @@
           "strength": 1.024
         }
       ]
+    },
+    {
+      "date": "2026-09-04",
+      "regime": "BULL",
+      "spy_close": 760.88,
+      "n_candidates": 4,
+      "n_entries": 4,
+      "n_executed": 0,
+      "n_exits": 1,
+      "n_raw_breakouts": 4,
+      "n_heat_blocked": 0,
+      "n_cash_blocked": 0,
+      "n_corr_reduced": 1,
+      "n_price_filtered": 221,
+      "n_adv_filtered": 562,
+      "n_breakout_filtered": 1289,
+      "n_atr_filtered": 0,
+      "n_stop_dist_filtered": 4,
+      "n_volume_filtered": 6,
+      "spy_pct_above_sma200": 6.7833,
+      "exits_executed": [],
+      "entries_executed": [],
+      "exit_signals": [
+        {
+          "ticker": "HRB",
+          "exit_reason": "stop_loss",
+          "stop_used": 50.006,
+          "shares": 165
+        }
+      ],
+      "candidate_signals": [
+        {
+          "ticker": "TARS",
+          "signal_price": 90.78,
+          "stop_price": 83.7698,
+          "shares": 94,
+          "trade_risk": 0.0039,
+          "strength": 1.0649,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.077222,
+          "atr_pct": 0.038611,
+          "adv60_m": 63.175,
+          "vol_ratio": 1.6274
+        },
+        {
+          "ticker": "CNH",
+          "signal_price": 14.4,
+          "stop_price": 13.3364,
+          "shares": 297,
+          "trade_risk": 0.0018,
+          "strength": 1.0367,
+          "rejection": "corr_reduced",
+          "corr_with": "DE",
+          "stop_distance_pct": 0.07386,
+          "atr_pct": 0.03693,
+          "adv60_m": 180.577,
+          "vol_ratio": 1.6216
+        },
+        {
+          "ticker": "DHT",
+          "signal_price": 20.87,
+          "stop_price": 19.5427,
+          "shares": 409,
+          "trade_risk": 0.0032,
+          "strength": 1.0121,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.0636,
+          "atr_pct": 0.0318,
+          "adv60_m": 62.252,
+          "vol_ratio": 1.5568
+        },
+        {
+          "ticker": "ITGR",
+          "signal_price": 126.5,
+          "stop_price": 123.6693,
+          "shares": 68,
+          "trade_risk": 0.0011,
+          "strength": 1.0029,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.022377,
+          "atr_pct": 0.011189,
+          "adv60_m": 105.548,
+          "vol_ratio": 1.7686
+        }
+      ],
+      "entry_signals": [
+        {
+          "ticker": "TARS",
+          "signal_price": 90.78,
+          "stop_price": 83.7698,
+          "shares": 94,
+          "trade_risk": 0.0039,
+          "strength": 1.0649
+        },
+        {
+          "ticker": "CNH",
+          "signal_price": 14.4,
+          "stop_price": 13.3364,
+          "shares": 297,
+          "trade_risk": 0.0018,
+          "strength": 1.0367
+        },
+        {
+          "ticker": "DHT",
+          "signal_price": 20.87,
+          "stop_price": 19.5427,
+          "shares": 409,
+          "trade_risk": 0.0032,
+          "strength": 1.0121
+        },
+        {
+          "ticker": "ITGR",
+          "signal_price": 126.5,
+          "stop_price": 123.6693,
+          "shares": 68,
+          "trade_risk": 0.0011,
+          "strength": 1.0029
+        }
+      ]
     }
   ],
-  "last_update_utc": "2026-09-15T09:52:25Z",
+  "last_update_utc": "2026-09-15T10:07:24Z",
   "today_signals": {
-    "date": "2026-09-03",
+    "date": "2026-09-04",
     "regime": "BULL",
     "spy_close": 760.88,
-    "n_candidates": 1,
-    "n_entries": 1,
-    "n_executed": 1,
-    "n_exits": 0,
-    "n_raw_breakouts": 1,
+    "n_candidates": 4,
+    "n_entries": 4,
+    "n_executed": 0,
+    "n_exits": 1,
+    "n_raw_breakouts": 4,
     "n_heat_blocked": 0,
     "n_cash_blocked": 0,
-    "n_corr_reduced": 0,
-    "n_price_filtered": 220,
-    "n_adv_filtered": 563,
-    "n_breakout_filtered": 1275,
+    "n_corr_reduced": 1,
+    "n_price_filtered": 221,
+    "n_adv_filtered": 562,
+    "n_breakout_filtered": 1289,
     "n_atr_filtered": 0,
-    "n_stop_dist_filtered": 5,
-    "n_volume_filtered": 22,
+    "n_stop_dist_filtered": 4,
+    "n_volume_filtered": 6,
     "spy_pct_above_sma200": 6.7833,
-    "exits_executed": [
+    "exits_executed": [],
+    "entries_executed": [],
+    "exit_signals": [
       {
-        "ticker": "SLB",
-        "shares": 144,
-        "exit_open": 58.17,
-        "exit_price": 58.1118,
-        "net_pnl": -285.64,
-        "pnl_r": -0.5601,
-        "exit_reason": "stop_loss"
+        "ticker": "HRB",
+        "exit_reason": "stop_loss",
+        "stop_used": 50.006,
+        "shares": 165
       }
     ],
-    "entries_executed": [
-      {
-        "ticker": "DE",
-        "signal_date": "2026-09-02",
-        "signal_price": 698.37,
-        "open_price": 703.25,
-        "entry_price": 703.9532,
-        "shares": 12,
-        "stop_price": 664.0742,
-        "trade_risk": 0.0028
-      }
-    ],
-    "exit_signals": [],
     "candidate_signals": [
       {
-        "ticker": "PFG",
-        "signal_price": 118.51,
-        "stop_price": 113.2814,
-        "shares": 73,
-        "trade_risk": 0.0022,
-        "strength": 1.024,
+        "ticker": "TARS",
+        "signal_price": 90.78,
+        "stop_price": 83.7698,
+        "shares": 94,
+        "trade_risk": 0.0039,
+        "strength": 1.0649,
         "rejection": null,
         "corr_with": null,
-        "stop_distance_pct": 0.044119,
-        "atr_pct": 0.02206,
-        "adv60_m": 153.156,
-        "vol_ratio": 2.6912
+        "stop_distance_pct": 0.077222,
+        "atr_pct": 0.038611,
+        "adv60_m": 63.175,
+        "vol_ratio": 1.6274
+      },
+      {
+        "ticker": "CNH",
+        "signal_price": 14.4,
+        "stop_price": 13.3364,
+        "shares": 297,
+        "trade_risk": 0.0018,
+        "strength": 1.0367,
+        "rejection": "corr_reduced",
+        "corr_with": "DE",
+        "stop_distance_pct": 0.07386,
+        "atr_pct": 0.03693,
+        "adv60_m": 180.577,
+        "vol_ratio": 1.6216
+      },
+      {
+        "ticker": "DHT",
+        "signal_price": 20.87,
+        "stop_price": 19.5427,
+        "shares": 409,
+        "trade_risk": 0.0032,
+        "strength": 1.0121,
+        "rejection": null,
+        "corr_with": null,
+        "stop_distance_pct": 0.0636,
+        "atr_pct": 0.0318,
+        "adv60_m": 62.252,
+        "vol_ratio": 1.5568
+      },
+      {
+        "ticker": "ITGR",
+        "signal_price": 126.5,
+        "stop_price": 123.6693,
+        "shares": 68,
+        "trade_risk": 0.0011,
+        "strength": 1.0029,
+        "rejection": null,
+        "corr_with": null,
+        "stop_distance_pct": 0.022377,
+        "atr_pct": 0.011189,
+        "adv60_m": 105.548,
+        "vol_ratio": 1.7686
       }
     ],
     "entry_signals": [
       {
-        "ticker": "PFG",
-        "signal_price": 118.51,
-        "stop_price": 113.2814,
-        "shares": 73,
-        "trade_risk": 0.0022,
-        "strength": 1.024
+        "ticker": "TARS",
+        "signal_price": 90.78,
+        "stop_price": 83.7698,
+        "shares": 94,
+        "trade_risk": 0.0039,
+        "strength": 1.0649
+      },
+      {
+        "ticker": "CNH",
+        "signal_price": 14.4,
+        "stop_price": 13.3364,
+        "shares": 297,
+        "trade_risk": 0.0018,
+        "strength": 1.0367
+      },
+      {
+        "ticker": "DHT",
+        "signal_price": 20.87,
+        "stop_price": 19.5427,
+        "shares": 409,
+        "trade_risk": 0.0032,
+        "strength": 1.0121
+      },
+      {
+        "ticker": "ITGR",
+        "signal_price": 126.5,
+        "stop_price": 123.6693,
+        "shares": 68,
+        "trade_risk": 0.0011,
+        "strength": 1.0029
       }
     ]
   },
@@ -10319,7 +10554,7 @@
   "last_download_stats": {
     "downloaded_count": 2107,
     "total_scanned": 2107,
-    "updated_utc": "2026-09-15T09:52:24Z"
+    "updated_utc": "2026-09-15T10:07:23Z"
   },
   "universe_stats": {
     "tiingo_eligible": 2163,
@@ -10327,7 +10562,7 @@
     "yf_unavailable_in_pool": 56,
     "total_active": 3037,
     "total_delisted": 1440,
-    "updated_utc": "2026-09-15T09:52:34Z"
+    "updated_utc": "2026-09-15T10:07:33Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -10413,18 +10648,22 @@
   ],
   "tiingo_universe_synced_utc": "2026-09-15T00:55:58Z",
   "daily_summary": {
-    "date": "2026-09-03",
-    "updated_sgt": "2026-09-15 17:52 SGT",
-    "nav_change_pct": 0.75,
+    "date": "2026-09-04",
+    "updated_sgt": "2026-09-15 18:07 SGT",
+    "nav_change_pct": -0.89,
     "spy_change_pct": 0.0,
-    "vs_spy_pct": 0.75,
+    "vs_spy_pct": -0.89,
     "bullets": [
-      "Zeta作为AI营销领域的核心标的，凭借Palantir等战略伙伴支撑和持续的AI产品创新（如Zeta神经引擎），市场对其盈利前景的认可度提升，驱动股价上涨7.4%，成为今日Tech板块反弹的主要引擎。（[Inside Zeta's Transformation…](https://finance.yahoo.com/m/763994b2-cefb-30d1-a197-56e519133c36/inside-zeta-s-transformation.html)、[Why Is Zeta (ZETA) Up 12.5% …](https://finance.yahoo.com/markets/stocks/articles/why-zeta-zeta-12-5-153028608.html)）",
-      "Treasury收益率的下行创造了软件/科技股的估值修复机会，Snowflake等龙头企业财报表现良好进一步激发了市场对整个Tech板块的风险偏好，使得DT（+3.7%）、BOX（+4.0%）等持仓受益于板块性上涨动能。（[BlackLine, Upland Software, …](https://finance.yahoo.com/markets/stocks/articles/blackline-upland-software-zeta-global-215118296.html)）",
-      "策略重仓的三大Tech标的ZETA、BOX、DT分别贡献+616、+344、+308的净值增量，合计+1268元，而Consumer Cyclical板块持仓（CAKE -1.3%、LTH -0.9%、EAT -0.9%）合计拖累-347元，Tech板块的超额收益完全压倒了其他板块的跌幅，导致策略净值+0.75%相对SPY +0.00%产生+0.75%的显著分歧。（[Inside Zeta's Transformation…](https://finance.yahoo.com/m/763994b2-cefb-30d1-a197-56e519133c36/inside-zeta-s-transformation.html)、[BlackLine, Upland Software, …](https://finance.yahoo.com/markets/stocks/articles/blackline-upland-software-zeta-global-215118296.html)、[Why Is Zeta (ZETA) Up 12.5% …](https://finance.yahoo.com/markets/stocks/articles/why-zeta-zeta-12-5-153028608.html)）",
-      "这一分歧反映出市场在利率下行背景下重新定价高成长科技股的特征，而策略因对AI营销、云协作等赛道的集中配置，成功捕获了这一轮板块轮动的超额收益。（[Inside Zeta's Transformation…](https://finance.yahoo.com/m/763994b2-cefb-30d1-a197-56e519133c36/inside-zeta-s-transformation.html)、[BlackLine, Upland Software, …](https://finance.yahoo.com/markets/stocks/articles/blackline-upland-software-zeta-global-215118296.html)）"
+      "ZETA和BOX等AI营销及云计算相关的Technology个股今日大幅下跌，反映市场对这类高估值科技股的增长预期出现调整，即使ZETA过去5年涨幅353%、BOX最新季度业绩超预期，投资者仍在重新评估其当前股价是否已充分反映未来增长潜力 （[Zeta Global (ZETA) Stock Loo…](https://finance.yahoo.com/markets/stocks/articles/zeta-global-zeta-stock-looks-090706703.html)、[Inside Zeta's Transformation…](https://finance.yahoo.com/m/763994b2-cefb-30d1-a197-56e519133c36/inside-zeta-s-transformation.html)、[BOX Q2 Deep Dive: AI Platfor…](https://finance.yahoo.com/technology/ai/articles/box-q2-deep-dive-ai-215010347.html)）。",
+      "Strategy重仓ZETA（-4.1%、净值影响-$366）和BOX（-2.1%、净值影响-$193）两只Technology核心持仓同时承压，而SPY作为宽基指数中Technology权重有限、Consumer Cyclical等其他板块保持相对稳定，导致策略净值-0.89%的跌幅远超SPY的0.00%持平 （[Zeta Global (ZETA) Stock Loo…](https://finance.yahoo.com/markets/stocks/articles/zeta-global-zeta-stock-looks-090706703.html)、[Inside Zeta's Transformation…](https://finance.yahoo.com/m/763994b2-cefb-30d1-a197-56e519133c36/inside-zeta-s-transformation.html)、[BOX Q2 Deep Dive: AI Platfor…](https://finance.yahoo.com/technology/ai/articles/box-q2-deep-dive-ai-215010347.html)）。",
+      "Technology板块个股的调整可能源于市场对AI营销类企业商业化变现能力和现金流质量的质疑，即便企业拥有强劲合作伙伴（如Palantir）和创新产品，但高成长预期若未能切实转化为可持续盈利，高估值就难以维系 （[Zeta Global (ZETA) Stock Loo…](https://finance.yahoo.com/markets/stocks/articles/zeta-global-zeta-stock-looks-090706703.html)、[Inside Zeta's Transformation…](https://finance.yahoo.com/m/763994b2-cefb-30d1-a197-56e519133c36/inside-zeta-s-transformation.html)、[1 Cash-Heavy Stock to Target…](https://finance.yahoo.com/markets/stocks/articles/1-cash-heavy-stock-target-084610171.html)）。",
+      "Strategy在Technology板块的集中度过高导致净值对该板块个股走势的敏感度远高于大盘，当ZETA、BOX、DT等多只Technology持仓同步下跌时（分别-4.1%、-2.1%、-1.6%），而同期消费类持仓涨跌幅度有限，这种结构性差异被放大为-0.89%的整体偏差 （[Zeta Global (ZETA) Stock Loo…](https://finance.yahoo.com/markets/stocks/articles/zeta-global-zeta-stock-looks-090706703.html)、[Inside Zeta's Transformation…](https://finance.yahoo.com/m/763994b2-cefb-30d1-a197-56e519133c36/inside-zeta-s-transformation.html)、[BOX Q2 Deep Dive: AI Platfor…](https://finance.yahoo.com/technology/ai/articles/box-q2-deep-dive-ai-215010347.html)）。"
     ],
     "news": [
+      {
+        "title": "Zeta Global (ZETA) Stock Looks Below Fair Value On Its 353% Run",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/zeta-global-zeta-stock-looks-090706703.html"
+      },
       {
         "title": "Inside Zeta's Transformation From Hopeful Do-Over To Surging AI Marketing Stock",
         "url": "https://finance.yahoo.com/m/763994b2-cefb-30d1-a197-56e519133c36/inside-zeta-s-transformation.html"
@@ -10438,21 +10677,17 @@
         "url": "https://finance.yahoo.com/markets/stocks/articles/1-cash-heavy-stock-target-084610171.html"
       },
       {
-        "title": "BlackLine, Upland Software, Zeta Global, Oracle, and Okta Shares Are Soaring and Falling, What You Need To Know",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/blackline-upland-software-zeta-global-215118296.html"
-      },
-      {
-        "title": "Why Is Zeta (ZETA) Up 12.5% Since Last Earnings Report?",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/why-zeta-zeta-12-5-153028608.html"
+        "title": "BOX Q2 Deep Dive: AI Platform Momentum and Enterprise Migration Drive Growth",
+        "url": "https://finance.yahoo.com/technology/ai/articles/box-q2-deep-dive-ai-215010347.html"
       }
     ]
   },
   "last_no_op_utc": "2026-09-15T05:04:29Z",
   "download_log": {
-    "date": "2026-09-03",
+    "date": "2026-09-04",
     "attempts": [
       {
-        "time_sgt": "2026-09-15 17:52 SGT",
+        "time_sgt": "2026-09-15 18:07 SGT",
         "type": "main_download",
         "status": "success",
         "total": 2107,
