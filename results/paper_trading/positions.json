@@ -4,8 +4,8 @@
   "start_date": "2026-06-19",
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
-  "last_update_date": "2026-09-09",
-  "cash": 8590.603409390375,
+  "last_update_date": "2026-09-10",
+  "cash": 8568.503459473199,
   "positions": [
     {
       "ticker": "LTH",
@@ -14,8 +14,8 @@
       "shares": 270,
       "atr_at_entry": 1.2762,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 41.75,
-      "last_price_date": "2026-09-09",
+      "last_known_price": 41.48,
+      "last_price_date": "2026-09-10",
       "stop_loss": 34.3677,
       "trail_stop": 40.771092,
       "highest_high": 47.235,
@@ -57,8 +57,8 @@
       "lowest_low": 79.585,
       "atr_at_entry": 2.6443,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 103.61,
-      "last_price_date": "2026-09-09",
+      "last_known_price": 101.16,
+      "last_price_date": "2026-09-10",
       "entry_commission": 2.75,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -120,8 +120,8 @@
       "lowest_low": 223.42,
       "atr_at_entry": 6.0504,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 235.46,
-      "last_price_date": "2026-09-09",
+      "last_known_price": 231.14,
+      "last_price_date": "2026-09-10",
       "entry_commission": 2.67,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -136,13 +136,13 @@
       "entry_price": 58.5585,
       "shares": 153,
       "stop_loss": 52.1019,
-      "trail_stop": 56.69738,
-      "highest_high": 67.62,
+      "trail_stop": 56.777374,
+      "highest_high": 67.7,
       "lowest_low": 55.25,
       "atr_at_entry": 3.2283,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 67.29,
-      "last_price_date": "2026-09-09",
+      "last_known_price": 66.38,
+      "last_price_date": "2026-09-10",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -162,8 +162,8 @@
       "lowest_low": 100.57,
       "atr_at_entry": 3.5541,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 103.16,
-      "last_price_date": "2026-09-09",
+      "last_known_price": 101.06,
+      "last_price_date": "2026-09-10",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -180,11 +180,11 @@
       "stop_loss": 142.9074,
       "trail_stop": 145.743884,
       "highest_high": 156.9199,
-      "lowest_low": 145.98,
+      "lowest_low": 144.1,
       "atr_at_entry": 4.0117,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 147.53,
-      "last_price_date": "2026-09-09",
+      "last_known_price": 144.71,
+      "last_price_date": "2026-09-10",
       "entry_commission": 2.63,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -204,8 +204,8 @@
       "lowest_low": 90.84,
       "atr_at_entry": 1.7297,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 92.11,
-      "last_price_date": "2026-09-09",
+      "last_known_price": 92.84,
+      "last_price_date": "2026-09-10",
       "entry_commission": 2.64,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -225,8 +225,8 @@
       "lowest_low": 33.8,
       "atr_at_entry": 1.1225,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 34.49,
-      "last_price_date": "2026-09-09",
+      "last_known_price": 34.12,
+      "last_price_date": "2026-09-10",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -246,8 +246,8 @@
       "lowest_low": 49.56,
       "atr_at_entry": 2.0107,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 50.6,
-      "last_price_date": "2026-09-09",
+      "last_known_price": 51.42,
+      "last_price_date": "2026-09-10",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -264,11 +264,11 @@
       "stop_loss": 28.0521,
       "trail_stop": 28.478269,
       "highest_high": 32.81,
-      "lowest_low": 30.17,
+      "lowest_low": 29.68,
       "atr_at_entry": 1.4594,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 30.42,
-      "last_price_date": "2026-09-09",
+      "last_known_price": 30.56,
+      "last_price_date": "2026-09-10",
       "entry_commission": 2.56,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -306,11 +306,11 @@
       "stop_loss": 664.0742,
       "trail_stop": 649.943355,
       "highest_high": 705.88,
-      "lowest_low": 672.62,
+      "lowest_low": 671.4,
       "atr_at_entry": 19.9395,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 677.21,
-      "last_price_date": "2026-09-09",
+      "last_known_price": 677.94,
+      "last_price_date": "2026-09-10",
       "entry_commission": 2.53,
       "entry_regime": "BULL",
       "sector": "Industrials"
@@ -327,11 +327,11 @@
       "stop_loss": 13.2607,
       "trail_stop": 12.7289,
       "highest_high": 14.3243,
-      "lowest_low": 13.51,
+      "lowest_low": 13.37,
       "atr_at_entry": 0.5318,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 13.9,
-      "last_price_date": "2026-09-09",
+      "last_known_price": 13.5,
+      "last_price_date": "2026-09-10",
       "entry_commission": 1.28,
       "entry_regime": "BULL",
       "sector": "Industrials"
@@ -348,11 +348,11 @@
       "stop_loss": 38.3602,
       "trail_stop": 37.791165,
       "highest_high": 42.275,
-      "lowest_low": 41.081,
+      "lowest_low": 40.215,
       "atr_at_entry": 1.5356,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 41.81,
-      "last_price_date": "2026-09-09",
+      "last_known_price": 40.94,
+      "last_price_date": "2026-09-10",
       "entry_commission": 2.54,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -369,11 +369,11 @@
       "stop_loss": 66.583,
       "trail_stop": 64.35698,
       "highest_high": 71.66,
-      "lowest_low": 69.11,
+      "lowest_low": 64.46,
       "atr_at_entry": 2.254,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 70.34,
-      "last_price_date": "2026-09-09",
+      "last_known_price": 65.9,
+      "last_price_date": "2026-09-10",
       "entry_commission": 2.54,
       "entry_regime": "BULL",
       "sector": "Basic Materials"
@@ -2610,10 +2610,103 @@
       "nav": 168288.66,
       "regime": "BULL",
       "spy_close": 760.88
+    },
+    {
+      "date": "2026-09-10",
+      "nav": 166608.5,
+      "regime": "BULL",
+      "spy_close": 760.88
     }
   ],
-  "pending_exits": [],
-  "pending_entries": [],
+  "pending_exits": [
+    {
+      "ticker": "DGX",
+      "exit_reason": "trailing_stop",
+      "stop_used": 232.4743,
+      "shares": 39,
+      "open_price": 228.0,
+      "entry_price": 228.228,
+      "entry_date": "2026-07-24",
+      "signal_date": "2026-07-23",
+      "signal_price": 227.9,
+      "signal_strength": 1.0439,
+      "stop_loss": 216.1272,
+      "atr_at_entry": 6.0504,
+      "highest_high": 247.19,
+      "lowest_low": 223.42,
+      "trail_stop_at_exit": 232.474274,
+      "atr_at_exit": 5.251,
+      "detected_date": "2026-09-10",
+      "entry_commission": 2.67,
+      "entry_regime": "BULL"
+    },
+    {
+      "ticker": "MRK",
+      "exit_reason": "trailing_stop",
+      "stop_used": 145.7439,
+      "shares": 58,
+      "open_price": 150.78,
+      "entry_price": 150.9308,
+      "entry_date": "2026-08-20",
+      "signal_date": "2026-08-19",
+      "signal_price": 152.2,
+      "signal_strength": 1.1031,
+      "stop_loss": 142.9074,
+      "atr_at_entry": 4.0117,
+      "highest_high": 156.9199,
+      "lowest_low": 144.1,
+      "trail_stop_at_exit": 145.743884,
+      "atr_at_exit": 3.7253,
+      "detected_date": "2026-09-10",
+      "entry_commission": 2.63,
+      "entry_regime": "BULL"
+    },
+    {
+      "ticker": "TECK",
+      "exit_reason": "stop_loss",
+      "stop_used": 66.583,
+      "shares": 119,
+      "open_price": 71.02,
+      "entry_price": 71.091,
+      "entry_date": "2026-09-09",
+      "signal_date": "2026-09-08",
+      "signal_price": 71.97,
+      "signal_strength": 1.0006,
+      "stop_loss": 66.583,
+      "atr_at_entry": 2.254,
+      "highest_high": 71.66,
+      "lowest_low": 64.46,
+      "trail_stop_at_exit": 64.35698,
+      "atr_at_exit": 2.4343,
+      "detected_date": "2026-09-10",
+      "entry_commission": 2.54,
+      "entry_regime": "BULL"
+    }
+  ],
+  "pending_entries": [
+    {
+      "ticker": "QRVO",
+      "signal_date": "2026-09-10",
+      "signal_price": 112.36,
+      "stop_price": 105.7083,
+      "shares": 74,
+      "atr": 3.3258,
+      "signal_strength": 1.0262,
+      "trade_risk": 0.003,
+      "notional": 8314.64
+    },
+    {
+      "ticker": "FRO",
+      "signal_date": "2026-09-10",
+      "signal_price": 48.4,
+      "stop_price": 45.3334,
+      "shares": 172,
+      "atr": 1.5333,
+      "signal_strength": 1.0153,
+      "trade_risk": 0.0032,
+      "notional": 8324.8
+    }
+  ],
   "signals_history": [
     {
       "date": "2026-06-22",
@@ -10652,82 +10745,188 @@
       "exit_signals": [],
       "candidate_signals": [],
       "entry_signals": []
+    },
+    {
+      "date": "2026-09-10",
+      "regime": "BULL",
+      "spy_close": 760.88,
+      "n_candidates": 2,
+      "n_entries": 2,
+      "n_executed": 0,
+      "n_exits": 3,
+      "n_raw_breakouts": 2,
+      "n_heat_blocked": 0,
+      "n_cash_blocked": 0,
+      "n_corr_reduced": 0,
+      "n_price_filtered": 230,
+      "n_adv_filtered": 557,
+      "n_breakout_filtered": 1296,
+      "n_atr_filtered": 0,
+      "n_stop_dist_filtered": 1,
+      "n_volume_filtered": 1,
+      "spy_pct_above_sma200": 6.7833,
+      "exits_executed": [],
+      "entries_executed": [],
+      "exit_signals": [
+        {
+          "ticker": "DGX",
+          "exit_reason": "trailing_stop",
+          "stop_used": 232.4743,
+          "shares": 39
+        },
+        {
+          "ticker": "MRK",
+          "exit_reason": "trailing_stop",
+          "stop_used": 145.7439,
+          "shares": 58
+        },
+        {
+          "ticker": "TECK",
+          "exit_reason": "stop_loss",
+          "stop_used": 66.583,
+          "shares": 119
+        }
+      ],
+      "candidate_signals": [
+        {
+          "ticker": "QRVO",
+          "signal_price": 112.36,
+          "stop_price": 105.7083,
+          "shares": 74,
+          "trade_risk": 0.003,
+          "strength": 1.0262,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.0592,
+          "atr_pct": 0.0296,
+          "adv60_m": 110.924,
+          "vol_ratio": 1.9041
+        },
+        {
+          "ticker": "FRO",
+          "signal_price": 48.4,
+          "stop_price": 45.3334,
+          "shares": 172,
+          "trade_risk": 0.0032,
+          "strength": 1.0153,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.063359,
+          "atr_pct": 0.031679,
+          "adv60_m": 102.192,
+          "vol_ratio": 1.6083
+        }
+      ],
+      "entry_signals": [
+        {
+          "ticker": "QRVO",
+          "signal_price": 112.36,
+          "stop_price": 105.7083,
+          "shares": 74,
+          "trade_risk": 0.003,
+          "strength": 1.0262
+        },
+        {
+          "ticker": "FRO",
+          "signal_price": 48.4,
+          "stop_price": 45.3334,
+          "shares": 172,
+          "trade_risk": 0.0032,
+          "strength": 1.0153
+        }
+      ]
     }
   ],
-  "last_update_utc": "2026-09-15T10:17:30Z",
+  "last_update_utc": "2026-09-15T10:20:20Z",
   "today_signals": {
-    "date": "2026-09-09",
+    "date": "2026-09-10",
     "regime": "BULL",
     "spy_close": 760.88,
-    "n_candidates": 0,
-    "n_entries": 0,
-    "n_executed": 2,
-    "n_exits": 0,
-    "n_raw_breakouts": 0,
+    "n_candidates": 2,
+    "n_entries": 2,
+    "n_executed": 0,
+    "n_exits": 3,
+    "n_raw_breakouts": 2,
     "n_heat_blocked": 0,
     "n_cash_blocked": 0,
     "n_corr_reduced": 0,
-    "n_price_filtered": 229,
+    "n_price_filtered": 230,
     "n_adv_filtered": 557,
-    "n_breakout_filtered": 1294,
+    "n_breakout_filtered": 1296,
     "n_atr_filtered": 0,
-    "n_stop_dist_filtered": 2,
-    "n_volume_filtered": 5,
+    "n_stop_dist_filtered": 1,
+    "n_volume_filtered": 1,
     "spy_pct_above_sma200": 6.7833,
-    "exits_executed": [
+    "exits_executed": [],
+    "entries_executed": [],
+    "exit_signals": [
       {
-        "ticker": "DXCM",
-        "shares": 104,
-        "exit_open": 83.93,
-        "exit_price": 83.8461,
-        "net_pnl": -165.36,
-        "pnl_r": -0.2542,
-        "exit_reason": "trailing_stop"
+        "ticker": "DGX",
+        "exit_reason": "trailing_stop",
+        "stop_used": 232.4743,
+        "shares": 39
       },
       {
-        "ticker": "EAT",
-        "shares": 40,
-        "exit_open": 220.09,
-        "exit_price": 219.8699,
-        "net_pnl": -104.2,
-        "pnl_r": -0.1545,
-        "exit_reason": "trailing_stop"
-      },
-      {
-        "ticker": "XLV",
-        "shares": 25,
-        "exit_open": 167.31,
-        "exit_price": 167.1427,
-        "net_pnl": -183.1,
-        "pnl_r": -1.2384,
-        "exit_reason": "stop_loss"
-      }
-    ],
-    "entries_executed": [
-      {
-        "ticker": "ROIV",
-        "signal_date": "2026-09-08",
-        "signal_price": 41.48,
-        "open_price": 41.39,
-        "entry_price": 41.4314,
-        "shares": 204,
-        "stop_price": 38.3602,
-        "trade_risk": 0.0037
+        "ticker": "MRK",
+        "exit_reason": "trailing_stop",
+        "stop_used": 145.7439,
+        "shares": 58
       },
       {
         "ticker": "TECK",
-        "signal_date": "2026-09-08",
-        "signal_price": 71.97,
-        "open_price": 71.02,
-        "entry_price": 71.091,
-        "shares": 119,
-        "stop_price": 66.583,
-        "trade_risk": 0.0032
+        "exit_reason": "stop_loss",
+        "stop_used": 66.583,
+        "shares": 119
       }
     ],
-    "exit_signals": [],
-    "candidate_signals": [],
-    "entry_signals": []
+    "candidate_signals": [
+      {
+        "ticker": "QRVO",
+        "signal_price": 112.36,
+        "stop_price": 105.7083,
+        "shares": 74,
+        "trade_risk": 0.003,
+        "strength": 1.0262,
+        "rejection": null,
+        "corr_with": null,
+        "stop_distance_pct": 0.0592,
+        "atr_pct": 0.0296,
+        "adv60_m": 110.924,
+        "vol_ratio": 1.9041
+      },
+      {
+        "ticker": "FRO",
+        "signal_price": 48.4,
+        "stop_price": 45.3334,
+        "shares": 172,
+        "trade_risk": 0.0032,
+        "strength": 1.0153,
+        "rejection": null,
+        "corr_with": null,
+        "stop_distance_pct": 0.063359,
+        "atr_pct": 0.031679,
+        "adv60_m": 102.192,
+        "vol_ratio": 1.6083
+      }
+    ],
+    "entry_signals": [
+      {
+        "ticker": "QRVO",
+        "signal_price": 112.36,
+        "stop_price": 105.7083,
+        "shares": 74,
+        "trade_risk": 0.003,
+        "strength": 1.0262
+      },
+      {
+        "ticker": "FRO",
+        "signal_price": 48.4,
+        "stop_price": 45.3334,
+        "shares": 172,
+        "trade_risk": 0.0032,
+        "strength": 1.0153
+      }
+    ]
   },
   "data_error_log": [],
   "universe_size": 2194,
@@ -10735,7 +10934,7 @@
   "last_download_stats": {
     "downloaded_count": 2107,
     "total_scanned": 2107,
-    "updated_utc": "2026-09-15T10:17:29Z"
+    "updated_utc": "2026-09-15T10:20:19Z"
   },
   "universe_stats": {
     "tiingo_eligible": 2163,
@@ -10743,7 +10942,7 @@
     "yf_unavailable_in_pool": 56,
     "total_active": 3037,
     "total_delisted": 1440,
-    "updated_utc": "2026-09-15T10:17:37Z"
+    "updated_utc": "2026-09-15T10:20:28Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -10829,30 +11028,46 @@
   ],
   "tiingo_universe_synced_utc": "2026-09-15T00:55:58Z",
   "daily_summary": {
-    "date": "2026-09-09",
-    "updated_sgt": "2026-09-15 18:17 SGT",
-    "nav_change_pct": -0.35,
+    "date": "2026-09-10",
+    "updated_sgt": "2026-09-15 18:20 SGT",
+    "nav_change_pct": -1.0,
     "spy_change_pct": 0.0,
-    "vs_spy_pct": -0.35,
+    "vs_spy_pct": -1.0,
     "bullets": [
-      "Consumer Cyclical板块中的零售餐饮类公司如CAKE面临估值压力或市场情绪调整，导致板块整体承压下行。（[Are Retail-Wholesale Stocks …](https://finance.yahoo.com/markets/stocks/articles/retail-wholesale-stocks-lagging-cheesecake-195426595.html)）",
-      "策略重仓Consumer Cyclical板块的CAKE（-3.4%）和LTH（-1.7%）今日双双下跌，其中CAKE单日跌幅最大，对净值拖累最重（-$400），而同期SPY保持平盘，形成了-0.35%的显著偏差。（[Are Retail-Wholesale Stocks …](https://finance.yahoo.com/markets/stocks/articles/retail-wholesale-stocks-lagging-cheesecake-195426595.html)）",
-      "零售批发类企业可能面临消费需求疲软或竞争加剧的市场预期，而这类周期性敏感板块的下跌幅度往往超过大盘平均水平，解释了策略净值相对SPY的相对弱势。（[Are Retail-Wholesale Stocks …](https://finance.yahoo.com/markets/stocks/articles/retail-wholesale-stocks-lagging-cheesecake-195426595.html)）",
-      "策略虽然通过持仓TXG（+2.6%，+$259）和CNH（+2.2%，+$89）获得部分正收益抵消，但仍不足以弥补Consumer Cyclical板块龙头CAKE的深幅回调所造成的净值损失。（[Are Retail-Wholesale Stocks …](https://finance.yahoo.com/markets/stocks/articles/retail-wholesale-stocks-lagging-cheesecake-195426595.html)）"
+      "油价上升和通胀数据恶化打压了大盘走势，而Basic Materials板块作为对宏观经济敏感的周期性板块，对这类负面消息的反应幅度更大，导致整体板块下跌。（[Stock Market News for Sep 11…](https://finance.yahoo.com/markets/stocks/articles/stock-market-news-sep-11-132500350.html)）",
+      "铜价下跌和关税政策的不确定性直接冲击了矿业公司的盈利预期，Freeport-McMoRan因铜价下跌和关税前景黯淡而下跌6.6%，反映出市场对Basic Materials板块中大宗商品敏感性公司的悲观态度。（[Why Did Freeport-McMoRan Sto…](https://www.trefis.com/articles/615048/why-did-freeport-mcmoran-stock-drop-on-doubts-over-a-tariff-it-would-gain-from/2026-09-11)）",
+      "策略重仓的TECK（-6.3%，净值影响-$528）跌幅远超SPY（-0.0%），是导致策略相对大盘跑输1.00%的主要原因，这说明该矿业股票受到油价、通胀和大宗商品价格下跌的集中打击。（[Stock Market News for Sep 11…](https://finance.yahoo.com/markets/stocks/articles/stock-market-news-sep-11-132500350.html)、[Why Did Freeport-McMoRan Sto…](https://www.trefis.com/articles/615048/why-did-freeport-mcmoran-stock-drop-on-doubts-over-a-tariff-it-would-gain-from/2026-09-11)）",
+      "虽然部分Basic Materials个股如Corteva和Dow相对板块有超额表现的历史记录，但今日整个板块的系统性下跌压过了个股差异，使得策略的集中持仓敞口无法对冲，最终导致净值与追踪大盘的SPY出现-1.00%的负偏差。（[Corteva Stock: Is CTVA Outpe…](https://www.barchart.com/story/news/4537459/corteva-stock-is-ctva-outperforming-the-basic-material-sector)、[Dow Stock: Is DOW Outperform…](https://www.barchart.com/story/news/4530570/dow-stock-is-dow-outperforming-the-materials-sector)）"
     ],
     "news": [
       {
-        "title": "Are Retail-Wholesale Stocks Lagging  The Cheesecake Factory (CAKE) This Year?",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/retail-wholesale-stocks-lagging-cheesecake-195426595.html"
+        "title": "Stock Market News for Sep 11, 2026",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-sep-11-132500350.html"
+      },
+      {
+        "title": "Corteva Stock: Is CTVA Outperforming the Basic Material Sector?",
+        "url": "https://www.barchart.com/story/news/4537459/corteva-stock-is-ctva-outperforming-the-basic-material-sector"
+      },
+      {
+        "title": "Dow Stock: Is DOW Outperforming the Materials Sector?",
+        "url": "https://www.barchart.com/story/news/4530570/dow-stock-is-dow-outperforming-the-materials-sector"
+      },
+      {
+        "title": "Why Did Freeport-McMoRan Stock Drop On Doubts Over A Tariff It Would Gain From?",
+        "url": "https://www.trefis.com/articles/615048/why-did-freeport-mcmoran-stock-drop-on-doubts-over-a-tariff-it-would-gain-from/2026-09-11"
+      },
+      {
+        "title": "Visionary Metals Starts Diamond Drilling at King Solomon in Wyoming",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/visionary-metals-starts-diamond-drilling-154650791.html"
       }
     ]
   },
   "last_no_op_utc": "2026-09-15T10:08:56Z",
   "download_log": {
-    "date": "2026-09-09",
+    "date": "2026-09-10",
     "attempts": [
       {
-        "time_sgt": "2026-09-15 18:17 SGT",
+        "time_sgt": "2026-09-15 18:20 SGT",
         "type": "main_download",
         "status": "success",
         "total": 2107,
