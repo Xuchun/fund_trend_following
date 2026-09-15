@@ -11299,33 +11299,38 @@
   ],
   "tiingo_universe_synced_utc": "2026-09-15T00:55:58Z",
   "daily_summary": {
-    "date": "2026-09-12",
-    "updated_sgt": "2026-09-15 18:25 SGT",
+    "date": "2026-09-05",
+    "updated_sgt": "2026-09-15 18:33 SGT",
     "nav_change_pct": null,
     "spy_change_pct": null,
     "vs_spy_pct": null,
     "bullets": [
-      "📊 2026-09-12 收盘数据尚未获取到，正在持续重试，获取成功后将自动更新。"
+      "📊 2026-09-05 收盘数据尚未获取到，正在持续重试，获取成功后将自动更新。"
     ],
     "news": [],
     "data_pending": true
   },
-  "last_no_op_utc": "2026-09-15T10:25:20Z",
+  "last_no_op_utc": "2026-09-15T10:33:35Z",
   "download_log": {
-    "date": "2026-09-12",
+    "date": "2026-09-05",
     "attempts": [
       {
-        "time_sgt": "2026-09-15 18:25 SGT",
+        "time_sgt": "2026-09-15 18:33 SGT",
         "type": "main_probe",
         "status": "no_data",
         "success": 0,
         "failed": 0,
         "attempt": 1,
-        "next_retry_sgt": "2026-09-15 18:30 SGT",
+        "next_retry_sgt": "2026-09-15 19:30 SGT",
         "seq": 1
       }
     ],
     "holiday": null
   },
-  "no_data_probe": null
+  "no_data_probe": {
+    "date": "2026-09-05",
+    "attempt": 2,
+    "next_retry_utc": "2026-09-15T11:30:00Z",
+    "next_retry_sgt": "2026-09-15 19:30 SGT"
+  }
 }
