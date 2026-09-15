@@ -2654,43 +2654,43 @@
       "date": "2026-09-02",
       "nav": 171056.51,
       "regime": "BULL",
-      "spy_close": 760.88
+      "spy_close": 765.16
     },
     {
       "date": "2026-09-03",
       "nav": 172337.43,
       "regime": "BULL",
-      "spy_close": 760.88
+      "spy_close": 773.17
     },
     {
       "date": "2026-09-04",
       "nav": 170802.74,
       "regime": "BULL",
-      "spy_close": 760.88
+      "spy_close": 770.19
     },
     {
       "date": "2026-09-08",
       "nav": 168881.24,
       "regime": "BULL",
-      "spy_close": 760.88
+      "spy_close": 765.96
     },
     {
       "date": "2026-09-09",
       "nav": 168288.66,
       "regime": "BULL",
-      "spy_close": 760.88
+      "spy_close": 762.4
     },
     {
       "date": "2026-09-10",
       "nav": 166608.5,
       "regime": "BULL",
-      "spy_close": 760.88
+      "spy_close": 757.83
     },
     {
       "date": "2026-09-11",
       "nav": 167658.23,
       "regime": "BULL",
-      "spy_close": 760.88
+      "spy_close": 764.29
     }
   ],
   "pending_exits": [],
@@ -11327,10 +11327,5 @@
     ],
     "holiday": null
   },
-  "no_data_probe": {
-    "date": "2026-09-12",
-    "attempt": 2,
-    "next_retry_utc": "2026-09-15T10:30:00Z",
-    "next_retry_sgt": "2026-09-15 18:30 SGT"
-  }
+  "no_data_probe": null
 }
