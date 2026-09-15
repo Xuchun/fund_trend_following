@@ -10648,56 +10648,38 @@
   ],
   "tiingo_universe_synced_utc": "2026-09-15T00:55:58Z",
   "daily_summary": {
-    "date": "2026-09-04",
-    "updated_sgt": "2026-09-15 18:07 SGT",
-    "nav_change_pct": -0.89,
-    "spy_change_pct": 0.0,
-    "vs_spy_pct": -0.89,
+    "date": "2026-09-05",
+    "updated_sgt": "2026-09-15 18:08 SGT",
+    "nav_change_pct": null,
+    "spy_change_pct": null,
+    "vs_spy_pct": null,
     "bullets": [
-      "ZETA和BOX等AI营销及云计算相关的Technology个股今日大幅下跌，反映市场对这类高估值科技股的增长预期出现调整，即使ZETA过去5年涨幅353%、BOX最新季度业绩超预期，投资者仍在重新评估其当前股价是否已充分反映未来增长潜力 （[Zeta Global (ZETA) Stock Loo…](https://finance.yahoo.com/markets/stocks/articles/zeta-global-zeta-stock-looks-090706703.html)、[Inside Zeta's Transformation…](https://finance.yahoo.com/m/763994b2-cefb-30d1-a197-56e519133c36/inside-zeta-s-transformation.html)、[BOX Q2 Deep Dive: AI Platfor…](https://finance.yahoo.com/technology/ai/articles/box-q2-deep-dive-ai-215010347.html)）。",
-      "Strategy重仓ZETA（-4.1%、净值影响-$366）和BOX（-2.1%、净值影响-$193）两只Technology核心持仓同时承压，而SPY作为宽基指数中Technology权重有限、Consumer Cyclical等其他板块保持相对稳定，导致策略净值-0.89%的跌幅远超SPY的0.00%持平 （[Zeta Global (ZETA) Stock Loo…](https://finance.yahoo.com/markets/stocks/articles/zeta-global-zeta-stock-looks-090706703.html)、[Inside Zeta's Transformation…](https://finance.yahoo.com/m/763994b2-cefb-30d1-a197-56e519133c36/inside-zeta-s-transformation.html)、[BOX Q2 Deep Dive: AI Platfor…](https://finance.yahoo.com/technology/ai/articles/box-q2-deep-dive-ai-215010347.html)）。",
-      "Technology板块个股的调整可能源于市场对AI营销类企业商业化变现能力和现金流质量的质疑，即便企业拥有强劲合作伙伴（如Palantir）和创新产品，但高成长预期若未能切实转化为可持续盈利，高估值就难以维系 （[Zeta Global (ZETA) Stock Loo…](https://finance.yahoo.com/markets/stocks/articles/zeta-global-zeta-stock-looks-090706703.html)、[Inside Zeta's Transformation…](https://finance.yahoo.com/m/763994b2-cefb-30d1-a197-56e519133c36/inside-zeta-s-transformation.html)、[1 Cash-Heavy Stock to Target…](https://finance.yahoo.com/markets/stocks/articles/1-cash-heavy-stock-target-084610171.html)）。",
-      "Strategy在Technology板块的集中度过高导致净值对该板块个股走势的敏感度远高于大盘，当ZETA、BOX、DT等多只Technology持仓同步下跌时（分别-4.1%、-2.1%、-1.6%），而同期消费类持仓涨跌幅度有限，这种结构性差异被放大为-0.89%的整体偏差 （[Zeta Global (ZETA) Stock Loo…](https://finance.yahoo.com/markets/stocks/articles/zeta-global-zeta-stock-looks-090706703.html)、[Inside Zeta's Transformation…](https://finance.yahoo.com/m/763994b2-cefb-30d1-a197-56e519133c36/inside-zeta-s-transformation.html)、[BOX Q2 Deep Dive: AI Platfor…](https://finance.yahoo.com/technology/ai/articles/box-q2-deep-dive-ai-215010347.html)）。"
+      "📊 2026-09-05 收盘数据尚未获取到，正在持续重试，获取成功后将自动更新。"
     ],
-    "news": [
-      {
-        "title": "Zeta Global (ZETA) Stock Looks Below Fair Value On Its 353% Run",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/zeta-global-zeta-stock-looks-090706703.html"
-      },
-      {
-        "title": "Inside Zeta's Transformation From Hopeful Do-Over To Surging AI Marketing Stock",
-        "url": "https://finance.yahoo.com/m/763994b2-cefb-30d1-a197-56e519133c36/inside-zeta-s-transformation.html"
-      },
-      {
-        "title": "DAVE INC (DAVE) Up 7% Since Last Earnings Report: Can It Continue?",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/dave-inc-dave-7-since-153009251.html"
-      },
-      {
-        "title": "1 Cash-Heavy Stock to Target This Week and 2 That Underwhelm",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/1-cash-heavy-stock-target-084610171.html"
-      },
-      {
-        "title": "BOX Q2 Deep Dive: AI Platform Momentum and Enterprise Migration Drive Growth",
-        "url": "https://finance.yahoo.com/technology/ai/articles/box-q2-deep-dive-ai-215010347.html"
-      }
-    ]
+    "news": [],
+    "data_pending": true
   },
-  "last_no_op_utc": "2026-09-15T05:04:29Z",
+  "last_no_op_utc": "2026-09-15T10:08:56Z",
   "download_log": {
-    "date": "2026-09-04",
+    "date": "2026-09-05",
     "attempts": [
       {
-        "time_sgt": "2026-09-15 18:07 SGT",
-        "type": "main_download",
-        "status": "success",
-        "total": 2107,
-        "success": 2107,
-        "cumulative_success": 2107,
+        "time_sgt": "2026-09-15 18:08 SGT",
+        "type": "main_probe",
+        "status": "no_data",
+        "success": 0,
         "failed": 0,
-        "next_retry_sgt": null,
+        "attempt": 1,
+        "next_retry_sgt": "2026-09-15 18:30 SGT",
         "seq": 1
       }
     ],
     "holiday": null
+  },
+  "no_data_probe": {
+    "date": "2026-09-05",
+    "attempt": 2,
+    "next_retry_utc": "2026-09-15T10:30:00Z",
+    "next_retry_sgt": "2026-09-15 18:30 SGT"
   }
 }
