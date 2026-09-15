@@ -4,8 +4,8 @@
   "start_date": "2026-06-19",
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
-  "last_update_date": "2026-09-11",
-  "cash": 17296.28548628181,
+  "last_update_date": "2026-09-14",
+  "cash": 4735.209343804773,
   "positions": [
     {
       "ticker": "LTH",
@@ -14,8 +14,8 @@
       "shares": 270,
       "atr_at_entry": 1.2762,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 41.5,
-      "last_price_date": "2026-09-11",
+      "last_known_price": 41.53,
+      "last_price_date": "2026-09-14",
       "stop_loss": 34.3677,
       "trail_stop": 40.771092,
       "highest_high": 47.235,
@@ -57,8 +57,8 @@
       "lowest_low": 79.585,
       "atr_at_entry": 2.6443,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 102.7,
-      "last_price_date": "2026-09-11",
+      "last_known_price": 105.17,
+      "last_price_date": "2026-09-14",
       "entry_commission": 2.75,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -115,13 +115,13 @@
       "entry_price": 58.5585,
       "shares": 153,
       "stop_loss": 52.1019,
-      "trail_stop": 58.747375,
-      "highest_high": 69.67,
+      "trail_stop": 59.537376,
+      "highest_high": 70.46,
       "lowest_low": 55.25,
       "atr_at_entry": 3.2283,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 68.59,
-      "last_price_date": "2026-09-11",
+      "last_known_price": 70.11,
+      "last_price_date": "2026-09-14",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -141,8 +141,8 @@
       "lowest_low": 100.53,
       "atr_at_entry": 3.5541,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 102.69,
-      "last_price_date": "2026-09-11",
+      "last_known_price": 106.31,
+      "last_price_date": "2026-09-14",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -162,8 +162,8 @@
       "lowest_low": 90.84,
       "atr_at_entry": 1.7297,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 93.45,
-      "last_price_date": "2026-09-11",
+      "last_known_price": 93.43,
+      "last_price_date": "2026-09-14",
       "entry_commission": 2.64,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -183,8 +183,8 @@
       "lowest_low": 33.65,
       "atr_at_entry": 1.1225,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 33.75,
-      "last_price_date": "2026-09-11",
+      "last_known_price": 34.86,
+      "last_price_date": "2026-09-14",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -204,8 +204,8 @@
       "lowest_low": 49.56,
       "atr_at_entry": 2.0107,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 51.07,
-      "last_price_date": "2026-09-11",
+      "last_known_price": 53.34,
+      "last_price_date": "2026-09-14",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -225,8 +225,8 @@
       "lowest_low": 29.68,
       "atr_at_entry": 1.4594,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 30.18,
-      "last_price_date": "2026-09-11",
+      "last_known_price": 31.01,
+      "last_price_date": "2026-09-14",
       "entry_commission": 2.56,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -264,11 +264,11 @@
       "stop_loss": 664.0742,
       "trail_stop": 649.943355,
       "highest_high": 705.88,
-      "lowest_low": 671.4,
+      "lowest_low": 668.0,
       "atr_at_entry": 19.9395,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 675.74,
-      "last_price_date": "2026-09-11",
+      "last_known_price": 681.46,
+      "last_price_date": "2026-09-14",
       "entry_commission": 2.53,
       "entry_regime": "BULL",
       "sector": "Industrials"
@@ -285,11 +285,11 @@
       "stop_loss": 13.2607,
       "trail_stop": 12.7289,
       "highest_high": 14.3243,
-      "lowest_low": 13.37,
+      "lowest_low": 13.28,
       "atr_at_entry": 0.5318,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 13.58,
-      "last_price_date": "2026-09-11",
+      "last_known_price": 13.75,
+      "last_price_date": "2026-09-14",
       "entry_commission": 1.28,
       "entry_regime": "BULL",
       "sector": "Industrials"
@@ -309,8 +309,8 @@
       "lowest_low": 40.215,
       "atr_at_entry": 1.5356,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 40.82,
-      "last_price_date": "2026-09-11",
+      "last_known_price": 41.02,
+      "last_price_date": "2026-09-14",
       "entry_commission": 2.54,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -325,13 +325,13 @@
       "entry_price": 112.9478,
       "shares": 74,
       "stop_loss": 106.2962,
-      "trail_stop": 109.031007,
+      "trail_stop": 109.031011,
       "highest_high": 120.52,
-      "lowest_low": 112.595,
+      "lowest_low": 107.84,
       "atr_at_entry": 3.3258,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 116.65,
-      "last_price_date": "2026-09-11",
+      "last_known_price": 107.98,
+      "last_price_date": "2026-09-14",
       "entry_commission": 2.51,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -346,16 +346,58 @@
       "entry_price": 48.098,
       "shares": 173,
       "stop_loss": 45.0314,
-      "trail_stop": 44.94763,
-      "highest_high": 49.56,
+      "trail_stop": 46.167627,
+      "highest_high": 50.78,
       "lowest_low": 48.03,
       "atr_at_entry": 1.5333,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 49.21,
-      "last_price_date": "2026-09-11",
+      "last_known_price": 50.52,
+      "last_price_date": "2026-09-14",
       "entry_commission": 2.5,
       "entry_regime": "BULL",
       "sector": "Energy"
+    },
+    {
+      "ticker": "HPQ",
+      "signal_date": "2026-09-11",
+      "signal_price": 35.48,
+      "signal_strength": 1.0696,
+      "entry_date": "2026-09-14",
+      "open_price": 35.12,
+      "entry_price": 35.1551,
+      "shares": 238,
+      "stop_loss": 32.1337,
+      "trail_stop": 30.623,
+      "highest_high": 35.19,
+      "lowest_low": 33.57,
+      "atr_at_entry": 1.5107,
+      "R_at_backtest_end": 0.0,
+      "last_known_price": 34.02,
+      "last_price_date": "2026-09-14",
+      "entry_commission": 2.51,
+      "entry_regime": "BULL",
+      "sector": "N/A"
+    },
+    {
+      "ticker": "DHT",
+      "signal_date": "2026-09-11",
+      "signal_price": 22.0,
+      "signal_strength": 1.019,
+      "entry_date": "2026-09-14",
+      "open_price": 22.14,
+      "entry_price": 22.1621,
+      "shares": 189,
+      "stop_loss": 20.8287,
+      "trail_stop": 20.270402,
+      "highest_high": 22.28,
+      "lowest_low": 21.55,
+      "atr_at_entry": 0.6667,
+      "R_at_backtest_end": 0.0,
+      "last_known_price": 22.15,
+      "last_price_date": "2026-09-14",
+      "entry_commission": 1.26,
+      "entry_regime": "BULL",
+      "sector": "N/A"
     }
   ],
   "closed_trades": [
@@ -2691,53 +2733,59 @@
       "nav": 167658.23,
       "regime": "BULL",
       "spy_close": 764.29
+    },
+    {
+      "date": "2026-09-14",
+      "nav": 168815.67,
+      "regime": "BULL",
+      "spy_close": 760.88
     }
   ],
-  "pending_exits": [],
+  "pending_exits": [
+    {
+      "ticker": "QRVO",
+      "exit_reason": "trailing_stop",
+      "stop_used": 109.031,
+      "shares": 74,
+      "open_price": 112.835,
+      "entry_price": 112.9478,
+      "entry_date": "2026-09-11",
+      "signal_date": "2026-09-10",
+      "signal_price": 112.36,
+      "signal_strength": 1.0262,
+      "stop_loss": 106.2962,
+      "atr_at_entry": 3.3258,
+      "highest_high": 120.52,
+      "lowest_low": 107.84,
+      "trail_stop_at_exit": 109.031011,
+      "atr_at_exit": 3.8297,
+      "detected_date": "2026-09-14",
+      "entry_commission": 2.51,
+      "entry_regime": "BULL"
+    }
+  ],
   "pending_entries": [
     {
-      "ticker": "HPQ",
-      "signal_date": "2026-09-11",
-      "signal_price": 35.48,
-      "stop_price": 32.4585,
-      "shares": 236,
-      "atr": 1.5107,
-      "signal_strength": 1.0696,
-      "trade_risk": 0.0043,
-      "notional": 8373.28
+      "ticker": "OKTA",
+      "signal_date": "2026-09-14",
+      "signal_price": 186.45,
+      "stop_price": 168.2096,
+      "shares": 45,
+      "atr": 9.1202,
+      "signal_strength": 1.0391,
+      "trade_risk": 0.0049,
+      "notional": 8390.25
     },
     {
-      "ticker": "SWKS",
-      "signal_date": "2026-09-11",
-      "signal_price": 88.35,
-      "stop_price": 80.9238,
-      "shares": 47,
-      "atr": 3.7131,
-      "signal_strength": 1.0286,
-      "trade_risk": 0.0021,
-      "notional": 4152.45
-    },
-    {
-      "ticker": "DHT",
-      "signal_date": "2026-09-11",
-      "signal_price": 22.0,
-      "stop_price": 20.6666,
-      "shares": 191,
-      "atr": 0.6667,
-      "signal_strength": 1.019,
-      "trade_risk": 0.0015,
-      "notional": 4202.0
-    },
-    {
-      "ticker": "AVT",
-      "signal_date": "2026-09-11",
-      "signal_price": 99.63,
-      "stop_price": 92.7085,
-      "shares": 84,
-      "atr": 3.4607,
-      "signal_strength": 1.0003,
-      "trade_risk": 0.0035,
-      "notional": 8368.92
+      "ticker": "CRWD",
+      "signal_date": "2026-09-14",
+      "signal_price": 235.38,
+      "stop_price": 211.118,
+      "shares": 36,
+      "atr": 12.131,
+      "signal_strength": 1.0064,
+      "trade_risk": 0.0052,
+      "notional": 8473.68
     }
   ],
   "signals_history": [
@@ -11032,170 +11080,204 @@
           "strength": 1.0003
         }
       ]
+    },
+    {
+      "date": "2026-09-14",
+      "regime": "BULL",
+      "spy_close": 760.88,
+      "n_candidates": 2,
+      "n_entries": 2,
+      "n_executed": 2,
+      "n_exits": 1,
+      "n_raw_breakouts": 2,
+      "n_heat_blocked": 0,
+      "n_cash_blocked": 0,
+      "n_corr_reduced": 0,
+      "n_price_filtered": 232,
+      "n_adv_filtered": 569,
+      "n_breakout_filtered": 1273,
+      "n_atr_filtered": 0,
+      "n_stop_dist_filtered": 1,
+      "n_volume_filtered": 9,
+      "spy_pct_above_sma200": 6.7833,
+      "exits_executed": [],
+      "entries_executed": [
+        {
+          "ticker": "HPQ",
+          "signal_date": "2026-09-11",
+          "signal_price": 35.48,
+          "open_price": 35.12,
+          "entry_price": 35.1551,
+          "shares": 238,
+          "stop_price": 32.1337,
+          "trade_risk": 0.0043
+        },
+        {
+          "ticker": "DHT",
+          "signal_date": "2026-09-11",
+          "signal_price": 22.0,
+          "open_price": 22.14,
+          "entry_price": 22.1621,
+          "shares": 189,
+          "stop_price": 20.8287,
+          "trade_risk": 0.0015
+        }
+      ],
+      "exit_signals": [
+        {
+          "ticker": "QRVO",
+          "exit_reason": "trailing_stop",
+          "stop_used": 109.031,
+          "shares": 74
+        }
+      ],
+      "candidate_signals": [
+        {
+          "ticker": "OKTA",
+          "signal_price": 186.45,
+          "stop_price": 168.2096,
+          "shares": 45,
+          "trade_risk": 0.0049,
+          "strength": 1.0391,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.09783,
+          "atr_pct": 0.048915,
+          "adv60_m": 492.805,
+          "vol_ratio": 1.9788
+        },
+        {
+          "ticker": "CRWD",
+          "signal_price": 235.38,
+          "stop_price": 211.118,
+          "shares": 36,
+          "trade_risk": 0.0052,
+          "strength": 1.0064,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.103076,
+          "atr_pct": 0.051538,
+          "adv60_m": 1927.184,
+          "vol_ratio": 2.6013
+        }
+      ],
+      "entry_signals": [
+        {
+          "ticker": "OKTA",
+          "signal_price": 186.45,
+          "stop_price": 168.2096,
+          "shares": 45,
+          "trade_risk": 0.0049,
+          "strength": 1.0391
+        },
+        {
+          "ticker": "CRWD",
+          "signal_price": 235.38,
+          "stop_price": 211.118,
+          "shares": 36,
+          "trade_risk": 0.0052,
+          "strength": 1.0064
+        }
+      ]
     }
   ],
-  "last_update_utc": "2026-09-15T10:23:56Z",
+  "last_update_utc": "2026-09-15T10:36:22Z",
   "today_signals": {
-    "date": "2026-09-11",
+    "date": "2026-09-14",
     "regime": "BULL",
     "spy_close": 760.88,
-    "n_candidates": 4,
-    "n_entries": 4,
+    "n_candidates": 2,
+    "n_entries": 2,
     "n_executed": 2,
-    "n_exits": 0,
-    "n_raw_breakouts": 4,
+    "n_exits": 1,
+    "n_raw_breakouts": 2,
     "n_heat_blocked": 0,
     "n_cash_blocked": 0,
-    "n_corr_reduced": 2,
-    "n_price_filtered": 230,
-    "n_adv_filtered": 567,
-    "n_breakout_filtered": 1282,
+    "n_corr_reduced": 0,
+    "n_price_filtered": 232,
+    "n_adv_filtered": 569,
+    "n_breakout_filtered": 1273,
     "n_atr_filtered": 0,
-    "n_stop_dist_filtered": 3,
-    "n_volume_filtered": 2,
+    "n_stop_dist_filtered": 1,
+    "n_volume_filtered": 9,
     "spy_pct_above_sma200": 6.7833,
-    "exits_executed": [
-      {
-        "ticker": "DGX",
-        "shares": 39,
-        "exit_open": 233.2,
-        "exit_price": 232.9668,
-        "net_pnl": 179.42,
-        "pnl_r": 0.3916,
-        "exit_reason": "trailing_stop"
-      },
-      {
-        "ticker": "MRK",
-        "shares": 58,
-        "exit_open": 145.52,
-        "exit_price": 145.3745,
-        "net_pnl": -327.43,
-        "pnl_r": -0.6925,
-        "exit_reason": "trailing_stop"
-      },
-      {
-        "ticker": "TECK",
-        "shares": 119,
-        "exit_open": 66.56,
-        "exit_price": 66.4934,
-        "net_pnl": -552.02,
-        "pnl_r": -1.0199,
-        "exit_reason": "stop_loss"
-      }
-    ],
+    "exits_executed": [],
     "entries_executed": [
       {
-        "ticker": "QRVO",
-        "signal_date": "2026-09-10",
-        "signal_price": 112.36,
-        "open_price": 112.835,
-        "entry_price": 112.9478,
-        "shares": 74,
-        "stop_price": 106.2962,
-        "trade_risk": 0.003
-      },
-      {
-        "ticker": "FRO",
-        "signal_date": "2026-09-10",
-        "signal_price": 48.4,
-        "open_price": 48.05,
-        "entry_price": 48.098,
-        "shares": 173,
-        "stop_price": 45.0314,
-        "trade_risk": 0.0032
-      }
-    ],
-    "exit_signals": [],
-    "candidate_signals": [
-      {
         "ticker": "HPQ",
+        "signal_date": "2026-09-11",
         "signal_price": 35.48,
-        "stop_price": 32.4585,
-        "shares": 236,
-        "trade_risk": 0.0043,
-        "strength": 1.0696,
-        "rejection": null,
-        "corr_with": null,
-        "stop_distance_pct": 0.08516,
-        "atr_pct": 0.04258,
-        "adv60_m": 418.991,
-        "vol_ratio": 1.7088
-      },
-      {
-        "ticker": "SWKS",
-        "signal_price": 88.35,
-        "stop_price": 80.9238,
-        "shares": 47,
-        "trade_risk": 0.0021,
-        "strength": 1.0286,
-        "rejection": "corr_reduced",
-        "corr_with": "QRVO",
-        "stop_distance_pct": 0.084054,
-        "atr_pct": 0.042027,
-        "adv60_m": 391.433,
-        "vol_ratio": 1.8972
+        "open_price": 35.12,
+        "entry_price": 35.1551,
+        "shares": 238,
+        "stop_price": 32.1337,
+        "trade_risk": 0.0043
       },
       {
         "ticker": "DHT",
+        "signal_date": "2026-09-11",
         "signal_price": 22.0,
-        "stop_price": 20.6666,
-        "shares": 191,
-        "trade_risk": 0.0015,
-        "strength": 1.019,
-        "rejection": "corr_reduced",
-        "corr_with": "FRO",
-        "stop_distance_pct": 0.060609,
-        "atr_pct": 0.030305,
-        "adv60_m": 63.145,
-        "vol_ratio": 1.5386
-      },
+        "open_price": 22.14,
+        "entry_price": 22.1621,
+        "shares": 189,
+        "stop_price": 20.8287,
+        "trade_risk": 0.0015
+      }
+    ],
+    "exit_signals": [
       {
-        "ticker": "AVT",
-        "signal_price": 99.63,
-        "stop_price": 92.7085,
-        "shares": 84,
-        "trade_risk": 0.0035,
-        "strength": 1.0003,
+        "ticker": "QRVO",
+        "exit_reason": "trailing_stop",
+        "stop_used": 109.031,
+        "shares": 74
+      }
+    ],
+    "candidate_signals": [
+      {
+        "ticker": "OKTA",
+        "signal_price": 186.45,
+        "stop_price": 168.2096,
+        "shares": 45,
+        "trade_risk": 0.0049,
+        "strength": 1.0391,
         "rejection": null,
         "corr_with": null,
-        "stop_distance_pct": 0.069472,
-        "atr_pct": 0.034736,
-        "adv60_m": 108.766,
-        "vol_ratio": 1.6252
+        "stop_distance_pct": 0.09783,
+        "atr_pct": 0.048915,
+        "adv60_m": 492.805,
+        "vol_ratio": 1.9788
+      },
+      {
+        "ticker": "CRWD",
+        "signal_price": 235.38,
+        "stop_price": 211.118,
+        "shares": 36,
+        "trade_risk": 0.0052,
+        "strength": 1.0064,
+        "rejection": null,
+        "corr_with": null,
+        "stop_distance_pct": 0.103076,
+        "atr_pct": 0.051538,
+        "adv60_m": 1927.184,
+        "vol_ratio": 2.6013
       }
     ],
     "entry_signals": [
       {
-        "ticker": "HPQ",
-        "signal_price": 35.48,
-        "stop_price": 32.4585,
-        "shares": 236,
-        "trade_risk": 0.0043,
-        "strength": 1.0696
+        "ticker": "OKTA",
+        "signal_price": 186.45,
+        "stop_price": 168.2096,
+        "shares": 45,
+        "trade_risk": 0.0049,
+        "strength": 1.0391
       },
       {
-        "ticker": "SWKS",
-        "signal_price": 88.35,
-        "stop_price": 80.9238,
-        "shares": 47,
-        "trade_risk": 0.0021,
-        "strength": 1.0286
-      },
-      {
-        "ticker": "DHT",
-        "signal_price": 22.0,
-        "stop_price": 20.6666,
-        "shares": 191,
-        "trade_risk": 0.0015,
-        "strength": 1.019
-      },
-      {
-        "ticker": "AVT",
-        "signal_price": 99.63,
-        "stop_price": 92.7085,
-        "shares": 84,
-        "trade_risk": 0.0035,
-        "strength": 1.0003
+        "ticker": "CRWD",
+        "signal_price": 235.38,
+        "stop_price": 211.118,
+        "shares": 36,
+        "trade_risk": 0.0052,
+        "strength": 1.0064
       }
     ]
   },
@@ -11203,20 +11285,19 @@
   "universe_size": 2194,
   "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
-    "downloaded_count": 2107,
-    "total_scanned": 2107,
-    "updated_utc": "2026-09-15T10:23:55Z"
+    "downloaded_count": 2124,
+    "total_scanned": 2163,
+    "updated_utc": "2026-09-15T10:36:21Z"
   },
   "universe_stats": {
     "tiingo_eligible": 2163,
-    "yf_downloadable": 2107,
-    "yf_unavailable_in_pool": 56,
+    "yf_downloadable": 2109,
+    "yf_unavailable_in_pool": 54,
     "total_active": 3037,
     "total_delisted": 1440,
-    "updated_utc": "2026-09-15T10:24:04Z"
+    "updated_utc": "2026-09-15T10:36:23Z"
   },
   "yf_persistent_unavailable": [
-    "ACOM",
     "AGR",
     "AL",
     "ALE",
@@ -11285,7 +11366,6 @@
     "SNBR",
     "SNCR",
     "SPLK",
-    "THOR",
     "TMHC",
     "TRUE",
     "TTM",
@@ -11299,38 +11379,30 @@
   ],
   "tiingo_universe_synced_utc": "2026-09-15T00:55:58Z",
   "daily_summary": {
-    "date": "2026-09-05",
-    "updated_sgt": "2026-09-15 18:33 SGT",
-    "nav_change_pct": null,
-    "spy_change_pct": null,
-    "vs_spy_pct": null,
-    "bullets": [
-      "📊 2026-09-05 收盘数据尚未获取到，正在持续重试，获取成功后将自动更新。"
-    ],
-    "news": [],
-    "data_pending": true
+    "date": "2026-09-14",
+    "updated_sgt": "2026-09-15 18:36 SGT",
+    "nav_change_pct": 0.69,
+    "spy_change_pct": -0.45,
+    "vs_spy_pct": 1.14,
+    "bullets": [],
+    "news": []
   },
   "last_no_op_utc": "2026-09-15T10:33:35Z",
   "download_log": {
-    "date": "2026-09-05",
+    "date": "2026-09-14",
     "attempts": [
       {
-        "time_sgt": "2026-09-15 18:33 SGT",
-        "type": "main_probe",
-        "status": "no_data",
-        "success": 0,
+        "time_sgt": "2026-09-15 18:36 SGT",
+        "type": "main_download",
+        "status": "success",
+        "total": 2163,
+        "success": 2124,
+        "cumulative_success": 2124,
         "failed": 0,
-        "attempt": 1,
-        "next_retry_sgt": "2026-09-15 19:30 SGT",
+        "next_retry_sgt": null,
         "seq": 1
       }
     ],
     "holiday": null
-  },
-  "no_data_probe": {
-    "date": "2026-09-05",
-    "attempt": 2,
-    "next_retry_utc": "2026-09-15T11:30:00Z",
-    "next_retry_sgt": "2026-09-15 19:30 SGT"
   }
 }
