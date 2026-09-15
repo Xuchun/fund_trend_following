@@ -1762,6 +1762,10 @@ def main() -> None:
         log.info("=== Done (no-op — market not yet open) ===")
         return
 
+    # Use the date-specific SPY close (not the latest) so historical backfills
+    # (--date YYYY-MM-DD) record the correct price for that trading day.
+    spy_close = float(_spy_today["Close"].iloc[-1])
+
     # ── Step 1b: check suspended positions (YF + Tiingo) ─────────────────────
     _suspended = [p for p in state.get("positions", []) if p.get("suspended")]
     if _suspended:
