@@ -11299,40 +11299,38 @@
   ],
   "tiingo_universe_synced_utc": "2026-09-15T00:55:58Z",
   "daily_summary": {
-    "date": "2026-09-11",
-    "updated_sgt": "2026-09-15 18:24 SGT",
-    "nav_change_pct": 0.63,
-    "spy_change_pct": 0.0,
-    "vs_spy_pct": 0.63,
+    "date": "2026-09-12",
+    "updated_sgt": "2026-09-15 18:25 SGT",
+    "nav_change_pct": null,
+    "spy_change_pct": null,
+    "vs_spy_pct": null,
     "bullets": [
-      "宏观经济压力驱动市场风格轮动，机构资金从科技等周期性强的板块流向医疗健康等防守性板块，这是N/A板块中HAE和TXG等个股上涨的根本逻辑。（[Moderna, 10x Genomics, Oscar…](https://finance.yahoo.com/markets/stocks/articles/moderna-10x-genomics-oscar-health-043505539.html)）",
-      "策略的N/A板块重仓在今日的轮动中受益，TXG涨幅达+3.3%（净值贡献+$338）和HAE涨幅+1.6%（净值贡献+$135）共拉动策略净值上升，而SPY作为宽基指数在科技权重拖累下保持平盘，导致策略相对SPY产生+0.63%的超额收益。（[Moderna, 10x Genomics, Oscar…](https://finance.yahoo.com/markets/stocks/articles/moderna-10x-genomics-oscar-health-043505539.html)）",
-      "科技板块的系统性回调是造成策略与SPY偏差的主要对冲因素，ZETA、BOX、DT等科技持仓分别下跌1.2%、1.1%、0.7%，共计拖累净值$-254，但这部分损失被N/A板块的强劲表现部分抵消。（[Moderna, 10x Genomics, Oscar…](https://finance.yahoo.com/markets/stocks/articles/moderna-10x-genomics-oscar-health-043505539.html)）",
-      "策略在风格轮动中实现了对SPY的显著跑赢，本质上反映了其重仓N/A板块（特别是TXG的+3.3%涨幅）相比大盘权重科技股更好地捕捉了市场从增长型向防守型的切换机会。（[Moderna, 10x Genomics, Oscar…](https://finance.yahoo.com/markets/stocks/articles/moderna-10x-genomics-oscar-health-043505539.html)）"
+      "📊 2026-09-12 收盘数据尚未获取到，正在持续重试，获取成功后将自动更新。"
     ],
-    "news": [
-      {
-        "title": "Moderna, 10x Genomics, Oscar Health, and Novavax Shares Are Soaring, What You Need To Know",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/moderna-10x-genomics-oscar-health-043505539.html"
-      }
-    ]
+    "news": [],
+    "data_pending": true
   },
-  "last_no_op_utc": "2026-09-15T10:08:56Z",
+  "last_no_op_utc": "2026-09-15T10:25:20Z",
   "download_log": {
-    "date": "2026-09-11",
+    "date": "2026-09-12",
     "attempts": [
       {
-        "time_sgt": "2026-09-15 18:23 SGT",
-        "type": "main_download",
-        "status": "success",
-        "total": 2107,
-        "success": 2107,
-        "cumulative_success": 2107,
+        "time_sgt": "2026-09-15 18:25 SGT",
+        "type": "main_probe",
+        "status": "no_data",
+        "success": 0,
         "failed": 0,
-        "next_retry_sgt": null,
+        "attempt": 1,
+        "next_retry_sgt": "2026-09-15 18:30 SGT",
         "seq": 1
       }
     ],
     "holiday": null
+  },
+  "no_data_probe": {
+    "date": "2026-09-12",
+    "attempt": 2,
+    "next_retry_utc": "2026-09-15T10:30:00Z",
+    "next_retry_sgt": "2026-09-15 18:30 SGT"
   }
 }
