@@ -4,8 +4,8 @@
   "start_date": "2026-06-19",
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
-  "last_update_date": "2026-09-04",
-  "cash": 75.039884155453,
+  "last_update_date": "2026-09-08",
+  "cash": 3823.8224511424323,
   "positions": [
     {
       "ticker": "LTH",
@@ -14,8 +14,8 @@
       "shares": 270,
       "atr_at_entry": 1.2762,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 43.23,
-      "last_price_date": "2026-09-04",
+      "last_known_price": 42.47,
+      "last_price_date": "2026-09-08",
       "stop_loss": 34.3677,
       "trail_stop": 40.771092,
       "highest_high": 47.235,
@@ -57,8 +57,8 @@
       "lowest_low": 79.585,
       "atr_at_entry": 2.6443,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 107.58,
-      "last_price_date": "2026-09-04",
+      "last_known_price": 107.21,
+      "last_price_date": "2026-09-08",
       "entry_commission": 2.75,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -120,8 +120,8 @@
       "lowest_low": 223.42,
       "atr_at_entry": 6.0504,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 237.14,
-      "last_price_date": "2026-09-04",
+      "last_known_price": 235.5,
+      "last_price_date": "2026-09-08",
       "entry_commission": 2.67,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -141,8 +141,8 @@
       "lowest_low": 82.09,
       "atr_at_entry": 3.0281,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 87.9,
-      "last_price_date": "2026-09-04",
+      "last_known_price": 84.53,
+      "last_price_date": "2026-09-08",
       "entry_commission": 2.66,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -162,8 +162,8 @@
       "lowest_low": 217.09,
       "atr_at_entry": 8.003,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 230.22,
-      "last_price_date": "2026-09-04",
+      "last_known_price": 222.49,
+      "last_price_date": "2026-09-08",
       "entry_commission": 2.67,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -183,32 +183,11 @@
       "lowest_low": 55.25,
       "atr_at_entry": 3.2283,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 62.65,
-      "last_price_date": "2026-09-04",
+      "last_known_price": 65.6,
+      "last_price_date": "2026-09-08",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
       "sector": "N/A"
-    },
-    {
-      "ticker": "HRB",
-      "signal_date": "2026-08-12",
-      "signal_price": 54.18,
-      "signal_strength": 1.0617,
-      "entry_date": "2026-08-13",
-      "open_price": 54.22,
-      "entry_price": 54.2742,
-      "shares": 165,
-      "stop_loss": 50.006,
-      "trail_stop": 49.368406,
-      "highest_high": 54.71,
-      "lowest_low": 48.63,
-      "atr_at_entry": 2.1341,
-      "R_at_backtest_end": 0.0,
-      "last_known_price": 49.06,
-      "last_price_date": "2026-09-04",
-      "entry_commission": 2.69,
-      "entry_regime": "BULL",
-      "sector": "Consumer Cyclical"
     },
     {
       "ticker": "HAE",
@@ -222,11 +201,11 @@
       "stop_loss": 98.197,
       "trail_stop": 100.560376,
       "highest_high": 109.5707,
-      "lowest_low": 101.39,
+      "lowest_low": 101.25,
       "atr_at_entry": 3.5541,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 102.92,
-      "last_price_date": "2026-09-04",
+      "last_known_price": 102.84,
+      "last_price_date": "2026-09-08",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -246,8 +225,8 @@
       "lowest_low": 145.98,
       "atr_at_entry": 4.0117,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 150.33,
-      "last_price_date": "2026-09-04",
+      "last_known_price": 148.46,
+      "last_price_date": "2026-09-08",
       "entry_commission": 2.63,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -264,11 +243,11 @@
       "stop_loss": 168.5328,
       "trail_stop": 167.971177,
       "highest_high": 175.8,
-      "lowest_low": 169.202,
+      "lowest_low": 166.94,
       "atr_at_entry": 2.9157,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 171.45,
-      "last_price_date": "2026-09-04",
+      "last_known_price": 167.13,
+      "last_price_date": "2026-09-08",
       "entry_commission": 1.31,
       "entry_regime": "BULL",
       "sector": "ETF"
@@ -288,8 +267,8 @@
       "lowest_low": 90.84,
       "atr_at_entry": 1.7297,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 93.82,
-      "last_price_date": "2026-09-04",
+      "last_known_price": 92.84,
+      "last_price_date": "2026-09-08",
       "entry_commission": 2.64,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -306,11 +285,11 @@
       "stop_loss": 32.5097,
       "trail_stop": 32.931665,
       "highest_high": 36.34,
-      "lowest_low": 34.58,
+      "lowest_low": 33.85,
       "atr_at_entry": 1.1225,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 35.19,
-      "last_price_date": "2026-09-04",
+      "last_known_price": 34.3,
+      "last_price_date": "2026-09-08",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -327,11 +306,11 @@
       "stop_loss": 49.4921,
       "trail_stop": 49.192636,
       "highest_high": 54.835,
-      "lowest_low": 50.86,
+      "lowest_low": 50.12,
       "atr_at_entry": 2.0107,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 51.9,
-      "last_price_date": "2026-09-04",
+      "last_known_price": 50.29,
+      "last_price_date": "2026-09-08",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -348,11 +327,11 @@
       "stop_loss": 28.0521,
       "trail_stop": 28.478269,
       "highest_high": 32.81,
-      "lowest_low": 30.337,
+      "lowest_low": 30.17,
       "atr_at_entry": 1.4594,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 31.35,
-      "last_price_date": "2026-09-04",
+      "last_known_price": 30.79,
+      "last_price_date": "2026-09-08",
       "entry_commission": 2.56,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -390,12 +369,33 @@
       "stop_loss": 664.0742,
       "trail_stop": 649.943355,
       "highest_high": 705.88,
-      "lowest_low": 685.48,
+      "lowest_low": 680.26,
       "atr_at_entry": 19.9395,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 693.53,
-      "last_price_date": "2026-09-04",
+      "last_known_price": 680.73,
+      "last_price_date": "2026-09-08",
       "entry_commission": 2.53,
+      "entry_regime": "BULL",
+      "sector": "Industrials"
+    },
+    {
+      "ticker": "CNH",
+      "signal_date": "2026-09-04",
+      "signal_price": 14.4,
+      "signal_strength": 1.0367,
+      "entry_date": "2026-09-08",
+      "open_price": 14.31,
+      "entry_price": 14.3243,
+      "shares": 298,
+      "stop_loss": 13.2607,
+      "trail_stop": 12.7289,
+      "highest_high": 14.3243,
+      "lowest_low": 13.55,
+      "atr_at_entry": 0.5318,
+      "R_at_backtest_end": 0.0,
+      "last_known_price": 13.6,
+      "last_price_date": "2026-09-08",
+      "entry_commission": 1.28,
       "entry_regime": "BULL",
       "sector": "Industrials"
     }
@@ -2187,6 +2187,36 @@
       "holding_days": 2,
       "entry_regime": "BULL",
       "exit_regime": "BULL"
+    },
+    {
+      "ticker": "HRB",
+      "signal_date": "2026-08-12",
+      "signal_price": 54.18,
+      "signal_strength": 1.0617,
+      "entry_date": "2026-08-13",
+      "exit_date": "2026-09-08",
+      "open_price": 54.22,
+      "entry_price": 54.2742,
+      "exit_open": 48.67,
+      "exit_price": 48.6213,
+      "shares": 165,
+      "stop_loss": 50.006,
+      "stop_used": 50.006,
+      "highest_high": 54.71,
+      "lowest_low": 48.63,
+      "atr_at_entry": 2.1341,
+      "stop_distance_pct": 0.078641,
+      "trail_stop_at_exit": 49.368406,
+      "atr_at_exit": 1.7805,
+      "exit_commission": 2.41,
+      "entry_commission": 2.69,
+      "pnl_r": -1.3244,
+      "net_pnl": -937.82,
+      "exit_reason": "stop_loss",
+      "detected_date": "2026-09-04",
+      "holding_days": 26,
+      "entry_regime": "BULL",
+      "exit_regime": "BULL"
     }
   ],
   "nav_history": [
@@ -2499,75 +2529,101 @@
       "nav": 170802.74,
       "regime": "BULL",
       "spy_close": 760.88
+    },
+    {
+      "date": "2026-09-08",
+      "nav": 168881.24,
+      "regime": "BULL",
+      "spy_close": 760.88
     }
   ],
   "pending_exits": [
     {
-      "ticker": "HRB",
+      "ticker": "DXCM",
+      "exit_reason": "trailing_stop",
+      "stop_used": 84.8168,
+      "shares": 104,
+      "open_price": 85.3,
+      "entry_price": 85.3853,
+      "entry_date": "2026-08-03",
+      "signal_date": "2026-07-31",
+      "signal_price": 83.45,
+      "signal_strength": 1.0543,
+      "stop_loss": 79.3291,
+      "atr_at_entry": 3.0281,
+      "highest_high": 92.59,
+      "lowest_low": 82.09,
+      "trail_stop_at_exit": 84.816839,
+      "atr_at_exit": 2.5911,
+      "detected_date": "2026-09-08",
+      "entry_commission": 2.66,
+      "entry_regime": "BULL"
+    },
+    {
+      "ticker": "EAT",
+      "exit_reason": "trailing_stop",
+      "stop_used": 228.4235,
+      "shares": 40,
+      "open_price": 222.12,
+      "entry_price": 222.3421,
+      "entry_date": "2026-08-04",
+      "signal_date": "2026-08-03",
+      "signal_price": 225.3,
+      "signal_strength": 1.0517,
+      "stop_loss": 206.3361,
+      "atr_at_entry": 8.003,
+      "highest_high": 254.99,
+      "lowest_low": 217.09,
+      "trail_stop_at_exit": 228.423487,
+      "atr_at_exit": 8.8555,
+      "detected_date": "2026-09-08",
+      "entry_commission": 2.67,
+      "entry_regime": "BULL"
+    },
+    {
+      "ticker": "XLV",
       "exit_reason": "stop_loss",
-      "stop_used": 50.006,
-      "shares": 165,
-      "open_price": 54.22,
-      "entry_price": 54.2742,
-      "entry_date": "2026-08-13",
-      "signal_date": "2026-08-12",
-      "signal_price": 54.18,
-      "signal_strength": 1.0617,
-      "stop_loss": 50.006,
-      "atr_at_entry": 2.1341,
-      "highest_high": 54.71,
-      "lowest_low": 48.63,
-      "trail_stop_at_exit": 49.368406,
-      "atr_at_exit": 1.7805,
-      "detected_date": "2026-09-04",
-      "entry_commission": 2.69,
+      "stop_used": 168.5328,
+      "shares": 25,
+      "open_price": 174.19,
+      "entry_price": 174.3642,
+      "entry_date": "2026-08-20",
+      "signal_date": "2026-08-19",
+      "signal_price": 175.68,
+      "signal_strength": 1.0316,
+      "stop_loss": 168.5328,
+      "atr_at_entry": 2.9157,
+      "highest_high": 175.8,
+      "lowest_low": 166.94,
+      "trail_stop_at_exit": 167.971177,
+      "atr_at_exit": 2.6096,
+      "detected_date": "2026-09-08",
+      "entry_commission": 1.31,
       "entry_regime": "BULL"
     }
   ],
   "pending_entries": [
     {
-      "ticker": "TARS",
-      "signal_date": "2026-09-04",
-      "signal_price": 90.78,
-      "stop_price": 83.7698,
-      "shares": 94,
-      "atr": 3.5051,
-      "signal_strength": 1.0649,
-      "trade_risk": 0.0039,
-      "notional": 8533.32
+      "ticker": "ROIV",
+      "signal_date": "2026-09-08",
+      "signal_price": 41.48,
+      "stop_price": 38.4088,
+      "shares": 204,
+      "atr": 1.5356,
+      "signal_strength": 1.0924,
+      "trade_risk": 0.0037,
+      "notional": 8461.92
     },
     {
-      "ticker": "CNH",
-      "signal_date": "2026-09-04",
-      "signal_price": 14.4,
-      "stop_price": 13.3364,
-      "shares": 297,
-      "atr": 0.5318,
-      "signal_strength": 1.0367,
-      "trade_risk": 0.0018,
-      "notional": 4276.8
-    },
-    {
-      "ticker": "DHT",
-      "signal_date": "2026-09-04",
-      "signal_price": 20.87,
-      "stop_price": 19.5427,
-      "shares": 409,
-      "atr": 0.6637,
-      "signal_strength": 1.0121,
-      "trade_risk": 0.0032,
-      "notional": 8535.83
-    },
-    {
-      "ticker": "ITGR",
-      "signal_date": "2026-09-04",
-      "signal_price": 126.5,
-      "stop_price": 123.6693,
-      "shares": 68,
-      "atr": 1.4154,
-      "signal_strength": 1.0029,
-      "trade_risk": 0.0011,
-      "notional": 8602.0
+      "ticker": "TECK",
+      "signal_date": "2026-09-08",
+      "signal_price": 71.97,
+      "stop_price": 67.462,
+      "shares": 117,
+      "atr": 2.254,
+      "signal_strength": 1.0006,
+      "trade_risk": 0.0031,
+      "notional": 8420.49
     }
   ],
   "signals_history": [
@@ -10423,128 +10479,228 @@
           "strength": 1.0029
         }
       ]
+    },
+    {
+      "date": "2026-09-08",
+      "regime": "BULL",
+      "spy_close": 760.88,
+      "n_candidates": 2,
+      "n_entries": 2,
+      "n_executed": 1,
+      "n_exits": 3,
+      "n_raw_breakouts": 2,
+      "n_heat_blocked": 0,
+      "n_cash_blocked": 0,
+      "n_corr_reduced": 0,
+      "n_price_filtered": 224,
+      "n_adv_filtered": 559,
+      "n_breakout_filtered": 1294,
+      "n_atr_filtered": 0,
+      "n_stop_dist_filtered": 2,
+      "n_volume_filtered": 5,
+      "spy_pct_above_sma200": 6.7833,
+      "exits_executed": [
+        {
+          "ticker": "HRB",
+          "shares": 165,
+          "exit_open": 48.67,
+          "exit_price": 48.6213,
+          "net_pnl": -937.82,
+          "pnl_r": -1.3244,
+          "exit_reason": "stop_loss"
+        }
+      ],
+      "entries_executed": [
+        {
+          "ticker": "CNH",
+          "signal_date": "2026-09-04",
+          "signal_price": 14.4,
+          "open_price": 14.31,
+          "entry_price": 14.3243,
+          "shares": 298,
+          "stop_price": 13.2607,
+          "trade_risk": 0.0019
+        }
+      ],
+      "exit_signals": [
+        {
+          "ticker": "DXCM",
+          "exit_reason": "trailing_stop",
+          "stop_used": 84.8168,
+          "shares": 104
+        },
+        {
+          "ticker": "EAT",
+          "exit_reason": "trailing_stop",
+          "stop_used": 228.4235,
+          "shares": 40
+        },
+        {
+          "ticker": "XLV",
+          "exit_reason": "stop_loss",
+          "stop_used": 168.5328,
+          "shares": 25
+        }
+      ],
+      "candidate_signals": [
+        {
+          "ticker": "ROIV",
+          "signal_price": 41.48,
+          "stop_price": 38.4088,
+          "shares": 204,
+          "trade_risk": 0.0037,
+          "strength": 1.0924,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.07404,
+          "atr_pct": 0.03702,
+          "adv60_m": 219.203,
+          "vol_ratio": 3.893
+        },
+        {
+          "ticker": "TECK",
+          "signal_price": 71.97,
+          "stop_price": 67.462,
+          "shares": 117,
+          "trade_risk": 0.0031,
+          "strength": 1.0006,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.062637,
+          "atr_pct": 0.031319,
+          "adv60_m": 196.871,
+          "vol_ratio": 1.7179
+        }
+      ],
+      "entry_signals": [
+        {
+          "ticker": "ROIV",
+          "signal_price": 41.48,
+          "stop_price": 38.4088,
+          "shares": 204,
+          "trade_risk": 0.0037,
+          "strength": 1.0924
+        },
+        {
+          "ticker": "TECK",
+          "signal_price": 71.97,
+          "stop_price": 67.462,
+          "shares": 117,
+          "trade_risk": 0.0031,
+          "strength": 1.0006
+        }
+      ]
     }
   ],
-  "last_update_utc": "2026-09-15T10:07:24Z",
+  "last_update_utc": "2026-09-15T10:14:11Z",
   "today_signals": {
-    "date": "2026-09-04",
+    "date": "2026-09-08",
     "regime": "BULL",
     "spy_close": 760.88,
-    "n_candidates": 4,
-    "n_entries": 4,
-    "n_executed": 0,
-    "n_exits": 1,
-    "n_raw_breakouts": 4,
+    "n_candidates": 2,
+    "n_entries": 2,
+    "n_executed": 1,
+    "n_exits": 3,
+    "n_raw_breakouts": 2,
     "n_heat_blocked": 0,
     "n_cash_blocked": 0,
-    "n_corr_reduced": 1,
-    "n_price_filtered": 221,
-    "n_adv_filtered": 562,
-    "n_breakout_filtered": 1289,
+    "n_corr_reduced": 0,
+    "n_price_filtered": 224,
+    "n_adv_filtered": 559,
+    "n_breakout_filtered": 1294,
     "n_atr_filtered": 0,
-    "n_stop_dist_filtered": 4,
-    "n_volume_filtered": 6,
+    "n_stop_dist_filtered": 2,
+    "n_volume_filtered": 5,
     "spy_pct_above_sma200": 6.7833,
-    "exits_executed": [],
-    "entries_executed": [],
-    "exit_signals": [
+    "exits_executed": [
       {
         "ticker": "HRB",
+        "shares": 165,
+        "exit_open": 48.67,
+        "exit_price": 48.6213,
+        "net_pnl": -937.82,
+        "pnl_r": -1.3244,
+        "exit_reason": "stop_loss"
+      }
+    ],
+    "entries_executed": [
+      {
+        "ticker": "CNH",
+        "signal_date": "2026-09-04",
+        "signal_price": 14.4,
+        "open_price": 14.31,
+        "entry_price": 14.3243,
+        "shares": 298,
+        "stop_price": 13.2607,
+        "trade_risk": 0.0019
+      }
+    ],
+    "exit_signals": [
+      {
+        "ticker": "DXCM",
+        "exit_reason": "trailing_stop",
+        "stop_used": 84.8168,
+        "shares": 104
+      },
+      {
+        "ticker": "EAT",
+        "exit_reason": "trailing_stop",
+        "stop_used": 228.4235,
+        "shares": 40
+      },
+      {
+        "ticker": "XLV",
         "exit_reason": "stop_loss",
-        "stop_used": 50.006,
-        "shares": 165
+        "stop_used": 168.5328,
+        "shares": 25
       }
     ],
     "candidate_signals": [
       {
-        "ticker": "TARS",
-        "signal_price": 90.78,
-        "stop_price": 83.7698,
-        "shares": 94,
-        "trade_risk": 0.0039,
-        "strength": 1.0649,
+        "ticker": "ROIV",
+        "signal_price": 41.48,
+        "stop_price": 38.4088,
+        "shares": 204,
+        "trade_risk": 0.0037,
+        "strength": 1.0924,
         "rejection": null,
         "corr_with": null,
-        "stop_distance_pct": 0.077222,
-        "atr_pct": 0.038611,
-        "adv60_m": 63.175,
-        "vol_ratio": 1.6274
+        "stop_distance_pct": 0.07404,
+        "atr_pct": 0.03702,
+        "adv60_m": 219.203,
+        "vol_ratio": 3.893
       },
       {
-        "ticker": "CNH",
-        "signal_price": 14.4,
-        "stop_price": 13.3364,
-        "shares": 297,
-        "trade_risk": 0.0018,
-        "strength": 1.0367,
-        "rejection": "corr_reduced",
-        "corr_with": "DE",
-        "stop_distance_pct": 0.07386,
-        "atr_pct": 0.03693,
-        "adv60_m": 180.577,
-        "vol_ratio": 1.6216
-      },
-      {
-        "ticker": "DHT",
-        "signal_price": 20.87,
-        "stop_price": 19.5427,
-        "shares": 409,
-        "trade_risk": 0.0032,
-        "strength": 1.0121,
+        "ticker": "TECK",
+        "signal_price": 71.97,
+        "stop_price": 67.462,
+        "shares": 117,
+        "trade_risk": 0.0031,
+        "strength": 1.0006,
         "rejection": null,
         "corr_with": null,
-        "stop_distance_pct": 0.0636,
-        "atr_pct": 0.0318,
-        "adv60_m": 62.252,
-        "vol_ratio": 1.5568
-      },
-      {
-        "ticker": "ITGR",
-        "signal_price": 126.5,
-        "stop_price": 123.6693,
-        "shares": 68,
-        "trade_risk": 0.0011,
-        "strength": 1.0029,
-        "rejection": null,
-        "corr_with": null,
-        "stop_distance_pct": 0.022377,
-        "atr_pct": 0.011189,
-        "adv60_m": 105.548,
-        "vol_ratio": 1.7686
+        "stop_distance_pct": 0.062637,
+        "atr_pct": 0.031319,
+        "adv60_m": 196.871,
+        "vol_ratio": 1.7179
       }
     ],
     "entry_signals": [
       {
-        "ticker": "TARS",
-        "signal_price": 90.78,
-        "stop_price": 83.7698,
-        "shares": 94,
-        "trade_risk": 0.0039,
-        "strength": 1.0649
+        "ticker": "ROIV",
+        "signal_price": 41.48,
+        "stop_price": 38.4088,
+        "shares": 204,
+        "trade_risk": 0.0037,
+        "strength": 1.0924
       },
       {
-        "ticker": "CNH",
-        "signal_price": 14.4,
-        "stop_price": 13.3364,
-        "shares": 297,
-        "trade_risk": 0.0018,
-        "strength": 1.0367
-      },
-      {
-        "ticker": "DHT",
-        "signal_price": 20.87,
-        "stop_price": 19.5427,
-        "shares": 409,
-        "trade_risk": 0.0032,
-        "strength": 1.0121
-      },
-      {
-        "ticker": "ITGR",
-        "signal_price": 126.5,
-        "stop_price": 123.6693,
-        "shares": 68,
-        "trade_risk": 0.0011,
-        "strength": 1.0029
+        "ticker": "TECK",
+        "signal_price": 71.97,
+        "stop_price": 67.462,
+        "shares": 117,
+        "trade_risk": 0.0031,
+        "strength": 1.0006
       }
     ]
   },
@@ -10554,7 +10710,7 @@
   "last_download_stats": {
     "downloaded_count": 2107,
     "total_scanned": 2107,
-    "updated_utc": "2026-09-15T10:07:23Z"
+    "updated_utc": "2026-09-15T10:14:10Z"
   },
   "universe_stats": {
     "tiingo_eligible": 2163,
@@ -10562,7 +10718,7 @@
     "yf_unavailable_in_pool": 56,
     "total_active": 3037,
     "total_delisted": 1440,
-    "updated_utc": "2026-09-15T10:07:33Z"
+    "updated_utc": "2026-09-15T10:14:19Z"
   },
   "yf_persistent_unavailable": [
     "ACOM",
@@ -10648,38 +10804,52 @@
   ],
   "tiingo_universe_synced_utc": "2026-09-15T00:55:58Z",
   "daily_summary": {
-    "date": "2026-09-05",
-    "updated_sgt": "2026-09-15 18:08 SGT",
-    "nav_change_pct": null,
-    "spy_change_pct": null,
-    "vs_spy_pct": null,
+    "date": "2026-09-08",
+    "updated_sgt": "2026-09-15 18:14 SGT",
+    "nav_change_pct": -1.12,
+    "spy_change_pct": 0.0,
+    "vs_spy_pct": -1.12,
     "bullets": [
-      "📊 2026-09-05 收盘数据尚未获取到，正在持续重试，获取成功后将自动更新。"
+      "Box（BOX）虽然获得了媒体和分析师的看好，但这类长期被市场忽视的个股往往在突破初期面临获利回吐压力，导致今日跌幅达-2.5%成为拉低科技板块的重要因素。（[After Years of Sideways Trad…](https://finance.yahoo.com/markets/stocks/articles/years-sideways-trading-jim-cramer-191022823.html)、[Box CEO Aaron Levie Says 'Be…](https://finance.yahoo.com/technology/ai/articles/box-ceo-aaron-levie-says-180030274.html)）",
+      "策略重仓的Data Transfer（DT）跌幅-3.1%，结合DXCM的-3.8%和EAT的-3.4%等多只持仓的同步下跌，表明市场今日面临的是系统性的风险厌恶情绪，而非科技基本面恶化，这导致了科技敏感型策略相对大盘跑输。（[After Years of Sideways Trad…](https://finance.yahoo.com/markets/stocks/articles/years-sideways-trading-jim-cramer-191022823.html)、[Box CEO Aaron Levie Says 'Be…](https://finance.yahoo.com/technology/ai/articles/box-ceo-aaron-levie-says-180030274.html)、[Palantir Stock Continues to …](https://www.barchart.com/story/news/4500766/palantir-stock-continues-to-grow-on-the-back-of-enterprise-partnerships)）",
+      "尽管Palantir（PLTR）因企业合作扩展而获得支撑，但这一正面信号未能抵消DXCM、DT、BOX等核心科技持仓的跌势，说明今日市场对科技股的乐观预期存在结构性分歧。（[Palantir Stock Continues to …](https://www.barchart.com/story/news/4500766/palantir-stock-continues-to-grow-on-the-back-of-enterprise-partnerships)）",
+      "策略净值-1.12%相对SPY +0.00%产生-1.12%的偏差，主要源于Technology板块持仓（BOX -2.5%、DT -3.1%）与Consumer Cyclical持仓（EAT -3.4%、LTH -1.8%）的集中亏损，而小额头寸TXG的+4.7%涨幅未能有效对冲这些跌幅。（[After Years of Sideways Trad…](https://finance.yahoo.com/markets/stocks/articles/years-sideways-trading-jim-cramer-191022823.html)、[Box CEO Aaron Levie Says 'Be…](https://finance.yahoo.com/technology/ai/articles/box-ceo-aaron-levie-says-180030274.html)、[Palantir Stock Continues to …](https://www.barchart.com/story/news/4500766/palantir-stock-continues-to-grow-on-the-back-of-enterprise-partnerships)）"
     ],
-    "news": [],
-    "data_pending": true
+    "news": [
+      {
+        "title": "After Years of Sideways Trading, Jim Cramer Sees New Life in Box, Inc. (BOX)",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/years-sideways-trading-jim-cramer-191022823.html"
+      },
+      {
+        "title": "Box CEO Aaron Levie Says 'Best Opportunities' In AI are Products That are 'Barely Only Possible' Today",
+        "url": "https://finance.yahoo.com/technology/ai/articles/box-ceo-aaron-levie-says-180030274.html"
+      },
+      {
+        "title": "Palantir Stock Continues to Grow on the Back of Enterprise Partnerships",
+        "url": "https://www.barchart.com/story/news/4500766/palantir-stock-continues-to-grow-on-the-back-of-enterprise-partnerships"
+      },
+      {
+        "title": "Why Did DELL, VOD, ZETA Stocks Surge To 52-Week Highs Last Week?",
+        "url": "https://stocktwits.com/news-articles/markets/equity/why-did-dell-vod-zeta-stocks-surge-to-52-week-highs-last-week/cZt3Sp3RJxr"
+      }
+    ]
   },
   "last_no_op_utc": "2026-09-15T10:08:56Z",
   "download_log": {
-    "date": "2026-09-05",
+    "date": "2026-09-08",
     "attempts": [
       {
-        "time_sgt": "2026-09-15 18:08 SGT",
-        "type": "main_probe",
-        "status": "no_data",
-        "success": 0,
+        "time_sgt": "2026-09-15 18:14 SGT",
+        "type": "main_download",
+        "status": "success",
+        "total": 2107,
+        "success": 2107,
+        "cumulative_success": 2107,
         "failed": 0,
-        "attempt": 1,
-        "next_retry_sgt": "2026-09-15 18:30 SGT",
+        "next_retry_sgt": null,
         "seq": 1
       }
     ],
     "holiday": null
-  },
-  "no_data_probe": {
-    "date": "2026-09-05",
-    "attempt": 2,
-    "next_retry_utc": "2026-09-15T10:30:00Z",
-    "next_retry_sgt": "2026-09-15 18:30 SGT"
   }
 }
