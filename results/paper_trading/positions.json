@@ -4,8 +4,8 @@
   "start_date": "2026-06-19",
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
-  "last_update_date": "2026-09-15",
-  "cash": 108.73246114278957,
+  "last_update_date": "2026-09-16",
+  "cash": 2434.648666988279,
   "positions": [
     {
       "ticker": "LTH",
@@ -14,8 +14,8 @@
       "shares": 270,
       "atr_at_entry": 1.2762,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 41.47,
-      "last_price_date": "2026-09-15",
+      "last_known_price": 40.73,
+      "last_price_date": "2026-09-16",
       "stop_loss": 34.3677,
       "trail_stop": 40.891788,
       "highest_high": 47.235,
@@ -41,27 +41,6 @@
       "entry_commission": 3.03,
       "lowest_low": 132.695,
       "sector": "Healthcare"
-    },
-    {
-      "ticker": "CAKE",
-      "signal_date": "2026-07-10",
-      "signal_price": 82.76,
-      "signal_strength": 1.0226,
-      "entry_date": "2026-07-14",
-      "open_price": 82.49,
-      "entry_price": 82.5725,
-      "shares": 111,
-      "stop_loss": 77.2839,
-      "trail_stop": 100.806251,
-      "highest_high": 118.46,
-      "lowest_low": 79.585,
-      "atr_at_entry": 2.6443,
-      "R_at_backtest_end": 0.0,
-      "last_known_price": 96.73,
-      "last_price_date": "2026-09-15",
-      "entry_commission": 2.75,
-      "entry_regime": "BULL",
-      "sector": "Consumer Cyclical"
     },
     {
       "ticker": "GTLS",
@@ -115,13 +94,13 @@
       "entry_price": 58.5585,
       "shares": 153,
       "stop_loss": 52.1019,
-      "trail_stop": 64.408509,
-      "highest_high": 75.61,
+      "trail_stop": 66.264086,
+      "highest_high": 77.87,
       "lowest_low": 55.25,
       "atr_at_entry": 3.2283,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 74.39,
-      "last_price_date": "2026-09-15",
+      "last_known_price": 72.68,
+      "last_price_date": "2026-09-16",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -136,13 +115,13 @@
       "entry_price": 105.3052,
       "shares": 83,
       "stop_loss": 98.197,
-      "trail_stop": 100.560376,
+      "trail_stop": 100.621607,
       "highest_high": 109.5707,
       "lowest_low": 100.53,
       "atr_at_entry": 3.5541,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 106.2,
-      "last_price_date": "2026-09-15",
+      "last_known_price": 106.24,
+      "last_price_date": "2026-09-16",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -162,8 +141,8 @@
       "lowest_low": 90.84,
       "atr_at_entry": 1.7297,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 93.28,
-      "last_price_date": "2026-09-15",
+      "last_known_price": 92.96,
+      "last_price_date": "2026-09-16",
       "entry_commission": 2.64,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -178,13 +157,13 @@
       "entry_price": 34.7547,
       "shares": 251,
       "stop_loss": 32.5097,
-      "trail_stop": 32.971582,
+      "trail_stop": 32.981153,
       "highest_high": 36.34,
       "lowest_low": 33.65,
       "atr_at_entry": 1.1225,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 34.8,
-      "last_price_date": "2026-09-15",
+      "last_known_price": 34.66,
+      "last_price_date": "2026-09-16",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -199,13 +178,13 @@
       "entry_price": 53.5135,
       "shares": 163,
       "stop_loss": 49.4921,
-      "trail_stop": 49.681755,
-      "highest_high": 55.45,
+      "trail_stop": 50.070165,
+      "highest_high": 55.76,
       "lowest_low": 49.56,
       "atr_at_entry": 2.0107,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 55.17,
-      "last_price_date": "2026-09-15",
+      "last_known_price": 55.19,
+      "last_price_date": "2026-09-16",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -220,13 +199,13 @@
       "entry_price": 30.9709,
       "shares": 275,
       "stop_loss": 28.0521,
-      "trail_stop": 28.478269,
+      "trail_stop": 28.523511,
       "highest_high": 32.81,
       "lowest_low": 29.68,
       "atr_at_entry": 1.4594,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 31.04,
-      "last_price_date": "2026-09-15",
+      "last_known_price": 30.85,
+      "last_price_date": "2026-09-16",
       "entry_commission": 2.56,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -264,11 +243,11 @@
       "stop_loss": 664.0742,
       "trail_stop": 651.423187,
       "highest_high": 705.88,
-      "lowest_low": 668.0,
+      "lowest_low": 665.45,
       "atr_at_entry": 19.9395,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 684.04,
-      "last_price_date": "2026-09-15",
+      "last_known_price": 669.47,
+      "last_price_date": "2026-09-16",
       "entry_commission": 2.53,
       "entry_regime": "BULL",
       "sector": "Industrials"
@@ -288,8 +267,8 @@
       "lowest_low": 13.28,
       "atr_at_entry": 0.5318,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 14.0,
-      "last_price_date": "2026-09-15",
+      "last_known_price": 13.52,
+      "last_price_date": "2026-09-16",
       "entry_commission": 1.28,
       "entry_regime": "BULL",
       "sector": "Industrials"
@@ -306,11 +285,11 @@
       "stop_loss": 38.3602,
       "trail_stop": 37.791165,
       "highest_high": 42.275,
-      "lowest_low": 39.215,
+      "lowest_low": 39.165,
       "atr_at_entry": 1.5356,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 39.5,
-      "last_price_date": "2026-09-15",
+      "last_known_price": 39.57,
+      "last_price_date": "2026-09-16",
       "entry_commission": 2.54,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -325,13 +304,13 @@
       "entry_price": 48.098,
       "shares": 173,
       "stop_loss": 45.0314,
-      "trail_stop": 48.195246,
-      "highest_high": 52.94,
+      "trail_stop": 49.717484,
+      "highest_high": 54.69,
       "lowest_low": 48.03,
       "atr_at_entry": 1.5333,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 51.59,
-      "last_price_date": "2026-09-15",
+      "last_known_price": 53.67,
+      "last_price_date": "2026-09-16",
       "entry_commission": 2.5,
       "entry_regime": "BULL",
       "sector": "Energy"
@@ -346,13 +325,13 @@
       "entry_price": 35.1551,
       "shares": 238,
       "stop_loss": 32.1337,
-      "trail_stop": 30.623,
+      "trail_stop": 30.631796,
       "highest_high": 35.19,
-      "lowest_low": 33.37,
+      "lowest_low": 32.65,
       "atr_at_entry": 1.5107,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 33.82,
-      "last_price_date": "2026-09-15",
+      "last_known_price": 32.7,
+      "last_price_date": "2026-09-16",
       "entry_commission": 2.51,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -367,13 +346,13 @@
       "entry_price": 22.1621,
       "shares": 189,
       "stop_loss": 20.8287,
-      "trail_stop": 20.780382,
-      "highest_high": 22.82,
+      "trail_stop": 21.322862,
+      "highest_high": 23.46,
       "lowest_low": 21.55,
       "atr_at_entry": 0.6667,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 22.14,
-      "last_price_date": "2026-09-15",
+      "last_known_price": 23.04,
+      "last_price_date": "2026-09-16",
       "entry_commission": 1.26,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -388,13 +367,13 @@
       "entry_price": 183.3832,
       "shares": 46,
       "stop_loss": 165.1428,
-      "trail_stop": 164.648948,
+      "trail_stop": 165.109996,
       "highest_high": 191.99,
       "lowest_low": 183.0,
       "atr_at_entry": 9.1202,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 190.45,
-      "last_price_date": "2026-09-15",
+      "last_known_price": 188.12,
+      "last_price_date": "2026-09-16",
       "entry_commission": 2.53,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -409,16 +388,37 @@
       "entry_price": 233.233,
       "shares": 18,
       "stop_loss": 208.971,
-      "trail_stop": 207.626155,
-      "highest_high": 243.98,
+      "trail_stop": 209.222852,
+      "highest_high": 245.19,
       "lowest_low": 232.11,
       "atr_at_entry": 12.131,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 242.49,
-      "last_price_date": "2026-09-15",
+      "last_known_price": 241.36,
+      "last_price_date": "2026-09-16",
       "entry_commission": 1.26,
       "entry_regime": "BULL",
       "sector": "Technology"
+    },
+    {
+      "ticker": "RVTY",
+      "signal_date": "2026-09-15",
+      "signal_price": 140.19,
+      "signal_strength": 1.0541,
+      "entry_date": "2026-09-16",
+      "open_price": 140.88,
+      "entry_price": 141.0209,
+      "shares": 60,
+      "stop_loss": 132.4643,
+      "trail_stop": 134.210342,
+      "highest_high": 147.5,
+      "lowest_low": 140.2,
+      "atr_at_entry": 4.2783,
+      "R_at_backtest_end": 0.0,
+      "last_known_price": 145.73,
+      "last_price_date": "2026-09-16",
+      "entry_commission": 2.54,
+      "entry_regime": "BULL",
+      "sector": "Healthcare"
     }
   ],
   "closed_trades": [
@@ -2448,6 +2448,36 @@
       "holding_days": 4,
       "entry_regime": "BULL",
       "exit_regime": "BULL"
+    },
+    {
+      "ticker": "CAKE",
+      "signal_date": "2026-07-10",
+      "signal_price": 82.76,
+      "signal_strength": 1.0226,
+      "entry_date": "2026-07-14",
+      "exit_date": "2026-09-16",
+      "open_price": 82.49,
+      "entry_price": 82.5725,
+      "exit_open": 97.35,
+      "exit_price": 97.2526,
+      "shares": 111,
+      "stop_loss": 77.2839,
+      "stop_used": 100.8063,
+      "highest_high": 118.46,
+      "lowest_low": 79.585,
+      "atr_at_entry": 2.6443,
+      "stop_distance_pct": 0.064048,
+      "trail_stop_at_exit": 100.806251,
+      "atr_at_exit": 3.9292,
+      "exit_commission": 3.24,
+      "entry_commission": 2.75,
+      "pnl_r": 2.7758,
+      "net_pnl": 1623.51,
+      "exit_reason": "trailing_stop",
+      "detected_date": "2026-09-15",
+      "holding_days": 64,
+      "entry_regime": "BULL",
+      "exit_regime": "BULL"
     }
   ],
   "nav_history": [
@@ -2796,44 +2826,38 @@
       "nav": 169309.45,
       "regime": "BULL",
       "spy_close": 757.39
+    },
+    {
+      "date": "2026-09-16",
+      "nav": 168901.76,
+      "regime": "BULL",
+      "spy_close": 754.05
     }
   ],
   "pending_exits": [
     {
-      "ticker": "CAKE",
+      "ticker": "LTH",
       "exit_reason": "trailing_stop",
-      "stop_used": 100.8063,
-      "shares": 111,
-      "open_price": 82.49,
-      "entry_price": 82.5725,
-      "entry_date": "2026-07-14",
-      "signal_date": "2026-07-10",
-      "signal_price": 82.76,
-      "signal_strength": 1.0226,
-      "stop_loss": 77.2839,
-      "atr_at_entry": 2.6443,
-      "highest_high": 118.46,
-      "lowest_low": 79.585,
-      "trail_stop_at_exit": 100.806251,
-      "atr_at_exit": 3.9292,
-      "detected_date": "2026-09-15",
-      "entry_commission": 2.75,
-      "entry_regime": "BULL"
+      "stop_used": 40.8918,
+      "shares": 270,
+      "open_price": 36.92,
+      "entry_price": 36.92,
+      "entry_date": "2026-06-19",
+      "signal_date": "",
+      "signal_price": 0.0,
+      "signal_strength": 0.0,
+      "stop_loss": 34.3677,
+      "atr_at_entry": 1.2762,
+      "highest_high": 47.235,
+      "lowest_low": 36.92,
+      "trail_stop_at_exit": 40.891788,
+      "atr_at_exit": 1.2885,
+      "detected_date": "2026-09-16",
+      "entry_commission": 0.0,
+      "entry_regime": ""
     }
   ],
-  "pending_entries": [
-    {
-      "ticker": "RVTY",
-      "signal_date": "2026-09-15",
-      "signal_price": 140.19,
-      "stop_price": 131.6334,
-      "shares": 60,
-      "atr": 4.2783,
-      "signal_strength": 1.0541,
-      "trade_risk": 0.003,
-      "notional": 8411.4
-    }
-  ],
+  "pending_entries": [],
   "signals_history": [
     {
       "date": "2026-06-22",
@@ -11312,103 +11336,122 @@
           "strength": 1.0541
         }
       ]
+    },
+    {
+      "date": "2026-09-16",
+      "regime": "BULL",
+      "spy_close": 754.05,
+      "n_candidates": 0,
+      "n_entries": 0,
+      "n_executed": 1,
+      "n_exits": 1,
+      "n_raw_breakouts": 0,
+      "n_heat_blocked": 0,
+      "n_cash_blocked": 0,
+      "n_corr_reduced": 0,
+      "n_price_filtered": 231,
+      "n_adv_filtered": 578,
+      "n_breakout_filtered": 1270,
+      "n_atr_filtered": 0,
+      "n_stop_dist_filtered": 1,
+      "n_volume_filtered": 5,
+      "spy_pct_above_sma200": 5.7002,
+      "exits_executed": [
+        {
+          "ticker": "CAKE",
+          "shares": 111,
+          "exit_open": 97.35,
+          "exit_price": 97.2526,
+          "net_pnl": 1623.51,
+          "pnl_r": 2.7758,
+          "exit_reason": "trailing_stop"
+        }
+      ],
+      "entries_executed": [
+        {
+          "ticker": "RVTY",
+          "signal_date": "2026-09-15",
+          "signal_price": 140.19,
+          "open_price": 140.88,
+          "entry_price": 141.0209,
+          "shares": 60,
+          "stop_price": 132.4643,
+          "trade_risk": 0.003
+        }
+      ],
+      "exit_signals": [
+        {
+          "ticker": "LTH",
+          "exit_reason": "trailing_stop",
+          "stop_used": 40.8918,
+          "shares": 270
+        }
+      ],
+      "candidate_signals": [],
+      "entry_signals": []
     }
   ],
-  "last_update_utc": "2026-09-16T09:47:27Z",
+  "last_update_utc": "2026-09-17T09:55:15Z",
   "today_signals": {
-    "date": "2026-09-15",
+    "date": "2026-09-16",
     "regime": "BULL",
-    "spy_close": 757.39,
-    "n_candidates": 1,
-    "n_entries": 1,
-    "n_executed": 2,
+    "spy_close": 754.05,
+    "n_candidates": 0,
+    "n_entries": 0,
+    "n_executed": 1,
     "n_exits": 1,
-    "n_raw_breakouts": 1,
+    "n_raw_breakouts": 0,
     "n_heat_blocked": 0,
     "n_cash_blocked": 0,
     "n_corr_reduced": 0,
     "n_price_filtered": 231,
-    "n_adv_filtered": 577,
-    "n_breakout_filtered": 1257,
+    "n_adv_filtered": 578,
+    "n_breakout_filtered": 1270,
     "n_atr_filtered": 0,
-    "n_stop_dist_filtered": 3,
-    "n_volume_filtered": 23,
-    "spy_pct_above_sma200": 6.2279,
+    "n_stop_dist_filtered": 1,
+    "n_volume_filtered": 5,
+    "spy_pct_above_sma200": 5.7002,
     "exits_executed": [
       {
-        "ticker": "QRVO",
-        "shares": 74,
-        "exit_open": 108.4,
-        "exit_price": 108.2916,
-        "net_pnl": -349.47,
-        "pnl_r": -0.7,
+        "ticker": "CAKE",
+        "shares": 111,
+        "exit_open": 97.35,
+        "exit_price": 97.2526,
+        "net_pnl": 1623.51,
+        "pnl_r": 2.7758,
         "exit_reason": "trailing_stop"
       }
     ],
     "entries_executed": [
       {
-        "ticker": "OKTA",
-        "signal_date": "2026-09-14",
-        "signal_price": 186.45,
-        "open_price": 183.2,
-        "entry_price": 183.3832,
-        "shares": 46,
-        "stop_price": 165.1428,
-        "trade_risk": 0.005
-      },
-      {
-        "ticker": "CRWD",
-        "signal_date": "2026-09-14",
-        "signal_price": 235.38,
-        "open_price": 233.0,
-        "entry_price": 233.233,
-        "shares": 18,
-        "stop_price": 208.971,
-        "trade_risk": 0.0026
+        "ticker": "RVTY",
+        "signal_date": "2026-09-15",
+        "signal_price": 140.19,
+        "open_price": 140.88,
+        "entry_price": 141.0209,
+        "shares": 60,
+        "stop_price": 132.4643,
+        "trade_risk": 0.003
       }
     ],
     "exit_signals": [
       {
-        "ticker": "CAKE",
+        "ticker": "LTH",
         "exit_reason": "trailing_stop",
-        "stop_used": 100.8063,
-        "shares": 111
+        "stop_used": 40.8918,
+        "shares": 270
       }
     ],
-    "candidate_signals": [
-      {
-        "ticker": "RVTY",
-        "signal_price": 140.19,
-        "stop_price": 131.6334,
-        "shares": 60,
-        "trade_risk": 0.003,
-        "strength": 1.0541,
-        "rejection": null,
-        "corr_with": null,
-        "stop_distance_pct": 0.061036,
-        "atr_pct": 0.030518,
-        "adv60_m": 182.517,
-        "vol_ratio": 2.3579
-      }
-    ],
-    "entry_signals": [
-      {
-        "ticker": "RVTY",
-        "signal_price": 140.19,
-        "stop_price": 131.6334,
-        "shares": 60,
-        "trade_risk": 0.003,
-        "strength": 1.0541
-      }
-    ]
+    "candidate_signals": [],
+    "entry_signals": []
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
+  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
-    "downloaded_count": 2113,
-    "total_scanned": 2113,
-    "updated_utc": "2026-09-16T09:47:25Z"
+    "downloaded_count": 2106,
+    "total_scanned": 2106,
+    "updated_utc": "2026-09-17T09:55:13Z"
   },
   "universe_stats": {
     "tiingo_eligible": 2162,
@@ -11416,7 +11459,7 @@
     "yf_unavailable_in_pool": 56,
     "total_active": 3038,
     "total_delisted": 1439,
-    "updated_utc": "2026-09-17T00:53:39Z"
+    "updated_utc": "2026-09-17T09:55:22Z"
   },
   "yf_persistent_unavailable": [
     "AGR",
@@ -11500,39 +11543,51 @@
   ],
   "tiingo_universe_synced_utc": "2026-09-17T00:53:39Z",
   "daily_summary": {
-    "date": "2026-09-15",
-    "updated_sgt": "2026-09-16 17:47 SGT",
-    "nav_change_pct": 0.29,
-    "spy_change_pct": -0.46,
-    "vs_spy_pct": 0.75,
+    "date": "2026-09-16",
+    "updated_sgt": "2026-09-17 17:55 SGT",
+    "nav_change_pct": -0.24,
+    "spy_change_pct": -0.44,
+    "vs_spy_pct": 0.2,
     "bullets": [
-      "\u4e2d\u4e1c\u5730\u7f18\u653f\u6cbb\u5c40\u52bf\u5bfc\u81f4\u7684\u6d77\u8fd0\u4e2d\u65ad\u63a8\u9ad8\u4e86\u6cb9\u8f6e\u8fd0\u8d39\uff0c\u4f7f\u5f97\u6d77\u8fd0\u548c\u80fd\u6e90\u677f\u5757\u53d7\u76ca\uff0c\u8fd9\u6210\u4e3a\u5e02\u573a\u76f8\u5bf9\u5f3a\u52bf\u7684\u5c11\u6570\u4eae\u70b9\uff0c\u62b5\u6d88\u4e86\u6d88\u8d39\u7c7b\u4e2a\u80a1\u7684\u5927\u5e45\u4e0b\u8dcc\u3002\uff08[The Zacks Analyst Blog Highl\u2026](https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-bwet-145100293.html)\uff09",
-      "\u7b56\u7565\u5728\u6d88\u8d39\u7c7b\u677f\u5757\u7684\u91cd\u4ed3CAKE\uff08-8.0%\uff0c\u8d1f\u8d21\u732e$-937\uff09\u548c\u533b\u7597\u677f\u5757\u7684ROIV\uff08-3.7%\uff0c\u8d1f\u8d21\u732e$-310\uff09\u906d\u9047\u8f83\u5927\u8dcc\u5e45\uff0c\u4f46\u901a\u8fc7\u5728\u8fd0\u8f93\u80fd\u6e90\u76f8\u5173\u6807\u7684\u7684\u914d\u7f6e\uff08\u5982FRO +2.1%\u8d21\u732e$+185\uff09\u548c\u79d1\u6280\u7c7b\u6301\u4ed3DT\uff08+3.4%\u8d21\u732e$+298\uff09\u3001TXG\uff08+6.1%\u8d21\u732e$+655\uff09\u7684\u5f3a\u52bf\u8868\u73b0\u5b9e\u73b0\u4e86\u51c0\u503c\u6b63\u589e\u957f\u3002\uff08[The Zacks Analyst Blog Highl\u2026](https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-bwet-145100293.html)\uff09",
-      "\u7b56\u7565\u5728N/A\u677f\u5757\u7684TXG\u6301\u4ed3\u5f55\u5f97+6.1%\u7684\u6da8\u5e45\uff08\u8d21\u732e$+655\uff09\uff0c\u800c\u540c\u671fSPY\u4e0b\u8dcc-0.46%\uff0c\u8fd9\u8bf4\u660e\u7b56\u7565\u901a\u8fc7\u5dee\u5f02\u5316\u7684\u677f\u5757\u914d\u7f6e\u2014\u2014\u5c24\u5176\u662f\u5bf9\u6d77\u8fd0\u3001\u80fd\u6e90\u548c\u7279\u5b9a\u79d1\u6280\u4e2a\u80a1\u7684\u91cd\u4ed3\u2014\u2014\u6210\u529f\u89c4\u907f\u4e86\u5927\u76d8\u4e0b\u8dcc\u98ce\u9669\u5e76\u5b9e\u73b0\u4e86\u8d85\u989d\u6536\u76ca\u3002\uff08[Cathie Wood Makes Striking S\u2026](https://finance.yahoo.com/technology/ai/articles/cathie-wood-makes-striking-switch-121942854.html)\u3001[The Zacks Analyst Blog Highl\u2026](https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-bwet-145100293.html)\uff09",
-      "\u5e02\u573a\u4e2dCathie Wood\u7b49\u673a\u6784\u6295\u8d44\u8005\u7684\u7b56\u7565\u8c03\u6574\u53ef\u80fd\u6d89\u53caAI\u7b49\u79d1\u6280\u5de8\u5934\u7684\u8f6e\u6362\uff0c\u8fd9\u4e0e\u7b56\u7565\u7684DT\u548cTXG\u7b49\u79d1\u6280\u6301\u4ed3\u4e0a\u6da8\u65b9\u5411\u4e00\u81f4\uff0c\u53cd\u6620\u51fa\u677f\u5757\u5185\u90e8\u5b58\u5728\u7ed3\u6784\u6027\u7684\u673a\u4f1a\u91cd\u914d\u3002\uff08[Cathie Wood Makes Striking S\u2026](https://finance.yahoo.com/technology/ai/articles/cathie-wood-makes-striking-switch-121942854.html)\uff09"
+      "中东地缘政治紧张局势推高了原油价格和油轮运费，这为能源板块尤其是海运油轮类公司（如FRO +4.0%、DHT +4.1%）带来了上行支撑，抵消了大盘下跌的拖累。（[Oil Surges, Tanker Rates Soa…](https://finance.yahoo.com/energy/articles/oil-surges-tanker-rates-soar-195500447.html)）",
+      "策略的Energy板块重仓在今日获得了来自油价上涨的结构性支撑，使得能源类标的如FRO和DHT分别上涨4.0%和4.1%，累计贡献净值+$530，从而让整体策略跌幅（-0.24%）好于SPY大盘（-0.44%），形成了+0.20%的正偏差。（[Oil Surges, Tanker Rates Soa…](https://finance.yahoo.com/energy/articles/oil-surges-tanker-rates-soar-195500447.html)）",
+      "尽管期权交易者在大幅押注能源板块未来一个月将下跌12%，反映出对宏观面的担忧，但这种悲观预期尚未在今日股价上充分体现，原油价格和油运基本面的强劲反而压过了这种技术性看空情绪。（[Futures Traders Betting On 1…](https://247wallst.com/investing/2026/09/16/futures-traders-betting-on-12-drop-in-energy-stocks-over-next-month/)）",
+      "策略持仓中非能源板块标的（HPQ -3.3%、TXG -2.3%、CNH -3.4%、DE -2.1%）的跌幅普遍超过大盘，但被FRO和DHT的强劲涨幅所弥补，最终使策略表现超越了同样下跌的SPY。（[Sector Update: Energy Stocks…](https://finance.yahoo.com/energy/articles/sector-energy-stocks-fall-afternoon-200001097.html)、[Oil Surges, Tanker Rates Soa…](https://finance.yahoo.com/energy/articles/oil-surges-tanker-rates-soar-195500447.html)）"
     ],
     "news": [
       {
-        "title": "Cathie Wood Makes Striking Switch Between AI Stock Giants",
-        "url": "https://finance.yahoo.com/technology/ai/articles/cathie-wood-makes-striking-switch-121942854.html"
+        "title": "Sector Update: Energy Stocks Fall Late Afternoon",
+        "url": "https://finance.yahoo.com/energy/articles/sector-energy-stocks-fall-afternoon-200001097.html"
       },
       {
-        "title": "The Zacks Analyst Blog Highlights BWET, Frontline, International Seaways, DHT, BWET, BOAT, BDRY and SEA",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-bwet-145100293.html"
+        "title": "Oil Surges, Tanker Rates Soar: ETFs in Play",
+        "url": "https://finance.yahoo.com/energy/articles/oil-surges-tanker-rates-soar-195500447.html"
+      },
+      {
+        "title": "Futures Traders Betting On 12% Drop In Energy Stocks Over Next Month",
+        "url": "https://247wallst.com/investing/2026/09/16/futures-traders-betting-on-12-drop-in-energy-stocks-over-next-month/"
+      },
+      {
+        "title": "Sector Update: Energy Stocks Fall in Afternoon Trading",
+        "url": "https://finance.yahoo.com/energy/articles/sector-energy-stocks-fall-afternoon-180100130.html"
+      },
+      {
+        "title": "Exchange-Traded Funds Rise, US Equities Mixed After Midday",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-rise-us-170848334.html"
       }
     ]
   },
   "last_no_op_utc": "2026-09-15T10:33:35Z",
   "download_log": {
-    "date": "2026-09-15",
+    "date": "2026-09-16",
     "attempts": [
       {
-        "time_sgt": "2026-09-16 17:47 SGT",
+        "time_sgt": "2026-09-17 17:55 SGT",
         "type": "main_download",
         "status": "success",
-        "total": 2113,
-        "success": 2113,
-        "cumulative_success": 2113,
+        "total": 2106,
+        "success": 2106,
+        "cumulative_success": 2106,
         "failed": 0,
         "next_retry_sgt": null,
         "seq": 1
