@@ -11447,19 +11447,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2106,
     "total_scanned": 2106,
     "updated_utc": "2026-09-17T09:55:13Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2162,
-    "yf_downloadable": 2106,
-    "yf_unavailable_in_pool": 56,
-    "total_active": 3038,
-    "total_delisted": 1439,
-    "updated_utc": "2026-09-17T09:55:22Z"
+    "tiingo_eligible": 2154,
+    "yf_downloadable": 2101,
+    "yf_unavailable_in_pool": 53,
+    "total_active": 3029,
+    "total_delisted": 1448,
+    "updated_utc": "2026-09-18T00:47:48Z"
   },
   "yf_persistent_unavailable": [
     "AGR",
@@ -11541,7 +11541,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-09-17T00:53:39Z",
+  "tiingo_universe_synced_utc": "2026-09-18T00:47:48Z",
   "daily_summary": {
     "date": "2026-09-16",
     "updated_sgt": "2026-09-17 17:55 SGT",
@@ -11549,10 +11549,10 @@
     "spy_change_pct": -0.44,
     "vs_spy_pct": 0.2,
     "bullets": [
-      "中东地缘政治紧张局势推高了原油价格和油轮运费，这为能源板块尤其是海运油轮类公司（如FRO +4.0%、DHT +4.1%）带来了上行支撑，抵消了大盘下跌的拖累。（[Oil Surges, Tanker Rates Soa…](https://finance.yahoo.com/energy/articles/oil-surges-tanker-rates-soar-195500447.html)）",
-      "策略的Energy板块重仓在今日获得了来自油价上涨的结构性支撑，使得能源类标的如FRO和DHT分别上涨4.0%和4.1%，累计贡献净值+$530，从而让整体策略跌幅（-0.24%）好于SPY大盘（-0.44%），形成了+0.20%的正偏差。（[Oil Surges, Tanker Rates Soa…](https://finance.yahoo.com/energy/articles/oil-surges-tanker-rates-soar-195500447.html)）",
-      "尽管期权交易者在大幅押注能源板块未来一个月将下跌12%，反映出对宏观面的担忧，但这种悲观预期尚未在今日股价上充分体现，原油价格和油运基本面的强劲反而压过了这种技术性看空情绪。（[Futures Traders Betting On 1…](https://247wallst.com/investing/2026/09/16/futures-traders-betting-on-12-drop-in-energy-stocks-over-next-month/)）",
-      "策略持仓中非能源板块标的（HPQ -3.3%、TXG -2.3%、CNH -3.4%、DE -2.1%）的跌幅普遍超过大盘，但被FRO和DHT的强劲涨幅所弥补，最终使策略表现超越了同样下跌的SPY。（[Sector Update: Energy Stocks…](https://finance.yahoo.com/energy/articles/sector-energy-stocks-fall-afternoon-200001097.html)、[Oil Surges, Tanker Rates Soa…](https://finance.yahoo.com/energy/articles/oil-surges-tanker-rates-soar-195500447.html)）"
+      "\u4e2d\u4e1c\u5730\u7f18\u653f\u6cbb\u7d27\u5f20\u5c40\u52bf\u63a8\u9ad8\u4e86\u539f\u6cb9\u4ef7\u683c\u548c\u6cb9\u8f6e\u8fd0\u8d39\uff0c\u8fd9\u4e3a\u80fd\u6e90\u677f\u5757\u5c24\u5176\u662f\u6d77\u8fd0\u6cb9\u8f6e\u7c7b\u516c\u53f8\uff08\u5982FRO +4.0%\u3001DHT +4.1%\uff09\u5e26\u6765\u4e86\u4e0a\u884c\u652f\u6491\uff0c\u62b5\u6d88\u4e86\u5927\u76d8\u4e0b\u8dcc\u7684\u62d6\u7d2f\u3002\uff08[Oil Surges, Tanker Rates Soa\u2026](https://finance.yahoo.com/energy/articles/oil-surges-tanker-rates-soar-195500447.html)\uff09",
+      "\u7b56\u7565\u7684Energy\u677f\u5757\u91cd\u4ed3\u5728\u4eca\u65e5\u83b7\u5f97\u4e86\u6765\u81ea\u6cb9\u4ef7\u4e0a\u6da8\u7684\u7ed3\u6784\u6027\u652f\u6491\uff0c\u4f7f\u5f97\u80fd\u6e90\u7c7b\u6807\u7684\u5982FRO\u548cDHT\u5206\u522b\u4e0a\u6da84.0%\u548c4.1%\uff0c\u7d2f\u8ba1\u8d21\u732e\u51c0\u503c+$530\uff0c\u4ece\u800c\u8ba9\u6574\u4f53\u7b56\u7565\u8dcc\u5e45\uff08-0.24%\uff09\u597d\u4e8eSPY\u5927\u76d8\uff08-0.44%\uff09\uff0c\u5f62\u6210\u4e86+0.20%\u7684\u6b63\u504f\u5dee\u3002\uff08[Oil Surges, Tanker Rates Soa\u2026](https://finance.yahoo.com/energy/articles/oil-surges-tanker-rates-soar-195500447.html)\uff09",
+      "\u5c3d\u7ba1\u671f\u6743\u4ea4\u6613\u8005\u5728\u5927\u5e45\u62bc\u6ce8\u80fd\u6e90\u677f\u5757\u672a\u6765\u4e00\u4e2a\u6708\u5c06\u4e0b\u8dcc12%\uff0c\u53cd\u6620\u51fa\u5bf9\u5b8f\u89c2\u9762\u7684\u62c5\u5fe7\uff0c\u4f46\u8fd9\u79cd\u60b2\u89c2\u9884\u671f\u5c1a\u672a\u5728\u4eca\u65e5\u80a1\u4ef7\u4e0a\u5145\u5206\u4f53\u73b0\uff0c\u539f\u6cb9\u4ef7\u683c\u548c\u6cb9\u8fd0\u57fa\u672c\u9762\u7684\u5f3a\u52b2\u53cd\u800c\u538b\u8fc7\u4e86\u8fd9\u79cd\u6280\u672f\u6027\u770b\u7a7a\u60c5\u7eea\u3002\uff08[Futures Traders Betting On 1\u2026](https://247wallst.com/investing/2026/09/16/futures-traders-betting-on-12-drop-in-energy-stocks-over-next-month/)\uff09",
+      "\u7b56\u7565\u6301\u4ed3\u4e2d\u975e\u80fd\u6e90\u677f\u5757\u6807\u7684\uff08HPQ -3.3%\u3001TXG -2.3%\u3001CNH -3.4%\u3001DE -2.1%\uff09\u7684\u8dcc\u5e45\u666e\u904d\u8d85\u8fc7\u5927\u76d8\uff0c\u4f46\u88abFRO\u548cDHT\u7684\u5f3a\u52b2\u6da8\u5e45\u6240\u5f25\u8865\uff0c\u6700\u7ec8\u4f7f\u7b56\u7565\u8868\u73b0\u8d85\u8d8a\u4e86\u540c\u6837\u4e0b\u8dcc\u7684SPY\u3002\uff08[Sector Update: Energy Stocks\u2026](https://finance.yahoo.com/energy/articles/sector-energy-stocks-fall-afternoon-200001097.html)\u3001[Oil Surges, Tanker Rates Soa\u2026](https://finance.yahoo.com/energy/articles/oil-surges-tanker-rates-soar-195500447.html)\uff09"
     ],
     "news": [
       {
