@@ -11798,19 +11798,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2101,
     "total_scanned": 2101,
     "updated_utc": "2026-09-18T09:31:15Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2154,
-    "yf_downloadable": 2101,
-    "yf_unavailable_in_pool": 53,
-    "total_active": 3029,
-    "total_delisted": 1448,
-    "updated_utc": "2026-09-18T09:31:25Z"
+    "tiingo_eligible": 2153,
+    "yf_downloadable": 2099,
+    "yf_unavailable_in_pool": 54,
+    "total_active": 3032,
+    "total_delisted": 1445,
+    "updated_utc": "2026-09-19T00:39:27Z"
   },
   "yf_persistent_unavailable": [
     "AGR",
@@ -11892,7 +11892,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-09-18T00:47:48Z",
+  "tiingo_universe_synced_utc": "2026-09-19T00:39:27Z",
   "daily_summary": {
     "date": "2026-09-17",
     "updated_sgt": "2026-09-18 17:31 SGT",
@@ -11900,10 +11900,10 @@
     "spy_change_pct": 1.13,
     "vs_spy_pct": 0.05,
     "bullets": [
-      "HPQ和TXG等硬件厂商因AI本地化部署趋势而获得市场青睐，企业和专业用户对本地AI工厂的需求推动了这类设备制造商的估值上升，这反映了云计算模式向边缘计算转变的产业升级逻辑。（[HP (HPQ) Puts A Local AI Fac…](https://finance.yahoo.com/technology/ai/articles/hp-hpq-puts-local-ai-091537939.html)、[Lenovo, MemryX Partnership t…](https://finance.yahoo.com/technology/ai/articles/lenovo-memryx-partnership-expand-sovereign-181300600.html)）",
-      "N/A板块中的HPQ（+6.0%，贡献+$466净值）和TXG（+5.9%，贡献+$656净值）的强势表现是策略跑赢SPY +0.05%的主要驱动，这两只重仓标的的AI硬件相关收益完全抵消了ZETA（-1.6%，损失-$132）的拖累。（[HP (HPQ) Puts A Local AI Fac…](https://finance.yahoo.com/technology/ai/articles/hp-hpq-puts-local-ai-091537939.html)、[Should You Buy HP Stock For …](https://www.trefis.com/articles/615725/should-you-buy-hp-stock-for-the-shares-it-keeps-retiring/2026-09-17)、[Lenovo, MemryX Partnership t…](https://finance.yahoo.com/technology/ai/articles/lenovo-memryx-partnership-expand-sovereign-181300600.html)）",
-      "HPQ股价上涨不仅源于ZBook Ultra G3a等新品发布带来的增长前景，更根本上反映了市场对其股票回购持续提升每股收益能力的确认，即使面临芯片成本压力，这一财务工程也支撑了股价表现。（[Should You Buy HP Stock For …](https://www.trefis.com/articles/615725/should-you-buy-hp-stock-for-the-shares-it-keeps-retiring/2026-09-17)）",
-      "策略的N/A板块重仓配置在今日实现了对大盘的超额收益，关键在于押注了AI芯片需求、本地部署和硬件创新这一明确的产业主线，而这条主线在今日新闻催化下得到了市场的立即响应和定价。（[Top strategist thinks the Fe…](https://finance.yahoo.com/markets/article/top-strategist-thinks-the-federal-reserve-interest-rate-hike-wont-fix-this-huge-earnings-risk-121619669.html)、[HP (HPQ) Puts A Local AI Fac…](https://finance.yahoo.com/technology/ai/articles/hp-hpq-puts-local-ai-091537939.html)、[Should You Buy HP Stock For …](https://www.trefis.com/articles/615725/should-you-buy-hp-stock-for-the-shares-it-keeps-retiring/2026-09-17)、[Lenovo, MemryX Partnership t…](https://finance.yahoo.com/technology/ai/articles/lenovo-memryx-partnership-expand-sovereign-181300600.html)）"
+      "HPQ\u548cTXG\u7b49\u786c\u4ef6\u5382\u5546\u56e0AI\u672c\u5730\u5316\u90e8\u7f72\u8d8b\u52bf\u800c\u83b7\u5f97\u5e02\u573a\u9752\u7750\uff0c\u4f01\u4e1a\u548c\u4e13\u4e1a\u7528\u6237\u5bf9\u672c\u5730AI\u5de5\u5382\u7684\u9700\u6c42\u63a8\u52a8\u4e86\u8fd9\u7c7b\u8bbe\u5907\u5236\u9020\u5546\u7684\u4f30\u503c\u4e0a\u5347\uff0c\u8fd9\u53cd\u6620\u4e86\u4e91\u8ba1\u7b97\u6a21\u5f0f\u5411\u8fb9\u7f18\u8ba1\u7b97\u8f6c\u53d8\u7684\u4ea7\u4e1a\u5347\u7ea7\u903b\u8f91\u3002\uff08[HP (HPQ) Puts A Local AI Fac\u2026](https://finance.yahoo.com/technology/ai/articles/hp-hpq-puts-local-ai-091537939.html)\u3001[Lenovo, MemryX Partnership t\u2026](https://finance.yahoo.com/technology/ai/articles/lenovo-memryx-partnership-expand-sovereign-181300600.html)\uff09",
+      "N/A\u677f\u5757\u4e2d\u7684HPQ\uff08+6.0%\uff0c\u8d21\u732e+$466\u51c0\u503c\uff09\u548cTXG\uff08+5.9%\uff0c\u8d21\u732e+$656\u51c0\u503c\uff09\u7684\u5f3a\u52bf\u8868\u73b0\u662f\u7b56\u7565\u8dd1\u8d62SPY +0.05%\u7684\u4e3b\u8981\u9a71\u52a8\uff0c\u8fd9\u4e24\u53ea\u91cd\u4ed3\u6807\u7684\u7684AI\u786c\u4ef6\u76f8\u5173\u6536\u76ca\u5b8c\u5168\u62b5\u6d88\u4e86ZETA\uff08-1.6%\uff0c\u635f\u5931-$132\uff09\u7684\u62d6\u7d2f\u3002\uff08[HP (HPQ) Puts A Local AI Fac\u2026](https://finance.yahoo.com/technology/ai/articles/hp-hpq-puts-local-ai-091537939.html)\u3001[Should You Buy HP Stock For \u2026](https://www.trefis.com/articles/615725/should-you-buy-hp-stock-for-the-shares-it-keeps-retiring/2026-09-17)\u3001[Lenovo, MemryX Partnership t\u2026](https://finance.yahoo.com/technology/ai/articles/lenovo-memryx-partnership-expand-sovereign-181300600.html)\uff09",
+      "HPQ\u80a1\u4ef7\u4e0a\u6da8\u4e0d\u4ec5\u6e90\u4e8eZBook Ultra G3a\u7b49\u65b0\u54c1\u53d1\u5e03\u5e26\u6765\u7684\u589e\u957f\u524d\u666f\uff0c\u66f4\u6839\u672c\u4e0a\u53cd\u6620\u4e86\u5e02\u573a\u5bf9\u5176\u80a1\u7968\u56de\u8d2d\u6301\u7eed\u63d0\u5347\u6bcf\u80a1\u6536\u76ca\u80fd\u529b\u7684\u786e\u8ba4\uff0c\u5373\u4f7f\u9762\u4e34\u82af\u7247\u6210\u672c\u538b\u529b\uff0c\u8fd9\u4e00\u8d22\u52a1\u5de5\u7a0b\u4e5f\u652f\u6491\u4e86\u80a1\u4ef7\u8868\u73b0\u3002\uff08[Should You Buy HP Stock For \u2026](https://www.trefis.com/articles/615725/should-you-buy-hp-stock-for-the-shares-it-keeps-retiring/2026-09-17)\uff09",
+      "\u7b56\u7565\u7684N/A\u677f\u5757\u91cd\u4ed3\u914d\u7f6e\u5728\u4eca\u65e5\u5b9e\u73b0\u4e86\u5bf9\u5927\u76d8\u7684\u8d85\u989d\u6536\u76ca\uff0c\u5173\u952e\u5728\u4e8e\u62bc\u6ce8\u4e86AI\u82af\u7247\u9700\u6c42\u3001\u672c\u5730\u90e8\u7f72\u548c\u786c\u4ef6\u521b\u65b0\u8fd9\u4e00\u660e\u786e\u7684\u4ea7\u4e1a\u4e3b\u7ebf\uff0c\u800c\u8fd9\u6761\u4e3b\u7ebf\u5728\u4eca\u65e5\u65b0\u95fb\u50ac\u5316\u4e0b\u5f97\u5230\u4e86\u5e02\u573a\u7684\u7acb\u5373\u54cd\u5e94\u548c\u5b9a\u4ef7\u3002\uff08[Top strategist thinks the Fe\u2026](https://finance.yahoo.com/markets/article/top-strategist-thinks-the-federal-reserve-interest-rate-hike-wont-fix-this-huge-earnings-risk-121619669.html)\u3001[HP (HPQ) Puts A Local AI Fac\u2026](https://finance.yahoo.com/technology/ai/articles/hp-hpq-puts-local-ai-091537939.html)\u3001[Should You Buy HP Stock For \u2026](https://www.trefis.com/articles/615725/should-you-buy-hp-stock-for-the-shares-it-keeps-retiring/2026-09-17)\u3001[Lenovo, MemryX Partnership t\u2026](https://finance.yahoo.com/technology/ai/articles/lenovo-memryx-partnership-expand-sovereign-181300600.html)\uff09"
     ],
     "news": [
       {
