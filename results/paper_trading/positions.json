@@ -12136,7 +12136,7 @@
     "news": [],
     "data_pending": true
   },
-  "last_no_op_utc": "2026-09-23T09:49:36Z",
+  "last_no_op_utc": "2026-09-23T11:53:12Z",
   "download_log": {
     "date": "2026-09-22",
     "attempts": [
@@ -12149,14 +12149,23 @@
         "attempt": 1,
         "next_retry_sgt": "2026-09-23 18:30 SGT",
         "seq": 1
+      },
+      {
+        "time_sgt": "2026-09-23 19:53 SGT",
+        "type": "retry_probe",
+        "status": "no_data",
+        "success": 0,
+        "failed": 0,
+        "next_retry_sgt": "2026-09-23 20:30 SGT",
+        "seq": 2
       }
     ],
     "holiday": null
   },
   "no_data_probe": {
     "date": "2026-09-22",
-    "attempt": 2,
-    "next_retry_utc": "2026-09-23T10:30:00Z",
-    "next_retry_sgt": "2026-09-23 18:30 SGT"
+    "attempt": 3,
+    "next_retry_utc": "2026-09-23T12:30:00Z",
+    "next_retry_sgt": "2026-09-23 20:30 SGT"
   }
 }
