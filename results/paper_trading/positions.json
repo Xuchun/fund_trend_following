@@ -12136,7 +12136,7 @@
     "news": [],
     "data_pending": true
   },
-  "last_no_op_utc": "2026-09-23T11:53:12Z",
+  "last_no_op_utc": "2026-09-23T17:17:58Z",
   "download_log": {
     "date": "2026-09-22",
     "attempts": [
@@ -12158,14 +12158,26 @@
         "failed": 0,
         "next_retry_sgt": "2026-09-23 20:30 SGT",
         "seq": 2
+      },
+      {
+        "time_sgt": "2026-09-24 01:17 SGT",
+        "type": "retry_probe",
+        "status": "no_data",
+        "success": 0,
+        "failed": 0,
+        "seq": 3
       }
     ],
-    "holiday": null
+    "holiday": {
+      "is_holiday": null,
+      "name": "未能确认，持续重试中",
+      "source": "https://www.nyse.com/markets/hours-calendars"
+    }
   },
   "no_data_probe": {
     "date": "2026-09-22",
-    "attempt": 3,
-    "next_retry_utc": "2026-09-23T12:30:00Z",
-    "next_retry_sgt": "2026-09-23 20:30 SGT"
+    "attempt": 4,
+    "next_retry_utc": "2026-09-23T17:30:00Z",
+    "next_retry_sgt": "2026-09-24 01:30 SGT"
   }
 }
