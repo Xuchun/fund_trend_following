@@ -21,7 +21,7 @@
       "highest_high": 135.09,
       "atr_at_entry": 6.529,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 135.07,
+      "last_known_price": 135.07000732421875,
       "last_price_date": "2026-09-02",
       "entry_commission": 3.03,
       "lowest_low": 132.695,
@@ -63,7 +63,7 @@
       "lowest_low": 207.17,
       "atr_at_entry": 0.9593,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 209.7,
+      "last_known_price": 209.6999969482422,
       "last_price_date": "2026-08-04",
       "entry_commission": 2.74,
       "entry_regime": "BULL",
@@ -84,7 +84,7 @@
       "lowest_low": 55.25,
       "atr_at_entry": 3.2283,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 79.1,
+      "last_known_price": 75.62000274658203,
       "last_price_date": "2026-09-21",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
@@ -105,7 +105,7 @@
       "lowest_low": 100.53,
       "atr_at_entry": 3.5541,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 108.73,
+      "last_known_price": 106.81999969482422,
       "last_price_date": "2026-09-21",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
@@ -126,7 +126,7 @@
       "lowest_low": 90.84,
       "atr_at_entry": 1.7297,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 95.35,
+      "last_known_price": 92.25,
       "last_price_date": "2026-09-21",
       "entry_commission": 2.64,
       "entry_regime": "BULL",
@@ -147,7 +147,7 @@
       "lowest_low": 33.45,
       "atr_at_entry": 1.1225,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 33.61,
+      "last_known_price": 32.7599983215332,
       "last_price_date": "2026-09-21",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
@@ -168,7 +168,7 @@
       "lowest_low": 49.56,
       "atr_at_entry": 2.0107,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 56.4,
+      "last_known_price": 58.5099983215332,
       "last_price_date": "2026-09-21",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
@@ -189,7 +189,7 @@
       "lowest_low": 29.46,
       "atr_at_entry": 1.4594,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 31.15,
+      "last_known_price": 29.790000915527344,
       "last_price_date": "2026-09-21",
       "entry_commission": 2.56,
       "entry_regime": "BULL",
@@ -210,7 +210,7 @@
       "lowest_low": 84.95,
       "atr_at_entry": 0.6684,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 84.95,
+      "last_known_price": 84.94999694824219,
       "last_price_date": "2026-09-02",
       "entry_commission": 2.55,
       "entry_regime": "BULL",
@@ -231,7 +231,7 @@
       "lowest_low": 665.45,
       "atr_at_entry": 19.9395,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 684.73,
+      "last_known_price": 709.47998046875,
       "last_price_date": "2026-09-21",
       "entry_commission": 2.53,
       "entry_regime": "BULL",
@@ -252,7 +252,7 @@
       "lowest_low": 13.28,
       "atr_at_entry": 0.5318,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 13.48,
+      "last_known_price": 13.75,
       "last_price_date": "2026-09-21",
       "entry_commission": 1.28,
       "entry_regime": "BULL",
@@ -273,7 +273,7 @@
       "lowest_low": 38.72,
       "atr_at_entry": 1.5356,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 38.99,
+      "last_known_price": 36.81999969482422,
       "last_price_date": "2026-09-21",
       "entry_commission": 2.54,
       "entry_regime": "BULL",
@@ -294,7 +294,7 @@
       "lowest_low": 48.03,
       "atr_at_entry": 1.5333,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 49.81,
+      "last_known_price": 47.560001373291016,
       "last_price_date": "2026-09-21",
       "entry_commission": 2.5,
       "entry_regime": "BULL",
@@ -315,7 +315,7 @@
       "lowest_low": 32.56,
       "atr_at_entry": 1.5107,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 32.95,
+      "last_known_price": 32.15999984741211,
       "last_price_date": "2026-09-21",
       "entry_commission": 2.51,
       "entry_regime": "BULL",
@@ -336,7 +336,7 @@
       "lowest_low": 21.55,
       "atr_at_entry": 0.6667,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 22.45,
+      "last_known_price": 21.280000686645508,
       "last_price_date": "2026-09-21",
       "entry_commission": 1.26,
       "entry_regime": "BULL",
@@ -357,7 +357,7 @@
       "lowest_low": 180.55,
       "atr_at_entry": 9.1202,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 191.33,
+      "last_known_price": 205.36000061035156,
       "last_price_date": "2026-09-21",
       "entry_commission": 2.53,
       "entry_regime": "BULL",
@@ -378,7 +378,7 @@
       "lowest_low": 230.85,
       "atr_at_entry": 12.131,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 249.35,
+      "last_known_price": 262.489990234375,
       "last_price_date": "2026-09-21",
       "entry_commission": 1.26,
       "entry_regime": "BULL",
@@ -399,7 +399,7 @@
       "lowest_low": 140.2,
       "atr_at_entry": 4.2783,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 143.59,
+      "last_known_price": 142.11000061035156,
       "last_price_date": "2026-09-21",
       "entry_commission": 2.54,
       "entry_regime": "BULL",
@@ -420,7 +420,7 @@
       "lowest_low": 236.42,
       "atr_at_entry": 9.5574,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 238.82,
+      "last_known_price": 255.3800048828125,
       "last_price_date": "2026-09-21",
       "entry_commission": 2.54,
       "entry_regime": "BULL",
@@ -441,7 +441,7 @@
       "lowest_low": 75.99,
       "atr_at_entry": 4.6621,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 78.03,
+      "last_known_price": 76.58999633789062,
       "last_price_date": "2026-09-21",
       "entry_commission": 1.27,
       "entry_regime": "BULL",
@@ -12126,17 +12126,36 @@
   "tiingo_universe_synced_utc": "2026-09-23T00:57:06Z",
   "daily_summary": {
     "date": "2026-09-22",
-    "updated_sgt": "2026-09-23 17:49 SGT",
-    "nav_change_pct": null,
-    "spy_change_pct": null,
-    "vs_spy_pct": null,
+    "updated_sgt": "2026-09-24 04:32 SGT",
+    "nav_change_pct": -5.93,
+    "spy_change_pct": -0.74,
+    "vs_spy_pct": -5.19,
     "bullets": [
-      "📊 2026-09-22 收盘数据尚未获取到，正在持续重试，获取成功后将自动更新。"
+      "📰 [Q2 Rundown: 10x Genomics (NASDAQ:TXG) Vs Other Life Sciences Tools & Services Stocks](https://finance.yahoo.com/healthcare/articles/q2-rundown-10x-genomics-nasdaq-133346400.html)（Yahoo Finance，2026-09-22）",
+      "📰 [Beyond Meta, Cathie Wood’s ARKG Loads Up On These 4 Biotech Names](https://stocktwits.com/news-articles/markets/equity/beyond-meta-cathie-wood-arkg-loads-up-on-biotech-names/cZMPZhJRBek)（Yahoo Finance，2026-09-22）",
+      "📰 [3 Oil Tanker Stocks Retail Investors Are Watching For Strait Of Hormuz Reopening](https://finance.yahoo.com/energy/articles/3-oil-tanker-stocks-retail-081819644.html)（Yahoo Finance，2026-09-23）",
+      "📰 [Why DHT Holdings Stock Dropped Today](https://www.fool.com/investing/2026/09/22/why-dht-holdings-stock-dropped-today/)（Yahoo Finance，2026-09-22）"
     ],
-    "news": [],
-    "data_pending": true
+    "news": [
+      {
+        "title": "Q2 Rundown: 10x Genomics (NASDAQ:TXG) Vs Other Life Sciences Tools & Services Stocks",
+        "url": "https://finance.yahoo.com/healthcare/articles/q2-rundown-10x-genomics-nasdaq-133346400.html"
+      },
+      {
+        "title": "Beyond Meta, Cathie Wood’s ARKG Loads Up On These 4 Biotech Names",
+        "url": "https://stocktwits.com/news-articles/markets/equity/beyond-meta-cathie-wood-arkg-loads-up-on-biotech-names/cZMPZhJRBek"
+      },
+      {
+        "title": "3 Oil Tanker Stocks Retail Investors Are Watching For Strait Of Hormuz Reopening",
+        "url": "https://finance.yahoo.com/energy/articles/3-oil-tanker-stocks-retail-081819644.html"
+      },
+      {
+        "title": "Why DHT Holdings Stock Dropped Today",
+        "url": "https://www.fool.com/investing/2026/09/22/why-dht-holdings-stock-dropped-today/"
+      }
+    ]
   },
-  "last_no_op_utc": "2026-09-23T17:17:58Z",
+  "last_no_op_utc": "2026-09-23T20:32:40Z",
   "download_log": {
     "date": "2026-09-22",
     "attempts": [
@@ -12166,6 +12185,15 @@
         "success": 0,
         "failed": 0,
         "seq": 3
+      },
+      {
+        "time_sgt": "2026-09-24 04:32 SGT",
+        "type": "retry_probe",
+        "status": "data_available",
+        "success": 1,
+        "failed": 0,
+        "note": "市场有数据，已生成今日小结",
+        "seq": 4
       }
     ],
     "holiday": {
@@ -12173,11 +12201,5 @@
       "name": "未能确认，持续重试中",
       "source": "https://www.nyse.com/markets/hours-calendars"
     }
-  },
-  "no_data_probe": {
-    "date": "2026-09-22",
-    "attempt": 4,
-    "next_retry_utc": "2026-09-23T17:30:00Z",
-    "next_retry_sgt": "2026-09-24 01:30 SGT"
   }
 }
