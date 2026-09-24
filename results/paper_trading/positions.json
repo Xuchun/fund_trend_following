@@ -4,8 +4,8 @@
   "start_date": "2026-06-19",
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
-  "last_update_date": "2026-09-21",
-  "cash": 862.6198399257216,
+  "last_update_date": "2026-09-23",
+  "cash": 428.79229883181654,
   "positions": [
     {
       "ticker": "APGE",
@@ -21,7 +21,7 @@
       "highest_high": 135.09,
       "atr_at_entry": 6.529,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 135.07000732421875,
+      "last_known_price": 135.07,
       "last_price_date": "2026-09-02",
       "entry_commission": 3.03,
       "lowest_low": 132.695,
@@ -63,7 +63,7 @@
       "lowest_low": 207.17,
       "atr_at_entry": 0.9593,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 209.6999969482422,
+      "last_known_price": 209.7,
       "last_price_date": "2026-08-04",
       "entry_commission": 2.74,
       "entry_regime": "BULL",
@@ -80,12 +80,12 @@
       "shares": 153,
       "stop_loss": 52.1019,
       "trail_stop": 66.264086,
-      "highest_high": 80.11,
+      "highest_high": 81.93,
       "lowest_low": 55.25,
       "atr_at_entry": 3.2283,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 75.62000274658203,
-      "last_price_date": "2026-09-21",
+      "last_known_price": 75.62,
+      "last_price_date": "2026-09-23",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -105,8 +105,8 @@
       "lowest_low": 100.53,
       "atr_at_entry": 3.5541,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 106.81999969482422,
-      "last_price_date": "2026-09-21",
+      "last_known_price": 106.82,
+      "last_price_date": "2026-09-23",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -127,7 +127,7 @@
       "atr_at_entry": 1.7297,
       "R_at_backtest_end": 0.0,
       "last_known_price": 92.25,
-      "last_price_date": "2026-09-21",
+      "last_price_date": "2026-09-23",
       "entry_commission": 2.64,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -144,11 +144,11 @@
       "stop_loss": 32.5097,
       "trail_stop": 33.091976,
       "highest_high": 36.34,
-      "lowest_low": 33.45,
+      "lowest_low": 32.515,
       "atr_at_entry": 1.1225,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 32.7599983215332,
-      "last_price_date": "2026-09-21",
+      "last_known_price": 32.76,
+      "last_price_date": "2026-09-23",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -163,13 +163,13 @@
       "entry_price": 53.5135,
       "shares": 163,
       "stop_loss": 49.4921,
-      "trail_stop": 51.590875,
-      "highest_high": 57.23,
+      "trail_stop": 53.516333,
+      "highest_high": 59.31,
       "lowest_low": 49.56,
       "atr_at_entry": 2.0107,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 58.5099983215332,
-      "last_price_date": "2026-09-21",
+      "last_known_price": 58.51,
+      "last_price_date": "2026-09-23",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -189,8 +189,8 @@
       "lowest_low": 29.46,
       "atr_at_entry": 1.4594,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 29.790000915527344,
-      "last_price_date": "2026-09-21",
+      "last_known_price": 29.79,
+      "last_price_date": "2026-09-23",
       "entry_commission": 2.56,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -210,7 +210,7 @@
       "lowest_low": 84.95,
       "atr_at_entry": 0.6684,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 84.94999694824219,
+      "last_known_price": 84.95,
       "last_price_date": "2026-09-02",
       "entry_commission": 2.55,
       "entry_regime": "BULL",
@@ -226,13 +226,13 @@
       "entry_price": 703.9532,
       "shares": 12,
       "stop_loss": 664.0742,
-      "trail_stop": 653.665883,
-      "highest_high": 705.88,
+      "trail_stop": 666.143061,
+      "highest_high": 721.22,
       "lowest_low": 665.45,
       "atr_at_entry": 19.9395,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 709.47998046875,
-      "last_price_date": "2026-09-21",
+      "last_known_price": 709.48,
+      "last_price_date": "2026-09-23",
       "entry_commission": 2.53,
       "entry_regime": "BULL",
       "sector": "Industrials"
@@ -253,7 +253,7 @@
       "atr_at_entry": 0.5318,
       "R_at_backtest_end": 0.0,
       "last_known_price": 13.75,
-      "last_price_date": "2026-09-21",
+      "last_price_date": "2026-09-23",
       "entry_commission": 1.28,
       "entry_regime": "BULL",
       "sector": "Industrials"
@@ -270,35 +270,14 @@
       "stop_loss": 38.3602,
       "trail_stop": 37.8879,
       "highest_high": 42.275,
-      "lowest_low": 38.72,
+      "lowest_low": 36.78,
       "atr_at_entry": 1.5356,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 36.81999969482422,
-      "last_price_date": "2026-09-21",
+      "last_known_price": 36.82,
+      "last_price_date": "2026-09-23",
       "entry_commission": 2.54,
       "entry_regime": "BULL",
       "sector": "Healthcare"
-    },
-    {
-      "ticker": "FRO",
-      "signal_date": "2026-09-10",
-      "signal_price": 48.4,
-      "signal_strength": 1.0153,
-      "entry_date": "2026-09-11",
-      "open_price": 48.05,
-      "entry_price": 48.098,
-      "shares": 173,
-      "stop_loss": 45.0314,
-      "trail_stop": 50.267587,
-      "highest_high": 54.91,
-      "lowest_low": 48.03,
-      "atr_at_entry": 1.5333,
-      "R_at_backtest_end": 0.0,
-      "last_known_price": 47.560001373291016,
-      "last_price_date": "2026-09-21",
-      "entry_commission": 2.5,
-      "entry_regime": "BULL",
-      "sector": "Energy"
     },
     {
       "ticker": "HPQ",
@@ -312,11 +291,11 @@
       "stop_loss": 32.1337,
       "trail_stop": 30.631796,
       "highest_high": 35.19,
-      "lowest_low": 32.56,
+      "lowest_low": 31.61,
       "atr_at_entry": 1.5107,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 32.15999984741211,
-      "last_price_date": "2026-09-21",
+      "last_known_price": 32.16,
+      "last_price_date": "2026-09-23",
       "entry_commission": 2.51,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -333,11 +312,11 @@
       "stop_loss": 20.8287,
       "trail_stop": 21.405059,
       "highest_high": 23.56,
-      "lowest_low": 21.55,
+      "lowest_low": 20.64,
       "atr_at_entry": 0.6667,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 21.280000686645508,
-      "last_price_date": "2026-09-21",
+      "last_known_price": 21.28,
+      "last_price_date": "2026-09-23",
       "entry_commission": 1.26,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -352,13 +331,13 @@
       "entry_price": 183.3832,
       "shares": 46,
       "stop_loss": 165.1428,
-      "trail_stop": 165.662223,
-      "highest_high": 192.59,
+      "trail_stop": 178.854204,
+      "highest_high": 207.2,
       "lowest_low": 180.55,
       "atr_at_entry": 9.1202,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 205.36000061035156,
-      "last_price_date": "2026-09-21",
+      "last_known_price": 205.36,
+      "last_price_date": "2026-09-23",
       "entry_commission": 2.53,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -373,13 +352,13 @@
       "entry_price": 233.233,
       "shares": 18,
       "stop_loss": 208.971,
-      "trail_stop": 213.581714,
-      "highest_high": 250.32,
+      "trail_stop": 225.010325,
+      "highest_high": 263.19,
       "lowest_low": 230.85,
       "atr_at_entry": 12.131,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 262.489990234375,
-      "last_price_date": "2026-09-21",
+      "last_known_price": 262.49,
+      "last_price_date": "2026-09-23",
       "entry_commission": 1.26,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -396,11 +375,11 @@
       "stop_loss": 132.4643,
       "trail_stop": 136.423466,
       "highest_high": 149.52,
-      "lowest_low": 140.2,
+      "lowest_low": 140.08,
       "atr_at_entry": 4.2783,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 142.11000061035156,
-      "last_price_date": "2026-09-21",
+      "last_known_price": 142.11,
+      "last_price_date": "2026-09-23",
       "entry_commission": 2.54,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -415,13 +394,13 @@
       "entry_price": 249.3791,
       "shares": 34,
       "stop_loss": 230.2643,
-      "trail_stop": 220.775504,
-      "highest_high": 250.06,
+      "trail_stop": 225.706131,
+      "highest_high": 256.17,
       "lowest_low": 236.42,
       "atr_at_entry": 9.5574,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 255.3800048828125,
-      "last_price_date": "2026-09-21",
+      "last_known_price": 255.38,
+      "last_price_date": "2026-09-23",
       "entry_commission": 2.54,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -436,14 +415,35 @@
       "entry_price": 81.4814,
       "shares": 52,
       "stop_loss": 72.1572,
-      "trail_stop": 67.907539,
+      "trail_stop": 68.346903,
       "highest_high": 81.83,
-      "lowest_low": 75.99,
+      "lowest_low": 75.88,
       "atr_at_entry": 4.6621,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 76.58999633789062,
-      "last_price_date": "2026-09-21",
+      "last_known_price": 76.59,
+      "last_price_date": "2026-09-23",
       "entry_commission": 1.27,
+      "entry_regime": "BULL",
+      "sector": "N/A"
+    },
+    {
+      "ticker": "AMD",
+      "signal_date": "2026-09-21",
+      "signal_price": 615.52,
+      "signal_strength": 1.0527,
+      "entry_date": "2026-09-23",
+      "open_price": 621.5,
+      "entry_price": 622.1215,
+      "shares": 14,
+      "stop_loss": 568.5801,
+      "trail_stop": 547.121977,
+      "highest_high": 624.69,
+      "lowest_low": 608.08,
+      "atr_at_entry": 26.7707,
+      "R_at_backtest_end": 0.0,
+      "last_known_price": 614.61,
+      "last_price_date": "2026-09-23",
+      "entry_commission": 2.61,
       "entry_regime": "BULL",
       "sector": "N/A"
     }
@@ -2535,6 +2535,36 @@
       "holding_days": 90,
       "entry_regime": "",
       "exit_regime": "BULL"
+    },
+    {
+      "ticker": "FRO",
+      "signal_date": "2026-09-10",
+      "signal_price": 48.4,
+      "signal_strength": 1.0153,
+      "entry_date": "2026-09-11",
+      "exit_date": "2026-09-23",
+      "open_price": 48.05,
+      "entry_price": 48.098,
+      "exit_open": 47.92,
+      "exit_price": 47.8721,
+      "shares": 173,
+      "stop_loss": 45.0314,
+      "stop_used": 50.2676,
+      "highest_high": 54.91,
+      "lowest_low": 48.03,
+      "atr_at_entry": 1.5333,
+      "stop_distance_pct": 0.063757,
+      "trail_stop_at_exit": 50.267587,
+      "atr_at_exit": 1.6211,
+      "exit_commission": 2.48,
+      "entry_commission": 2.5,
+      "pnl_r": -0.0737,
+      "net_pnl": -44.07,
+      "exit_reason": "trailing_stop",
+      "detected_date": "2026-09-21",
+      "holding_days": 12,
+      "entry_regime": "BULL",
+      "exit_regime": "BULL"
     }
   ],
   "nav_history": [
@@ -2907,64 +2937,122 @@
       "nav": 169438.4,
       "regime": "BULL",
       "spy_close": 773.5
+    },
+    {
+      "date": "2026-09-23",
+      "nav": 168569.98,
+      "regime": "BULL",
+      "spy_close": 767.81
     }
   ],
   "pending_exits": [
     {
-      "ticker": "FRO",
+      "ticker": "BOX",
       "exit_reason": "trailing_stop",
-      "stop_used": 50.2676,
-      "shares": 173,
-      "open_price": 48.05,
-      "entry_price": 48.098,
-      "entry_date": "2026-09-11",
-      "signal_date": "2026-09-10",
-      "signal_price": 48.4,
-      "signal_strength": 1.0153,
-      "stop_loss": 45.0314,
-      "atr_at_entry": 1.5333,
-      "highest_high": 54.91,
-      "lowest_low": 48.03,
-      "trail_stop_at_exit": 50.267587,
-      "atr_at_exit": 1.6211,
-      "detected_date": "2026-09-21",
-      "entry_commission": 2.5,
+      "stop_used": 33.092,
+      "shares": 251,
+      "open_price": 34.72,
+      "entry_price": 34.7547,
+      "entry_date": "2026-08-31",
+      "signal_date": "2026-08-27",
+      "signal_price": 34.74,
+      "signal_strength": 1.007,
+      "stop_loss": 32.5097,
+      "atr_at_entry": 1.1225,
+      "highest_high": 36.34,
+      "lowest_low": 32.515,
+      "trail_stop_at_exit": 33.091976,
+      "atr_at_exit": 1.0833,
+      "detected_date": "2026-09-23",
+      "entry_commission": 2.62,
+      "entry_regime": "BULL"
+    },
+    {
+      "ticker": "ROIV",
+      "exit_reason": "stop_loss",
+      "stop_used": 38.3602,
+      "shares": 204,
+      "open_price": 41.39,
+      "entry_price": 41.4314,
+      "entry_date": "2026-09-09",
+      "signal_date": "2026-09-08",
+      "signal_price": 41.48,
+      "signal_strength": 1.0924,
+      "stop_loss": 38.3602,
+      "atr_at_entry": 1.5356,
+      "highest_high": 42.275,
+      "lowest_low": 36.78,
+      "trail_stop_at_exit": 37.8879,
+      "atr_at_exit": 1.4997,
+      "detected_date": "2026-09-23",
+      "entry_commission": 2.54,
+      "entry_regime": "BULL"
+    },
+    {
+      "ticker": "HPQ",
+      "exit_reason": "stop_loss",
+      "stop_used": 32.1337,
+      "shares": 238,
+      "open_price": 35.12,
+      "entry_price": 35.1551,
+      "entry_date": "2026-09-14",
+      "signal_date": "2026-09-11",
+      "signal_price": 35.48,
+      "signal_strength": 1.0696,
+      "stop_loss": 32.1337,
+      "atr_at_entry": 1.5107,
+      "highest_high": 35.19,
+      "lowest_low": 31.61,
+      "trail_stop_at_exit": 30.631796,
+      "atr_at_exit": 1.5733,
+      "detected_date": "2026-09-23",
+      "entry_commission": 2.51,
+      "entry_regime": "BULL"
+    },
+    {
+      "ticker": "DHT",
+      "exit_reason": "stop_loss",
+      "stop_used": 20.8287,
+      "shares": 189,
+      "open_price": 22.14,
+      "entry_price": 22.1621,
+      "entry_date": "2026-09-14",
+      "signal_date": "2026-09-11",
+      "signal_price": 22.0,
+      "signal_strength": 1.019,
+      "stop_loss": 20.8287,
+      "atr_at_entry": 0.6667,
+      "highest_high": 23.56,
+      "lowest_low": 20.64,
+      "trail_stop_at_exit": 21.405059,
+      "atr_at_exit": 0.7841,
+      "detected_date": "2026-09-23",
+      "entry_commission": 1.26,
       "entry_regime": "BULL"
     }
   ],
   "pending_entries": [
     {
-      "ticker": "AMD",
-      "signal_date": "2026-09-21",
-      "signal_price": 615.52,
-      "stop_price": 561.9787,
-      "shares": 14,
-      "atr": 26.7707,
-      "signal_strength": 1.0527,
-      "trade_risk": 0.0044,
-      "notional": 8617.28
+      "ticker": "TWLO",
+      "signal_date": "2026-09-23",
+      "signal_price": 290.7,
+      "stop_price": 265.6649,
+      "shares": 29,
+      "atr": 12.5175,
+      "signal_strength": 1.0909,
+      "trade_risk": 0.0043,
+      "notional": 8430.3
     },
     {
-      "ticker": "FIVN",
-      "signal_date": "2026-09-21",
-      "signal_price": 37.01,
-      "stop_price": 33.1647,
-      "shares": 229,
-      "atr": 1.9226,
-      "signal_strength": 1.0481,
-      "trade_risk": 0.0052,
-      "notional": 8475.29
-    },
-    {
-      "ticker": "WBD",
-      "signal_date": "2026-09-21",
-      "signal_price": 30.8,
-      "stop_price": 29.7451,
-      "shares": 275,
-      "atr": 0.5275,
-      "signal_strength": 1.0267,
-      "trade_risk": 0.0017,
-      "notional": 8470.0
+      "ticker": "DBRG",
+      "signal_date": "2026-09-23",
+      "signal_price": 15.99,
+      "stop_price": 15.9052,
+      "shares": 527,
+      "atr": 0.0424,
+      "signal_strength": 1.0006,
+      "trade_risk": 0.0003,
+      "notional": 8426.73
     }
   ],
   "signals_history": [
@@ -11925,116 +12013,250 @@
           "strength": 1.0267
         }
       ]
+    },
+    {
+      "date": "2026-09-23",
+      "regime": "BULL",
+      "spy_close": 767.81,
+      "n_candidates": 2,
+      "n_entries": 2,
+      "n_executed": 1,
+      "n_exits": 4,
+      "n_raw_breakouts": 2,
+      "n_heat_blocked": 0,
+      "n_cash_blocked": 0,
+      "n_corr_reduced": 0,
+      "n_price_filtered": 241,
+      "n_adv_filtered": 553,
+      "n_breakout_filtered": 1268,
+      "n_atr_filtered": 0,
+      "n_stop_dist_filtered": 2,
+      "n_volume_filtered": 10,
+      "spy_pct_above_sma200": 7.5487,
+      "exits_executed": [
+        {
+          "ticker": "FRO",
+          "shares": 173,
+          "exit_open": 47.92,
+          "exit_price": 47.8721,
+          "net_pnl": -44.07,
+          "pnl_r": -0.0737,
+          "exit_reason": "trailing_stop"
+        }
+      ],
+      "entries_executed": [
+        {
+          "ticker": "AMD",
+          "signal_date": "2026-09-21",
+          "signal_price": 615.52,
+          "open_price": 621.5,
+          "entry_price": 622.1215,
+          "shares": 14,
+          "stop_price": 568.5801,
+          "trade_risk": 0.0044
+        }
+      ],
+      "exit_signals": [
+        {
+          "ticker": "BOX",
+          "exit_reason": "trailing_stop",
+          "stop_used": 33.092,
+          "shares": 251
+        },
+        {
+          "ticker": "ROIV",
+          "exit_reason": "stop_loss",
+          "stop_used": 38.3602,
+          "shares": 204
+        },
+        {
+          "ticker": "HPQ",
+          "exit_reason": "stop_loss",
+          "stop_used": 32.1337,
+          "shares": 238
+        },
+        {
+          "ticker": "DHT",
+          "exit_reason": "stop_loss",
+          "stop_used": 20.8287,
+          "shares": 189
+        }
+      ],
+      "candidate_signals": [
+        {
+          "ticker": "TWLO",
+          "signal_price": 290.7,
+          "stop_price": 265.6649,
+          "shares": 29,
+          "trade_risk": 0.0043,
+          "strength": 1.0909,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.08612,
+          "atr_pct": 0.04306,
+          "adv60_m": 460.639,
+          "vol_ratio": 2.0014
+        },
+        {
+          "ticker": "DBRG",
+          "signal_price": 15.99,
+          "stop_price": 15.9052,
+          "shares": 527,
+          "trade_risk": 0.0003,
+          "strength": 1.0006,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.005303,
+          "atr_pct": 0.002652,
+          "adv60_m": 60.605,
+          "vol_ratio": 2.1522
+        }
+      ],
+      "entry_signals": [
+        {
+          "ticker": "TWLO",
+          "signal_price": 290.7,
+          "stop_price": 265.6649,
+          "shares": 29,
+          "trade_risk": 0.0043,
+          "strength": 1.0909
+        },
+        {
+          "ticker": "DBRG",
+          "signal_price": 15.99,
+          "stop_price": 15.9052,
+          "shares": 527,
+          "trade_risk": 0.0003,
+          "strength": 1.0006
+        }
+      ]
     }
   ],
-  "last_update_utc": "2026-09-22T09:44:41Z",
+  "last_update_utc": "2026-09-24T09:47:22Z",
   "today_signals": {
-    "date": "2026-09-21",
+    "date": "2026-09-23",
     "regime": "BULL",
-    "spy_close": 773.5,
-    "n_candidates": 3,
-    "n_entries": 3,
-    "n_executed": 0,
-    "n_exits": 1,
-    "n_raw_breakouts": 3,
+    "spy_close": 767.81,
+    "n_candidates": 2,
+    "n_entries": 2,
+    "n_executed": 1,
+    "n_exits": 4,
+    "n_raw_breakouts": 2,
     "n_heat_blocked": 0,
     "n_cash_blocked": 0,
     "n_corr_reduced": 0,
-    "n_price_filtered": 233,
-    "n_adv_filtered": 570,
-    "n_breakout_filtered": 1269,
+    "n_price_filtered": 241,
+    "n_adv_filtered": 553,
+    "n_breakout_filtered": 1268,
     "n_atr_filtered": 0,
     "n_stop_dist_filtered": 2,
     "n_volume_filtered": 10,
-    "spy_pct_above_sma200": 8.4882,
-    "exits_executed": [],
-    "entries_executed": [],
-    "exit_signals": [
+    "spy_pct_above_sma200": 7.5487,
+    "exits_executed": [
       {
         "ticker": "FRO",
+        "shares": 173,
+        "exit_open": 47.92,
+        "exit_price": 47.8721,
+        "net_pnl": -44.07,
+        "pnl_r": -0.0737,
+        "exit_reason": "trailing_stop"
+      }
+    ],
+    "entries_executed": [
+      {
+        "ticker": "AMD",
+        "signal_date": "2026-09-21",
+        "signal_price": 615.52,
+        "open_price": 621.5,
+        "entry_price": 622.1215,
+        "shares": 14,
+        "stop_price": 568.5801,
+        "trade_risk": 0.0044
+      }
+    ],
+    "exit_signals": [
+      {
+        "ticker": "BOX",
         "exit_reason": "trailing_stop",
-        "stop_used": 50.2676,
-        "shares": 173
+        "stop_used": 33.092,
+        "shares": 251
+      },
+      {
+        "ticker": "ROIV",
+        "exit_reason": "stop_loss",
+        "stop_used": 38.3602,
+        "shares": 204
+      },
+      {
+        "ticker": "HPQ",
+        "exit_reason": "stop_loss",
+        "stop_used": 32.1337,
+        "shares": 238
+      },
+      {
+        "ticker": "DHT",
+        "exit_reason": "stop_loss",
+        "stop_used": 20.8287,
+        "shares": 189
       }
     ],
     "candidate_signals": [
       {
-        "ticker": "AMD",
-        "signal_price": 615.52,
-        "stop_price": 561.9787,
-        "shares": 14,
-        "trade_risk": 0.0044,
-        "strength": 1.0527,
+        "ticker": "TWLO",
+        "signal_price": 290.7,
+        "stop_price": 265.6649,
+        "shares": 29,
+        "trade_risk": 0.0043,
+        "strength": 1.0909,
         "rejection": null,
         "corr_with": null,
-        "stop_distance_pct": 0.086986,
-        "atr_pct": 0.043493,
-        "adv60_m": 12566.126,
-        "vol_ratio": 1.7836
+        "stop_distance_pct": 0.08612,
+        "atr_pct": 0.04306,
+        "adv60_m": 460.639,
+        "vol_ratio": 2.0014
       },
       {
-        "ticker": "FIVN",
-        "signal_price": 37.01,
-        "stop_price": 33.1647,
-        "shares": 229,
-        "trade_risk": 0.0052,
-        "strength": 1.0481,
+        "ticker": "DBRG",
+        "signal_price": 15.99,
+        "stop_price": 15.9052,
+        "shares": 527,
+        "trade_risk": 0.0003,
+        "strength": 1.0006,
         "rejection": null,
         "corr_with": null,
-        "stop_distance_pct": 0.103899,
-        "atr_pct": 0.051949,
-        "adv60_m": 73.718,
-        "vol_ratio": 1.5692
-      },
-      {
-        "ticker": "WBD",
-        "signal_price": 30.8,
-        "stop_price": 29.7451,
-        "shares": 275,
-        "trade_risk": 0.0017,
-        "strength": 1.0267,
-        "rejection": null,
-        "corr_with": null,
-        "stop_distance_pct": 0.034251,
-        "atr_pct": 0.017126,
-        "adv60_m": 564.096,
-        "vol_ratio": 11.2627
+        "stop_distance_pct": 0.005303,
+        "atr_pct": 0.002652,
+        "adv60_m": 60.605,
+        "vol_ratio": 2.1522
       }
     ],
     "entry_signals": [
       {
-        "ticker": "AMD",
-        "signal_price": 615.52,
-        "stop_price": 561.9787,
-        "shares": 14,
-        "trade_risk": 0.0044,
-        "strength": 1.0527
+        "ticker": "TWLO",
+        "signal_price": 290.7,
+        "stop_price": 265.6649,
+        "shares": 29,
+        "trade_risk": 0.0043,
+        "strength": 1.0909
       },
       {
-        "ticker": "FIVN",
-        "signal_price": 37.01,
-        "stop_price": 33.1647,
-        "shares": 229,
-        "trade_risk": 0.0052,
-        "strength": 1.0481
-      },
-      {
-        "ticker": "WBD",
-        "signal_price": 30.8,
-        "stop_price": 29.7451,
-        "shares": 275,
-        "trade_risk": 0.0017,
-        "strength": 1.0267
+        "ticker": "DBRG",
+        "signal_price": 15.99,
+        "stop_price": 15.9052,
+        "shares": 527,
+        "trade_risk": 0.0003,
+        "strength": 1.0006
       }
     ]
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
+  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
-    "downloaded_count": 2126,
-    "total_scanned": 2166,
-    "updated_utc": "2026-09-22T09:44:40Z"
+    "downloaded_count": 2103,
+    "total_scanned": 2103,
+    "updated_utc": "2026-09-24T09:47:21Z"
   },
   "universe_stats": {
     "tiingo_eligible": 2161,
@@ -12042,7 +12264,7 @@
     "yf_unavailable_in_pool": 58,
     "total_active": 3037,
     "total_delisted": 1440,
-    "updated_utc": "2026-09-24T00:54:05Z"
+    "updated_utc": "2026-09-24T09:47:30Z"
   },
   "yf_persistent_unavailable": [
     "AGR",
@@ -12125,81 +12347,55 @@
   ],
   "tiingo_universe_synced_utc": "2026-09-24T00:54:05Z",
   "daily_summary": {
-    "date": "2026-09-22",
-    "updated_sgt": "2026-09-24 04:32 SGT",
-    "nav_change_pct": -5.93,
+    "date": "2026-09-23",
+    "updated_sgt": "2026-09-24 17:47 SGT",
+    "nav_change_pct": -0.51,
     "spy_change_pct": -0.74,
-    "vs_spy_pct": -5.19,
+    "vs_spy_pct": 0.22,
     "bullets": [
-      "\ud83d\udcf0 [Q2 Rundown: 10x Genomics (NASDAQ:TXG) Vs Other Life Sciences Tools & Services Stocks](https://finance.yahoo.com/healthcare/articles/q2-rundown-10x-genomics-nasdaq-133346400.html)\uff08Yahoo Finance\uff0c2026-09-22\uff09",
-      "\ud83d\udcf0 [Beyond Meta, Cathie Wood\u2019s ARKG Loads Up On These 4 Biotech Names](https://stocktwits.com/news-articles/markets/equity/beyond-meta-cathie-wood-arkg-loads-up-on-biotech-names/cZMPZhJRBek)\uff08Yahoo Finance\uff0c2026-09-22\uff09",
-      "\ud83d\udcf0 [3 Oil Tanker Stocks Retail Investors Are Watching For Strait Of Hormuz Reopening](https://finance.yahoo.com/energy/articles/3-oil-tanker-stocks-retail-081819644.html)\uff08Yahoo Finance\uff0c2026-09-23\uff09",
-      "\ud83d\udcf0 [Why DHT Holdings Stock Dropped Today](https://www.fool.com/investing/2026/09/22/why-dht-holdings-stock-dropped-today/)\uff08Yahoo Finance\uff0c2026-09-22\uff09"
+      "尽管美债收益率上升普遍压低了大盘（SPY -0.74%），但科技板块中的部分龙头如AMD因AI芯片竞争格局重新洗牌而获得资金追捧，其187%的年度涨幅反映出市场对其芯片产品线的强劲信心，带动整个Technology板块相对抗跌。（[AMD Is Up 187% This Year: Ta…](https://247wallst.com/investing/2026/09/23/amd-is-up-187-this-year-take-profits-or-buy-more/)）",
+      "策略重仓Technology板块的特定标的（如BOX等）在AI应用集成创新的驱动下获得正收益，而SPY作为宽基指数包含大量受利率上升冲击的非科技权重股，导致策略净值跌幅（-0.51%）小于SPY（-0.74%），出现+0.22%的正向偏差。（[S&P 500, Dow, Nasdaq Drop As…](https://stocktwits.com/news-articles/markets/equity/s-and-p-500-dow-nasdaq-drop-as-yields-spike-amid-calls-for-more-rate-hikes-amzn-googl-nflx-spcx-rklb-in-focus/cZM4IxjRBB9)、[Box (BOX) Stock Dropped, Wha…](https://finance.yahoo.com/markets/stocks/articles/box-box-stock-dropped-behind-141538033.html)）",
+      "市场对于某些特定科技公司的AI赋能前景存在结构性看多预期，这种集中的行业轮动（从传统芯片龙头向新兴AI应用方向旋转）使得策略的持仓受益程度超过了大盘平均水平。（[AMD Is Up 187% This Year: Ta…](https://247wallst.com/investing/2026/09/23/amd-is-up-187-this-year-take-profits-or-buy-more/)、[Box (BOX) Stock Dropped, Wha…](https://finance.yahoo.com/markets/stocks/articles/box-box-stock-dropped-behind-141538033.html)）"
     ],
     "news": [
       {
-        "title": "Q2 Rundown: 10x Genomics (NASDAQ:TXG) Vs Other Life Sciences Tools & Services Stocks",
-        "url": "https://finance.yahoo.com/healthcare/articles/q2-rundown-10x-genomics-nasdaq-133346400.html"
+        "title": "S&P 500, Dow, Nasdaq Drop As Yields Spike Amid Calls For More Rate Hikes — AMZN, GOOGL, NFLX, SPCX, RKLB In Focus",
+        "url": "https://stocktwits.com/news-articles/markets/equity/s-and-p-500-dow-nasdaq-drop-as-yields-spike-amid-calls-for-more-rate-hikes-amzn-googl-nflx-spcx-rklb-in-focus/cZM4IxjRBB9"
       },
       {
-        "title": "Beyond Meta, Cathie Wood\u2019s ARKG Loads Up On These 4 Biotech Names",
-        "url": "https://stocktwits.com/news-articles/markets/equity/beyond-meta-cathie-wood-arkg-loads-up-on-biotech-names/cZMPZhJRBek"
+        "title": "AMD Is Up 187% This Year: Take Profits, or Buy More?",
+        "url": "https://247wallst.com/investing/2026/09/23/amd-is-up-187-this-year-take-profits-or-buy-more/"
       },
       {
-        "title": "3 Oil Tanker Stocks Retail Investors Are Watching For Strait Of Hormuz Reopening",
-        "url": "https://finance.yahoo.com/energy/articles/3-oil-tanker-stocks-retail-081819644.html"
+        "title": "This Unstoppable ETF Is Down 12% From Its High -- and History Says Now Is a Smart Time to Invest",
+        "url": "https://www.fool.com/investing/2026/09/23/this-unstoppable-etf-is-down-x-from-its-high-and/"
       },
       {
-        "title": "Why DHT Holdings Stock Dropped Today",
-        "url": "https://www.fool.com/investing/2026/09/22/why-dht-holdings-stock-dropped-today/"
+        "title": "US-Iran, Tech Outlooks Pause Wall Street Pre-Bell, Asia Mixed, Europe Off",
+        "url": "https://finance.yahoo.com/markets/articles/us-iran-tech-outlooks-pause-111539245.html"
+      },
+      {
+        "title": "Box (BOX) Stock Dropped, What Is Behind The Latest Attention?",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/box-box-stock-dropped-behind-141538033.html"
       }
     ]
   },
   "last_no_op_utc": "2026-09-23T20:32:40Z",
   "download_log": {
-    "date": "2026-09-22",
+    "date": "2026-09-23",
     "attempts": [
       {
-        "time_sgt": "2026-09-23 17:49 SGT",
-        "type": "main_probe",
-        "status": "no_data",
-        "success": 0,
+        "time_sgt": "2026-09-24 17:47 SGT",
+        "type": "main_download",
+        "status": "success",
+        "total": 2103,
+        "success": 2103,
+        "cumulative_success": 2103,
         "failed": 0,
-        "attempt": 1,
-        "next_retry_sgt": "2026-09-23 18:30 SGT",
+        "next_retry_sgt": null,
         "seq": 1
-      },
-      {
-        "time_sgt": "2026-09-23 19:53 SGT",
-        "type": "retry_probe",
-        "status": "no_data",
-        "success": 0,
-        "failed": 0,
-        "next_retry_sgt": "2026-09-23 20:30 SGT",
-        "seq": 2
-      },
-      {
-        "time_sgt": "2026-09-24 01:17 SGT",
-        "type": "retry_probe",
-        "status": "no_data",
-        "success": 0,
-        "failed": 0,
-        "seq": 3
-      },
-      {
-        "time_sgt": "2026-09-24 04:32 SGT",
-        "type": "retry_probe",
-        "status": "data_available",
-        "success": 1,
-        "failed": 0,
-        "note": "\u5e02\u573a\u6709\u6570\u636e\uff0c\u5df2\u751f\u6210\u4eca\u65e5\u5c0f\u7ed3",
-        "seq": 4
       }
     ],
-    "holiday": {
-      "is_holiday": null,
-      "name": "\u672a\u80fd\u786e\u8ba4\uff0c\u6301\u7eed\u91cd\u8bd5\u4e2d",
-      "source": "https://www.nyse.com/markets/hours-calendars"
-    }
+    "holiday": null
   }
 }
