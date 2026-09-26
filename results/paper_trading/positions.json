@@ -12483,19 +12483,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2107,
     "total_scanned": 2107,
     "updated_utc": "2026-09-25T10:05:48Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2162,
-    "yf_downloadable": 2106,
-    "yf_unavailable_in_pool": 56,
-    "total_active": 3036,
-    "total_delisted": 1441,
-    "updated_utc": "2026-09-25T10:05:58Z"
+    "tiingo_eligible": 2160,
+    "yf_downloadable": 2101,
+    "yf_unavailable_in_pool": 59,
+    "total_active": 3037,
+    "total_delisted": 1440,
+    "updated_utc": "2026-09-26T00:54:39Z"
   },
   "yf_persistent_unavailable": [
     "AGR",
@@ -12577,7 +12577,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-09-25T00:52:48Z",
+  "tiingo_universe_synced_utc": "2026-09-26T00:54:39Z",
   "daily_summary": {
     "date": "2026-09-24",
     "updated_sgt": "2026-09-25 18:05 SGT",
@@ -12585,10 +12585,10 @@
     "spy_change_pct": -0.08,
     "vs_spy_pct": 1.73,
     "bullets": [
-      "医疗AI生态的资本化重估是今日N/A板块上涨的深层驱动：Illumina和Tempus AI等公司通过AI赋能精准医学和药物研发，正在解锁新的临床应用场景和商业价值，这激发了整个医疗生物技术领域的估值上修预期。（[Illumina Stock Surges 94.9% …](https://finance.yahoo.com/markets/stocks/articles/illumina-stock-surges-94-9-134500924.html)、[Buy 3 AI-Powered Medical Sto…](https://finance.yahoo.com/healthcare/articles/buy-3-ai-powered-medical-102200254.html)）",
-      "Illumina的Russell指数剔除虽然在机制上可能引发被动卖压，但其强劲的基本面表现（2026年指引提升、测序业务增长强劲）反而吸引了主动资金介入，说明市场对其长期价值的认知已经发生了质变。（[Illumina (ILMN) Tests Valuat…](https://finance.yahoo.com/markets/stocks/articles/illumina-ilmn-tests-valuation-russell-081013253.html)、[Illumina Stock Surges 94.9% …](https://finance.yahoo.com/markets/stocks/articles/illumina-stock-surges-94-9-134500924.html)）",
-      "策略净值相比SPY产生+1.73%的显著分歧，主要源于重仓标的TXG（今日+11.2%，对净值贡献+$1,299）和ILMN（今日+7.3%，对净值贡献+$630）的强劲表现，这两只N/A板块标的的联合涨幅远超大盘，而同时德国农机DE和CNH等工业股的下跌（分别-2.0%和-3.4%）未能抵消医疗AI概念的涨势。（[Illumina (ILMN) Tests Valuat…](https://finance.yahoo.com/markets/stocks/articles/illumina-ilmn-tests-valuation-russell-081013253.html)、[Illumina Stock Surges 94.9% …](https://finance.yahoo.com/markets/stocks/articles/illumina-stock-surges-94-9-134500924.html)、[Buy 3 AI-Powered Medical Sto…](https://finance.yahoo.com/healthcare/articles/buy-3-ai-powered-medical-102200254.html)）",
-      "市场对AI驱动的医疗创新的景气度判断已经与宏观风险情绪脱钩，这导致持有高科技医疗生物资产的策略获得了超额收益，反映出在特定赛道景气度明确的情况下，结构性机会可以覆盖掉整体市场的弱势。（[Illumina Stock Surges 94.9% …](https://finance.yahoo.com/markets/stocks/articles/illumina-stock-surges-94-9-134500924.html)、[Buy 3 AI-Powered Medical Sto…](https://finance.yahoo.com/healthcare/articles/buy-3-ai-powered-medical-102200254.html)）"
+      "\u533b\u7597AI\u751f\u6001\u7684\u8d44\u672c\u5316\u91cd\u4f30\u662f\u4eca\u65e5N/A\u677f\u5757\u4e0a\u6da8\u7684\u6df1\u5c42\u9a71\u52a8\uff1aIllumina\u548cTempus AI\u7b49\u516c\u53f8\u901a\u8fc7AI\u8d4b\u80fd\u7cbe\u51c6\u533b\u5b66\u548c\u836f\u7269\u7814\u53d1\uff0c\u6b63\u5728\u89e3\u9501\u65b0\u7684\u4e34\u5e8a\u5e94\u7528\u573a\u666f\u548c\u5546\u4e1a\u4ef7\u503c\uff0c\u8fd9\u6fc0\u53d1\u4e86\u6574\u4e2a\u533b\u7597\u751f\u7269\u6280\u672f\u9886\u57df\u7684\u4f30\u503c\u4e0a\u4fee\u9884\u671f\u3002\uff08[Illumina Stock Surges 94.9% \u2026](https://finance.yahoo.com/markets/stocks/articles/illumina-stock-surges-94-9-134500924.html)\u3001[Buy 3 AI-Powered Medical Sto\u2026](https://finance.yahoo.com/healthcare/articles/buy-3-ai-powered-medical-102200254.html)\uff09",
+      "Illumina\u7684Russell\u6307\u6570\u5254\u9664\u867d\u7136\u5728\u673a\u5236\u4e0a\u53ef\u80fd\u5f15\u53d1\u88ab\u52a8\u5356\u538b\uff0c\u4f46\u5176\u5f3a\u52b2\u7684\u57fa\u672c\u9762\u8868\u73b0\uff082026\u5e74\u6307\u5f15\u63d0\u5347\u3001\u6d4b\u5e8f\u4e1a\u52a1\u589e\u957f\u5f3a\u52b2\uff09\u53cd\u800c\u5438\u5f15\u4e86\u4e3b\u52a8\u8d44\u91d1\u4ecb\u5165\uff0c\u8bf4\u660e\u5e02\u573a\u5bf9\u5176\u957f\u671f\u4ef7\u503c\u7684\u8ba4\u77e5\u5df2\u7ecf\u53d1\u751f\u4e86\u8d28\u53d8\u3002\uff08[Illumina (ILMN) Tests Valuat\u2026](https://finance.yahoo.com/markets/stocks/articles/illumina-ilmn-tests-valuation-russell-081013253.html)\u3001[Illumina Stock Surges 94.9% \u2026](https://finance.yahoo.com/markets/stocks/articles/illumina-stock-surges-94-9-134500924.html)\uff09",
+      "\u7b56\u7565\u51c0\u503c\u76f8\u6bd4SPY\u4ea7\u751f+1.73%\u7684\u663e\u8457\u5206\u6b67\uff0c\u4e3b\u8981\u6e90\u4e8e\u91cd\u4ed3\u6807\u7684TXG\uff08\u4eca\u65e5+11.2%\uff0c\u5bf9\u51c0\u503c\u8d21\u732e+$1,299\uff09\u548cILMN\uff08\u4eca\u65e5+7.3%\uff0c\u5bf9\u51c0\u503c\u8d21\u732e+$630\uff09\u7684\u5f3a\u52b2\u8868\u73b0\uff0c\u8fd9\u4e24\u53eaN/A\u677f\u5757\u6807\u7684\u7684\u8054\u5408\u6da8\u5e45\u8fdc\u8d85\u5927\u76d8\uff0c\u800c\u540c\u65f6\u5fb7\u56fd\u519c\u673aDE\u548cCNH\u7b49\u5de5\u4e1a\u80a1\u7684\u4e0b\u8dcc\uff08\u5206\u522b-2.0%\u548c-3.4%\uff09\u672a\u80fd\u62b5\u6d88\u533b\u7597AI\u6982\u5ff5\u7684\u6da8\u52bf\u3002\uff08[Illumina (ILMN) Tests Valuat\u2026](https://finance.yahoo.com/markets/stocks/articles/illumina-ilmn-tests-valuation-russell-081013253.html)\u3001[Illumina Stock Surges 94.9% \u2026](https://finance.yahoo.com/markets/stocks/articles/illumina-stock-surges-94-9-134500924.html)\u3001[Buy 3 AI-Powered Medical Sto\u2026](https://finance.yahoo.com/healthcare/articles/buy-3-ai-powered-medical-102200254.html)\uff09",
+      "\u5e02\u573a\u5bf9AI\u9a71\u52a8\u7684\u533b\u7597\u521b\u65b0\u7684\u666f\u6c14\u5ea6\u5224\u65ad\u5df2\u7ecf\u4e0e\u5b8f\u89c2\u98ce\u9669\u60c5\u7eea\u8131\u94a9\uff0c\u8fd9\u5bfc\u81f4\u6301\u6709\u9ad8\u79d1\u6280\u533b\u7597\u751f\u7269\u8d44\u4ea7\u7684\u7b56\u7565\u83b7\u5f97\u4e86\u8d85\u989d\u6536\u76ca\uff0c\u53cd\u6620\u51fa\u5728\u7279\u5b9a\u8d5b\u9053\u666f\u6c14\u5ea6\u660e\u786e\u7684\u60c5\u51b5\u4e0b\uff0c\u7ed3\u6784\u6027\u673a\u4f1a\u53ef\u4ee5\u8986\u76d6\u6389\u6574\u4f53\u5e02\u573a\u7684\u5f31\u52bf\u3002\uff08[Illumina Stock Surges 94.9% \u2026](https://finance.yahoo.com/markets/stocks/articles/illumina-stock-surges-94-9-134500924.html)\u3001[Buy 3 AI-Powered Medical Sto\u2026](https://finance.yahoo.com/healthcare/articles/buy-3-ai-powered-medical-102200254.html)\uff09"
     ],
     "news": [
       {
