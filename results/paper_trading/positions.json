@@ -4,8 +4,8 @@
   "start_date": "2026-06-19",
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
-  "last_update_date": "2026-09-22",
-  "cash": 15010.438146277977,
+  "last_update_date": "2026-09-25",
+  "cash": 6472.2618682822385,
   "positions": [
     {
       "ticker": "APGE",
@@ -80,12 +80,12 @@
       "shares": 153,
       "stop_loss": 52.1019,
       "trail_stop": 66.264086,
-      "highest_high": 85.93,
+      "highest_high": 86.16,
       "lowest_low": 55.25,
       "atr_at_entry": 3.2283,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 80.7,
-      "last_price_date": "2026-09-22",
+      "last_known_price": 85.71,
+      "last_price_date": "2026-09-25",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -105,8 +105,8 @@
       "lowest_low": 100.53,
       "atr_at_entry": 3.5541,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 108.52,
-      "last_price_date": "2026-09-22",
+      "last_known_price": 105.3,
+      "last_price_date": "2026-09-25",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -121,13 +121,13 @@
       "entry_price": 92.7427,
       "shares": 95,
       "stop_loss": 89.2833,
-      "trail_stop": 90.94619,
+      "trail_stop": 90.946192,
       "highest_high": 95.74,
       "lowest_low": 90.84,
       "atr_at_entry": 1.7297,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 94.06,
-      "last_price_date": "2026-09-22",
+      "last_known_price": 93.48,
+      "last_price_date": "2026-09-25",
       "entry_commission": 2.64,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -147,8 +147,8 @@
       "lowest_low": 49.56,
       "atr_at_entry": 2.0107,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 57.2,
-      "last_price_date": "2026-09-22",
+      "last_known_price": 57.95,
+      "last_price_date": "2026-09-25",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -168,8 +168,8 @@
       "lowest_low": 28.83,
       "atr_at_entry": 1.4594,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 30.13,
-      "last_price_date": "2026-09-22",
+      "last_known_price": 29.45,
+      "last_price_date": "2026-09-25",
       "entry_commission": 2.56,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -210,8 +210,8 @@
       "lowest_low": 665.45,
       "atr_at_entry": 19.9395,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 703.12,
-      "last_price_date": "2026-09-22",
+      "last_known_price": 690.46,
+      "last_price_date": "2026-09-25",
       "entry_commission": 2.53,
       "entry_regime": "BULL",
       "sector": "Industrials"
@@ -231,8 +231,8 @@
       "lowest_low": 180.55,
       "atr_at_entry": 9.1202,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 196.62,
-      "last_price_date": "2026-09-22",
+      "last_known_price": 195.19,
+      "last_price_date": "2026-09-25",
       "entry_commission": 2.53,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -252,8 +252,8 @@
       "lowest_low": 230.85,
       "atr_at_entry": 12.131,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 250.06,
-      "last_price_date": "2026-09-22",
+      "last_known_price": 252.13,
+      "last_price_date": "2026-09-25",
       "entry_commission": 1.26,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -273,8 +273,8 @@
       "lowest_low": 140.08,
       "atr_at_entry": 4.2783,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 143.31,
-      "last_price_date": "2026-09-22",
+      "last_known_price": 151.11,
+      "last_price_date": "2026-09-25",
       "entry_commission": 2.54,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -294,8 +294,8 @@
       "lowest_low": 234.57,
       "atr_at_entry": 9.5574,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 247.46,
-      "last_price_date": "2026-09-22",
+      "last_known_price": 270.0,
+      "last_price_date": "2026-09-25",
       "entry_commission": 2.54,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -310,13 +310,13 @@
       "entry_price": 81.4814,
       "shares": 52,
       "stop_loss": 72.1572,
-      "trail_stop": 68.579935,
-      "highest_high": 82.46,
+      "trail_stop": 71.579934,
+      "highest_high": 85.46,
       "lowest_low": 74.81,
       "atr_at_entry": 4.6621,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 77.19,
-      "last_price_date": "2026-09-22",
+      "last_known_price": 85.01,
+      "last_price_date": "2026-09-25",
       "entry_commission": 1.27,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -331,13 +331,13 @@
       "entry_price": 622.1215,
       "shares": 14,
       "stop_loss": 568.5801,
-      "trail_stop": 552.917781,
-      "highest_high": 630.8,
+      "trail_stop": 561.117781,
+      "highest_high": 639.0,
       "lowest_low": 599.24,
       "atr_at_entry": 26.7707,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 623.77,
-      "last_price_date": "2026-09-22",
+      "last_known_price": 630.63,
+      "last_price_date": "2026-09-25",
       "entry_commission": 2.61,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -357,8 +357,8 @@
       "lowest_low": 270.0,
       "atr_at_entry": 12.5175,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 284.53,
-      "last_price_date": "2026-09-22",
+      "last_known_price": 275.8,
+      "last_price_date": "2026-09-25",
       "entry_commission": 2.5,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -379,8 +379,29 @@
       "atr_at_entry": 0.0424,
       "R_at_backtest_end": 0.0,
       "last_known_price": 15.98,
-      "last_price_date": "2026-09-22",
+      "last_price_date": "2026-09-25",
       "entry_commission": 2.53,
+      "entry_regime": "BULL",
+      "sector": "N/A"
+    },
+    {
+      "ticker": "HALO",
+      "signal_date": "2026-09-22",
+      "signal_price": 115.13,
+      "signal_strength": 1.0146,
+      "entry_date": "2026-09-25",
+      "open_price": 115.36,
+      "entry_price": 115.4754,
+      "shares": 74,
+      "stop_loss": 109.6732,
+      "trail_stop": 106.7721,
+      "highest_high": 115.63,
+      "lowest_low": 113.43,
+      "atr_at_entry": 2.9011,
+      "R_at_backtest_end": 0.0,
+      "last_known_price": 113.9,
+      "last_price_date": "2026-09-25",
+      "entry_commission": 2.56,
       "entry_regime": "BULL",
       "sector": "N/A"
     }
@@ -3042,42 +3063,26 @@
       "nav": 171353.53,
       "regime": "BULL",
       "spy_close": 767.18
+    },
+    {
+      "date": "2026-09-25",
+      "nav": 170120.51,
+      "regime": "BULL",
+      "spy_close": 771.35
     }
   ],
   "pending_exits": [],
   "pending_entries": [
     {
-      "ticker": "FIVN",
-      "signal_date": "2026-09-22",
-      "signal_price": 38.65,
-      "stop_price": 34.709,
-      "shares": 218,
-      "atr": 1.9705,
-      "signal_strength": 1.0409,
-      "trade_risk": 0.0051,
-      "notional": 8425.7
-    },
-    {
-      "ticker": "A",
-      "signal_date": "2026-09-22",
-      "signal_price": 167.26,
-      "stop_price": 158.533,
-      "shares": 50,
-      "atr": 4.3635,
-      "signal_strength": 1.0214,
-      "trade_risk": 0.0026,
-      "notional": 8363.0
-    },
-    {
-      "ticker": "HALO",
-      "signal_date": "2026-09-22",
-      "signal_price": 115.13,
-      "stop_price": 109.3278,
-      "shares": 73,
-      "atr": 2.9011,
-      "signal_strength": 1.0146,
-      "trade_risk": 0.0025,
-      "notional": 8404.49
+      "ticker": "GRAL",
+      "signal_date": "2026-09-25",
+      "signal_price": 126.89,
+      "stop_price": 113.3693,
+      "shares": 67,
+      "atr": 6.7603,
+      "signal_strength": 1.0006,
+      "trade_risk": 0.0053,
+      "notional": 8501.63
     }
   ],
   "signals_history": [
@@ -12416,109 +12421,126 @@
           "strength": 1.0073
         }
       ]
+    },
+    {
+      "date": "2026-09-25",
+      "regime": "BULL",
+      "spy_close": 771.35,
+      "n_candidates": 1,
+      "n_entries": 1,
+      "n_executed": 1,
+      "n_exits": 0,
+      "n_raw_breakouts": 1,
+      "n_heat_blocked": 0,
+      "n_cash_blocked": 0,
+      "n_corr_reduced": 0,
+      "n_price_filtered": 243,
+      "n_adv_filtered": 582,
+      "n_breakout_filtered": 1252,
+      "n_atr_filtered": 0,
+      "n_stop_dist_filtered": 3,
+      "n_volume_filtered": 3,
+      "spy_pct_above_sma200": 7.0354,
+      "exits_executed": [],
+      "entries_executed": [
+        {
+          "ticker": "HALO",
+          "signal_date": "2026-09-22",
+          "signal_price": 115.13,
+          "open_price": 115.36,
+          "entry_price": 115.4754,
+          "shares": 74,
+          "stop_price": 109.6732,
+          "trade_risk": 0.0025
+        }
+      ],
+      "exit_signals": [],
+      "candidate_signals": [
+        {
+          "ticker": "GRAL",
+          "signal_price": 126.89,
+          "stop_price": 113.3693,
+          "shares": 67,
+          "trade_risk": 0.0053,
+          "strength": 1.0006,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.106554,
+          "atr_pct": 0.053277,
+          "adv60_m": 69.038,
+          "vol_ratio": 1.5358
+        }
+      ],
+      "entry_signals": [
+        {
+          "ticker": "GRAL",
+          "signal_price": 126.89,
+          "stop_price": 113.3693,
+          "shares": 67,
+          "trade_risk": 0.0053,
+          "strength": 1.0006
+        }
+      ]
     }
   ],
-  "last_update_utc": "2026-09-29T01:36:50Z",
+  "last_update_utc": "2026-09-29T01:42:19Z",
   "today_signals": {
-    "date": "2026-09-22",
+    "date": "2026-09-25",
     "regime": "BULL",
-    "spy_close": 773.38,
-    "n_candidates": 3,
-    "n_entries": 3,
-    "n_executed": 0,
+    "spy_close": 771.35,
+    "n_candidates": 1,
+    "n_entries": 1,
+    "n_executed": 1,
     "n_exits": 0,
-    "n_raw_breakouts": 3,
+    "n_raw_breakouts": 1,
     "n_heat_blocked": 0,
     "n_cash_blocked": 0,
     "n_corr_reduced": 0,
-    "n_price_filtered": 230,
-    "n_adv_filtered": 573,
-    "n_breakout_filtered": 1272,
+    "n_price_filtered": 243,
+    "n_adv_filtered": 582,
+    "n_breakout_filtered": 1252,
     "n_atr_filtered": 0,
-    "n_stop_dist_filtered": 1,
-    "n_volume_filtered": 6,
+    "n_stop_dist_filtered": 3,
+    "n_volume_filtered": 3,
     "spy_pct_above_sma200": 7.0354,
-    "exits_executed": [
+    "exits_executed": [],
+    "entries_executed": [
       {
-        "ticker": "CNH",
-        "shares": 298,
-        "exit_open": 13.53,
-        "exit_price": 13.5165,
-        "net_pnl": -243.22,
-        "pnl_r": -0.7595,
-        "exit_reason": "stop_loss"
+        "ticker": "HALO",
+        "signal_date": "2026-09-22",
+        "signal_price": 115.13,
+        "open_price": 115.36,
+        "entry_price": 115.4754,
+        "shares": 74,
+        "stop_price": 109.6732,
+        "trade_risk": 0.0025
       }
     ],
-    "entries_executed": [],
     "exit_signals": [],
     "candidate_signals": [
       {
-        "ticker": "FIVN",
-        "signal_price": 38.65,
-        "stop_price": 34.709,
-        "shares": 218,
-        "trade_risk": 0.0051,
-        "strength": 1.0409,
+        "ticker": "GRAL",
+        "signal_price": 126.89,
+        "stop_price": 113.3693,
+        "shares": 67,
+        "trade_risk": 0.0053,
+        "strength": 1.0006,
         "rejection": null,
         "corr_with": null,
-        "stop_distance_pct": 0.101967,
-        "atr_pct": 0.050983,
-        "adv60_m": 75.538,
-        "vol_ratio": 1.9821
-      },
-      {
-        "ticker": "A",
-        "signal_price": 167.26,
-        "stop_price": 158.533,
-        "shares": 50,
-        "trade_risk": 0.0026,
-        "strength": 1.0214,
-        "rejection": null,
-        "corr_with": null,
-        "stop_distance_pct": 0.052176,
-        "atr_pct": 0.026088,
-        "adv60_m": 319.108,
-        "vol_ratio": 1.7119
-      },
-      {
-        "ticker": "HALO",
-        "signal_price": 115.13,
-        "stop_price": 109.3278,
-        "shares": 73,
-        "trade_risk": 0.0025,
-        "strength": 1.0146,
-        "rejection": null,
-        "corr_with": null,
-        "stop_distance_pct": 0.050397,
-        "atr_pct": 0.025199,
-        "adv60_m": 198.345,
-        "vol_ratio": 1.9937
+        "stop_distance_pct": 0.106554,
+        "atr_pct": 0.053277,
+        "adv60_m": 69.038,
+        "vol_ratio": 1.5358
       }
     ],
     "entry_signals": [
       {
-        "ticker": "FIVN",
-        "signal_price": 38.65,
-        "stop_price": 34.709,
-        "shares": 218,
-        "trade_risk": 0.0051,
-        "strength": 1.0409
-      },
-      {
-        "ticker": "A",
-        "signal_price": 167.26,
-        "stop_price": 158.533,
-        "shares": 50,
-        "trade_risk": 0.0026,
-        "strength": 1.0214
-      },
-      {
-        "ticker": "HALO",
-        "signal_price": 115.13,
-        "stop_price": 109.3278,
-        "shares": 73,
-        "trade_risk": 0.0025,
-        "strength": 1.0146
+        "ticker": "GRAL",
+        "signal_price": 126.89,
+        "stop_price": 113.3693,
+        "shares": 67,
+        "trade_risk": 0.0053,
+        "strength": 1.0006
       }
     ]
   },
@@ -12528,7 +12550,7 @@
   "last_download_stats": {
     "downloaded_count": 2101,
     "total_scanned": 2101,
-    "updated_utc": "2026-09-29T01:36:48Z"
+    "updated_utc": "2026-09-29T01:42:18Z"
   },
   "universe_stats": {
     "tiingo_eligible": 2160,
@@ -12536,7 +12558,7 @@
     "yf_unavailable_in_pool": 59,
     "total_active": 3037,
     "total_delisted": 1440,
-    "updated_utc": "2026-09-29T01:36:59Z"
+    "updated_utc": "2026-09-29T01:42:27Z"
   },
   "yf_persistent_unavailable": [
     "AGR",
@@ -12620,46 +12642,46 @@
   ],
   "tiingo_universe_synced_utc": "2026-09-26T00:54:39Z",
   "daily_summary": {
-    "date": "2026-09-22",
-    "updated_sgt": "2026-09-29 09:36 SGT",
-    "nav_change_pct": -1.64,
-    "spy_change_pct": 0.81,
-    "vs_spy_pct": -2.45,
+    "date": "2026-09-25",
+    "updated_sgt": "2026-09-29 09:42 SGT",
+    "nav_change_pct": -0.72,
+    "spy_change_pct": 0.54,
+    "vs_spy_pct": -1.26,
     "bullets": [
-      "医疗健康政策风险释放：美国医疗保险和医疗补助中心宣布取消760,000人的平价医疗法案覆盖并收回数十亿补贴，这一政策变化直接打击了生命科学工具和医疗器械公司的增长预期，导致TXG（-4.1%）、ILMN（-9.7%）等生命科学及诊断领域龙头股遭到抛售。（[Surgery Partners, 10x Genomi…](https://finance.yahoo.com/healthcare/articles/surgery-partners-10x-genomics-quidelortho-213005328.html)）",
-      "生命科学工具板块整体承压：医保覆盖面缩小意味着相关检测和诊断需求的下行风险，这对专注于基因测序、生物分析的公司构成实质性威胁，而ILMN作为测序行业龙头以-9.7%的跌幅成为策略净值拖累的最大因素（对净值影响-$899）。（[Surgery Partners, 10x Genomi…](https://finance.yahoo.com/healthcare/articles/surgery-partners-10x-genomics-quidelortho-213005328.html)、[Q2 Rundown: 10x Genomics (NA…](https://finance.yahoo.com/healthcare/articles/q2-rundown-10x-genomics-nasdaq-133346400.html)）",
-      "策略对新兴生命科学和科技创新的集中配置放大了政策冲击：ILMN（-9.7%、-$899）、TXG（-4.1%、-$522）、TWLO（-5.0%、-$439）等N/A板块核心重仓在单日内累计对净值造成-$1,860的负面影响，远超SPY上涨+0.81%带来的收益，最终导致策略净值下跌-1.64%，与大盘偏差扩大至-2.45%。（[Analysts Think 6 S&P 500 Sto…](https://finance.yahoo.com/m/1361e2ec-e530-333f-878c-de76a2462d42/analysts-think-6-s-p-500.html)、[Surgery Partners, 10x Genomi…](https://finance.yahoo.com/healthcare/articles/surgery-partners-10x-genomics-quidelortho-213005328.html)）",
-      "医疗政策不确定性短期压制成长型生物科技估值，而市场整体仍受大型科技股支撑：S&P 500涨跌不一，但策略重仓的高成长、政"
+      "Industrials 板块面临的核心问题是市场对经济周期的不确定性认知，投资者对该板块未来增长前景的信心不足，导致高资本密集型企业估值承压 （[2 Industrials Stocks Worth I…](https://finance.yahoo.com/markets/stocks/articles/2-industrials-stocks-worth-investigating-104837526.html)）",
+      "Deere 等龙头公司虽然基本面强劲（Q2 业绩超预期），但股价已经反映了乐观预期，当前估值水平对后续增长的定价过高，使得市场对其可持续性产生疑虑 （[Is Deere (DE) Stock Reasonab…](https://finance.yahoo.com/markets/stocks/articles/deere-stock-reasonable-strong-q2-121038058.html)）",
+      "贸易政策的不确定性（美中贸易休战但条款差异大）对 Industrials 板块造成结构性拖累，尤其是农业机械等出口导向型企业面临中国市场需求预期调整 （[Trump and Xi Buy Time on Tra…](https://247wallst.com/investing/2026/09/25/trump-and-xi-buy-time-on-trade-farm-and-chip-stocks-are-watching-closely/)）",
+      "策略净值相对 SPY 下跌 1.26% 的主要原因是重仓 Industrials 板块的 DE（-1.8%）等标的拖累，同时非重点持仓的 ILMN（+9.1%）和 TXG（+6.2%）等标的涨幅被边缘化，无法有效对冲板块性下跌的影响 （[Is Deere (DE) Stock Reasonab…](https://finance.yahoo.com/markets/stocks/articles/deere-stock-reasonable-strong-q2-121038058.html)、[2 Industrials Stocks Worth I…](https://finance.yahoo.com/markets/stocks/articles/2-industrials-stocks-worth-investigating-104837526.html)）"
     ],
     "news": [
       {
-        "title": "Analysts Think 6 S&P 500 Stocks Are Grossly Overvalued",
-        "url": "https://finance.yahoo.com/m/1361e2ec-e530-333f-878c-de76a2462d42/analysts-think-6-s-p-500.html"
+        "title": "Exchange-Traded Funds, Equity Futures up Pre-Bell Friday as Treasury Yields Rise, Oil Prices Fall",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-132448177.html"
       },
       {
-        "title": "3 Healthcare Stocks with Warning Signs",
-        "url": "https://finance.yahoo.com/healthcare/articles/3-healthcare-stocks-warning-signs-102102087.html"
+        "title": "Can Share Buybacks Continue to Prop Up Toro Stock?",
+        "url": "https://www.trefis.com/articles/616598/can-share-buybacks-continue-to-prop-up-toro-stock/2026-09-25"
       },
       {
-        "title": "Surgery Partners, 10x Genomics, QuidelOrtho, Zimmer Biomet, and Tandem Diabetes Stocks Trade Down, What You Need To Know",
-        "url": "https://finance.yahoo.com/healthcare/articles/surgery-partners-10x-genomics-quidelortho-213005328.html"
+        "title": "Trump and Xi Buy Time on Trade. Farm and Chip Stocks Are Watching Closely.",
+        "url": "https://247wallst.com/investing/2026/09/25/trump-and-xi-buy-time-on-trade-farm-and-chip-stocks-are-watching-closely/"
       },
       {
-        "title": "Q2 Rundown: 10x Genomics (NASDAQ:TXG) Vs Other Life Sciences Tools & Services Stocks",
-        "url": "https://finance.yahoo.com/healthcare/articles/q2-rundown-10x-genomics-nasdaq-133346400.html"
+        "title": "Is Deere (DE) Stock Reasonable After Its Strong Q2 Beat?",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/deere-stock-reasonable-strong-q2-121038058.html"
       },
       {
-        "title": "Beyond Meta, Cathie Wood’s ARKG Loads Up On These 4 Biotech Names",
-        "url": "https://stocktwits.com/news-articles/markets/equity/beyond-meta-cathie-wood-arkg-loads-up-on-biotech-names/cZMPZhJRBek"
+        "title": "2 Industrials Stocks Worth Investigating and 1 Facing Challenges",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/2-industrials-stocks-worth-investigating-104837526.html"
       }
     ]
   },
   "last_no_op_utc": "2026-09-26T09:46:00Z",
   "download_log": {
-    "date": "2026-09-22",
+    "date": "2026-09-25",
     "attempts": [
       {
-        "time_sgt": "2026-09-29 09:36 SGT",
+        "time_sgt": "2026-09-29 09:42 SGT",
         "type": "main_download",
         "status": "success",
         "total": 2101,
