@@ -12546,19 +12546,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2101,
     "total_scanned": 2101,
     "updated_utc": "2026-09-29T01:42:18Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2160,
+    "tiingo_eligible": 2157,
     "yf_downloadable": 2101,
-    "yf_unavailable_in_pool": 59,
-    "total_active": 3037,
-    "total_delisted": 1440,
-    "updated_utc": "2026-09-29T01:42:27Z"
+    "yf_unavailable_in_pool": 56,
+    "total_active": 3030,
+    "total_delisted": 1447,
+    "updated_utc": "2026-09-29T02:19:40Z"
   },
   "yf_persistent_unavailable": [
     "AGR",
@@ -12640,7 +12640,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-09-26T00:54:39Z",
+  "tiingo_universe_synced_utc": "2026-09-29T02:19:40Z",
   "daily_summary": {
     "date": "2026-09-25",
     "updated_sgt": "2026-09-29 09:42 SGT",
@@ -12648,10 +12648,10 @@
     "spy_change_pct": 0.54,
     "vs_spy_pct": -1.26,
     "bullets": [
-      "Industrials 板块面临的核心问题是市场对经济周期的不确定性认知，投资者对该板块未来增长前景的信心不足，导致高资本密集型企业估值承压 （[2 Industrials Stocks Worth I…](https://finance.yahoo.com/markets/stocks/articles/2-industrials-stocks-worth-investigating-104837526.html)）",
-      "Deere 等龙头公司虽然基本面强劲（Q2 业绩超预期），但股价已经反映了乐观预期，当前估值水平对后续增长的定价过高，使得市场对其可持续性产生疑虑 （[Is Deere (DE) Stock Reasonab…](https://finance.yahoo.com/markets/stocks/articles/deere-stock-reasonable-strong-q2-121038058.html)）",
-      "贸易政策的不确定性（美中贸易休战但条款差异大）对 Industrials 板块造成结构性拖累，尤其是农业机械等出口导向型企业面临中国市场需求预期调整 （[Trump and Xi Buy Time on Tra…](https://247wallst.com/investing/2026/09/25/trump-and-xi-buy-time-on-trade-farm-and-chip-stocks-are-watching-closely/)）",
-      "策略净值相对 SPY 下跌 1.26% 的主要原因是重仓 Industrials 板块的 DE（-1.8%）等标的拖累，同时非重点持仓的 ILMN（+9.1%）和 TXG（+6.2%）等标的涨幅被边缘化，无法有效对冲板块性下跌的影响 （[Is Deere (DE) Stock Reasonab…](https://finance.yahoo.com/markets/stocks/articles/deere-stock-reasonable-strong-q2-121038058.html)、[2 Industrials Stocks Worth I…](https://finance.yahoo.com/markets/stocks/articles/2-industrials-stocks-worth-investigating-104837526.html)）"
+      "Industrials \u677f\u5757\u9762\u4e34\u7684\u6838\u5fc3\u95ee\u9898\u662f\u5e02\u573a\u5bf9\u7ecf\u6d4e\u5468\u671f\u7684\u4e0d\u786e\u5b9a\u6027\u8ba4\u77e5\uff0c\u6295\u8d44\u8005\u5bf9\u8be5\u677f\u5757\u672a\u6765\u589e\u957f\u524d\u666f\u7684\u4fe1\u5fc3\u4e0d\u8db3\uff0c\u5bfc\u81f4\u9ad8\u8d44\u672c\u5bc6\u96c6\u578b\u4f01\u4e1a\u4f30\u503c\u627f\u538b \uff08[2 Industrials Stocks Worth I\u2026](https://finance.yahoo.com/markets/stocks/articles/2-industrials-stocks-worth-investigating-104837526.html)\uff09",
+      "Deere \u7b49\u9f99\u5934\u516c\u53f8\u867d\u7136\u57fa\u672c\u9762\u5f3a\u52b2\uff08Q2 \u4e1a\u7ee9\u8d85\u9884\u671f\uff09\uff0c\u4f46\u80a1\u4ef7\u5df2\u7ecf\u53cd\u6620\u4e86\u4e50\u89c2\u9884\u671f\uff0c\u5f53\u524d\u4f30\u503c\u6c34\u5e73\u5bf9\u540e\u7eed\u589e\u957f\u7684\u5b9a\u4ef7\u8fc7\u9ad8\uff0c\u4f7f\u5f97\u5e02\u573a\u5bf9\u5176\u53ef\u6301\u7eed\u6027\u4ea7\u751f\u7591\u8651 \uff08[Is Deere (DE) Stock Reasonab\u2026](https://finance.yahoo.com/markets/stocks/articles/deere-stock-reasonable-strong-q2-121038058.html)\uff09",
+      "\u8d38\u6613\u653f\u7b56\u7684\u4e0d\u786e\u5b9a\u6027\uff08\u7f8e\u4e2d\u8d38\u6613\u4f11\u6218\u4f46\u6761\u6b3e\u5dee\u5f02\u5927\uff09\u5bf9 Industrials \u677f\u5757\u9020\u6210\u7ed3\u6784\u6027\u62d6\u7d2f\uff0c\u5c24\u5176\u662f\u519c\u4e1a\u673a\u68b0\u7b49\u51fa\u53e3\u5bfc\u5411\u578b\u4f01\u4e1a\u9762\u4e34\u4e2d\u56fd\u5e02\u573a\u9700\u6c42\u9884\u671f\u8c03\u6574 \uff08[Trump and Xi Buy Time on Tra\u2026](https://247wallst.com/investing/2026/09/25/trump-and-xi-buy-time-on-trade-farm-and-chip-stocks-are-watching-closely/)\uff09",
+      "\u7b56\u7565\u51c0\u503c\u76f8\u5bf9 SPY \u4e0b\u8dcc 1.26% \u7684\u4e3b\u8981\u539f\u56e0\u662f\u91cd\u4ed3 Industrials \u677f\u5757\u7684 DE\uff08-1.8%\uff09\u7b49\u6807\u7684\u62d6\u7d2f\uff0c\u540c\u65f6\u975e\u91cd\u70b9\u6301\u4ed3\u7684 ILMN\uff08+9.1%\uff09\u548c TXG\uff08+6.2%\uff09\u7b49\u6807\u7684\u6da8\u5e45\u88ab\u8fb9\u7f18\u5316\uff0c\u65e0\u6cd5\u6709\u6548\u5bf9\u51b2\u677f\u5757\u6027\u4e0b\u8dcc\u7684\u5f71\u54cd \uff08[Is Deere (DE) Stock Reasonab\u2026](https://finance.yahoo.com/markets/stocks/articles/deere-stock-reasonable-strong-q2-121038058.html)\u3001[2 Industrials Stocks Worth I\u2026](https://finance.yahoo.com/markets/stocks/articles/2-industrials-stocks-worth-investigating-104837526.html)\uff09"
     ],
     "news": [
       {
