@@ -4,8 +4,8 @@
   "start_date": "2026-06-19",
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
-  "last_update_date": "2026-09-30",
-  "cash": 5902.414222518478,
+  "last_update_date": "2026-10-01",
+  "cash": 5996.46135806626,
   "positions": [
     {
       "ticker": "APGE",
@@ -84,8 +84,8 @@
       "lowest_low": 55.25,
       "atr_at_entry": 3.2283,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 90.36,
-      "last_price_date": "2026-09-30",
+      "last_known_price": 88.76,
+      "last_price_date": "2026-10-01",
       "entry_commission": 2.69,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -105,30 +105,9 @@
       "lowest_low": 100.53,
       "atr_at_entry": 3.5541,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 105.3,
-      "last_price_date": "2026-09-30",
+      "last_known_price": 104.37,
+      "last_price_date": "2026-10-01",
       "entry_commission": 2.62,
-      "entry_regime": "BULL",
-      "sector": "N/A"
-    },
-    {
-      "ticker": "BNS",
-      "signal_date": "2026-08-25",
-      "signal_price": 93.1,
-      "signal_strength": 1.0115,
-      "entry_date": "2026-08-26",
-      "open_price": 92.65,
-      "entry_price": 92.7427,
-      "shares": 95,
-      "stop_loss": 89.2833,
-      "trail_stop": 91.032883,
-      "highest_high": 95.74,
-      "lowest_low": 90.82,
-      "atr_at_entry": 1.7297,
-      "R_at_backtest_end": 0.0,
-      "last_known_price": 90.84,
-      "last_price_date": "2026-09-30",
-      "entry_commission": 2.64,
       "entry_regime": "BULL",
       "sector": "N/A"
     },
@@ -142,13 +121,13 @@
       "entry_price": 53.5135,
       "shares": 163,
       "stop_loss": 49.4921,
-      "trail_stop": 54.010863,
-      "highest_high": 59.41,
+      "trail_stop": 54.038818,
+      "highest_high": 59.42,
       "lowest_low": 49.56,
       "atr_at_entry": 2.0107,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 57.74,
-      "last_price_date": "2026-09-30",
+      "last_known_price": 59.26,
+      "last_price_date": "2026-10-01",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -186,11 +165,11 @@
       "stop_loss": 664.0742,
       "trail_stop": 670.263753,
       "highest_high": 721.22,
-      "lowest_low": 665.45,
+      "lowest_low": 644.06,
       "atr_at_entry": 19.9395,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 671.55,
-      "last_price_date": "2026-09-30",
+      "last_known_price": 667.26,
+      "last_price_date": "2026-10-01",
       "entry_commission": 2.53,
       "entry_regime": "BULL",
       "sector": "Industrials"
@@ -205,13 +184,13 @@
       "entry_price": 183.3832,
       "shares": 46,
       "stop_loss": 165.1428,
-      "trail_stop": 184.089693,
-      "highest_high": 212.5,
+      "trail_stop": 185.578709,
+      "highest_high": 213.86,
       "lowest_low": 180.55,
       "atr_at_entry": 9.1202,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 209.11,
-      "last_price_date": "2026-09-30",
+      "last_known_price": 212.63,
+      "last_price_date": "2026-10-01",
       "entry_commission": 2.53,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -226,13 +205,13 @@
       "entry_price": 233.233,
       "shares": 18,
       "stop_loss": 208.971,
-      "trail_stop": 233.679336,
-      "highest_high": 268.95,
+      "trail_stop": 234.292845,
+      "highest_high": 269.3,
       "lowest_low": 230.85,
       "atr_at_entry": 12.131,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 264.75,
-      "last_price_date": "2026-09-30",
+      "last_known_price": 266.09,
+      "last_price_date": "2026-10-01",
       "entry_commission": 1.26,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -252,8 +231,8 @@
       "lowest_low": 140.08,
       "atr_at_entry": 4.2783,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 152.89,
-      "last_price_date": "2026-09-30",
+      "last_known_price": 149.06,
+      "last_price_date": "2026-10-01",
       "entry_commission": 2.54,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -268,13 +247,13 @@
       "entry_price": 249.3791,
       "shares": 34,
       "stop_loss": 230.2643,
-      "trail_stop": 247.7049,
+      "trail_stop": 247.942143,
       "highest_high": 280.17,
       "lowest_low": 234.57,
       "atr_at_entry": 9.5574,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 273.68,
-      "last_price_date": "2026-09-30",
+      "last_known_price": 265.72,
+      "last_price_date": "2026-10-01",
       "entry_commission": 2.54,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -294,8 +273,8 @@
       "lowest_low": 74.81,
       "atr_at_entry": 4.6621,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 81.9,
-      "last_price_date": "2026-09-30",
+      "last_known_price": 76.5,
+      "last_price_date": "2026-10-01",
       "entry_commission": 1.27,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -310,13 +289,13 @@
       "entry_price": 622.1215,
       "shares": 14,
       "stop_loss": 568.5801,
-      "trail_stop": 563.760396,
+      "trail_stop": 564.852377,
       "highest_high": 639.0,
       "lowest_low": 596.07,
       "atr_at_entry": 26.7707,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 611.76,
-      "last_price_date": "2026-09-30",
+      "last_known_price": 615.73,
+      "last_price_date": "2026-10-01",
       "entry_commission": 2.61,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -332,12 +311,12 @@
       "shares": 29,
       "stop_loss": 261.7515,
       "trail_stop": 266.112488,
-      "highest_high": 304.75,
+      "highest_high": 305.95,
       "lowest_low": 265.4,
       "atr_at_entry": 12.5175,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 292.46,
-      "last_price_date": "2026-09-30",
+      "last_known_price": 301.27,
+      "last_price_date": "2026-10-01",
       "entry_commission": 2.5,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -375,11 +354,11 @@
       "stop_loss": 109.6732,
       "trail_stop": 106.7721,
       "highest_high": 115.63,
-      "lowest_low": 110.35,
+      "lowest_low": 106.84,
       "atr_at_entry": 2.9011,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 110.4,
-      "last_price_date": "2026-09-30",
+      "last_known_price": 106.94,
+      "last_price_date": "2026-10-01",
       "entry_commission": 2.56,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -399,9 +378,30 @@
       "lowest_low": 14.1,
       "atr_at_entry": 0.7429,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 14.82,
-      "last_price_date": "2026-09-30",
+      "last_known_price": 14.23,
+      "last_price_date": "2026-10-01",
       "entry_commission": 2.56,
+      "entry_regime": "BULL",
+      "sector": "N/A"
+    },
+    {
+      "ticker": "TWST",
+      "signal_date": "2026-09-30",
+      "signal_price": 193.24,
+      "signal_strength": 1.013,
+      "entry_date": "2026-10-01",
+      "open_price": 193.1,
+      "entry_price": 193.2931,
+      "shares": 44,
+      "stop_loss": 172.2151,
+      "trail_stop": 168.36723,
+      "highest_high": 200.31,
+      "lowest_low": 187.6,
+      "atr_at_entry": 10.539,
+      "R_at_backtest_end": 0.0,
+      "last_known_price": 188.05,
+      "last_price_date": "2026-10-01",
+      "entry_commission": 2.55,
       "entry_regime": "BULL",
       "sector": "N/A"
     }
@@ -2703,6 +2703,36 @@
       "holding_days": 27,
       "entry_regime": "BULL",
       "exit_regime": "BULL"
+    },
+    {
+      "ticker": "BNS",
+      "signal_date": "2026-08-25",
+      "signal_price": 93.1,
+      "signal_strength": 1.0115,
+      "entry_date": "2026-08-26",
+      "exit_date": "2026-10-01",
+      "open_price": 92.65,
+      "entry_price": 92.7427,
+      "exit_open": 90.55,
+      "exit_price": 90.4595,
+      "shares": 95,
+      "stop_loss": 89.2833,
+      "stop_used": 91.0329,
+      "highest_high": 95.74,
+      "lowest_low": 90.82,
+      "atr_at_entry": 1.7297,
+      "stop_distance_pct": 0.037301,
+      "trail_stop_at_exit": 91.032883,
+      "atr_at_exit": 1.5786,
+      "exit_commission": 2.58,
+      "entry_commission": 2.64,
+      "pnl_r": -0.66,
+      "net_pnl": -222.13,
+      "exit_reason": "trailing_stop",
+      "detected_date": "2026-09-30",
+      "holding_days": 36,
+      "entry_regime": "BULL",
+      "exit_regime": "BULL"
     }
   ],
   "nav_history": [
@@ -3117,55 +3147,59 @@
       "nav": 171199.65,
       "regime": "BULL",
       "spy_close": 762.63
+    },
+    {
+      "date": "2026-10-01",
+      "nav": 169928.25,
+      "regime": "BULL",
+      "spy_close": 763.99
     }
   ],
   "pending_exits": [
     {
-      "ticker": "BNS",
-      "exit_reason": "trailing_stop",
-      "stop_used": 91.0329,
-      "shares": 95,
-      "open_price": 92.65,
-      "entry_price": 92.7427,
-      "entry_date": "2026-08-26",
-      "signal_date": "2026-08-25",
-      "signal_price": 93.1,
-      "signal_strength": 1.0115,
-      "stop_loss": 89.2833,
-      "atr_at_entry": 1.7297,
-      "highest_high": 95.74,
-      "lowest_low": 90.82,
-      "trail_stop_at_exit": 91.032883,
-      "atr_at_exit": 1.5786,
-      "detected_date": "2026-09-30",
-      "entry_commission": 2.64,
+      "ticker": "DE",
+      "exit_reason": "stop_loss",
+      "stop_used": 664.0742,
+      "shares": 12,
+      "open_price": 703.25,
+      "entry_price": 703.9532,
+      "entry_date": "2026-09-03",
+      "signal_date": "2026-09-02",
+      "signal_price": 698.37,
+      "signal_strength": 1.0302,
+      "stop_loss": 664.0742,
+      "atr_at_entry": 19.9395,
+      "highest_high": 721.22,
+      "lowest_low": 644.06,
+      "trail_stop_at_exit": 670.263753,
+      "atr_at_exit": 17.5106,
+      "detected_date": "2026-10-01",
+      "entry_commission": 2.53,
+      "entry_regime": "BULL"
+    },
+    {
+      "ticker": "HALO",
+      "exit_reason": "stop_loss",
+      "stop_used": 109.6732,
+      "shares": 74,
+      "open_price": 115.36,
+      "entry_price": 115.4754,
+      "entry_date": "2026-09-25",
+      "signal_date": "2026-09-22",
+      "signal_price": 115.13,
+      "signal_strength": 1.0146,
+      "stop_loss": 109.6732,
+      "atr_at_entry": 2.9011,
+      "highest_high": 115.63,
+      "lowest_low": 106.84,
+      "trail_stop_at_exit": 106.7721,
+      "atr_at_exit": 3.0005,
+      "detected_date": "2026-10-01",
+      "entry_commission": 2.56,
       "entry_regime": "BULL"
     }
   ],
-  "pending_entries": [
-    {
-      "ticker": "TWST",
-      "signal_date": "2026-09-30",
-      "signal_price": 193.24,
-      "stop_price": 172.1619,
-      "shares": 44,
-      "atr": 10.539,
-      "signal_strength": 1.013,
-      "trade_risk": 0.0054,
-      "notional": 8502.56
-    },
-    {
-      "ticker": "WBD",
-      "signal_date": "2026-09-30",
-      "signal_price": 30.95,
-      "stop_price": 30.1474,
-      "shares": 277,
-      "atr": 0.4013,
-      "signal_strength": 1.001,
-      "trade_risk": 0.0013,
-      "notional": 8573.15
-    }
-  ],
+  "pending_entries": [],
   "signals_history": [
     {
       "date": "2026-06-22",
@@ -12742,105 +12776,134 @@
           "strength": 1.001
         }
       ]
+    },
+    {
+      "date": "2026-10-01",
+      "regime": "BULL",
+      "spy_close": 763.99,
+      "n_candidates": 0,
+      "n_entries": 0,
+      "n_executed": 1,
+      "n_exits": 2,
+      "n_raw_breakouts": 0,
+      "n_heat_blocked": 0,
+      "n_cash_blocked": 0,
+      "n_corr_reduced": 0,
+      "n_price_filtered": 246,
+      "n_adv_filtered": 575,
+      "n_breakout_filtered": 1257,
+      "n_atr_filtered": 0,
+      "n_stop_dist_filtered": 4,
+      "n_volume_filtered": 3,
+      "spy_pct_above_sma200": 6.6194,
+      "exits_executed": [
+        {
+          "ticker": "BNS",
+          "shares": 95,
+          "exit_open": 90.55,
+          "exit_price": 90.4595,
+          "net_pnl": -222.13,
+          "pnl_r": -0.66,
+          "exit_reason": "trailing_stop"
+        }
+      ],
+      "entries_executed": [
+        {
+          "ticker": "TWST",
+          "signal_date": "2026-09-30",
+          "signal_price": 193.24,
+          "open_price": 193.1,
+          "entry_price": 193.2931,
+          "shares": 44,
+          "stop_price": 172.2151,
+          "trade_risk": 0.0054
+        }
+      ],
+      "exit_signals": [
+        {
+          "ticker": "DE",
+          "exit_reason": "stop_loss",
+          "stop_used": 664.0742,
+          "shares": 12
+        },
+        {
+          "ticker": "HALO",
+          "exit_reason": "stop_loss",
+          "stop_used": 109.6732,
+          "shares": 74
+        }
+      ],
+      "candidate_signals": [],
+      "entry_signals": []
     }
   ],
-  "last_update_utc": "2026-10-01T11:30:24Z",
+  "last_update_utc": "2026-10-02T10:58:56Z",
   "today_signals": {
-    "date": "2026-09-30",
+    "date": "2026-10-01",
     "regime": "BULL",
-    "spy_close": 762.63,
-    "n_candidates": 2,
-    "n_entries": 2,
+    "spy_close": 763.99,
+    "n_candidates": 0,
+    "n_entries": 0,
     "n_executed": 1,
-    "n_exits": 1,
-    "n_raw_breakouts": 2,
+    "n_exits": 2,
+    "n_raw_breakouts": 0,
     "n_heat_blocked": 0,
     "n_cash_blocked": 0,
     "n_corr_reduced": 0,
-    "n_price_filtered": 244,
-    "n_adv_filtered": 581,
-    "n_breakout_filtered": 1250,
+    "n_price_filtered": 246,
+    "n_adv_filtered": 575,
+    "n_breakout_filtered": 1257,
     "n_atr_filtered": 0,
-    "n_stop_dist_filtered": 1,
-    "n_volume_filtered": 1,
-    "spy_pct_above_sma200": 6.4961,
-    "exits_executed": [],
+    "n_stop_dist_filtered": 4,
+    "n_volume_filtered": 3,
+    "spy_pct_above_sma200": 6.6194,
+    "exits_executed": [
+      {
+        "ticker": "BNS",
+        "shares": 95,
+        "exit_open": 90.55,
+        "exit_price": 90.4595,
+        "net_pnl": -222.13,
+        "pnl_r": -0.66,
+        "exit_reason": "trailing_stop"
+      }
+    ],
     "entries_executed": [
       {
-        "ticker": "IOVA",
-        "signal_date": "2026-09-29",
-        "signal_price": 14.45,
-        "open_price": 14.65,
-        "entry_price": 14.6646,
-        "shares": 583,
-        "stop_price": 13.1788,
-        "trade_risk": 0.0051
+        "ticker": "TWST",
+        "signal_date": "2026-09-30",
+        "signal_price": 193.24,
+        "open_price": 193.1,
+        "entry_price": 193.2931,
+        "shares": 44,
+        "stop_price": 172.2151,
+        "trade_risk": 0.0054
       }
     ],
     "exit_signals": [
       {
-        "ticker": "BNS",
-        "exit_reason": "trailing_stop",
-        "stop_used": 91.0329,
-        "shares": 95
-      }
-    ],
-    "candidate_signals": [
-      {
-        "ticker": "TWST",
-        "signal_price": 193.24,
-        "stop_price": 172.1619,
-        "shares": 44,
-        "trade_risk": 0.0054,
-        "strength": 1.013,
-        "rejection": null,
-        "corr_with": null,
-        "stop_distance_pct": 0.109077,
-        "atr_pct": 0.054539,
-        "adv60_m": 229.11,
-        "vol_ratio": 1.8483
+        "ticker": "DE",
+        "exit_reason": "stop_loss",
+        "stop_used": 664.0742,
+        "shares": 12
       },
       {
-        "ticker": "WBD",
-        "signal_price": 30.95,
-        "stop_price": 30.1474,
-        "shares": 277,
-        "trade_risk": 0.0013,
-        "strength": 1.001,
-        "rejection": null,
-        "corr_with": null,
-        "stop_distance_pct": 0.025931,
-        "atr_pct": 0.012965,
-        "adv60_m": 823.807,
-        "vol_ratio": 3.3049
+        "ticker": "HALO",
+        "exit_reason": "stop_loss",
+        "stop_used": 109.6732,
+        "shares": 74
       }
     ],
-    "entry_signals": [
-      {
-        "ticker": "TWST",
-        "signal_price": 193.24,
-        "stop_price": 172.1619,
-        "shares": 44,
-        "trade_risk": 0.0054,
-        "strength": 1.013
-      },
-      {
-        "ticker": "WBD",
-        "signal_price": 30.95,
-        "stop_price": 30.1474,
-        "shares": 277,
-        "trade_risk": 0.0013,
-        "strength": 1.001
-      }
-    ]
+    "candidate_signals": [],
+    "entry_signals": []
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
+  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
-    "downloaded_count": 2105,
-    "total_scanned": 2105,
-    "updated_utc": "2026-10-01T11:30:23Z"
+    "downloaded_count": 2106,
+    "total_scanned": 2106,
+    "updated_utc": "2026-10-02T10:58:55Z"
   },
   "universe_stats": {
     "tiingo_eligible": 2157,
@@ -12848,7 +12911,7 @@
     "yf_unavailable_in_pool": 51,
     "total_active": 3032,
     "total_delisted": 1445,
-    "updated_utc": "2026-10-02T01:49:29Z"
+    "updated_utc": "2026-10-02T10:58:57Z"
   },
   "yf_persistent_unavailable": [
     "AGR",
@@ -12928,51 +12991,25 @@
   ],
   "tiingo_universe_synced_utc": "2026-10-02T01:49:29Z",
   "daily_summary": {
-    "date": "2026-09-30",
-    "updated_sgt": "2026-10-01 19:30 SGT",
-    "nav_change_pct": 0.09,
-    "spy_change_pct": -0.21,
-    "vs_spy_pct": 0.29,
-    "bullets": [
-      "Okta\u4f5c\u4e3aAI\u8eab\u4efd\u8ba4\u8bc1\u9886\u57df\u7684\u6838\u5fc3\u73a9\u5bb6\uff0cMorgan Stanley\u4e0a\u8c03\u76ee\u6807\u4ef7\u81f3$245\u53cd\u6620\u4e86\u534e\u5c14\u8857\u5bf9\u5176AI Agent\u5e94\u7528\u524d\u666f\u7684\u8ba4\u53ef\uff0c\u5e26\u52a8\u6574\u4e2aTechnology\u677f\u5757\u4e2dAI\u4e3b\u9898\u80a1\u7684\u8054\u52a8\u4e0a\u5347\u3002\uff08[Okta Stock Rises After Morga\u2026](https://finance.yahoo.com/markets/stocks/articles/okta-stock-rises-morgan-stanley-122919510.html)\uff09",
-      "\u7b56\u7565\u91cd\u4ed3\u7684OKTA\u4eca\u65e5\u4e0a\u6da82.1%\uff08\u51c0\u503c\u8d21\u732e+$195\uff09\uff0c\u800c\u540c\u671fSPY\u4e0b\u8dcc0.21%\uff0c\u8fd9+0.29%\u7684\u8d85\u989d\u6536\u76ca\u4e3b\u8981\u6765\u81ea\u4e8e\u7b56\u7565\u5bf9AI\u9a71\u52a8\u589e\u957f\u6545\u4e8b\u7684\u63d0\u524d\u5e03\u5c40\uff0cMorgan Stanley\u7b49\u673a\u6784\u7684\u4e50\u89c2\u8bc4\u7ea7\u5f3a\u5316\u4e86\u5e02\u573a\u5bf9\u8eab\u4efd\u7ba1\u7406\u4f9b\u5e94\u5546\u5728AI\u65f6\u4ee3\u7684\u4f30\u503c\u91cd\u4f30\u3002\uff08[Okta Stock Rises After Morga\u2026](https://finance.yahoo.com/markets/stocks/articles/okta-stock-rises-morgan-stanley-122919510.html)\u3001[Okta (OKTA) Could Be 36% Ove\u2026](https://finance.yahoo.com/markets/stocks/articles/okta-okta-could-36-overvalued-001338026.html)\uff09",
-      "\u867d\u7136\u65b0\u95fb\u8b66\u793aOKTA\u5728AI Agent\u53d9\u4e8b\u9a71\u52a8\u4e0b\u53ef\u80fd\u5b58\u572836%\u7684\u9ad8\u4f30\u98ce\u9669\uff0c\u4f46\u77ed\u671f\u5e02\u573a\u60c5\u7eea\u4ecd\u88abAI\u589e\u957f\u50ac\u5316\u5242\u4e3b\u5bfc\uff0c\u6295\u8d44\u8005\u5bf9144.95%\u5e74\u5ea6\u6da8\u5e45\u7684\u5f3a\u52bf\u60ef\u6027\u62bc\u6ce8\u538b\u5012\u4e86\u4f30\u503c\u8c28\u614e\u58f0\u97f3\uff0c\u5bfc\u81f4Technology\u677f\u5757\u76f8\u5bf9\u5927\u76d8\u83b7\u5f97\u8d85\u989d\u6536\u76ca\u3002\uff08[Okta (OKTA) Could Be 36% Ove\u2026](https://finance.yahoo.com/markets/stocks/articles/okta-okta-could-36-overvalued-001338026.html)\uff09",
-      "\u76f8\u6bd4\u4e4b\u4e0b\u7b56\u7565\u4e2d\u975e\u6838\u5fc3\u6301\u4ed3BNS\u3001DE\u3001HALO\u7b49\u8dcc\u5e45\u66f4\u5927\uff08\u5206\u522b-1.8%\u3001-1.3%\u3001-1.0%\uff09\uff0c\u8fd9\u4e9b\u975e\u79d1\u6280\u6216\u975eAI\u4e3b\u9898\u6807\u7684\u7684\u8d1f\u9762\u8868\u73b0\u88abOKTA\u7b49\u91cd\u4ed3\u79d1\u6280\u80a1\u7684\u5f3a\u52bf\u5b8c\u5168\u62b5\u6d88\uff0c\u6700\u7ec8\u4f7f\u7b56\u7565\u51c0\u503c\u9006\u52bf\u4e0a\u5347\u81f3+0.09%\u800cSPY\u9677\u5165\u8d1f\u503c\u3002\uff08[Okta Stock Rises After Morga\u2026](https://finance.yahoo.com/markets/stocks/articles/okta-stock-rises-morgan-stanley-122919510.html)\u3001[Okta (OKTA) Could Be 36% Ove\u2026](https://finance.yahoo.com/markets/stocks/articles/okta-okta-could-36-overvalued-001338026.html)\uff09"
-    ],
-    "news": [
-      {
-        "title": "Wall Street Analysts Think Okta (OKTA) Is a Good Investment: Is It?",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/wall-street-analysts-think-okta-123003079.html"
-      },
-      {
-        "title": "Okta Stock Rises After Morgan Stanley Raises Price Target to $245",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/okta-stock-rises-morgan-stanley-122919510.html"
-      },
-      {
-        "title": "Okta (OKTA) Could Be 36% Overvalued Following Its AI Agent Identity Push",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/okta-okta-could-36-overvalued-001338026.html"
-      },
-      {
-        "title": "3 Rate Sensitive Software Stocks Investors May Want On Their Watchlist",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/3-rate-sensitive-software-stocks-231430931.html"
-      },
-      {
-        "title": "CrowdStrike (CRWD) Stock May Be Overvalued On Blueprint Alliance News",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/crowdstrike-crwd-stock-may-overvalued-211447326.html"
-      }
-    ]
+    "date": "2026-10-01",
+    "updated_sgt": "2026-10-02 18:58 SGT",
+    "nav_change_pct": -0.74,
+    "spy_change_pct": 0.18,
+    "vs_spy_pct": -0.92,
+    "bullets": [],
+    "news": []
   },
   "last_no_op_utc": "2026-09-26T09:46:00Z",
   "download_log": {
-    "date": "2026-09-30",
+    "date": "2026-10-01",
     "attempts": [
       {
-        "time_sgt": "2026-10-01 19:30 SGT",
+        "time_sgt": "2026-10-02 18:58 SGT",
         "type": "main_download",
         "status": "success",
-        "total": 2105,
-        "success": 2105,
-        "cumulative_success": 2105,
+        "total": 2106,
+        "success": 2106,
+        "cumulative_success": 2106,
         "failed": 0,
         "next_retry_sgt": null,
         "seq": 1
