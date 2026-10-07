@@ -13519,19 +13519,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2125,
     "total_scanned": 2166,
     "updated_utc": "2026-10-06T11:54:01Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2166,
-    "yf_downloadable": 2114,
-    "yf_unavailable_in_pool": 52,
-    "total_active": 3044,
-    "total_delisted": 1433,
-    "updated_utc": "2026-10-06T11:54:04Z"
+    "tiingo_eligible": 2155,
+    "yf_downloadable": 2101,
+    "yf_unavailable_in_pool": 54,
+    "total_active": 3024,
+    "total_delisted": 1453,
+    "updated_utc": "2026-10-07T01:49:41Z"
   },
   "yf_persistent_unavailable": [
     "AGR",
@@ -13611,7 +13611,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-10-06T02:31:26Z",
+  "tiingo_universe_synced_utc": "2026-10-07T01:49:41Z",
   "daily_summary": {
     "date": "2026-10-05",
     "updated_sgt": "2026-10-06 19:54 SGT",
