@@ -13709,7 +13709,7 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
+  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
     "downloaded_count": 2096,
     "total_scanned": 2096,
@@ -13805,15 +13805,19 @@
   ],
   "tiingo_universe_synced_utc": "2026-10-10T01:55:31Z",
   "daily_summary": {
-    "date": "2026-10-08",
-    "updated_sgt": "2026-10-09 19:47 SGT",
-    "nav_change_pct": 1.04,
-    "spy_change_pct": -0.42,
-    "vs_spy_pct": 1.46,
-    "bullets": [],
-    "news": []
+    "date": "2026-10-10",
+    "updated_sgt": "2026-10-10 19:01 SGT",
+    "nav_change_pct": null,
+    "spy_change_pct": null,
+    "vs_spy_pct": null,
+    "bullets": [
+      "📅 今日（2026-10-10）美股市场不开盘（周末（Weekend））。",
+      "最近交易日：2026-10-09。"
+    ],
+    "news": [],
+    "market_closed": true
   },
-  "last_no_op_utc": "2026-10-03T10:17:03Z",
+  "last_no_op_utc": "2026-10-10T11:01:52Z",
   "download_log": {
     "date": "2026-10-08",
     "attempts": [
