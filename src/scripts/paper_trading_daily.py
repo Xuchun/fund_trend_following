@@ -1633,13 +1633,14 @@ def main() -> None:
             return
 
     # ── Non-trading day early exit ────────────────────────────────────────────
-    # Exit early only when NYSE is genuinely closed today (holiday/weekend).
-    # NOTE: Do NOT use "_et_today != today" — that comparison fires every time
-    # the script runs after midnight ET (e.g., 02:00 AM), causing a false
-    # "market closed" exit even when today is a normal trading day.
+    # Exit early only when the TARGET date (today) is genuinely a non-trading day.
+    # BUG FIX: must check `today` (the target), NOT `_get_et_date()` (current ET date).
+    # When the cron runs on Saturday, _get_et_date() returns Saturday (weekend),
+    # but today = _get_target_date() = Friday (trading day). Checking current ET date
+    # caused the script to skip Friday's data every time it ran on a Saturday.
     if not args.date:
         _et_today = _get_et_date()
-        _is_hol, _hol_name, _ = _check_market_holiday(_et_today)
+        _is_hol, _hol_name, _ = _check_market_holiday(today)
         if _is_hol is True:
             _closed_reason = _hol_name or "假日"
             _now_utc_cl = datetime.now(timezone.utc)
