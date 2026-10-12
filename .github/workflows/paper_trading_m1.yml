@@ -2,11 +2,12 @@ name: Paper Trading M1 — Daily Update
 
 on:
   schedule:
-    # 05:00 UTC = 1:00 AM ET (summer/EDT) = 12:00 AM ET (winter/EST), next calendar day
-    # 9+ hours after US market close (4:00 PM ET) — Yahoo Finance period="300d" endpoint
-    # typically takes 7-9 hours to publish EOD data; 23:00 UTC was too early and missed it.
-    # Day-of-week shifted to 2-6 (Tue-Sat UTC) = Mon-Fri ET.
-    - cron: '0 5 * * 2-6'
+    # 01:00 UTC = 09:00 SGT (UTC+8) = 21:00 ET previous day (EDT) / 20:00 ET (EST)
+    # Triggers at 9:00 AM Singapore time. Actual execution may be delayed by GitHub
+    # Actions queue (often 1-6 hours). If Yahoo Finance data is not yet available,
+    # the no_data_probe mechanism causes the retry workflow to re-attempt hourly.
+    # Day-of-week 2-6 (Tue-Sat UTC) = Mon-Fri ET previous trading day.
+    - cron: '0 1 * * 2-6'
   workflow_dispatch:   # allow manual trigger from GitHub Actions UI
     inputs:
       date:
