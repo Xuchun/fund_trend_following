@@ -4,8 +4,8 @@
   "start_date": "2026-06-19",
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
-  "last_update_date": "2026-10-27",
-  "cash": 1440.2724049946682,
+  "last_update_date": "2026-10-28",
+  "cash": 9248.764432214799,
   "positions": [
     {
       "ticker": "APGE",
@@ -84,8 +84,8 @@
       "lowest_low": 49.56,
       "atr_at_entry": 2.0107,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 63.75,
-      "last_price_date": "2026-10-27",
+      "last_known_price": 62.81,
+      "last_price_date": "2026-10-28",
       "entry_commission": 2.62,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -122,12 +122,12 @@
       "shares": 60,
       "stop_loss": 132.4643,
       "trail_stop": 150.646357,
-      "highest_high": 166.25,
+      "highest_high": 169.06,
       "lowest_low": 140.08,
       "atr_at_entry": 4.2783,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 161.86,
-      "last_price_date": "2026-10-27",
+      "last_known_price": 165.33,
+      "last_price_date": "2026-10-28",
       "entry_commission": 2.54,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -147,8 +147,8 @@
       "lowest_low": 234.57,
       "atr_at_entry": 9.5574,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 279.47,
-      "last_price_date": "2026-10-27",
+      "last_known_price": 288.79,
+      "last_price_date": "2026-10-28",
       "entry_commission": 2.54,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -189,8 +189,8 @@
       "lowest_low": 115.49,
       "atr_at_entry": 3.5409,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 119.97,
-      "last_price_date": "2026-10-27",
+      "last_known_price": 118.32,
+      "last_price_date": "2026-10-28",
       "entry_commission": 2.48,
       "entry_regime": "BULL",
       "sector": "N/A"
@@ -205,35 +205,14 @@
       "entry_price": 118.5084,
       "shares": 69,
       "stop_loss": 110.2544,
-      "trail_stop": 110.422029,
+      "trail_stop": 110.528928,
       "highest_high": 122.64,
       "lowest_low": 113.18,
       "atr_at_entry": 4.127,
       "R_at_backtest_end": 0.0,
       "last_known_price": 115.22,
-      "last_price_date": "2026-10-27",
+      "last_price_date": "2026-10-28",
       "entry_commission": 2.45,
-      "entry_regime": "BULL",
-      "sector": "Consumer Cyclical"
-    },
-    {
-      "ticker": "EBAY",
-      "signal_date": "2026-10-15",
-      "signal_price": 122.91,
-      "signal_strength": 1.0345,
-      "entry_date": "2026-10-16",
-      "open_price": 123.94,
-      "entry_price": 124.0639,
-      "shares": 66,
-      "stop_loss": 117.0533,
-      "trail_stop": 114.03764,
-      "highest_high": 124.09,
-      "lowest_low": 116.81,
-      "atr_at_entry": 3.5053,
-      "R_at_backtest_end": 0.0,
-      "last_known_price": 117.83,
-      "last_price_date": "2026-10-27",
-      "entry_commission": 2.46,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
     },
@@ -252,8 +231,8 @@
       "lowest_low": 73.785,
       "atr_at_entry": 2.614,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 82.04,
-      "last_price_date": "2026-10-27",
+      "last_known_price": 83.6,
+      "last_price_date": "2026-10-28",
       "entry_commission": 2.44,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -268,13 +247,13 @@
       "entry_price": 34.4444,
       "shares": 236,
       "stop_loss": 32.7718,
-      "trail_stop": 33.047395,
+      "trail_stop": 33.084025,
       "highest_high": 35.4,
       "lowest_low": 34.14,
       "atr_at_entry": 0.8363,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 34.86,
-      "last_price_date": "2026-10-27",
+      "last_known_price": 34.93,
+      "last_price_date": "2026-10-28",
       "entry_commission": 2.44,
       "entry_regime": "BULL",
       "sector": "Consumer Defensive"
@@ -289,13 +268,13 @@
       "entry_price": 89.5895,
       "shares": 91,
       "stop_loss": 83.1373,
-      "trail_stop": 81.186444,
-      "highest_high": 91.12,
+      "trail_stop": 83.733948,
+      "highest_high": 94.489,
       "lowest_low": 83.57,
       "atr_at_entry": 3.2261,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 87.66,
-      "last_price_date": "2026-10-27",
+      "last_known_price": 92.35,
+      "last_price_date": "2026-10-28",
       "entry_commission": 2.45,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -310,13 +289,13 @@
       "entry_price": 157.6775,
       "shares": 51,
       "stop_loss": 150.4885,
-      "trail_stop": 153.623148,
+      "trail_stop": 153.963564,
       "highest_high": 165.11,
       "lowest_low": 154.3,
       "atr_at_entry": 3.5945,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 161.1,
-      "last_price_date": "2026-10-27",
+      "last_known_price": 160.92,
+      "last_price_date": "2026-10-28",
       "entry_commission": 2.41,
       "entry_regime": "BULL",
       "sector": "Energy"
@@ -333,11 +312,11 @@
       "stop_loss": 15.4952,
       "trail_stop": 16.028437,
       "highest_high": 17.45,
-      "lowest_low": 16.19,
+      "lowest_low": 16.17,
       "atr_at_entry": 0.4706,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 17.13,
-      "last_price_date": "2026-10-27",
+      "last_known_price": 16.69,
+      "last_price_date": "2026-10-28",
       "entry_commission": 2.41,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -352,13 +331,13 @@
       "entry_price": 53.7237,
       "shares": 147,
       "stop_loss": 50.6579,
-      "trail_stop": 51.657343,
-      "highest_high": 56.47,
+      "trail_stop": 51.951476,
+      "highest_high": 56.9,
       "lowest_low": 53.51,
       "atr_at_entry": 1.5329,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 56.38,
-      "last_price_date": "2026-10-27",
+      "last_known_price": 55.88,
+      "last_price_date": "2026-10-28",
       "entry_commission": 2.37,
       "entry_regime": "BULL",
       "sector": "Energy"
@@ -373,13 +352,13 @@
       "entry_price": 48.2382,
       "shares": 163,
       "stop_loss": 43.5944,
-      "trail_stop": 42.266147,
-      "highest_high": 49.17,
+      "trail_stop": 43.31384,
+      "highest_high": 50.21,
       "lowest_low": 47.26,
       "atr_at_entry": 2.3219,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 48.65,
-      "last_price_date": "2026-10-27",
+      "last_known_price": 48.72,
+      "last_price_date": "2026-10-28",
       "entry_commission": 2.36,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -3252,6 +3231,36 @@
       "holding_days": 20,
       "entry_regime": "BULL",
       "exit_regime": "BULL"
+    },
+    {
+      "ticker": "EBAY",
+      "signal_date": "2026-10-15",
+      "signal_price": 122.91,
+      "signal_strength": 1.0345,
+      "entry_date": "2026-10-16",
+      "exit_date": "2026-10-28",
+      "open_price": 123.94,
+      "entry_price": 124.0639,
+      "exit_open": 118.43,
+      "exit_price": 118.3116,
+      "shares": 66,
+      "stop_loss": 117.0533,
+      "stop_used": 117.0533,
+      "highest_high": 124.09,
+      "lowest_low": 116.81,
+      "atr_at_entry": 3.5053,
+      "stop_distance_pct": 0.056508,
+      "trail_stop_at_exit": 114.03764,
+      "atr_at_exit": 3.3508,
+      "exit_commission": 2.34,
+      "entry_commission": 2.46,
+      "pnl_r": -0.8205,
+      "net_pnl": -384.46,
+      "exit_reason": "stop_loss",
+      "detected_date": "2026-10-27",
+      "holding_days": 12,
+      "entry_regime": "BULL",
+      "exit_regime": "BULL"
     }
   ],
   "nav_history": [
@@ -3774,6 +3783,12 @@
       "nav": 158186.81,
       "regime": "BULL",
       "spy_close": 769.66
+    },
+    {
+      "date": "2026-10-28",
+      "nav": 158796.09,
+      "regime": "BULL",
+      "spy_close": 772.31
     }
   ],
   "pending_exits": [
@@ -3797,30 +3812,43 @@
       "detected_date": "2026-09-14",
       "entry_commission": 2.53,
       "entry_regime": "BULL"
-    },
-    {
-      "ticker": "EBAY",
-      "exit_reason": "stop_loss",
-      "stop_used": 117.0533,
-      "shares": 66,
-      "open_price": 123.94,
-      "entry_price": 124.0639,
-      "entry_date": "2026-10-16",
-      "signal_date": "2026-10-15",
-      "signal_price": 122.91,
-      "signal_strength": 1.0345,
-      "stop_loss": 117.0533,
-      "atr_at_entry": 3.5053,
-      "highest_high": 124.09,
-      "lowest_low": 116.81,
-      "trail_stop_at_exit": 114.03764,
-      "atr_at_exit": 3.3508,
-      "detected_date": "2026-10-27",
-      "entry_commission": 2.46,
-      "entry_regime": "BULL"
     }
   ],
-  "pending_entries": [],
+  "pending_entries": [
+    {
+      "ticker": "GMAB",
+      "signal_date": "2026-10-28",
+      "signal_price": 57.29,
+      "stop_price": 53.217,
+      "shares": 139,
+      "atr": 2.0365,
+      "signal_strength": 1.2606,
+      "trade_risk": 0.0036,
+      "notional": 7963.31
+    },
+    {
+      "ticker": "ICLR",
+      "signal_date": "2026-10-28",
+      "signal_price": 214.16,
+      "stop_price": 196.5783,
+      "shares": 37,
+      "atr": 8.7909,
+      "signal_strength": 1.1213,
+      "trade_risk": 0.0041,
+      "notional": 7923.92
+    },
+    {
+      "ticker": "LH",
+      "signal_date": "2026-10-28",
+      "signal_price": 360.25,
+      "stop_price": 342.4957,
+      "shares": 22,
+      "atr": 8.8771,
+      "signal_strength": 1.0562,
+      "trade_risk": 0.0025,
+      "notional": 7925.5
+    }
+  ],
   "signals_history": [
     {
       "date": "2026-06-22",
@@ -15756,97 +15784,222 @@
       ],
       "candidate_signals": [],
       "entry_signals": []
+    },
+    {
+      "date": "2026-10-28",
+      "regime": "BULL",
+      "spy_close": 772.31,
+      "n_candidates": 3,
+      "n_entries": 3,
+      "n_executed": 0,
+      "n_exits": 0,
+      "n_raw_breakouts": 3,
+      "n_heat_blocked": 0,
+      "n_cash_blocked": 0,
+      "n_corr_reduced": 0,
+      "n_price_filtered": 247,
+      "n_adv_filtered": 588,
+      "n_breakout_filtered": 1226,
+      "n_atr_filtered": 0,
+      "n_stop_dist_filtered": 2,
+      "n_volume_filtered": 13,
+      "spy_pct_above_sma200": 6.4923,
+      "exits_executed": [
+        {
+          "ticker": "EBAY",
+          "shares": 66,
+          "exit_open": 118.43,
+          "exit_price": 118.3116,
+          "net_pnl": -384.46,
+          "pnl_r": -0.8205,
+          "exit_reason": "stop_loss"
+        }
+      ],
+      "entries_executed": [],
+      "exit_signals": [],
+      "candidate_signals": [
+        {
+          "ticker": "GMAB",
+          "signal_price": 57.29,
+          "stop_price": 53.217,
+          "shares": 139,
+          "trade_risk": 0.0036,
+          "strength": 1.2606,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.071095,
+          "atr_pct": 0.035547,
+          "adv60_m": 124.527,
+          "vol_ratio": 8.4903
+        },
+        {
+          "ticker": "ICLR",
+          "signal_price": 214.16,
+          "stop_price": 196.5783,
+          "shares": 37,
+          "trade_risk": 0.0041,
+          "strength": 1.1213,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.082096,
+          "atr_pct": 0.041048,
+          "adv60_m": 138.682,
+          "vol_ratio": 4.8138
+        },
+        {
+          "ticker": "LH",
+          "signal_price": 360.25,
+          "stop_price": 342.4957,
+          "shares": 22,
+          "trade_risk": 0.0025,
+          "strength": 1.0562,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.049283,
+          "atr_pct": 0.024642,
+          "adv60_m": 219.174,
+          "vol_ratio": 2.6252
+        }
+      ],
+      "entry_signals": [
+        {
+          "ticker": "GMAB",
+          "signal_price": 57.29,
+          "stop_price": 53.217,
+          "shares": 139,
+          "trade_risk": 0.0036,
+          "strength": 1.2606
+        },
+        {
+          "ticker": "ICLR",
+          "signal_price": 214.16,
+          "stop_price": 196.5783,
+          "shares": 37,
+          "trade_risk": 0.0041,
+          "strength": 1.1213
+        },
+        {
+          "ticker": "LH",
+          "signal_price": 360.25,
+          "stop_price": 342.4957,
+          "shares": 22,
+          "trade_risk": 0.0025,
+          "strength": 1.0562
+        }
+      ]
     }
   ],
-  "last_update_utc": "2026-10-28T06:40:58Z",
+  "last_update_utc": "2026-10-29T06:48:14Z",
   "today_signals": {
-    "date": "2026-10-27",
+    "date": "2026-10-28",
     "regime": "BULL",
-    "spy_close": 769.66,
-    "n_candidates": 0,
-    "n_entries": 0,
-    "n_executed": 2,
-    "n_exits": 1,
-    "n_raw_breakouts": 0,
+    "spy_close": 772.31,
+    "n_candidates": 3,
+    "n_entries": 3,
+    "n_executed": 0,
+    "n_exits": 0,
+    "n_raw_breakouts": 3,
     "n_heat_blocked": 0,
     "n_cash_blocked": 0,
     "n_corr_reduced": 0,
-    "n_price_filtered": 245,
-    "n_adv_filtered": 577,
-    "n_breakout_filtered": 1238,
+    "n_price_filtered": 247,
+    "n_adv_filtered": 588,
+    "n_breakout_filtered": 1226,
     "n_atr_filtered": 0,
     "n_stop_dist_filtered": 2,
-    "n_volume_filtered": 7,
-    "spy_pct_above_sma200": 6.1874,
+    "n_volume_filtered": 13,
+    "spy_pct_above_sma200": 6.4923,
     "exits_executed": [
       {
-        "ticker": "PBR-A",
-        "shares": 398,
-        "exit_open": 19.93,
-        "exit_price": 19.9101,
-        "net_pnl": -841.58,
-        "pnl_r": -1.6921,
-        "exit_reason": "stop_loss"
-      },
-      {
-        "ticker": "PBR",
-        "shares": 182,
-        "exit_open": 22.6,
-        "exit_price": 22.5774,
-        "net_pnl": -274.92,
-        "pnl_r": -1.0547,
-        "exit_reason": "stop_loss"
-      },
-      {
-        "ticker": "XP",
-        "shares": 284,
-        "exit_open": 16.01,
-        "exit_price": 15.994,
-        "net_pnl": -3830.89,
-        "pnl_r": -5.9201,
-        "exit_reason": "stop_loss"
-      }
-    ],
-    "entries_executed": [
-      {
-        "ticker": "RRC",
-        "signal_date": "2026-10-26",
-        "signal_price": 53.56,
-        "open_price": 53.67,
-        "entry_price": 53.7237,
-        "shares": 147,
-        "stop_price": 50.6579,
-        "trade_risk": 0.0029
-      },
-      {
-        "ticker": "TENB",
-        "signal_date": "2026-10-26",
-        "signal_price": 48.21,
-        "open_price": 48.19,
-        "entry_price": 48.2382,
-        "shares": 163,
-        "stop_price": 43.5944,
-        "trade_risk": 0.0048
-      }
-    ],
-    "exit_signals": [
-      {
         "ticker": "EBAY",
-        "exit_reason": "stop_loss",
-        "stop_used": 117.0533,
-        "shares": 66
+        "shares": 66,
+        "exit_open": 118.43,
+        "exit_price": 118.3116,
+        "net_pnl": -384.46,
+        "pnl_r": -0.8205,
+        "exit_reason": "stop_loss"
       }
     ],
-    "candidate_signals": [],
-    "entry_signals": []
+    "entries_executed": [],
+    "exit_signals": [],
+    "candidate_signals": [
+      {
+        "ticker": "GMAB",
+        "signal_price": 57.29,
+        "stop_price": 53.217,
+        "shares": 139,
+        "trade_risk": 0.0036,
+        "strength": 1.2606,
+        "rejection": null,
+        "corr_with": null,
+        "stop_distance_pct": 0.071095,
+        "atr_pct": 0.035547,
+        "adv60_m": 124.527,
+        "vol_ratio": 8.4903
+      },
+      {
+        "ticker": "ICLR",
+        "signal_price": 214.16,
+        "stop_price": 196.5783,
+        "shares": 37,
+        "trade_risk": 0.0041,
+        "strength": 1.1213,
+        "rejection": null,
+        "corr_with": null,
+        "stop_distance_pct": 0.082096,
+        "atr_pct": 0.041048,
+        "adv60_m": 138.682,
+        "vol_ratio": 4.8138
+      },
+      {
+        "ticker": "LH",
+        "signal_price": 360.25,
+        "stop_price": 342.4957,
+        "shares": 22,
+        "trade_risk": 0.0025,
+        "strength": 1.0562,
+        "rejection": null,
+        "corr_with": null,
+        "stop_distance_pct": 0.049283,
+        "atr_pct": 0.024642,
+        "adv60_m": 219.174,
+        "vol_ratio": 2.6252
+      }
+    ],
+    "entry_signals": [
+      {
+        "ticker": "GMAB",
+        "signal_price": 57.29,
+        "stop_price": 53.217,
+        "shares": 139,
+        "trade_risk": 0.0036,
+        "strength": 1.2606
+      },
+      {
+        "ticker": "ICLR",
+        "signal_price": 214.16,
+        "stop_price": 196.5783,
+        "shares": 37,
+        "trade_risk": 0.0041,
+        "strength": 1.1213
+      },
+      {
+        "ticker": "LH",
+        "signal_price": 360.25,
+        "stop_price": 342.4957,
+        "shares": 22,
+        "trade_risk": 0.0025,
+        "strength": 1.0562
+      }
+    ]
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
+  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
-    "downloaded_count": 2100,
-    "total_scanned": 2100,
-    "updated_utc": "2026-10-28T06:40:57Z"
+    "downloaded_count": 2107,
+    "total_scanned": 2107,
+    "updated_utc": "2026-10-29T06:48:13Z"
   },
   "universe_stats": {
     "tiingo_eligible": 2155,
@@ -15854,7 +16007,7 @@
     "yf_unavailable_in_pool": 48,
     "total_active": 3026,
     "total_delisted": 1451,
-    "updated_utc": "2026-10-29T01:56:58Z"
+    "updated_utc": "2026-10-29T06:48:15Z"
   },
   "yf_persistent_unavailable": [
     "AGR",
@@ -15935,25 +16088,25 @@
   ],
   "tiingo_universe_synced_utc": "2026-10-29T01:56:58Z",
   "daily_summary": {
-    "date": "2026-10-27",
-    "updated_sgt": "2026-10-28 14:40 SGT",
-    "nav_change_pct": 0.34,
-    "spy_change_pct": 0.56,
-    "vs_spy_pct": -0.22,
+    "date": "2026-10-28",
+    "updated_sgt": "2026-10-29 14:48 SGT",
+    "nav_change_pct": 0.39,
+    "spy_change_pct": 0.34,
+    "vs_spy_pct": 0.04,
     "bullets": [],
     "news": []
   },
   "last_no_op_utc": "2026-10-13T07:22:37Z",
   "download_log": {
-    "date": "2026-10-27",
+    "date": "2026-10-28",
     "attempts": [
       {
-        "time_sgt": "2026-10-28 14:40 SGT",
+        "time_sgt": "2026-10-29 14:48 SGT",
         "type": "main_download",
         "status": "success",
-        "total": 2100,
-        "success": 2100,
-        "cumulative_success": 2100,
+        "total": 2107,
+        "success": 2107,
+        "cumulative_success": 2107,
         "failed": 0,
         "next_retry_sgt": null,
         "seq": 1
