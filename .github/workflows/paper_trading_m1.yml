@@ -2,12 +2,15 @@ name: Paper Trading M1 — Daily Update
 
 on:
   schedule:
-    # 01:00 UTC = 09:00 SGT (UTC+8) = 21:00 ET previous day (EDT) / 20:00 ET (EST)
-    # Triggers at 9:00 AM Singapore time. Actual execution may be delayed by GitHub
-    # Actions queue (often 1-6 hours). If Yahoo Finance data is not yet available,
-    # the no_data_probe mechanism causes the retry workflow to re-attempt hourly.
+    # Primary:  01:00 UTC = 09:00 SGT — first daily attempt
+    # Backup:   07:00 UTC = 15:00 SGT — fires if primary was silently dropped
+    #   (GitHub drops a scheduled run when the concurrency group already has a
+    #    pending slot, e.g. the retry workflow queued at 00:30 UTC. The backup
+    #    cron gives the main update a second chance 6 hours later.)
     # Day-of-week 2-6 (Tue-Sat UTC) = Mon-Fri ET previous trading day.
+    # Duplicate-run guard in the script ensures only one full update runs per day.
     - cron: '0 1 * * 2-6'
+    - cron: '0 7 * * 2-6'
   workflow_dispatch:   # allow manual trigger from GitHub Actions UI
     inputs:
       date:
