@@ -879,6 +879,7 @@ def scan_entries(
         "n_atr_filtered":      n_atr_filtered,
         "n_stop_dist_filtered": n_stop_dist_filtered,
         "n_volume_filtered":   n_volume_filtered,
+        "n_stale_filtered":    n_stale_filtered,
         "all_raw_candidates":  all_raw_candidates,   # full funnel; displayed in 四
     }
     return signals, scan_stats
