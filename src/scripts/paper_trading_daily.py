@@ -1812,8 +1812,8 @@ def main() -> None:
     # ── Step 3: ① OPEN — execute yesterday's pending entries ─────────────────
     entries_executed = execute_pending_entries(state, pos_data, today, regime=_regime_str)
 
-    # ── Step 3.5: ② CASH — apply SGOV return to uninvested cash ─────────────
-    # Mirrors backtest engine step ②: portfolio.cash *= (1 + sgov_ret)
+    # ── Step 3.5: ② CASH — apply SHY return to uninvested cash ──────────────
+    # Mirrors backtest engine step ②: portfolio.cash *= (1 + shy_ret)
     # Applied AFTER open executions (cash reflects today's buys/sells) and
     # BEFORE NAV snapshot, so NAV correctly captures interest earned today.
     shy_df   = pos_data.get("SHY")
