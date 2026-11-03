@@ -17537,10 +17537,5 @@
     ],
     "holiday": null
   },
-  "no_data_probe": {
-    "date": "2026-10-31",
-    "attempt": 2,
-    "next_retry_utc": "2026-11-03T02:30:00Z",
-    "next_retry_sgt": "2026-11-03 10:30 SGT"
-  }
+  "no_data_probe": null
 }
