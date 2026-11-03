@@ -5,28 +5,8 @@
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
   "last_update_date": "2026-10-30",
-  "cash": 1323.7945918172327,
+  "cash": 11586.0846,
   "positions": [
-    {
-      "ticker": "APGE",
-      "signal_date": "2026-06-22",
-      "signal_price": 132.55,
-      "signal_strength": 1.3907,
-      "entry_date": "2026-06-23",
-      "open_price": 132.62,
-      "entry_price": 132.7526,
-      "shares": 76,
-      "stop_loss": 119.6946,
-      "trail_stop": 132.936494,
-      "highest_high": 135.09,
-      "atr_at_entry": 6.529,
-      "R_at_backtest_end": 0.0,
-      "last_known_price": 135.07,
-      "last_price_date": "2026-09-02",
-      "entry_commission": 3.03,
-      "lowest_low": 132.695,
-      "sector": "Healthcare"
-    },
     {
       "ticker": "GTLS",
       "signal_date": "2026-07-10",
@@ -3282,6 +3262,20 @@
       "holding_days": 12,
       "entry_regime": "BULL",
       "exit_regime": "BULL"
+    },
+    {
+      "ticker": "APGE",
+      "signal_date": "2026-06-22",
+      "entry_date": "2026-06-23",
+      "entry_price": 132.7526,
+      "shares": 76,
+      "exit_date": "2026-09-02",
+      "exit_price": 135.07,
+      "pnl": 170.0624,
+      "exit_reason": "delisted",
+      "entry_commission": 3.03,
+      "exit_commission": 3.03,
+      "sector": "Healthcare"
     }
   ],
   "nav_history": [
