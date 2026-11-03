@@ -939,6 +939,26 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 _line += f"\n  - 本次成功下载：**{_att_ok:,}** 个"
                 _line += f"\n  - 到目前为止已成功下载：**{_att_cum:,}** 个"
                 _line += f"\n  - 仍需重试下载：**{_att_fail:,}** 个"
+            if _att_status == "no_data":
+                # 动态计算下一次 GitHub Actions cron 触发时间（SGT）
+                # 主 cron: 09:00 SGT，备用 cron: 15:00 SGT，周二到周六（UTC Tue-Sat）
+                import datetime as _dta_nc
+                _sgt_tz_nc = _dta_nc.timezone(_dta_nc.timedelta(hours=8))
+                _now_sgt_nc = _dta_nc.datetime.now(_sgt_tz_nc)
+                _next_cron_str = None
+                for _dd in range(7):
+                    _cand = _now_sgt_nc + _dta_nc.timedelta(days=_dd)
+                    if _cand.weekday() not in (1, 2, 3, 4, 5):  # 1=Tue … 5=Sat
+                        continue
+                    for _ch in (9, 15):
+                        _cand_dt = _cand.replace(hour=_ch, minute=0, second=0, microsecond=0)
+                        if _cand_dt > _now_sgt_nc:
+                            _next_cron_str = _cand_dt.strftime("%Y-%m-%d %H:%M SGT")
+                            break
+                    if _next_cron_str:
+                        break
+                if _next_cron_str:
+                    _line += f"\n  - 下一次尝试：**{_next_cron_str}**"
             if _att_note:
                 _line += f"\n  - {_att_note}"
             _att_lines.append(_line)
