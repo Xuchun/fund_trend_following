@@ -956,7 +956,9 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 _ndp_state.get("next_retry_sgt")
                 if _ndp_state.get("date") == _dl_date else None
             )
-            _last_nxt = _ndp_next or _last_att.get("next_retry_sgt")
+            # 只用 no_data_probe 里的下次重试时间来决定是否显示警告：
+            # 如果 no_data_probe 为 None（已取消重试），即使 download_log 里有旧记录也不显示。
+            _last_nxt = _ndp_next
             if _last_st in ("no_data", "partial") and _last_nxt:
                 _pend_fail = _ds_pending.get("tickers", [])
                 _fail_n    = len(_pend_fail) if _pend_fail else _last_att.get("failed", 0)
