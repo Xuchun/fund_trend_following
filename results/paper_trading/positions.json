@@ -5,29 +5,8 @@
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
   "last_update_date": "2026-10-30",
-  "cash": 11586.0846,
+  "cash": 29200.1946,
   "positions": [
-    {
-      "ticker": "GTLS",
-      "signal_date": "2026-07-10",
-      "signal_price": 209.87,
-      "signal_strength": 1.0004,
-      "entry_date": "2026-07-14",
-      "open_price": 209.91,
-      "entry_price": 210.1199,
-      "shares": 44,
-      "stop_loss": 209.0095,
-      "trail_stop": 208.692933,
-      "highest_high": 210.1199,
-      "lowest_low": 209.81,
-      "atr_at_entry": 0.5552,
-      "R_at_backtest_end": 0.0,
-      "last_known_price": 209.9,
-      "last_price_date": "2026-07-15",
-      "entry_commission": 2.77,
-      "entry_regime": "BULL",
-      "sector": "Industrials"
-    },
     {
       "ticker": "EA",
       "signal_date": "2026-07-15",
@@ -130,27 +109,6 @@
       "last_known_price": 235.99,
       "last_price_date": "2026-10-30",
       "entry_commission": 2.54,
-      "entry_regime": "BULL",
-      "sector": "N/A"
-    },
-    {
-      "ticker": "DBRG",
-      "signal_date": "2026-09-23",
-      "signal_price": 15.99,
-      "signal_strength": 1.0006,
-      "entry_date": "2026-09-24",
-      "open_price": 15.98,
-      "entry_price": 15.996,
-      "shares": 527,
-      "stop_loss": 15.9112,
-      "trail_stop": 15.89105,
-      "highest_high": 16.0,
-      "lowest_low": 15.9,
-      "atr_at_entry": 0.0424,
-      "R_at_backtest_end": 0.0,
-      "last_known_price": 15.91,
-      "last_price_date": "2026-09-14",
-      "entry_commission": 2.53,
       "entry_regime": "BULL",
       "sector": "N/A"
     },
@@ -3276,6 +3234,34 @@
       "entry_commission": 3.03,
       "exit_commission": 3.03,
       "sector": "Healthcare"
+    },
+    {
+      "ticker": "GTLS",
+      "signal_date": "2026-07-10",
+      "entry_date": "2026-07-14",
+      "entry_price": 210.1199,
+      "shares": 44,
+      "exit_date": "2026-07-15",
+      "exit_price": 209.9,
+      "pnl": -15.4756,
+      "exit_reason": "delisted",
+      "entry_commission": 2.77,
+      "exit_commission": 3.03,
+      "sector": "Industrials"
+    },
+    {
+      "ticker": "DBRG",
+      "signal_date": "2026-09-23",
+      "entry_date": "2026-09-24",
+      "entry_price": 15.996,
+      "shares": 527,
+      "exit_date": "2026-09-14",
+      "exit_price": 15.91,
+      "pnl": -50.882,
+      "exit_reason": "delisted",
+      "entry_commission": 2.53,
+      "exit_commission": 3.03,
+      "sector": "N/A"
     }
   ],
   "nav_history": [
@@ -17410,7 +17396,7 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
+  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
     "downloaded_count": 2095,
     "total_scanned": 2095,
@@ -17509,7 +17495,7 @@
     "spy_change_pct": null,
     "vs_spy_pct": null,
     "bullets": [
-      "\ud83d\udcca 2026-10-31 \u6536\u76d8\u6570\u636e\u5c1a\u672a\u83b7\u53d6\u5230\uff0c\u6b63\u5728\u6301\u7eed\u91cd\u8bd5\uff0c\u83b7\u53d6\u6210\u529f\u540e\u5c06\u81ea\u52a8\u66f4\u65b0\u3002"
+      "📊 2026-10-31 收盘数据尚未获取到，正在持续重试，获取成功后将自动更新。"
     ],
     "news": [],
     "data_pending": true
