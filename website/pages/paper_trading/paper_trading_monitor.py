@@ -1036,15 +1036,26 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                     # 用 UTC 日期作为美股交易日日期（脚本在 23:00 UTC 运行，对应美股当日收盘后）
                     _no_op_date_str = _no_op_dt.strftime("%Y-%m-%d")
 
-            # 统计自上次运行以来"应跑却未跑"的工作日时间点数量
-            # 工作流每个工作日 23:05 UTC 运行；若当日 23:05 UTC 尚未到，则不计入"应跑"
+            # 统计自上次运行以来"应跑却未跑"的 NYSE 交易日数量
+            # 主 cron 在 01:00 UTC 和 07:00 UTC 各触发一次；以 07:00 UTC 为"最晚截止"判断
+            # 只有 NYSE 实际交易日才计入"应跑"，避免把市场假日（如 Oct 31）误算为缺失
             def _missed_runs(last_dt, now_dt):
+                try:
+                    import pandas_market_calendars as _mcal
+                    _nyse = _mcal.get_calendar("NYSE")
+                except Exception:
+                    _nyse = None
                 count = 0
                 cur = last_dt
                 while cur < now_dt:
                     cur += _dt_ga.timedelta(days=1)
-                    if cur.weekday() < 5:  # 0=Mon … 4=Fri
-                        scheduled = cur.replace(hour=23, minute=5, second=0, microsecond=0)
+                    if cur.weekday() < 5:  # 0=Mon … 4=Fri，先过滤周末
+                        _cur_date = cur.date()
+                        if _nyse is not None:
+                            _sched = _nyse.schedule(start_date=str(_cur_date), end_date=str(_cur_date))
+                            if _sched.empty:
+                                continue  # NYSE 假日，跳过
+                        scheduled = cur.replace(hour=7, minute=0, second=0, microsecond=0)
                         if scheduled < now_dt:
                             count += 1
                 return count
