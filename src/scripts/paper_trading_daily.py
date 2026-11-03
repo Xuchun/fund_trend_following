@@ -687,6 +687,21 @@ def scan_entries(
         low    = today_df["Low"]
         volume = today_df["Volume"]
 
+        # Stale price guard: if Raw_Close is identical for 3+ consecutive days, Tiingo has
+        # frozen the price (delisted / halted stock). Skip to avoid phantom breakout signals.
+        # Uses Raw_Close (unadjusted) because the adjusted series may shift slightly due to
+        # dividend factor changes even when the underlying price has not moved.
+        _STALE_DAYS = 3
+        if len(today_df) >= _STALE_DAYS:
+            _recent_raw = today_df["Raw_Close"].iloc[-_STALE_DAYS:]
+            if _recent_raw.nunique() == 1:
+                log.info(
+                    f"  SKIP {ticker}: stale price — Raw_Close frozen at "
+                    f"{_recent_raw.iloc[-1]:.4f} for {_STALE_DAYS}+ days"
+                )
+                n_stale_filtered += 1
+                continue
+
         # Min-price filter uses Raw_Close (unadjusted) — mirrors backtest entry.py row["close"]
         if float(today_df["Raw_Close"].iloc[-1]) < PARAMS.min_price:
             n_price_filtered += 1
