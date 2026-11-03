@@ -2130,6 +2130,7 @@ def main() -> None:
         "n_atr_filtered":      scan_stats.get("n_atr_filtered", 0),
         "n_stop_dist_filtered": scan_stats.get("n_stop_dist_filtered", 0),
         "n_volume_filtered":   scan_stats.get("n_volume_filtered", 0),
+        "n_stale_filtered":    scan_stats.get("n_stale_filtered", 0),
         "spy_pct_above_sma200": spy_pct_above_sma200,
 
         # ① OPEN executions (from yesterday's pending signals)
