@@ -650,6 +650,7 @@ def scan_entries(
     n_atr_filtered       = 0   # ATR invalid or zero
     n_stop_dist_filtered = 0   # stop distance too small (< min_stop_distance_pct)
     n_volume_filtered    = 0   # volume below 1.5× 60-day average
+    n_stale_filtered     = 0   # stale price — Raw_Close unchanged for 3+ days (Tiingo freeze)
     # Note: no cash pre-filtering at signal time (mirrors backtest). Cash is checked
     # at T+1 execution so gap-filter failures free cash for the next signal in line.
 
