@@ -2462,6 +2462,47 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 _cn_fp  = _fm_batch.FontProperties(fname=_zh_font_path) if _zh_font_path else None
                 _cn_fp8 = _fm_batch.FontProperties(fname=_zh_font_path, size=8) if _zh_font_path else None
 
+                def _draw_candle(_kdf, _show_vol, _figsize=(16, 7)):
+                    """纯 matplotlib 蜡烛图 + 成交量，替代 mplfinance。"""
+                    _up, _dn = "#2ca02c", "#d62728"
+                    _has_vol = _show_vol and _kdf["Volume"].sum() > 0
+                    if _has_vol:
+                        _fig = _plt.figure(figsize=_figsize)
+                        _gs  = _mgs.GridSpec(2, 1, height_ratios=[3, 1], hspace=0.05)
+                        _axp = _fig.add_subplot(_gs[0])
+                        _axv = _fig.add_subplot(_gs[1], sharex=_axp)
+                        _plt.setp(_axp.get_xticklabels(), visible=False)
+                    else:
+                        _fig, _axp = _plt.subplots(figsize=_figsize)
+                        _axv = None
+                    _n = len(_kdf)
+                    for _i, (_, _row) in enumerate(_kdf.iterrows()):
+                        _o, _h, _l, _c = _row["Open"], _row["High"], _row["Low"], _row["Close"]
+                        _col = _up if _c >= _o else _dn
+                        _axp.plot([_i, _i], [_l, _h], color=_col, linewidth=0.8)
+                        _body_lo = min(_o, _c)
+                        _body_h  = max(abs(_c - _o), (_h - _l) * 0.001)
+                        _axp.add_patch(_mpatch.Rectangle(
+                            (_i - 0.4, _body_lo), 0.8, _body_h,
+                            linewidth=0, facecolor=_col
+                        ))
+                        if _axv is not None:
+                            _axv.bar(_i, _row["Volume"], color=_col, width=0.8, linewidth=0)
+                    _axp.set_xlim(-0.5, _n - 0.5)
+                    _axp.set_ylim(_kdf["Low"].min() * 0.995, _kdf["High"].max() * 1.005)
+                    _step = max(1, _n // 10)
+                    _tpos = list(range(0, _n, _step))
+                    _tlbl = [_kdf.index[_ii].strftime("%Y-%m-%d") for _ii in _tpos]
+                    _axp.set_xticks(_tpos); _axp.set_xticklabels(_tlbl, rotation=30, ha="right", fontsize=7)
+                    _axp.grid(True, linestyle="--", color="#eeeeee")
+                    _axp.set_facecolor("white"); _fig.patch.set_facecolor("white")
+                    if _axv is not None:
+                        _axv.set_xlim(-0.5, _n - 0.5); _axv.set_ylim(bottom=0)
+                        _axv.set_xticks(_tpos); _axv.set_xticklabels(_tlbl, rotation=30, ha="right", fontsize=7)
+                        _axv.grid(True, linestyle="--", color="#eeeeee")
+                        _axv.set_facecolor("white")
+                    return _fig, _axp
+
                 _batch_tks = tuple(sorted(set(
                     [p["ticker"] for p in _m1_positions] +
                     [c["ticker"] for c in _m1_closed]
