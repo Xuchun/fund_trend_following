@@ -2550,42 +2550,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                         # 成交量全为 0 时隐藏成交量面板（避免坐标轴显示负数）
                         _b_show_vol = bool(_bkdf2["Volume"].sum() > 0)
 
-                        # 水平线附加图
-                        _add_plots = []
-                        if _b_ep:
-                            _add_plots.append(_mpf.make_addplot(
-                                [_b_ep] * len(_bkdf2), type="line",
-                                color="#1f77b4", linestyle="--", width=1.5, panel=0,
-                            ))
-                        if _b_sp:
-                            _add_plots.append(_mpf.make_addplot(
-                                [_b_sp] * len(_bkdf2), type="line",
-                                color="#d62728", linestyle="--", width=1.5, panel=0,
-                            ))
-                        if _b_show_trl:
-                            _add_plots.append(_mpf.make_addplot(
-                                [_b_trl] * len(_bkdf2), type="line",
-                                color="#ff7f0e", linestyle=":", width=1.5, panel=0,
-                            ))
-
-                        _mpf_kwargs = dict(
-                            type="candle",
-                            volume=_b_show_vol,
-                            style=_mpf_style,
-                            figsize=(16, 7),
-                            returnfig=True,
-                            warn_too_much_data=9999,
-                        )
-                        if _add_plots:
-                            _mpf_kwargs["addplot"] = _add_plots
-
-                        _bfig_mpf, _baxes_mpf = _mpf.plot(_bkdf2, **_mpf_kwargs)
-                        _ax_price = _baxes_mpf[0]
-                        # Fix volume axis: ensure y starts at 0 (prevents negative display when volume≈0)
-                        if _b_show_vol:
-                            _ax_vol = _baxes_mpf[-1]
-                            if _ax_vol.get_ylim()[0] < 0:
-                                _ax_vol.set_ylim(bottom=0)
+                        _bfig_mpf, _ax_price = _draw_candle(_bkdf2, _b_show_vol)
 
                         # 标题（直接指定字体文件，绕过 font cache）
                         _b_title_info = f"  |  开仓 {_b_edt.date()}" + (f"  ${_b_ep:.2f}" if _b_ep else "")
