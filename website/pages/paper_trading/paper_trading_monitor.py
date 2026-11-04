@@ -2443,7 +2443,7 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 import matplotlib.font_manager as _fm_batch
                 import matplotlib.pyplot as _plt
                 import matplotlib.patches as _mpatch
-                import mplfinance as _mpf
+                import matplotlib.gridspec as _mgs
                 # 用 fc-list 查找系统中文字体路径，直接传给 FontProperties 绕过 cache
                 _zh_font_path = None
                 try:
