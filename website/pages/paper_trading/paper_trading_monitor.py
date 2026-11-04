@@ -2509,20 +2509,6 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                 )))
                 _batch_raw, _ = _fetch_yf(_batch_tks, "600d")
 
-                # mplfinance 样式：绿涨红跌
-                _mpf_mc = _mpf.make_marketcolors(
-                    up="#2ca02c", down="#d62728",
-                    edge="inherit",
-                    wick={"up": "#2ca02c", "down": "#d62728"},
-                    volume={"up": "#2ca02c", "down": "#d62728"},
-                )
-                _mpf_style = _mpf.make_mpf_style(
-                    base_mpf_style="charles",
-                    marketcolors=_mpf_mc,
-                    gridstyle="--", gridcolor="#eeeeee",
-                    facecolor="white", edgecolor="white",
-                )
-
                 _zip_buf = _io.BytesIO()
                 with _zf_mod.ZipFile(_zip_buf, "w", _zf_mod.ZIP_DEFLATED) as _zf:
                     _batch_items = (
