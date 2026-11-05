@@ -8,7 +8,11 @@ on:
   workflow_dispatch:   # allow manual trigger
 
 concurrency:
-  group: paper-trading-m1
+  # Separate concurrency group from the main workflow so retry runs never
+  # block or get blocked by the daily primary/backup schedule.  Previously
+  # both workflows shared "paper-trading-m1", which caused GitHub to drop
+  # the primary run when the retry run held the pending slot at 01:00 UTC.
+  group: paper-trading-m1-retry
   cancel-in-progress: false
 
 permissions:
