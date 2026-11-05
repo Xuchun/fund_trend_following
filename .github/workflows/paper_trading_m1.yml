@@ -61,4 +61,5 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add results/paper_trading/positions.json
           git diff --staged --quiet && echo "No changes to commit" || \
-            git commit -m "auto: paper trading M1 $(date -u +%Y-%m-%d)" && git push
+            git commit -m "auto: paper trading M1 $(date -u +%Y-%m-%d)" && \
+            git pull --rebase && git push
