@@ -2706,8 +2706,10 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
                    delta_color="off")
         sa3.metric("回测平均每月平仓笔数", f"{_bt_per_month:.1f} 笔/月")
 
-        sc1, sc2, sc3, sc4 = st.columns(4)
+        sc1, sc1b, sc1c, sc2, sc3, sc4 = st.columns(6)
         sc1.metric("已平仓笔数", f"{_n_cl} 笔")
+        sc1b.metric("已平仓亏钱笔数", f"{len(_losses)} 笔")
+        sc1c.metric("已平仓赚钱笔数", f"{len(_wins)} 笔")
         sc2.metric("胜率", f"{_win_rate:.1f}%")
         sc3.metric("平均持仓", f"{_avg_days:.0f} 天")
         sc4.metric("平均R", f"{_avg_r:+.2f}R")
