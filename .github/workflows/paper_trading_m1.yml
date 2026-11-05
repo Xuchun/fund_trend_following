@@ -3,10 +3,10 @@ name: Paper Trading M1 — Daily Update
 on:
   schedule:
     # Primary:  01:00 UTC = 09:00 SGT — first daily attempt
-    # Backup:   07:00 UTC = 15:00 SGT — fires if primary was silently dropped
-    #   (GitHub drops a scheduled run when the concurrency group already has a
-    #    pending slot, e.g. the retry workflow queued at 00:30 UTC. The backup
-    #    cron gives the main update a second chance 6 hours later.)
+    # Backup:   07:00 UTC = 15:00 SGT — second attempt if primary was dropped
+    #   The retry workflow now uses a separate concurrency group so it no longer
+    #   blocks primary. The backup cron remains as a safety net for GitHub's
+    #   own scheduler unreliability (rare cron drops under high load).
     # Day-of-week 2-6 (Tue-Sat UTC) = Mon-Fri ET previous trading day.
     # Duplicate-run guard in the script ensures only one full update runs per day.
     - cron: '0 1 * * 2-6'
