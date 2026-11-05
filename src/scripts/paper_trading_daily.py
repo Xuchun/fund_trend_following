@@ -531,6 +531,13 @@ def detect_exit_signals(
             continue
 
         bar_date = today_rows.index[0].date()
+        # Stale bar (delisted / halted): an old bar — possibly predating entry — must not
+        # trigger an exit or move stops. DBRG got a false stop_loss this way (bar 09-14, entry 09-24).
+        if bar_date != today:
+            log.warning(f"  {ticker}: latest bar {bar_date} != {today} — stale data, keeping open")
+            updated.append(pos)
+            continue
+
         high_px  = float(today_rows["High"].iloc[0])
         low_px   = float(today_rows["Low"].iloc[0])
         close_px = float(today_rows["Close"].iloc[0])
