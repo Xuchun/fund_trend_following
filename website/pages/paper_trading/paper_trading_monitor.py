@@ -1274,6 +1274,31 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             unsafe_allow_html=True,
         )
 
+    # ── 价格已过期持仓警告（退市/停牌后 last_price_date 不再更新；已标记 suspended 的上面已提示）──
+    _m1_data_date = _m1.get("last_update_date", "")
+    _m1_stale = sorted(
+        (p for p in _m1_positions
+         if not p.get("suspended") and (p.get("last_price_date") or "") < _m1_data_date),
+        key=lambda p: p.get("last_price_date") or "",
+    )
+    if _m1_stale:
+        _stale_lines = []
+        for _sl in _m1_stale:
+            _sl_date = _sl.get("last_price_date")
+            _sl_days = (pd.Timestamp(_m1_data_date) - pd.Timestamp(_sl_date)).days if _sl_date else None
+            _sl_px   = _sl.get("last_known_price", _sl.get("entry_price", 0.0))
+            _stale_lines.append(
+                f"- **{_sl['ticker']}**：最后价格 ${_sl_px:,.2f}"
+                f"（{_sl_date or '日期未知'}{f'，已过期 {_sl_days} 天' if _sl_days is not None else ''}），"
+                f"占用约 ${_sl_px * _sl.get('shares', 0):,.0f}"
+            )
+        st.warning(
+            f"⚠️ **{len(_m1_stale)} 只持仓价格已过期**（最新数据日 {_m1_data_date}）\n\n"
+            + "\n".join(_stale_lines)
+            + "\n\n这些持仓的净值按旧价计算，止损也不会触发。单日缺数据可能只是暂时的；"
+              "如持续多日，请核查是否已退市或被收购，确认后需手工平仓。"
+        )
+
     if _m1_stop:
         st.warning(f"⚠️ **{len(_m1_stop)} 只已触及止损** — 建议执行止损出场")
 
