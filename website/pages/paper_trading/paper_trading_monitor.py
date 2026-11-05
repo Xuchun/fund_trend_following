@@ -2746,6 +2746,51 @@ python src/scripts/paper_trading_daily.py --date YYYY-MM-DD
             )
             st.plotly_chart(_fig_r, width="stretch")
 
+        # ── 逐笔 R 值（按出场日排序）────────────────────────────────────────────
+        # 横轴用序号而非日期，否则同一天平仓的多笔会叠在同一位置
+        _rs_trades = [c for c in _ct_by_date if pd.notna(c.get("pnl_r"))]
+        if _rs_trades:
+            _rs_missing = _n_cl - len(_rs_trades)
+            _rs_note    = f"，另有 {_rs_missing} 笔缺 R 值未显示" if _rs_missing else ""
+            _fig_rs = go.Figure()
+            for _rs_name, _rs_color, _rs_match in (
+                ("亏损", "#d62728", lambda r: r <= 0),
+                ("盈利", "#2ca02c", lambda r: r > 0),
+            ):
+                _rs_pts = [(i, c) for i, c in enumerate(_rs_trades) if _rs_match(c["pnl_r"])]
+                if _rs_pts:
+                    _fig_rs.add_trace(go.Bar(
+                        x=[i for i, _ in _rs_pts],
+                        y=[c["pnl_r"] for _, c in _rs_pts],
+                        name=_rs_name, marker_color=_rs_color,
+                        customdata=[[c.get("ticker", ""), c.get("entry_date", ""),
+                                     c.get("exit_date", ""), c.get("exit_reason", "")]
+                                    for _, c in _rs_pts],
+                        hovertemplate=(
+                            "<b>%{customdata[0]}</b>  %{y:+.2f}R<br>"
+                            "入场 %{customdata[1]} → 出场 %{customdata[2]}<br>"
+                            "原因 %{customdata[3]}<extra></extra>"
+                        ),
+                    ))
+            # 刻度按笔数等距抽样并保持水平，避免文字重叠或旋转后挤压绘图区；同一出场日只标一次
+            _rs_first = {}
+            for i in range(0, len(_rs_trades), max(1, len(_rs_trades) // 8)):
+                _rs_first.setdefault(_rs_trades[i].get("exit_date", ""), i)
+            _rs_ticks = list(_rs_first.items())
+            _fig_rs.add_hline(y=0, line_color="#888888", line_width=1)
+            _fig_rs.update_layout(
+                barmode="overlay", bargap=0.2, hovermode="x",
+                title=f"已平仓逐笔 R 值（按出场日排序，{len(_rs_trades)} 笔{_rs_note}）",
+                xaxis=dict(title="出场日", tickmode="array", tickangle=0,
+                           tickvals=[i for _, i in _rs_ticks],
+                           ticktext=[d for d, _ in _rs_ticks]),
+                yaxis_title="R 倍数",
+                height=300, template="plotly_white",
+                legend=dict(orientation="h", y=1.02, yanchor="bottom", x=1, xanchor="right"),
+                margin=dict(l=60, r=20, t=60, b=40),
+            )
+            st.plotly_chart(_fig_rs, width="stretch")
+
         # ── 交易执行质量汇总 ────────────────────────────────────────────────────
         # signal_price=0.0 是旧数据缺失，需显式过滤（0.0 在 Python 中是 falsy）
         _eq_slip_valid = [
