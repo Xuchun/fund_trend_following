@@ -352,6 +352,10 @@ def execute_pending_entries(
         if _today_rows.empty:
             log.warning(f"  SKIP {ticker}: no data for {today}")
             continue
+        # Placeholder bar with no trades (seen after delisting) — nothing could actually fill
+        if not _today_rows["Volume"].iloc[0] > 0:
+            log.warning(f"  SKIP {ticker}: no volume on {today} — not tradable")
+            continue
 
         open_px = float(_today_rows["Open"].iloc[0])
 
@@ -687,6 +691,12 @@ def scan_entries(
 
         today_df = df[df.index.date <= today]
         if today_df.empty:
+            continue
+
+        # No bar for today (delisted / halted): an old bar must not generate a signal.
+        # CRNX re-signaled on 09-01 from its 08-31 bar after the merger had closed.
+        if today_df.index[-1].date() != today:
+            n_stale_filtered += 1
             continue
 
         close  = today_df["Close"]
