@@ -260,9 +260,53 @@ _c3.metric("最大涨幅", f"{_ann_df['pct'].max():+.1f}%",
 _c4.metric("最大跌幅", f"{_ann_df['pct'].min():+.1f}%",
            f"{int(_ann_df.loc[_ann_df['pct'].idxmin(), 'year'])} 年")
 
-# ─── 六、年线价格走势与回撤 ─────────────────────────────────────────
+# ─── 四、年线价格走势与回撤 ─────────────────────────────────────────
 st.subheader("四、QQQ 年线价格走势与回撤（1999 年至今）")
 st.markdown("以每年最后一个交易日收盘价为基础。")
+
+
+def _find_drawdowns(s: pd.Series, thresh: float = 0.30) -> list:
+    periods     = []
+    in_dd       = False
+    running_max = float(s.iloc[0])
+    peak_dt     = s.index[0];  peak_px   = running_max
+    trough_dt   = s.index[0];  trough_px = running_max
+    for dt, px in s.items():
+        px = float(px)
+        if px >= running_max:
+            if in_dd:
+                mdd = (trough_px - peak_px) / peak_px
+                if mdd <= -thresh:
+                    periods.append(dict(
+                        peak_dt=peak_dt, peak_px=peak_px,
+                        trough_dt=trough_dt, trough_px=trough_px,
+                        recovery_dt=dt, mdd=mdd,
+                        d_pt=(trough_dt - peak_dt).days,
+                        d_tr=(dt - trough_dt).days,
+                        d_tot=(dt - peak_dt).days,
+                    ))
+                in_dd = False
+            running_max = px
+            peak_dt = dt; peak_px = px
+            trough_dt = dt; trough_px = px
+        else:
+            if not in_dd:
+                in_dd = True
+                trough_dt = dt; trough_px = px
+            elif px < trough_px:
+                trough_dt = dt; trough_px = px
+    if in_dd:
+        mdd = (trough_px - peak_px) / peak_px
+        if mdd <= -thresh:
+            periods.append(dict(
+                peak_dt=peak_dt, peak_px=peak_px,
+                trough_dt=trough_dt, trough_px=trough_px,
+                recovery_dt=None, mdd=mdd,
+                d_pt=(trough_dt - peak_dt).days,
+                d_tr=None,
+                d_tot=(s.index[-1] - peak_dt).days,
+            ))
+    return periods
 
 _yr_ath = _yr_px.expanding().max()
 _yr_dd  = (_yr_px - _yr_ath) / _yr_ath * 100
