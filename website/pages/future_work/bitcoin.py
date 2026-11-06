@@ -40,9 +40,8 @@ with st.spinner("正在加载数据…"):
     _fbtc  = _load("FBTC",    "2024-01-11")   # Fidelity Wise Origin Bitcoin Fund
     _gbtc  = _load("GBTC",    "2015-05-01")   # Grayscale Bitcoin Trust（2024年转为ETF）
 
-import pytz as _pytz
-_sgt = _pytz.timezone("Asia/Singapore")
-_now_sgt = pd.Timestamp.now(tz=_sgt).strftime("%Y-%m-%d %H:%M SGT")
+from datetime import timezone as _tz, timedelta as _td
+_now_sgt = (pd.Timestamp.utcnow() + _td(hours=8)).strftime("%Y-%m-%d %H:%M SGT")
 
 st.markdown(
     f"数据来源：**Yahoo Finance**（`auto_adjust=True`，价格含分红复权，比特币无分红）  \n"
