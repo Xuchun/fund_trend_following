@@ -406,7 +406,6 @@ for _etf, _fee in _fees.items():
 st.dataframe(pd.DataFrame(_drag_rows), use_container_width=True, hide_index=True)
 
 # 损耗对比柱状图
-import numpy as np as _np
 _fig_drag = go.Figure()
 _x = [f"{y}年" for y in _hold_years]
 for _etf, _fee in _fees.items():
