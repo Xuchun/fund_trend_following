@@ -154,68 +154,29 @@ _fig1.update_layout(
 st.plotly_chart(_fig1, use_container_width=True)
 st.markdown("纵轴使用**对数刻度**，使 $30 量级（1999年）与 $500+ 量级（2024年）均清晰可见。")
 
-# 日线三项关键指标
-_n_cal_days = (_prices.index[-1] - _prices.index[0]).days
-_cagr = (_prices.iloc[-1] / _prices.iloc[0]) ** (365.0 / _n_cal_days) - 1
-_max_dd_val = _dd.min()
+# 计算 QQQ 与 SPY 指标（对齐后的相同区间）
+_spy_dd_aligned = (_spy_aligned - _spy_aligned.expanding().max()) / _spy_aligned.expanding().max() * 100
+_m_qqq = _calc_metrics(_prices_aligned, (_prices_aligned - _prices_aligned.expanding().max()) / _prices_aligned.expanding().max() * 100)
+_m_spy = _calc_metrics(_spy_aligned, _spy_dd_aligned)
 
-# 最大水下时间
-_underwater = _dd < 0
-_max_uw_days = 0
-_uw_start = None
-_uw_best_start = None
-_uw_best_end = None
-for _dt, _is_uw in _underwater.items():
-    if _is_uw:
-        if _uw_start is None:
-            _uw_start = _dt
-    else:
-        if _uw_start is not None:
-            _dur = (_dt - _uw_start).days
-            if _dur > _max_uw_days:
-                _max_uw_days = _dur
-                _uw_best_start = _uw_start
-                _uw_best_end = _dt
-            _uw_start = None
-if _uw_start is not None:
-    _dur = (_prices.index[-1] - _uw_start).days
-    if _dur > _max_uw_days:
-        _max_uw_days = _dur
-        _uw_best_start = _uw_start
-        _uw_best_end = None
-_uw_range = (
-    f"{_uw_best_start.strftime('%Y-%m')} 至今"
-    if _uw_best_end is None
-    else f"{_uw_best_start.strftime('%Y-%m')} 至 {_uw_best_end.strftime('%Y-%m')}"
-)
-
-_mdd_trough_dt = _dd.idxmin()
-_after_trough = _dd.loc[_mdd_trough_dt:]
-_recovery_after_trough = _after_trough[_after_trough >= 0]
-if len(_recovery_after_trough) > 0:
-    _ttr_recovery_dt = _recovery_after_trough.index[0]
-    _ttr_days = (_ttr_recovery_dt - _mdd_trough_dt).days
-    _ttr_val = f"{_ttr_days / 365:.1f} 年"
-    _ttr_sub = f"{_mdd_trough_dt.strftime('%Y-%m')} → {_ttr_recovery_dt.strftime('%Y-%m')}"
-else:
-    _ttr_val = "至今未恢复"
-    _ttr_sub = f"最低点 {_mdd_trough_dt.strftime('%Y-%m')}"
-
+# QQQ 指标行
+st.markdown("**QQQ**")
 _km1, _km2, _km3, _km4 = st.columns(4)
-_km1.metric(
-    "年化收益（CAGR）",
-    f"{_cagr:+.2%}",
-    f"{_prices.index[0].strftime('%Y-%m-%d')} 至 {_prices.index[-1].strftime('%Y-%m-%d')}",
-    delta_color="off",
-)
-_km2.metric("历史最大回撤", f"{_max_dd_val:.1f}%")
-_km3.metric(
-    "最大水下时间",
-    f"{_max_uw_days / 365:.1f} 年",
-    _uw_range,
-    delta_color="off",
-)
-_km4.metric("最低点→复原", _ttr_val, _ttr_sub, delta_color="off")
+_km1.metric("年化收益（CAGR）", f"{_m_qqq['cagr']:+.2%}", _m_qqq["date_range"], delta_color="off")
+_km2.metric("历史最大回撤", f"{_m_qqq['max_dd']:.1f}%")
+_km3.metric("最大水下时间", f"{_m_qqq['max_uw_days'] / 365:.1f} 年", _m_qqq["uw_range"], delta_color="off")
+_km4.metric("最低点→复原", _m_qqq["ttr_val"], _m_qqq["ttr_sub"], delta_color="off")
+
+# SPY 对比指标行
+st.markdown("**SPY（同期对比）**")
+_sm1, _sm2, _sm3, _sm4 = st.columns(4)
+_sm1.metric("年化收益（CAGR）", f"{_m_spy['cagr']:+.2%}", _m_spy["date_range"], delta_color="off")
+_sm2.metric("历史最大回撤", f"{_m_spy['max_dd']:.1f}%")
+_sm3.metric("最大水下时间", f"{_m_spy['max_uw_days'] / 365:.1f} 年", _m_spy["uw_range"], delta_color="off")
+_sm4.metric("最低点→复原", _m_spy["ttr_val"], _m_spy["ttr_sub"], delta_color="off")
+
+# 供后续回撤图、详细分析使用的原始 QQQ 序列（非对齐版，保留完整历史）
+_max_dd_val = _dd.min()
 
 # 各回撤阈值买入后的前瞻收益表
 def _fwd_table(prices: pd.Series, dd: pd.Series, thresh: float, label: str):
