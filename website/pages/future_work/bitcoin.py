@@ -325,3 +325,63 @@ for _name, _ser in _base.items():
         "数据天数":    f"{_n} 天",
     })
 st.dataframe(pd.DataFrame(_etf_rows), use_container_width=True, hide_index=True)
+
+# ── 跟踪误差分析 ──────────────────────────────────────────────────────
+st.markdown("**各比特币ETF对BTC-USD的价格跟踪误差：**")
+st.markdown(
+    "以 BTC-USD 为基准，计算各ETF的跟踪质量。"
+    "跟踪差异（Tracking Difference）= ETF区间总收益 − BTC同期总收益；"
+    "年化跟踪误差（Tracking Error）= 日收益差的标准差 × √252。"
+)
+
+# 计算每日对数收益率，再求差
+_btc_ret  = _base["BTC-USD"].pct_change().dropna()
+_te_rows  = []
+_etf_names = [n for n in _base if n != "BTC-USD"]
+
+for _name in _etf_names:
+    _etf_ret = _base[_name].pct_change().dropna()
+    _common_idx = _btc_ret.index.intersection(_etf_ret.index)
+    _diff = _etf_ret.loc[_common_idx] - _btc_ret.loc[_common_idx]
+    _td   = ((_base[_name].iloc[-1] / _base[_name].iloc[0]) -
+             (_base["BTC-USD"].iloc[-1] / _base["BTC-USD"].iloc[0]))   # 绝对差（百分点）
+    _btc_total = _base["BTC-USD"].iloc[-1] / _base["BTC-USD"].iloc[0] - 1
+    _etf_total = _base[_name].iloc[-1] / _base[_name].iloc[0] - 1
+    _te_rows.append({
+        "ETF":              _name,
+        "跟踪差异（区间）":  f"{(_etf_total - _btc_total):+.2%}",
+        "平均日偏差":        f"{_diff.mean() * 100:+.4f}%",
+        "年化跟踪误差（TE）": f"{_diff.std() * (252 ** 0.5) * 100:.3f}%",
+        "最大单日正偏差":    f"{_diff.max() * 100:+.2f}%",
+        "最大单日负偏差":    f"{_diff.min() * 100:+.2f}%",
+        "样本交易日数":      len(_common_idx),
+    })
+st.dataframe(pd.DataFrame(_te_rows), use_container_width=True, hide_index=True)
+
+# 累计跟踪差异走势图（ETF相对BTC的超额/落后累计）
+st.markdown("**各ETF相对BTC-USD的累计跟踪差异走势（百分点，起点=0）：**")
+_fig_te = go.Figure()
+for _name in _etf_names:
+    _etf_ret = _base[_name].pct_change().dropna()
+    _common_idx = _btc_ret.index.intersection(_etf_ret.index)
+    _cum_diff = (_etf_ret.loc[_common_idx] - _btc_ret.loc[_common_idx]).cumsum() * 100
+    _fig_te.add_trace(go.Scatter(
+        x=_cum_diff.index, y=_cum_diff.values,
+        mode="lines", name=_name,
+        line=dict(color=_colors[_name], width=1.5),
+        hovertemplate=f"{_name}  %{{x|%Y-%m-%d}}  累计偏差 %{{y:+.2f}}ppt<extra></extra>",
+    ))
+_fig_te.add_hline(y=0, line_color="white", line_width=1, line_dash="dot")
+_fig_te.update_layout(
+    xaxis_title="日期",
+    yaxis_title="ETF − BTC 累计日收益差（百分点）",
+    yaxis=dict(ticksuffix=" ppt"),
+    height=360, hovermode="x unified",
+    legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0),
+    margin=dict(t=40, b=40, l=80),
+)
+st.plotly_chart(_fig_te, use_container_width=True)
+st.markdown(
+    "曲线在0轴以上：ETF累计收益**优于**BTC（含管理费抵消后仍有正偏差，通常为复权/分红处理差异）；"
+    "曲线在0轴以下：ETF累计收益**落后**于BTC（主要来源：管理费、买卖价差、溢折价）。"
+)
