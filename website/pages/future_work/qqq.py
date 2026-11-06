@@ -261,7 +261,7 @@ _c4.metric("最大跌幅", f"{_ann_df['pct'].min():+.1f}%",
            f"{int(_ann_df.loc[_ann_df['pct'].idxmin(), 'year'])} 年")
 
 # ─── 六、年线价格走势与回撤 ─────────────────────────────────────────
-st.subheader("五、QQQ 年线价格走势与回撤（1999 年至今）")
+st.subheader("四、QQQ 年线价格走势与回撤（1999 年至今）")
 st.markdown("以每年最后一个交易日收盘价为基础。")
 
 _yr_ath = _yr_px.expanding().max()
