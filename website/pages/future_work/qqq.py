@@ -86,6 +86,9 @@ def _calc_metrics(prices: pd.Series, dd: pd.Series) -> dict:
     ) if uw_best_start else "—"
 
     mdd_trough_dt = dd.idxmin()
+    mdd_peak_dt = prices.loc[:mdd_trough_dt].idxmax()
+    mdd_period = f"{mdd_peak_dt.strftime('%Y-%m-%d')} → {mdd_trough_dt.strftime('%Y-%m-%d')}"
+
     after_trough = dd.loc[mdd_trough_dt:]
     recovery_pts = after_trough[after_trough >= 0]
     if len(recovery_pts) > 0:
@@ -98,7 +101,7 @@ def _calc_metrics(prices: pd.Series, dd: pd.Series) -> dict:
         ttr_sub = f"最低点 {mdd_trough_dt.strftime('%Y-%m')}"
 
     return dict(
-        cagr=cagr, max_dd=max_dd,
+        cagr=cagr, max_dd=max_dd, mdd_period=mdd_period,
         max_uw_days=max_uw, uw_range=uw_range,
         ttr_val=ttr_val, ttr_sub=ttr_sub,
         date_range=f"{prices.index[0].strftime('%Y-%m-%d')} 至 {prices.index[-1].strftime('%Y-%m-%d')}",
