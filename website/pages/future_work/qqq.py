@@ -33,8 +33,88 @@ def _load_qqq() -> pd.Series:
         s.index = s.index.tz_localize(None)
     return s.sort_index().rename("qqq")
 
-with st.spinner("正在加载 QQQ 价格数据…"):
+@st.cache_data(ttl=86400)
+def _load_spy(start: str, end: str) -> pd.Series:
+    raw = yf.download(
+        "SPY", start=start, end=end,
+        interval="1d", auto_adjust=True, progress=False,
+    )
+    if isinstance(raw.columns, pd.MultiIndex):
+        raw.columns = raw.columns.get_level_values(0)
+    s = raw["Close"].dropna()
+    s.index = pd.to_datetime(s.index)
+    if s.index.tz is not None:
+        s.index = s.index.tz_convert(None)
+    else:
+        s.index = s.index.tz_localize(None)
+    return s.sort_index().rename("spy")
+
+
+def _calc_metrics(prices: pd.Series, dd: pd.Series) -> dict:
+    """计算CAGR、最大回撤、最大水下时间、最低点→复原四项指标。"""
+    n_cal = (prices.index[-1] - prices.index[0]).days
+    cagr = (prices.iloc[-1] / prices.iloc[0]) ** (365.0 / n_cal) - 1
+    max_dd = dd.min()
+
+    underwater = dd < 0
+    max_uw = 0
+    uw_start = None
+    uw_best_start = None
+    uw_best_end = None
+    for dt, is_uw in underwater.items():
+        if is_uw:
+            if uw_start is None:
+                uw_start = dt
+        else:
+            if uw_start is not None:
+                dur = (dt - uw_start).days
+                if dur > max_uw:
+                    max_uw = dur
+                    uw_best_start = uw_start
+                    uw_best_end = dt
+                uw_start = None
+    if uw_start is not None:
+        dur = (prices.index[-1] - uw_start).days
+        if dur > max_uw:
+            max_uw = dur
+            uw_best_start = uw_start
+            uw_best_end = None
+    uw_range = (
+        f"{uw_best_start.strftime('%Y-%m')} 至今"
+        if uw_best_end is None
+        else f"{uw_best_start.strftime('%Y-%m')} 至 {uw_best_end.strftime('%Y-%m')}"
+    ) if uw_best_start else "—"
+
+    mdd_trough_dt = dd.idxmin()
+    after_trough = dd.loc[mdd_trough_dt:]
+    recovery_pts = after_trough[after_trough >= 0]
+    if len(recovery_pts) > 0:
+        ttr_recovery_dt = recovery_pts.index[0]
+        ttr_days = (ttr_recovery_dt - mdd_trough_dt).days
+        ttr_val = f"{ttr_days / 365:.1f} 年"
+        ttr_sub = f"{mdd_trough_dt.strftime('%Y-%m')} → {ttr_recovery_dt.strftime('%Y-%m')}"
+    else:
+        ttr_val = "至今未恢复"
+        ttr_sub = f"最低点 {mdd_trough_dt.strftime('%Y-%m')}"
+
+    return dict(
+        cagr=cagr, max_dd=max_dd,
+        max_uw_days=max_uw, uw_range=uw_range,
+        ttr_val=ttr_val, ttr_sub=ttr_sub,
+        date_range=f"{prices.index[0].strftime('%Y-%m-%d')} 至 {prices.index[-1].strftime('%Y-%m-%d')}",
+    )
+
+
+with st.spinner("正在加载 QQQ / SPY 价格数据…"):
     _prices = _load_qqq()
+    _spy_prices = _load_spy(
+        _prices.index[0].strftime("%Y-%m-%d"),
+        _date.today().isoformat(),
+    )
+    # 两者对齐到共同的交易日
+    _common_idx = _prices.index.intersection(_spy_prices.index)
+    _prices_aligned = _prices.loc[_common_idx]
+    _spy_aligned = _spy_prices.loc[_common_idx]
 
 st.markdown(
     f"数据来源：**Yahoo Finance — QQQ（纳斯达克100 ETF，1999 年上市至今）**  \n"
