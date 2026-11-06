@@ -166,7 +166,7 @@ _m_spy = _calc_metrics(_spy_aligned, _spy_dd_aligned)
 st.markdown("**QQQ**")
 _km1, _km2, _km3, _km4 = st.columns(4)
 _km1.metric("年化收益（CAGR）", f"{_m_qqq['cagr']:+.2%}", _m_qqq["date_range"], delta_color="off")
-_km2.metric("历史最大回撤", f"{_m_qqq['max_dd']:.1f}%")
+_km2.metric("历史最大回撤", f"{_m_qqq['max_dd']:.1f}%", _m_qqq["mdd_period"], delta_color="off")
 _km3.metric("最大水下时间", f"{_m_qqq['max_uw_days'] / 365:.1f} 年", _m_qqq["uw_range"], delta_color="off")
 _km4.metric("最低点→复原", _m_qqq["ttr_val"], _m_qqq["ttr_sub"], delta_color="off")
 
@@ -174,7 +174,7 @@ _km4.metric("最低点→复原", _m_qqq["ttr_val"], _m_qqq["ttr_sub"], delta_co
 st.markdown("**SPY（同期对比）**")
 _sm1, _sm2, _sm3, _sm4 = st.columns(4)
 _sm1.metric("年化收益（CAGR）", f"{_m_spy['cagr']:+.2%}", _m_spy["date_range"], delta_color="off")
-_sm2.metric("历史最大回撤", f"{_m_spy['max_dd']:.1f}%")
+_sm2.metric("历史最大回撤", f"{_m_spy['max_dd']:.1f}%", _m_spy["mdd_period"], delta_color="off")
 _sm3.metric("最大水下时间", f"{_m_spy['max_uw_days'] / 365:.1f} 年", _m_spy["uw_range"], delta_color="off")
 _sm4.metric("最低点→复原", _m_spy["ttr_val"], _m_spy["ttr_sub"], delta_color="off")
 
