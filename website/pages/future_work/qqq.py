@@ -214,7 +214,7 @@ _fig2.update_layout(
 st.plotly_chart(_fig2, use_container_width=True)
 
 # ─── 三、月线价格走势与回撤 ────────────────────────────────────────
-st.subheader("四、QQQ 月线价格走势与回撤（1999 年至今）")
+st.subheader("三、QQQ 月线价格走势与回撤（1999 年至今）")
 st.markdown("数据来源：Yahoo Finance 日线数据，月末最后交易日收盘价。")
 
 _mo_px  = _prices.resample("ME").last().dropna()
