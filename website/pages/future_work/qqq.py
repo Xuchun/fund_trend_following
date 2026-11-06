@@ -396,7 +396,7 @@ if _mo_dds:
     st.dataframe(pd.DataFrame(_mo_rows), use_container_width=True, hide_index=True)
 
 # ─── 五、年度收益柱状图 ─────────────────────────────────────────────
-st.subheader("五、QQQ 年度收益历史（1999 年至今）")
+st.subheader("四、QQQ 年度收益历史（1999 年至今）")
 st.markdown("数据来源：Yahoo Finance 日线数据，以每年最后一个交易日收盘价计算当年收益。")
 
 # 每年最后一个交易日收盘价，计算年度涨跌幅
