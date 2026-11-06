@@ -40,12 +40,22 @@ with st.spinner("正在加载数据…"):
     _fbtc  = _load("FBTC",    "2024-01-11")   # Fidelity Wise Origin Bitcoin Fund
     _gbtc  = _load("GBTC",    "2015-05-01")   # Grayscale Bitcoin Trust（2024年转为ETF）
 
+import pytz as _pytz
+_sgt = _pytz.timezone("Asia/Singapore")
+_now_sgt = pd.Timestamp.now(tz=_sgt).strftime("%Y-%m-%d %H:%M SGT")
+
 st.markdown(
-    "数据来源：**Yahoo Finance**（`auto_adjust=True`，价格含分红复权，比特币无分红）  \n"
-    "- **BTC-USD**：比特币现货价格（USD），2014年至今  \n"
-    "- **IBIT**：iShares Bitcoin Trust ETF（BlackRock），2024-01-11 上市  \n"
-    "- **FBTC**：Fidelity Wise Origin Bitcoin Fund，2024-01-11 上市  \n"
-    "- **GBTC**：Grayscale Bitcoin Trust（2024年1月转为ETF），2015年起场外交易"
+    f"数据来源：**Yahoo Finance**（`auto_adjust=True`，价格含分红复权，比特币无分红）  \n"
+    f"数据截至：**{_now_sgt}**（每小时自动刷新）  \n"
+    f"- **BTC-USD**：比特币现货价格（USD），"
+    f"**{_btc.index[0].strftime('%Y-%m-%d')}** 至 **{_btc.index[-1].strftime('%Y-%m-%d')}**，"
+    f"共 **{len(_btc):,}** 个交易日  \n"
+    f"- **IBIT**：iShares Bitcoin Trust ETF（BlackRock），2024-01-11 上市，"
+    f"数据至 **{_ibit.index[-1].strftime('%Y-%m-%d')}**  \n"
+    f"- **FBTC**：Fidelity Wise Origin Bitcoin Fund，2024-01-11 上市，"
+    f"数据至 **{_fbtc.index[-1].strftime('%Y-%m-%d')}**  \n"
+    f"- **GBTC**：Grayscale Bitcoin Trust（2024年1月转为ETF），"
+    f"**{_gbtc.index[0].strftime('%Y-%m-%d')}** 至 **{_gbtc.index[-1].strftime('%Y-%m-%d')}**"
 )
 
 # 计算BTC回撤序列（全量）
