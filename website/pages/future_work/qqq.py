@@ -181,37 +181,6 @@ _sm4.metric("最低点→复原", _m_spy["ttr_val"], _m_spy["ttr_sub"], delta_co
 # 供后续回撤图、详细分析使用的原始 QQQ 序列（非对齐版，保留完整历史）
 _max_dd_val = _dd.min()
 
-# 各回撤阈值买入后的前瞻收益表
-def _fwd_table(prices: pd.Series, dd: pd.Series, thresh: float, label: str):
-    st.markdown(f"**各次价格首次跌破 {label}（相对历史高点）时买入，后续收益：**")
-    _in_event = False
-    _rows = []
-    for _fdt, _fdv in dd.items():
-        if not _in_event and _fdv <= thresh:
-            _fep = float(prices[_fdt])
-            _frow = {
-                "买入时间": _fdt.strftime("%Y-%m"),
-                "买入价（$）": f"{_fep:,.2f}",
-                "当时回撤": f"{_fdv:.1f}%",
-            }
-            for _fy in [1, 2, 3, 5, 10]:
-                _ffd = prices[prices.index >= _fdt + pd.DateOffset(years=_fy)]
-                _frow[f"{_fy}年后收益"] = f"{(_ffd.iloc[0] / _fep - 1):+.1%}" if len(_ffd) else "—"
-            _rows.append(_frow)
-            _in_event = True
-        elif _in_event and _fdv >= 0:
-            _in_event = False
-    if _rows:
-        st.dataframe(pd.DataFrame(_rows), use_container_width=True, hide_index=True)
-    else:
-        st.markdown(f"数据范围内无跌破 {label} 的时间点。")
-
-_fwd_table(_prices, _dd, -30, "−30%")
-_fwd_table(_prices, _dd, -40, "−40%")
-_fwd_table(_prices, _dd, -50, "−50%")
-_fwd_table(_prices, _dd, -60, "−60%")
-_fwd_table(_prices, _dd, -70, "−70%")
-
 # ─── 二、回撤时序图 ─────────────────────────────────────────────────
 st.subheader("二、QQQ 价格回撤时序图（相对历史高点）")
 
