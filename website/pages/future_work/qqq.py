@@ -162,6 +162,8 @@ _spy_dd_aligned = (_spy_aligned - _spy_aligned.expanding().max()) / _spy_aligned
 _m_qqq = _calc_metrics(_prices_aligned, (_prices_aligned - _prices_aligned.expanding().max()) / _prices_aligned.expanding().max() * 100)
 _m_spy = _calc_metrics(_spy_aligned, _spy_dd_aligned)
 
+st.markdown("年化收益（CAGR）基于 Yahoo Finance 复权价格（`auto_adjust=True`）计算，**已包含历史分红再投资**，为总回报年化收益（Total Return CAGR）。")
+
 # QQQ 指标行
 st.markdown("**QQQ**")
 _km1, _km2, _km3, _km4 = st.columns(4)
