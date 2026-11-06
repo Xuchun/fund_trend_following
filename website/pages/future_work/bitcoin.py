@@ -385,3 +385,52 @@ st.markdown(
     "曲线在0轴以上：ETF累计收益**优于**BTC（含管理费抵消后仍有正偏差，通常为复权/分红处理差异）；"
     "曲线在0轴以下：ETF累计收益**落后**于BTC（主要来源：管理费、买卖价差、溢折价）。"
 )
+
+# ── 长期持有费用损耗测算 ──────────────────────────────────────────────
+st.markdown("**持有不同年限，各ETF相对比特币的理论价格损耗（基于年化管理费）：**")
+st.markdown(
+    "损耗 = 1 − (1 − 年管理费率)ᴺ，仅含年度管理费，不含买卖价差和溢折价。  \n"
+    "数据来源：各ETF官方公布年管理费率（IBIT 0.25%，FBTC 0.25%，GBTC 1.50%）。"
+)
+
+_fees = {"IBIT": 0.0025, "FBTC": 0.0025, "GBTC": 0.0150}
+_hold_years = [1, 3, 5, 10, 20]
+
+_drag_rows = []
+for _etf, _fee in _fees.items():
+    _row = {"ETF": _etf, "年管理费率": f"{_fee:.2%}"}
+    for _yr in _hold_years:
+        _drag = (1 - (1 - _fee) ** _yr) * 100
+        _row[f"持有{_yr}年损耗"] = f"{_drag:.2f}%"
+    _drag_rows.append(_row)
+st.dataframe(pd.DataFrame(_drag_rows), use_container_width=True, hide_index=True)
+
+# 损耗对比柱状图
+import numpy as np as _np
+_fig_drag = go.Figure()
+_x = [f"{y}年" for y in _hold_years]
+for _etf, _fee in _fees.items():
+    _y = [(1 - (1 - _fee) ** y) * 100 for y in _hold_years]
+    _fig_drag.add_trace(go.Bar(
+        name=_etf, x=_x, y=_y,
+        marker_color=_colors[_etf],
+        text=[f"{v:.1f}%" for v in _y],
+        textposition="outside",
+        textfont=dict(size=10),
+        hovertemplate=f"{_etf}  持有%{{x}}  损耗 %{{y:.2f}}%<extra></extra>",
+    ))
+_fig_drag.update_layout(
+    barmode="group",
+    xaxis_title="持有年限",
+    yaxis_title="相对BTC的损耗（%）",
+    yaxis=dict(ticksuffix="%"),
+    height=400,
+    bargap=0.2, bargroupgap=0.05,
+    legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0),
+    margin=dict(t=40, b=40, l=70, r=20),
+)
+st.plotly_chart(_fig_drag, use_container_width=True)
+st.markdown(
+    "**结论**：IBIT 和 FBTC 管理费均为 0.25%/年，长期持有损耗可控（持有20年约损耗 4.9%）；"
+    "GBTC 管理费高达 1.50%/年，持有10年损耗约 14%，持有20年损耗约 26%，长期持有成本显著更高。"
+)
