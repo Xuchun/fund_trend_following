@@ -77,7 +77,7 @@ try:
             st.Page(_fw / "shiller_pe.py",                 title="Shiller PE Ratio vs SPY", icon="📐"),
             st.Page(_fw / "qqq.py",                        title="QQQ历史分析",             icon="📊"),
             st.Page(_fw / "gold.py",                       title="黄金",                    icon="🥇"),
-            st.Page(_fw / "bitcoin.py",                    title="比特币 vs 比特币ETF",     icon="₿"),
+            st.Page(_fw / "bitcoin.py",                    title="比特币 vs 比特币ETF",     icon="🪙"),
             st.Page(_fw / "second_data_source.py",         title="是否购买第二家数据源",   icon="🗄️"),
         ],
         "策略2.0（开发中）": [
