@@ -19481,19 +19481,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2103,
     "total_scanned": 2103,
     "updated_utc": "2026-11-05T08:16:29Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2155,
+    "tiingo_eligible": 2154,
     "yf_downloadable": 2103,
-    "yf_unavailable_in_pool": 52,
-    "total_active": 3037,
-    "total_delisted": 1440,
-    "updated_utc": "2026-11-05T08:16:41Z"
+    "yf_unavailable_in_pool": 51,
+    "total_active": 3042,
+    "total_delisted": 1435,
+    "updated_utc": "2026-11-06T02:50:45Z"
   },
   "yf_persistent_unavailable": [
     "AGR",
@@ -19576,7 +19576,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-11-04T02:44:12Z",
+  "tiingo_universe_synced_utc": "2026-11-06T02:50:45Z",
   "daily_summary": {
     "date": "2026-11-04",
     "updated_sgt": "2026-11-05 16:16 SGT",
@@ -19584,14 +19584,14 @@
     "spy_change_pct": 1.65,
     "vs_spy_pct": -0.51,
     "bullets": [
-      "Energy板块今日下跌的根本原因在于市场对能源长期前景的悲观预期转变——交易员认为通胀压力已经缓解，油价不会重返100美元高位，这削弱了投资者对能源股持续上涨的信心。（[Joe Terranova Says “Inflatio…](https://247wallst.com/investing/2026/11/04/joe-terranova-says-inflation-lost-on-election-night-what-that-means-for-energy-stocks/)）",
-      "Energy板块的广泛下跌（NYSE Energy Sector Index下跌4.7%-5.4%）表明市场情绪整体悲观，策略重仓持有的EOG（-5.2%）和RRC（-3.5%）均遭重创，分别对净值造成-414美元和-281美元的损失。（[Sector Update: Energy Stocks…](https://finance.yahoo.com/energy/articles/sector-energy-stocks-fall-afternoon-205739762.html)、[Sector Update: Energy Stocks…](https://finance.yahoo.com/energy/articles/sector-energy-stocks-fall-wednesday-184335445.html)）",
-      "策略净值相对SPY偏差-0.51%的核心原因是Energy板块配置过重与个股跌幅不对称：EOG和RRC的Energy持仓拖累整体表现，而同期ETSY（+7.1%，+581美元）和SIG（+8.0%，+656美元）的Consumer Cyclical强势表现虽然部分对冲了Energy的亏损，但仍无法完全弥补能源类重仓股的超额下跌。（[Joe Terranova Says “Inflatio…](https://247wallst.com/investing/2026/11/04/joe-terranova-says-inflation-lost-on-election-night-what-that-means-for-energy-stocks/)、[Sector Update: Energy Stocks…](https://finance.yahoo.com/energy/articles/sector-energy-stocks-fall-afternoon-205739762.html)、[Sector Update: Energy Stocks…](https://finance.yahoo.com/energy/articles/sector-energy-stocks-fall-wednesday-184335445.html)）",
-      "能源股即使基本面稳健如Occidental Petroleum，在通胀预期转向的大背景下也难以独善其身，这反映出宏观预期转变对整个板块的压制力度，超过了个股选择能带来的超额收益。（[Joe Terranova Says “Inflatio…](https://247wallst.com/investing/2026/11/04/joe-terranova-says-inflation-lost-on-election-night-what-that-means-for-energy-stocks/)、[Do Wall Street Analysts Like…](https://www.barchart.com/story/news/8647505/do-wall-street-analysts-like-occidental-petroleum-stock)）"
+      "Energy\u677f\u5757\u4eca\u65e5\u4e0b\u8dcc\u7684\u6839\u672c\u539f\u56e0\u5728\u4e8e\u5e02\u573a\u5bf9\u80fd\u6e90\u957f\u671f\u524d\u666f\u7684\u60b2\u89c2\u9884\u671f\u8f6c\u53d8\u2014\u2014\u4ea4\u6613\u5458\u8ba4\u4e3a\u901a\u80c0\u538b\u529b\u5df2\u7ecf\u7f13\u89e3\uff0c\u6cb9\u4ef7\u4e0d\u4f1a\u91cd\u8fd4100\u7f8e\u5143\u9ad8\u4f4d\uff0c\u8fd9\u524a\u5f31\u4e86\u6295\u8d44\u8005\u5bf9\u80fd\u6e90\u80a1\u6301\u7eed\u4e0a\u6da8\u7684\u4fe1\u5fc3\u3002\uff08[Joe Terranova Says \u201cInflatio\u2026](https://247wallst.com/investing/2026/11/04/joe-terranova-says-inflation-lost-on-election-night-what-that-means-for-energy-stocks/)\uff09",
+      "Energy\u677f\u5757\u7684\u5e7f\u6cdb\u4e0b\u8dcc\uff08NYSE Energy Sector Index\u4e0b\u8dcc4.7%-5.4%\uff09\u8868\u660e\u5e02\u573a\u60c5\u7eea\u6574\u4f53\u60b2\u89c2\uff0c\u7b56\u7565\u91cd\u4ed3\u6301\u6709\u7684EOG\uff08-5.2%\uff09\u548cRRC\uff08-3.5%\uff09\u5747\u906d\u91cd\u521b\uff0c\u5206\u522b\u5bf9\u51c0\u503c\u9020\u6210-414\u7f8e\u5143\u548c-281\u7f8e\u5143\u7684\u635f\u5931\u3002\uff08[Sector Update: Energy Stocks\u2026](https://finance.yahoo.com/energy/articles/sector-energy-stocks-fall-afternoon-205739762.html)\u3001[Sector Update: Energy Stocks\u2026](https://finance.yahoo.com/energy/articles/sector-energy-stocks-fall-wednesday-184335445.html)\uff09",
+      "\u7b56\u7565\u51c0\u503c\u76f8\u5bf9SPY\u504f\u5dee-0.51%\u7684\u6838\u5fc3\u539f\u56e0\u662fEnergy\u677f\u5757\u914d\u7f6e\u8fc7\u91cd\u4e0e\u4e2a\u80a1\u8dcc\u5e45\u4e0d\u5bf9\u79f0\uff1aEOG\u548cRRC\u7684Energy\u6301\u4ed3\u62d6\u7d2f\u6574\u4f53\u8868\u73b0\uff0c\u800c\u540c\u671fETSY\uff08+7.1%\uff0c+581\u7f8e\u5143\uff09\u548cSIG\uff08+8.0%\uff0c+656\u7f8e\u5143\uff09\u7684Consumer Cyclical\u5f3a\u52bf\u8868\u73b0\u867d\u7136\u90e8\u5206\u5bf9\u51b2\u4e86Energy\u7684\u4e8f\u635f\uff0c\u4f46\u4ecd\u65e0\u6cd5\u5b8c\u5168\u5f25\u8865\u80fd\u6e90\u7c7b\u91cd\u4ed3\u80a1\u7684\u8d85\u989d\u4e0b\u8dcc\u3002\uff08[Joe Terranova Says \u201cInflatio\u2026](https://247wallst.com/investing/2026/11/04/joe-terranova-says-inflation-lost-on-election-night-what-that-means-for-energy-stocks/)\u3001[Sector Update: Energy Stocks\u2026](https://finance.yahoo.com/energy/articles/sector-energy-stocks-fall-afternoon-205739762.html)\u3001[Sector Update: Energy Stocks\u2026](https://finance.yahoo.com/energy/articles/sector-energy-stocks-fall-wednesday-184335445.html)\uff09",
+      "\u80fd\u6e90\u80a1\u5373\u4f7f\u57fa\u672c\u9762\u7a33\u5065\u5982Occidental Petroleum\uff0c\u5728\u901a\u80c0\u9884\u671f\u8f6c\u5411\u7684\u5927\u80cc\u666f\u4e0b\u4e5f\u96be\u4ee5\u72ec\u5584\u5176\u8eab\uff0c\u8fd9\u53cd\u6620\u51fa\u5b8f\u89c2\u9884\u671f\u8f6c\u53d8\u5bf9\u6574\u4e2a\u677f\u5757\u7684\u538b\u5236\u529b\u5ea6\uff0c\u8d85\u8fc7\u4e86\u4e2a\u80a1\u9009\u62e9\u80fd\u5e26\u6765\u7684\u8d85\u989d\u6536\u76ca\u3002\uff08[Joe Terranova Says \u201cInflatio\u2026](https://247wallst.com/investing/2026/11/04/joe-terranova-says-inflation-lost-on-election-night-what-that-means-for-energy-stocks/)\u3001[Do Wall Street Analysts Like\u2026](https://www.barchart.com/story/news/8647505/do-wall-street-analysts-like-occidental-petroleum-stock)\uff09"
     ],
     "news": [
       {
-        "title": "Joe Terranova Says “Inflation Lost” on Election Night. What That Means for Energy Stocks",
+        "title": "Joe Terranova Says \u201cInflation Lost\u201d on Election Night. What That Means for Energy Stocks",
         "url": "https://247wallst.com/investing/2026/11/04/joe-terranova-says-inflation-lost-on-election-night-what-that-means-for-energy-stocks/"
       },
       {
