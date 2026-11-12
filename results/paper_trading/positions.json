@@ -4,8 +4,8 @@
   "start_date": "2026-06-19",
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
-  "last_update_date": "2026-11-10",
-  "cash": 2056.9195946818973,
+  "last_update_date": "2026-11-11",
+  "cash": 2056.6665992308604,
   "positions": [
     {
       "ticker": "RVTY",
@@ -22,8 +22,8 @@
       "lowest_low": 140.08,
       "atr_at_entry": 4.2783,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 159.1,
-      "last_price_date": "2026-11-10",
+      "last_known_price": 158.25,
+      "last_price_date": "2026-11-11",
       "entry_commission": 2.54,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -43,8 +43,8 @@
       "lowest_low": 113.18,
       "atr_at_entry": 4.127,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 120.34,
-      "last_price_date": "2026-11-10",
+      "last_known_price": 120.7,
+      "last_price_date": "2026-11-11",
       "entry_commission": 2.45,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -59,13 +59,13 @@
       "entry_price": 34.4444,
       "shares": 236,
       "stop_loss": 32.7718,
-      "trail_stop": 34.946085,
-      "highest_high": 37.89,
+      "trail_stop": 35.272818,
+      "highest_high": 38.29,
       "lowest_low": 34.14,
       "atr_at_entry": 0.8363,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 37.59,
-      "last_price_date": "2026-11-10",
+      "last_known_price": 38.25,
+      "last_price_date": "2026-11-11",
       "entry_commission": 2.44,
       "entry_regime": "BULL",
       "sector": "Consumer Defensive"
@@ -85,8 +85,8 @@
       "lowest_low": 83.32,
       "atr_at_entry": 3.2261,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 86.5,
-      "last_price_date": "2026-11-10",
+      "last_known_price": 88.35,
+      "last_price_date": "2026-11-11",
       "entry_commission": 2.45,
       "entry_regime": "BULL",
       "sector": "Consumer Cyclical"
@@ -106,8 +106,8 @@
       "lowest_low": 887.04,
       "atr_at_entry": 25.1507,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 916.06,
-      "last_price_date": "2026-11-10",
+      "last_known_price": 959.41,
+      "last_price_date": "2026-11-11",
       "entry_commission": 2.23,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -122,13 +122,13 @@
       "entry_price": 466.3659,
       "shares": 17,
       "stop_loss": 442.7041,
-      "trail_stop": 468.418418,
+      "trail_stop": 468.527572,
       "highest_high": 507.24,
       "lowest_low": 462.54,
       "atr_at_entry": 11.8309,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 474.47,
-      "last_price_date": "2026-11-10",
+      "last_known_price": 477.7,
+      "last_price_date": "2026-11-11",
       "entry_commission": 2.38,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -143,13 +143,13 @@
       "entry_price": 170.0199,
       "shares": 46,
       "stop_loss": 161.5237,
-      "trail_stop": 162.469084,
+      "trail_stop": 162.79963,
       "highest_high": 176.58,
       "lowest_low": 164.0,
       "atr_at_entry": 4.2481,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 170.87,
-      "last_price_date": "2026-11-10",
+      "last_known_price": 169.73,
+      "last_price_date": "2026-11-11",
       "entry_commission": 2.35,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -169,8 +169,8 @@
       "lowest_low": 68.01,
       "atr_at_entry": 1.8118,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 70.58,
-      "last_price_date": "2026-11-10",
+      "last_known_price": 70.7,
+      "last_price_date": "2026-11-11",
       "entry_commission": 2.34,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -190,8 +190,8 @@
       "lowest_low": 302.18,
       "atr_at_entry": 8.212,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 311.12,
-      "last_price_date": "2026-11-10",
+      "last_known_price": 314.09,
+      "last_price_date": "2026-11-11",
       "entry_commission": 2.35,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -232,8 +232,8 @@
       "lowest_low": 112.22,
       "atr_at_entry": 3.6219,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 116.44,
-      "last_price_date": "2026-11-10",
+      "last_known_price": 115.62,
+      "last_price_date": "2026-11-11",
       "entry_commission": 2.34,
       "entry_regime": "BULL",
       "sector": "Industrials"
@@ -248,13 +248,13 @@
       "entry_price": 438.2178,
       "shares": 17,
       "stop_loss": 414.129,
-      "trail_stop": 424.146793,
+      "trail_stop": 425.233452,
       "highest_high": 463.07,
       "lowest_low": 427.97,
       "atr_at_entry": 12.0444,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 459.64,
-      "last_price_date": "2026-11-10",
+      "last_known_price": 461.95,
+      "last_price_date": "2026-11-11",
       "entry_commission": 2.23,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -269,13 +269,13 @@
       "entry_price": 513.9735,
       "shares": 15,
       "stop_loss": 492.2517,
-      "trail_stop": 496.970336,
-      "highest_high": 530.31,
+      "trail_stop": 502.416305,
+      "highest_high": 535.79,
       "lowest_low": 508.4,
       "atr_at_entry": 10.8609,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 527.38,
-      "last_price_date": "2026-11-10",
+      "last_known_price": 535.22,
+      "last_price_date": "2026-11-11",
       "entry_commission": 2.31,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -290,13 +290,13 @@
       "entry_price": 44.7147,
       "shares": 169,
       "stop_loss": 41.7095,
-      "trail_stop": 41.356346,
+      "trail_stop": 41.434029,
       "highest_high": 45.895,
       "lowest_low": 42.85,
       "atr_at_entry": 1.5026,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 45.24,
-      "last_price_date": "2026-11-10",
+      "last_known_price": 44.44,
+      "last_price_date": "2026-11-11",
       "entry_commission": 2.27,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -311,13 +311,13 @@
       "entry_price": 265.8456,
       "shares": 28,
       "stop_loss": 252.2558,
-      "trail_stop": 256.830464,
-      "highest_high": 277.38,
+      "trail_stop": 258.014344,
+      "highest_high": 277.76,
       "lowest_low": 263.92,
       "atr_at_entry": 6.7949,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 274.29,
-      "last_price_date": "2026-11-09",
+      "last_known_price": 277.45,
+      "last_price_date": "2026-11-11",
       "entry_commission": 2.23,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -337,8 +337,8 @@
       "lowest_low": 48.945,
       "atr_at_entry": 2.5029,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 50.34,
-      "last_price_date": "2026-11-10",
+      "last_known_price": 49.65,
+      "last_price_date": "2026-11-11",
       "entry_commission": 2.26,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -355,11 +355,11 @@
       "stop_loss": 32.9336,
       "trail_stop": 32.93548,
       "highest_high": 34.95,
-      "lowest_low": 34.22,
+      "lowest_low": 34.17,
       "atr_at_entry": 0.6753,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 34.88,
-      "last_price_date": "2026-11-10",
+      "last_known_price": 34.74,
+      "last_price_date": "2026-11-11",
       "entry_commission": 2.25,
       "entry_regime": "BULL",
       "sector": "Financial Services"
@@ -374,13 +374,13 @@
       "entry_price": 410.41,
       "shares": 18,
       "stop_loss": 384.9514,
-      "trail_stop": 386.197845,
+      "trail_stop": 386.913942,
       "highest_high": 424.73,
       "lowest_low": 409.8,
       "atr_at_entry": 12.7293,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 424.0,
-      "last_price_date": "2026-11-10",
+      "last_known_price": 419.98,
+      "last_price_date": "2026-11-11",
       "entry_commission": 2.22,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -395,13 +395,13 @@
       "entry_price": 26.7367,
       "shares": 285,
       "stop_loss": 25.0669,
-      "trail_stop": 24.366393,
+      "trail_stop": 24.438073,
       "highest_high": 26.82,
       "lowest_low": 26.325,
       "atr_at_entry": 0.8349,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 26.73,
-      "last_price_date": "2026-11-10",
+      "last_known_price": 26.66,
+      "last_price_date": "2026-11-11",
       "entry_commission": 2.29,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -4383,64 +4383,37 @@
       "nav": 152164.56,
       "regime": "BULL",
       "spy_close": 749.92
+    },
+    {
+      "date": "2026-11-11",
+      "nav": 152732.92,
+      "regime": "BULL",
+      "spy_close": 759.81
     }
   ],
   "pending_exits": [],
   "pending_entries": [
     {
-      "ticker": "EMBJ",
-      "signal_date": "2026-11-10",
-      "signal_price": 82.5,
-      "stop_price": 76.7443,
-      "shares": 92,
-      "atr": 2.8779,
-      "signal_strength": 1.0276,
-      "trade_risk": 0.0035,
-      "notional": 7590.0
+      "ticker": "ZETA",
+      "signal_date": "2026-11-11",
+      "signal_price": 37.74,
+      "stop_price": 34.0726,
+      "shares": 202,
+      "atr": 1.8337,
+      "signal_strength": 1.0557,
+      "trade_risk": 0.0049,
+      "notional": 7623.48
     },
     {
-      "ticker": "AIZ",
-      "signal_date": "2026-11-10",
-      "signal_price": 322.16,
-      "stop_price": 308.5837,
-      "shares": 24,
-      "atr": 6.7881,
-      "signal_strength": 1.0132,
-      "trade_risk": 0.0021,
-      "notional": 7731.84
-    },
-    {
-      "ticker": "TGTX",
-      "signal_date": "2026-11-10",
-      "signal_price": 64.26,
-      "stop_price": 58.2913,
-      "shares": 118,
-      "atr": 2.9844,
-      "signal_strength": 1.0104,
-      "trade_risk": 0.0046,
-      "notional": 7582.68
-    },
-    {
-      "ticker": "FWONK",
-      "signal_date": "2026-11-10",
-      "signal_price": 108.94,
-      "stop_price": 103.1465,
-      "shares": 70,
-      "atr": 2.8967,
-      "signal_strength": 1.005,
-      "trade_risk": 0.0027,
-      "notional": 7625.8
-    },
-    {
-      "ticker": "AMG",
-      "signal_date": "2026-11-10",
-      "signal_price": 401.32,
-      "stop_price": 373.0634,
-      "shares": 19,
-      "atr": 14.1283,
-      "signal_strength": 1.003,
-      "trade_risk": 0.0035,
-      "notional": 7625.08
+      "ticker": "VTRS",
+      "signal_date": "2026-11-11",
+      "signal_price": 21.06,
+      "stop_price": 19.9638,
+      "shares": 363,
+      "atr": 0.5481,
+      "signal_strength": 1.0096,
+      "trade_risk": 0.0026,
+      "notional": 7644.78
     }
   ],
   "signals_history": [
@@ -19750,175 +19723,160 @@
           "strength": 1.003
         }
       ]
+    },
+    {
+      "date": "2026-11-11",
+      "regime": "BULL",
+      "spy_close": 759.81,
+      "n_candidates": 2,
+      "n_entries": 2,
+      "n_executed": 0,
+      "n_exits": 0,
+      "n_raw_breakouts": 2,
+      "n_heat_blocked": 0,
+      "n_cash_blocked": 0,
+      "n_corr_reduced": 0,
+      "n_price_filtered": 236,
+      "n_adv_filtered": 557,
+      "n_breakout_filtered": 1241,
+      "n_atr_filtered": 0,
+      "n_stop_dist_filtered": 0,
+      "n_volume_filtered": 20,
+      "n_stale_filtered": 3,
+      "spy_pct_above_sma200": 4.2762,
+      "exits_executed": [],
+      "entries_executed": [],
+      "exit_signals": [],
+      "candidate_signals": [
+        {
+          "ticker": "ZETA",
+          "signal_price": 37.74,
+          "stop_price": 34.0726,
+          "shares": 202,
+          "trade_risk": 0.0049,
+          "strength": 1.0557,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.097174,
+          "atr_pct": 0.048587,
+          "adv60_m": 189.959,
+          "vol_ratio": 1.5307
+        },
+        {
+          "ticker": "VTRS",
+          "signal_price": 21.06,
+          "stop_price": 19.9638,
+          "shares": 363,
+          "trade_risk": 0.0026,
+          "strength": 1.0096,
+          "rejection": null,
+          "corr_with": null,
+          "stop_distance_pct": 0.052051,
+          "atr_pct": 0.026025,
+          "adv60_m": 154.615,
+          "vol_ratio": 1.6606
+        }
+      ],
+      "entry_signals": [
+        {
+          "ticker": "ZETA",
+          "signal_price": 37.74,
+          "stop_price": 34.0726,
+          "shares": 202,
+          "trade_risk": 0.0049,
+          "strength": 1.0557
+        },
+        {
+          "ticker": "VTRS",
+          "signal_price": 21.06,
+          "stop_price": 19.9638,
+          "shares": 363,
+          "trade_risk": 0.0026,
+          "strength": 1.0096
+        }
+      ]
     }
   ],
-  "last_update_utc": "2026-11-11T07:31:51Z",
+  "last_update_utc": "2026-11-12T07:59:41Z",
   "today_signals": {
-    "date": "2026-11-10",
+    "date": "2026-11-11",
     "regime": "BULL",
-    "spy_close": 749.92,
-    "n_candidates": 5,
-    "n_entries": 5,
-    "n_executed": 1,
+    "spy_close": 759.81,
+    "n_candidates": 2,
+    "n_entries": 2,
+    "n_executed": 0,
     "n_exits": 0,
-    "n_raw_breakouts": 5,
+    "n_raw_breakouts": 2,
     "n_heat_blocked": 0,
     "n_cash_blocked": 0,
     "n_corr_reduced": 0,
-    "n_price_filtered": 238,
-    "n_adv_filtered": 552,
-    "n_breakout_filtered": 1246,
+    "n_price_filtered": 236,
+    "n_adv_filtered": 557,
+    "n_breakout_filtered": 1241,
     "n_atr_filtered": 0,
     "n_stop_dist_filtered": 0,
-    "n_volume_filtered": 11,
-    "n_stale_filtered": 1,
-    "spy_pct_above_sma200": 2.9682,
-    "exits_executed": [
-      {
-        "ticker": "TGTX",
-        "shares": 128,
-        "exit_open": 62.7,
-        "exit_price": 62.6373,
-        "net_pnl": 195.73,
-        "pnl_r": 0.3388,
-        "exit_reason": "stop_loss"
-      }
-    ],
-    "entries_executed": [
-      {
-        "ticker": "SGRY",
-        "signal_date": "2026-11-09",
-        "signal_price": 26.45,
-        "open_price": 26.71,
-        "entry_price": 26.7367,
-        "shares": 285,
-        "stop_price": 25.0669,
-        "trade_risk": 0.0031
-      }
-    ],
+    "n_volume_filtered": 20,
+    "n_stale_filtered": 3,
+    "spy_pct_above_sma200": 4.2762,
+    "exits_executed": [],
+    "entries_executed": [],
     "exit_signals": [],
     "candidate_signals": [
       {
-        "ticker": "EMBJ",
-        "signal_price": 82.5,
-        "stop_price": 76.7443,
-        "shares": 92,
-        "trade_risk": 0.0035,
-        "strength": 1.0276,
+        "ticker": "ZETA",
+        "signal_price": 37.74,
+        "stop_price": 34.0726,
+        "shares": 202,
+        "trade_risk": 0.0049,
+        "strength": 1.0557,
         "rejection": null,
         "corr_with": null,
-        "stop_distance_pct": 0.069766,
-        "atr_pct": 0.034883,
-        "adv60_m": 104.596,
-        "vol_ratio": 2.5108
+        "stop_distance_pct": 0.097174,
+        "atr_pct": 0.048587,
+        "adv60_m": 189.959,
+        "vol_ratio": 1.5307
       },
       {
-        "ticker": "AIZ",
-        "signal_price": 322.16,
-        "stop_price": 308.5837,
-        "shares": 24,
-        "trade_risk": 0.0021,
-        "strength": 1.0132,
+        "ticker": "VTRS",
+        "signal_price": 21.06,
+        "stop_price": 19.9638,
+        "shares": 363,
+        "trade_risk": 0.0026,
+        "strength": 1.0096,
         "rejection": null,
         "corr_with": null,
-        "stop_distance_pct": 0.042141,
-        "atr_pct": 0.021071,
-        "adv60_m": 105.951,
-        "vol_ratio": 1.6523
-      },
-      {
-        "ticker": "TGTX",
-        "signal_price": 64.26,
-        "stop_price": 58.2913,
-        "shares": 118,
-        "trade_risk": 0.0046,
-        "strength": 1.0104,
-        "rejection": null,
-        "corr_with": null,
-        "stop_distance_pct": 0.092884,
-        "atr_pct": 0.046442,
-        "adv60_m": 103.648,
-        "vol_ratio": 3.1286
-      },
-      {
-        "ticker": "FWONK",
-        "signal_price": 108.94,
-        "stop_price": 103.1465,
-        "shares": 70,
-        "trade_risk": 0.0027,
-        "strength": 1.005,
-        "rejection": null,
-        "corr_with": null,
-        "stop_distance_pct": 0.05318,
-        "atr_pct": 0.02659,
-        "adv60_m": 230.219,
-        "vol_ratio": 1.5166
-      },
-      {
-        "ticker": "AMG",
-        "signal_price": 401.32,
-        "stop_price": 373.0634,
-        "shares": 19,
-        "trade_risk": 0.0035,
-        "strength": 1.003,
-        "rejection": null,
-        "corr_with": null,
-        "stop_distance_pct": 0.070409,
-        "atr_pct": 0.035205,
-        "adv60_m": 110.974,
-        "vol_ratio": 2.5945
+        "stop_distance_pct": 0.052051,
+        "atr_pct": 0.026025,
+        "adv60_m": 154.615,
+        "vol_ratio": 1.6606
       }
     ],
     "entry_signals": [
       {
-        "ticker": "EMBJ",
-        "signal_price": 82.5,
-        "stop_price": 76.7443,
-        "shares": 92,
-        "trade_risk": 0.0035,
-        "strength": 1.0276
+        "ticker": "ZETA",
+        "signal_price": 37.74,
+        "stop_price": 34.0726,
+        "shares": 202,
+        "trade_risk": 0.0049,
+        "strength": 1.0557
       },
       {
-        "ticker": "AIZ",
-        "signal_price": 322.16,
-        "stop_price": 308.5837,
-        "shares": 24,
-        "trade_risk": 0.0021,
-        "strength": 1.0132
-      },
-      {
-        "ticker": "TGTX",
-        "signal_price": 64.26,
-        "stop_price": 58.2913,
-        "shares": 118,
-        "trade_risk": 0.0046,
-        "strength": 1.0104
-      },
-      {
-        "ticker": "FWONK",
-        "signal_price": 108.94,
-        "stop_price": 103.1465,
-        "shares": 70,
-        "trade_risk": 0.0027,
-        "strength": 1.005
-      },
-      {
-        "ticker": "AMG",
-        "signal_price": 401.32,
-        "stop_price": 373.0634,
-        "shares": 19,
-        "trade_risk": 0.0035,
-        "strength": 1.003
+        "ticker": "VTRS",
+        "signal_price": 21.06,
+        "stop_price": 19.9638,
+        "shares": 363,
+        "trade_risk": 0.0026,
+        "strength": 1.0096
       }
     ]
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
+  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
-    "downloaded_count": 2088,
-    "total_scanned": 2088,
-    "updated_utc": "2026-11-11T07:31:50Z"
+    "downloaded_count": 2096,
+    "total_scanned": 2096,
+    "updated_utc": "2026-11-12T07:59:39Z"
   },
   "universe_stats": {
     "tiingo_eligible": 2125,
@@ -19926,7 +19884,7 @@
     "yf_unavailable_in_pool": 29,
     "total_active": 2984,
     "total_delisted": 1493,
-    "updated_utc": "2026-11-12T03:23:34Z"
+    "updated_utc": "2026-11-12T07:59:49Z"
   },
   "yf_persistent_unavailable": [
     "AGR",
@@ -20016,25 +19974,50 @@
   ],
   "tiingo_universe_synced_utc": "2026-11-12T03:23:34Z",
   "daily_summary": {
-    "date": "2026-11-10",
-    "updated_sgt": "2026-11-11 15:31 SGT",
-    "nav_change_pct": -0.05,
-    "spy_change_pct": -0.37,
-    "vs_spy_pct": 0.32,
-    "bullets": [],
-    "news": []
+    "date": "2026-11-11",
+    "updated_sgt": "2026-11-12 15:59 SGT",
+    "nav_change_pct": 0.37,
+    "spy_change_pct": 1.32,
+    "vs_spy_pct": -0.95,
+    "bullets": [
+      "Industrials板块中Stanley Black & Decker等传统工业股票虽然基本面表现稳健但缺乏增长动能，而State Street工业基金虽然持续加仓但无法扭转市场对周期性工业股的谨慎态度，导致SWK（-0.7%）等重仓工业股承压。（[Are Wall Street Analysts Pre…](https://www.barchart.com/story/news/8783167/are-wall-street-analysts-predicting-stanley-black-decker-stock-will-climb-or-sink)、[State Street Industrial Sele…](https://finance.yahoo.com/markets/stocks/articles/state-street-industrial-select-sector-110410356.html)）",
+      "策略重仓Industrials板块而大盘表现由Technology和Healthcare驱动，导致净值与SPY出现-0.95%的偏差，其中Healthcare中的REGN（+4.7%，+$347）大幅上涨而策略无法充分受益，同时Technology中的BSY（-1.8%，-$135）和U（-1.4%，-$99）的双重拖累进一步拉大了与大盘的差距。（[Is Howmet Aerospace Stock a …](https://finance.yahoo.com/markets/stocks/articles/howmet-aerospace-stock-buy-q3-163500662.html)）",
+      "Industrials板块内部缺乏明确的正面催化剂，相关新闻主要聚焦于估值比较和分析师展望而非业绩突破，使得该板块难以在市场轮动中获得资金追捧，而偏离高成长板块的配置选择最终导致策略跑输大盘。（[Can Stanley Black & Decker S…](https://www.trefis.com/stock/swk/articles/624299/can-stanley-black-decker-stock-drop-from-here/2026-11-11)、[SWK or LECO: Which Is the Be…](https://finance.yahoo.com/markets/stocks/articles/swk-leco-better-value-stock-154002141.html)）"
+    ],
+    "news": [
+      {
+        "title": "Are Wall Street Analysts Predicting Stanley Black & Decker Stock Will Climb or Sink?",
+        "url": "https://www.barchart.com/story/news/8783167/are-wall-street-analysts-predicting-stanley-black-decker-stock-will-climb-or-sink"
+      },
+      {
+        "title": "State Street Industrial Select Sector SPDR (XLI) Adds GE and CAT on Nov. 9",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/state-street-industrial-select-sector-110410356.html"
+      },
+      {
+        "title": "Can Stanley Black & Decker Stock Drop From Here?",
+        "url": "https://www.trefis.com/stock/swk/articles/624299/can-stanley-black-decker-stock-drop-from-here/2026-11-11"
+      },
+      {
+        "title": "Is Howmet Aerospace Stock a Buy After Q3 Earnings Beat & Raised Outlook?",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/howmet-aerospace-stock-buy-q3-163500662.html"
+      },
+      {
+        "title": "SWK or LECO: Which Is the Better Value Stock Right Now?",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/swk-leco-better-value-stock-154002141.html"
+      }
+    ]
   },
   "last_no_op_utc": "2026-11-11T14:47:41Z",
   "download_log": {
-    "date": "2026-11-10",
+    "date": "2026-11-11",
     "attempts": [
       {
-        "time_sgt": "2026-11-11 15:31 SGT",
+        "time_sgt": "2026-11-12 15:59 SGT",
         "type": "main_download",
         "status": "success",
-        "total": 2088,
-        "success": 2088,
-        "cumulative_success": 2088,
+        "total": 2096,
+        "success": 2096,
+        "cumulative_success": 2096,
         "failed": 0,
         "next_retry_sgt": null,
         "seq": 1
