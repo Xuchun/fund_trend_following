@@ -19872,19 +19872,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2096,
     "total_scanned": 2096,
     "updated_utc": "2026-11-12T07:59:39Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2125,
-    "yf_downloadable": 2096,
-    "yf_unavailable_in_pool": 29,
-    "total_active": 2984,
-    "total_delisted": 1493,
-    "updated_utc": "2026-11-12T07:59:49Z"
+    "tiingo_eligible": 2135,
+    "yf_downloadable": 2105,
+    "yf_unavailable_in_pool": 30,
+    "total_active": 2989,
+    "total_delisted": 1488,
+    "updated_utc": "2026-11-13T02:56:13Z"
   },
   "yf_persistent_unavailable": [
     "AGR",
@@ -19972,7 +19972,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-11-12T03:23:34Z",
+  "tiingo_universe_synced_utc": "2026-11-13T02:56:13Z",
   "daily_summary": {
     "date": "2026-11-11",
     "updated_sgt": "2026-11-12 15:59 SGT",
@@ -19980,9 +19980,9 @@
     "spy_change_pct": 1.32,
     "vs_spy_pct": -0.95,
     "bullets": [
-      "Industrials板块中Stanley Black & Decker等传统工业股票虽然基本面表现稳健但缺乏增长动能，而State Street工业基金虽然持续加仓但无法扭转市场对周期性工业股的谨慎态度，导致SWK（-0.7%）等重仓工业股承压。（[Are Wall Street Analysts Pre…](https://www.barchart.com/story/news/8783167/are-wall-street-analysts-predicting-stanley-black-decker-stock-will-climb-or-sink)、[State Street Industrial Sele…](https://finance.yahoo.com/markets/stocks/articles/state-street-industrial-select-sector-110410356.html)）",
-      "策略重仓Industrials板块而大盘表现由Technology和Healthcare驱动，导致净值与SPY出现-0.95%的偏差，其中Healthcare中的REGN（+4.7%，+$347）大幅上涨而策略无法充分受益，同时Technology中的BSY（-1.8%，-$135）和U（-1.4%，-$99）的双重拖累进一步拉大了与大盘的差距。（[Is Howmet Aerospace Stock a …](https://finance.yahoo.com/markets/stocks/articles/howmet-aerospace-stock-buy-q3-163500662.html)）",
-      "Industrials板块内部缺乏明确的正面催化剂，相关新闻主要聚焦于估值比较和分析师展望而非业绩突破，使得该板块难以在市场轮动中获得资金追捧，而偏离高成长板块的配置选择最终导致策略跑输大盘。（[Can Stanley Black & Decker S…](https://www.trefis.com/stock/swk/articles/624299/can-stanley-black-decker-stock-drop-from-here/2026-11-11)、[SWK or LECO: Which Is the Be…](https://finance.yahoo.com/markets/stocks/articles/swk-leco-better-value-stock-154002141.html)）"
+      "Industrials\u677f\u5757\u4e2dStanley Black & Decker\u7b49\u4f20\u7edf\u5de5\u4e1a\u80a1\u7968\u867d\u7136\u57fa\u672c\u9762\u8868\u73b0\u7a33\u5065\u4f46\u7f3a\u4e4f\u589e\u957f\u52a8\u80fd\uff0c\u800cState Street\u5de5\u4e1a\u57fa\u91d1\u867d\u7136\u6301\u7eed\u52a0\u4ed3\u4f46\u65e0\u6cd5\u626d\u8f6c\u5e02\u573a\u5bf9\u5468\u671f\u6027\u5de5\u4e1a\u80a1\u7684\u8c28\u614e\u6001\u5ea6\uff0c\u5bfc\u81f4SWK\uff08-0.7%\uff09\u7b49\u91cd\u4ed3\u5de5\u4e1a\u80a1\u627f\u538b\u3002\uff08[Are Wall Street Analysts Pre\u2026](https://www.barchart.com/story/news/8783167/are-wall-street-analysts-predicting-stanley-black-decker-stock-will-climb-or-sink)\u3001[State Street Industrial Sele\u2026](https://finance.yahoo.com/markets/stocks/articles/state-street-industrial-select-sector-110410356.html)\uff09",
+      "\u7b56\u7565\u91cd\u4ed3Industrials\u677f\u5757\u800c\u5927\u76d8\u8868\u73b0\u7531Technology\u548cHealthcare\u9a71\u52a8\uff0c\u5bfc\u81f4\u51c0\u503c\u4e0eSPY\u51fa\u73b0-0.95%\u7684\u504f\u5dee\uff0c\u5176\u4e2dHealthcare\u4e2d\u7684REGN\uff08+4.7%\uff0c+$347\uff09\u5927\u5e45\u4e0a\u6da8\u800c\u7b56\u7565\u65e0\u6cd5\u5145\u5206\u53d7\u76ca\uff0c\u540c\u65f6Technology\u4e2d\u7684BSY\uff08-1.8%\uff0c-$135\uff09\u548cU\uff08-1.4%\uff0c-$99\uff09\u7684\u53cc\u91cd\u62d6\u7d2f\u8fdb\u4e00\u6b65\u62c9\u5927\u4e86\u4e0e\u5927\u76d8\u7684\u5dee\u8ddd\u3002\uff08[Is Howmet Aerospace Stock a \u2026](https://finance.yahoo.com/markets/stocks/articles/howmet-aerospace-stock-buy-q3-163500662.html)\uff09",
+      "Industrials\u677f\u5757\u5185\u90e8\u7f3a\u4e4f\u660e\u786e\u7684\u6b63\u9762\u50ac\u5316\u5242\uff0c\u76f8\u5173\u65b0\u95fb\u4e3b\u8981\u805a\u7126\u4e8e\u4f30\u503c\u6bd4\u8f83\u548c\u5206\u6790\u5e08\u5c55\u671b\u800c\u975e\u4e1a\u7ee9\u7a81\u7834\uff0c\u4f7f\u5f97\u8be5\u677f\u5757\u96be\u4ee5\u5728\u5e02\u573a\u8f6e\u52a8\u4e2d\u83b7\u5f97\u8d44\u91d1\u8ffd\u6367\uff0c\u800c\u504f\u79bb\u9ad8\u6210\u957f\u677f\u5757\u7684\u914d\u7f6e\u9009\u62e9\u6700\u7ec8\u5bfc\u81f4\u7b56\u7565\u8dd1\u8f93\u5927\u76d8\u3002\uff08[Can Stanley Black & Decker S\u2026](https://www.trefis.com/stock/swk/articles/624299/can-stanley-black-decker-stock-drop-from-here/2026-11-11)\u3001[SWK or LECO: Which Is the Be\u2026](https://finance.yahoo.com/markets/stocks/articles/swk-leco-better-value-stock-154002141.html)\uff09"
     ],
     "news": [
       {
