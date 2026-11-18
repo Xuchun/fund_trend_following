@@ -20372,19 +20372,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2115,
     "total_scanned": 2128,
     "updated_utc": "2026-11-17T08:50:20Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2128,
-    "yf_downloadable": 2096,
-    "yf_unavailable_in_pool": 32,
-    "total_active": 2975,
-    "total_delisted": 1502,
-    "updated_utc": "2026-11-17T08:50:27Z"
+    "tiingo_eligible": 2138,
+    "yf_downloadable": 2105,
+    "yf_unavailable_in_pool": 33,
+    "total_active": 2970,
+    "total_delisted": 1507,
+    "updated_utc": "2026-11-18T03:53:12Z"
   },
   "yf_persistent_unavailable": [
     "ACVA",
@@ -20477,7 +20477,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-11-17T04:47:54Z",
+  "tiingo_universe_synced_utc": "2026-11-18T03:53:12Z",
   "daily_summary": {
     "date": "2026-11-16",
     "updated_sgt": "2026-11-17 16:50 SGT",
@@ -20485,10 +20485,10 @@
     "spy_change_pct": -1.91,
     "vs_spy_pct": 0.96,
     "bullets": [
-      "DOJ对并购审查采取更灵活的态度，降低了通信服务等大型企业合并的监管风险溢价，市场对该板块潜在整合机会的预期改善，推升板块估值。（[DOJ Open to Behavioral Remed…](https://finance.yahoo.com/economy/policy/articles/doj-open-behavioral-remedies-merger-004907935.html)）",
-      "纳斯达克和标普500整体下跌主要源于NVIDIA等科技龙头的技术股调整，但Communication Services作为防守性板块相对抗跌，这导致重仓该板块的策略相对大盘的表现分化。（[Stock Market News for Nov 16…](https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-16-132700717.html)）",
-      "策略净值相比SPY高出0.96%的超额收益，主要源于对科技板块持仓（U、MSI、ROP等）的抗跌表现，其中ROP上涨0.8%、MSI上涨0.6%，部分对冲了ETSY暴跌4.5%、RVTY下跌3.6%等高波动性消费和医疗股的损失。（[Stock Market News for Nov 16…](https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-16-132700717.html)）",
-      "ETSY和RVTY等高估值成长股的超预期大幅下挫（分别下跌4.5%和3.6%，合计拖累净值696元），反映出在科技板块调整的市场环境中，策略配置的非通信服务板块标的承压，但由于Communication Services板块本身的相对强韧性，使得整体跌幅控制在-0.95%，好于大盘-1.91%的表现。（[Stock Market News for Nov 16…](https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-16-132700717.html)）"
+      "DOJ\u5bf9\u5e76\u8d2d\u5ba1\u67e5\u91c7\u53d6\u66f4\u7075\u6d3b\u7684\u6001\u5ea6\uff0c\u964d\u4f4e\u4e86\u901a\u4fe1\u670d\u52a1\u7b49\u5927\u578b\u4f01\u4e1a\u5408\u5e76\u7684\u76d1\u7ba1\u98ce\u9669\u6ea2\u4ef7\uff0c\u5e02\u573a\u5bf9\u8be5\u677f\u5757\u6f5c\u5728\u6574\u5408\u673a\u4f1a\u7684\u9884\u671f\u6539\u5584\uff0c\u63a8\u5347\u677f\u5757\u4f30\u503c\u3002\uff08[DOJ Open to Behavioral Remed\u2026](https://finance.yahoo.com/economy/policy/articles/doj-open-behavioral-remedies-merger-004907935.html)\uff09",
+      "\u7eb3\u65af\u8fbe\u514b\u548c\u6807\u666e500\u6574\u4f53\u4e0b\u8dcc\u4e3b\u8981\u6e90\u4e8eNVIDIA\u7b49\u79d1\u6280\u9f99\u5934\u7684\u6280\u672f\u80a1\u8c03\u6574\uff0c\u4f46Communication Services\u4f5c\u4e3a\u9632\u5b88\u6027\u677f\u5757\u76f8\u5bf9\u6297\u8dcc\uff0c\u8fd9\u5bfc\u81f4\u91cd\u4ed3\u8be5\u677f\u5757\u7684\u7b56\u7565\u76f8\u5bf9\u5927\u76d8\u7684\u8868\u73b0\u5206\u5316\u3002\uff08[Stock Market News for Nov 16\u2026](https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-16-132700717.html)\uff09",
+      "\u7b56\u7565\u51c0\u503c\u76f8\u6bd4SPY\u9ad8\u51fa0.96%\u7684\u8d85\u989d\u6536\u76ca\uff0c\u4e3b\u8981\u6e90\u4e8e\u5bf9\u79d1\u6280\u677f\u5757\u6301\u4ed3\uff08U\u3001MSI\u3001ROP\u7b49\uff09\u7684\u6297\u8dcc\u8868\u73b0\uff0c\u5176\u4e2dROP\u4e0a\u6da80.8%\u3001MSI\u4e0a\u6da80.6%\uff0c\u90e8\u5206\u5bf9\u51b2\u4e86ETSY\u66b4\u8dcc4.5%\u3001RVTY\u4e0b\u8dcc3.6%\u7b49\u9ad8\u6ce2\u52a8\u6027\u6d88\u8d39\u548c\u533b\u7597\u80a1\u7684\u635f\u5931\u3002\uff08[Stock Market News for Nov 16\u2026](https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-16-132700717.html)\uff09",
+      "ETSY\u548cRVTY\u7b49\u9ad8\u4f30\u503c\u6210\u957f\u80a1\u7684\u8d85\u9884\u671f\u5927\u5e45\u4e0b\u632b\uff08\u5206\u522b\u4e0b\u8dcc4.5%\u548c3.6%\uff0c\u5408\u8ba1\u62d6\u7d2f\u51c0\u503c696\u5143\uff09\uff0c\u53cd\u6620\u51fa\u5728\u79d1\u6280\u677f\u5757\u8c03\u6574\u7684\u5e02\u573a\u73af\u5883\u4e2d\uff0c\u7b56\u7565\u914d\u7f6e\u7684\u975e\u901a\u4fe1\u670d\u52a1\u677f\u5757\u6807\u7684\u627f\u538b\uff0c\u4f46\u7531\u4e8eCommunication Services\u677f\u5757\u672c\u8eab\u7684\u76f8\u5bf9\u5f3a\u97e7\u6027\uff0c\u4f7f\u5f97\u6574\u4f53\u8dcc\u5e45\u63a7\u5236\u5728-0.95%\uff0c\u597d\u4e8e\u5927\u76d8-1.91%\u7684\u8868\u73b0\u3002\uff08[Stock Market News for Nov 16\u2026](https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-16-132700717.html)\uff09"
     ],
     "news": [
       {
