@@ -20585,19 +20585,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2084,
     "total_scanned": 2084,
     "updated_utc": "2026-11-19T08:26:09Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2116,
-    "yf_downloadable": 2081,
-    "yf_unavailable_in_pool": 35,
-    "total_active": 2964,
-    "total_delisted": 1513,
-    "updated_utc": "2026-11-19T08:26:18Z"
+    "tiingo_eligible": 2125,
+    "yf_downloadable": 2089,
+    "yf_unavailable_in_pool": 36,
+    "total_active": 2972,
+    "total_delisted": 1505,
+    "updated_utc": "2026-11-20T03:44:20Z"
   },
   "yf_persistent_unavailable": [
     "ACH",
@@ -20694,7 +20694,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-11-19T03:51:46Z",
+  "tiingo_universe_synced_utc": "2026-11-20T03:44:20Z",
   "daily_summary": {
     "date": "2026-11-18",
     "updated_sgt": "2026-11-19 16:26 SGT",
@@ -20702,10 +20702,10 @@
     "spy_change_pct": -0.31,
     "vs_spy_pct": -0.0,
     "bullets": [
-      "Healthcare板块今日整体承压下行，NYSE Healthcare Index跌幅达1.6%，反映出市场对医疗健康类资产的风险偏好下降，这种系统性的板块调整导致策略重仓的ONC（-2.3%）和REGN（-1.3%）均承压。（[Sector Update: Healthcare St…](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-fall-afternoon-204713275.html)、[Sector Update: Healthcare St…](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-decline-afternoon-184357969.html)）",
-      "尽管Regeneron获得EC批准Libtayo给药灵活性的利好消息，但这类个股利好无法对抗整个Healthcare板块的下跌趋势，说明当前市场风险厌恶情绪强于对个别公司基本面改善的认可。（[Regeneron Wins EC Clearance …](https://finance.yahoo.com/healthcare/articles/regeneron-wins-ec-clearance-libtayo-181000462.html)）",
-      "策略净值与SPY出现-0.00%偏差看似无分歧，但这掩盖了结构性风险：Healthcare板块龙头REGN跌幅仅-1.3%，而策略中ONC跌-2.3%的超额下跌，以及Technology板块的U（-2.8%）和PCTY（-1.4%）跌幅更大，导致策略虽未跑输大盘但内部持仓结构承受了分化压力。（[Sector Update: Healthcare St…](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-fall-afternoon-204713275.html)、[Sector Update: Healthcare St…](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-decline-afternoon-184357969.html)）",
-      "市场今日的风险资产整体调整（包括Technology板块同步下行）并非Healthcare板块的独特问题，而是广泛的避险情绪，策略作为Healthcare重仓组合恰好在这轮调整中被动承受了板块内个股分化和跨板块风险扩散的双重压力。（[Sector Update: Healthcare St…](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-fall-afternoon-204713275.html)、[Sector Update: Healthcare St…](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-decline-afternoon-184357969.html)）"
+      "Healthcare\u677f\u5757\u4eca\u65e5\u6574\u4f53\u627f\u538b\u4e0b\u884c\uff0cNYSE Healthcare Index\u8dcc\u5e45\u8fbe1.6%\uff0c\u53cd\u6620\u51fa\u5e02\u573a\u5bf9\u533b\u7597\u5065\u5eb7\u7c7b\u8d44\u4ea7\u7684\u98ce\u9669\u504f\u597d\u4e0b\u964d\uff0c\u8fd9\u79cd\u7cfb\u7edf\u6027\u7684\u677f\u5757\u8c03\u6574\u5bfc\u81f4\u7b56\u7565\u91cd\u4ed3\u7684ONC\uff08-2.3%\uff09\u548cREGN\uff08-1.3%\uff09\u5747\u627f\u538b\u3002\uff08[Sector Update: Healthcare St\u2026](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-fall-afternoon-204713275.html)\u3001[Sector Update: Healthcare St\u2026](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-decline-afternoon-184357969.html)\uff09",
+      "\u5c3d\u7ba1Regeneron\u83b7\u5f97EC\u6279\u51c6Libtayo\u7ed9\u836f\u7075\u6d3b\u6027\u7684\u5229\u597d\u6d88\u606f\uff0c\u4f46\u8fd9\u7c7b\u4e2a\u80a1\u5229\u597d\u65e0\u6cd5\u5bf9\u6297\u6574\u4e2aHealthcare\u677f\u5757\u7684\u4e0b\u8dcc\u8d8b\u52bf\uff0c\u8bf4\u660e\u5f53\u524d\u5e02\u573a\u98ce\u9669\u538c\u6076\u60c5\u7eea\u5f3a\u4e8e\u5bf9\u4e2a\u522b\u516c\u53f8\u57fa\u672c\u9762\u6539\u5584\u7684\u8ba4\u53ef\u3002\uff08[Regeneron Wins EC Clearance \u2026](https://finance.yahoo.com/healthcare/articles/regeneron-wins-ec-clearance-libtayo-181000462.html)\uff09",
+      "\u7b56\u7565\u51c0\u503c\u4e0eSPY\u51fa\u73b0-0.00%\u504f\u5dee\u770b\u4f3c\u65e0\u5206\u6b67\uff0c\u4f46\u8fd9\u63a9\u76d6\u4e86\u7ed3\u6784\u6027\u98ce\u9669\uff1aHealthcare\u677f\u5757\u9f99\u5934REGN\u8dcc\u5e45\u4ec5-1.3%\uff0c\u800c\u7b56\u7565\u4e2dONC\u8dcc-2.3%\u7684\u8d85\u989d\u4e0b\u8dcc\uff0c\u4ee5\u53caTechnology\u677f\u5757\u7684U\uff08-2.8%\uff09\u548cPCTY\uff08-1.4%\uff09\u8dcc\u5e45\u66f4\u5927\uff0c\u5bfc\u81f4\u7b56\u7565\u867d\u672a\u8dd1\u8f93\u5927\u76d8\u4f46\u5185\u90e8\u6301\u4ed3\u7ed3\u6784\u627f\u53d7\u4e86\u5206\u5316\u538b\u529b\u3002\uff08[Sector Update: Healthcare St\u2026](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-fall-afternoon-204713275.html)\u3001[Sector Update: Healthcare St\u2026](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-decline-afternoon-184357969.html)\uff09",
+      "\u5e02\u573a\u4eca\u65e5\u7684\u98ce\u9669\u8d44\u4ea7\u6574\u4f53\u8c03\u6574\uff08\u5305\u62ecTechnology\u677f\u5757\u540c\u6b65\u4e0b\u884c\uff09\u5e76\u975eHealthcare\u677f\u5757\u7684\u72ec\u7279\u95ee\u9898\uff0c\u800c\u662f\u5e7f\u6cdb\u7684\u907f\u9669\u60c5\u7eea\uff0c\u7b56\u7565\u4f5c\u4e3aHealthcare\u91cd\u4ed3\u7ec4\u5408\u6070\u597d\u5728\u8fd9\u8f6e\u8c03\u6574\u4e2d\u88ab\u52a8\u627f\u53d7\u4e86\u677f\u5757\u5185\u4e2a\u80a1\u5206\u5316\u548c\u8de8\u677f\u5757\u98ce\u9669\u6269\u6563\u7684\u53cc\u91cd\u538b\u529b\u3002\uff08[Sector Update: Healthcare St\u2026](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-fall-afternoon-204713275.html)\u3001[Sector Update: Healthcare St\u2026](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-decline-afternoon-184357969.html)\uff09"
     ],
     "news": [
       {
