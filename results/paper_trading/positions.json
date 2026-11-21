@@ -20696,19 +20696,19 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
+  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
   "last_download_stats": {
     "downloaded_count": 2084,
     "total_scanned": 2084,
     "updated_utc": "2026-11-19T08:26:09Z"
   },
   "universe_stats": {
-    "tiingo_eligible": 2125,
-    "yf_downloadable": 2089,
-    "yf_unavailable_in_pool": 36,
-    "total_active": 2972,
-    "total_delisted": 1505,
-    "updated_utc": "2026-11-20T08:05:44Z"
+    "tiingo_eligible": 2123,
+    "yf_downloadable": 2086,
+    "yf_unavailable_in_pool": 37,
+    "total_active": 2974,
+    "total_delisted": 1503,
+    "updated_utc": "2026-11-21T03:30:19Z"
   },
   "yf_persistent_unavailable": [
     "ACH",
@@ -20805,7 +20805,7 @@
     "ZVZZT",
     "ZXZZT"
   ],
-  "tiingo_universe_synced_utc": "2026-11-20T03:44:20Z",
+  "tiingo_universe_synced_utc": "2026-11-21T03:30:19Z",
   "daily_summary": {
     "date": "2026-11-19",
     "updated_sgt": "2026-11-20 16:05 SGT",
@@ -20813,10 +20813,10 @@
     "spy_change_pct": -1.96,
     "vs_spy_pct": 0.11,
     "bullets": [
-      "Financial Services板块今日相对抗跌的原因在于美联储加息政策对金融机构盈利能力的潜在利好，尽管大盘普遍下跌，但金融股因净息差扩大预期而获得支撑。（[Is A Fed Hike Still Good New…](https://www.trefis.com/stock/jpm/articles/626855/is-a-fed-hike-still-good-news-for-jpmorgan/2026-11-19)）",
-      "策略净值-1.85%相比SPY的-1.96%仅好0.11%，实际上主要是因为策略重仓的Technology板块标的（CPAY、U、BILL、BSY等）跌幅普遍达到-2.9%至-4.6%，远超大盘跌幅，这些科技股的集中亏损完全抵消了Financial Services板块的防守优势。（[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-fall-afternoon-210231677.html)、[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-lower-afternoon-185732019.html)）",
-      "Wall Street分析师对金融股Chubb Limited持谨慎乐观态度，认为其在过去52周的强劲表现具有可持续性，这种对金融板块前景的看好情绪可能支撑了整个Financial Services板块的相对表现。（[Are Wall Street Analysts Pre…](https://www.barchart.com/story/news/8919253/are-wall-street-analysts-predicting-chubb-limited-stock-will-climb-or-sink)）",
-      "策略的\"小幅超越大盘\"假象掩盖了其实质风险暴露失衡：Financial Services的IBN持仓几乎无涨跌（+0.0%），而Technology重仓的CPAY(-4.6%)、U(-4.6%)、BILL(-2.9%)等标的大幅下挫，说明策略在市场剧烈波动中并未因金融板块配置而获得真正保护，仅是亏损幅度略小于基准。（[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-fall-afternoon-210231677.html)、[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-lower-afternoon-185732019.html)）"
+      "Financial Services\u677f\u5757\u4eca\u65e5\u76f8\u5bf9\u6297\u8dcc\u7684\u539f\u56e0\u5728\u4e8e\u7f8e\u8054\u50a8\u52a0\u606f\u653f\u7b56\u5bf9\u91d1\u878d\u673a\u6784\u76c8\u5229\u80fd\u529b\u7684\u6f5c\u5728\u5229\u597d\uff0c\u5c3d\u7ba1\u5927\u76d8\u666e\u904d\u4e0b\u8dcc\uff0c\u4f46\u91d1\u878d\u80a1\u56e0\u51c0\u606f\u5dee\u6269\u5927\u9884\u671f\u800c\u83b7\u5f97\u652f\u6491\u3002\uff08[Is A Fed Hike Still Good New\u2026](https://www.trefis.com/stock/jpm/articles/626855/is-a-fed-hike-still-good-news-for-jpmorgan/2026-11-19)\uff09",
+      "\u7b56\u7565\u51c0\u503c-1.85%\u76f8\u6bd4SPY\u7684-1.96%\u4ec5\u597d0.11%\uff0c\u5b9e\u9645\u4e0a\u4e3b\u8981\u662f\u56e0\u4e3a\u7b56\u7565\u91cd\u4ed3\u7684Technology\u677f\u5757\u6807\u7684\uff08CPAY\u3001U\u3001BILL\u3001BSY\u7b49\uff09\u8dcc\u5e45\u666e\u904d\u8fbe\u5230-2.9%\u81f3-4.6%\uff0c\u8fdc\u8d85\u5927\u76d8\u8dcc\u5e45\uff0c\u8fd9\u4e9b\u79d1\u6280\u80a1\u7684\u96c6\u4e2d\u4e8f\u635f\u5b8c\u5168\u62b5\u6d88\u4e86Financial Services\u677f\u5757\u7684\u9632\u5b88\u4f18\u52bf\u3002\uff08[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-fall-afternoon-210231677.html)\u3001[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-lower-afternoon-185732019.html)\uff09",
+      "Wall Street\u5206\u6790\u5e08\u5bf9\u91d1\u878d\u80a1Chubb Limited\u6301\u8c28\u614e\u4e50\u89c2\u6001\u5ea6\uff0c\u8ba4\u4e3a\u5176\u5728\u8fc7\u53bb52\u5468\u7684\u5f3a\u52b2\u8868\u73b0\u5177\u6709\u53ef\u6301\u7eed\u6027\uff0c\u8fd9\u79cd\u5bf9\u91d1\u878d\u677f\u5757\u524d\u666f\u7684\u770b\u597d\u60c5\u7eea\u53ef\u80fd\u652f\u6491\u4e86\u6574\u4e2aFinancial Services\u677f\u5757\u7684\u76f8\u5bf9\u8868\u73b0\u3002\uff08[Are Wall Street Analysts Pre\u2026](https://www.barchart.com/story/news/8919253/are-wall-street-analysts-predicting-chubb-limited-stock-will-climb-or-sink)\uff09",
+      "\u7b56\u7565\u7684\"\u5c0f\u5e45\u8d85\u8d8a\u5927\u76d8\"\u5047\u8c61\u63a9\u76d6\u4e86\u5176\u5b9e\u8d28\u98ce\u9669\u66b4\u9732\u5931\u8861\uff1aFinancial Services\u7684IBN\u6301\u4ed3\u51e0\u4e4e\u65e0\u6da8\u8dcc\uff08+0.0%\uff09\uff0c\u800cTechnology\u91cd\u4ed3\u7684CPAY(-4.6%)\u3001U(-4.6%)\u3001BILL(-2.9%)\u7b49\u6807\u7684\u5927\u5e45\u4e0b\u632b\uff0c\u8bf4\u660e\u7b56\u7565\u5728\u5e02\u573a\u5267\u70c8\u6ce2\u52a8\u4e2d\u5e76\u672a\u56e0\u91d1\u878d\u677f\u5757\u914d\u7f6e\u800c\u83b7\u5f97\u771f\u6b63\u4fdd\u62a4\uff0c\u4ec5\u662f\u4e8f\u635f\u5e45\u5ea6\u7565\u5c0f\u4e8e\u57fa\u51c6\u3002\uff08[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-fall-afternoon-210231677.html)\u3001[Sector Update: Financial Sto\u2026](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-lower-afternoon-185732019.html)\uff09"
     ],
     "news": [
       {
