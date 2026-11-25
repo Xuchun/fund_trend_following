@@ -4,7 +4,7 @@
   "start_date": "2026-06-19",
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
-  "last_update_date": "2026-11-23",
+  "last_update_date": "2026-11-24",
   "cash": 47321.45160933011,
   "positions": [
     {
@@ -17,13 +17,13 @@
       "entry_price": 928.1472,
       "shares": 8,
       "stop_loss": 877.8458,
-      "trail_stop": 897.32355,
-      "highest_high": 981.55,
+      "trail_stop": 898.53526,
+      "highest_high": 988.15,
       "lowest_low": 887.04,
       "atr_at_entry": 25.1507,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 942.24,
-      "last_price_date": "2026-11-23",
+      "last_known_price": 987.09,
+      "last_price_date": "2026-11-24",
       "entry_commission": 2.23,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -38,13 +38,13 @@
       "entry_price": 170.0199,
       "shares": 46,
       "stop_loss": 161.5237,
-      "trail_stop": 163.278992,
-      "highest_high": 176.58,
+      "trail_stop": 165.555472,
+      "highest_high": 179.68,
       "lowest_low": 164.0,
       "atr_at_entry": 4.2481,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 170.59,
-      "last_price_date": "2026-11-23",
+      "last_known_price": 178.29,
+      "last_price_date": "2026-11-24",
       "entry_commission": 2.35,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -64,8 +64,8 @@
       "lowest_low": 302.18,
       "atr_at_entry": 8.212,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 313.95,
-      "last_price_date": "2026-11-23",
+      "last_known_price": 317.25,
+      "last_price_date": "2026-11-24",
       "entry_commission": 2.35,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -106,8 +106,8 @@
       "lowest_low": 508.4,
       "atr_at_entry": 10.8609,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 529.87,
-      "last_price_date": "2026-11-23",
+      "last_known_price": 530.08,
+      "last_price_date": "2026-11-24",
       "entry_commission": 2.31,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -127,8 +127,8 @@
       "lowest_low": 263.92,
       "atr_at_entry": 6.7949,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 271.97,
-      "last_price_date": "2026-11-23",
+      "last_known_price": 279.65,
+      "last_price_date": "2026-11-24",
       "entry_commission": 2.23,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -148,8 +148,8 @@
       "lowest_low": 34.16,
       "atr_at_entry": 0.6753,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 35.47,
-      "last_price_date": "2026-11-23",
+      "last_known_price": 35.9,
+      "last_price_date": "2026-11-24",
       "entry_commission": 2.25,
       "entry_regime": "BULL",
       "sector": "Financial Services"
@@ -169,8 +169,8 @@
       "lowest_low": 385.0,
       "atr_at_entry": 12.7293,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 403.36,
-      "last_price_date": "2026-11-23",
+      "last_known_price": 415.62,
+      "last_price_date": "2026-11-24",
       "entry_commission": 2.22,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -185,13 +185,13 @@
       "entry_price": 26.7367,
       "shares": 285,
       "stop_loss": 25.0669,
-      "trail_stop": 25.142294,
+      "trail_stop": 25.173429,
       "highest_high": 27.07,
       "lowest_low": 26.325,
       "atr_at_entry": 0.8349,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 26.56,
-      "last_price_date": "2026-11-23",
+      "last_known_price": 26.83,
+      "last_price_date": "2026-11-24",
       "entry_commission": 2.29,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -206,13 +206,13 @@
       "entry_price": 56.8168,
       "shares": 132,
       "stop_loss": 52.8192,
-      "trail_stop": 59.572164,
+      "trail_stop": 59.891056,
       "highest_high": 66.58,
       "lowest_low": 55.13,
       "atr_at_entry": 1.9988,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 61.61,
-      "last_price_date": "2026-11-23",
+      "last_known_price": 61.45,
+      "last_price_date": "2026-11-24",
       "entry_commission": 2.25,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -232,8 +232,8 @@
       "lowest_low": 170.865,
       "atr_at_entry": 5.7708,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 174.25,
-      "last_price_date": "2026-11-23",
+      "last_known_price": 175.31,
+      "last_price_date": "2026-11-24",
       "entry_commission": 2.24,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -253,8 +253,8 @@
       "lowest_low": 166.89,
       "atr_at_entry": 3.1547,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 169.6,
-      "last_price_date": "2026-11-23",
+      "last_known_price": 172.47,
+      "last_price_date": "2026-11-24",
       "entry_commission": 2.26,
       "entry_regime": "BULL",
       "sector": "Consumer Defensive"
@@ -269,13 +269,13 @@
       "entry_price": 157.9978,
       "shares": 47,
       "stop_loss": 149.3652,
-      "trail_stop": 153.164175,
-      "highest_high": 167.4,
+      "trail_stop": 153.946469,
+      "highest_high": 168.45,
       "lowest_low": 157.5,
       "atr_at_entry": 4.3163,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 163.78,
-      "last_price_date": "2026-11-23",
+      "last_known_price": 166.96,
+      "last_price_date": "2026-11-24",
       "entry_commission": 2.23,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -4701,6 +4701,12 @@
       "nav": 146858.27,
       "regime": "BEAR",
       "spy_close": 722.29
+    },
+    {
+      "date": "2026-11-24",
+      "nav": 148561.84,
+      "regime": "BEAR",
+      "spy_close": 718.78
     }
   ],
   "pending_exits": [],
@@ -20754,13 +20760,39 @@
       "exit_signals": [],
       "candidate_signals": [],
       "entry_signals": []
+    },
+    {
+      "date": "2026-11-24",
+      "regime": "BEAR",
+      "spy_close": 718.78,
+      "n_candidates": 0,
+      "n_entries": 0,
+      "n_executed": 0,
+      "n_exits": 0,
+      "n_raw_breakouts": 0,
+      "n_heat_blocked": 0,
+      "n_cash_blocked": 0,
+      "n_corr_reduced": 0,
+      "n_price_filtered": 0,
+      "n_adv_filtered": 0,
+      "n_breakout_filtered": 0,
+      "n_atr_filtered": 0,
+      "n_stop_dist_filtered": 0,
+      "n_volume_filtered": 0,
+      "n_stale_filtered": 0,
+      "spy_pct_above_sma200": -1.6209,
+      "exits_executed": [],
+      "entries_executed": [],
+      "exit_signals": [],
+      "candidate_signals": [],
+      "entry_signals": []
     }
   ],
-  "last_update_utc": "2026-11-24T10:40:55Z",
+  "last_update_utc": "2026-11-25T09:33:51Z",
   "today_signals": {
-    "date": "2026-11-23",
+    "date": "2026-11-24",
     "regime": "BEAR",
-    "spy_close": 722.29,
+    "spy_close": 718.78,
     "n_candidates": 0,
     "n_entries": 0,
     "n_executed": 0,
@@ -20776,36 +20808,8 @@
     "n_stop_dist_filtered": 0,
     "n_volume_filtered": 0,
     "n_stale_filtered": 0,
-    "spy_pct_above_sma200": -1.12,
-    "exits_executed": [
-      {
-        "ticker": "CPAY",
-        "shares": 17,
-        "exit_open": 436.47,
-        "exit_price": 436.0335,
-        "net_pnl": -41.59,
-        "pnl_r": -0.0907,
-        "exit_reason": "trailing_stop"
-      },
-      {
-        "ticker": "BSY",
-        "shares": 169,
-        "exit_open": 41.89,
-        "exit_price": 41.8481,
-        "net_pnl": -488.85,
-        "pnl_r": -0.9539,
-        "exit_reason": "stop_loss"
-      },
-      {
-        "ticker": "CAKE",
-        "shares": 63,
-        "exit_open": 110.0,
-        "exit_price": 109.89,
-        "net_pnl": -535.29,
-        "pnl_r": -0.8832,
-        "exit_reason": "stop_loss"
-      }
-    ],
+    "spy_pct_above_sma200": -1.6209,
+    "exits_executed": [],
     "entries_executed": [],
     "exit_signals": [],
     "candidate_signals": [],
@@ -20813,7 +20817,7 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
+  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
     "downloaded_count": 2084,
     "total_scanned": 2084,
@@ -20825,7 +20829,7 @@
     "yf_unavailable_in_pool": 34,
     "total_active": 2962,
     "total_delisted": 1515,
-    "updated_utc": "2026-11-25T05:02:44Z"
+    "updated_utc": "2026-11-25T09:34:00Z"
   },
   "yf_persistent_unavailable": [
     "ACH",
@@ -20924,13 +20928,39 @@
   ],
   "tiingo_universe_synced_utc": "2026-11-25T05:02:44Z",
   "daily_summary": {
-    "date": "2026-11-23",
-    "updated_sgt": "2026-11-24 18:40 SGT",
-    "nav_change_pct": 0.88,
-    "spy_change_pct": 4.71,
-    "vs_spy_pct": -3.82,
-    "bullets": [],
-    "news": []
+    "date": "2026-11-24",
+    "updated_sgt": "2026-11-25 17:34 SGT",
+    "nav_change_pct": 1.16,
+    "spy_change_pct": -0.49,
+    "vs_spy_pct": 1.65,
+    "bullets": [
+      "Healthcare板块今日上涨的核心驱动力来自于大型药企并购预期的激活和市场对长期增长潜力的重新定价，其中Sanofi斥资41亿美元收购Insmed的交易宣布释放了生物科技M&A活动重启的信号，刺激了投资者对整个板块的风险偏好。（[Insmed Snags A Whopping Pric…](https://finance.yahoo.com/m/512db97e-0e42-388a-871d-acdb3ea67146/insmed-snags-a-whopping-price.html)）",
+      "策略重仓Healthcare板块的GILD（+4.5%，对净值贡献$354）和REGN（+4.8%，对净值贡献$359）两只个股今日涨幅显著超越大盘，这两只标的的强劲表现直接拉大了策略与SPY的业绩分歧，其中REGN的涨幅反映了市场对其Dupixent和EYLEA等明星产品全球市场渗透率被低估的共识修复。（[Sector Update: Healthcare St…](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-gain-afternoon-205950473.html)、[What Regeneron Pharmaceutica…](https://finance.yahoo.com/healthcare/articles/regeneron-pharmaceuticals-doubters-overlooked-221722502.html)）",
+      "ONC（+3.0%，对净值贡献$221）和SGRY（+1.0%，对净值贡献$77）等中小型Healthcare持仓的普遍上涨进一步强化了板块轮动效应，使得策略在SPY下跌-0.49%的背景下仍能实现+1.16%的净值增长，累计+1.65%的偏差充分体现了Healthcare板块个股对市场情绪的超额敏感性。（[Sector Update: Healthcare St…](https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-gain-afternoon-205950473.html)、[State Street Health Care SPD…](https://finance.yahoo.com/healthcare/articles/state-street-health-care-spdr-110402940.html)）",
+      "Technology板块持仓中BILL（-0.3%，对净值影响$-21）的小幅下跌被Healthcare板块的强劲上涨完全覆盖，说明今日市场风险偏好从成长科技向周期性防守的Healthcare板块进行了明确的结构性切换。[来"
+    ],
+    "news": [
+      {
+        "title": "Sector Update: Healthcare Stocks Gain Late Afternoon",
+        "url": "https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-gain-afternoon-205950473.html"
+      },
+      {
+        "title": "What Are Wall Street Analysts' Target Price for Revvity Stock?",
+        "url": "https://www.barchart.com/story/news/8980571/what-are-wall-street-analysts-target-price-for-revvity-stock"
+      },
+      {
+        "title": "State Street Health Care SPDR (XLV) Sells Eli Lilly and J&J on Friday",
+        "url": "https://finance.yahoo.com/healthcare/articles/state-street-health-care-spdr-110402940.html"
+      },
+      {
+        "title": "What Regeneron Pharmaceuticals Doubters Overlooked",
+        "url": "https://finance.yahoo.com/healthcare/articles/regeneron-pharmaceuticals-doubters-overlooked-221722502.html"
+      },
+      {
+        "title": "Insmed Snags A Whopping Price Tag As Sanofi Confirms Rumored Buyout",
+        "url": "https://finance.yahoo.com/m/512db97e-0e42-388a-871d-acdb3ea67146/insmed-snags-a-whopping-price.html"
+      }
+    ]
   },
   "last_no_op_utc": "2026-11-24T18:25:56Z",
   "download_log": {
