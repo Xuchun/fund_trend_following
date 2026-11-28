@@ -4,8 +4,8 @@
   "start_date": "2026-06-19",
   "live_start_date": "2026-07-01",
   "initial_nav": 200000.0,
-  "last_update_date": "2026-11-25",
-  "cash": 47362.06074484176,
+  "last_update_date": "2026-11-27",
+  "cash": 47350.46003158006,
   "positions": [
     {
       "ticker": "REGN",
@@ -17,13 +17,13 @@
       "entry_price": 928.1472,
       "shares": 8,
       "stop_loss": 877.8458,
-      "trail_stop": 902.860489,
-      "highest_high": 991.83,
+      "trail_stop": 905.686455,
+      "highest_high": 992.57,
       "lowest_low": 887.04,
       "atr_at_entry": 25.1507,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 981.87,
-      "last_price_date": "2026-11-25",
+      "last_known_price": 992.14,
+      "last_price_date": "2026-11-27",
       "entry_commission": 2.23,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -64,8 +64,8 @@
       "lowest_low": 302.18,
       "atr_at_entry": 8.212,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 319.47,
-      "last_price_date": "2026-11-25",
+      "last_known_price": 320.2,
+      "last_price_date": "2026-11-27",
       "entry_commission": 2.35,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -101,13 +101,13 @@
       "entry_price": 513.9735,
       "shares": 15,
       "stop_loss": 492.2517,
-      "trail_stop": 509.173655,
-      "highest_high": 543.16,
+      "trail_stop": 513.05697,
+      "highest_high": 546.91,
       "lowest_low": 508.4,
       "atr_at_entry": 10.8609,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 541.0,
-      "last_price_date": "2026-11-25",
+      "last_known_price": 544.83,
+      "last_price_date": "2026-11-27",
       "entry_commission": 2.31,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -122,13 +122,13 @@
       "entry_price": 265.8456,
       "shares": 28,
       "stop_loss": 252.2558,
-      "trail_stop": 266.416264,
+      "trail_stop": 266.576776,
       "highest_high": 285.08,
       "lowest_low": 263.92,
       "atr_at_entry": 6.7949,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 282.91,
-      "last_price_date": "2026-11-25",
+      "last_known_price": 282.86,
+      "last_price_date": "2026-11-27",
       "entry_commission": 2.23,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -148,8 +148,8 @@
       "lowest_low": 34.16,
       "atr_at_entry": 0.6753,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 36.5,
-      "last_price_date": "2026-11-25",
+      "last_known_price": 36.29,
+      "last_price_date": "2026-11-27",
       "entry_commission": 2.25,
       "entry_regime": "BULL",
       "sector": "Financial Services"
@@ -169,8 +169,8 @@
       "lowest_low": 385.0,
       "atr_at_entry": 12.7293,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 414.79,
-      "last_price_date": "2026-11-25",
+      "last_known_price": 419.29,
+      "last_price_date": "2026-11-27",
       "entry_commission": 2.22,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -185,13 +185,13 @@
       "entry_price": 26.7367,
       "shares": 285,
       "stop_loss": 25.0669,
-      "trail_stop": 25.191008,
+      "trail_stop": 25.245207,
       "highest_high": 27.07,
       "lowest_low": 26.315,
       "atr_at_entry": 0.8349,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 26.55,
-      "last_price_date": "2026-11-25",
+      "last_known_price": 26.75,
+      "last_price_date": "2026-11-27",
       "entry_commission": 2.29,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -206,13 +206,13 @@
       "entry_price": 56.8168,
       "shares": 132,
       "stop_loss": 52.8192,
-      "trail_stop": 60.201503,
+      "trail_stop": 60.476928,
       "highest_high": 66.58,
       "lowest_low": 55.13,
       "atr_at_entry": 1.9988,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 61.55,
-      "last_price_date": "2026-11-25",
+      "last_known_price": 61.73,
+      "last_price_date": "2026-11-27",
       "entry_commission": 2.25,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -232,8 +232,8 @@
       "lowest_low": 170.865,
       "atr_at_entry": 5.7708,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 179.33,
-      "last_price_date": "2026-11-25",
+      "last_known_price": 181.03,
+      "last_price_date": "2026-11-27",
       "entry_commission": 2.24,
       "entry_regime": "BULL",
       "sector": "Technology"
@@ -248,13 +248,13 @@
       "entry_price": 171.5113,
       "shares": 44,
       "stop_loss": 165.2019,
-      "trail_stop": 165.262977,
+      "trail_stop": 165.44133,
       "highest_high": 174.56,
       "lowest_low": 166.89,
       "atr_at_entry": 3.1547,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 173.23,
-      "last_price_date": "2026-11-25",
+      "last_known_price": 172.86,
+      "last_price_date": "2026-11-27",
       "entry_commission": 2.26,
       "entry_regime": "BULL",
       "sector": "Consumer Defensive"
@@ -269,13 +269,13 @@
       "entry_price": 157.9978,
       "shares": 47,
       "stop_loss": 149.3652,
-      "trail_stop": 153.999649,
-      "highest_high": 168.45,
+      "trail_stop": 155.25767,
+      "highest_high": 169.41,
       "lowest_low": 157.5,
       "atr_at_entry": 4.3163,
       "R_at_backtest_end": 0.0,
-      "last_known_price": 168.28,
-      "last_price_date": "2026-11-25",
+      "last_known_price": 168.31,
+      "last_price_date": "2026-11-27",
       "entry_commission": 2.23,
       "entry_regime": "BULL",
       "sector": "Healthcare"
@@ -4713,6 +4713,12 @@
       "nav": 149110.13,
       "regime": "BEAR",
       "spy_close": 716.7
+    },
+    {
+      "date": "2026-11-27",
+      "nav": 149425.59,
+      "regime": "BEAR",
+      "spy_close": 728.32
     }
   ],
   "pending_exits": [],
@@ -20818,13 +20824,39 @@
       "exit_signals": [],
       "candidate_signals": [],
       "entry_signals": []
+    },
+    {
+      "date": "2026-11-27",
+      "regime": "BEAR",
+      "spy_close": 728.32,
+      "n_candidates": 0,
+      "n_entries": 0,
+      "n_executed": 0,
+      "n_exits": 0,
+      "n_raw_breakouts": 0,
+      "n_heat_blocked": 0,
+      "n_cash_blocked": 0,
+      "n_corr_reduced": 0,
+      "n_price_filtered": 0,
+      "n_adv_filtered": 0,
+      "n_breakout_filtered": 0,
+      "n_atr_filtered": 0,
+      "n_stop_dist_filtered": 0,
+      "n_volume_filtered": 0,
+      "n_stale_filtered": 0,
+      "spy_pct_above_sma200": -0.364,
+      "exits_executed": [],
+      "entries_executed": [],
+      "exit_signals": [],
+      "candidate_signals": [],
+      "entry_signals": []
     }
   ],
-  "last_update_utc": "2026-11-26T09:10:34Z",
+  "last_update_utc": "2026-11-28T08:40:57Z",
   "today_signals": {
-    "date": "2026-11-25",
+    "date": "2026-11-27",
     "regime": "BEAR",
-    "spy_close": 716.7,
+    "spy_close": 728.32,
     "n_candidates": 0,
     "n_entries": 0,
     "n_executed": 0,
@@ -20840,7 +20872,7 @@
     "n_stop_dist_filtered": 0,
     "n_volume_filtered": 0,
     "n_stale_filtered": 0,
-    "spy_pct_above_sma200": -1.9256,
+    "spy_pct_above_sma200": -0.364,
     "exits_executed": [],
     "entries_executed": [],
     "exit_signals": [],
@@ -20849,7 +20881,7 @@
   },
   "data_error_log": [],
   "universe_size": 2194,
-  "universe_size_note": "\u6a21\u62df\u4ea4\u6613\u5b9e\u9645\u626b\u63cf\u6570\uff08is_active=True\uff0celigible_days\u2265252\uff0c\u6392\u9664\u7ed3\u6784\u6027\u6807\u76849\u53ea\u53caYahoo Finance\u65e0\u6cd5\u4e0b\u8f7d\u768418\u53ea\uff09\uff1bis_active=True\u603b\u6570\u4e3a3099\uff0c\u5176\u4e2d3\u53ea\u771f\u6b63\u9000\u5e02\uff08TGNA/THS/VTYX\uff09",
+  "universe_size_note": "模拟交易实际扫描数（is_active=True，eligible_days≥252，排除结构性标的9只及Yahoo Finance无法下载的18只）；is_active=True总数为3099，其中3只真正退市（TGNA/THS/VTYX）",
   "last_download_stats": {
     "downloaded_count": 2084,
     "total_scanned": 2084,
@@ -20861,7 +20893,7 @@
     "yf_unavailable_in_pool": 33,
     "total_active": 2959,
     "total_delisted": 1518,
-    "updated_utc": "2026-11-28T04:16:20Z"
+    "updated_utc": "2026-11-28T08:41:06Z"
   },
   "yf_persistent_unavailable": [
     "ACH",
@@ -20960,37 +20992,37 @@
   ],
   "tiingo_universe_synced_utc": "2026-11-28T04:16:20Z",
   "daily_summary": {
-    "date": "2026-11-25",
-    "updated_sgt": "2026-11-26 17:10 SGT",
-    "nav_change_pct": 0.37,
-    "spy_change_pct": -0.29,
-    "vs_spy_pct": 0.66,
+    "date": "2026-11-27",
+    "updated_sgt": "2026-11-28 16:41 SGT",
+    "nav_change_pct": 0.21,
+    "spy_change_pct": 1.62,
+    "vs_spy_pct": -1.41,
     "bullets": [
-      "\u82af\u7247\u80a1\u4eca\u65e5\u7ecf\u5386\u4e86\u5267\u70c8\u6ce2\u52a8\u4f46\u6574\u4f53\u6536\u9ad8\uff0c\u6838\u5fc3\u539f\u56e0\u662f\u6295\u8d44\u8005\u5bf9\u8d38\u6613\u5173\u7a0e\u653f\u7b56\u7684\u62c5\u5fe7\u6709\u6240\u7f13\u89e3\uff0c\u52a0\u4e0a\u673a\u6784\u6295\u8d44\u8005\u4ece\u82af\u7247\u8bbe\u5907\u80a1\u8f6e\u6362\u81f3AI\u5e94\u7528\u7aef\uff08\u7279\u522b\u662f\u7279\u65af\u62c9\u673a\u5668\u4eba\uff09\u7684\u8d44\u91d1\u6d41\u5411\u8c03\u6574\uff0c\u652f\u6491\u4e86\u534a\u5bfc\u4f53\u677f\u5757\u7684\u53cd\u5f39 \uff08[Update: US Equity Indexes Mi\u2026](https://finance.yahoo.com/markets/stocks/articles/us-equity-indexes-mixed-treasury-213222387.html)\u3001[Billionaire Brad Gerstner\u2019s \u2026](https://247wallst.com/investing/2026/11/25/billionaire-brad-gerstners-altimeter-opened-a-680-million-tesla-stake-and-exited-qualcomm-and-applied-materials/)\u3001[Chip Stocks Just Pulled a Wh\u2026](https://247wallst.com/investing/2026/11/25/chip-stocks-just-pulled-a-whipsaw-last-seen-at-the-april-2025-tariff-pause/)\uff09",
-      "\u7b56\u7565\u51c0\u503c\u76f8\u6bd4SPY\u9ad8\u51fa0.66%\u7684\u5173\u952e\u5728\u4e8e\u6301\u4ed3\u4e2dMSI\uff08+2.1%\uff0c\u8d21\u732e+164\u5143\uff09\u548cPCTY\uff08+2.3%\uff0c\u8d21\u732e+165\u5143\uff09\u4e24\u53eaTechnology\u6807\u7684\u6da8\u5e45\u8d85\u8fc7\u5927\u76d8\uff0c\u800cHealthcare\u677f\u5757\u7684SGRY\uff08-1.0%\uff09\u3001GILD\uff08-0.9%\uff09\u7b49\u4e2a\u80a1\u5927\u5e45\u4e0b\u8dcc\u5bf9\u51b2\u4e86\u90e8\u5206\u6536\u76ca\uff0c\u6700\u7ec8\u4f7f\u7b56\u7565\u5728SPY\u4e0b\u8dcc0.29%\u7684\u80cc\u666f\u4e0b\u4ecd\u5b9e\u73b0\u6b63\u6536\u76ca [\u6765\u6e90\u65e0\u76f4\u63a5\u5bf9\u5e94\u4f46\u57fa\u4e8e\u6301\u4ed3\u6570\u636e\u63a8\u5bfc]",
-      "\u82af\u7247\u80a1\u7684\u5f3a\u52bf\u53cd\u5f39\u4e0eAI\u7126\u8651\u4e3b\u5bfc\u7684\u5e7f\u6cdb\u629b\u552e\u5f62\u6210\u4e86\u7ed3\u6784\u6027\u5206\u5316\u2014\u2014\u5f53\u5927\u76d8\u56e0AI\u4f30\u503c\u8fc7\u9ad8\u800c\u56de\u8c03\u65f6\uff0c\u90e8\u5206\u88ab\u9519\u6740\u7684Technology\u5e94\u7528\u7aef\u4e2a\u80a1\uff08\u5982MSI\u3001PCTY\u6240\u5728\u7684\u7ec6\u5206\u9886\u57df\uff09\u53cd\u800c\u83b7\u5f97\u914d\u7f6e\u4ef7\u503c\u91cd\u4f30\uff0c\u8fd9\u6b63\u662f\u7b56\u7565\u8d85\u8d8aSPY\u7684\u4e3b\u8981\u6765\u6e90 \uff08[Update: Nasdaq Heads for Bea\u2026](https://finance.yahoo.com/markets/stocks/articles/nasdaq-heads-bear-market-sellers-180214921.html)\u3001[Chip Stocks Just Pulled a Wh\u2026](https://247wallst.com/investing/2026/11/25/chip-stocks-just-pulled-a-whipsaw-last-seen-at-the-april-2025-tariff-pause/)\uff09",
-      "\u7b56\u7565\u7684\u8d85\u989d\u6536\u76ca\u672c\u8d28\u4e0a\u53cd\u6620\u4e86\u5bf9\u88ab\u5927\u76d8\u5ffd\u89c6\u7684Technology\u677f\u5757\u7ed3\u6784\u6027\u673a\u4f1a\u7684\u7cbe\u51c6\u628a\u63e1\uff0c\u7279\u522b\u662f\u5728\u8d38\u6613\u653f\u7b56\u4e0d\u786e\u5b9a\u6027\u7f13\u548c\u548cAI\u6ce1\u6cab\u6324\u538b\u7684\u53cc\u91cd\u80cc\u666f\u4e0b\uff0c\u975e\u5934\u90e8\u82af\u7247\u80a1\u548c\u5e94\u7528\u7aef\u516c\u53f8\u83b7\u5f97\u4e86\u76f8\u5bf9\u7684\u9632\u5b88\u5c5e\u6027\u548c\u4f30\u503c\u4fee\u590d\u7a7a\u95f4 \uff08[Update: US Equity Indexes Mi\u2026](https://finance.yahoo.com/markets/stocks/articles/us-equity-indexes-mixed-treasury-213222387.html)\u3001[Billionaire Brad Gerstner\u2019s \u2026](https://247wallst.com/investing/2026/11/25/billionaire-brad-gerstners-altimeter-opened-a-680-million-tesla-stake-and-exited-qualcomm-and-applied-materials/)\uff09"
+      "JPMorgan Chase等大型金融机构面临长期营销、技术和AI投入增速超过收入增速的压力，这种利润率挤压的担忧可能导致投资者对个股风险的重新评估，从而拖累Financial Services板块整体表现 （[Why JPMorgan Chase Fans May …](https://finance.yahoo.com/markets/options/articles/why-jpmorgan-chase-fans-may-211349086.html)）",
+      "Financial Services板块虽然在周五午盘和盘前交易中出现上涨迹象，但这种涨幅不足以抵消策略重仓标的IBN（-0.6%，净值贡献-$46）的下跌幅度，说明板块内部分化严重，部分金融股承压 （[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-higher-friday-175851334.html)、[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-rise-premarket-142037937.html)）",
+      "策略净值+0.21%相比SPY的+1.62%出现-1.41%的显著偏差，根本原因是重仓Financial Services的IBN拖累作用（-$46）未能被其他持仓充分弥补，而Healthcare板块的ONC（+1.1%，+$81）和REGN（+1.0%，+$82）以及Technology的PCTY（+0.9%，+$70）的涨幅虽然提供了支撑，但这些非Financial Services持仓的权重显然不足以对冲板块性下跌的影响 （[Why JPMorgan Chase Fans May …](https://finance.yahoo.com/markets/options/articles/why-jpmorgan-chase-fans-may-211349086.html)、[Sector Update: Financial Sto…](https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-higher-friday-175851334.html)、[Visa Stock: Is V Outperformi…](https://www.barchart.com/story/news/9035667/visa-stock-is-v-outperforming-the-financial-sector)）",
+      "Visa等部分金融相关公司的相对强势表现说明市场可能在重新配置金融板块风险偏好，倾向于支付结算等轻资产金融服务而远离传统银行业务，这种结构性分化进一步加深了策略作为Financial Services重仓策略与大盘的背离 （[Visa Stock: Is V Outperformi…](https://www.barchart.com/story/news/9035667/visa-stock-is-v-outperforming-the-financial-sector)）"
     ],
     "news": [
       {
-        "title": "Update: US Equity Indexes Mixed, Treasury Yields Drop as Investors Rotate Out of Chipmakers While Assessing Trade Tariffs",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/us-equity-indexes-mixed-treasury-213222387.html"
+        "title": "Why JPMorgan Chase Fans May Look To ETFs Right Now",
+        "url": "https://finance.yahoo.com/markets/options/articles/why-jpmorgan-chase-fans-may-211349086.html"
       },
       {
-        "title": "Billionaire Brad Gerstner\u2019s Altimeter Opened a $680 Million Tesla Stake and Exited Qualcomm and Applied Materials",
-        "url": "https://247wallst.com/investing/2026/11/25/billionaire-brad-gerstners-altimeter-opened-a-680-million-tesla-stake-and-exited-qualcomm-and-applied-materials/"
+        "title": "Sector Update: Financial Stocks Higher Friday Afternoon",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-higher-friday-175851334.html"
       },
       {
-        "title": "Update: Nasdaq Heads for Bear Market as Sellers Descend on AI Trade",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/nasdaq-heads-bear-market-sellers-180214921.html"
+        "title": "Visa Stock: Is V Outperforming the Financial Sector?",
+        "url": "https://www.barchart.com/story/news/9035667/visa-stock-is-v-outperforming-the-financial-sector"
       },
       {
-        "title": "Chip Stocks Just Pulled a Whipsaw Last Seen at the April 2025 Tariff Pause",
-        "url": "https://247wallst.com/investing/2026/11/25/chip-stocks-just-pulled-a-whipsaw-last-seen-at-the-april-2025-tariff-pause/"
+        "title": "Exchange-Traded Funds Higher as US Equities Advance in Friday Trading",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-higher-us-172712881.html"
       },
       {
-        "title": "AI Anxiety Rules Wall Street Pre-Bell; Asia Off, Europe Up",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/ai-anxiety-rules-wall-street-112810095.html"
+        "title": "Sector Update: Financial Stocks Rise Premarket Friday",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/sector-financial-stocks-rise-premarket-142037937.html"
       }
     ]
   },
